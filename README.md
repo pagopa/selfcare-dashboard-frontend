@@ -1,1 +1,1 @@
-# selfcare-core-frontend
+# selfcare-dashboard-frontend
