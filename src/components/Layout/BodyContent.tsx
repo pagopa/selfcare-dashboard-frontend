@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import {Grid,TextField, Typography, Button } from '@mui/material';
-// import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-// import InputAdornment from "@material-ui/core/InputAdornment"
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import InputAdornment from "@mui/material/InputAdornment";
 
 export default function BodyContent() {
     // interface EntiOptionType {
@@ -29,14 +29,14 @@ export default function BodyContent() {
             </Grid>
             <Grid item xs={12} mx={-1} sx={{ maxWidth: '400px' }} >          
             <TextField
-                id="input-with-icon-textfield"
-                label="TextField"
+                id="search"
+                label="Cerca"
                 InputProps={{
-                // startAdornment: (
-                //     // <InputAdornment position="start">
-                //         <SearchOutlinedIcon />
-                //     // </InputAdornment>
-                // ),
+                endAdornment: (
+                    <InputAdornment position="end">
+                        <SearchOutlinedIcon />
+                    </InputAdornment>
+                ),
                 }}
                 variant="standard"
             />
