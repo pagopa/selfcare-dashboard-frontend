@@ -110,7 +110,7 @@ export default function BodyContent() {
     >
       <Grid item xs={12}>
         <Box>
-          <Typography variant="h3" component="h2">
+          <Typography variant="h3" component="h2" sx={{color:'#17324D'}}>
             {bodyTitle}
           </Typography>
         </Box>
@@ -145,14 +145,18 @@ export default function BodyContent() {
         <CustomBox sx={{ width: 400, overflowY: 'scroll', maxHeight: '230px' }}>
           {filteredParties &&
             filteredParties.map((party, index) => (
-              <Box key={index}>
+              <Box key={index} mt={2}>
                 <FieldsList
                   bgColor="transparent"
-                  border={selectedIndex === index ? '2px solid #0073E6' : 'transparent'}
+                  borderList={selectedIndex === index ? '2px solid #0073E6' : 'transparent'}
                   disabled={party.status === 'Pending'}
+				  chipText={party.status === 'Pending' ? 'Da completare' : ''}
                   selectedItem={selectedIndex === index}
                   title={party.description}
 				  subTitle={party.role}
+				  titleColor='#0073E6'
+				  titleSize='16px'
+				  subTitleSize='14px'
                   image={party.image}
                   action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                     handleListItemClick(event, index)

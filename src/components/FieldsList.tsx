@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import { Avatar, List, ListItemButton, ListItemText, Grid } from '@mui/material';
+import { Avatar, List, ListItemButton, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // import { withStyles } from '@mui/styles/';
 
@@ -12,9 +12,13 @@ type Props = {
 	subTitle?:string;
     image?: string;
 	action?: React.Dispatch<React.MouseEvent <HTMLDivElement, MouseEvent >>;
-	border?: string;
+	borderList?: string;
 	disabled: boolean;
 	bgColor?: string;
+	titleColor?:string;
+	titleSize?:string;
+	subTitleSize?:string;
+	chipText?:string;
 	};
 
 const CustomList = styled(List)({ 
@@ -27,11 +31,11 @@ const CustomList = styled(List)({
 			  }
 		 },
 	});
-export default function FieldsList({title,subTitle, image, selectedItem, action, border, disabled, bgColor}: Props) {
+export default function FieldsList({title,subTitle, image, selectedItem, action, borderList, disabled, bgColor,titleColor,titleSize,subTitleSize,chipText}: Props) {
 	
 	return (
-		<Box sx={{ width: '100%', maxWidth: 370, bgcolor: 'background.paper'}} mx={"auto"} >
-			<CustomList aria-label="main mailbox folders" sx={{border:{border},backgroundColor:{bgColor}}}>
+		<Box sx={{ width: '100%', maxWidth: 370}} mx={"auto"} >
+			<CustomList aria-label="main mailbox folders" sx={{ border:borderList,backgroundColor:bgColor}}>
 				<ListItemButton
 					disableRipple
 					disabled={disabled}
@@ -41,17 +45,16 @@ export default function FieldsList({title,subTitle, image, selectedItem, action,
 					 <Box mx={2}>
                         <Avatar alt="Remy Sharp" src={image} />
                     </Box>
-
-					<Box>
-						<ListItemText primary={title} />
-						<ListItemText primary={subTitle} />
-					</Box>
-
-					<Grid>
-						<Grid>
+					<Grid container >
+						<Grid xs={disabled ? 8 : 12}>
+							<Typography variant="h1" sx={{fontSize:titleSize, color:titleColor }}> {title} </Typography>
 						</Grid>
-							
-						<Grid>
+						{disabled && 
+						<Grid xs={4} sx={{borderRadius:'56px', backgroundColor:'#0073E6', fontSize:'12px',display:'flex',justifyContent:'space-around'}}>
+							<Typography variant="caption" sx={{fontSize:'12px',  color:'#FFFFFF'}}>{chipText}</Typography>
+						</Grid>}
+						<Grid xs={12}>
+							<Typography variant="caption" sx={{fontSize:subTitleSize}}> {subTitle} </Typography>
 						</Grid>
 					</Grid>
 				</ListItemButton>
