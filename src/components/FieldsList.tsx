@@ -1,37 +1,61 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import { Avatar, List, ListItemButton, ListItemText } from '@mui/material';
+import { Avatar, List, ListItemButton, ListItemText, Grid } from '@mui/material';
+import { styled } from '@mui/material/styles';
+// import { withStyles } from '@mui/styles/';
+
 
 
 type Props = {
 	selectedItem?: boolean;
     title?: string;
+	subTitle?:string;
     image?: string;
 	action?: React.Dispatch<React.MouseEvent <HTMLDivElement, MouseEvent >>;
 	border?: string;
-	borderColor?:string;
-	borderStyle?:string;
 	disabled: boolean;
+	bgColor?: string;
 	};
 
-export default function FieldsList({title, image, selectedItem, action, border, borderColor, borderStyle,disabled}: Props) {
+const CustomList = styled(List)({ 
+	"& .MuiListItemButton-root": {
+		"&.Mui-selected": {
+			backgroundColor:'transparent !important',
+			},
+		"&:hover":{
+			backgroundColor:'transparent !important',
+			  }
+		 },
+	});
+export default function FieldsList({title,subTitle, image, selectedItem, action, border, disabled, bgColor}: Props) {
 	
 	return (
-		<Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} m={"auto"}>
-			<List component="nav" aria-label="main mailbox folders" sx={{border:{border}, borderColor:{borderColor}, borderStyle:{borderStyle}, marginBottom:"10px"}}>
+		<Box sx={{ width: '100%', maxWidth: 370, bgcolor: 'background.paper'}} mx={"auto"} >
+			<CustomList aria-label="main mailbox folders" sx={{border:{border},backgroundColor:{bgColor}}}>
 				<ListItemButton
+					disableRipple
 					disabled={disabled}
 					selected={ selectedItem }
-					onClick={action}
-					
-					
+					onClick={action}	
 				>
 					 <Box mx={2}>
                         <Avatar alt="Remy Sharp" src={image} />
                     </Box>
-					<ListItemText primary={title} />
+
+					<Box>
+						<ListItemText primary={title} />
+						<ListItemText primary={subTitle} />
+					</Box>
+
+					<Grid>
+						<Grid>
+						</Grid>
+							
+						<Grid>
+						</Grid>
+					</Grid>
 				</ListItemButton>
-			</List>
+			</CustomList>
 		</Box>
 	);
 }
