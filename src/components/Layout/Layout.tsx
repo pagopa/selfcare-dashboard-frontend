@@ -7,7 +7,7 @@ type Props = {
     children?:React.ReactChild ;
 };
 
-export default function BodyRouting({children} : Props) {
+export default function Layout({children} : Props) {
     return (
         <Box
         sx={{

@@ -39,10 +39,10 @@ const CustomList = styled(List)({
 		 },
 	});
 
-export default function FieldsList({title,subTitle, image, selectedItem, action, borderList, disabled, bgColor,titleColor,titleSize,subTitleSize}: Props) {
+export default function PartyItem({title,subTitle, image, selectedItem, action, borderList, disabled, bgColor,titleColor,titleSize,subTitleSize}: Props) {
 	
 	return (
-		<Box sx={{ width: '100%', maxWidth: 370}} mx={"auto"} >
+		<Box sx={{ width: '100%', maxWidth: 370}} >
 			<CustomList aria-label="main mailbox folders" sx={{ border:borderList,backgroundColor:bgColor}}>
 				<ListItemButton
 					sx={{paddingLeft:0}}

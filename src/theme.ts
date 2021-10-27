@@ -4,6 +4,8 @@ import "@fontsource/titillium-web/400.css";
 import "@fontsource/titillium-web/600.css";
 import "@fontsource/titillium-web/700.css";
 
+// TODO: to remove when theme will be delpoyed
+
 const theme = createTheme({
   palette: {
     primary: {
