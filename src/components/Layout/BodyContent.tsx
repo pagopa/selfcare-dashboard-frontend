@@ -8,16 +8,20 @@ import { Party } from '../../model/Party';
 import FieldsList from './../FieldsList';
 
 const CustomBox = styled(Box)({
-		"&::-webkit-scrollbar": {
-			width: 8,
-		  },
-		  "&::-webkit-scrollbar-track": {
-			boxShadow: `inset 10px 10px  #E6E9F2`,
-		  },
-		  "&::-webkit-scrollbar-thumb": {
-			backgroundColor: "#0073E6",
-		  },
-  });
+  '&::-webkit-scrollbar': {
+    width: 8,
+  },
+  '&::-webkit-scrollbar-track': {
+    boxShadow: `inset 10px 10px  #E6E9F2`,
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#0073E6',
+  },
+  width: 400,
+  overflowY: 'auto',
+  height: '200px',
+});
+
 
 export default function BodyContent() {
   const bodyTitle = "Seleziona l'Ente per cui accedi";
@@ -48,7 +52,6 @@ export default function BodyContent() {
     }
   };
 
-
   useEffect(() => {
     // TODO: chiamata BE
     const party: Array<Party> = [
@@ -56,25 +59,12 @@ export default function BodyContent() {
         role: 'Manager',
         description: 'Comune di Bari',
         image: 'image',
-        status: 'Active',
-      },
-      {
-        role: 'Manager',
-        description: 'Comune di Milano',
-        image: 'image',
         status: 'Pending',
-      },
-      {
-        role: 'Manager',
-        description: 'Comune di Roma',
-        image: 'image',
-        status: 'Active',
-      },
-      {
+      },{
         role: 'Manager',
         description: 'Comune di Napoli',
         image: 'image',
-        status: 'Active',
+        status: 'Pending',
       },
       {
         role: 'Manager',
@@ -90,10 +80,10 @@ export default function BodyContent() {
       },
       {
         role: 'Manager',
-        description: 'Comune di Milano',
+        description: 'Comune di Ancona',
         image: 'image',
         status: 'Pending',
-      },
+      }
     ];
     setParties(party);
     setFilteredParties(party);
@@ -110,7 +100,7 @@ export default function BodyContent() {
     >
       <Grid item xs={12}>
         <Box>
-          <Typography variant="h3" component="h2" sx={{color:'#17324D'}}>
+          <Typography variant="h3" component="h2" sx={{ color: '#17324D' }}>
             {bodyTitle}
           </Typography>
         </Box>
@@ -142,27 +132,38 @@ export default function BodyContent() {
         </Box>
       </Grid>
       <Grid item xs={12} container display="flex" justifyContent="center">
-        <CustomBox sx={{ width: 400, overflowY: 'scroll', maxHeight: '230px' }}>
+        <CustomBox>
           {filteredParties &&
             filteredParties.map((party, index) => (
-              <Box key={index} mt={2}>
-                <FieldsList
-                  bgColor="transparent"
-                  borderList={selectedIndex === index ? '2px solid #0073E6' : 'transparent'}
-                  disabled={party.status === 'Pending'}
-				  chipText={party.status === 'Pending' ? 'Da completare' : ''}
-                  selectedItem={selectedIndex === index}
-                  title={party.description}
-				  subTitle={party.role}
-				  titleColor='#0073E6'
-				  titleSize='16px'
-				  subTitleSize='14px'
-                  image={party.image}
-                  action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                    handleListItemClick(event, index)
-                  }
-                />
-              </Box>
+              <Grid key={index} container direction={"row"}> 
+                    <Grid item xs={8}> 
+                      <Box >
+                          <FieldsList
+                          bgColor="transparent"
+                          borderList={selectedIndex === index ? '2px solid #0073E6' : 'transparent'}
+                          disabled={party.status === 'Pending'}
+                          // chipText={party.status === 'Pending' ? 'Da completare' : ''}
+                          selectedItem={selectedIndex === index}
+                          title={party.description}
+                          subTitle={party.role}
+                          titleColor={party.status === 'Pending' ? '' : '#0073E6'}
+                          titleSize="16px"
+                          subTitleSize="14px"
+                          image={party.image}
+                          action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                          handleListItemClick(event, index)
+                          }
+                        /> 
+                      </Box>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Box >
+                      <Grid  className='chip' sx={{borderRadius:'56px', backgroundColor:'#0073E6', fontSize:'12px',display:'flex',justifyContent:'space-around',marginTop:'20px', marginRight: '10px'}}>
+							          <Typography variant="caption" sx={{fontSize:'12px',  color:'#FFFFFF'}}>{party.status === 'Pending' ? 'Da completare' : ''}</Typography>
+						          </Grid>
+                      </Box>
+                    </Grid> 
+              </Grid>
             ))}
         </CustomBox>
       </Grid>

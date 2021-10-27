@@ -18,11 +18,18 @@ type Props = {
 	titleColor?:string;
 	titleSize?:string;
 	subTitleSize?:string;
-	chipText?:string;
 	};
 
 const CustomList = styled(List)({ 
 	"& .MuiListItemButton-root": {
+		"&.Mui-disabled ": {
+				opacity:'0.38',
+				"& .MuiGrid-container":{ 
+					"& .chip ":{
+						opacity:'unset',
+					}
+				}
+			},
 		"&.Mui-selected": {
 			backgroundColor:'transparent !important',
 			},
@@ -31,28 +38,26 @@ const CustomList = styled(List)({
 			  }
 		 },
 	});
-export default function FieldsList({title,subTitle, image, selectedItem, action, borderList, disabled, bgColor,titleColor,titleSize,subTitleSize,chipText}: Props) {
+
+export default function FieldsList({title,subTitle, image, selectedItem, action, borderList, disabled, bgColor,titleColor,titleSize,subTitleSize}: Props) {
 	
 	return (
 		<Box sx={{ width: '100%', maxWidth: 370}} mx={"auto"} >
 			<CustomList aria-label="main mailbox folders" sx={{ border:borderList,backgroundColor:bgColor}}>
 				<ListItemButton
+					sx={{paddingLeft:0}}
 					disableRipple
 					disabled={disabled}
 					selected={ selectedItem }
 					onClick={action}	
 				>
-					 <Box mx={2}>
-                        <Avatar alt="Remy Sharp" src={image} />
+					 <Box pl={1} pr={2}>
+                        <Avatar alt="" src={image} />
                     </Box>
-					<Grid container >
-						<Grid xs={disabled ? 8 : 12}>
+					<Grid container>
+						<Grid xs={12}>
 							<Typography variant="h1" sx={{fontSize:titleSize, color:titleColor }}> {title} </Typography>
-						</Grid>
-						{disabled && 
-						<Grid xs={4} sx={{borderRadius:'56px', backgroundColor:'#0073E6', fontSize:'12px',display:'flex',justifyContent:'space-around'}}>
-							<Typography variant="caption" sx={{fontSize:'12px',  color:'#FFFFFF'}}>{chipText}</Typography>
-						</Grid>}
+						</Grid>				
 						<Grid xs={12}>
 							<Typography variant="caption" sx={{fontSize:subTitleSize}}> {subTitle} </Typography>
 						</Grid>
