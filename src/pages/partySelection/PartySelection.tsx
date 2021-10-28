@@ -7,6 +7,7 @@ import PartySelectionTitle from './components/PartySelectionTitle';
 import PartySelectionSearch from './components/PartySelectionSearch';
 import PartyItemContainer from './components/PartyItemContainer';
 
+const verifyPartyFilter = (party: Party, filter: string) => party.description.toUpperCase().indexOf(filter.toUpperCase()) >= 0;
 const CustomBox = styled(Box)({
   '&::-webkit-scrollbar': {
     width: 8,
@@ -26,14 +27,14 @@ export default function PartySelection() {
   const bodyTitle = "Seleziona l'Ente per cui accedi";
   const bodyDescription =
     "Potrai in ogni momento cambiare Ente/ruolo anche all'interno dell'interfaccia di gestione dei prodotti";
-  const [selectedIndex, setSelectedIndex] = React.useState(-1);
+  const [selectedParty, setSelectedParty] = React.useState<Party | null>(null);
   const [disableBtn, setBtnDisable] = React.useState(true);
 
   const handleListItemClick = (
     _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number
+    party: Party
   ) => {
-    setSelectedIndex(index);
+    setSelectedParty(party);
     setBtnDisable(false);
   };
   const [input, setInput] = useState('');
@@ -41,14 +42,18 @@ export default function PartySelection() {
   const [filteredParties, setFilteredParties] = useState<Array<Party>>();
 
   const onFilterChange = (value: string) => {
+
     setInput(value);
     if (!value) {
       setFilteredParties(parties);
     } else {
       setFilteredParties(
-        parties?.filter((e) => e.description.toUpperCase().indexOf(value.toUpperCase()) >= 0)
-      );
+        parties?.filter(e => verifyPartyFilter(e, value)));
     }
+    if(value && selectedParty && !verifyPartyFilter(selectedParty, value)){
+      setSelectedParty(null);
+      setBtnDisable(true);
+    };
   };
 
   useEffect(() => {
@@ -101,22 +106,22 @@ export default function PartySelection() {
       <Grid item xs={12} container display="flex" justifyContent="center">
         <CustomBox>
           {filteredParties &&
-            filteredParties.map((party, index) => {
+            filteredParties.map((party) => {
               const isDisabled = party.status === 'Pending';
               return (
                 <PartyItemContainer
                   isDisabled={isDisabled}
                   disabled={isDisabled}
                   key={party.institutionId}
-                  borderList={selectedIndex === index ? '2px solid #0073E6' : 'transparent'}
-                  selectedItem={selectedIndex === index}
+                  borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
+                  selectedItem={selectedParty === party}
                   title={party.description}
                   subTitle={party.role}
                   titleColor={isDisabled ? '' : '#0073E6'}
                   image={party.image}
                   chip={party.status === 'Pending' ? 'Da completare' : ''}
                   action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                    handleListItemClick(event, index)
+                    handleListItemClick(event, party)
                   }
                 />
               );

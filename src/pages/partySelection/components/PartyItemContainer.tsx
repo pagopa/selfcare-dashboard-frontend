@@ -4,7 +4,6 @@ import { Box } from '@mui/system';
 import PartyItem from './PartyItem';
 
 type Props={
-    key: string | undefined;
     isDisabled: boolean;
     disabled: boolean;
     borderList:string;
@@ -16,9 +15,9 @@ type Props={
     chip:string;
 	action: React.Dispatch<React.MouseEvent <HTMLDivElement, MouseEvent >>;
 };
-export default function PartyItemContainer({key, isDisabled, borderList,selectedItem,title,subTitle,titleColor,image,chip,action}:Props) {
+export default function PartyItemContainer({ isDisabled, borderList,selectedItem,title,subTitle,titleColor,image,chip,action}:Props) {
     return (
-      <Grid key={key} container direction={"row"}> 
+      <Grid container direction={"row"}> 
         <Grid item xs={isDisabled ? 8 : 12}> 
           <Box >
             <PartyItem

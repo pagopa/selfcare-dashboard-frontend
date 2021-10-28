@@ -15,6 +15,7 @@ export default function PartySelectionSearch({onChange, input}:Props) {
         <Grid item xs={12} mx={-1} display="flex" justifyContent="center">
         <Box sx={{ width: '400px' }}>
           <TextField
+            name="partySearchInput"
             type="search" 
             sx={{ width: '100%' }}
             value={input}

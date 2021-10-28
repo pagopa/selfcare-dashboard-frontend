@@ -55,10 +55,10 @@ export default function PartyItem({title,subTitle, image, selectedItem, action, 
                         <Avatar alt="" src={image} />
                     </Box>
 					<Grid container>
-						<Grid xs={12}>
+						<Grid item xs={12}>
 							<Typography variant="h1" sx={{fontSize:titleSize, color:titleColor }}> {title} </Typography>
 						</Grid>				
-						<Grid xs={12}>
+						<Grid item xs={12}>
 							<Typography variant="caption" sx={{fontSize:subTitleSize}}> {subTitle} </Typography>
 						</Grid>
 					</Grid>
