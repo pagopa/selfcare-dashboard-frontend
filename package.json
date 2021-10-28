@@ -34,7 +34,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
-    "prettify": "prettier --write \"./**/*.{ts,tsx}\""
+    "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
+    "generate:api": "openapi-generator-cli generate -i src/root/pdnd-interop-uservice-party-process.yml -g typescript-axios -o ./src/api/generated"
   },
   "eslintConfig": {
     "extends": [
