@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
-import { Party } from '../../model/Party';
+import { Party } from '../../../model/Party';
 import PartySelectionTitle from './components/PartySelectionTitle';
 import PartySelectionSearch from './components/PartySelectionSearch';
 import PartyItemContainer from './components/PartyItemContainer';
@@ -23,7 +23,11 @@ const CustomBox = styled(Box)({
   height: '200px',
 });
 
-export default function PartySelection() {
+type Props={
+ parties: Array<Party>;
+};
+
+export default function PartySelection({parties}: Props) {
   const bodyTitle = "Seleziona l'Ente per cui accedi";
   const bodyDescription =
     "Potrai in ogni momento cambiare Ente/ruolo anche all'interno dell'interfaccia di gestione dei prodotti";
@@ -38,8 +42,8 @@ export default function PartySelection() {
     setBtnDisable(false);
   };
   const [input, setInput] = useState('');
-  const [parties, setParties] = useState<Array<Party>>();
-  const [filteredParties, setFilteredParties] = useState<Array<Party>>();
+ 
+  const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
 
   const onFilterChange = (value: string) => {
 
@@ -55,55 +59,30 @@ export default function PartySelection() {
       setBtnDisable(true);
     };
   };
-
-  useEffect(() => {
-    // TODO: chiamata BE
-    const party: Array<Party> = [
-      {
-        role: 'Manager',
-        description: 'Comune di Bari',
-        image: 'image',
-        status: 'Pending',
-        institutionId: '1',
-      },
-      {
-        role: 'Manager',
-        description: 'Comune di Milano',
-        image: 'image',
-        status: 'Pending',
-        institutionId: '2',
-      },
-      {
-        role: 'Manager',
-        description: 'Comune di Roma',
-        image: 'image',
-        status: 'Active',
-        institutionId: '3',
-      },
-      {
-        role: 'Manager',
-        description: 'Comune di Napoli',
-        image: 'image',
-        status: 'Active',
-        institutionId: '4',
-      },
-    ];
-    setParties(party);
-    setFilteredParties(party);
-  }, []);
-
+  
   return (
     <Grid
-      container
-      display="flex"
-      justifyContent="center"
-      spacing={2}
-      my={'auto'}
-      sx={{ textAlign: 'center' }}
+    direction="column"
+    container
+    display="flex"
+    justifyContent="center"
+    spacing={2}
+    my={'auto'}
+    sx={{ textAlign: 'center' }}
     >
-      <PartySelectionTitle bodyTitle={bodyTitle} bodyDescription={bodyDescription} />
-      <PartySelectionSearch onChange={(e) => onFilterChange(e.target.value)} input={input} />
-      <Grid item xs={12} container display="flex" justifyContent="center">
+       <Grid item container justifyContent="center">
+        <Grid item xs={8}>
+          <PartySelectionTitle bodyTitle={bodyTitle} bodyDescription={bodyDescription} />
+        </Grid>
+      </Grid>
+
+      <Grid item container justifyContent="center">
+        <Grid item xs={4}>
+          { parties.length > 3 && <PartySelectionSearch onChange={(e) => onFilterChange(e.target.value)} input={input} />}
+        </Grid>
+      </Grid>
+
+      <Grid item xs={12} display="flex" justifyContent="center">
         <CustomBox>
           {filteredParties &&
             filteredParties.map((party) => {
@@ -128,7 +107,8 @@ export default function PartySelection() {
             })}
         </CustomBox>
       </Grid>
-      <Grid item xs={12}>
+
+      <Grid item xs={2} > 
         <Button
           variant="contained"
           disabled={disableBtn}
@@ -137,7 +117,7 @@ export default function PartySelection() {
         >
           Entra
         </Button>
-      </Grid>
+        </Grid>
     </Grid>
   );
 }

@@ -1,8 +1,8 @@
 import { BrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Layout from './components/Layout/Layout';
-import PartySelection from './pages/partySelection/PartySelection';
 import theme from './theme';
+import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 
 export function App() {
   return (
@@ -10,7 +10,7 @@ export function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout>
-          <PartySelection/>
+          <PartySelectionContainer/>
         </Layout>
       </ThemeProvider>
     </BrowserRouter>

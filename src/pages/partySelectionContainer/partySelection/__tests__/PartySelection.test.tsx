@@ -1,14 +1,39 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { Party } from '../../../../model/Party';
 import PartySelection from '../PartySelection';
 
-const parties = ['Comune di Bari', 'Comune di Milano', 'Comune di Roma', 'Comune di Napoli'];
-// const input = screen.getByLabelText('Cerca');
-// const filterNapoli = 'Napoli';
-// const filterRoma = 'ROMA';
-// const filterParty = 'Comune di Napoli Manager';
-
+const parties: Array<Party> = [
+  {
+    role: 'Manager',
+    description: 'Comune di Bari',
+    image: 'image',
+    status: 'Pending',
+    institutionId: '1',
+  },
+  {
+    role: 'Manager',
+    description: 'Comune di Milano',
+    image: 'image',
+    status: 'Pending',
+    institutionId: '2',
+  },
+  {
+    role: 'Manager',
+    description: 'Comune di Roma',
+    image: 'image',
+    status: 'Active',
+    institutionId: '3',
+  },
+  {
+    role: 'Manager',
+    description: 'Comune di Napoli',
+    image: 'image',
+    status: 'Active',
+    institutionId: '4',
+  },
+];
 test('Test rendering', () => {
-  render(<PartySelection />);
+  render(<PartySelection parties={parties} />);
   const input = screen.getByLabelText('Cerca');
 
   screen.getByText("Seleziona l'Ente per cui accedi");
@@ -23,13 +48,21 @@ test('Test rendering', () => {
   const button2 = document.querySelectorAll("*[type='button']")[0];
   expect(button).toBe(button2);
 
-  parties.forEach((element) => {
+  parties.map(x => x.description).forEach((element) => {
     screen.getByText(element);
   });
+
+  // la serach è presente solo se ho più di 3 parties
+  if(parties.length > 3) {
+    expect(input.tagName).toBe('INPUT');
+    console.log(parties)
+  }else{
+    expect(input.tagName).not.toBe('INPUT');
+  }
 });
 
 test('Test filter', () => {
-  render(<PartySelection />);
+  render(<PartySelection parties={parties}/>);
   const input = screen.getByLabelText('Cerca');
   const filterNapoli = 'Napoli';
 
@@ -37,7 +70,7 @@ test('Test filter', () => {
   fireEvent.change(input, { target: { value: filterNapoli } });
   expect(input.getAttribute('value')).toBe(filterNapoli);
 
-  parties.forEach((element) => {
+  parties.map(x => x.description).forEach((element) => {
     const party = screen.queryByText(element);
 
     if (element.indexOf(filterNapoli) > -1) {
@@ -50,7 +83,7 @@ test('Test filter', () => {
   fireEvent.change(input, { target: { value: null } });
   expect(input.getAttribute('value')).toBe("");
 
-  parties.forEach((element) => {
+  parties.map(x => x.description).forEach((element) => {
     screen.getByText(element);
   });
 
@@ -58,7 +91,7 @@ test('Test filter', () => {
 });
 
 test('Test selection', () => {
-  render(<PartySelection />);
+  render(<PartySelection parties={parties}/>);
   const input = screen.getByLabelText('Cerca');
   const filterPartyNapoli= 'Comune di Napoli Manager';
   // const filterPartyBari= 'Comune di Bari Manager';
@@ -92,9 +125,8 @@ test('Test selection', () => {
 });
 
 test('Test pending party', () => {
-  render(<PartySelection />);
-
- // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare'
+  render(<PartySelection parties={parties}/>);
+ // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare' in XPath
   const firstPartyDisabled =document.evaluate('//div[@role="PartyItemContainer" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',document,null,XPathResult.ANY_TYPE).iterateNext()
   expect(firstPartyDisabled).not.toBeNull();
   expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  Manager ')
