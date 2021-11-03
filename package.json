@@ -6,6 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@fontsource/titillium-web": "^4.5.0",
     "@mui/icons-material": "^5.0.3",
     "@mui/material": "^5.0.3",
     "@testing-library/jest-dom": "^5.14.1",
@@ -35,7 +36,8 @@
     "eject": "react-scripts eject",
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",
-    "prettify": "prettier --write \"./**/*.{ts,tsx}\""
+    "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
+    "generate:api": "openapi-generator-cli generate -i src/root/pdnd-interop-uservice-party-process.yml -g typescript-axios -o ./src/api/generated"
   },
   "eslintConfig": {
     "extends": [
@@ -66,5 +68,11 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-sonarjs": "^0.10.0",
     "prettier": "^2.4.1"
-  }
+  } ,
+  "jest": {
+    "coveragePathIgnorePatterns" : [
+      "src/index.tsx",
+      "src/reportWebVitals.ts"
+      ]
+    }
 }
