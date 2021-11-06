@@ -125,6 +125,7 @@ stages:
             parameters:
               nodeVersion: $(NODE_VERSION)
           - bash: |
+              yarn generate
               yarn build
             displayName: 'Build files'
             env:

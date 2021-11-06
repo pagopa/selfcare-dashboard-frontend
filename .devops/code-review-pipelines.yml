@@ -20,7 +20,7 @@ trigger:
 
 pr:
   - main
-  - release-* 
+  - release-*
 
 resources:
   repositories:
@@ -46,6 +46,7 @@ stages:
             parameters:
               nodeVersion: $(NODE_VERSION)
           - script: |
+              yarn generate
               yarn build
             displayName: 'Build'
 
