@@ -9,6 +9,7 @@
     "@fontsource/titillium-web": "^4.5.0",
     "@mui/icons-material": "^5.0.3",
     "@mui/material": "^5.0.3",
+    "@pagopa/ts-commons": "^10.2.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -19,7 +20,10 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.8",
     "axios": "^0.23.0",
+    "fp-ts": "^2.11.5",
+    "io-ts": "^2.2.16",
     "lodash": "^4.17.21",
+    "node-fetch": "^3.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-md-spinner": "^1.0.0",
@@ -37,7 +41,8 @@
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",
     "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
-    "generate:api": "openapi-generator-cli generate -i src/root/pdnd-interop-uservice-party-process.yml -g typescript-axios -o ./src/api/generated"
+    "generate:api-b4f-dashboard": "rimraf src/api/generated/b4f-dashboard & gen-api-models --api-spec openApi/dashboard-swagger20.json --out-dir src/api/generated/b4f-dashboard --no-strict --request-types --response-decoders --client",
+    "generate:api-party-process": "rimraf src/api/generated/party-process & gen-api-models --api-spec openApi/party-process-swagger20.json --out-dir src/api/generated/party-process --no-strict --request-types --response-decoders --client"
   },
   "eslintConfig": {
     "extends": [
@@ -58,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@pagopa/openapi-codegen-ts": "^10.0.5",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "7.11.0",
@@ -67,12 +73,13 @@
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-sonarjs": "^0.10.0",
-    "prettier": "^2.4.1"
-  } ,
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2"
+  },
   "jest": {
-    "coveragePathIgnorePatterns" : [
+    "coveragePathIgnorePatterns": [
       "src/index.tsx",
       "src/reportWebVitals.ts"
-      ]
-    }
+    ]
+  }
 }

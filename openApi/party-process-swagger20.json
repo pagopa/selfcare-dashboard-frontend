@@ -1,0 +1,871 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Party Process Micro Service",
+    "description": "This service is the party process",
+    "contact": {
+      "email": "support@example.com",
+      "name": "API Support",
+      "url": "http://www.example.com/support"
+    }
+  },
+  "host": "$hostDefaultValue",
+  "basePath": "/$basePathDefaultValue",
+  "securityDefinitions": {},
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/onboarding/info/": {
+      "get": {
+        "description": "Return ok",
+        "summary": "getOnBoardingInfo",
+        "tags": [
+          "process"
+        ],
+        "operationId": "getOnBoardingInfo",
+        "deprecated": false,
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "name": "institutionId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "UUID of an institution you can filter the retrieval with"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OnBoardingInfo"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/onboarding/legals": {
+      "post": {
+        "description": "Return ok",
+        "summary": "createLegals",
+        "tags": [
+          "process"
+        ],
+        "operationId": "createLegals",
+        "deprecated": false,
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/OnBoardingRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OnBoardingResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/onboarding/operators": {
+      "post": {
+        "description": "Return ok",
+        "summary": "createOperators",
+        "tags": [
+          "process"
+        ],
+        "operationId": "createOperators",
+        "deprecated": false,
+        "produces": [
+          "application/problem+json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/OnBoardingRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/institutions/{institutionId}/relationships": {
+      "get": {
+        "description": "Return ok",
+        "summary": "getUserInstitutionRelationships",
+        "tags": [
+          "process"
+        ],
+        "operationId": "getUserInstitutionRelationships",
+        "deprecated": false,
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "name": "institutionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "The identifier of the institution"
+          },
+          {
+            "name": "platformRoles",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "comma separated sequence of platform roles to filter the response with"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "default": "",
+              "items": {
+                "$ref": "#/definitions/RelationshipInfo"
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid institution id supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/relationships/{relationshipId}": {
+      "get": {
+        "description": "Gets relationship",
+        "summary": "getRelationship",
+        "tags": [
+          "process"
+        ],
+        "operationId": "getRelationship",
+        "deprecated": false,
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "name": "relationshipId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "The identifier of the relationship"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/RelationshipInfo"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      },
+      "delete": {
+        "description": "Given a relationship identifier, it relates the corresponding relationship.",
+        "summary": "deleteRelationshipById",
+        "tags": [
+          "process"
+        ],
+        "operationId": "deleteRelationshipById",
+        "deprecated": false,
+        "produces": [
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "name": "relationshipId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "the identifier of the relationship to be deleted"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "relationship deleted",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Relationship not found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/relationships/{relationshipId}/activate": {
+      "post": {
+        "description": "Activate relationship",
+        "summary": "activateRelationship",
+        "tags": [
+          "process"
+        ],
+        "operationId": "activateRelationship",
+        "deprecated": false,
+        "produces": [
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "name": "relationshipId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "The identifier of the relationship"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/relationships/{relationshipId}/suspend": {
+      "post": {
+        "description": "Suspend relationship",
+        "summary": "suspendRelationship",
+        "tags": [
+          "process"
+        ],
+        "operationId": "suspendRelationship",
+        "deprecated": false,
+        "produces": [
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "name": "relationshipId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "The identifier of the relationship"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/onboarding/complete/{token}": {
+      "post": {
+        "description": "Return ok",
+        "summary": "confirmOnBoarding",
+        "tags": [
+          "process"
+        ],
+        "operationId": "confirmOnBoarding",
+        "deprecated": false,
+        "produces": [
+          "application/problem+json"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "the token containing the onboardind information"
+          },
+          {
+            "name": "contract",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "format": "file",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      },
+      "delete": {
+        "description": "Return ok",
+        "summary": "invalidateOnboarding",
+        "tags": [
+          "process"
+        ],
+        "operationId": "invalidateOnboarding",
+        "deprecated": false,
+        "produces": [
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The token to invalidate"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/onboarding/relationship/{relationshipId}/document": {
+      "get": {
+        "description": "Get an onboarding document",
+        "summary": "getOnboardingDocument",
+        "tags": [
+          "process"
+        ],
+        "operationId": "getOnboardingDocument",
+        "deprecated": false,
+        "produces": [
+          "application/octet-stream",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "name": "relationshipId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "the relationship id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed onboarding document retrieved",
+            "schema": {
+              "type": "string",
+              "default": "",
+              "format": "binary"
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Document not found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/platform/roles": {
+      "get": {
+        "description": "Returns all the available bindings between roles and platform roles.",
+        "summary": "getPlatformRoles",
+        "tags": [
+          "platform"
+        ],
+        "operationId": "getPlatformRoles",
+        "deprecated": false,
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Available platform roles' bindings.",
+            "schema": {
+              "$ref": "#/definitions/PlatformRolesResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "description": "Return ok",
+        "summary": "getStatus",
+        "tags": [
+          "health"
+        ],
+        "operationId": "getStatus",
+        "deprecated": false,
+        "produces": [
+          "application/problem+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            },
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "OnBoardingRequest": {
+      "title": "OnBoardingRequest",
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "institutionId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "users",
+        "institutionId"
+      ]
+    },
+    "OnBoardingResponse": {
+      "title": "OnBoardingResponse",
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string",
+          "format": "binary"
+        }
+      },
+      "required": [
+        "token",
+        "document"
+      ]
+    },
+    "RelationshipInfo": {
+      "title": "RelationshipInfo",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "from": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "role": {
+          "$ref": "#/definitions/Role"
+        },
+        "platformRole": {
+          "description": "user role in the application context (e.g.: administrator, security user). This MUST belong to the configured set of application specific platform roles",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "role",
+        "platformRole",
+        "status"
+      ]
+    },
+    "User": {
+      "title": "User",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "taxCode": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "email": {
+          "$ref": "#/definitions/Email"
+        },
+        "platformRole": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "surname",
+        "taxCode",
+        "role",
+        "platformRole"
+      ]
+    },
+    "PersonInfo": {
+      "title": "PersonInfo",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "taxCode": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "surname",
+        "taxCode"
+      ]
+    },
+    "InstitutionInfo": {
+      "title": "InstitutionInfo",
+      "type": "object",
+      "properties": {
+        "institutionId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "digitalAddress": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "platformRole": {
+          "type": "string"
+        },
+        "attributes": {
+          "description": "certified attributes bound to this institution",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "institutionId",
+        "description",
+        "digitalAddress",
+        "status",
+        "role",
+        "platformRole",
+        "attributes"
+      ]
+    },
+    "OnBoardingInfo": {
+      "title": "OnBoardingInfo",
+      "type": "object",
+      "properties": {
+        "person": {
+          "$ref": "#/definitions/PersonInfo"
+        },
+        "institutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InstitutionInfo"
+          }
+        }
+      },
+      "required": [
+        "person",
+        "institutions"
+      ]
+    },
+    "PlatformRolesResponse": {
+      "title": "PlatformRolesResponse",
+      "description": "This payload contains the currently defined bindings between roles and platform roles.",
+      "type": "object",
+      "properties": {
+        "managerRoles": {
+          "description": "binding between manager and its platform roles",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "delegateRoles": {
+          "description": "binding between delegate and its platform roles",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "operatorRoles": {
+          "description": "binding between operator and its platform roles",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "managerRoles",
+        "delegateRoles",
+        "operatorRoles"
+      ]
+    },
+    "Problem": {
+      "title": "Problem",
+      "type": "object",
+      "properties": {
+        "detail": {
+          "description": "A human readable explanation specific to this occurrence of the problem.",
+          "example": "Request took too long to complete.",
+          "type": "string",
+          "maxLength": 4096,
+          "pattern": "^.{0,1024}$"
+        },
+        "status": {
+          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+          "example": 503,
+          "type": "integer",
+          "minimum": 100.0,
+          "maximum": 600.0,
+          "exclusiveMaximum": true,
+          "format": "int32"
+        },
+        "title": {
+          "description": "A short, summary of the problem type. Written in english and readable",
+          "example": "Service Unavailable",
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[ -~]{0,64}$"
+        }
+      },
+      "required": [
+        "status",
+        "title"
+      ]
+    },
+    "Email": {
+      "title": "Email",
+      "example": "Manager",
+      "type": "string",
+      "enum": [
+        "Manager",
+        "Delegate",
+        "Operator"
+      ]
+    },
+    "Role": {
+      "title": "Role",
+      "description": "represents the generic available role types for the relationship",
+      "example": "Manager",
+      "type": "string",
+      "enum": [
+        "Manager",
+        "Delegate",
+        "Operator"
+      ]
+    },
+    "Status": {
+      "title": "Status",
+      "example": "pending",
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "inactive"
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "process",
+      "description": "Implements party process",
+      "externalDocs": {
+        "url": "http://swagger.io",
+        "description": "Find out more"
+      }
+    },
+    {
+      "name": "platform",
+      "description": "Implements platform endpoints",
+      "externalDocs": {
+        "url": "http://swagger.io",
+        "description": "Find out more"
+      }
+    },
+    {
+      "name": "health",
+      "description": "Verify service status",
+      "externalDocs": {
+        "url": "http://swagger.io",
+        "description": "Find out more"
+      }
+    }
+  ]
+}
