@@ -1,18 +1,13 @@
-import { BrowserRouter } from 'react-router-dom';
-import { CssBaseline, ThemeProvider } from '@mui/material';
 import Layout from './components/Layout/Layout';
+import { withLogin } from './decorators/withLogin';
 import PartySelection from './pages/partySelection/PartySelection';
-import theme from './theme';
 
-export function App() {
+const app = function App() {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Layout>
-          <PartySelection/>
-        </Layout>
-      </ThemeProvider>
-    </BrowserRouter>
+    <Layout>
+      <PartySelection />
+    </Layout>
   );
-}
+};
+
+export default withLogin(app);

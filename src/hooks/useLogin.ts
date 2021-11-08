@@ -1,0 +1,41 @@
+import isEmpty from 'lodash/isEmpty';
+import { storageDelete, storageRead } from '../utils/storage-utils';
+import { MOCK_USER, URL_FE_LOGIN } from '../utils/constants';
+import { useAppDispatch } from '../redux/hooks';
+import { User } from '../model/User';
+import { userActions } from '../redux/slices/userSlice';
+
+export const useLogin = () => {
+  const dispatch = useAppDispatch();
+  const setUser = (user: User) => dispatch(userActions.setLoggedUser(user));
+
+  const attemptSilentLogin = async () => {
+    if (MOCK_USER) {
+      setUser({
+        uid: '0',
+        taxCode: 'AAAAAA00A00A000A',
+        name: 'loggedName',
+        surname: 'loggedSurname',
+        email: 'loggedEmail@aa.aa',
+      });
+      return;
+    }
+
+    const sessionStorageUser = storageRead('user', 'object');
+
+    // If there are no credentials, it is impossible to get the user, so
+    if (isEmpty(sessionStorageUser)) {
+      // Remove any partial data that might have remained, just for safety
+      storageDelete('user');
+      // Go to the login view
+      window.location.assign(URL_FE_LOGIN);
+      // This return is necessary
+      return;
+    }
+
+    // Otherwise, set the user to the one stored in the storage
+    setUser(sessionStorageUser);
+  };
+
+  return { attemptSilentLogin };
+};
