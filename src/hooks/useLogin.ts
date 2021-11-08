@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import { storageDelete, storageRead } from '../utils/storage-utils';
-import { MOCK_USER, URL_FE_LOGIN } from '../utils/constants';
+import { MOCK_USER, STORAGE_KEY_USER, URL_FE_LOGIN } from '../utils/constants';
 import { useAppDispatch } from '../redux/hooks';
 import { User } from '../model/User';
 import { userActions } from '../redux/slices/userSlice';
@@ -21,12 +21,12 @@ export const useLogin = () => {
       return;
     }
 
-    const sessionStorageUser = storageRead('user', 'object');
+    const sessionStorageUser = storageRead(STORAGE_KEY_USER, 'object');
 
     // If there are no credentials, it is impossible to get the user, so
     if (isEmpty(sessionStorageUser)) {
       // Remove any partial data that might have remained, just for safety
-      storageDelete('user');
+      storageDelete(STORAGE_KEY_USER);
       // Go to the login view
       window.location.assign(URL_FE_LOGIN);
       // This return is necessary
