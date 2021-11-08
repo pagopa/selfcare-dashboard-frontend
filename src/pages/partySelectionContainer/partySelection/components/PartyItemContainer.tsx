@@ -6,18 +6,18 @@ import PartyItem from './PartyItem';
 type Props={
     isDisabled: boolean;
     disabled: boolean;
-    borderList:string;
-    selectedItem:boolean;
+    borderList?:string;
+    selectedItem?:boolean;
     title:string | undefined;
     subTitle:string | undefined;
     titleColor:string;
     image:string | undefined;
     chip:string;
-	action: React.Dispatch<React.MouseEvent <HTMLDivElement, MouseEvent >>;
+	  action?: React.Dispatch<React.MouseEvent <HTMLDivElement, MouseEvent >>;
 };
 export default function PartyItemContainer({ isDisabled, borderList,selectedItem,title,subTitle,titleColor,image,chip,action}:Props) {
     return (
-      <Grid container direction={"row"} role="PartyItemContainer"> 
+      <Grid container direction={"row"} role="PartyItemContainer" data-testid={`PartyItemContainer: ${title}`}> 
         <Grid item xs={isDisabled ? 8 : 12}> 
           <Box >
             <PartyItem
@@ -38,8 +38,8 @@ export default function PartyItemContainer({ isDisabled, borderList,selectedItem
         {isDisabled && 
           <Grid item xs={4}>
             <Box>
-              <Grid  className='chip' sx={{borderRadius:'56px', backgroundColor:'#0073E6', fontSize:12,display:'flex',justifyContent:'space-around',marginTop:'20px', marginRight: '20px'}}>
-                <Typography variant="caption" sx={{fontSize:'12px',  color:'#FFFFFF'}}>{chip}</Typography>
+              <Grid className='chip' sx={{borderRadius:'56px', backgroundColor:'#0073E6', fontSize:12,display:'flex',justifyContent:'space-around',marginTop:'20px', marginRight: '20px'}}>
+                <Typography role="PartyItemDisabled" variant="caption" sx={{fontSize:'12px',  color:'#FFFFFF'}}>{chip}</Typography>
               </Grid>
             </Box>
           </Grid> }
