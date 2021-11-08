@@ -4,14 +4,12 @@ import NoActiveParty from './NoActiveParty';
 import NoParty from './NoParty';
 import PartySelection from './partySelection/PartySelection';
 
-
 export default function PartySelectionContainer() {
-   
-    const [parties, setParties] = useState<Array<Party>>([]);
-    console.log("PARTIES", parties);
-    useEffect(() => {
-        // TODO: chiamata BE
-        const party: Array<Party> = [   
+  const [parties, setParties] = useState<Array<Party>>([]);
+  console.log('PARTIES', parties);
+  useEffect(() => {
+    // TODO: chiamata BE
+    const party: Array<Party> = [
       {
         role: 'Manager',
         description: 'Comune di Bari',
@@ -40,23 +38,22 @@ export default function PartySelectionContainer() {
         status: 'Active',
         institutionId: '4',
       },
-          ];
-        setParties(party);
-        
-      }, []);
+    ];
+    setParties(party);
+  }, []);
 
-      // se esiste almeno un party attivo visualizzo PartySelection
-        // altrimenti se esiste almeno un elemento visualizzo NoActiveParty --<PartyItemContainer />
-        // NoParty
-    return (
-      <React.Fragment>
-        
-        {parties.filter(party => party.status === "Active").length >= 1 ?
-        <PartySelection parties={parties}/>
-        : <NoActiveParty /> }
-        
-        {parties.length === 0 && <NoParty />}
-                                                                       
-        </React.Fragment>
-        );
+  // se esiste almeno un party attivo visualizzo PartySelection
+  // altrimenti se esiste almeno un elemento visualizzo NoActiveParty --<PartyItemContainer />
+  // NoParty
+  return (
+    <React.Fragment>
+      {parties.filter((party) => party.status === 'Active').length >= 1 ? (
+        <PartySelection parties={parties} />
+      ) : parties.filter((party) => party.status === 'Pending').length >= 1 ? (
+        <NoActiveParty parties={parties}/>
+      ) : (
+        parties.length === 0 && <NoParty />
+      )}
+    </React.Fragment>
+  );
 }

@@ -77,7 +77,7 @@ export default function PartySelection({parties}: Props) {
       </Grid>
 
       <Grid item container justifyContent="center">
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           { parties.length > 3 && <PartySelectionSearch onChange={(e) => onFilterChange(e.target.value)} input={input} />}
         </Grid>
       </Grid>

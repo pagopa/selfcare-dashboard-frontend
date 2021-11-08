@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, getByText, render, screen } from '@testing-library/react';
 import { Party } from '../../../../model/Party';
 import PartySelection from '../PartySelection';
 
@@ -111,7 +111,7 @@ test('Test selection', () => {
 
   // verifica che bottone è abilitato
   expect(button).not.toBeDisabled();
-  
+
  // scrivo Napoli nel filtro
   fireEvent.change(input, { target: { value: filterNapoli } });
   expect(input.getAttribute('value')).toBe(filterNapoli);
@@ -130,4 +130,8 @@ test('Test pending party', () => {
   const firstPartyDisabled =document.evaluate('//div[@role="PartyItemContainer" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',document,null,XPathResult.ANY_TYPE).iterateNext()
   expect(firstPartyDisabled).not.toBeNull();
   expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  Manager ')
+
+  // cerca comune di bari e verifica che contenga "Da completare"
+   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');
+   getByText(PartyItemContainer,'Da completare')
 });
