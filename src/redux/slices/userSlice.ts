@@ -23,5 +23,5 @@ export const userActions = userSlice.actions;
 export const userReducer = userSlice.reducer;
 
 export const userSelectors = {
-  selectUser: (state: RootState) => state.user.logged,
+  selectLoggedUser: (state: RootState) => state.user.logged,
 };

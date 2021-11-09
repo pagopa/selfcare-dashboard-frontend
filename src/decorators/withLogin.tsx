@@ -6,11 +6,13 @@ import { userSelectors } from '../redux/slices/userSlice';
 // eslint-disable-next-line @typescript-eslint/ban-types
 type LoginProps = {};
 
-export function withLogin<T extends LoginProps>(WrappedComponent: React.ComponentType<T>) {
+export function withLogin<T extends LoginProps>(
+  WrappedComponent: React.ComponentType<T>
+): React.ComponentType<T> {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithLogin = (props: Omit<T, keyof LoginProps>) => {
-    const user = useAppSelector(userSelectors.selectUser);
+    const user = useAppSelector(userSelectors.selectLoggedUser);
     const { attemptSilentLogin } = useLogin();
 
     useEffect(() => {

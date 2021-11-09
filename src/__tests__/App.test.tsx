@@ -1,9 +1,10 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import App from '../App';
 import { Provider } from 'react-redux';
-import { store } from '../redux/store';
-import { storageDelete } from '../utils/storage-utils';
-import { STORAGE_KEY_USER } from '../utils/constants';
+import { storageDelete, storageWrite } from '../utils/storage-utils';
+import { STORAGE_KEY_USER, URL_FE_LOGIN } from '../utils/constants';
+import { User } from '../model/User';
+import { createStore } from '../redux/store';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
@@ -27,12 +28,40 @@ afterEach(() => {
   mockedLocation.assign.mockReset();
 });
 
-test('Test session', () => {
+const renderApp = () => {
+  const store = createStore();
   render(
     <Provider store={store}>
       <App />
     </Provider>
   );
+  return store;
+};
 
-  // TODO
+const mockUser = (): User => {
+  const user: User = {
+    name: 'NAME',
+    surname: 'SURNAME',
+    uid: 'UID',
+    taxCode: 'AAAAAA00A00A000A',
+    email: 'a@a.aa',
+  };
+
+  storageWrite(STORAGE_KEY_USER, user, 'object');
+
+  return user;
+};
+
+test('Test no auth session', async () => {
+  renderApp();
+  await waitFor(() => expect(global.window.location.assign).toBeCalledWith(URL_FE_LOGIN));
+});
+
+test('Test auth session', async () => {
+  const user = mockUser();
+  const store = renderApp();
+  await waitFor(() => {
+    expect(global.window.location.assign).not.toBeCalled();
+    expect(store.getState().user.logged).toMatchObject(user);
+  });
 });

@@ -2,12 +2,10 @@ import Layout from './components/Layout/Layout';
 import { withLogin } from './decorators/withLogin';
 import PartySelection from './pages/partySelection/PartySelection';
 
-const app = function App() {
-  return (
-    <Layout>
-      <PartySelection />
-    </Layout>
-  );
-};
+const App = () => (
+  <Layout>
+    <PartySelection />
+  </Layout>
+);
 
-export default withLogin(app);
+export default withLogin(App);
