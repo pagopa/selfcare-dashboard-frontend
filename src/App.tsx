@@ -1,10 +1,10 @@
 import Layout from './components/Layout/Layout';
 import { withLogin } from './decorators/withLogin';
-import PartySelection from './pages/partySelection/PartySelection';
+import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 
 const App = () => (
   <Layout>
-    <PartySelection />
+    <PartySelectionContainer />
   </Layout>
 );
 

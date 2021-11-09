@@ -42,7 +42,6 @@ const CustomList = styled(List)({
 export default function PartyItem({title,subTitle, image, selectedItem, action, borderList, disabled, bgColor,titleColor,titleSize,subTitleSize}: Props) {
 	
 	return (
-		<Box sx={{ width: '100%', maxWidth: 370}} >
 			<CustomList aria-label="main mailbox folders" sx={{ border:borderList,backgroundColor:bgColor}}>
 				<ListItemButton
 					sx={{paddingLeft:0}}
@@ -55,15 +54,14 @@ export default function PartyItem({title,subTitle, image, selectedItem, action, 
                         <Avatar alt="" src={image} />
                     </Box>
 					<Grid container>
-						<Grid item xs={12}>
-							<Typography variant="h1" sx={{fontSize:titleSize, color:titleColor }}> {title} </Typography>
-						</Grid>				
-						<Grid item xs={12}>
-							<Typography variant="caption" sx={{fontSize:subTitleSize}}> {subTitle} </Typography>
-						</Grid>
+					<Grid item xs={12}>
+					<Typography variant="h1" sx={{fontSize:titleSize, color:titleColor }}> {title} </Typography>
 					</Grid>
+					<Grid item xs={4}>
+					<Typography variant="caption" sx={{fontSize:subTitleSize}}> {subTitle} </Typography>	
+					</Grid>
+					</Grid>	
 				</ListItemButton>
 			</CustomList>
-		</Box>
 	);
 }
