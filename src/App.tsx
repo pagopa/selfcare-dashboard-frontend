@@ -1,11 +1,20 @@
 import Layout from './components/Layout/Layout';
-import { withLogin } from './decorators/withLogin';
+import { LoadingOverlay } from './components/Loading/LoadingOverlay';
+import withLogin from './decorators/withLogin';
+import withParties from './decorators/withParties';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
+import { useAppSelector } from './redux/hooks';
+import { appStateSelectors } from './redux/slices/appStateSlice';
 
-const App = () => (
-  <Layout>
-    <PartySelectionContainer />
-  </Layout>
-);
+const App = () => {
+  const loading = useAppSelector(appStateSelectors.selectLoading);
 
-export default withLogin(App);
+  return (
+    <Layout>
+      {loading && <LoadingOverlay />}
+      <PartySelectionContainer />
+    </Layout>
+  );
+};
+
+export default withParties(withLogin(App));

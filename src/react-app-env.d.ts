@@ -15,6 +15,9 @@ declare namespace NodeJS {
 
     REACT_APP_URL_API_DASHBOARD: string;
     REACT_APP_API_DASHBOARD_TIMEOUT_MS: number;
+
+    REACT_APP_URL_INSTITUTION_LOGO_PREFIX: string;
+    REACT_APP_URL_INSTITUTION_LOGO_SUFFIX: string;
   }
 }
 interface Window {

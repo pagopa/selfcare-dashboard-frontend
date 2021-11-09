@@ -7,7 +7,8 @@ import PartySelectionTitle from './components/PartySelectionTitle';
 import PartySelectionSearch from './components/PartySelectionSearch';
 import PartyItemContainer from './components/PartyItemContainer';
 
-const verifyPartyFilter = (party: Party, filter: string) => party.description.toUpperCase().indexOf(filter.toUpperCase()) >= 0;
+const verifyPartyFilter = (party: Party, filter: string) =>
+  party.description.toUpperCase().indexOf(filter.toUpperCase()) >= 0;
 const CustomBox = styled(Box)({
   '&::-webkit-scrollbar': {
     width: 8,
@@ -23,11 +24,11 @@ const CustomBox = styled(Box)({
   height: '200px',
 });
 
-type Props={
- parties: Array<Party>;
+type Props = {
+  parties: Array<Party>;
 };
 
-export default function PartySelection({parties}: Props) {
+export default function PartySelection({ parties }: Props) {
   const bodyTitle = "Seleziona l'Ente per cui accedi";
   const bodyDescription =
     "Potrai in ogni momento cambiare Ente/ruolo anche all'interno dell'interfaccia di gestione dei prodotti";
@@ -42,35 +43,33 @@ export default function PartySelection({parties}: Props) {
     setBtnDisable(false);
   };
   const [input, setInput] = useState('');
- 
+
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
 
   const onFilterChange = (value: string) => {
-
     setInput(value);
     if (!value) {
       setFilteredParties(parties);
     } else {
-      setFilteredParties(
-        parties?.filter(e => verifyPartyFilter(e, value)));
+      setFilteredParties(parties?.filter((e) => verifyPartyFilter(e, value)));
     }
-    if(value && selectedParty && !verifyPartyFilter(selectedParty, value)){
+    if (value && selectedParty && !verifyPartyFilter(selectedParty, value)) {
       setSelectedParty(null);
       setBtnDisable(true);
-    };
+    }
   };
-  
+
   return (
     <Grid
-    direction="column"
-    container
-    display="flex"
-    justifyContent="center"
-    spacing={2}
-    my={'auto'}
-    sx={{ textAlign: 'center' }}
+      direction="column"
+      container
+      display="flex"
+      justifyContent="center"
+      spacing={2}
+      my={'auto'}
+      sx={{ textAlign: 'center' }}
     >
-       <Grid item container justifyContent="center">
+      <Grid item container justifyContent="center">
         <Grid item xs={8}>
           <PartySelectionTitle bodyTitle={bodyTitle} bodyDescription={bodyDescription} />
         </Grid>
@@ -78,7 +77,9 @@ export default function PartySelection({parties}: Props) {
 
       <Grid item container justifyContent="center">
         <Grid item xs={3}>
-          { parties.length > 3 && <PartySelectionSearch onChange={(e) => onFilterChange(e.target.value)} input={input} />}
+          {parties.length > 3 && (
+            <PartySelectionSearch onChange={(e) => onFilterChange(e.target.value)} input={input} />
+          )}
         </Grid>
       </Grid>
 
@@ -97,7 +98,7 @@ export default function PartySelection({parties}: Props) {
                   title={party.description}
                   subTitle={party.role}
                   titleColor={isDisabled ? '' : '#0073E6'}
-                  image={party.image}
+                  image={party.urlLogo}
                   chip={party.status === 'Pending' ? 'Da completare' : ''}
                   action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                     handleListItemClick(event, party)
@@ -108,7 +109,7 @@ export default function PartySelection({parties}: Props) {
         </CustomBox>
       </Grid>
 
-      <Grid item xs={2} > 
+      <Grid item xs={2}>
         <Button
           variant="contained"
           disabled={disableBtn}
@@ -117,7 +118,7 @@ export default function PartySelection({parties}: Props) {
         >
           Entra
         </Button>
-        </Grid>
+      </Grid>
     </Grid>
   );
 }

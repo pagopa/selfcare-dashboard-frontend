@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
+import { appStateReducer } from './slices/appStateSlice';
 import { partiesReducer } from './slices/partiesSlice';
 import { userReducer } from './slices/userSlice';
 
@@ -11,6 +12,7 @@ export const createStore = () =>
     reducer: {
       parties: partiesReducer,
       user: userReducer,
+      appState: appStateReducer,
     },
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(

@@ -6,7 +6,7 @@ import { userSelectors } from '../redux/slices/userSlice';
 // eslint-disable-next-line @typescript-eslint/ban-types
 type LoginProps = {};
 
-export function withLogin<T extends LoginProps>(
+export default function withLogin<T extends LoginProps>(
   WrappedComponent: React.ComponentType<T>
 ): React.ComponentType<T> {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
