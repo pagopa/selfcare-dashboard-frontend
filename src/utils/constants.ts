@@ -11,3 +11,5 @@ export const URL_FE_ONBOARDING: string = process.env.REACT_APP_URL_FE_ONBOARDING
 export const URL_FE_LANDING: string = process.env.REACT_APP_URL_FE_LANDING;
 
 export const STORAGE_KEY_USER = 'user';
+
+export const LOADING_TASK_SEARCH_PARTIES = 'SEARCH_PARTIES';

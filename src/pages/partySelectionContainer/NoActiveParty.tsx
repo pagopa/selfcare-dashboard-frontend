@@ -66,7 +66,7 @@ export default function NoActiveParty({ parties }: Props) {
                       title={party.description}
                       subTitle={party.role}
                       titleColor={isDisabled ? '' : '#0073E6'}
-                      image={party.image}
+                      image={party.urlLogo}
                       chip={party.status === 'Pending' ? 'Da completare' : ''}
                     />
                   );

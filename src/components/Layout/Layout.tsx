@@ -3,7 +3,7 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 
 type Props = {
-  children?: React.ReactChild;
+  children?: Array<React.ReactChild | false>;
 };
 
 export default function Layout({ children }: Props) {

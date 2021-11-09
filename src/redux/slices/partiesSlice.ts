@@ -3,11 +3,13 @@ import type { RootState } from '../store';
 import { Party } from '../../model/Party';
 
 interface PartiesState {
-  list?: Array<Party>;
+  list: Array<Party>;
   selected?: Party;
 }
 
-const initialState: PartiesState = {};
+const initialState: PartiesState = {
+  list: [],
+};
 
 /* eslint-disable functional/immutable-data */
 export const partiesSlice = createSlice({

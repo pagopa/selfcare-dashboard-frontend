@@ -1,32 +1,13 @@
-import { render, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from '../App';
 import { Provider } from 'react-redux';
-import { storageDelete, storageWrite } from '../utils/storage-utils';
-import { STORAGE_KEY_USER, URL_FE_LOGIN } from '../utils/constants';
-import { User } from '../model/User';
 import { createStore } from '../redux/store';
+import { appStateActions } from '../redux/slices/appStateSlice';
+import { mockedUser } from '../decorators/__mocks__/withLogin';
+import { mockedParties } from '../decorators/__mocks__/withParties';
 
-const oldWindowLocation = global.window.location;
-const mockedLocation = {
-  assign: jest.fn(),
-  pathname: '',
-  origin: 'MOCKED_ORIGIN',
-  search: '',
-  hash: '',
-};
-
-beforeAll(() => {
-  Object.defineProperty(window, 'location', { value: mockedLocation });
-});
-afterAll(() => {
-  Object.defineProperty(window, 'location', { value: oldWindowLocation });
-});
-
-// clean storage after each test
-afterEach(() => {
-  storageDelete(STORAGE_KEY_USER);
-  mockedLocation.assign.mockReset();
-});
+jest.mock('../decorators/withLogin');
+jest.mock('../decorators/withParties');
 
 const renderApp = () => {
   const store = createStore();
@@ -38,30 +19,33 @@ const renderApp = () => {
   return store;
 };
 
-const mockUser = (): User => {
-  const user: User = {
-    name: 'NAME',
-    surname: 'SURNAME',
-    uid: 'UID',
-    taxCode: 'AAAAAA00A00A000A',
-    email: 'a@a.aa',
-  };
+test('Test rendering', () => {
+  const store = renderApp();
+  expect(store.getState().user.logged).toMatchObject(mockedUser);
+  expect(store.getState().parties.list).toMatchObject(mockedParties);
+});
 
-  storageWrite(STORAGE_KEY_USER, user, 'object');
+test('Test loading', () => {
+  const store = renderApp();
+  checkLoading(false);
+  dispatchLoadingTask(store.dispatch, 't1', true);
+  checkLoading(true);
+  dispatchLoadingTask(store.dispatch, 't2', true);
+  checkLoading(true);
+  dispatchLoadingTask(store.dispatch, 't1', false);
+  checkLoading(true);
+  dispatchLoadingTask(store.dispatch, 't2', false);
+  checkLoading(false);
+});
 
-  return user;
+const dispatchLoadingTask = (dispatch, task, loading) => {
+  dispatch(appStateActions.setLoading({ task, loading }));
 };
 
-test('Test no auth session', async () => {
-  renderApp();
-  await waitFor(() => expect(global.window.location.assign).toBeCalledWith(URL_FE_LOGIN));
-});
-
-test('Test auth session', async () => {
-  const user = mockUser();
-  const store = renderApp();
-  await waitFor(() => {
-    expect(global.window.location.assign).not.toBeCalled();
-    expect(store.getState().user.logged).toMatchObject(user);
-  });
-});
+const checkLoading = (expectedLoading: boolean) => {
+  if (expectedLoading) {
+    screen.getByRole('loadingSpinner');
+  } else {
+    expect(screen.queryByRole('loadingSpinner')).toBeNull();
+  }
+};
