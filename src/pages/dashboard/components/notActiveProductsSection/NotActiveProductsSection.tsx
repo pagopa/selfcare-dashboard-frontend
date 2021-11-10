@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Typography, Box, Link } from '@mui/material';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
-import BaseProductCard from './BaseProductCard';
+import NotActiveProductCard from './components/NotActiveProductCard';
+import TitleBox from './../TitleBox';
 
-export default function NewProductCard() {
+export default function NotActiveProductsSection() {
   const [products, setProducts] = useState<Array<Product>>([]);
   const buttonLabel = 'Aderisci al prodotto';
   // const infoLabelActive = 'Ultimo servizio attivato: 24 Ottobre 2021';
-  const infoLabelNew = 'SCOPRI DI PIÙ →';
+  const infoLabel = 'SCOPRI DI PIÙ →';
   useEffect(() => {
     const activeProducts: Array<Product> = [
       {
@@ -17,7 +17,7 @@ export default function NewProductCard() {
         description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
         id: '1',
         authorized: true,
-        active: true,
+        active: false,
         urlPublic: 'http://www.google.it',
       },
       {
@@ -35,7 +35,7 @@ export default function NewProductCard() {
         title: 'PDND',
         description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
         authorized: true,
-        active: true,
+        active: false,
         urlPublic: undefined,
       },
     ];
@@ -43,52 +43,31 @@ export default function NewProductCard() {
   }, []);
   return (
     <React.Fragment>
-      <Grid container direction="column" mt={5} mb={6} spacing={1}>
-        <Grid container item>
-          <Grid item xs={4}>
-            <Typography variant="h2">Scopri i nuovi prodotti</Typography>
-          </Grid>
-        </Grid>
-        <Grid container item>
-          <Grid item xs={5}>
-            <Typography variant="body2">
-              Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi.
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
+      <TitleBox
+        title="Scopri i nuovi prodotti"
+        subTitle="Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi."
+        mbTitle={1}
+        mtGrid={10}
+        mbSubTitle={6}
+        variantTitle="h2"
+        variantSubTitle="body2"
+      />
       <Grid container spacing={3}>
         {products &&
-          products.map((product) => {
-            const isDisabled = product.authorized === false;
-           // const urlPublic= window.location.assign(urlPublic);
-            return (
-              <Grid item xs={3} key={product.id}>
-                <Card sx={{ height: '369px', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
-                  <Box mx={3} my={4}>
-                    <BaseProductCard
-                      disableBtn={isDisabled}
-                      cardTitle={product.title}
-                      cardSubTitle={product.description}
-                      buttonLabel={buttonLabel}
-                      logoCard={product.logo}
-                      tag={product.tag}
-                      btnAction={() => product.urlPublic && window.location.assign(product.urlPublic)}
-                    />
-                    <Box mb={3}>
-                      <Link
-                        underline="none"
-                        sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
-                        mx={1}
-                      >
-                        {infoLabelNew}
-                      </Link>
-                    </Box>
-                  </Box>
-                </Card>
-              </Grid>
-            );
-          })}
+          products.findIndex((product) => product.active === false) > -1 &&
+          products
+            .filter((product) => product.active === false)
+            .map((product) => {
+              console.log('');
+              return (
+                <NotActiveProductCard
+                  key={product.id}
+                  product={product}
+                  buttonLabel={buttonLabel}
+                  infoLabel={infoLabel}
+                />
+              );
+            })}
       </Grid>
     </React.Fragment>
   );

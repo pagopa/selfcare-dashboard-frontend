@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Typography, Box } from '@mui/material';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
-import BaseProductCard from './BaseProductCard';
+import ActiveProductCard from './components/ActiveProductCard';
+import TitleBox from './../TitleBox';
 
-export default function ActiveProductCard() {
+export default function ActiveProductsSection() {
   const [products, setProducts] = useState<Array<Product>>([]);
   const buttonLabel = 'Gestisci il prodotto';
   const infoLabel = 'Ultimo servizio attivato: 24 Ottobre 2021';
@@ -16,8 +16,8 @@ export default function ActiveProductCard() {
         description: 'Attivo dal 16 Dicembre 2018',
         id: '1',
         authorized: true,
-        active:true,
-        urlBO: undefined
+        active: true,
+        urlBO: undefined,
       },
       {
         logo: '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',
@@ -25,17 +25,18 @@ export default function ActiveProductCard() {
         title: 'Piattaforma Notifiche',
         description: 'Attivo dal 4 Aprile 2021',
         authorized: false,
-        active:true,
-        urlBO: undefined
-      }, {
+        active: true,
+        urlBO: undefined,
+      },
+      {
         logo: 'iVBORw0KGgoAAAANSUhEUgAAAFAAAAA2CAYAAABQvB7qAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAX1SURBVHgB7VtbVttIEK1uKeFzmM8QZo5YQZwVjFlBmBVgVhCB+Y/5jxlnBYEVYFaAZwVjVmBxhsf8jfMZQN2paj2QpbYefkhy4J4DqNtdVnNV3VVdVWLwM+HgpgOMfco1lsEQpByCe78Pva2x6rP/bYJpfMCrJki2rpeTY/wMf9xTEA99E54rJDSQjQYYaxa2tsG+s8CQF9gfDpgi5/1ivImyu8+BwAFqmhO2GGvFPrfUby5apJYTkOBglxPpQdIhqpnNn59AKU7hePMkbLdvW7llQRxBNyp7N8IvnFjaHF4wF14InBOmsjyZeByGliqAPUJVfmXFVTpE77dBok/JmA3IQlTWHlkoY+kHojXsbQ6hQphgGBfZwwx0Ee46cPzmSDUP7z7hxtxJFWnf4gbs7sFnn4w8Mk9gvlU8A2/jTr+P+30bH7ADFSC/EWH4z9vX52CixuUjwgJpfMW/W3CIWp6fPP9+ro07TLa20n2MVzgWbKgAOgJttFzf1BXjf8GE2dYsV4bOqJBf/Na6L5OOPDI84cj2cV7n/rzI2d15mhb7BSqCjsA+mv0rddXGZTdtjwtAXvnx2xN17S27bAJnkpGXoTtycGOhP7cDNUBxP/ARDQpne2GbiTE8YxQn0LPGJ/AChdlOIuT6cHMXbWUT6g7aX9VWFEDOI2vFhxQnMDh0F5lItVhP3celPIVZZWEWAg3RiB26aUlHndkm1AnJgAAB5yyu0BvoQ1fj8E+XjQcTZiBQ4hNhEwQOobuxra487RxBrRALCBQCamf3bSdsvgQTFo8XAudEcgm77hYe4Bnkx3oYkOCulfOZFJfheNpQgQX/uiY2LEmgCi4YfkMzS8bijnMjMyDxiDJGQZk4JB4xjTXbv47NSX6DilBkCQ9UmMm9H8Ck1c2GF3IaFBEBl3eUFcwCjXEfelAR0oMJATjmFIKwlHcSea8iLIJZkIboMY8stV5GH0zovXEgiORMuw/Ny43EKpmLmTbjZGKMiORDUueqkaW+LDGMp8UXhIX/7BWUBZ3r090osgeXh/bt/zDpB47LSSoRSdxthm3SzO7vfVg9xE8lTjkEmo9BcNUHd4DCZqsE+1oX3C1JA3Uo7vpUC4NZyU5xWQ6BSTfGmurG5LG8VUBIjEDFE+/cKefRKzdGfMkxcqzOrnUEN94l+oQ7ZMpNiOJzSnQiD2hp9qZ8BxkT2g91bokg3/LBSaRP6wB9kAQN4cav5tyExUFLM5oCjcLz7RxYNSgPIrZYJfytPoJlgFKg7dtReHZddXD+MdkplBexBAKZ41+g2q+NUBvz1evVFSqnrUnui4dlERjDqmujxNxPsvMk2KvLcsBWUxuV8yxbiX73Ptzfy/VgV00bDX6W7FTa5wStxRNINcTpWAdzWrVVjXCoVouV6I9oH2HxBEqWQiAVdX9/v3DXadEgv09bDDWpfYRyz8LeSajepSBh3jsGOmKK+4RvW+4eKKkq/nV2IVFVoAJQU9C+ZyU/xCOmpgZxCQSKjGAsa0H75ivUDYq81xfqISeA5/hjfW55mRqI+RO2pY+uEIm3Z17Jbw2gzujTyMN9u7tpTxNdDoFSHqkcCJ19BaOqBd2+t4O+4T+VuzTk66kXbDTkqYTV/Z9p4osnkLJpx5FyCCLRFdNItBSJB9ctqALt/z6ir3cBuj1PGY3s2uvykjf0pDk6pky3QSv00cXZL6VYnEJuhknVt03t5znJI5Sb/VLJJVwu00kE5WuRs7oMIrOI8+4/VMs25/3LTx8+1UTvpA9kg+CNyLmCrGSo+FoLGPuQThwBra370Clyv+ryrwfXNibU6biUwxITmfKcQujal36iIKNkGA2Qr955FbRZpCng9z3uzZJqrTaBrbRRdHAau8WF/bij9/6u/xCSJbjZUFvG/qxaXo8KABW0NEgbm1AeBsDco3nP5fUqoVBE8tZsGpkLlPU7VaW9Cwpo1LMGJSgFYZyIbMJ88Gq46b3heQ2SBvUkMA5VoYWGgcEf4BkdC5LO79j/cbw31NklPoRh7UNnzx0/ADRQfrwcZanwAAAAAElFTkSuQmCC',
         id: '3',
         title: 'Pagamenti pagoPA',
         description: 'Attivo dal 16 Dicembre 2018',
         authorized: true,
-        tag:"Vecchio Portale",
-        active:true,
-        urlBO: undefined
+        tag: 'Vecchio Portale',
+        active: true,
+        urlBO: undefined,
       },
     ];
     setProducts(activeProducts);
@@ -43,41 +44,25 @@ export default function ActiveProductCard() {
 
   return (
     <React.Fragment>
-      <Grid container direction="column" mt={9} mb={6} spacing={1}>
-        <Grid container item>
-          <Grid item xs={2}>
-            <Typography variant="h2">Prodotti attivi</Typography>
-          </Grid>
-        </Grid>
-        <Grid container item>
-          <Grid item xs={3}>
-            <Typography variant="body2">I prodotti PagoPA a cui il tuo ente ha aderito.</Typography>
-          </Grid>
-        </Grid>
-      </Grid>
+      <TitleBox
+        title="Prodotti attivi"
+        subTitle="I prodotti PagoPA a cui il tuo Ente ha aderito."
+        mbTitle={1}
+        mtGrid={10}
+        mbSubTitle={5}
+        variantTitle="h2"
+        variantSubTitle="body2"
+      />
       <Grid container spacing={4}>
         {products &&
-          products.map((product) => {
-            const isDisabled = product.authorized === false;
-            return (
-              <Grid item xs={4} key={product.id}>
-                <Card sx={{ height: '359px', boxShadow:'0px 0px 80px rgba(0, 43, 85, 0.1)'}}>
-                  <Box mx={8} my={5}>
-                    <BaseProductCard
-                      disableBtn={isDisabled}
-                      cardTitle={product.title}
-                      cardSubTitle={product.description}
-                      buttonLabel={buttonLabel}
-                      logoCard={product.logo}
-                      tag={product.tag}
-                      btnAction={() => product.urlPublic && window.location.assign(product.urlPublic)}
-                    />
-                    <Typography mx={1}>{infoLabel}</Typography>
-                  </Box>
-                </Card>
-              </Grid>
-            );
-          })}
+          products.map((product) => (
+            <ActiveProductCard
+              key={product.id}
+              product={product}
+              buttonLabel={buttonLabel}
+              infoLabel={infoLabel}
+            />
+          ))}
       </Grid>
     </React.Fragment>
   );
