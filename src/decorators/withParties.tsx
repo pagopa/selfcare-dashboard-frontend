@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { PartyProcessApi } from '../api/PartyProcessApiClient';
+import useLoading from '../hooks/useLoading';
 import { institutionInfo2Party, Party } from '../model/Party';
 import { useAppDispatch } from '../redux/hooks';
-import { appStateActions } from '../redux/slices/appStateSlice';
 import { partiesActions } from '../redux/slices/partiesSlice';
 import { LOADING_TASK_SEARCH_PARTIES } from '../utils/constants';
 
@@ -15,8 +15,7 @@ export default function withParties<T>(
     const dispatch = useAppDispatch();
     const setPartiesList = (parties: Array<Party>) =>
       dispatch(partiesActions.setPartiesList(parties));
-    const setLoading = (loading: boolean) =>
-      dispatch(appStateActions.setLoading({ task: LOADING_TASK_SEARCH_PARTIES, loading }));
+    const setLoading = useLoading(LOADING_TASK_SEARCH_PARTIES);
 
     useEffect(() => {
       setLoading(true);
