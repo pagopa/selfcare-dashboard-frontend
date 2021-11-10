@@ -3,30 +3,49 @@ import App from '../App';
 import { Provider } from 'react-redux';
 import { createStore } from '../redux/store';
 import { appStateActions } from '../redux/slices/appStateSlice';
-import { mockedUser } from '../decorators/__mocks__/withLogin';
-import { mockedParties } from '../decorators/__mocks__/withParties';
+import { verifyMockExecution as verifyLoginMockExecution } from '../decorators/__mocks__/withLogin';
+import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators/__mocks__/withParties';
+import { createMemoryHistory } from 'history';
+import { Router } from 'react-router';
+import routes from '../routes';
 
 jest.mock('../decorators/withLogin');
 jest.mock('../decorators/withParties');
 
-const renderApp = () => {
-  const store = createStore();
+const renderApp = (
+  injectedStore?: ReturnType<typeof createStore>,
+  injectedHistory?: ReturnType<typeof createMemoryHistory>
+) => {
+  const store = injectedStore ? injectedStore : createStore();
+  const history = injectedHistory ? injectedHistory : createMemoryHistory();
   render(
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <Router history={history}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
   );
-  return store;
+  return { store, history };
 };
 
 test('Test rendering', () => {
-  const store = renderApp();
-  expect(store.getState().user.logged).toMatchObject(mockedUser);
-  expect(store.getState().parties.list).toMatchObject(mockedParties);
+  const { store } = renderApp();
+  verifyLoginMockExecution(store.getState());
+  verifyPartiesMockExecution(store.getState());
+});
+
+test('Test rendering dashboard no parties loaded', () => {
+  const history = createMemoryHistory();
+  history.push('/dashboard/1');
+
+  const { store } = renderApp(undefined, history);
+
+  verifyLoginMockExecution(store.getState());
+  expect(store.getState().parties.list).toBeUndefined();
 });
 
 test('Test loading', () => {
-  const store = renderApp();
+  const { store } = renderApp();
   checkLoading(false);
   dispatchLoadingTask(store.dispatch, 't1', true);
   checkLoading(true);
@@ -49,3 +68,14 @@ const checkLoading = (expectedLoading: boolean) => {
     expect(screen.queryByRole('loadingSpinner')).toBeNull();
   }
 };
+
+test('Test routing', () => {
+  const { history } = renderApp();
+  expect(history.location.pathname).toBe('/dashboard');
+
+  history.push('/dashboard/1');
+  expect(history.location.pathname).toBe('/dashboard/1');
+
+  history.push('/dashboard/13/2');
+  expect(history.location.pathname).toBe('/dashboard/13');
+});
