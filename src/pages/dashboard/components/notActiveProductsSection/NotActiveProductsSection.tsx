@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Typography, Box, Link } from '@mui/material';
+import { Typography} from '@mui/material';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
-import BaseProductCard from './BaseProductCard';
+import NotActiveProductCard from './components/NotActiveProductCard';
+// import BaseProductCard from './../productCard/BaseProductCard';
 
-export default function NewProductCard() {
+export default function NotActiveProductsSection() {
   const [products, setProducts] = useState<Array<Product>>([]);
   const buttonLabel = 'Aderisci al prodotto';
   // const infoLabelActive = 'Ultimo servizio attivato: 24 Ottobre 2021';
-  const infoLabelNew = 'SCOPRI DI PIÙ →';
+  const infoLabel = 'SCOPRI DI PIÙ →';
   useEffect(() => {
     const activeProducts: Array<Product> = [
       {
@@ -59,36 +60,14 @@ export default function NewProductCard() {
       </Grid>
       <Grid container spacing={3}>
         {products &&
-          products.map((product) => {
-            const isDisabled = product.authorized === false;
-           // const urlPublic= window.location.assign(urlPublic);
-            return (
-              <Grid item xs={3} key={product.id}>
-                <Card sx={{ height: '369px', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
-                  <Box mx={3} my={4}>
-                    <BaseProductCard
-                      disableBtn={isDisabled}
-                      cardTitle={product.title}
-                      cardSubTitle={product.description}
-                      buttonLabel={buttonLabel}
-                      logoCard={product.logo}
-                      tag={product.tag}
-                      btnAction={() => product.urlPublic && window.location.assign(product.urlPublic)}
-                    />
-                    <Box mb={3}>
-                      <Link
-                        underline="none"
-                        sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
-                        mx={1}
-                      >
-                        {infoLabelNew}
-                      </Link>
-                    </Box>
-                  </Box>
-                </Card>
-              </Grid>
-            );
-          })}
+          products.map((product) => (
+            <NotActiveProductCard
+              key={product.id}
+              product={product}
+              buttonLabel={buttonLabel}
+              infoLabel={infoLabel}
+            />
+          ))}
       </Grid>
     </React.Fragment>
   );
