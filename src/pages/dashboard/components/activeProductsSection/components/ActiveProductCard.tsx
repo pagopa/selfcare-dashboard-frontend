@@ -1,6 +1,6 @@
 import { Card, Grid,Box,Typography } from '@mui/material';
 import { Product } from '../../../../../model/Product';
-import BaseProductCard from '../../productCardPC/BaseProductCard';
+import BaseProductCard from '../../productCard/BaseProductCard';
 
 type Props={
     product: Product;
