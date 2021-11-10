@@ -1,6 +1,7 @@
 import { Party } from '../../model/Party';
 import { useAppDispatch } from '../../redux/hooks';
 import { partiesActions } from '../../redux/slices/partiesSlice';
+import { RootState } from '../../redux/store';
 
 export const mockedParties: Array<Party> = [
   {
@@ -44,6 +45,10 @@ export const mockedParties: Array<Party> = [
     platformRole: 'admin',
   },
 ];
+
+export const verifyMockExecution = (state: RootState) => {
+  expect(state.parties.list).toMatchObject(mockedParties);
+};
 
 export default (WrappedComponent: React.ComponentType<any>) => () => {
   useAppDispatch()(partiesActions.setPartiesList(mockedParties));

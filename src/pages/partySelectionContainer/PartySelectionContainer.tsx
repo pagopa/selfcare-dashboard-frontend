@@ -1,17 +1,20 @@
 import React from 'react';
+import withParties from '../../decorators/withParties';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import NoActiveParty from './NoActiveParty';
 import NoParty from './NoParty';
 import PartySelection from './partySelection/PartySelection';
 
-export default function PartySelectionContainer() {
+const PartySelectionContainer = () => {
   const parties = useAppSelector(partiesSelectors.selectPartiesList);
 
   // se esiste almeno un party attivo visualizzo PartySelection
   // altrimenti se esiste almeno un elemento visualizzo NoActiveParty --<PartyItemContainer />
   // NoParty
-  return (
+  return !parties ? (
+    <></>
+  ) : (
     <React.Fragment>
       {parties.filter((party) => party.status === 'Active').length >= 1 ? (
         <PartySelection parties={parties} />
@@ -22,4 +25,6 @@ export default function PartySelectionContainer() {
       )}
     </React.Fragment>
   );
-}
+};
+
+export default withParties(PartySelectionContainer);

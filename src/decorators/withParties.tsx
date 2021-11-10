@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { PartyProcessApi } from '../api/PartyProcessApiClient';
 import useLoading from '../hooks/useLoading';
 import { institutionInfo2Party, Party } from '../model/Party';
-import { useAppDispatch } from '../redux/hooks';
-import { partiesActions } from '../redux/slices/partiesSlice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
 import { LOADING_TASK_SEARCH_PARTIES } from '../utils/constants';
 
 export default function withParties<T>(
@@ -13,24 +13,27 @@ export default function withParties<T>(
 
   const ComponentWithParties = (props: T) => {
     const dispatch = useAppDispatch();
+    const parties = useAppSelector(partiesSelectors.selectPartiesList);
     const setPartiesList = (parties: Array<Party>) =>
       dispatch(partiesActions.setPartiesList(parties));
     const setLoading = useLoading(LOADING_TASK_SEARCH_PARTIES);
 
     useEffect(() => {
-      setLoading(true);
-      PartyProcessApi.getOnBoardingInfo()
-        .then((onBoardingInfo) =>
-          setPartiesList(
-            onBoardingInfo.institutions
-              ? onBoardingInfo.institutions.map(institutionInfo2Party)
-              : []
+      if (!parties) {
+        setLoading(true);
+        PartyProcessApi.getOnBoardingInfo()
+          .then((onBoardingInfo) =>
+            setPartiesList(
+              onBoardingInfo.institutions
+                ? onBoardingInfo.institutions.map(institutionInfo2Party)
+                : []
+            )
           )
-        )
-        .catch((reason) => {
-          /* TODO  errorHandling */ console.error(reason);
-        })
-        .finally(() => setLoading(false));
+          .catch((reason) => {
+            /* TODO  errorHandling */ console.error(reason);
+          })
+          .finally(() => setLoading(false));
+      }
     }, []);
 
     return <WrappedComponent {...(props as T)} />;
