@@ -1,12 +1,15 @@
 import { Modal, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import MDSpinner from 'react-md-spinner';
+import { useAppSelector } from '../../redux/hooks';
+import { appStateSelectors } from '../../redux/slices/appStateSlice';
 
 export function LoadingOverlay() {
   const theme = useTheme();
+  const loading = useAppSelector(appStateSelectors.selectLoading);
 
   return (
-    <Modal open={true} sx={{ outline: 0 }}>
+    <Modal open={loading} sx={{ outline: 0 }}>
       <Box
         sx={{
           position: 'absolute',
