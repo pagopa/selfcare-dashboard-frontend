@@ -3,7 +3,7 @@ import { Card, Grid, Link } from '@mui/material';
 import { Box } from '@mui/material';
 // import { Typography } from '@mui/material';
 import { Product } from '../../../../../model/Product';
-import BaseProductCard from './../../productCard/BaseProductCard';
+import BaseProductCard from '../../productCardPC/BaseProductCard';
 
 type Props={
     product: Product;
