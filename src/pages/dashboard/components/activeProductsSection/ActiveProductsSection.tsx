@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
 import ActiveProductCard from './components/ActiveProductCard';
+import TitleBox from './../TitleBox';
 
 export default function ActiveProductsSection() {
   const [products, setProducts] = useState<Array<Product>>([]);
@@ -44,18 +44,15 @@ export default function ActiveProductsSection() {
 
   return (
     <React.Fragment>
-      <Grid container direction="column" mt={9} mb={6} spacing={1}>
-        <Grid container item>
-          <Grid item xs={2}>
-            <Typography variant="h2">Prodotti attivi</Typography>
-          </Grid>
-        </Grid>
-        <Grid container item>
-          <Grid item xs={3}>
-            <Typography variant="body2">I prodotti PagoPA a cui il tuo ente ha aderito.</Typography>
-          </Grid>
-        </Grid>
-      </Grid>
+      <TitleBox
+        title="Prodotti attivi"
+        subTitle="I prodotti PagoPA a cui il tuo Ente ha aderito."
+        mbTitle={1}
+        mtGrid={10}
+        mbSubTitle={5}
+        variantTitle="h2"
+        variantSubTitle="body2"
+      />
       <Grid container spacing={4}>
         {products &&
           products.map((product) => (

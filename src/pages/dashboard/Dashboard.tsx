@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { Product } from '../../model/Product';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
+import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
 
 export default function Dashboard() {
   const [products, setProducts] = useState<Array<Product>>([]);
@@ -39,11 +40,14 @@ export default function Dashboard() {
     setProducts(activeProducts);
   }, []);
   return (
-    <Box mb={6}>
+    
+    <Box mb={6} px={10}>
+      <WelcomeDashboard />
       <ActiveProductsSection />
       {products && products.findIndex((product) => product.active === false) > -1 && (
         <NotActiveProductsSection />
       )}
     </Box>
+
   );
 }

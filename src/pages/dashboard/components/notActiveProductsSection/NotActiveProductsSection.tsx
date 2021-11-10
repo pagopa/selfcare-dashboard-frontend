@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Typography} from '@mui/material';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
 import NotActiveProductCard from './components/NotActiveProductCard';
-// import BaseProductCard from './../productCard/BaseProductCard';
+import TitleBox from './../TitleBox';
 
 export default function NotActiveProductsSection() {
   const [products, setProducts] = useState<Array<Product>>([]);
@@ -18,7 +17,7 @@ export default function NotActiveProductsSection() {
         description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
         id: '1',
         authorized: true,
-        active: true,
+        active: false,
         urlPublic: 'http://www.google.it',
       },
       {
@@ -36,7 +35,7 @@ export default function NotActiveProductsSection() {
         title: 'PDND',
         description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
         authorized: true,
-        active: true,
+        active: false,
         urlPublic: undefined,
       },
     ];
@@ -44,30 +43,31 @@ export default function NotActiveProductsSection() {
   }, []);
   return (
     <React.Fragment>
-      <Grid container direction="column" mt={5} mb={6} spacing={1}>
-        <Grid container item>
-          <Grid item xs={4}>
-            <Typography variant="h2">Scopri i nuovi prodotti</Typography>
-          </Grid>
-        </Grid>
-        <Grid container item>
-          <Grid item xs={5}>
-            <Typography variant="body2">
-              Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi.
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
+      <TitleBox
+        title="Scopri i nuovi prodotti"
+        subTitle="Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi."
+        mbTitle={1}
+        mtGrid={10}
+        mbSubTitle={6}
+        variantTitle="h2"
+        variantSubTitle="body2"
+      />
       <Grid container spacing={3}>
         {products &&
-          products.map((product) => (
-            <NotActiveProductCard
-              key={product.id}
-              product={product}
-              buttonLabel={buttonLabel}
-              infoLabel={infoLabel}
-            />
-          ))}
+          products.findIndex((product) => product.active === false) > -1 &&
+          products
+            .filter((product) => product.active === false)
+            .map((product) => {
+              console.log('');
+              return (
+                <NotActiveProductCard
+                  key={product.id}
+                  product={product}
+                  buttonLabel={buttonLabel}
+                  infoLabel={infoLabel}
+                />
+              );
+            })}
       </Grid>
     </React.Fragment>
   );
