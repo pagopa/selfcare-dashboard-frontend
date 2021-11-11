@@ -83,6 +83,9 @@
     "rimraf": "^3.0.2"
   },
   "jest": {
+    "restoreMocks": true,
+    "clearMocks": true,
+    "resetMocks": true,
     "coveragePathIgnorePatterns": [
       "src/index.tsx",
       "src/reportWebVitals.ts",

@@ -1,38 +1,14 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { PartyProcessApi } from '../api/PartyProcessApiClient';
 import useLoading from '../hooks/useLoading';
-import { institutionInfo2Party, Party } from '../model/Party';
+import { Party } from '../model/Party';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
+import { fetchPartyDetails } from '../services/partyService';
 import { LOADING_TASK_SEARCH_PARTY } from '../utils/constants';
 
 type DashboardUrlParams = {
   institutionId: string;
-};
-
-const fetchParty = (
-  institutionId: string,
-  setParty: (p: Party) => void,
-  setLoading: (l: boolean) => void
-) => {
-  setLoading(true);
-  PartyProcessApi.getOnBoardingInfo({ institutionId })
-    .then((onBoardingInfo) => {
-      const party =
-        onBoardingInfo.institutions && onBoardingInfo.institutions.length > 0
-          ? institutionInfo2Party(onBoardingInfo.institutions[0])
-          : null;
-
-      if (!party) {
-        throw new Error(`Cannot find institutionId ${institutionId}`);
-      }
-      setParty(party);
-    })
-    .catch((reason) => {
-      /* TODO  errorHandling */ console.error(reason);
-    })
-    .finally(() => setLoading(false));
 };
 
 export default function withSelectedParty<T>(
@@ -50,16 +26,19 @@ export default function withSelectedParty<T>(
 
     useEffect(() => {
       if (!selectedParty || selectedParty.institutionId !== institutionId) {
-        if (parties) {
-          const selected = parties.filter((p) => p.institutionId === institutionId);
-          if (selected && selected.length > 0) {
-            setParty(selected[0]);
-          } else {
-            fetchParty(institutionId, setParty, setLoading);
-          }
-        } else {
-          fetchParty(institutionId, setParty, setLoading);
-        }
+        setLoading(true);
+        fetchPartyDetails(institutionId, parties)
+          .then((p) => {
+            if (p) {
+              setParty(p);
+            } else {
+              throw new Error(`Cannot find institutionId ${institutionId}`);
+            }
+          })
+          .catch((reason) => {
+            /* TODO  errorHandling */ console.error(reason);
+          })
+          .finally(() => setLoading(false));
       }
     }, []);
     return <WrappedComponent {...(props as T)} />;

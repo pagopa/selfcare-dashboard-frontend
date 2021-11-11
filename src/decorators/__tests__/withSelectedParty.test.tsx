@@ -1,51 +1,67 @@
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { createStore } from '../../redux/store';
+import { createStore, RootState } from '../../redux/store';
 import withSelectedParty from '../withSelectedParty';
-import { mockedOnBoardingInfo } from '../../api/__mocks__/PartyProcessApiClient';
-import { PartyProcessApi } from '../../api/PartyProcessApiClient';
+import { verifyFetchPartyDetailsMockExecution } from '../../services/__mocks__/partyService';
+import { createMemoryHistory } from 'history';
+import { Route, Router, Switch } from 'react-router';
 
-jest.mock('../../api/PartyProcessApiClient');
+jest.mock('../../services/partyService');
 
-const renderApp = (injectedStore?: any) => {
-  const store = injectedStore ? injectedStore : createStore();
-  const Component = () => <></>;
-  const DecoratedComponent = withSelectedParty(Component);
-  render(
-    <Provider store={store}>
-      <DecoratedComponent />
-    </Provider>
-  );
-  return store;
-};
+const expectedInstitutionId: string = '1';
+
+let fetchPartyDetailsSpy: jest.SpyInstance;
 
 beforeEach(() => {
-  jest.spyOn(PartyProcessApi, 'getOnBoardingInfo');
+  fetchPartyDetailsSpy = jest.spyOn(require('../../services/partyService'), 'fetchPartyDetails');
 });
-// TODO to complete
-test('Test', async () => {
-  const store = renderApp();
-  await waitFor(() =>
-    expect(store.getState().parties.list.length).toBe(mockedOnBoardingInfo.institutions.length)
+
+const renderApp = async (
+  injectedStore?: ReturnType<typeof createStore>,
+  injectedHistory?: ReturnType<typeof createMemoryHistory>
+) => {
+  const store = injectedStore ? injectedStore : createStore();
+  const history = injectedHistory ? injectedHistory : createMemoryHistory();
+
+  if (!injectedHistory) {
+    history.push('/1');
+  }
+
+  const Component = () => <></>;
+  const DecoratedComponent = withSelectedParty(Component);
+
+  render(
+    <Router history={history}>
+      <Provider store={store}>
+        <Switch>
+          <Route path="/:institutionId">
+            <DecoratedComponent />
+          </Route>
+        </Switch>
+      </Provider>
+    </Router>
   );
-  const parties = store.getState().parties.list;
-  expect(
-    parties.map((p) => {
-      const clone = Object.assign({}, p);
-      delete clone.urlLogo;
-      return clone;
-    })
-  ).toMatchObject(mockedOnBoardingInfo.institutions);
 
-  store
-    .getState()
-    .parties.list.forEach((p) =>
-      expect(p.urlLogo).toBe(
-        `https://selcdcheckoutsa.z6.web.core.windows.net/institutions/${p.institutionId}/logo.png`
-      )
-    );
+  await waitFor(() => expect(store.getState().parties.selected).not.toBeUndefined());
 
-  renderApp(store);
+  return { store, history };
+};
 
-  expect(PartyProcessApi.getOnBoardingInfo).toBeCalledTimes(1);
+test('Test default behavior when no parties', async () => {
+  const { store } = await renderApp();
+  checkSelectedParty(store.getState());
+
+  // test when selected party already in store
+  await renderApp(store);
+  checkMockInvocation(1);
 });
+
+const checkSelectedParty = (state: RootState) => {
+  const party = state.parties.selected;
+  verifyFetchPartyDetailsMockExecution(party);
+};
+
+const checkMockInvocation = (expectedCallsNumber: number) => {
+  expect(fetchPartyDetailsSpy).toBeCalledTimes(expectedCallsNumber);
+  expect(fetchPartyDetailsSpy).toBeCalledWith(expectedInstitutionId, undefined);
+};
