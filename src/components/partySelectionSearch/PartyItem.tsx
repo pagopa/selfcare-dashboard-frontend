@@ -13,7 +13,7 @@ type Props = {
     image?: string;
 	action?: React.Dispatch<React.MouseEvent <HTMLDivElement, MouseEvent >>;
 	borderList?: string;
-	disabled: boolean;
+	disabled?: boolean;
 	bgColor?: string;
 	titleColor?:string;
 	titleSize?:string;
