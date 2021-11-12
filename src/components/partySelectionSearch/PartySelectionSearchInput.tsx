@@ -1,5 +1,5 @@
 import { Grid, TextField } from '@mui/material';
-import { Box } from '@mui/system';
+// import { Box } from '@mui/system';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import { ChangeEventHandler } from 'react';
@@ -7,22 +7,32 @@ import { ChangeEventHandler } from 'react';
 type Props ={
  onChange: ChangeEventHandler<HTMLInputElement>;
  input: string;
+ label: string;
+ disableUnderline?: boolean;
 };
 
 
-export default function PartySelectionSearch({onChange, input}:Props) {
+export default function PartySelectionSearchInput({onChange, input, label, disableUnderline}:Props) {
     return (
-        <Grid item xs={12} mx={-1} display="flex" justifyContent="center">
-        <Box sx={{ width: '400px' }}>
+        // <Grid container item  >
+        <Grid item  mx={-1} display="flex" justifyContent="center" >
           <TextField
             name="partySearchInput"
             type="search" 
-            sx={{ width: '100%' }}
+            sx={{ width: '100%'}}
             value={input}
             onChange={onChange}
             id="search"
-            label="Cerca"
+            label={label}
             InputProps={{
+              style: {
+                fontSize: '16px',
+                lineHeight: '24px',
+                color: '#C1C9D2',
+                textAlign: 'start',
+                paddingLeft:'16px'
+              },
+              disableUnderline,
               endAdornment: (
                 <InputAdornment position="end">
                   <SearchOutlinedIcon />
@@ -31,7 +41,7 @@ export default function PartySelectionSearch({onChange, input}:Props) {
             }}
             variant="standard"
           />
-        </Box>
-      </Grid>
+        </Grid>
+      // </Grid>
     );
 }

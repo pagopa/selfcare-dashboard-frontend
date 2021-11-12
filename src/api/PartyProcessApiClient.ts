@@ -23,11 +23,11 @@ const apiClient = createClient({
   withDefaults: withBearer,
 });
 
-// APIs
-
-export const getOnBoardingInfo = async (
-  request: RequestParams<GetOnBoardingInfoT>
-): Promise<OnBoardingInfo> => {
-  const result = await apiClient.getOnBoardingInfo(request);
-  return extractResponse(result, 200);
+export const PartyProcessApi = {
+  getOnBoardingInfo: async (
+    request: RequestParams<GetOnBoardingInfoT> = {}
+  ): Promise<OnBoardingInfo> => {
+    const result = await apiClient.getOnBoardingInfo(request);
+    return extractResponse(result, 200);
+  },
 };

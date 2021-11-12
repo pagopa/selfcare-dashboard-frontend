@@ -1,18 +1,42 @@
 import { AppBar, Button, SvgIcon, Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
-import { ReactComponent as logo } from '../../assets/pagopa-logo.svg';
+import { Fragment } from 'react';
+import { ReactComponent as logo } from '../../assets/logo_pago_pa_mini.svg';
+import SubHeader from './subHeader/SubHeader';
 
-export function Header() {
-  return (
-    <AppBar position="relative">
-      <Toolbar sx={{ flexWrap: 'wrap' }}>
+type HeaderProps = {
+  withSecondHeader: boolean;
+  onExitAction?: (() => void) | null;
+  subHeaderChild?: React.ReactNode;
+};
+
+const Header = ({ withSecondHeader, onExitAction, subHeaderChild }: HeaderProps) => (
+  //   <Box sx={{ height: withSecondHeader === true ? '155px' : '48px' }}>
+  <Fragment>
+    <AppBar
+      position="relative"
+      sx={{ alignItems: 'center', height: '48px', backgroundColor: '#0059B2' }}
+    >
+      <Toolbar sx={{ width: { xs: '100%', lg: '90%', minHeight: '48px !important' } }}>
         <SvgIcon component={logo} viewBox="0 0 80 24" sx={{ width: '80px' }} />
-        <Box sx={{ flexGrow: 1, textAlign: 'end' }}>
-          <Button variant="contained">
-            Esci
-          </Button>
-        </Box>
+        {onExitAction !== null ? (
+          <Box sx={{ flexGrow: 1, textAlign: 'end' }}>
+            <Button
+              variant="contained"
+              sx={{ width: '88px', backgroundColor: '#004C99', height: '32px' }}
+              onClick={onExitAction}
+            >
+              Esci
+            </Button>
+          </Box>
+        ) : (
+          ''
+        )}
       </Toolbar>
     </AppBar>
-  );
-}
+    {withSecondHeader === true ? <SubHeader>{subHeaderChild}</SubHeader> : ''}
+  </Fragment>
+  /*  </Box> */
+);
+
+export default Header;
