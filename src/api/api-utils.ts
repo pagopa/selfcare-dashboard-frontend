@@ -4,6 +4,7 @@ import * as t from 'io-ts';
 import { agent } from '@pagopa/ts-commons';
 import { AbortableFetch, setFetchTimeout, toFetch } from '@pagopa/ts-commons/lib/fetch';
 import { Millisecond } from '@pagopa/ts-commons/lib/units';
+import { URL_FE_LOGOUT } from '../utils/constants';
 
 export const buildFetchApi = (timeoutMs: number = 300000): typeof fetchWithTimeout => {
   // Must be an https endpoint so we use an https agent
@@ -24,7 +25,7 @@ export const extractResponse = async <R>(
     if (response.right.status === successHttpStatus) {
       return response.right.value;
     } else if (expiredTokenHttpStatus && response.right.status === expiredTokenHttpStatus) {
-      window.location.assign('http://selfcare/logout'); // TODO
+      window.location.assign(URL_FE_LOGOUT);
       return new Promise(() => null);
     } else {
       console.error(JSON.stringify(response.right));

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Party } from '../../model/Party';
+import { URL_FE_LANDING } from '../../utils/constants';
 import PartyItemContainer from './../../components/partySelectionSearch/PartyItemContainer';
 
 type Props = {
@@ -79,7 +80,7 @@ export default function NoActiveParty({ parties }: Props) {
           <Button
             variant="contained"
             sx={{ width: '190px', height: '40px' }}
-            // TODO: redirect to landing
+            onClick={() => window.location.assign(URL_FE_LANDING)}
           >
             Torna al portale
           </Button>

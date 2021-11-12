@@ -36,9 +36,14 @@ export default function DashboardSubMenu({
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     if (!parties) {
-      void fetchParties().then((parties) => {
-        setParties(parties.filter((p) => p !== selectedParty && p.status === 'Active'));
-      });
+      fetchParties()
+        .then((parties) => {
+          setParties(parties.filter((p) => p !== selectedParty && p.status === 'Active'));
+        })
+        .catch((reason) => {
+          /* TODO  errorHandling */ console.error(reason);
+          return [];
+        });
     }
   };
 
