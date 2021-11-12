@@ -2,13 +2,21 @@ import { mockedOnBoardingInfo } from '../../api/__mocks__/PartyProcessApiClient'
 import { PartyProcessApi } from '../../api/PartyProcessApiClient';
 import { fetchParties, fetchPartyDetails } from '../partyService';
 import { institutionInfo2Party, Party } from '../../model/Party';
+import { DashboardApi } from '../../api/DashboardApiClient';
+import { ENV } from '../../utils/env';
 
 jest.mock('../../api/PartyProcessApiClient');
+jest.mock('../../api/DashboardApiClient');
 
 let partyProcessApiGetOnBoardingInfoSpy;
+let dashboardApiGetInstitutionSpy;
+
+const oldEnv_FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS = ENV.FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS;
 
 beforeEach(() => {
   partyProcessApiGetOnBoardingInfoSpy = jest.spyOn(PartyProcessApi, 'getOnBoardingInfo');
+  dashboardApiGetInstitutionSpy = jest.spyOn(DashboardApi, 'getInstitution');
+  ENV.FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS = oldEnv_FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS;
 });
 
 test('Test fetchParties', async () => {
@@ -36,7 +44,7 @@ describe('Test fetchPartyDetails', () => {
   let fetchMocks: Array<jest.SpyInstance>;
 
   beforeEach(() => {
-    fetchMocks = [partyProcessApiGetOnBoardingInfoSpy];
+    fetchMocks = [partyProcessApiGetOnBoardingInfoSpy, dashboardApiGetInstitutionSpy];
   });
 
   const checkSelectedParty = (party: Party) => {
@@ -54,11 +62,16 @@ describe('Test fetchPartyDetails', () => {
     expect(fetchMocks.reduce((sum, m) => sum + m.mock.calls.length, 0)).toBe(expectedCallsNumber);
   };
 
-  const checkPartyProcessInvocation = () => {
-    expect(PartyProcessApi.getOnBoardingInfo).toBeCalledTimes(1);
+  const checkPartyProcessInvocation = (expectedCallsNumber: number) => {
+    expect(PartyProcessApi.getOnBoardingInfo).toBeCalledTimes(expectedCallsNumber);
     expect(PartyProcessApi.getOnBoardingInfo).toBeCalledWith({
       institutionId: expectedInstitutionId,
     });
+  };
+
+  const checkDashboardInvocation = (expectedCallsNumber: number) => {
+    expect(DashboardApi.getInstitution).toBeCalledTimes(expectedCallsNumber);
+    expect(DashboardApi.getInstitution).toBeCalledWith(expectedInstitutionId);
   };
 
   describe('Test no parties as cache', () => {
@@ -72,14 +85,21 @@ describe('Test fetchPartyDetails', () => {
     test('Test default behavior when no parties', async () => {
       await baseTestWhenNoParties();
 
-      checkPartyProcessInvocation();
+      checkPartyProcessInvocation(1);
     });
 
     test('Test PartyProcess configuration when no parties', async () => {
-      process.env.REACT_APP_FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS = 'true';
+      ENV.FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS = true;
       await baseTestWhenNoParties();
 
-      checkPartyProcessInvocation();
+      checkPartyProcessInvocation(1);
+    });
+
+    test('Test Dashboard configuration when no parties', async () => {
+      ENV.FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS = false;
+      await baseTestWhenNoParties();
+
+      checkDashboardInvocation(1);
     });
   });
 
@@ -103,14 +123,22 @@ describe('Test fetchPartyDetails', () => {
     test('Test default behavior when parties in store', async () => {
       await baseTestWhenPartiesInStore(true);
 
-      checkPartyProcessInvocation();
+      checkPartyProcessInvocation(1);
     });
 
     test('Test PartyProcess configuration when parties in store', async () => {
-      process.env.REACT_APP_FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS = 'true'; //TODO fixme is a boolean
+      ENV.FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS = true;
+      require('../partyService');
       await baseTestWhenPartiesInStore(true);
 
-      checkPartyProcessInvocation();
+      checkPartyProcessInvocation(1);
+    });
+
+    test('Test Dashboard configuration when parties in store', async () => {
+      ENV.FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS = false;
+      await baseTestWhenPartiesInStore(false);
+
+      checkDashboardInvocation(2);
     });
   });
 });

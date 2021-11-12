@@ -1,5 +1,7 @@
+import { DashboardApi } from '../api/DashboardApiClient';
 import { PartyProcessApi } from '../api/PartyProcessApiClient';
-import { institutionInfo2Party, Party } from '../model/Party';
+import { institutionInfo2Party, institutionResource2Party, Party } from '../model/Party';
+import { ENV } from '../utils/env';
 
 export const fetchParties = (): Promise<Array<Party>> =>
   PartyProcessApi.getOnBoardingInfo().then((onBoardingInfo) =>
@@ -10,10 +12,10 @@ export const fetchPartyDetails = (
   institutionId: string,
   parties?: Array<Party>
 ): Promise<Party | null> => {
-  const fetchPartyPromise: (institutionId: string) => Promise<Party | null> = process.env
-    .REACT_APP_FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS
-    ? (institutionId) => fetchPartyFromPartyProcess(institutionId, parties)
-    : fetchPartyFromDashboardBE;
+  const fetchPartyPromise: (institutionId: string) => Promise<Party | null> =
+    ENV.FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS
+      ? (institutionId) => fetchPartyFromPartyProcess(institutionId, parties)
+      : fetchPartyFromDashboardBE;
 
   return fetchPartyPromise(institutionId);
 };
@@ -45,5 +47,7 @@ const fetchPartyFromPartyProcess_fetch = (institutionId: string): Promise<Party 
 
 // fetch using Dashboard BE
 
-const fetchPartyFromDashboardBE = (_institutionId: string): Promise<Party | null> =>
-  new Promise((_resolve, error) => error('TO IMPLEMENT')); // TODO
+const fetchPartyFromDashboardBE = (institutionId: string): Promise<Party | null> =>
+  DashboardApi.getInstitution(institutionId).then((institutionResource) =>
+    institutionResource ? institutionResource2Party(institutionResource) : null
+  );
