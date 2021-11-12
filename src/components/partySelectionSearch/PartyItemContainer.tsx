@@ -4,8 +4,8 @@ import { Box } from '@mui/system';
 import PartyItem from './PartyItem';
 
 type Props={
-    isDisabled: boolean;
-    disabled: boolean;
+    isDisabled?: boolean;
+    disabled?: boolean ;
     borderList?:string;
     selectedItem?:boolean;
     title:string | undefined;

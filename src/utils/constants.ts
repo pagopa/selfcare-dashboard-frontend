@@ -14,3 +14,9 @@ export const STORAGE_KEY_TOKEN = 'token';
 export const LOADING_TASK_SEARCH_PARTIES = 'SEARCH_PARTIES';
 export const LOADING_TASK_SEARCH_PARTY = 'SEARCH_PARTY';
 export const LOADING_TASK_SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
+
+export const roleLabels: { [key: string]: string } = {
+  Manager: 'Rappresentante Legale',
+  Delegate: 'Referente Amministrativo',
+  Operator: 'Referente Tecnico',
+};
