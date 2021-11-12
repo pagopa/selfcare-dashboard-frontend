@@ -69,7 +69,6 @@ test('Test rendering', () => {
   // la serach è presente solo se ho più di 3 parties
   if (parties.length > 3) {
     expect(input.tagName).toBe('INPUT');
-    console.log(parties);
   } else {
     expect(input.tagName).not.toBe('INPUT');
   }
