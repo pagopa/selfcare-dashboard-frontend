@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import useLoading from '../hooks/useLoading';
 import { Party } from '../model/Party';

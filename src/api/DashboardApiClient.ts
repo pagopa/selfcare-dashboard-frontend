@@ -1,4 +1,3 @@
-import { store } from '../redux/store';
 import { storageRead } from '../utils/storage-utils';
 import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
@@ -12,11 +11,9 @@ const dashboardTimeoutMs = process.env.REACT_APP_API_DASHBOARD_TIMEOUT_MS;
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
     const token = storageRead(STORAGE_KEY_TOKEN, 'string');
-    const institutionId = store.getState().parties.selected?.institutionId;
     return wrappedOperation({
       ...params,
       bearerAuth: token,
-      'x-selc-institutionId': institutionId,
     });
   };
 

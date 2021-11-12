@@ -13,16 +13,19 @@ export type RouteConfig = {
   component?: React.FunctionComponent<any>;
 };
 
+export const resolvePathVariables = (path: string, pathVariables: { [key: string]: string }) =>
+  Object.keys(pathVariables).reduce(
+    (result, key) => result.replace(`:${key}`, pathVariables[key]),
+    path
+  );
+
 const buildRedirectToBasePath = (basePath: string): RoutesObject => ({
   SUBPATH_DEFAULT: {
     path: `${basePath}/*`,
     component: (): React.FunctionComponentElement<any> => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const pathVariables: { [key: string]: string } = useParams();
-      const effectiveBasePath = Object.keys(pathVariables).reduce(
-        (result, key) => result.replace(`:${key}`, pathVariables[key]),
-        basePath
-      );
+      const effectiveBasePath = resolvePathVariables(basePath, pathVariables);
       return <Redirect to={`${effectiveBasePath || basePath}`} />;
     },
   },

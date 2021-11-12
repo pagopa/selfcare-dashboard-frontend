@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { Product } from '../../model/Product';
+import withSelectedParty from '../../decorators/withSelectedParty';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
 
-export default function Dashboard() {
+const Dashboard = () => {
   const [products, setProducts] = useState<Array<Product>>([]);
   useEffect(() => {
     const activeProducts: Array<Product> = [
@@ -40,7 +41,6 @@ export default function Dashboard() {
     setProducts(activeProducts);
   }, []);
   return (
-    
     <Box mb={6} px={10}>
       <WelcomeDashboard />
       <ActiveProductsSection />
@@ -48,6 +48,7 @@ export default function Dashboard() {
         <NotActiveProductsSection />
       )}
     </Box>
-
   );
-}
+};
+
+export default withSelectedParty(Dashboard);
