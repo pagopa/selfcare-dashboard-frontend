@@ -63,7 +63,7 @@ export default function DashboardSubMenu({
           }}
         >
           <Grid container px={4}>
-            <Grid item xs={12} mt={5} mb={4}>
+            <Grid item xs={12} mt={4} mb={4}>
               <Typography variant="h3" sx={{ fontSize: '26px' }}>
                 {ownerName}
               </Typography>
@@ -71,16 +71,17 @@ export default function DashboardSubMenu({
             <Grid item xs={10} mb={4}>
               <LogoSubMenu urlLogo={urlLogo} title={description} subTitle={role} />
             </Grid>
-            <Grid item xs={12} mb={4}>
+            <Grid item xs={12}>
               <Divider sx={{ border: '1px solid #CCD4DC' }} />
             </Grid>
-
+            <Grid item mx={3}  mb={2}>
             {/* TODO: handle partySelection */}
             <PartySelectionSearch
               disableUnderline={true}
               parties={parties}
               onPartySelectionChange={(_selectedParty: Party | null) => null}
             />
+            </Grid>
             <Grid container item mb={2} justifyContent="center">
               <Grid item xs={8}>
                 <Button

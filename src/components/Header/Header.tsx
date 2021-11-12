@@ -7,9 +7,10 @@ import SubHeader from './subHeader/SubHeader';
 type HeaderProps = {
   withSecondHeader: boolean;
   onExitAction?: (() => void) | null;
+  subHeaderChild?: React.ReactNode;
 };
 
-const Header = ({ withSecondHeader, onExitAction }: HeaderProps) => (
+const Header = ({ withSecondHeader, onExitAction, subHeaderChild }: HeaderProps) => (
   //   <Box sx={{ height: withSecondHeader === true ? '155px' : '48px' }}>
   <Fragment>
     <AppBar
@@ -33,7 +34,7 @@ const Header = ({ withSecondHeader, onExitAction }: HeaderProps) => (
         )}
       </Toolbar>
     </AppBar>
-    {withSecondHeader === true ? <SubHeader /> : ''}
+    {withSecondHeader === true ? <SubHeader>{subHeaderChild}</SubHeader> : ''}
   </Fragment>
   /*  </Box> */
 );
