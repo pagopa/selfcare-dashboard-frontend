@@ -3,8 +3,8 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { IconButton, Grid, Divider, Button } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Party } from '../../../../../model/Party';
-import PartySelectionSearch from '../../../../partySelectionSearch/PartySelectionSearch';
+import { Party } from '../../../../model/Party';
+import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import LogoSubMenu from './LogoSubMenu';
 
 type Props = {
