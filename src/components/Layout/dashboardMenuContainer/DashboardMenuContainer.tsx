@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { Party } from '../../../../model/Party';
-import { roleLabels } from '../../../../utils/constants';
+import { Party } from '../../../model/Party';
+import { roleLabels } from '../../../utils/constants';
 import DashboardSubMenu from './components/DashboardSubMenu';
 import LogoSubMenu from './components/LogoSubMenu';
 
