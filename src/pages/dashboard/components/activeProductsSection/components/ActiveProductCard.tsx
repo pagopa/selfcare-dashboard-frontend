@@ -1,6 +1,7 @@
 import { Card, Grid,Box,Typography } from '@mui/material';
 import { Product } from '../../../../../model/Product';
 import BaseProductCard from '../../productCard/BaseProductCard';
+import { formatDateAsLongString } from './../../../../../utils/utils';
 
 type Props={
     product: Product;
@@ -16,7 +17,7 @@ export default function ActiveProductCard({product,buttonLabel,infoLabel}: Props
             <BaseProductCard
               disableBtn={isDisabled}
               cardTitle={product.title}
-              cardSubTitle={product.description}
+              cardSubTitle={`Attivo da ${product.activationDateTime && formatDateAsLongString(product.activationDateTime)}`}
               buttonLabel={buttonLabel}
               logoCard={product.logo}
               tag={product.tag}
