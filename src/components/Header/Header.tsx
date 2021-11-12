@@ -2,14 +2,15 @@ import { AppBar, Button, SvgIcon, Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
 import { Fragment } from 'react';
 import { ReactComponent as logo } from '../../assets/logo_pago_pa_mini.svg';
-import SubHeader from './SubHeader';
+import SubHeader from './subHeader/SubHeader';
 
 type HeaderProps = {
   withSecondHeader: boolean;
   onExitAction?: (() => void) | null;
+  subHeaderChild?: React.ReactNode;
 };
 
-const Header = ({ withSecondHeader, onExitAction }: HeaderProps) => (
+const Header = ({ withSecondHeader, onExitAction, subHeaderChild }: HeaderProps) => (
   //   <Box sx={{ height: withSecondHeader === true ? '155px' : '48px' }}>
   <Fragment>
     <AppBar
@@ -33,7 +34,7 @@ const Header = ({ withSecondHeader, onExitAction }: HeaderProps) => (
         )}
       </Toolbar>
     </AppBar>
-    {withSecondHeader === true ? <SubHeader /> : ''}
+    {withSecondHeader === true ? <SubHeader>{subHeaderChild}</SubHeader> : ''}
   </Fragment>
   /*  </Box> */
 );

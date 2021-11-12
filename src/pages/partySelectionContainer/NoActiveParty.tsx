@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Party } from '../../model/Party';
-import PartyItemContainer from './partySelection/components/PartyItemContainer';
+import PartyItemContainer from './../../components/partySelectionSearch/PartyItemContainer';
 
 type Props = {
   parties: Array<Party>;
