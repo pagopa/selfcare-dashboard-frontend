@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Product } from '../../model/Product';
+import { Party } from '../../model/Party';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
+import CardUser from './components/cardUser/CardUser';
 
 export default function Dashboard() {
   const [products, setProducts] = useState<Array<Product>>([]);
@@ -39,15 +41,28 @@ export default function Dashboard() {
     ];
     setProducts(activeProducts);
   }, []);
+
+  const party: Party = {
+    role: 'Manager',
+    description: 'Comune di Milano',
+    urlLogo: 'image',
+    status: 'Pending',
+    institutionId: '1',
+    digitalAddress: 'mail@comune.it',
+    platformRole: 'admin',
+    attributes: ['Ente Locale'],
+  };
+
   return (
-    
     <Box mb={6} px={10}>
       <WelcomeDashboard />
+      <Grid container direction="row" justifyContent={'center'}>
+        <CardUser party={party} />
+      </Grid>
       <ActiveProductsSection />
       {products && products.findIndex((product) => product.active === false) > -1 && (
         <NotActiveProductsSection />
       )}
     </Box>
-
   );
 }
