@@ -8,7 +8,7 @@ import TitleBox from './../TitleBox';
 export default function ActiveProductsSection() {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const buttonLabel = 'Gestisci il prodotto';
-  const infoLabel = 'Ultimo servizio attivato: 24 Ottobre 2021';
+  const infoLabel = 'Ultimo servizio attivato: 24 Ottobre 2021'; // TODO: remove
 
   return (
     <React.Fragment>

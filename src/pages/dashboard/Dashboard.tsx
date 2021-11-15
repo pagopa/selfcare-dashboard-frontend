@@ -1,22 +1,32 @@
-import { Box } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
+import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 const Dashboard = () => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
 
   return products ? (
-    <Box mb={6} px={10}>
-      <WelcomeDashboard />
-      <ActiveProductsSection />
-      {products && products.findIndex((product) => product.active === false) > -1 && (
-        <NotActiveProductsSection />
-      )}
-    </Box>
+    <Grid container>
+      <Grid item xs={3}>
+        <Box sx={{ backgroundColor: '#FFFFFF', height: '2148px' }}>
+          <DashboardSideMenu />
+        </Box>
+      </Grid>
+      <Grid item xs={9} px={10} sx={{ backgroundColor: '#E6E9F2' }}>
+        <Box>
+          <WelcomeDashboard />
+          <ActiveProductsSection />
+          {products && products.findIndex((product) => product.active === false) > -1 && (
+            <NotActiveProductsSection />
+          )}
+        </Box>
+      </Grid>
+    </Grid>
   ) : (
     <> </>
   );

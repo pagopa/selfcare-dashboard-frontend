@@ -36,13 +36,12 @@ export default function PartySelection({ parties }: Props) {
       </Grid>
 
       <Grid item display="flex" justifyContent="center">
-        <Grid container xs={3}>
+        <Grid container item xs={3}>
           <PartySelectionSearch
             parties={parties}
-            onPartySelectionChange={(selectedParty: Party | null) => {
-              setBtnDisable(selectedParty === null);
-              setSelectedParty(selectedParty);
-            }}
+            onPartySelectionChange={(selectedParty: Party | null) =>
+              setBtnDisable(selectedParty === null)
+            }
           />
         </Grid>
       </Grid>
