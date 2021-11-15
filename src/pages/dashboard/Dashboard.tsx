@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Box, Grid } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { Product } from '../../model/Product';
 import { Party } from '../../model/Party';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
 import CardUser from './components/cardUser/CardUser';
+import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export default function Dashboard() {
   const [products, setProducts] = useState<Array<Product>>([]);
@@ -54,15 +55,24 @@ export default function Dashboard() {
   };
 
   return (
-    <Box mb={6} px={10}>
-      <WelcomeDashboard />
-      <Grid container direction="row" justifyContent={'center'}>
-        <CardUser party={party} />
+    <Grid container>
+      <Grid item xs={3}>
+        <Box sx={{ backgroundColor: '#FFFFFF', height: '2148px' }}>
+          <DashboardSideMenu />
+        </Box>
       </Grid>
-      <ActiveProductsSection />
-      {products && products.findIndex((product) => product.active === false) > -1 && (
-        <NotActiveProductsSection />
-      )}
-    </Box>
+      <Grid item xs={9} px={10} sx={{ backgroundColor: '#E6E9F2' }}>
+        <Box>
+          <WelcomeDashboard />
+          <Grid container direction="row" justifyContent={'center'}>
+            <CardUser party={party} />
+          </Grid>
+          <ActiveProductsSection />
+          {products && products.findIndex((product) => product.active === false) > -1 && (
+            <NotActiveProductsSection />
+          )}
+        </Box>
+      </Grid>
+    </Grid>
   );
 }

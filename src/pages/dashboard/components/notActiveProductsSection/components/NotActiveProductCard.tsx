@@ -13,7 +13,7 @@ type Props={
 export default function NotActiveProductCard({product,buttonLabel,infoLabel}: Props) {
     const isDisabled = product.authorized === false;
     return (
-      <Grid item xs={3} key={product.id}>
+      <Grid item xs={4} key={product.id}>
         <Card sx={{ height: '369px', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
           <Box mx={3} my={4}>
             <BaseProductCard

@@ -4,7 +4,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
-import DashboardMenuContainer from './../Header/subHeader/dashboardMenuContainer/DashboardMenuContainer';
+import DashboardMenuContainer from './dashboardMenuContainer/DashboardMenuContainer';
 
 type Props = {
   children?: React.ReactNode;
