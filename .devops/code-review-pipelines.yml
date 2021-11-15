@@ -92,5 +92,6 @@ stages:
               nodeVersion: $(NODE_VERSION)
 
           - script: |
+              yarn generate
               yarn test:coverage --watchAll=false
             displayName: 'Unit tests exec'
