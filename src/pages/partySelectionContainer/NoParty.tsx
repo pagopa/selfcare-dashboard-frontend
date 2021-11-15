@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Button, Typography, Divider, Link } from '@mui/material';
 import { Box } from '@mui/system';
-import { URL_FE_LANDING } from '../../utils/constants';
+import { URL_FE_LANDING, URL_FE_ONBOARDING } from '../../utils/constants';
 
 export default function NoParty() {
   const bodyTitle = 'Non risulta nessun Ente associato';
@@ -63,8 +63,8 @@ export default function NoParty() {
           <Grid item xs={4}>
             <Box>
               <Typography variant="h5" sx={{ fontSize: '14px' }}>
-                {/* TODO: redirect to onboarding (Antonio: quale onboarding?) */}
-                {text} <Link>Aderisci</Link>
+                {text}{' '}
+                <Link onClick={() => window.location.assign(URL_FE_ONBOARDING)}>Aderisci</Link>
               </Typography>
             </Box>
           </Grid>

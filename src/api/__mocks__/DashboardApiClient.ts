@@ -3,16 +3,14 @@ import { ProductsResource } from '../generated/b4f-dashboard/ProductsResource';
 
 export const mockedInstitutionResource: InstitutionResource = {
   name: 'Comune di Bari',
-  //     status: 'Pending', TODO model to update
+  status: 'Active',
   id: '1',
-  //     attributes: ['Ente locale'],
+  category: 'Ente locale',
   mailAddress: 'address',
   fiscalCode: 'fiscalCode',
   IPACode: 'IPACode',
-  /*      actualUser: {
-        role:'Manager',
-        platformRole: 'admin',
-    } */
+  userRole: 'Operator',
+  //  platformRole: 'admin' TODO model to update
 };
 
 export const mockedProductResources: Array<ProductsResource> = [
@@ -21,8 +19,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     title: 'App IO',
     description: 'App IO description',
     id: '1',
-    //      authorized: true,
-    //    active: true,
+    authorized: true,
+    active: true,
     urlBO: 'http://appio/bo',
     activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'http://appio/public',
@@ -32,8 +30,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '2',
     title: 'Piattaforma Notifiche',
     description: 'Piattaforma Notifiche description',
-    //      authorized: false,
-    //    active: true,
+    authorized: false,
+    active: true,
     urlBO: 'http://notifiche/bo',
     activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
@@ -43,9 +41,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '3',
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
-    //      authorized: true,
-    //    tag: 'Vecchio Portale',
-    //    active: true,
+    authorized: true,
+    active: true,
     urlBO: 'http://pagopa/bo',
     activationDateTime: new Date(2021, 1, 3),
     urlPublic: 'http://pagopa/public',
@@ -55,8 +52,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     title: 'Check-IBAN',
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: '4',
-    // authorized: true,
-    // active: false,
+    authorized: true,
+    active: false,
     urlPublic: 'http://www.google.it',
   },
   {
@@ -64,8 +61,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '5',
     title: 'Carta Giovani',
     description: 'Richiedi la convenzione e gestisci i dati e le agevolazioni da offrire.',
-    // authorized: true,
-    // active: true,
+    authorized: true,
+    active: true,
     urlPublic: undefined,
   },
   {
@@ -73,8 +70,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '6',
     title: 'PDND',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
-    // authorized: true,
-    // active: false,
+    authorized: true,
+    active: false,
     urlPublic: undefined,
   },
 ];

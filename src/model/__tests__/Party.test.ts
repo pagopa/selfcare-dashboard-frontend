@@ -21,7 +21,7 @@ test('Test institutionInfo2Party', () => {
     institutionId: '1',
     digitalAddress: 'address',
     platformRole: 'admin',
-    attributes: ['Ente locale'],
+    category: 'Ente locale',
     urlLogo: 'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/1/logo.png',
   });
 });
@@ -29,27 +29,25 @@ test('Test institutionInfo2Party', () => {
 test('Test institutionResource2Party', () => {
   const institutionResource: InstitutionResource = {
     name: 'Comune di Bari',
-    //     status: 'Pending', TODO model to update
+    status: 'Pending',
     id: '1',
-    //     attributes: ['Ente locale'],
+    category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     IPACode: 'IPACode',
-    /*      actualUser: {
-          role:'Manager',
-          platformRole: 'admin',
-      }*/
+    userRole: 'Operator',
+    // platformRole: 'admin' TODO model to update
   };
 
   const party = institutionResource2Party(institutionResource);
   expect(party).toStrictEqual({
     role: 'Operator',
     description: 'Comune di Bari',
-    status: 'Active',
+    status: 'Pending',
     institutionId: '1',
     digitalAddress: 'address',
     platformRole: 'admin',
-    attributes: [],
+    category: 'Ente locale',
     urlLogo: 'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/1/logo.png',
   });
 });

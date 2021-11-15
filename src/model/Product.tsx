@@ -14,4 +14,4 @@ export type Product = {
 };
 
 export const productResource2Product = (resource: ProductsResource): Product =>
-  Object.assign({}, resource, { authorized: true, active: true }) as Product; // TODO update model
+  Object.assign({}, resource) as Product; // it will not provide tag: it will be undefined

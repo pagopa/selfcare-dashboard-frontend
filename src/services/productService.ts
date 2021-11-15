@@ -6,5 +6,5 @@ export const fetchProducts = (institutionId: string): Promise<Array<Product>> =>
   DashboardApi.getProducts(institutionId).then(
     (_productResources) =>
       // productResources ? productResources.map(productResource2Product) : []
-      new Promise((resolve) => resolve(mockedPartyProducts)) // TODO fixme
+      new Promise((resolve) => resolve(mockedPartyProducts)) // TODO fixme to restore functionality
   );

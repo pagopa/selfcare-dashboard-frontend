@@ -5,10 +5,21 @@
     "description": "Self Care Dashboard API documentation",
     "version": "0.0.1-SNAPSHOT"
   },
-  "servers": [{ "url": "http://localhost:8080", "description": "Inferred Url" }],
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Inferred Url"
+    }
+  ],
   "tags": [
-    { "name": "institutions", "description": "Institution operations" },
-    { "name": "products", "description": "Product operations" }
+    {
+      "name": "institutions",
+      "description": "Institution operations"
+    },
+    {
+      "name": "products",
+      "description": "Product operations"
+    }
   ],
   "paths": {
     "/institutions/{institutionId}": {
@@ -24,7 +35,9 @@
             "description": "Institution's unique identifier",
             "required": true,
             "style": "simple",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "x-selc-institutionId",
@@ -32,7 +45,9 @@
             "description": "Institution's unique identifier",
             "required": true,
             "allowReserved": false,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -40,15 +55,27 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/InstitutionResource" }
+                "schema": {
+                  "$ref": "#/components/schemas/InstitutionResource"
+                }
               }
             }
           },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" }
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
         },
-        "security": [{ "bearerAuth": ["global"] }]
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
       }
     },
     "/institutions/{institutionId}/logo": {
@@ -64,7 +91,9 @@
             "description": "${swagger.dashboard.model.id}",
             "required": true,
             "style": "simple",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "x-selc-institutionId",
@@ -72,7 +101,9 @@
             "description": "Institution's unique identifier",
             "required": true,
             "allowReserved": false,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -96,16 +127,36 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/json": { "schema": { "type": "object" } },
-              "multipart/form-data": { "schema": { "type": "object" } }
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object"
+                }
+              }
             }
           },
-          "201": { "description": "Created" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" }
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
         },
-        "security": [{ "bearerAuth": ["global"] }]
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
       }
     },
     "/products/": {
@@ -121,7 +172,9 @@
             "description": "Institution's unique identifier",
             "required": true,
             "allowReserved": false,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -131,16 +184,28 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/ProductsResource" }
+                  "items": {
+                    "$ref": "#/components/schemas/ProductsResource"
+                  }
                 }
               }
             }
           },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" }
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
         },
-        "security": [{ "bearerAuth": ["global"] }]
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
       }
     }
   },
@@ -148,37 +213,100 @@
     "schemas": {
       "InstitutionResource": {
         "title": "InstitutionResource",
+        "required": [
+          "IPACode",
+          "category",
+          "fiscalCode",
+          "id",
+          "mailAddress",
+          "name",
+          "status",
+          "userRole"
+        ],
         "type": "object",
         "properties": {
-          "IPACode": { "type": "string", "description": "Code IPA" },
+          "IPACode": {
+            "type": "string",
+            "description": "IPA code"
+          },
+          "category": {
+            "type": "string",
+            "description": "Institution's category"
+          },
           "fiscalCode": {
             "type": "string",
             "description": "Fiscal code corresponding to the institution"
           },
-          "id": { "type": "string", "description": "Institution's unique identifier" },
-          "mailAddress": { "type": "string", "description": "Institution email address" },
-          "name": { "type": "string", "description": "Institution name" },
-          "type": { "type": "string", "description": "Institution type" }
+          "id": {
+            "type": "string",
+            "description": "Institution's unique identifier"
+          },
+          "mailAddress": {
+            "type": "string",
+            "description": "Institution's email address"
+          },
+          "name": {
+            "type": "string",
+            "description": "Institution's name"
+          },
+          "status": {
+            "type": "string",
+            "description": "Institution's status"
+          },
+          "userRole": {
+            "type": "string",
+            "description": "Logged user's role"
+          }
         }
       },
       "ProductsResource": {
         "title": "ProductsResource",
+        "required": ["activationDateTime", "active", "authorized", "code", "id", "title", "urlBO"],
         "type": "object",
         "properties": {
           "activationDateTime": {
             "type": "string",
-            "description": "${swagger.products.model.activationDateTime}",
+            "description": "Date the products was activated/created",
             "format": "date-time"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "flag indicating whether the institution has a valid contract related to the product",
+            "example": false
+          },
+          "authorized": {
+            "type": "boolean",
+            "description": "flag indicating whether the logged user has the authorization to manage the product",
+            "example": false
+          },
+          "code": {
+            "type": "string",
+            "description": "Product's code"
           },
           "description": {
             "type": "string",
-            "description": "${swagger.products.model.description}"
+            "description": "Product's description"
           },
-          "id": { "type": "string", "description": "${swagger.products.model.id}" },
-          "logo": { "type": "string", "description": "${swagger.products.model.logo}" },
-          "title": { "type": "string", "description": "${swagger.products.model.title}" },
-          "urlBO": { "type": "string", "description": "${swagger.products.model.urlBO}" },
-          "urlPublic": { "type": "string", "description": "${swagger.products.model.urlPublic}" }
+          "id": {
+            "type": "string",
+            "description": "Product's unique identifier"
+          },
+          "logo": {
+            "type": "string",
+            "description": "Product's logo"
+          },
+          "title": {
+            "type": "string",
+            "description": "Product's title"
+          },
+          "urlBO": {
+            "type": "string",
+            "description": "URL that redirects to the back-office section, where is possible to manage the product"
+          },
+          "urlPublic": {
+            "type": "string",
+            "description": "URL that redirects to the public information webpage of the product"
+          }
         }
       }
     },
