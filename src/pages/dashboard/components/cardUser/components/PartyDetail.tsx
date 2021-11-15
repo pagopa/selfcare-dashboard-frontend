@@ -48,7 +48,7 @@ export default function PartyDetail({ party }: Props) {
             marginLeft: 1,
           }}
         >
-          {party.description}
+          {party.ipaCode}
         </Typography>
       </Grid>
       <Grid item>
@@ -102,7 +102,7 @@ export default function PartyDetail({ party }: Props) {
             mt: 1,
           }}
         >
-          {party.description}
+          {party.fiscalCode}
         </Typography>
       </Grid>
       <Grid item>

@@ -52,6 +52,8 @@ export default function Dashboard() {
     digitalAddress: 'mail@comune.it',
     platformRole: 'admin',
     attributes: ['Ente Locale'],
+    ipaCode: 'WFDOA',
+    fiscalCode: '00301970190',
   };
 
   return (
