@@ -5,7 +5,7 @@ import { Party } from '../../model/Party';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
-import CardUser from './components/cardUser/CardUser';
+import PartyCard from './components/partyCard/PartyCard';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export default function Dashboard() {
@@ -67,7 +67,7 @@ export default function Dashboard() {
         <Box>
           <WelcomeDashboard />
           <Grid container direction="row" justifyContent={'center'}>
-            <CardUser party={party} />
+            <PartyCard party={party} isAdminRef={true} />
           </Grid>
           <ActiveProductsSection />
           {products && products.findIndex((product) => product.active === false) > -1 && (

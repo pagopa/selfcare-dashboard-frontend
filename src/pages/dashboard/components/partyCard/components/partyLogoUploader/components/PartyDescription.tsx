@@ -36,7 +36,6 @@ export function PartyDescription({ labelLink, open }: Props) {
           lineHeight: '18px',
           fontSize: '12px',
           mt: 1,
-          mb: '43px',
         }}
       >
         {'dimensione 300x300px'}

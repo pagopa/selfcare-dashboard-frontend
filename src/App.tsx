@@ -19,7 +19,7 @@ const App = () => (
       {buildRoutes(routes)}
 
       <Route path="*">
-        <Redirect to={routes.PARTY_DASHBOARD.path} />
+        <Redirect to={routes.PARTY_SELECTION.path} />
       </Route>
     </Switch>
   </Layout>

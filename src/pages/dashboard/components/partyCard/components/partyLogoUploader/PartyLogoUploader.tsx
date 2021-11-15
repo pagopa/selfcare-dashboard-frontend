@@ -12,9 +12,10 @@ export const sleep = async (ms: number) => await new Promise((resolve) => setTim
 
 type Props = {
   urlLogo?: string;
+  isAdminRef: boolean;
 };
 
-export function FilePngUploader({ urlLogo }: Props) {
+export function FilePngUploader({ urlLogo, isAdminRef }: Props) {
   const [loading, setLoading] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
@@ -54,7 +55,7 @@ export function FilePngUploader({ urlLogo }: Props) {
       <Box {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
         <PartyLogo loading={loading} urlLogo={urlLogo} />
-        <PartyDescription labelLink={labelLink} open={open} />
+        {isAdminRef && <PartyDescription labelLink={labelLink} open={open} />}
       </Box>
 
       <SessionModal

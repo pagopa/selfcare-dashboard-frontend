@@ -9,7 +9,7 @@ type Props = {
 
 export function PartyLogo({ loading, urlLogo }: Props) {
   return (
-    <Box sx={{ width: '152px', height: '152px', mt: 5, mb: 4, alignItems: 'center' }}>
+    <Box sx={{ width: '152px', height: '152px', mb: 4, alignItems: 'center' }}>
       <Box sx={{ position: 'relative', display: loading ? undefined : 'none' }}>
         <CircularProgress
           variant="determinate"
