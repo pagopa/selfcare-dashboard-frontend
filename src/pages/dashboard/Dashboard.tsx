@@ -11,13 +11,13 @@ const Dashboard = () => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
 
   return products ? (
-    <Grid container>
-      <Grid item xs={3}>
+    <Grid container pl={10}>
+      <Grid item xs={2}>
         <Box sx={{ backgroundColor: '#FFFFFF', height: '2148px' }}>
           <DashboardSideMenu />
         </Box>
       </Grid>
-      <Grid item xs={9} px={10} sx={{ backgroundColor: '#E6E9F2' }}>
+      <Grid item xs={10} px={10} sx={{ backgroundColor: '#E6E9F2' }}>
         <Box>
           <WelcomeDashboard />
           <ActiveProductsSection />
