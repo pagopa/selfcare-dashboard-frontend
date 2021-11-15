@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
+import { useParams } from 'react-router';
 import { useSelectedParty } from '../hooks/useSelectedParty';
+
+type DashboardUrlParams = {
+  institutionId: string;
+};
 
 export default function withSelectedParty<T>(
   WrappedComponent: React.ComponentType<T>
@@ -8,12 +13,13 @@ export default function withSelectedParty<T>(
 
   const ComponentWithSelectedParty = (props: T) => {
     const { fetchSelectedParty } = useSelectedParty();
+    const { institutionId } = useParams<DashboardUrlParams>();
 
     useEffect(() => {
-      fetchSelectedParty().catch((reason) => {
+      fetchSelectedParty(institutionId).catch((reason) => {
         /* TODO  errorHandling */ console.error(reason);
       });
-    }, []);
+    }, [institutionId]);
     return <WrappedComponent {...(props as T)} />;
   };
 

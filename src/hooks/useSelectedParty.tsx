@@ -1,4 +1,3 @@
-import { useParams } from 'react-router';
 import useLoading from '../hooks/useLoading';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
@@ -8,15 +7,10 @@ import { fetchPartyDetails } from '../services/partyService';
 import { fetchProducts } from '../services/productService';
 import { LOADING_TASK_SEARCH_PARTY, LOADING_TASK_SEARCH_PRODUCTS } from '../utils/constants';
 
-type DashboardUrlParams = {
-  institutionId: string;
-};
-
 export const useSelectedParty = (): {
-  fetchSelectedParty: () => Promise<[Party | null, Array<Product> | null]>;
+  fetchSelectedParty: (institutionId: string) => Promise<[Party | null, Array<Product> | null]>;
 } => {
   const dispatch = useAppDispatch();
-  const { institutionId } = useParams<DashboardUrlParams>();
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
   const selectedPartyProducts = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const parties = useAppSelector(partiesSelectors.selectPartiesList);
@@ -26,7 +20,7 @@ export const useSelectedParty = (): {
   const setLoadingDetails = useLoading(LOADING_TASK_SEARCH_PARTY);
   const setLoadingProducts = useLoading(LOADING_TASK_SEARCH_PRODUCTS);
 
-  const fetchSelectedParty = () => {
+  const fetchSelectedParty = (institutionId: string) => {
     if (!selectedParty || selectedParty.institutionId !== institutionId) {
       setLoadingDetails(true);
       setLoadingProducts(true);
