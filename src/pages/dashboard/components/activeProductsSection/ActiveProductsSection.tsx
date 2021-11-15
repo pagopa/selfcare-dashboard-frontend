@@ -7,7 +7,7 @@ import TitleBox from './../TitleBox';
 export default function ActiveProductsSection() {
   const [products, setProducts] = useState<Array<Product>>([]);
   const buttonLabel = 'Gestisci il prodotto';
-  const infoLabel = 'Ultimo servizio attivato: 24 Ottobre 2021'; // TODO: remove
+  const infoLabel: Date = new Date('10-24-2021'); // TODO: where to find this info?
   useEffect(() => {
     const activeProducts: Array<Product> = [
       {

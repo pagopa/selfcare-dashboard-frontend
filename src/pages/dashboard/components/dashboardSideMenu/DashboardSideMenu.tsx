@@ -50,7 +50,7 @@ export default function DashboardSideMenu() {
 
   return (
     <Grid container item mt={11}>
-      <Grid item xs={12} ml={10}>
+      <Grid item xs={12} >
         <List>
           {arrayMenu &&
             arrayMenu.map((item) => {
@@ -72,13 +72,13 @@ export default function DashboardSideMenu() {
                     }
                   >
                     <Grid container>
-                      <Grid item xs={10}>
+                      <Grid item xs={11}>
                         <Typography variant="h6" sx={{ fontSize: '18px' }}>
                           {item.title}
                         </Typography>
                       </Grid>
                       {item.subMenu && (
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                           {isOpened ? (
                             <ExpandLess sx={{ color: '#0073E6' }} />
                           ) : (
