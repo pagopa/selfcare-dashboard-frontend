@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import { IconButton, Grid, Divider, Button } from '@mui/material';
+import { IconButton, Grid, Divider, Button, Popper, ClickAwayListener, Paper } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useHistory } from 'react-router';
 import { Party } from '../../../../model/Party';
@@ -57,70 +56,62 @@ export default function DashboardSubMenu({
         <IconButton onClick={handleClick}>
           {open ? <ExpandLess sx={{ color: 'white' }} /> : <ExpandMore sx={{ color: 'white' }} />}
         </IconButton>
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          PaperProps={{
-            style: {
-              boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)',
-              borderRadius: '0px 0px 3px 3px',
-              width: '392px',
-              height: '520px',
-              marginTop: '15px',
-            },
-          }}
-        >
-          <Grid container px={4}>
-            <Grid item xs={12} mt={4} mb={4}>
-              <Typography variant="h3" sx={{ fontSize: '26px' }}>
-                {ownerName}
-              </Typography>
-            </Grid>
-            <Grid item xs={10} mb={4}>
-              <LogoSubMenu urlLogo={urlLogo} title={description} subTitle={role} />
-            </Grid>
-            <Grid item xs={12}>
-              <Divider sx={{ border: '1px solid #CCD4DC' }} />
-            </Grid>
-            <Grid item mx={3} mb={2}>
-              {parties && (
-                <PartySelectionSearch
-                  disableUnderline={true}
-                  parties={parties}
-                  onPartySelectionChange={(selectedParty: Party | null) =>
-                    selectedParty &&
-                    history.push(
-                      resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                        institutionId: selectedParty.institutionId,
-                      })
-                    )
-                  }
-                />
-              )}
-            </Grid>
-            <Grid container item mb={2} justifyContent="center">
-              <Grid item xs={8}>
-                <Button
-                  variant="contained"
-                  sx={{ height: '40px', width: '100%' }}
-                  onClick={() => window.location.assign(URL_FE_LOGOUT)}
-                >
-                  Logout
-                </Button>
+        <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
+          <ClickAwayListener onClickAway={handleClose}>
+            <Paper
+              sx={{
+                style: {
+                  boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)',
+                  borderRadius: '0px 0px 3px 3px',
+                  width: '392px',
+                  height: '520px',
+                  marginTop: '15px',
+                },
+              }}
+            >
+              <Grid container px={4} width="392px" height="520px">
+                <Grid item xs={12} mt={4} mb={4}>
+                  <Typography variant="h3" sx={{ fontSize: '26px' }}>
+                    {ownerName}
+                  </Typography>
+                </Grid>
+                <Grid item xs={10} mb={4}>
+                  <LogoSubMenu urlLogo={urlLogo} title={description} subTitle={role} />
+                </Grid>
+                <Grid item xs={12}>
+                  <Divider sx={{ border: '1px solid #CCD4DC' }} />
+                </Grid>
+                <Grid item mx={3} mb={2}>
+                  {parties && (
+                    <PartySelectionSearch
+                      disableUnderline={true}
+                      parties={parties}
+                      onPartySelectionChange={(selectedParty: Party | null) =>
+                        selectedParty &&
+                        history.push(
+                          resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
+                            institutionId: selectedParty.institutionId,
+                          })
+                        )
+                      }
+                    />
+                  )}
+                </Grid>
+                <Grid container item mb={2} justifyContent="center">
+                  <Grid item xs={8}>
+                    <Button
+                      variant="contained"
+                      sx={{ height: '40px', width: '100%' }}
+                      onClick={() => window.location.assign(URL_FE_LOGOUT)}
+                    >
+                      Logout
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
-            </Grid>
-          </Grid>
-        </Popover>
+            </Paper>
+          </ClickAwayListener>
+        </Popper>
       </Grid>
     </Grid>
   );
