@@ -12,6 +12,8 @@ export type Party = {
   platformRole: UserPlatformRole;
   attributes: Array<string>;
   urlLogo?: string;
+  ipaCode?: string; // TODO is this mandatory?
+  fiscalCode?: string; // TODO is this mandatory?
 };
 
 export const institutionInfo2Party = (institutionInfo: InstitutionInfo): Party => {

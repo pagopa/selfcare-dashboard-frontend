@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Grid, Box } from '@mui/material';
 import { Product } from '../../model/Product';
+import { Party } from '../../model/Party';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
+import PartyCard from './components/partyCard/PartyCard';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export default function Dashboard() {
@@ -40,6 +42,20 @@ export default function Dashboard() {
     ];
     setProducts(activeProducts);
   }, []);
+
+  const party: Party = {
+    role: 'Manager',
+    description: 'Comune di Milano',
+    urlLogo: 'image',
+    status: 'Pending',
+    institutionId: '1',
+    digitalAddress: 'mail@comune.it',
+    platformRole: 'admin',
+    attributes: ['Ente Locale'],
+    ipaCode: 'WFDOA',
+    fiscalCode: '00301970190',
+  };
+
   return (
     <Grid container pl={10}>
       <Grid item xs={2}>
@@ -48,8 +64,11 @@ export default function Dashboard() {
         </Box>
       </Grid>
       <Grid item xs={10} px={10} sx={{ backgroundColor: '#E6E9F2' }}>
-        <Box >
+        <Box>
           <WelcomeDashboard />
+          <Grid container direction="row" justifyContent={'center'}>
+            <PartyCard party={party} isAdminRef={true} />
+          </Grid>
           <ActiveProductsSection />
           {products && products.findIndex((product) => product.active === false) > -1 && (
             <NotActiveProductsSection />
