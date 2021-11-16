@@ -3,14 +3,14 @@ import { ProductsResource } from '../generated/b4f-dashboard/ProductsResource';
 
 export const mockedInstitutionResource: InstitutionResource = {
   name: 'Comune di Bari',
-  status: 'Active',
+  status: 'ACTIVE',
   id: '1',
   category: 'Ente locale',
   mailAddress: 'address',
   fiscalCode: 'fiscalCode',
   IPACode: 'IPACode',
-  userRole: 'Operator',
-  //  platformRole: 'admin' TODO model to update
+  userRole: 'OPERATOR',
+  //  platformRole: "ADMIN" TODO model to update
 };
 
 export const mockedProductResources: Array<ProductsResource> = [

@@ -37,7 +37,7 @@ export default function DashboardSubMenu({
     if (!parties) {
       fetchParties()
         .then((parties) => {
-          setParties(parties.filter((p) => p !== selectedParty && p.status === 'Active'));
+          setParties(parties.filter((p) => p !== selectedParty && p.status === 'ACTIVE'));
         })
         .catch((reason) => {
           /* TODO  errorHandling */ console.error(reason);

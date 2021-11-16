@@ -1,14 +1,14 @@
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
 import { InstitutionInfo } from '../api/generated/party-process/InstitutionInfo';
 
-export type UserRole = 'Manager' | 'Delegate' | 'Operator';
-export type UserPlatformRole = 'admin' | 'security' | 'api';
+export type UserRole = 'MANAGER' | 'DELEGATE' | 'OPERATOR';
+export type UserPlatformRole = 'ADMIN' | 'ADMIN_REF' | 'TECH_REF';
 
 export type Party = {
   institutionId: string;
   description: string;
   digitalAddress: string;
-  status: 'Pending' | 'Active';
+  status: 'PENDING' | 'ACTIVE';
   role: UserRole;
   platformRole: UserPlatformRole;
   category?: string; // TODO fix on CardProduct
@@ -26,7 +26,7 @@ export const institutionInfo2Party = (institutionInfo: InstitutionInfo): Party =
     institutionId: institutionInfo.institutionId,
     description: institutionInfo.description,
     digitalAddress: institutionInfo.digitalAddress,
-    status: institutionInfo.status as 'Pending' | 'Active',
+    status: institutionInfo.state as 'PENDING' | 'ACTIVE',
     role: institutionInfo.role as UserRole,
     platformRole: institutionInfo.platformRole as UserPlatformRole,
     category:
@@ -43,9 +43,9 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     institutionId: institutionResource.id,
     description: institutionResource.name,
     digitalAddress: institutionResource.mailAddress,
-    status: institutionResource.status as 'Active' | 'Pending',
+    status: institutionResource.status as 'ACTIVE' | 'PENDING',
     role: institutionResource.userRole as UserRole,
-    platformRole: 'admin', // TODO bind after model update
+    platformRole: 'ADMIN_REF', // TODO bind after model update
     category: institutionResource.category,
     urlLogo,
   };

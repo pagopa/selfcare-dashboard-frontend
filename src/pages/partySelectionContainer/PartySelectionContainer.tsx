@@ -16,9 +16,9 @@ const PartySelectionContainer = () => {
     <></>
   ) : (
     <React.Fragment>
-      {parties.filter((party) => party.status === 'Active').length >= 1 ? (
+      {parties.filter((party) => party.status === 'ACTIVE').length >= 1 ? (
         <PartySelection parties={parties} />
-      ) : parties.filter((party) => party.status === 'Pending').length >= 1 ? (
+      ) : parties.filter((party) => party.status === 'PENDING').length >= 1 ? (
         <NoActiveParty parties={parties} />
       ) : (
         parties.length === 0 && <NoParty />

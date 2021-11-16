@@ -13,29 +13,18 @@
   "host": "$hostDefaultValue",
   "basePath": "/$basePathDefaultValue",
   "securityDefinitions": {},
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/onboarding/info/": {
       "get": {
         "description": "Return ok",
         "summary": "getOnBoardingInfo",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "getOnBoardingInfo",
         "deprecated": false,
-        "produces": [
-          "application/json",
-          "application/problem+json"
-        ],
+        "produces": ["application/json", "application/problem+json"],
         "parameters": [
           {
             "name": "institutionId",
@@ -67,18 +56,11 @@
       "post": {
         "description": "Return ok",
         "summary": "createLegals",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "createLegals",
         "deprecated": false,
-        "produces": [
-          "application/json",
-          "application/problem+json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "produces": ["application/json", "application/problem+json"],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "body",
@@ -112,17 +94,11 @@
       "post": {
         "description": "Return ok",
         "summary": "createOperators",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "createOperators",
         "deprecated": false,
-        "produces": [
-          "application/problem+json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "produces": ["application/problem+json"],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "body",
@@ -153,15 +129,10 @@
       "get": {
         "description": "Return ok",
         "summary": "getUserInstitutionRelationships",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "getUserInstitutionRelationships",
         "deprecated": false,
-        "produces": [
-          "application/json",
-          "application/problem+json"
-        ],
+        "produces": ["application/json", "application/problem+json"],
         "parameters": [
           {
             "name": "institutionId",
@@ -205,15 +176,10 @@
       "get": {
         "description": "Gets relationship",
         "summary": "getRelationship",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "getRelationship",
         "deprecated": false,
-        "produces": [
-          "application/json",
-          "application/problem+json"
-        ],
+        "produces": ["application/json", "application/problem+json"],
         "parameters": [
           {
             "name": "relationshipId",
@@ -251,14 +217,10 @@
       "delete": {
         "description": "Given a relationship identifier, it relates the corresponding relationship.",
         "summary": "deleteRelationshipById",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "deleteRelationshipById",
         "deprecated": false,
-        "produces": [
-          "application/problem+json"
-        ],
+        "produces": ["application/problem+json"],
         "parameters": [
           {
             "name": "relationshipId",
@@ -295,14 +257,10 @@
       "post": {
         "description": "Activate relationship",
         "summary": "activateRelationship",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "activateRelationship",
         "deprecated": false,
-        "produces": [
-          "application/problem+json"
-        ],
+        "produces": ["application/problem+json"],
         "parameters": [
           {
             "name": "relationshipId",
@@ -339,14 +297,10 @@
       "post": {
         "description": "Suspend relationship",
         "summary": "suspendRelationship",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "suspendRelationship",
         "deprecated": false,
-        "produces": [
-          "application/problem+json"
-        ],
+        "produces": ["application/problem+json"],
         "parameters": [
           {
             "name": "relationshipId",
@@ -383,17 +337,11 @@
       "post": {
         "description": "Return ok",
         "summary": "confirmOnBoarding",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "confirmOnBoarding",
         "deprecated": false,
-        "produces": [
-          "application/problem+json"
-        ],
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "produces": ["application/problem+json"],
+        "consumes": ["multipart/form-data"],
         "parameters": [
           {
             "name": "token",
@@ -428,14 +376,10 @@
       "delete": {
         "description": "Return ok",
         "summary": "invalidateOnboarding",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "invalidateOnboarding",
         "deprecated": false,
-        "produces": [
-          "application/problem+json"
-        ],
+        "produces": ["application/problem+json"],
         "parameters": [
           {
             "name": "token",
@@ -464,15 +408,10 @@
       "get": {
         "description": "Get an onboarding document",
         "summary": "getOnboardingDocument",
-        "tags": [
-          "process"
-        ],
+        "tags": ["process"],
         "operationId": "getOnboardingDocument",
         "deprecated": false,
-        "produces": [
-          "application/octet-stream",
-          "application/problem+json"
-        ],
+        "produces": ["application/octet-stream", "application/problem+json"],
         "parameters": [
           {
             "name": "relationshipId",
@@ -513,15 +452,10 @@
       "get": {
         "description": "Returns all the available bindings between roles and platform roles.",
         "summary": "getPlatformRoles",
-        "tags": [
-          "platform"
-        ],
+        "tags": ["platform"],
         "operationId": "getPlatformRoles",
         "deprecated": false,
-        "produces": [
-          "application/json",
-          "application/problem+json"
-        ],
+        "produces": ["application/json", "application/problem+json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -545,14 +479,10 @@
       "get": {
         "description": "Return ok",
         "summary": "getStatus",
-        "tags": [
-          "health"
-        ],
+        "tags": ["health"],
         "operationId": "getStatus",
         "deprecated": false,
-        "produces": [
-          "application/problem+json"
-        ],
+        "produces": ["application/problem+json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -581,10 +511,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "users",
-        "institutionId"
-      ]
+      "required": ["users", "institutionId"]
     },
     "OnBoardingResponse": {
       "title": "OnBoardingResponse",
@@ -598,10 +525,7 @@
           "format": "binary"
         }
       },
-      "required": [
-        "token",
-        "document"
-      ]
+      "required": ["token", "document"]
     },
     "RelationshipInfo": {
       "title": "RelationshipInfo",
@@ -622,17 +546,11 @@
           "description": "user role in the application context (e.g.: administrator, security user). This MUST belong to the configured set of application specific platform roles",
           "type": "string"
         },
-        "status": {
+        "state": {
           "$ref": "#/definitions/Status"
         }
       },
-      "required": [
-        "id",
-        "from",
-        "role",
-        "platformRole",
-        "status"
-      ]
+      "required": ["id", "from", "role", "platformRole", "state"]
     },
     "User": {
       "title": "User",
@@ -657,13 +575,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "name",
-        "surname",
-        "taxCode",
-        "role",
-        "platformRole"
-      ]
+      "required": ["name", "surname", "taxCode", "role", "platformRole"]
     },
     "PersonInfo": {
       "title": "PersonInfo",
@@ -679,11 +591,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "name",
-        "surname",
-        "taxCode"
-      ]
+      "required": ["name", "surname", "taxCode"]
     },
     "InstitutionInfo": {
       "title": "InstitutionInfo",
@@ -698,7 +606,7 @@
         "digitalAddress": {
           "type": "string"
         },
-        "status": {
+        "state": {
           "type": "string"
         },
         "role": {
@@ -719,7 +627,7 @@
         "institutionId",
         "description",
         "digitalAddress",
-        "status",
+        "state",
         "role",
         "platformRole",
         "attributes"
@@ -739,10 +647,7 @@
           }
         }
       },
-      "required": [
-        "person",
-        "institutions"
-      ]
+      "required": ["person", "institutions"]
     },
     "PlatformRolesResponse": {
       "title": "PlatformRolesResponse",
@@ -771,11 +676,7 @@
           }
         }
       },
-      "required": [
-        "managerRoles",
-        "delegateRoles",
-        "operatorRoles"
-      ]
+      "required": ["managerRoles", "delegateRoles", "operatorRoles"]
     },
     "Problem": {
       "title": "Problem",
@@ -805,41 +706,26 @@
           "pattern": "^[ -~]{0,64}$"
         }
       },
-      "required": [
-        "status",
-        "title"
-      ]
+      "required": ["status", "title"]
     },
     "Email": {
       "title": "Email",
-      "example": "Manager",
+      "example": "MANAGER",
       "type": "string",
-      "enum": [
-        "Manager",
-        "Delegate",
-        "Operator"
-      ]
+      "enum": ["MANAGER", "DELEGATE", "OPERATOR"]
     },
     "Role": {
       "title": "Role",
       "description": "represents the generic available role types for the relationship",
-      "example": "Manager",
+      "example": "MANAGER",
       "type": "string",
-      "enum": [
-        "Manager",
-        "Delegate",
-        "Operator"
-      ]
+      "enum": ["MANAGER", "DELEGATE", "OPERATOR"]
     },
     "Status": {
       "title": "Status",
-      "example": "pending",
+      "example": "PENDING",
       "type": "string",
-      "enum": [
-        "pending",
-        "active",
-        "inactive"
-      ]
+      "enum": ["PENDING", "ACTIVE", "INACTIVE"]
     }
   },
   "tags": [
@@ -861,7 +747,7 @@
     },
     {
       "name": "health",
-      "description": "Verify service status",
+      "description": "Verify service state",
       "externalDocs": {
         "url": "http://swagger.io",
         "description": "Find out more"

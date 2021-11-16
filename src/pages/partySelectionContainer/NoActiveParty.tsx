@@ -58,7 +58,7 @@ export default function NoActiveParty({ parties }: Props) {
             <Box>
               {filteredParties &&
                 filteredParties.map((party) => {
-                  const isDisabled = party.status === 'Pending';
+                  const isDisabled = party.status === 'PENDING';
                   return (
                     <PartyItemContainer
                       isDisabled={isDisabled}
@@ -68,7 +68,7 @@ export default function NoActiveParty({ parties }: Props) {
                       subTitle={party.role}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
-                      chip={party.status === 'Pending' ? 'Da completare' : ''}
+                      chip={party.status === 'PENDING' ? 'Da completare' : ''}
                     />
                   );
                 })}
