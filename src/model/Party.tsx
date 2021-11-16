@@ -13,6 +13,8 @@ export type Party = {
   platformRole: UserPlatformRole;
   category?: string; // TODO fix on CardProduct
   urlLogo?: string;
+  ipaCode?: string; // TODO is this mandatory?
+  fiscalCode?: string; // TODO is this mandatory?
 };
 
 const buildUrlLog = (institutionId: string) =>
