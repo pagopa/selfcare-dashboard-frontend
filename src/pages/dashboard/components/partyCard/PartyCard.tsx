@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function PartyCard({ party }: Props) {
-  const canUploadLogo = false;
+  const canUploadLogo = true; // TODO based on user role === ref admin
   return (
     <Card
       variant="outlined"
@@ -22,7 +22,11 @@ export default function PartyCard({ party }: Props) {
         <Grid item xs={3}>
           <Grid container direction="column" alignItems={'center'}>
             <Grid item>
-              <FilePngUploader urlLogo={party.urlLogo} canUploadLogo={canUploadLogo} />
+              <FilePngUploader
+                institutionId={party.institutionId}
+                urlLogo={party.urlLogo}
+                canUploadLogo={canUploadLogo}
+              />
             </Grid>
           </Grid>
         </Grid>

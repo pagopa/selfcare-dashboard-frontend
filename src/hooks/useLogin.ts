@@ -5,6 +5,9 @@ import { useAppDispatch } from '../redux/hooks';
 import { User } from '../model/User';
 import { userActions } from '../redux/slices/userSlice';
 
+const testToken =
+  'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.cjofRJljHPptEu582E3kGOfpEE7pAOHstapX2qXvTz4fNCi7tKyfXt8c7wOvSD4ZH6MxktWy9qmvup2H1M4QnA-BGr3_7PTf73aR0j6q7eFhQ1TX_0o_JBDSdN4atrcNzqQT4y1UW5hGinu7BxwPEwx6aK_tysCRDdzdTa3aab5AFOvB0-UBor1VRF5QZTXWZCAVTSvtum4cRtMuMNqBi-QQ0HZoW4sE6A7EJbtHsTA5HmxmPD-cEVeXSHNwCBikWpc8aDIN_GSc5ZvRXIvd8mu83npHDhRw5EmP-xkHnDjldYZY9H2uIQVY-dq18iTAjZhoF_wnIQSU0H3KSDEdHg';
+
 export const useLogin = () => {
   const dispatch = useAppDispatch();
   const setUser = (user: User) => dispatch(userActions.setLoggedUser(user));
@@ -18,7 +21,7 @@ export const useLogin = () => {
         surname: 'loggedSurname',
         email: 'loggedEmail@aa.aa',
       });
-      storageWrite(STORAGE_KEY_TOKEN, 'DUMMY_TOKEN', 'string');
+      storageWrite(STORAGE_KEY_TOKEN, testToken, 'string');
       return;
     }
 

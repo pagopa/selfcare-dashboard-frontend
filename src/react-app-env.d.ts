@@ -19,6 +19,9 @@ declare namespace NodeJS {
     REACT_APP_URL_INSTITUTION_LOGO_SUFFIX: string;
 
     REACT_APP_FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS: string;
+
+    REACT_APP_API_MOCK_PARTIES: string;
+    REACT_APP_API_MOCK_PRODUCTS: string;
   }
 }
 interface Window {

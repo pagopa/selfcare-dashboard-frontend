@@ -13,7 +13,7 @@ const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
     const token = storageRead(STORAGE_KEY_TOKEN, 'string');
     return wrappedOperation({
       ...params,
-      bearerAuth: token,
+      bearerAuth: `Bearer ${token}`,
     });
   };
 
@@ -34,6 +34,14 @@ export const DashboardApi = {
   },
   getProducts: async (institutionId: string): Promise<Array<ProductsResource>> => {
     const result = await apiClient.getProductsUsingGET({ 'x-selc-institutionId': institutionId });
+    return extractResponse(result, 200);
+  },
+  uploadLogo: async (institutionId: string, logo: File): Promise<boolean> => {
+    const result = await apiClient.saveInstitutionLogoUsingPUT({
+      'x-selc-institutionId': institutionId,
+      institutionId,
+      logo,
+    });
     return extractResponse(result, 200);
   },
 };

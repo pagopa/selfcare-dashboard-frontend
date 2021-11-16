@@ -19,14 +19,20 @@ export const extractResponse = async <R>(
     TypeofApiResponse<ApiRequestType<any, any, any, IResponseType<any, any, any>>>
   >,
   successHttpStatus: number,
-  expiredTokenHttpStatus: number | null = 403
+  notValidTokenHttpStatus: number | null = 401,
+  notAuthorizedTokenHttpStatus: number | null = 403
 ): Promise<R> => {
   if (isRight(response)) {
     if (response.right.status === successHttpStatus) {
       return response.right.value;
-    } else if (expiredTokenHttpStatus && response.right.status === expiredTokenHttpStatus) {
-      window.location.assign(URL_FE_LOGOUT);
+    } else if (notValidTokenHttpStatus && response.right.status === notValidTokenHttpStatus) {
+      window.location.assign(URL_FE_LOGOUT); // TODO Show error during redirect
       return new Promise(() => null);
+    } else if (
+      notAuthorizedTokenHttpStatus &&
+      response.right.status === notAuthorizedTokenHttpStatus
+    ) {
+      throw new Error(`Operation not allowed!`);
     } else {
       console.error(JSON.stringify(response.right));
       throw new Error(
