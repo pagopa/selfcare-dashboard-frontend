@@ -56,7 +56,7 @@
     "generate-fix:api-b4f-dashboard_2": "regex-replace \"logo.uri\" \"{const formData = new FormData(); formData.append(\\\"logo\\\", logo); return formData; }, // TODO manually fixed\" src/api/generated/b4f-dashboard/client.ts",
     "generate-fix:api-b4f-dashboard_3": "regex-replace \"readonly logo: string\" \"readonly logo: File // TODO manually fixed\" src/api/generated/b4f-dashboard/requestTypes.ts",
     "generate-fix:api-b4f-dashboard_4": "regex-replace \"\\\"Content-Type\\\" \\| \\\"Authorization\\\",\" \"\\\"Authorization\\\", // TODO manually fixed\" src/api/generated/b4f-dashboard/requestTypes.ts",
-    "generate-fix:api-b4f-dashboard_5": "regex-replace \"(RequestParams<SaveInstitutionLogoUsingPUTT>\\s+> = \\{\\s+method: \\\"put\\\",\\n)\" \"$1// @ts-ignore\" src/api/generated/b4f-dashboard/client.ts",
+    "generate-fix:api-b4f-dashboard_5": "regex-replace \"RequestParams<SaveInstitutionLogoUsingPUTT>\\s+> = \\{\\s+method: \\\"put\\\",\\n\" \"$&// @ts-ignore\" src/api/generated/b4f-dashboard/client.ts",
     "clean:api-party-process": "rimraf src/api/generated/party-process",
     "generate:api-party-process": "yarn run clean:api-party-process && gen-api-models --api-spec openApi/party-process-swagger20.json --out-dir src/api/generated/party-process --no-strict --request-types --response-decoders --client"
   },
