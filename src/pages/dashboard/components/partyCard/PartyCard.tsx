@@ -5,10 +5,10 @@ import { FilePngUploader } from './components/partyLogoUploader/PartyLogoUploade
 
 type Props = {
   party: Party;
-  isAdminRef: boolean;
 };
 
-export default function PartyCard({ party, isAdminRef }: Props) {
+export default function PartyCard({ party }: Props) {
+  const canUploadLogo = false;
   return (
     <Card
       variant="outlined"
@@ -22,7 +22,7 @@ export default function PartyCard({ party, isAdminRef }: Props) {
         <Grid item xs={3}>
           <Grid container direction="column" alignItems={'center'}>
             <Grid item>
-              <FilePngUploader urlLogo={party.urlLogo} isAdminRef={isAdminRef} />
+              <FilePngUploader urlLogo={party.urlLogo} canUploadLogo={canUploadLogo} />
             </Grid>
           </Grid>
         </Grid>

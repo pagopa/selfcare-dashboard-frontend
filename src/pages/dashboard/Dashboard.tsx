@@ -16,18 +16,18 @@ const Dashboard = () => {
     <Grid container pl={10}>
       <Grid item xs={2}>
         <Box sx={{ backgroundColor: '#FFFFFF', height: '2148px' }}>
-          <DashboardSideMenu />
+          <DashboardSideMenu products={products} />
         </Box>
       </Grid>
       <Grid item xs={10} px={10} sx={{ backgroundColor: '#E6E9F2' }}>
         <Box>
           <WelcomeDashboard />
           <Grid container direction="row" justifyContent={'center'}>
-            <PartyCard party={party} isAdminRef={true} />
+            <PartyCard party={party} />
           </Grid>
-          <ActiveProductsSection />
+          <ActiveProductsSection products={products} />
           {products && products.findIndex((product) => product.active === false) > -1 && (
-            <NotActiveProductsSection />
+            <NotActiveProductsSection products={products} />
           )}
         </Box>
       </Grid>

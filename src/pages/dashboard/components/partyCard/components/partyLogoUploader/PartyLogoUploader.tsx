@@ -12,10 +12,10 @@ export const sleep = async (ms: number) => await new Promise((resolve) => setTim
 
 type Props = {
   urlLogo?: string;
-  isAdminRef: boolean;
+  canUploadLogo: boolean;
 };
 
-export function FilePngUploader({ urlLogo, isAdminRef }: Props) {
+export function FilePngUploader({ urlLogo, canUploadLogo }: Props) {
   const [loading, setLoading] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
@@ -53,9 +53,9 @@ export function FilePngUploader({ urlLogo, isAdminRef }: Props) {
   return (
     <Grid container direction="row" justifyItems={'center'} alignItems={'center'}>
       <Box {...getRootProps({ className: 'dropzone' })}>
-        <input {...getInputProps()} />
+        {canUploadLogo && <input {...getInputProps()} />}
         <PartyLogo loading={loading} urlLogo={urlLogo} />
-        {isAdminRef && <PartyDescription labelLink={labelLink} open={open} />}
+        {canUploadLogo && <PartyDescription labelLink={labelLink} open={open} />}
       </Box>
 
       <SessionModal

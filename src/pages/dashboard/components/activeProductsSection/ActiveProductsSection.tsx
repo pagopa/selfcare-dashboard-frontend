@@ -1,12 +1,14 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { useAppSelector } from '../../../../redux/hooks';
-import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
+import { Product } from '../../../../model/Product';
 import ActiveProductCard from './components/ActiveProductCard';
 import TitleBox from './../TitleBox';
 
-export default function ActiveProductsSection() {
-  const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+type Props = {
+  products: Array<Product>;
+};
+
+export default function ActiveProductsSection({ products }: Props) {
   const buttonLabel = 'Gestisci il prodotto';
   const infoLabel: Date = new Date('10-24-2021'); // TODO: where to find this info?
 

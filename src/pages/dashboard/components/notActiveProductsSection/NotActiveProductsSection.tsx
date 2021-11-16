@@ -1,12 +1,14 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { useAppSelector } from '../../../../redux/hooks';
-import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
+import { Product } from '../../../../model/Product';
 import NotActiveProductCard from './components/NotActiveProductCard';
 import TitleBox from './../TitleBox';
 
-export default function NotActiveProductsSection() {
-  const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+type Props = {
+  products: Array<Product>;
+};
+
+export default function NotActiveProductsSection({ products }: Props) {
   const buttonLabel = 'Aderisci al prodotto';
   const infoLabel = 'SCOPRI DI PIÙ →';
 

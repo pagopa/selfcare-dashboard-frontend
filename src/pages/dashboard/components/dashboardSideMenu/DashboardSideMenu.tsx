@@ -7,6 +7,11 @@ import Collapse from '@mui/material/Collapse';
 import { useLocation, matchPath } from 'react-router-dom';
 import { Location } from 'history';
 import ROUTES from '../../../../routes';
+import { Product } from '../../../../model/Product';
+
+type Props = {
+  products: Array<Product>;
+};
 
 type MenuItem = {
   title: string;
@@ -30,11 +35,11 @@ const arrayMenu: Array<MenuItem> = [
       { title: 'Ruoli', active: true },
     ],
   },
-  { title: 'App IO', active: true },
-  { title: 'Piattaforma Notifiche', active: false },
+  { title: 'App IO', active: true }, // TODO read from input products
+  { title: 'Piattaforma Notifiche', active: false }, // TODO read from input products
 ];
 
-export default function DashboardSideMenu() {
+export default function DashboardSideMenu(_prop: Props) {
   const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(arrayMenu[0]);
   const location = useLocation();
 
@@ -50,7 +55,7 @@ export default function DashboardSideMenu() {
 
   return (
     <Grid container item mt={11}>
-      <Grid item xs={12} >
+      <Grid item xs={12}>
         <List>
           {arrayMenu &&
             arrayMenu.map((item) => {
