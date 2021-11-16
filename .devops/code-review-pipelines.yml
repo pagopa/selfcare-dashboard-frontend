@@ -36,7 +36,7 @@ pool:
   vmImage: '$(vmImageNameDefault)'
 
 stages:
-  - stage: Prepare_workspace
+  - stage: Build
     dependsOn: []
     jobs:
       - job: make_build
@@ -47,20 +47,18 @@ stages:
               nodeVersion: $(NODE_VERSION)
           - script: |
               yarn generate
-  - stage: Build
-    dependsOn: ['Prepare_workspace']
-    jobs:
-      - job: make_build
-        steps:
-          - script: |
               yarn build
             displayName: 'Build'
 
   - stage: Static_analysis
-    dependsOn: ['Prepare_workspace']
+    dependsOn: []
     jobs:
       - job: lint
         steps:
+          - template: ./azure-templates/setup-yarn-cache.yml
+          - template: templates/node-job-setup/template.yaml@pagopaCommons
+            parameters:
+              nodeVersion: $(NODE_VERSION)
           - script: |
               yarn lint
             displayName: 'Lint'
@@ -84,10 +82,16 @@ stages:
 
   # B) Run unit tests if there is a push or pull request on any branch.
   - stage: Test
-    dependsOn: ['Prepare_workspace']
+    dependsOn: []
     jobs:
       - job: unit_tests
         steps:
+          - template: ./azure-templates/setup-yarn-cache.yml
+          - template: templates/node-job-setup/template.yaml@pagopaCommons
+            parameters:
+              nodeVersion: $(NODE_VERSION)
+
           - script: |
+              yarn generate
               yarn test:coverage --watchAll=false
             displayName: 'Unit tests exec'
