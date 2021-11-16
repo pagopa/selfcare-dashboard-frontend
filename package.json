@@ -52,11 +52,11 @@
     "generate": "npm-run-all generate:*",
     "clean:api-b4f-dashboard": "rimraf src/api/generated/b4f-dashboard && rimraf openApi/generated",
     "generate:api-b4f-dashboard": "yarn run clean:api-b4f-dashboard && mkdirp openApi/generated && api-spec-converter --from=openapi_3 --to=swagger_2 openApi/dashboard-api-docs.json > openApi/generated/dashboard-swagger20.json && gen-api-models --api-spec openApi/generated/dashboard-swagger20.json --out-dir src/api/generated/b4f-dashboard --no-strict --request-types --response-decoders --client && npm-run-all generate-fix:api-b4f-dashboard_*",
-    "generate-fix:api-b4f-dashboard_1": "rexreplace --output \"\\\"Content-Type\\\": \\\"multipart/form-data\\\"\" \"// \\\"Content-Type\\\": \\\"multipart/form-data\\\", TODO manually fixed\" src/api/generated/b4f-dashboard/client.ts",
-    "generate-fix:api-b4f-dashboard_2": "rexreplace --output \"logo.uri\" \"{const formData = new FormData(); formData.append(\\\"logo\\\", logo); return formData; }, // TODO manually fixed\" src/api/generated/b4f-dashboard/client.ts",
-    "generate-fix:api-b4f-dashboard_3": "rexreplace --output \"readonly logo: string\" \"readonly logo: File // TODO manually fixed\" src/api/generated/b4f-dashboard/requestTypes.ts",
-    "generate-fix:api-b4f-dashboard_4": "rexreplace --output \"\\\"Content-Type\\\" \\| \\\"Authorization\\\",\" \"\\\"Authorization\\\", // TODO manually fixed\" src/api/generated/b4f-dashboard/requestTypes.ts",
-    "generate-fix:api-b4f-dashboard_5": "rexreplace --output \"(RequestParams<SaveInstitutionLogoUsingPUTT>\\s+> = \\{\\s+method: \\\"put\\\",\\n)\" \"$1// @ts-ignore\" src/api/generated/b4f-dashboard/client.ts",
+    "generate-fix:api-b4f-dashboard_1": "regex-replace \"\\\"Content-Type\\\": \\\"multipart/form-data\\\"\" \"// \\\"Content-Type\\\": \\\"multipart/form-data\\\", TODO manually fixed\" src/api/generated/b4f-dashboard/client.ts",
+    "generate-fix:api-b4f-dashboard_2": "regex-replace \"logo.uri\" \"{const formData = new FormData(); formData.append(\\\"logo\\\", logo); return formData; }, // TODO manually fixed\" src/api/generated/b4f-dashboard/client.ts",
+    "generate-fix:api-b4f-dashboard_3": "regex-replace \"readonly logo: string\" \"readonly logo: File // TODO manually fixed\" src/api/generated/b4f-dashboard/requestTypes.ts",
+    "generate-fix:api-b4f-dashboard_4": "regex-replace \"\\\"Content-Type\\\" \\| \\\"Authorization\\\",\" \"\\\"Authorization\\\", // TODO manually fixed\" src/api/generated/b4f-dashboard/requestTypes.ts",
+    "generate-fix:api-b4f-dashboard_5": "regex-replace \"(RequestParams<SaveInstitutionLogoUsingPUTT>\\s+> = \\{\\s+method: \\\"put\\\",\\n)\" \"$1// @ts-ignore\" src/api/generated/b4f-dashboard/client.ts",
     "clean:api-party-process": "rimraf src/api/generated/party-process",
     "generate:api-party-process": "yarn run clean:api-party-process && gen-api-models --api-spec openApi/party-process-swagger20.json --out-dir src/api/generated/party-process --no-strict --request-types --response-decoders --client"
   },
@@ -93,7 +93,7 @@
     "mkdirp": "^1.0.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",
-    "rexreplace": "^7.0.7",
+    "regex-replace": "^2.3.1",
     "rimraf": "^3.0.2"
   },
   "jest": {
