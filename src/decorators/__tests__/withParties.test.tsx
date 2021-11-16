@@ -1,11 +1,10 @@
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createStore } from '../../redux/store';
 import withParties from '../withParties';
-import { mockedOnBoardingInfo } from '../../api/__mocks__/PartyProcessApiClient';
-import { PartyProcessApi } from '../../api/PartyProcessApiClient';
+import { verifyFetchPartiesMockExecution } from '../../services/__mocks__/partyService';
 
-jest.mock('../../api/PartyProcessApiClient');
+jest.mock('../../services/partyService');
 
 const renderApp = (injectedStore?: any) => {
   const store = injectedStore ? injectedStore : createStore();
@@ -19,33 +18,17 @@ const renderApp = (injectedStore?: any) => {
   return store;
 };
 
+let fetchPartiesSpy: jest.SpyInstance;
+
 beforeEach(() => {
-  jest.spyOn(PartyProcessApi, 'getOnBoardingInfo');
+  fetchPartiesSpy = jest.spyOn(require('../../services/partyService'), 'fetchParties');
 });
 
 test('Test', async () => {
   const store = renderApp();
-  await waitFor(() =>
-    expect(store.getState().parties.list.length).toBe(mockedOnBoardingInfo.institutions.length)
-  );
-  const parties = store.getState().parties.list;
-  expect(
-    parties.map((p) => {
-      const clone = Object.assign({}, p);
-      delete clone.urlLogo;
-      return clone;
-    })
-  ).toMatchObject(mockedOnBoardingInfo.institutions);
-
-  store
-    .getState()
-    .parties.list.forEach((p) =>
-      expect(p.urlLogo).toBe(
-        `https://selcdcheckoutsa.z6.web.core.windows.net/institutions/${p.institutionId}/logo.png`
-      )
-    );
+  await waitFor(() => verifyFetchPartiesMockExecution(store.getState().parties.list));
 
   renderApp(store);
 
-  expect(PartyProcessApi.getOnBoardingInfo).toBeCalledTimes(1);
+  expect(fetchPartiesSpy).toBeCalledTimes(1);
 });

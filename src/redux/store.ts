@@ -17,7 +17,7 @@ export const createStore = () =>
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(
         (array, middleware) => (middleware ? array.concat(middleware) : array),
-        getDefaultMiddleware()
+        getDefaultMiddleware({ serializableCheck: false })
       ),
   });
 

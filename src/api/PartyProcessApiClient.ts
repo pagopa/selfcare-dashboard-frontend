@@ -1,4 +1,6 @@
 import { RequestParams } from '@pagopa/ts-commons/lib/requests';
+import { storageRead } from '../utils/storage-utils';
+import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { createClient, WithDefaultsT } from './generated/party-process/client';
 import { OnBoardingInfo } from './generated/party-process/OnBoardingInfo';
 import { GetOnBoardingInfoT } from './generated/party-process/requestTypes';
@@ -9,7 +11,7 @@ const partyProcessTimeoutMs = process.env.REACT_APP_API_PARTY_PROCESS_TIMEOUT_MS
 
 // TODO, there is not a bearer token at the moment?!?
 const withBearer: WithDefaultsT<'_____'> = (wrappedOperation) => (params) => {
-  const token = 'VALID_TOKEN'; // TODO retrieve last valid token
+  const token = storageRead(STORAGE_KEY_TOKEN, 'string');
   return wrappedOperation({
     ...params,
     Bearer: token,

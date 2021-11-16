@@ -9,8 +9,12 @@ export const URL_FE_ONBOARDING: string = process.env.REACT_APP_URL_FE_ONBOARDING
 export const URL_FE_LANDING: string = process.env.REACT_APP_URL_FE_LANDING;
 
 export const STORAGE_KEY_USER = 'user';
+export const STORAGE_KEY_TOKEN = 'token';
 
+export const LOADING_TASK_LOGIN_CHECK = 'LOGIN_CHECK';
 export const LOADING_TASK_SEARCH_PARTIES = 'SEARCH_PARTIES';
+export const LOADING_TASK_SEARCH_PARTY = 'SEARCH_PARTY';
+export const LOADING_TASK_SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
 
 export const roleLabels: { [key: string]: string } = {
   Manager: 'Rappresentante Legale',

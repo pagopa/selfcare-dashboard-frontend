@@ -11,7 +11,6 @@ const parties: Array<Party> = [
     urlLogo: 'image',
     status: 'Pending',
     institutionId: '1',
-    attributes: [],
     digitalAddress: '',
     platformRole: 'admin',
   },
@@ -21,7 +20,6 @@ const parties: Array<Party> = [
     urlLogo: 'image',
     status: 'Pending',
     institutionId: '2',
-    attributes: [],
     digitalAddress: '',
     platformRole: 'admin',
   },
@@ -31,7 +29,6 @@ const parties: Array<Party> = [
     urlLogo: 'image',
     status: 'Active',
     institutionId: '3',
-    attributes: [],
     digitalAddress: '',
     platformRole: 'admin',
   },
@@ -41,36 +38,40 @@ const parties: Array<Party> = [
     urlLogo: 'image',
     status: 'Active',
     institutionId: '4',
-    attributes: [],
     digitalAddress: '',
     platformRole: 'admin',
   },
 ];
 
-beforeEach(() => selectedParty = null);
+beforeEach(() => (selectedParty = null));
 
 test('Test rendering', () => {
-  render(<PartySelectionSearch parties={parties} onPartySelectionChange={(p) => selectedParty = p}  />);
+  render(
+    <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
+  );
   const input = screen.getByLabelText('Cerca');
 
   // search button  "Cerca"
   expect(input.tagName).toBe('INPUT');
 
-  parties.map(x => x.description).forEach((element) => {
-    screen.getByText(element);
-  });
+  parties
+    .map((x) => x.description)
+    .forEach((element) => {
+      screen.getByText(element);
+    });
 
   // la serach è presente solo se ho più di 3 parties
-  if(parties.length > 3) {
+  if (parties.length > 3) {
     expect(input.tagName).toBe('INPUT');
-    console.log(parties)
-  }else{
+  } else {
     expect(input.tagName).not.toBe('INPUT');
   }
 });
 
 test('Test filter', () => {
-  render(<PartySelectionSearch parties={parties} onPartySelectionChange={(p) => selectedParty = p}/>);
+  render(
+    <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
+  );
   const input = screen.getByLabelText('Cerca');
   const filterNapoli = 'Napoli';
 
@@ -78,35 +79,39 @@ test('Test filter', () => {
   fireEvent.change(input, { target: { value: filterNapoli } });
   expect(input.getAttribute('value')).toBe(filterNapoli);
 
-  parties.map(x => x.description).forEach((element) => {
-    const party = screen.queryByText(element);
+  parties
+    .map((x) => x.description)
+    .forEach((element) => {
+      const party = screen.queryByText(element);
 
-    if (element.indexOf(filterNapoli) > -1) {
-      expect(party).not.toBeNull();
-    } else {
-      expect(party).toBeNull();
-    }
-  });
+      if (element.indexOf(filterNapoli) > -1) {
+        expect(party).not.toBeNull();
+      } else {
+        expect(party).toBeNull();
+      }
+    });
 
   fireEvent.change(input, { target: { value: null } });
-  expect(input.getAttribute('value')).toBe("");
+  expect(input.getAttribute('value')).toBe('');
 
-  parties.map(x => x.description).forEach((element) => {
-    screen.getByText(element);
-  });
-
-
+  parties
+    .map((x) => x.description)
+    .forEach((element) => {
+      screen.getByText(element);
+    });
 });
 
 test('Test selection', () => {
-  render(<PartySelectionSearch parties={parties} onPartySelectionChange={(p) => selectedParty = p}/>);
+  render(
+    <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
+  );
   const input = screen.getByLabelText('Cerca');
-  const filterPartyNapoli= 'Comune di Napoli Manager';
+  const filterPartyNapoli = 'Comune di Napoli Manager';
   // const filterPartyBari= 'Comune di Bari Manager';
   const filterNapoli = 'Napoli';
   const filterRoma = 'ROMA';
 
-  expect(selectedParty).toBe(null)
+  expect(selectedParty).toBe(null);
 
   // seleziona su uno dei party Napoli
   const buttonParty = screen.getByRole('button', { name: filterPartyNapoli });
@@ -116,14 +121,14 @@ test('Test selection', () => {
   expect(buttonParty.className.indexOf('Mui-selected') > -1).toBe(true);
 
   expect(selectedParty).not.toBe(null);
-  expect (selectedParty.description).toBe('Comune di Napoli');
+  expect(selectedParty.description).toBe('Comune di Napoli');
 
- // scrivo Napoli nel filtro
+  // scrivo Napoli nel filtro
   fireEvent.change(input, { target: { value: filterNapoli } });
   expect(input.getAttribute('value')).toBe(filterNapoli);
 
   expect(selectedParty).not.toBe(null);
-  expect (selectedParty.description).toBe('Comune di Napoli');
+  expect(selectedParty.description).toBe('Comune di Napoli');
 
   // scrivi nella serach in maiuscolo Roma
   fireEvent.change(input, { target: { value: filterRoma } });
@@ -133,13 +138,22 @@ test('Test selection', () => {
 });
 
 test('Test pending party', () => {
-  render(<PartySelectionSearch parties={parties} onPartySelectionChange={(p) => selectedParty = p}/>);
- // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare' in XPath
-  const firstPartyDisabled =document.evaluate('//div[@role="PartyItemContainer" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',document,null,XPathResult.ANY_TYPE).iterateNext()
+  render(
+    <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
+  );
+  // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare' in XPath
+  const firstPartyDisabled = document
+    .evaluate(
+      '//div[@role="PartyItemContainer" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
+      document,
+      null,
+      XPathResult.ANY_TYPE
+    )
+    .iterateNext();
   expect(firstPartyDisabled).not.toBeNull();
-  expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  Manager ')
+  expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  Manager ');
 
   // cerca comune di bari e verifica che contenga "Da completare"
-   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');
-   getByText(PartyItemContainer,'Da completare')
+  const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');
+  getByText(PartyItemContainer, 'Da completare');
 });

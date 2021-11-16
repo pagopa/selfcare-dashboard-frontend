@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import SessionModal from '../../../../../../components/SessionModal';
+import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
 
@@ -11,11 +12,12 @@ import { PartyDescription } from './components/PartyDescription';
 export const sleep = async (ms: number) => await new Promise((resolve) => setTimeout(resolve, ms));
 
 type Props = {
+  institutionId: string;
   urlLogo?: string;
-  isAdminRef: boolean;
+  canUploadLogo: boolean;
 };
 
-export function FilePngUploader({ urlLogo, isAdminRef }: Props) {
+export function FilePngUploader({ urlLogo, canUploadLogo, institutionId }: Props) {
   const [loading, setLoading] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
@@ -31,18 +33,16 @@ export function FilePngUploader({ urlLogo, isAdminRef }: Props) {
     onDropAccepted: async (files: Array<File>) => {
       setLoading(true);
       setLabelLink(files[0].name);
-      const formData = new FormData();
-      formData.append('file', files[0]);
-      await sleep(2000);
-      /* const uploadDocument = await fetchWithLogs(
-          { endpoint: 'ONBOARDING_COMPLETE_REGISTRATION', endpointParams: { token } },
-          { method: 'POST', data: formData, headers: { 'Content-Type': 'multipart/form-data' } }
-        ); */
 
-      setLoading(false);
-      setLabelLink('Modifica Logo');
-      // TODO RIMUOVIMI
-      setOpenLogoutModal(true);
+      DashboardApi.uploadLogo(institutionId, files[0])
+        .then(() => {
+          setLoading(false);
+          setLabelLink('Modifica Logo');
+        })
+        .catch(() => {
+          setLoading(false);
+          setOpenLogoutModal(true);
+        });
     },
     // Disable click and keydown behavior
     noClick: true,
@@ -53,9 +53,9 @@ export function FilePngUploader({ urlLogo, isAdminRef }: Props) {
   return (
     <Grid container direction="row" justifyItems={'center'} alignItems={'center'}>
       <Box {...getRootProps({ className: 'dropzone' })}>
-        <input {...getInputProps()} />
+        {canUploadLogo && <input {...getInputProps()} />}
         <PartyLogo loading={loading} urlLogo={urlLogo} />
-        {isAdminRef && <PartyDescription labelLink={labelLink} open={open} />}
+        {canUploadLogo && <PartyDescription labelLink={labelLink} open={open} />}
       </Box>
 
       <SessionModal
