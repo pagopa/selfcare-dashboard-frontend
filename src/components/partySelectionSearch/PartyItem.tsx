@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import { Avatar, List, ListItemButton, Typography, Grid } from '@mui/material';
+import { List, ListItemButton, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import CustomAvatar from './../CustomAvatar';
 // import { withStyles } from '@mui/styles/';
 
 type Props = {
@@ -33,7 +34,8 @@ const CustomList = styled(List)({
     },
     '&:hover': {
       backgroundColor: 'transparent !important',
-    },
+    }
+
   },
 });
 
@@ -63,13 +65,12 @@ export default function PartyItem({
         onClick={action}
       >
         <Box pl={1} pr={2}>
-          <Avatar alt="" src={image} />
+          <CustomAvatar customAlt="" customSrc={image} />
         </Box>
         <Grid container>
           <Grid item xs={12}>
             <Typography variant="h1" sx={{ fontSize: titleSize, color: titleColor }}>
-              {' '}
-              {title}{' '}
+              {title}
             </Typography>
           </Grid>
           <Grid item xs={12}>

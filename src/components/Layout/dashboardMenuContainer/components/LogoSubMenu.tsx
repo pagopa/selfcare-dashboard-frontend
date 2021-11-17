@@ -1,7 +1,8 @@
 import React from 'react';
-import { Grid, Box, Avatar, Typography } from '@mui/material';
+import { Grid, Box, Typography } from '@mui/material';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
+import CustomAvatar from './../../../CustomAvatar';
 type Props = {
   title: string;
   subTitle?: string;
@@ -14,7 +15,7 @@ export default function LogoSubMenu({ title, subTitle }: Props) {
       <Grid container>
         <Grid item xs={3}>
           <Box px={1}>
-            <Avatar alt="" src={urlLogo} />
+            <CustomAvatar customAlt="" customSrc={urlLogo} />
           </Box>
         </Grid>
         <Grid item xs={9}>
