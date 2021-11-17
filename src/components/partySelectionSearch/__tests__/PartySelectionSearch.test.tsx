@@ -106,8 +106,8 @@ test('Test selection', () => {
     <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
   );
   const input = screen.getByLabelText('Cerca');
-  const filterPartyNapoli = 'Comune di Napoli MANAGER';
-  // const filterPartyBari= 'Comune di Bari MANAGER';
+  const filterPartyNapoli = 'Comune di Napoli Referente Amministrativo';
+  // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
   const filterNapoli = 'Napoli';
   const filterRoma = 'ROMA';
 
@@ -151,7 +151,7 @@ test('Test pending party', () => {
     )
     .iterateNext();
   expect(firstPartyDisabled).not.toBeNull();
-  expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  MANAGER ');
+  expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  Referente Amministrativo ');
 
   // cerca comune di bari e verifica che contenga "Da completare"
   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');
