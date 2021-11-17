@@ -8,26 +8,24 @@ import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSe
 import ROUTES, { resolvePathVariables } from '../../../../routes';
 import { URL_FE_LOGOUT } from '../../../../utils/constants';
 import { useParties } from '../../../../hooks/useParties';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { partiesActions, partiesSelectors } from '../../../../redux/slices/partiesSlice';
 import LogoSubMenu from './LogoSubMenu';
 
 type Props = {
   ownerName: string;
-  urlLogo?: string;
   description: string;
   role: string;
   selectedParty: Party;
 };
 
-export default function DashboardSubMenu({
-  ownerName,
-  urlLogo,
-  description,
-  role,
-  selectedParty,
-}: Props) {
+export default function DashboardSubMenu({ ownerName, description, role, selectedParty }: Props) {
+  const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const history = useHistory();
-  const [parties, setParties] = useState<Array<Party>>();
+  const parties = useAppSelector(partiesSelectors.selectPartiesList);
+  const setParties = (parties: Array<Party>) => dispatch(partiesActions.setPartiesList(parties));
+  const [parties2Show, setParties2Show] = useState<Array<Party>>();
   const { fetchParties } = useParties();
 
   const open = Boolean(anchorEl);
@@ -37,12 +35,23 @@ export default function DashboardSubMenu({
     if (!parties) {
       fetchParties()
         .then((parties) => {
-          setParties(parties.filter((p) => p !== selectedParty && p.status === 'ACTIVE'));
+          setParties(parties);
+          setParties2Show(
+            parties.filter(
+              (p) => p.status === 'ACTIVE' && p.institutionId !== selectedParty.institutionId
+            )
+          );
         })
         .catch((reason) => {
           /* TODO  errorHandling */ console.error(reason);
           return [];
         });
+    } else {
+      setParties2Show(
+        parties.filter(
+          (p) => p.status === 'ACTIVE' && p.institutionId !== selectedParty.institutionId
+        )
+      );
     }
   };
 
@@ -76,24 +85,26 @@ export default function DashboardSubMenu({
                   </Typography>
                 </Grid>
                 <Grid item xs={10} mb={4}>
-                  <LogoSubMenu urlLogo={urlLogo} title={description} subTitle={role} />
+                  <LogoSubMenu title={description} subTitle={role} />
                 </Grid>
                 <Grid item xs={12}>
                   <Divider sx={{ border: '1px solid #CCD4DC' }} />
                 </Grid>
                 <Grid item mx={3} mb={2}>
-                  {parties && (
+                  {parties2Show && (
                     <PartySelectionSearch
                       disableUnderline={true}
-                      parties={parties}
-                      onPartySelectionChange={(selectedParty: Party | null) =>
-                        selectedParty &&
-                        history.push(
-                          resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                            institutionId: selectedParty.institutionId,
-                          })
-                        )
-                      }
+                      parties={parties2Show}
+                      onPartySelectionChange={(selectedParty: Party | null) => {
+                        if (selectedParty) {
+                          handleClose();
+                          history.push(
+                            resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
+                              institutionId: selectedParty.institutionId,
+                            })
+                          );
+                        }
+                      }}
                     />
                   )}
                 </Grid>

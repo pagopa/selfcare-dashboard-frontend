@@ -3,6 +3,7 @@ import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Party } from '../../model/Party';
+import { roleLabels } from '../../utils/constants';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
 
@@ -84,7 +85,7 @@ export default function PartySelectionSearch({
                   borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                   selectedItem={selectedParty === party}
                   title={party.description}
-                  subTitle={party.role}
+                  subTitle={roleLabels[party.platformRole]}
                   titleColor={isDisabled ? '' : '#0073E6'}
                   image={party.urlLogo}
                   chip={party.status === 'PENDING' ? 'Da completare' : ''}

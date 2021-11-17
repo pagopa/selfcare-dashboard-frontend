@@ -1,16 +1,19 @@
 import React from 'react';
 import { Grid, Box, Avatar, Typography } from '@mui/material';
+import { useAppSelector } from '../../../../redux/hooks';
+import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
 type Props = {
-  urlLogo?: string;
   title: string;
   subTitle?: string;
 };
-export default function LogoSubMenu({ urlLogo, title, subTitle }: Props) {
+export default function LogoSubMenu({ title, subTitle }: Props) {
+  const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
+
   return (
     <React.Fragment>
       <Grid container>
         <Grid item xs={3}>
-          <Box px={1} >
+          <Box px={1}>
             <Avatar alt="" src={urlLogo} />
           </Box>
         </Grid>
