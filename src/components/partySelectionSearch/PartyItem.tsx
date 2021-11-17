@@ -68,14 +68,12 @@ export default function PartyItem({
         <Grid container>
           <Grid item xs={12}>
             <Typography variant="h1" sx={{ fontSize: titleSize, color: titleColor }}>
-              {' '}
-              {title}{' '}
+              {title}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="caption" sx={{ fontSize: subTitleSize }}>
-              {' '}
-              {subTitle}{' '}
+              {subTitle}
             </Typography>
           </Grid>
         </Grid>
