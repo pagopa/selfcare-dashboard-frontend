@@ -17,7 +17,7 @@ type Props={
 };
 export default function PartyItemContainer({ isDisabled, borderList,selectedItem,title,subTitle,titleColor,image,chip,action}:Props) {
     return (
-      <Grid container direction={"row"} role="PartyItemContainer" data-testid={`PartyItemContainer: ${title}`}> 
+      <Grid container direction={"row"} role="PartyItemContainer" data-testid={`PartyItemContainer: ${title}`} sx={{boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)'}}> 
         <Grid item xs={isDisabled ? 8 : 12}> 
           <Box >
             <PartyItem

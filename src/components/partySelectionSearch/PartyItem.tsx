@@ -75,8 +75,7 @@ export default function PartyItem({
           </Grid>
           <Grid item xs={12}>
             <Typography variant="caption" sx={{ fontSize: subTitleSize }}>
-              {' '}
-              {subTitle}{' '}
+              {subTitle}
             </Typography>
           </Grid>
         </Grid>
