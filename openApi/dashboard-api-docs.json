@@ -183,10 +183,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ProductsResource"
-                  }
+                  "$ref": "#/components/schemas/ProductsResourceArray"
                 }
               }
             }
@@ -261,7 +258,7 @@
       },
       "ProductsResource": {
         "title": "ProductsResource",
-        "required": ["activationDateTime", "active", "authorized", "code", "id", "title", "urlBO"],
+        "required": ["active", "authorized", "code", "id", "title"],
         "type": "object",
         "properties": {
           "activationDateTime": {
@@ -307,6 +304,12 @@
             "type": "string",
             "description": "URL that redirects to the public information webpage of the product"
           }
+        }
+      },
+      "ProductsResourceArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProductsResource"
         }
       }
     },
