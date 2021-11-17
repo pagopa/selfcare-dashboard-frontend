@@ -6,6 +6,7 @@ import { Product } from '../../model/Product';
 interface PartiesState {
   list?: Array<Party>;
   selected?: Party;
+  selectedPartyLogoUrl?: string;
   selectedProducts?: Array<Product>;
 }
 
@@ -21,6 +22,15 @@ export const partiesSlice = createSlice({
     },
     setPartySelected: (state, action: PayloadAction<Party>) => {
       state.selected = action.payload;
+      state.selectedPartyLogoUrl = action.payload.urlLogo;
+    },
+    setPartySelectedPartyLogo: (state, action: PayloadAction<string | undefined>) => {
+      state.selectedPartyLogoUrl = `${action.payload}?${new Date()}`;
+      if (state.list) {
+        state.list
+          .filter((p) => p.institutionId === state.selected?.institutionId)
+          .forEach((p) => (p.urlLogo = state.selectedPartyLogoUrl));
+      }
     },
     setPartySelectedProducts: (state, action: PayloadAction<Array<Product>>) => {
       state.selectedProducts = action.payload;
@@ -34,6 +44,8 @@ export const partiesReducer = partiesSlice.reducer;
 export const partiesSelectors = {
   selectPartiesList: (state: RootState): Array<Party> | undefined => state.parties.list,
   selectPartySelected: (state: RootState): Party | undefined => state.parties.selected,
+  selectPartySelectedLogo: (state: RootState): string | undefined =>
+    state.parties.selectedPartyLogoUrl,
   selectPartySelectedProducts: (state: RootState): Array<Product> | undefined =>
     state.parties.selectedProducts,
 };

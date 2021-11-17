@@ -4,22 +4,23 @@ import { Box } from '@mui/system';
 import { useState } from 'react';
 import SessionModal from '../../../../../../components/SessionModal';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
+import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
+import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
 import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
 
-// Utility to wait some time
-
-export const sleep = async (ms: number) => await new Promise((resolve) => setTimeout(resolve, ms));
-
 type Props = {
   institutionId: string;
-  urlLogo?: string;
   canUploadLogo: boolean;
 };
 
-export function FilePngUploader({ urlLogo, canUploadLogo, institutionId }: Props) {
+export function FilePngUploader({ canUploadLogo, institutionId }: Props) {
   const [loading, setLoading] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
+  const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
+  const dispatch = useAppDispatch();
+  const setUrlLogo = (urlLogo?: string) =>
+    dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
   const [labelLink, setLabelLink] = useState(
     urlLogo !== undefined ? 'Modifica Logo' : 'Carica il logo del tuo ente'
@@ -36,6 +37,7 @@ export function FilePngUploader({ urlLogo, canUploadLogo, institutionId }: Props
 
       DashboardApi.uploadLogo(institutionId, files[0])
         .then(() => {
+          setUrlLogo(urlLogo);
           setLoading(false);
           setLabelLink('Modifica Logo');
         })

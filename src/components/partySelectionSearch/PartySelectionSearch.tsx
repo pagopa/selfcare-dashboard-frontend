@@ -3,12 +3,13 @@ import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Party } from '../../model/Party';
+import { roleLabels } from '../../utils/constants';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
 
 type Props = {
   parties: Array<Party>;
-  onPartySelectionChange: (selectedParty: Party | null ) => void;
+  onPartySelectionChange: (selectedParty: Party | null) => void;
   disableUnderline?: boolean;
 };
 
@@ -28,7 +29,11 @@ const CustomBox = styled(Box)({
   height: '200px',
 });
 
-export default function PartySelectionSearch({ parties, onPartySelectionChange, disableUnderline= false }: Props) {
+export default function PartySelectionSearch({
+  parties,
+  onPartySelectionChange,
+  disableUnderline = false,
+}: Props) {
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
   const [selectedParty, setSelectedParty] = React.useState<Party | null>(null);
@@ -53,7 +58,6 @@ export default function PartySelectionSearch({ parties, onPartySelectionChange, 
     setSelectedParty(party);
     onPartySelectionChange(party);
   };
-  
 
   return (
     <Grid container item direction="column">
@@ -72,7 +76,7 @@ export default function PartySelectionSearch({ parties, onPartySelectionChange, 
         <CustomBox>
           {filteredParties &&
             filteredParties.map((party) => {
-              const isDisabled = party.status === 'Pending';
+              const isDisabled = party.status === 'PENDING';
               return (
                 <PartyItemContainer
                   isDisabled={isDisabled}
@@ -81,10 +85,10 @@ export default function PartySelectionSearch({ parties, onPartySelectionChange, 
                   borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                   selectedItem={selectedParty === party}
                   title={party.description}
-                  subTitle={party.role}
+                  subTitle={roleLabels[party.platformRole]}
                   titleColor={isDisabled ? '' : '#0073E6'}
                   image={party.urlLogo}
-                  chip={party.status === 'Pending' ? 'Da completare' : ''}
+                  chip={party.status === 'PENDING' ? 'Da completare' : ''}
                   action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                     handleListItemClick(event, party)
                   }

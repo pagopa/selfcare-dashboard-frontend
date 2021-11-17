@@ -24,8 +24,9 @@ test('Test fetchParties', async () => {
 
   expect(
     parties.map((p) => {
-      const clone = Object.assign({}, p, { attributes: [] });
+      const clone = Object.assign({}, p, { attributes: [] }, { state: p.status });
       delete clone.urlLogo;
+      delete clone.status;
       return clone;
     })
   ).toMatchObject(mockedOnBoardingInfo.institutions);
@@ -48,8 +49,9 @@ describe('Test fetchPartyDetails', () => {
   });
 
   const checkSelectedParty = (party: Party) => {
-    const clonedParty = Object.assign({}, party, { attributes: [] });
+    const clonedParty = Object.assign({}, party, { attributes: [] }, { state: party.status });
     delete clonedParty.urlLogo;
+    delete clonedParty.status;
 
     expect(clonedParty).toMatchObject(mockedOnBoardingInfo.institutions[0]);
 

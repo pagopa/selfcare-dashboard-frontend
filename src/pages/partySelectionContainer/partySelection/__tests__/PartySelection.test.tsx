@@ -4,40 +4,40 @@ import PartySelection from '../PartySelection';
 
 const parties: Array<Party> = [
   {
-    role: 'Manager',
+    role: 'MANAGER',
     description: 'Comune di Bari',
     urlLogo: 'image',
-    status: 'Pending',
+    status: 'PENDING',
     institutionId: '1',
     digitalAddress: '',
-    platformRole: 'admin',
+    platformRole: 'ADMIN_REF',
   },
   {
-    role: 'Manager',
+    role: 'MANAGER',
     description: 'Comune di Milano',
     urlLogo: 'image',
-    status: 'Pending',
+    status: 'PENDING',
     institutionId: '2',
     digitalAddress: '',
-    platformRole: 'admin',
+    platformRole: 'ADMIN_REF',
   },
   {
-    role: 'Manager',
+    role: 'MANAGER',
     description: 'Comune di Roma',
     urlLogo: 'image',
-    status: 'Active',
+    status: 'ACTIVE',
     institutionId: '3',
     digitalAddress: '',
-    platformRole: 'admin',
+    platformRole: 'ADMIN_REF',
   },
   {
-    role: 'Manager',
+    role: 'MANAGER',
     description: 'Comune di Napoli',
     urlLogo: 'image',
-    status: 'Active',
+    status: 'ACTIVE',
     institutionId: '4',
     digitalAddress: '',
-    platformRole: 'admin',
+    platformRole: 'ADMIN_REF',
   },
 ];
 test('Test rendering', () => {
@@ -104,8 +104,8 @@ test('Test filter', () => {
 test('Test selection', () => {
   render(<PartySelection parties={parties} />);
   const input = screen.getByLabelText('Cerca');
-  const filterPartyNapoli = 'Comune di Napoli Manager';
-  // const filterPartyBari= 'Comune di Bari Manager';
+  const filterPartyNapoli = 'Comune di Napoli MANAGER';
+  // const filterPartyBari= 'Comune di Bari MANAGER';
   const filterNapoli = 'Napoli';
   const filterRoma = 'ROMA';
 
@@ -147,7 +147,7 @@ test('Test pending party', () => {
     )
     .iterateNext();
   expect(firstPartyDisabled).not.toBeNull();
-  expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  Manager ');
+  expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  MANAGER ');
 
   // cerca comune di bari e verifica che contenga "Da completare"
   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');

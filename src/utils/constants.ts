@@ -17,7 +17,7 @@ export const LOADING_TASK_SEARCH_PARTY = 'SEARCH_PARTY';
 export const LOADING_TASK_SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
 
 export const roleLabels: { [key: string]: string } = {
-  Manager: 'Rappresentante Legale',
-  Delegate: 'Referente Amministrativo',
-  Operator: 'Referente Tecnico',
+  ADMIN: 'Amministratore',
+  ADMIN_REF: 'Referente Amministrativo',
+  TECH_REF: 'Referente Tecnico',
 };

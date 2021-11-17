@@ -4,23 +4,23 @@ import { institutionInfo2Party, institutionResource2Party } from '../Party';
 
 test('Test institutionInfo2Party', () => {
   const institutionInfo: InstitutionInfo = {
-    role: 'Manager',
+    role: 'MANAGER',
     description: 'Comune di Bari',
-    status: 'Pending',
+    state: 'PENDING',
     institutionId: '1',
     attributes: ['Ente locale'],
     digitalAddress: 'address',
-    platformRole: 'admin',
+    platformRole: 'ADMIN_REF',
   };
 
   const party = institutionInfo2Party(institutionInfo);
   expect(party).toStrictEqual({
-    role: 'Manager',
+    role: 'MANAGER',
     description: 'Comune di Bari',
-    status: 'Pending',
+    status: 'PENDING',
     institutionId: '1',
     digitalAddress: 'address',
-    platformRole: 'admin',
+    platformRole: 'ADMIN_REF',
     category: 'Ente locale',
     urlLogo: 'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/1/logo.png',
   });
@@ -29,24 +29,24 @@ test('Test institutionInfo2Party', () => {
 test('Test institutionResource2Party', () => {
   const institutionResource: InstitutionResource = {
     name: 'Comune di Bari',
-    status: 'Pending',
+    status: 'PENDING',
     id: '1',
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     IPACode: 'IPACode',
-    userRole: 'Operator',
-    // platformRole: 'admin' TODO model to update
+    userRole: 'OPERATOR',
+    // platformRole: 'ADMIN_REF' TODO model to update
   };
 
   const party = institutionResource2Party(institutionResource);
   expect(party).toStrictEqual({
-    role: 'Operator',
+    role: 'OPERATOR',
     description: 'Comune di Bari',
-    status: 'Pending',
+    status: 'PENDING',
     institutionId: '1',
     digitalAddress: 'address',
-    platformRole: 'admin',
+    platformRole: 'ADMIN_REF',
     category: 'Ente locale',
     urlLogo: 'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/1/logo.png',
   });

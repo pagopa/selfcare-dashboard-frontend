@@ -10,22 +10,22 @@ export const mockedOnBoardingInfo = {
   },
   institutions: [
     {
-      role: 'Operator',
+      role: 'OPERATOR',
       description: 'Comune di Bari',
-      status: 'Active',
+      state: 'ACTIVE',
       institutionId: '1',
       attributes: [],
       digitalAddress: 'address',
-      platformRole: 'admin',
+      platformRole: 'ADMIN_REF',
     },
     {
-      role: 'Manager',
+      role: 'MANAGER',
       description: 'Comune di Milano',
-      status: 'Pending',
+      state: 'PENDING',
       institutionId: '2',
       attributes: [],
       digitalAddress: '',
-      platformRole: 'admin',
+      platformRole: 'ADMIN_REF',
     },
   ],
 };
