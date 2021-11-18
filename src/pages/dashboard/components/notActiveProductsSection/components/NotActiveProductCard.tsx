@@ -23,6 +23,7 @@ export default function NotActiveProductCard({ product, buttonLabel, infoLabel }
             logoCard={product.logo}
             tag={product.tag}
             btnAction={() => product.urlPublic && window.location.assign(product.urlPublic)}
+            customHeight='80px'
           />
           <Box mb={3}>
             <Link
