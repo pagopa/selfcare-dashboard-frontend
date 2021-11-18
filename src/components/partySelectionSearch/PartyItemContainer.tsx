@@ -38,8 +38,8 @@ export default function PartyItemContainer({ isDisabled, borderList,selectedItem
         {isDisabled && 
           <Grid item xs={4}>
             <Box>
-              <Grid className='chip' sx={{borderRadius:'56px', backgroundColor:'#0073E6', fontSize:12,display:'flex',justifyContent:'space-around',marginTop:'20px', marginRight: '20px'}}>
-                <Typography role="PartyItemDisabled" variant="caption" sx={{fontSize:'12px',  color:'#FFFFFF'}}>{chip}</Typography>
+              <Grid className='chip' sx={{borderRadius:'56px', backgroundColor:'#00C5CA', fontSize:12,display:'flex',justifyContent:'space-around',marginTop:'20px', marginRight: '20px'}}>
+                <Typography role="PartyItemDisabled" variant="caption" sx={{fontSize:'12px', fontWeight:'600', color:'#17324D'}}>{chip}</Typography>
               </Grid>
             </Box>
           </Grid> }
