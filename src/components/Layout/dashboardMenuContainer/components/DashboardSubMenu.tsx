@@ -73,7 +73,6 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                   boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)',
                   borderRadius: '0px 0px 3px 3px',
                   width: '392px',
-                  // maxHeight:"400px",
                   marginTop: '15px',
                 },
               }}
