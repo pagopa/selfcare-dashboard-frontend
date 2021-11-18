@@ -9,6 +9,7 @@ type Props = {
   logoCard?: string;
   tag?: string;
   btnAction?: () => void;
+  customHeight?: string;
 };
 
 export default function BaseProductCard({
@@ -18,7 +19,8 @@ export default function BaseProductCard({
   disableBtn,
   logoCard,
   tag,
-  btnAction
+  customHeight,
+  btnAction,
 }: Props) {
   return (
     <React.Fragment>
@@ -30,17 +32,19 @@ export default function BaseProductCard({
               <img src={`data:image/png;base64,${logoCard}`} />
             </Box>
           </Grid>
-          <Grid item xs={6} >
-            <Badge badgeContent={tag} color="primary" sx={{minWidth:'113px'}}/>
+          <Grid item xs={6}>
+            <Badge badgeContent={tag} color="primary" sx={{ minWidth: '113px' }} />
           </Grid>
         </Grid>
         <Typography variant="h2" sx={{ color: '#17324D' }} mb={2}>
           {cardTitle}
         </Typography>
 
-        <Typography variant="body2" sx={{ fontSize: '18px' }} mb={4}>
-          {cardSubTitle}
-        </Typography>
+        <Box sx={{ height: customHeight }}>
+          <Typography variant="body2" sx={{ fontSize: '18px' }} mb={4}>
+            {cardSubTitle}
+          </Typography>
+        </Box>
       </CardContent>
       <CardActions sx={{ padding: 0 }}>
         <Grid container mb={2}>
