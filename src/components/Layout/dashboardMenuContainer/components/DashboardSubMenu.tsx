@@ -73,12 +73,11 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                   boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)',
                   borderRadius: '0px 0px 3px 3px',
                   width: '392px',
-                  height: '520px',
                   marginTop: '15px',
                 },
               }}
             >
-              <Grid container px={4} width="392px" height="520px">
+              <Grid container px={4} width="392px" maxHeight="520px">
                 <Grid item xs={12} mt={4} mb={4}>
                   <Typography variant="h3" sx={{ fontSize: '26px' }}>
                     {ownerName}
@@ -90,7 +89,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 <Grid item xs={12}>
                   <Divider sx={{ border: '1px solid #CCD4DC' }} />
                 </Grid>
-                <Grid item mx={3} mb={2}>
+                <Grid item mx={3} mb={3}>
                   {parties2Show && (
                     <PartySelectionSearch
                       disableUnderline={true}
@@ -108,7 +107,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                     />
                   )}
                 </Grid>
-                <Grid container item mb={2} justifyContent="center">
+                <Grid container item mb={3} justifyContent="center">
                   <Grid item xs={8}>
                     <Button
                       variant="contained"
