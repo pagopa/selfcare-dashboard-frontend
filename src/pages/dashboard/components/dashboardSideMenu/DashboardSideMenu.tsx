@@ -22,7 +22,7 @@ type MenuItem = {
   isSelected?: (location: Location) => boolean;
 };
 
-const arrayMenu: Array<MenuItem> = [
+const navigationMenu: Array<MenuItem> = [
   {
     title: 'Gestione ente',
     active: true,
@@ -36,21 +36,21 @@ const arrayMenu: Array<MenuItem> = [
       { title: 'Ruoli', active: true },
     ],
   },
-  // { title: 'App IO', active: true }, // TODO read from input products
-  // { title: 'Piattaforma Notifiche', active: false }, // TODO read from input products
 ];
 
 export default function DashboardSideMenu({ products }: Props) {
-  // const arrayConcat = arrayMenu
-  //   .concat(products.filter((product) => product.active === true))
-  //   .map((item) => {
-  //     console.log('ITEM', item);
-  //   });
-
-  // console.log('ARRAY CONCAT', arrayConcat);
-
-  const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(arrayMenu[0]);
+  const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(navigationMenu[0]);
   const location = useLocation();
+  
+  const arrayMenu: Array<MenuItem> = navigationMenu.concat(
+    products.filter((p) => p.active)
+    .map((p) =>(
+      {
+        title:p.title,
+        active:p.authorized ?? false,
+        onClick:p.urlBO ? () => window.location.assign(p.urlBO ?? "") : undefined,
+      }
+    )));
 
   const handleClick = (
     _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -68,8 +68,7 @@ export default function DashboardSideMenu({ products }: Props) {
       <Grid item xs={12}>
         <List>
           {arrayMenu &&
-            arrayMenu.concat(products.filter((product) => product.active === true)).map((item) => {
-              console.log("ITEM",item);
+            arrayMenu.map((item) => {
               const isOpened = selectedItem === item;
               return (
                 <React.Fragment key={item.title} >
@@ -81,8 +80,7 @@ export default function DashboardSideMenu({ products }: Props) {
                       marginBottom:'8px',
                       backgroundColor: 'transparent !important',
                     }}
-
-                    // disabled
+                    disabled={!item.active}
                     selected={item.isSelected && item.isSelected(location)}
                     onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                       handleClick(event, item)
