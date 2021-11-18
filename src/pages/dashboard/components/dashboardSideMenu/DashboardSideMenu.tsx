@@ -65,11 +65,11 @@ export default function DashboardSideMenu(_prop: Props) {
                   <ListItem
                     disableRipple
                     button
-                    sx={{
-                      color: '#0073E6',
-                      border: 'red',
-                      backgroundColor: 'transparent !important',
-                    }}
+                    // sx={{
+                    //   color: 'primary.main',
+                    //   border: 'red',
+                    //   backgroundColor: 'transparent !important',
+                    // }}
                     // disabled
                     selected={item.isSelected && item.isSelected(location)}
                     onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
@@ -78,16 +78,16 @@ export default function DashboardSideMenu(_prop: Props) {
                   >
                     <Grid container>
                       <Grid item xs={11}>
-                        <Typography variant="h6" sx={{ fontSize: '18px' }}>
+                        <Typography variant="h6" sx={{ fontSize: '18px', color: 'primary.main' }}>
                           {item.title}
                         </Typography>
                       </Grid>
                       {item.subMenu && (
                         <Grid item xs={1}>
                           {isOpened ? (
-                            <ExpandLess sx={{ color: '#0073E6' }} />
+                            <ExpandLess sx={{ color: 'primary.main' }} />
                           ) : (
-                            <ExpandMore sx={{ color: '#0073E6' }} />
+                            <ExpandMore sx={{ color: 'primary.main' }} />
                           )}
                         </Grid>
                       )}
@@ -96,11 +96,15 @@ export default function DashboardSideMenu(_prop: Props) {
                   {item.subMenu && (
                     <Collapse in={isOpened} timeout="auto" unmountOnExit>
                       <List sx={{ pl: 4 }}>
-                        <ListItem button sx={{ color: '#0073E6' }}>
-                          <Typography variant="body2">Overview</Typography>
+                        <ListItem button sx={{ color: 'primary.main' }}>
+                          <Typography variant="body2" color="primary.main">
+                            Overview
+                          </Typography>
                         </ListItem>
-                        <ListItem button sx={{ color: '#0073E6' }}>
-                          <Typography variant="body2">Ruoli</Typography>
+                        <ListItem button sx={{ color: 'primary.main' }}>
+                          <Typography variant="body2" color="primary.main">
+                            Ruoli
+                          </Typography>
                         </ListItem>
                       </List>
                     </Collapse>

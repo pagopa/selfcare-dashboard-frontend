@@ -9,6 +9,7 @@
     "@fontsource/titillium-web": "^4.5.0",
     "@mui/icons-material": "^5.0.3",
     "@mui/material": "^5.0.3",
+    "@pagopa/mui-italia": "pagopa/mui-italia",
     "@pagopa/ts-commons": "^10.2.1",
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.14.1",
