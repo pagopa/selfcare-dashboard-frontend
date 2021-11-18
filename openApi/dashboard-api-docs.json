@@ -183,7 +183,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductsResourceArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductsResource"
+                  }
                 }
               }
             }
@@ -304,12 +307,6 @@
             "type": "string",
             "description": "URL that redirects to the public information webpage of the product"
           }
-        }
-      },
-      "ProductsResourceArray": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/ProductsResource"
         }
       }
     },
