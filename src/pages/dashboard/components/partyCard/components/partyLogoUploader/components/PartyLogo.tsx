@@ -1,6 +1,6 @@
-import { Avatar, CircularProgress } from '@mui/material';
-
+import {  CircularProgress } from '@mui/material';
 import { Box } from '@mui/system';
+import CustomAvatar from './../../../../../../../components/CustomAvatar';
 
 type Props = {
   loading: boolean;
@@ -34,14 +34,12 @@ export function PartyLogo({ loading, urlLogo }: Props) {
         />
       </Box>
 
-      <Avatar
-        alt=""
-        src={urlLogo}
-        sx={{
-          width: '100%',
-          height: '100%',
-          display: !loading ? undefined : 'none',
-        }}
+      <CustomAvatar
+        customAlt=""
+        customSrc={urlLogo}
+        customWidth= '100%'
+        customHeight= '100%'
+        loading={loading}
       />
     </Box>
   );
