@@ -261,7 +261,7 @@
       },
       "ProductsResource": {
         "title": "ProductsResource",
-        "required": ["activationDateTime", "active", "authorized", "code", "id", "title", "urlBO"],
+        "required": ["active", "authorized", "code", "id", "title"],
         "type": "object",
         "properties": {
           "activationDateTime": {
