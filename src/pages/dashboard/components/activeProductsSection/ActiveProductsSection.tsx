@@ -10,7 +10,7 @@ type Props = {
 
 export default function ActiveProductsSection({ products }: Props) {
   const buttonLabel = 'Gestisci il prodotto';
-  const infoLabel: Date = new Date('10-24-2021'); // TODO: where to find this info?
+  const lastServiceActivationDate= undefined;// actually this info is not available
 
   return (
     <React.Fragment>
@@ -32,7 +32,7 @@ export default function ActiveProductsSection({ products }: Props) {
                 key={product.id}
                 product={product}
                 buttonLabel={buttonLabel}
-                infoLabel={infoLabel}
+                lastServiceActivationDate={lastServiceActivationDate}
               />
             ))}
       </Grid>
