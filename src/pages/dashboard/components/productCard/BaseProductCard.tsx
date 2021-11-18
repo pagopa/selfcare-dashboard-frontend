@@ -40,7 +40,7 @@ export default function BaseProductCard({
           {cardTitle}
         </Typography>
 
-        <Box sx={{ height: customHeight }}>
+        <Box sx={{height: customHeight}}>
           <Typography variant="body2" sx={{ fontSize: '18px' }} mb={4}>
             {cardSubTitle}
           </Typography>
