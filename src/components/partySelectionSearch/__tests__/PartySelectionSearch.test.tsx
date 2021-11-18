@@ -151,7 +151,7 @@ test('Test pending party', () => {
     )
     .iterateNext();
   expect(firstPartyDisabled).not.toBeNull();
-  expect(firstPartyDisabled.textContent).toBe(' Comune di Bari  Referente Amministrativo ');
+  expect(firstPartyDisabled.textContent).toBe('Comune di BariReferente Amministrativo');
 
   // cerca comune di bari e verifica che contenga "Da completare"
   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');
