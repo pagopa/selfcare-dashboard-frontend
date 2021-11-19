@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardContent, Typography, Button, CardActions, Box, Grid, Badge } from '@mui/material';
+import { Typography, Button, Box, Grid, Badge, Card, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 type Props = {
@@ -10,13 +10,12 @@ type Props = {
   logoCard?: string;
   tag?: string;
   btnAction?: () => void;
-  customHeight?: string;
 };
 
 const CustomBadge = styled(Badge)({
-  '.MuiBadge-badge':{
-    backgroundColor:'#00C5CA',
-    color:'#17324D',
+  '.MuiBadge-badge': {
+    backgroundColor: '#00C5CA',
+    color: '#17324D',
     fontWeight: '600',
   },
 });
@@ -28,47 +27,54 @@ export default function BaseProductCard({
   disableBtn,
   logoCard,
   tag,
-  customHeight,
   btnAction,
 }: Props) {
   return (
     <React.Fragment>
-      <CardContent sx={{ padding: 0 }}>
-        {/* TODO: to verify if is a direct img or an url */}
-        <Grid container>
-          <Grid item xs={6}>
-            <Box sx={{ width: '100%', height: '100%' }} mb={3}>
-              <img src={`data:image/png;base64,${logoCard}`} />
+      <Card sx={{ border: 'none', boxShadow: 'none' }}>
+        <CardContent>
+          {/* TODO: to verify if is a direct img or an url */}
+          <Grid container >
+            <Grid item xs={6} mb={3}>
+              <Box sx={{ width: '100%', height: '50px' }}>
+                <img src={`data:image/png;base64,${logoCard}`} />
+              </Box>
+            </Grid>
+            {tag && (
+              <Grid item xs={6}>
+                <CustomBadge badgeContent={tag} sx={{ minWidth: '113px' }} />
+              </Grid>
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ height: '80px' }} display='flex' alignItems={'center'}>
+              <Typography variant="h2" sx={{ color: '#17324D' }}>
+                {cardTitle}
+              </Typography>
             </Box>
           </Grid>
-          <Grid item xs={6}>
-            <CustomBadge badgeContent={tag}  sx={{ minWidth: '113px'}} />
-          </Grid>
-        </Grid>
-        <Typography variant="h2" sx={{ color: '#17324D' }} mb={2}>
-          {cardTitle}
-        </Typography>
+          {cardSubTitle && <Grid item xs={12} mb={2}>
+            <Box sx={{ height: '80px' }} display='flex' alignItems={'center'}>
+              <Typography variant="body2" sx={{ fontSize: '18px' }}>
+                {cardSubTitle}
+              </Typography>
+            </Box>
+          </Grid>}
 
-        <Box sx={{height: customHeight}}>
-          <Typography variant="body2" sx={{ fontSize: '18px' }} mb={4}>
-            {cardSubTitle}
-          </Typography>
-        </Box>
-      </CardContent>
-      <CardActions sx={{ padding: 0 }}>
-        <Grid container mb={2}>
-          <Grid item xs={12}>
-            <Button
-              onClick={btnAction}
-              disabled={disableBtn}
-              variant="contained"
-              sx={{ width: '100%', height: '48px' }}
-            >
-              {buttonLabel}
-            </Button>
+          <Grid item xs={12} justifyContent="center">
+            <Box sx={{ height: '45px', width: '100%'}}>
+              <Button
+                onClick={btnAction}
+                disabled={disableBtn}
+                variant="contained"
+                sx={{ width: '100%', height: '48px' }}
+              >
+                {buttonLabel}
+              </Button>
+            </Box>
           </Grid>
-        </Grid>
-      </CardActions>
+        </CardContent>
+      </Card>
     </React.Fragment>
   );
 }

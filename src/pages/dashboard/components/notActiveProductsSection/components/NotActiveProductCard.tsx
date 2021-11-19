@@ -13,7 +13,9 @@ export default function NotActiveProductCard({ product, buttonLabel, infoLabel }
   const isDisabled = product.authorized === false;
   return (
     <Grid item xs={4} key={product.id}>
-      <Card sx={{ height:'100%', maxHeight: '369px', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
+      <Card
+        sx={{ height: '100%', maxHeight: '420px', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}
+      >
         <Box mx={3} my={4}>
           <BaseProductCard
             disableBtn={isDisabled}
@@ -23,17 +25,22 @@ export default function NotActiveProductCard({ product, buttonLabel, infoLabel }
             logoCard={product.logo}
             tag={product.tag}
             btnAction={() => product.urlPublic && window.location.assign(product.urlPublic)}
-            customHeight='80px'
           />
-          {product.urlPublic && <Box mb={3}>
-            <Link
-              underline="none"
-              sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
-              mx={1}
-            >
-              {infoLabel}
-            </Link>
-          </Box>}
+
+          {product.urlPublic && (
+            <Grid container>
+              <Grid item xs={12} px={2}>
+                <Box mb={3}>
+                  <Link
+                    underline="none"
+                    sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
+                  >
+                    {infoLabel}
+                  </Link>
+                </Box>
+              </Grid>
+            </Grid>
+          )}
         </Box>
       </Card>
     </Grid>
