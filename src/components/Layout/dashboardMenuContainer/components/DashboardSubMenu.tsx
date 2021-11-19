@@ -89,7 +89,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 <Grid item xs={12}>
                   <Divider sx={{ border: '1px solid #CCD4DC' }} />
                 </Grid>
-                <Grid item mx={3} mb={3}>
+                <Grid item mx={3} mb={3} xs={12}>
                   {parties2Show && (
                     <PartySelectionSearch
                       disableUnderline={true}
