@@ -12,7 +12,7 @@ export default function ActiveProductCard({product,buttonLabel,lastServiceActiva
     const isDisabled = product.authorized === false;
     return (
       <Grid item xs={6}>
-        <Card sx={{ height:'100%',maxHeight: '359px', boxShadow:'0px 0px 80px rgba(0, 43, 85, 0.1)'}}>
+        <Card sx={{ height:'100%', boxShadow:'0px 0px 80px rgba(0, 43, 85, 0.1)'}}>
         <Box mx={8} my={5}>
             <BaseProductCard
               disableBtn={isDisabled}
