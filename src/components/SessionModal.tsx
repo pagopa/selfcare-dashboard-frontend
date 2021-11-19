@@ -47,11 +47,18 @@ export default function SessionModal({ open, handleClose, message, onConfirm, ti
             </Grid>
           </Grid>
 
-          <Grid item xs={12} mb={2}>
-            <Button sx={{ width: '100%' }} color="primary" variant="contained" onClick={onConfirm}>
-              Riprova
-            </Button>
-          </Grid>
+          {onConfirm && (
+            <Grid item xs={12} mb={2}>
+              <Button
+                sx={{ width: '100%' }}
+                color="primary"
+                variant="contained"
+                onClick={onConfirm}
+              >
+                Riprova
+              </Button>
+            </Grid>
+          )}
 
           <Grid item xs={12} mb={3}>
             <Button onClick={handleClose} sx={{ width: '100%' }} color="primary" variant="outlined">

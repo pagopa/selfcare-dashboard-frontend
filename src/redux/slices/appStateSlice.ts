@@ -1,11 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ErrorInfo } from 'react';
 import type { RootState } from '../store';
+
+export type AppError = {
+  id: string;
+  error: Error;
+  errorInfo?: ErrorInfo;
+  blocking: boolean;
+  techDescription: string;
+  displayableDescription?: string;
+  onRetry?: () => void;
+};
 
 interface AppStateState {
   loading: {
     result: boolean;
     tasks: { [taskId: string]: boolean };
   };
+  errors: Array<AppError>;
 }
 
 const initialState: AppStateState = {
@@ -13,6 +25,7 @@ const initialState: AppStateState = {
     result: false,
     tasks: {},
   },
+  errors: [],
 };
 
 /* eslint-disable functional/immutable-data */
@@ -29,6 +42,12 @@ export const appStateSlice = createSlice({
         state.loading.result = Object.keys(state.loading.tasks).length > 0;
       }
     },
+    addError: (state, action: PayloadAction<AppError>) => {
+      state.errors.push(action.payload);
+    },
+    removeError: (state, action: PayloadAction<AppError>) => {
+      state.errors = state.errors.filter((e) => e.id !== action.payload.id);
+    },
   },
 });
 
@@ -37,4 +56,5 @@ export const appStateReducer = appStateSlice.reducer;
 
 export const appStateSelectors = {
   selectLoading: (state: RootState) => state.appState.loading.result,
+  selectErrors: (state: RootState) => state.appState.errors,
 };

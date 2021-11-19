@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import { IconButton, Grid, Divider, Button, Popper, ClickAwayListener, Paper } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useHistory } from 'react-router';
+import { uniqueId } from 'lodash';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import ROUTES, { resolvePathVariables } from '../../../../routes';
@@ -10,6 +11,7 @@ import { URL_FE_LOGOUT } from '../../../../utils/constants';
 import { useParties } from '../../../../hooks/useParties';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../redux/slices/partiesSlice';
+import { AppError, appStateActions } from '../../../../redux/slices/appStateSlice';
 import LogoSubMenu from './LogoSubMenu';
 
 type Props = {
@@ -26,26 +28,36 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
   const parties = useAppSelector(partiesSelectors.selectPartiesList);
   const setParties = (parties: Array<Party>) => dispatch(partiesActions.setPartiesList(parties));
   const [parties2Show, setParties2Show] = useState<Array<Party>>();
+  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
   const { fetchParties } = useParties();
+
+  const doFetch = (): void => {
+    fetchParties()
+      .then((parties) => {
+        setParties(parties);
+        setParties2Show(
+          parties.filter(
+            (p) => p.status === 'ACTIVE' && p.institutionId !== selectedParty.institutionId
+          )
+        );
+      })
+      .catch((reason) => {
+        addError({
+          id: uniqueId('dashboardSubmenu-'),
+          blocking: false,
+          error: reason,
+          techDescription: 'An error occurred while fetching parties opening dashboard submenu',
+          onRetry: doFetch,
+        });
+      });
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     if (!parties) {
-      fetchParties()
-        .then((parties) => {
-          setParties(parties);
-          setParties2Show(
-            parties.filter(
-              (p) => p.status === 'ACTIVE' && p.institutionId !== selectedParty.institutionId
-            )
-          );
-        })
-        .catch((reason) => {
-          /* TODO  errorHandling */ console.error(reason);
-          return [];
-        });
+      doFetch();
     } else {
       setParties2Show(
         parties.filter(
