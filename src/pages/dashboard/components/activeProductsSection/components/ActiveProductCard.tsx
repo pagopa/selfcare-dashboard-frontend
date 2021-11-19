@@ -22,6 +22,10 @@ export default function ActiveProductCard({product,buttonLabel,lastServiceActiva
               logoCard={product.logo}
               tag={product.tag}
               btnAction={() => product.urlPublic && window.location.assign(product.urlPublic)}
+              heightLogo="70px"
+              heightTitle="80px"
+              heightSubTitle="20px"
+              heightButton="45px"
             />
             {lastServiceActivationDate &&<Typography variant='h5' sx={{fontSize:'16px'}} mx={1}>{`Ultimo servizio attivato: ${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}</Typography>}
           </Box>

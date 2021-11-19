@@ -10,6 +10,10 @@ type Props = {
   logoCard?: string;
   tag?: string;
   btnAction?: () => void;
+  heightLogo?:string;
+  heightTitle?:string;
+  heightSubTitle?:string;
+  heightButton?:string;
 };
 
 const CustomBadge = styled(Badge)({
@@ -28,15 +32,19 @@ export default function BaseProductCard({
   logoCard,
   tag,
   btnAction,
+  heightLogo,
+  heightTitle,
+  heightSubTitle,
+  heightButton
 }: Props) {
   return (
     <React.Fragment>
       <Card sx={{ border: 'none', boxShadow: 'none' }}>
         <CardContent>
           {/* TODO: to verify if is a direct img or an url */}
-          <Grid container >
+          <Grid container height={heightLogo}>
             <Grid item xs={6} mb={3}>
-              <Box sx={{ width: '100%', height: '50px' }}>
+              <Box sx={{ width: '100%' }}>
                 <img src={`data:image/png;base64,${logoCard}`} />
               </Box>
             </Grid>
@@ -46,23 +54,19 @@ export default function BaseProductCard({
               </Grid>
             )}
           </Grid>
-          <Grid item xs={12}>
-            <Box sx={{ height: '80px' }} display='flex' alignItems={'center'}>
-              <Typography variant="h2" sx={{ color: '#17324D' }}>
+          <Grid item xs={12} height={heightTitle} display='flex' alignItems={'center'}>
+              {cardTitle && <Typography variant="h2" sx={{ color: '#17324D' }}>
                 {cardTitle}
-              </Typography>
-            </Box>
+              </Typography>}
           </Grid>
-          {cardSubTitle && <Grid item xs={12} mb={2}>
-            <Box sx={{ height: '80px' }} display='flex' alignItems={'center'}>
-              <Typography variant="body2" sx={{ fontSize: '18px' }}>
+          <Grid item xs={12} mb={3} height={heightSubTitle} display='flex' alignItems={'center'}>
+            {cardSubTitle && <Typography variant="body2" sx={{ fontSize: '18px' }}>
                 {cardSubTitle}
-              </Typography>
-            </Box>
-          </Grid>}
+              </Typography>}
+          </Grid>
 
-          <Grid item xs={12} justifyContent="center">
-            <Box sx={{ height: '45px', width: '100%'}}>
+          <Grid item xs={12} justifyContent="center" height={heightButton} >
+            <Box sx={{width: '100%'}}>
               <Button
                 onClick={btnAction}
                 disabled={disableBtn}
