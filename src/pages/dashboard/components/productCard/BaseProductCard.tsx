@@ -1,5 +1,6 @@
 import React from 'react';
 import { CardContent, Typography, Button, CardActions, Box, Grid, Badge } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 type Props = {
   cardTitle: string;
@@ -11,6 +12,14 @@ type Props = {
   btnAction?: () => void;
   customHeight?: string;
 };
+
+const CustomBadge = styled(Badge)({
+  '.MuiBadge-badge':{
+    backgroundColor:'#00C5CA',
+    color:'#17324D',
+    fontWeight: '600',
+  },
+});
 
 export default function BaseProductCard({
   cardTitle,
@@ -33,7 +42,7 @@ export default function BaseProductCard({
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Badge badgeContent={tag} color="primary" sx={{ minWidth: '113px' }} />
+            <CustomBadge badgeContent={tag}  sx={{ minWidth: '113px'}} />
           </Grid>
         </Grid>
         <Typography variant="h2" sx={{ color: '#17324D' }} mb={2}>
