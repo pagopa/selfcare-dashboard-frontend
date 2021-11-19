@@ -2,30 +2,33 @@ import React from 'react';
 import { Avatar } from '@mui/material';
 
 type Props = {
-  customSrc?: string | undefined ;
+  customSrc?: string | undefined;
   customAlt?: string | undefined;
   customWidth?: string | undefined;
   customHeight?: string | undefined;
   loading?: boolean;
+  id?: string;
 };
 export default function CustomAvatar({
-    customAlt,
-    customSrc,
-    customWidth,
-    customHeight,
-loading,
+  customAlt,
+  customSrc,
+  customWidth,
+  customHeight,
+  id,
+  loading,
 }: Props) {
   return (
     <React.Fragment>
-      <Avatar
+      <Avatar 
+        id={id}
         alt={customAlt}
         src={customSrc}
         sx={{
           width: customWidth,
           height: customHeight,
           display: !loading ? undefined : 'none',
-          color:'#FFF',
-          backgroundColor:'#CCD4DC'
+          color: '#FFF',
+          backgroundColor: '#CCD4DC',
         }}
       />
     </React.Fragment>

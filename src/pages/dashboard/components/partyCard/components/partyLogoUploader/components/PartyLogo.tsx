@@ -40,6 +40,7 @@ export function PartyLogo({ loading, urlLogo }: Props) {
         customWidth= '100%'
         customHeight= '100%'
         loading={loading}
+        id='partyLogo'
       />
     </Box>
   );
