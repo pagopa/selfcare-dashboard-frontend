@@ -18,7 +18,7 @@ export default function BaseProductCard({
   disableBtn,
   logoCard,
   tag,
-  btnAction
+  btnAction,
 }: Props) {
   return (
     <React.Fragment>
@@ -30,11 +30,11 @@ export default function BaseProductCard({
               <img src={`data:image/png;base64,${logoCard}`} />
             </Box>
           </Grid>
-          <Grid item xs={6} >
-            <Badge badgeContent={tag} color="primary" sx={{minWidth:'113px'}}/>
+          <Grid item xs={6}>
+            <Badge badgeContent={tag} color="primary" sx={{ minWidth: '113px' }} />
           </Grid>
         </Grid>
-        <Typography variant="h2" sx={{ color: '#17324D' }} mb={2}>
+        <Typography variant="h2" mb={2}>
           {cardTitle}
         </Typography>
 

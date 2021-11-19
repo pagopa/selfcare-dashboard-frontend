@@ -33,7 +33,7 @@ export default function NoActiveParty({ parties }: Props) {
         <Grid item container justifyContent="center">
           <Grid item xs={4}>
             <Box>
-              <Typography variant="h3" component="h2" sx={{ color: '#17324D' }}>
+              <Typography variant="h3" component="h2">
                 {bodyTitle}
               </Typography>
             </Box>

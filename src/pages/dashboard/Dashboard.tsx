@@ -15,7 +15,7 @@ const Dashboard = () => {
   return party && products ? (
     <Grid container pl={10}>
       <Grid item xs={2}>
-        <Box sx={{ backgroundColor: '#FFFFFF', height: '2148px' }}>
+        <Box sx={{ backgroundColor: 'background.default', height: '2148px' }}>
           <DashboardSideMenu products={products} />
         </Box>
       </Grid>
