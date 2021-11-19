@@ -1,5 +1,8 @@
+import { uniqueId } from 'lodash';
 import { useEffect } from 'react';
 import { useParties } from '../hooks/useParties';
+import { useAppDispatch } from '../redux/hooks';
+import { AppError, appStateActions } from '../redux/slices/appStateSlice';
 
 export default function withParties<T>(
   WrappedComponent: React.ComponentType<T>
@@ -7,12 +10,25 @@ export default function withParties<T>(
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithParties = (props: T) => {
+    const dispatch = useAppDispatch();
     const { fetchParties } = useParties();
-    useEffect(() => {
+
+    const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+
+    const doFetch = (): void => {
       fetchParties().catch((reason) => {
-        /* TODO  errorHandling */ console.error(reason);
-        return [];
+        addError({
+          id: uniqueId(`${ComponentWithParties.displayName}-`),
+          blocking: false,
+          error: reason,
+          techDescription: `An error occurred while fetching parties in component ${ComponentWithParties.displayName}`,
+          onRetry: doFetch,
+        });
       });
+    };
+
+    useEffect(() => {
+      doFetch();
     }, []);
 
     return <WrappedComponent {...(props as T)} />;
