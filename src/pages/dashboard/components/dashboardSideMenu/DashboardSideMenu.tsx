@@ -41,16 +41,16 @@ const navigationMenu: Array<MenuItem> = [
 export default function DashboardSideMenu({ products }: Props) {
   const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(navigationMenu[0]);
   const location = useLocation();
-  
+
   const arrayMenu: Array<MenuItem> = navigationMenu.concat(
-    products.filter((p) => p.active)
-    .map((p) =>(
-      {
-        title:p.title,
-        active:p.authorized ?? false,
-        onClick:p.urlBO ? () => window.location.assign(p.urlBO ?? "") : undefined,
-      }
-    )));
+    products
+      .filter((p) => p.active)
+      .map((p) => ({
+        title: p.title,
+        active: p.authorized ?? false,
+        onClick: p.urlBO ? () => window.location.assign(p.urlBO ?? '') : undefined,
+      }))
+  );
 
   const handleClick = (
     _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -71,13 +71,13 @@ export default function DashboardSideMenu({ products }: Props) {
             arrayMenu.map((item) => {
               const isOpened = selectedItem === item;
               return (
-                <React.Fragment key={item.title} >
+                <React.Fragment key={item.title}>
                   <ListItem
                     disableRipple
                     button
                     sx={{
-                      color: '#0073E6',
-                      marginBottom:'8px',
+                      color: 'primary.main',
+                      marginBottom: '8px',
                       backgroundColor: 'transparent !important',
                     }}
                     disabled={!item.active}
@@ -88,16 +88,16 @@ export default function DashboardSideMenu({ products }: Props) {
                   >
                     <Grid container>
                       <Grid item xs={10}>
-                        <Typography variant="h6" sx={{ fontSize: '18px' }}>
+                        <Typography variant="h6" sx={{ fontSize: '18px', color: 'primary.main' }}>
                           {item.title}
                         </Typography>
                       </Grid>
                       {item.subMenu && (
                         <Grid item xs={2}>
                           {isOpened ? (
-                            <ExpandLess sx={{ color: '#0073E6' }} />
+                            <ExpandMore sx={{ color: 'primary.main' }} />
                           ) : (
-                            <ExpandMore sx={{ color: '#0073E6' }} />
+                            <ExpandLess sx={{ color: 'primary.main' }} />
                           )}
                         </Grid>
                       )}
@@ -105,12 +105,16 @@ export default function DashboardSideMenu({ products }: Props) {
                   </ListItem>
                   {item.subMenu && (
                     <Collapse in={isOpened} timeout="auto" unmountOnExit>
-                      <List sx={{ pl: 4, top:'-15px' }}>
-                        <ListItem button sx={{ color: '#0073E6' }}>
-                          <Typography variant="body2">Overview</Typography>
+                      <List sx={{ pl: 4, top: '-15px' }}>
+                        <ListItem button sx={{ color: 'primary.main' }}>
+                          <Typography variant="body2" color="primary.main">
+                            Overview
+                          </Typography>
                         </ListItem>
-                        <ListItem button sx={{ color: '#0073E6' }}>
-                          <Typography variant="body2">Ruoli</Typography>
+                        <ListItem button sx={{ color: 'primary.main' }}>
+                          <Typography variant="body2" color="primary.main">
+                            Ruoli
+                          </Typography>
                         </ListItem>
                       </List>
                     </Collapse>

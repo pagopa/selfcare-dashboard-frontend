@@ -9,17 +9,23 @@ type Props = {
   subTitle: string;
   mbTitle: GridSize;
   mtGrid: number;
-  mbSubTitle:number;
-  variantTitle: Variant ;
-  variantSubTitle: Variant ;
+  mbSubTitle: number;
+  variantTitle: Variant;
+  variantSubTitle: Variant;
 };
-export default function TitleBox({ title, subTitle,mbTitle,mtGrid,mbSubTitle,variantTitle,variantSubTitle }: Props) {
+export default function TitleBox({
+  title,
+  subTitle,
+  mbTitle,
+  mtGrid,
+  mbSubTitle,
+  variantTitle,
+  variantSubTitle,
+}: Props) {
   return (
     <Grid container mt={mtGrid}>
       <Grid item xs={12} mb={mbTitle}>
-        <Typography variant={variantTitle} sx={{ color: '#17324D'}}>
-          {title}
-        </Typography>
+        <Typography variant={variantTitle}>{title}</Typography>
       </Grid>
       <Grid item xs={12} mb={mbSubTitle}>
         <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }}>

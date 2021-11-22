@@ -10,16 +10,16 @@ type Props = {
   logoCard?: string;
   tag?: string;
   btnAction?: () => void;
-  heightLogo?:string;
-  heightTitle?:string;
-  heightSubTitle?:string;
-  heightButton?:string;
+  heightLogo?: string;
+  heightTitle?: string;
+  heightSubTitle?: string;
+  heightButton?: string;
 };
 
 const CustomBadge = styled(Badge)({
   '.MuiBadge-badge': {
     backgroundColor: '#00C5CA',
-    color: '#17324D',
+    color: 'text.primary',
     fontWeight: '600',
   },
 });
@@ -35,7 +35,7 @@ export default function BaseProductCard({
   heightLogo,
   heightTitle,
   heightSubTitle,
-  heightButton
+  heightButton,
 }: Props) {
   return (
     <React.Fragment>
@@ -54,19 +54,19 @@ export default function BaseProductCard({
               </Grid>
             )}
           </Grid>
-          <Grid item xs={12} height={heightTitle} display='flex' alignItems={'center'}>
-              {cardTitle && <Typography variant="h2" sx={{ color: '#17324D' }}>
-                {cardTitle}
-              </Typography>}
+          <Grid item xs={12} height={heightTitle} display="flex" alignItems={'center'}>
+            {cardTitle && <Typography variant="h2">{cardTitle}</Typography>}
           </Grid>
-          <Grid item xs={12} mb={3} height={heightSubTitle} display='flex' alignItems={'center'}>
-            {cardSubTitle && <Typography variant="body2" sx={{ fontSize: '18px' }}>
+          <Grid item xs={12} mb={3} height={heightSubTitle} display="flex" alignItems={'center'}>
+            {cardSubTitle && (
+              <Typography variant="body2" sx={{ fontSize: '18px' }}>
                 {cardSubTitle}
-              </Typography>}
+              </Typography>
+            )}
           </Grid>
 
-          <Grid item xs={12} justifyContent="center" height={heightButton} >
-            <Box sx={{width: '100%'}}>
+          <Grid item xs={12} justifyContent="center" height={heightButton}>
+            <Box sx={{ width: '100%' }}>
               <Button
                 onClick={btnAction}
                 disabled={disableBtn}

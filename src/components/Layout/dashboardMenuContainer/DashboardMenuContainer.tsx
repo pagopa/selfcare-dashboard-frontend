@@ -16,6 +16,7 @@ const DashboardMenuContainer = () => {
         <LogoSubMenu
           title={selectedParty.description}
           subTitle={roleLabels[selectedParty.platformRole]}
+          color="background.default"
         />
       </Grid>
       <Grid item xs={1}>
