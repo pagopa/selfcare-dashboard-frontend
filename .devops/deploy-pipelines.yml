@@ -137,9 +137,9 @@ stages:
               REACT_APP_URL_FE_LOGOUT: '$(react_app_url_fe_login)/logout'
               REACT_APP_URL_FE_ONBOARDING: '$(react_app_url_fe_onboarding)/add'
           - bash: |
-              printf "$(printf '%(%Y-%m-%d)T\n' -1) $EXECUTION_ID\n$(git name-rev --name-only FETCH_HEAD) $(git rev-parse HEAD)" > $(System.DefaultWorkingDirectory)/build/build.info
+              printf "$EXECUTION_ID\n$(git branch --show-current) $(git rev-parse HEAD)" > $(System.DefaultWorkingDirectory)/build/build.info
             env:
-              EXECUTION_ID: '$(Build.DefinitionName) - $(Build.BuildId) - $(Build.BuildNumber)'
+              EXECUTION_ID: '$(Build.BuildNumber) - $(Build.DefinitionName)\($(Build.BuildId)\)'
             displayName: 'Build info'
           - publish: $(System.DefaultWorkingDirectory)/build
             artifact: Bundle
