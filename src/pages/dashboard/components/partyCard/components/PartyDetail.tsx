@@ -48,7 +48,7 @@ export default function PartyDetail({ party }: Props) {
             marginLeft: 1,
           }}
         >
-          {party.ipaCode}
+          {party.institutionId}
         </Typography>
       </Grid>
       <Grid item>

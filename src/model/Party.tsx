@@ -13,7 +13,6 @@ export type Party = {
   platformRole: UserPlatformRole;
   category?: string; // TODO fix on CardProduct
   urlLogo?: string;
-  ipaCode?: string; // TODO is this mandatory?
   fiscalCode?: string; // TODO is this mandatory?
 };
 
@@ -34,6 +33,7 @@ export const institutionInfo2Party = (institutionInfo: InstitutionInfo): Party =
         ? institutionInfo.attributes[0]
         : undefined,
     urlLogo,
+    // TODO fiscalCode
   };
 };
 
@@ -48,5 +48,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     platformRole: 'ADMIN_REF', // TODO bind after model update
     category: institutionResource.category,
     urlLogo,
+    // TODO fiscalCode
   };
 };
