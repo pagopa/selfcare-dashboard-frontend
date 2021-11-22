@@ -26,7 +26,7 @@ const CustomBox = styled(Box)({
     backgroundColor: '#0073E6',
   },
   overflowY: 'auto',
-  height: '200px',
+  maxHeight: '200px',
 });
 
 export default function PartySelectionSearch({
@@ -61,14 +61,16 @@ export default function PartySelectionSearch({
 
   return (
     <Grid container item direction="column">
-      <Grid item mb={3}>
+      <Grid item mb={3} >
         {parties.length > 3 && (
+          <Box>
           <PartySelectionSearchInput
             disableUnderline={disableUnderline}
             label="Cerca"
             onChange={(e) => onFilterChange(e.target.value)}
             input={input}
-          />
+            clearField={() => onFilterChange('')}
+          /></Box>
         )}
       </Grid>
 

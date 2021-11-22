@@ -7,17 +7,20 @@ type Props = {
   customWidth?: string | undefined;
   customHeight?: string | undefined;
   loading?: boolean;
+  id?: string;
 };
 export default function CustomAvatar({
   customAlt,
   customSrc,
   customWidth,
   customHeight,
+  id,
   loading,
 }: Props) {
   return (
     <React.Fragment>
       <Avatar
+        id={id}
         alt={customAlt}
         src={customSrc}
         sx={{

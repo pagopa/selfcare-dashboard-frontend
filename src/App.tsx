@@ -1,4 +1,5 @@
 import { Redirect, Route, Switch } from 'react-router';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import Layout from './components/Layout/Layout';
 import { LoadingOverlay } from './components/Loading/LoadingOverlay';
 import withLogin from './decorators/withLogin';
@@ -13,16 +14,18 @@ const buildRoutes = (rs: RoutesObject) =>
   ));
 
 const App = () => (
-  <Layout>
-    <LoadingOverlay />
-    <Switch>
-      {buildRoutes(routes)}
+  <ErrorBoundary>
+    <Layout>
+      <LoadingOverlay />
+      <Switch>
+        {buildRoutes(routes)}
 
-      <Route path="*">
-        <Redirect to={routes.PARTY_SELECTION.path} />
-      </Route>
-    </Switch>
-  </Layout>
+        <Route path="*">
+          <Redirect to={routes.PARTY_SELECTION.path} />
+        </Route>
+      </Switch>
+    </Layout>
+  </ErrorBoundary>
 );
 
 export default withLogin(App);

@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
 import { Box } from '@mui/system';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SessionModal from '../../../../../../components/SessionModal';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
@@ -22,9 +22,20 @@ export function FilePngUploader({ canUploadLogo, institutionId }: Props) {
   const setUrlLogo = (urlLogo?: string) =>
     dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
-  const [labelLink, setLabelLink] = useState(
-    urlLogo !== undefined ? 'Modifica Logo' : 'Carica il logo del tuo ente'
-  );
+  const [labelLink, setLabelLink] = useState('Modifica Logo');
+
+  useEffect(() => {
+    setTimeout(
+      () =>
+        setLabelLink(
+          document.querySelector('#partyLogo')?.children[0].tagName === 'svg'
+            ? 'Carica il logo del tuo Ente'
+            : 'Modifica Logo'
+        ),
+      100
+    );
+  }, [urlLogo]);
+
   const handleOpen = () => {
     open();
     setOpenLogoutModal(false);

@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import { IconButton, Grid, Divider, Button, Popper, ClickAwayListener, Paper } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useHistory } from 'react-router';
+import { uniqueId } from 'lodash';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import ROUTES, { resolvePathVariables } from '../../../../routes';
@@ -10,6 +11,7 @@ import { URL_FE_LOGOUT } from '../../../../utils/constants';
 import { useParties } from '../../../../hooks/useParties';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../redux/slices/partiesSlice';
+import { AppError, appStateActions } from '../../../../redux/slices/appStateSlice';
 import LogoSubMenu from './LogoSubMenu';
 
 type Props = {
@@ -26,26 +28,36 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
   const parties = useAppSelector(partiesSelectors.selectPartiesList);
   const setParties = (parties: Array<Party>) => dispatch(partiesActions.setPartiesList(parties));
   const [parties2Show, setParties2Show] = useState<Array<Party>>();
+  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
   const { fetchParties } = useParties();
+
+  const doFetch = (): void => {
+    fetchParties()
+      .then((parties) => {
+        setParties(parties);
+        setParties2Show(
+          parties.filter(
+            (p) => p.status === 'ACTIVE' && p.institutionId !== selectedParty.institutionId
+          )
+        );
+      })
+      .catch((reason) => {
+        addError({
+          id: uniqueId('dashboardSubmenu-'),
+          blocking: false,
+          error: reason,
+          techDescription: 'An error occurred while fetching parties opening dashboard submenu',
+          onRetry: doFetch,
+        });
+      });
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     if (!parties) {
-      fetchParties()
-        .then((parties) => {
-          setParties(parties);
-          setParties2Show(
-            parties.filter(
-              (p) => p.status === 'ACTIVE' && p.institutionId !== selectedParty.institutionId
-            )
-          );
-        })
-        .catch((reason) => {
-          /* TODO  errorHandling */ console.error(reason);
-          return [];
-        });
+      doFetch();
     } else {
       setParties2Show(
         parties.filter(
@@ -73,12 +85,11 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                   boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)',
                   borderRadius: '0px 0px 3px 3px',
                   width: '392px',
-                  height: '520px',
                   marginTop: '15px',
                 },
               }}
             >
-              <Grid container px={4} width="392px" height="520px">
+              <Grid container px={4} width="392px" maxHeight="520px">
                 <Grid item xs={12} mt={4} mb={4}>
                   <Typography variant="h3" sx={{ fontSize: '26px' }}>
                     {ownerName}
@@ -90,7 +101,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 <Grid item xs={12}>
                   <Divider sx={{ border: '1px solid #CCD4DC' }} />
                 </Grid>
-                <Grid item mx={3} mb={2}>
+                <Grid item mx={3} mb={3} xs={12}>
                   {parties2Show && (
                     <PartySelectionSearch
                       disableUnderline={true}
@@ -108,7 +119,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                     />
                   )}
                 </Grid>
-                <Grid container item mb={2} justifyContent="center">
+                <Grid container item mb={3} justifyContent="center">
                   <Grid item xs={8}>
                     <Button
                       variant="contained"
