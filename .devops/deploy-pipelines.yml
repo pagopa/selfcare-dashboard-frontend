@@ -136,6 +136,12 @@ stages:
               REACT_APP_URL_FE_LOGIN: '$(react_app_url_fe_login)/login'
               REACT_APP_URL_FE_LOGOUT: '$(react_app_url_fe_login)/logout'
               REACT_APP_URL_FE_ONBOARDING: '$(react_app_url_fe_onboarding)/add'
+          - bash: |
+              printf "$EXECUTION_ID\n$BRANCH_NAME $(git rev-parse HEAD)" > $(System.DefaultWorkingDirectory)/build/build.info
+            env:
+              EXECUTION_ID: '$(Date:yyyyMMdd)$(Rev:.r) $(Build.DefinitionName - $(Build.BuildId)'
+              BRANCH_NAME: '$(SourceBranchName)'
+            displayName: 'Build info'
           - publish: $(System.DefaultWorkingDirectory)/build
             artifact: Bundle
 
