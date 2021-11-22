@@ -1,13 +1,13 @@
 import React from 'react';
-import { Grid, Button, Typography, Divider, Link } from '@mui/material';
+import { Grid, Button, Typography,} from '@mui/material';
 import { Box } from '@mui/system';
-import { URL_FE_LANDING, URL_FE_ONBOARDING } from '../../utils/constants';
+import { URL_FE_LANDING} from '../../utils/constants';
 
 export default function NoParty() {
   const bodyTitle = 'Non risulta nessun Ente associato';
   const bodyDescription = 'Il tuo profilo non è associato a nessun ente.';
   const bodyDescription2 = 'In tal caso prova ad accedere in un secondo momento.';
-  const text = 'Vuoi registrare un nuovo Ente?';
+
   return (
     <React.Fragment>
       <Grid
@@ -52,24 +52,7 @@ export default function NoParty() {
             Torna al portale
           </Button>
         </Grid>
-
-        <Grid item container justifyContent="center" mt={13}>
-          <Grid item xs={4}>
-            <Divider sx={{ border: '1px solid #CCD4DC;' }} />
-          </Grid>
-        </Grid>
-
-        <Grid item container justifyContent="center">
-          <Grid item xs={4}>
-            <Box>
-              <Typography variant="h5" sx={{ fontSize: '14px' }}>
-                {text}{' '}
-                <Link onClick={() => window.location.assign(URL_FE_ONBOARDING)}>Aderisci</Link>
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Grid>
+      </Grid> 
     </React.Fragment>
   );
 }
