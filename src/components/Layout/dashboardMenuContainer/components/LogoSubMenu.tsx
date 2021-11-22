@@ -6,8 +6,9 @@ import CustomAvatar from './../../../CustomAvatar';
 type Props = {
   title: string;
   subTitle?: string;
+  color?: string;
 };
-export default function LogoSubMenu({ title, subTitle }: Props) {
+export default function LogoSubMenu({ title, subTitle, color }: Props) {
   const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
 
   return (
@@ -21,12 +22,12 @@ export default function LogoSubMenu({ title, subTitle }: Props) {
         <Grid item xs={9}>
           <Grid container direction="column">
             <Grid item xs={12} mb={0.5}>
-              <Typography variant="h6" sx={{ fontWeight: '700' }}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color }}>
                 {title}
               </Typography>
             </Grid>
             <Grid item xs={4}>
-              <Typography variant="h5" sx={{ fontSize: '14px' }}>
+              <Typography variant="h5" sx={{ fontSize: '14px', color }}>
                 {subTitle}
               </Typography>
             </Grid>

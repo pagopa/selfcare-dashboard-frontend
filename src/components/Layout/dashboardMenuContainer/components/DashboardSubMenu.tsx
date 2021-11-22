@@ -75,7 +75,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
     <Grid container justifyContent="center">
       <Grid item>
         <IconButton onClick={handleClick}>
-          {open ? <ExpandLess sx={{ color: 'white' }} /> : <ExpandMore sx={{ color: 'white' }} />}
+          {open ? <ExpandMore sx={{ color: 'white' }} /> : <ExpandLess sx={{ color: 'white' }} />}
         </IconButton>
         <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
           <ClickAwayListener onClickAway={handleClose}>

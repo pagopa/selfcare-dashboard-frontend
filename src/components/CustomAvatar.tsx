@@ -19,7 +19,7 @@ export default function CustomAvatar({
 }: Props) {
   return (
     <React.Fragment>
-      <Avatar 
+      <Avatar
         id={id}
         alt={customAlt}
         src={customSrc}
@@ -27,7 +27,7 @@ export default function CustomAvatar({
           width: customWidth,
           height: customHeight,
           display: !loading ? undefined : 'none',
-          color: '#FFF',
+          color: 'palette.background.default',
           backgroundColor: '#CCD4DC',
         }}
       />

@@ -22,7 +22,7 @@ export default function PartyDetail({ party }: Props) {
         />
       </Grid>
       <Grid item sx={{ mt: '18px', mb: '24px' }}>
-        <Typography variant="h1" component="h2" sx={{ color: '#17324D' }}>
+        <Typography variant="h1" component="h2">
           {party.description}
         </Typography>
       </Grid>
@@ -31,7 +31,7 @@ export default function PartyDetail({ party }: Props) {
           variant="body2"
           display="inline"
           sx={{
-            color: '#475A6D',
+            color: 'text.disabled',
             fontWeight: 'normal',
             lineHeight: '28px',
           }}
@@ -56,7 +56,7 @@ export default function PartyDetail({ party }: Props) {
           variant="body2"
           display="inline"
           sx={{
-            color: '#475A6D',
+            color: 'text.disabled',
             fontWeight: 'normal',
             lineHeight: '28px',
             mt: 1,
@@ -83,7 +83,7 @@ export default function PartyDetail({ party }: Props) {
           variant="body2"
           display="inline"
           sx={{
-            color: '#475A6D',
+            color: 'text.disabled',
             fontWeight: 'normal',
             lineHeight: '28px',
             mt: 1,
@@ -110,7 +110,7 @@ export default function PartyDetail({ party }: Props) {
           variant="body2"
           display="inline"
           sx={{
-            color: '#475A6D',
+            color: 'text.disabled',
             fontWeight: 'normal',
             lineHeight: '28px',
             mt: 1,
