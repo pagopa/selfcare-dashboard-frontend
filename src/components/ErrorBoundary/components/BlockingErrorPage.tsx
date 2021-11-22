@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, Typography, Box } from '@mui/material';
 import { ReactComponent as ErrorIllustration } from '../../../assets/error-illustration.svg';
 
 type Props = {
@@ -6,13 +6,14 @@ type Props = {
 };
 
 export default ({ description }: Props) => (
-  <Grid container direction="column" key="0" style={{ textAlign: 'center' }}>
-    <Grid container item justifyContent="center" mt={5}>
+  <Box sx={{minHeight: '100vh'}} display='flex'>
+  <Grid container direction="column" key="0" style={{ textAlign: 'center' }} margin={'auto'}>
+    <Grid container item justifyContent="center" mb={5}>
       <Grid item xs={6}>
         <ErrorIllustration />
       </Grid>
     </Grid>
-    <Grid container item justifyContent="center" mt={5}>
+    <Grid container item justifyContent="center">
       <Grid item xs={6}>
         <Typography variant="h2">Spiacenti, qualcosa è andato storto.</Typography>
       </Grid>
@@ -37,4 +38,5 @@ export default ({ description }: Props) => (
       </Grid>
     </Grid>
   </Grid>
+  </Box>
 );
