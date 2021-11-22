@@ -96,7 +96,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                   </Typography>
                 </Grid>
                 <Grid item xs={10} mb={4}>
-                  <LogoSubMenu title={description} color="" subTitle={role} />
+                  <LogoSubMenu title={description} subTitle={role} />
                 </Grid>
                 <Grid item xs={12}>
                   <Divider sx={{ border: '1px solid #CCD4DC' }} />
