@@ -26,7 +26,7 @@ const CustomBox = styled(Box)({
     backgroundColor: '#0073E6',
   },
   overflowY: 'auto',
-  maxHeight: '200px',
+  height: '200px',
 });
 
 export default function PartySelectionSearch({
