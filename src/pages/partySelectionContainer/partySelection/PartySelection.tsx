@@ -36,7 +36,7 @@ export default function PartySelection({ parties }: Props) {
       </Grid>
 
       <Grid item display="flex" justifyContent="center">
-        <Grid container item xs={3}>
+        <Grid container item xs={3} md={4} lg={3}>
           <PartySelectionSearch
             parties={parties}
             onPartySelectionChange={(selectedParty: Party | null) => {
