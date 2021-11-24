@@ -52,8 +52,8 @@ const DashboardSideMenuItem = ({item, selectedItem, handleClick, location}: Prop
             </Grid>
             {item.subMenu && (
               <Grid item xs={2}>
-                {isOpened ? (<ExpandMore sx={{ color: 'primary.main' }}/>) 
-                : (<ExpandLess sx={{ color: 'primary.main' }} />)}
+                {isOpened ? (<ExpandLess sx={{ color: 'primary.main' }}/>) 
+                : (<ExpandMore sx={{ color: 'primary.main' }} />)}
               </Grid>
             )}
           </Grid>
