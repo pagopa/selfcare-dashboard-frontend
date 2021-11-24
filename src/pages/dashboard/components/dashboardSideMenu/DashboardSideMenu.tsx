@@ -95,9 +95,9 @@ export default function DashboardSideMenu({ products }: Props) {
                       {item.subMenu && (
                         <Grid item xs={2}>
                           {isOpened ? (
-                            <ExpandMore sx={{ color: 'primary.main' }} />
-                          ) : (
                             <ExpandLess sx={{ color: 'primary.main' }} />
+                          ) : (
+                            <ExpandMore sx={{ color: 'primary.main' }} />
                           )}
                         </Grid>
                       )}
