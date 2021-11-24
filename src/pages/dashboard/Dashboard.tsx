@@ -16,7 +16,7 @@ const Dashboard = () => {
     <Grid container pl={10}>
       <Grid item xs={2}>
         <Box sx={{ backgroundColor: 'background.default', height: '2148px' }}>
-          <DashboardSideMenu products={products} />
+          <DashboardSideMenu products={products} party={party} />
         </Box>
       </Grid>
       <Grid item xs={10} sx={{ backgroundColor: '#E6E9F2' }} display='flex' justifyContent="center">
