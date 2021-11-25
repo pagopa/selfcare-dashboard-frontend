@@ -2,7 +2,6 @@
 declare namespace NodeJS {
   interface ProcessEnv {
     NODE_ENV: 'development' | 'uat' | 'production';
-    REACT_APP_URL_API_PARTY_PROCESS: string;
 
     REACT_APP_URL_FE_LOGIN: string;
     REACT_APP_URL_FE_LOGOUT: string;
