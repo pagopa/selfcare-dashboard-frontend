@@ -1,68 +1,93 @@
+
 import React from 'react';
+import { Grid, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 
-export default function FormComponent() {
-  // Pass the useFormik() hook initial form values and a submit function that will
-  // be called when the form is submitted
-//   const formik = useFormik({
-//     initialValues: {
-//       firstName: '',
-//       lastName: '',
-//       email: '',
-//     },
-//     onSubmit: (values) => {
-//       alert(JSON.stringify(values, null, 2));
-//     },
-//   });
+// type Props={
+//   fields: Array<any>;
+// };
 
- // A custom validation function. This must return an object
- // which keys are symmetrical to our values/initialValues
- const formik = useFormik({
-  initialValues: {
-    firstName: '',
-    lastName: '',
-    email: '',
-  },
-  onSubmit: values => {
-    alert(JSON.stringify(values, null, 2));
-  },
-});
+
+export default function FormComponent() {
   
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      surname:'',
+      fiscalCode:'',
+      email:''
+    },
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
+
+  const baseTextFieldProps={
+    required:true,
+    variant:"standard" as const,
+    onChange:formik.handleChange,
+    sx:{ width: '100%' },
+    InputProps:{
+      style: {
+        fontSize: '16px',
+        fontStyle: 'italic',
+        fontWeight: 400,
+        lineHeight: '24px',
+        color: '#5C6F82',
+        textAlign: 'start' as const,
+        paddingLeft: '16px',
+      },
+    }
+  };
   return (
     <React.Fragment>
-       <form onSubmit={formik.handleSubmit}>
-       <label htmlFor="firstName">First Name</label>
-       <input
-         id="firstName"
-         name="firstName"
-         type="text"
-         onChange={formik.handleChange}
-         value={formik.values.firstName}
-       />
-       {formik.errors.firstName ? <div>{formik.errors.firstName}</div> : null}
- 
-       <label htmlFor="lastName">Last Name</label>
-       <input
-         id="lastName"
-         name="lastName"
-         type="text"
-         onChange={formik.handleChange}
-         value={formik.values.lastName}
-       />
-       {formik.errors.lastName ? <div>{formik.errors.lastName}</div> : null}
- 
-       <label htmlFor="email">Email Address</label>
-       <input
-         id="email"
-         name="email"
-         type="email"
-         onChange={formik.handleChange}
-         value={formik.values.email}
-       />
-       {formik.errors.email ? <div>{formik.errors.email}</div> : null}
- 
-       <button type="submit">Submit</button>
-     </form>
+      <form onSubmit={formik.handleSubmit}>
+        <Grid container spacing={3}>
+          <Grid item xs={4} mb={5}>
+            <TextField
+              {...baseTextFieldProps}
+              id='name'
+              type='text'
+              value={formik.values.name}
+              label='Nome'
+              placeholder='Inserisci il nome del referente'
+            />
+          </Grid>
+          <Grid item xs={4} mb={5}>
+            <TextField
+              {...baseTextFieldProps}
+              id='surname'
+              type='text'
+              value={formik.values.surname}
+              label='Cognome'
+              placeholder='Inserisci il cognome del referente'
+            />
+          </Grid>
+          <Grid item xs={8} mb={5}>
+            <TextField
+              {...baseTextFieldProps}
+              id='fiscalCode'
+              type='text'
+              value={formik.values.fiscalCode}
+              label='Codice Fiscale'
+              placeholder='Inserisci il Codice Fiscale del referente'
+            //  pattern= '^[A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1}$'
+            />
+          </Grid>
+          <Grid item xs={8} mb={5}>
+            <TextField
+              {...baseTextFieldProps}
+              id='email'
+              type='email'
+              value={formik.values.fiscalCode}
+              label='Email'
+              placeholder='Inserisci l’indirizzo email istituzionale del referente'
+            //  pattern='^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$'
+            />
+          </Grid>
+        </Grid>
+        <button type="submit">Submit</button>
+      </form>
     </React.Fragment>
   );
 }
