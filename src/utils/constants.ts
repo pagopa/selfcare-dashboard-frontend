@@ -21,3 +21,5 @@ export const roleLabels: { [key: string]: string } = {
   ADMIN_REF: 'Referente Amministrativo',
   TECH_REF: 'Referente Tecnico',
 };
+
+export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;
