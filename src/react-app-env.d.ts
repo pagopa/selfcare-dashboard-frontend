@@ -22,6 +22,8 @@ declare namespace NodeJS {
 
     REACT_APP_API_MOCK_PARTIES: string;
     REACT_APP_API_MOCK_PRODUCTS: string;
+
+    REACT_APP_PAGOPA_HELP_EMAIL: string;
   }
 }
 interface Window {
