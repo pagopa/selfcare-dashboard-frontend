@@ -90,15 +90,15 @@ export default function FormComponent() {
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
-          <Grid item xs={4} mb={5}>
+          <Grid item xs={4} mb={3} sx={{height:'75px'}}>
             <TextField {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')} />
           </Grid>
-          <Grid item xs={4} mb={5}>
+          <Grid item xs={4} mb={3} sx={{height:'75px'}}>
             <TextField
               {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
             />
           </Grid>
-          <Grid item xs={8} mb={5}>
+          <Grid item xs={8} mb={3} sx={{height:'75px'}}>
             <TextField
               {...baseTextFieldProps(
                 'taxCode',
@@ -107,7 +107,7 @@ export default function FormComponent() {
               )}
             />
           </Grid>
-          <Grid item xs={8} mb={5}>
+          <Grid item xs={8} mb={4} sx={{height:'75px'}}>
             <TextField
               {...baseTextFieldProps(
                 'email',
@@ -116,8 +116,8 @@ export default function FormComponent() {
               )}
             />
           </Grid>
-        </Grid>
-        <Grid item xs={8} mb={5}>
+        
+        <Grid item xs={8} mb={3}>
           <Typography> Ruoli* </Typography>
           <RadioGroup
             aria-label="user"
@@ -134,6 +134,7 @@ export default function FormComponent() {
             <FormControlLabel value="TECH_REF" control={<Radio />} label="Referente tecnico" />
           </RadioGroup>
         </Grid>
+        </Grid>
         <Grid item xs={3} mt={12}>
           <p>{formik.isValid} </p>
           <Button
@@ -147,6 +148,7 @@ export default function FormComponent() {
             Conferma
           </Button>
         </Grid>
+       
       </form>
     </React.Fragment>
   );
