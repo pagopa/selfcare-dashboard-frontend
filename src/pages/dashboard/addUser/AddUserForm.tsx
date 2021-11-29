@@ -25,7 +25,7 @@ const taxCodeRegexp = new RegExp(
 );
 const emailRegexp = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 const requiredError='Required';
-export default function FormComponent() {
+export default function AddUserForm() {
   const validate = (values: FormValues) =>
     Object.fromEntries(
       Object.entries({

@@ -6,12 +6,12 @@ import { Variant } from '@mui/material/styles/createTypography';
 
 type Props = {
   title: string;
-  subTitle: string;
-  mbTitle: GridSize;
-  mtGrid: number;
-  mbSubTitle: number;
-  variantTitle: Variant;
-  variantSubTitle: Variant;
+  subTitle?: string;
+  mbTitle?: GridSize;
+  mtGrid?: number;
+  mbSubTitle?: number;
+  variantTitle?: Variant;
+  variantSubTitle?: Variant;
 };
 export default function TitleBox({
   title,
