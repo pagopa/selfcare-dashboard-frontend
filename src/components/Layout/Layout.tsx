@@ -22,7 +22,9 @@ export default function Layout({ children }: Props) {
     >
       <Header withSecondHeader={true} subHeaderChild={party && <DashboardMenuContainer />} />
       {children}
-      <Footer />
+      <Box mt={16} >
+        <Footer />
+      </Box>
     </Box>
   );
 }
