@@ -20,11 +20,9 @@ export default function Layout({ children }: Props) {
         minHeight: '100vh',
       }}
     >
-      <Box mb={16}>
-        <Header withSecondHeader={true} subHeaderChild={party && <DashboardMenuContainer />} />
-      </Box>
+      <Header withSecondHeader={true} subHeaderChild={party && <DashboardMenuContainer />} />
       {children}
-      <Box mt={16}>
+      <Box mt={16} >
         <Footer />
       </Box>
     </Box>
