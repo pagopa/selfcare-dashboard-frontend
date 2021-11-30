@@ -20,12 +20,12 @@ const Dashboard = () => {
         </Box>
       </Grid>
       <Grid item xs={10} sx={{ backgroundColor: '#E6E9F2' }} display="flex" justifyContent="center">
-        <Box sx={{width: '953px' }}>
+        <Box sx={{ width: '953px' }}>
           <WelcomeDashboard />
           <Grid container direction="row" justifyContent={'center'}>
             <PartyCard party={party} />
           </Grid>
-          <ActiveProductsSection products={products} />
+          <ActiveProductsSection products={products} party={party} />
           {products && products.findIndex((product) => product.active === false) > -1 && (
             <NotActiveProductsSection products={products} />
           )}
