@@ -8,8 +8,8 @@ export default function Roles() {
       variant="outlined"
       sx={{ width: '100%', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)', py: 5 }}
     >
-      <Grid container direction="column" alignItems={'center'} px={4}>
-        <Grid item xs={9}>
+      <Grid container alignItems={'center'} px={0}>
+        <Grid item xs={12}>
           <Typography>Ruoli</Typography>
           {/*    <PartyDetail party={party} /> */}
         </Grid>
