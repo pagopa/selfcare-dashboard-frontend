@@ -106,7 +106,6 @@ export default function RolesSearchTable(_props: RolesSearchTableProps) {
           </TableBody>
         </Table>
       </TableContainer>
-      {numSelected}
     </Paper>
   );
 }

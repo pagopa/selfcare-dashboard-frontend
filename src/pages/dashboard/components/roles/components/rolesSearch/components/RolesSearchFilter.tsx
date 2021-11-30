@@ -1,5 +1,4 @@
-import { Grid, Chip, IconButton, TextField, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Grid, Chip, IconButton, TextField } from '@mui/material';
 // import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -30,18 +29,18 @@ export default function RolesSearchFilter({
   return (
     <Grid container direction="row" alignItems={'center'} px={4}>
       {filterProducts === true ? (
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Chip label="Prodotti" />
           {/*    <PartyDetail party={party} /> */}
         </Grid>
       ) : (
-        <Grid item xs={2}></Grid>
+        <Grid item xs={3}></Grid>
       )}
-      <Grid item xs={2}>
+      <Grid item xs={3}>
         <Chip label="Ruoli" />
         {/*    <PartyDetail party={party} /> */}
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={4}>
         <TextField
           variant="standard"
           value={filter.name}
@@ -64,11 +63,6 @@ export default function RolesSearchFilter({
           }}
         />
         {/*    <PartyDetail party={party} /> */}
-      </Grid>
-      <Grid item xs={2}>
-        <Button variant="contained" startIcon={<AddIcon />}>
-          Aggiungi
-        </Button>
       </Grid>
     </Grid>
   );
