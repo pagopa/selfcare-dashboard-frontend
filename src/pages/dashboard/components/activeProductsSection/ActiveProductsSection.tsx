@@ -10,7 +10,7 @@ type Props = {
   products: Array<Product>;
 };
 
-export default function ActiveProductsSection({ products }: Props) {
+export default function ActiveProductsSection({ party, products }: Props) {
   const buttonLabel = 'Gestisci il prodotto';
   const lastServiceActivationDate = undefined; // actually this info is not available
 

@@ -1,6 +1,5 @@
 import { storageRead } from '../utils/storage-utils';
 import { STORAGE_KEY_TOKEN } from '../utils/constants';
-import { Party } from '../model/Party';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
