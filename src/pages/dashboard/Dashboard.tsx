@@ -19,8 +19,8 @@ const Dashboard = () => {
           <DashboardSideMenu products={products} party={party} />
         </Box>
       </Grid>
-      <Grid item xs={10} sx={{ backgroundColor: '#E6E9F2' }} display='flex' justifyContent="center">
-        <Box sx={{width: '953px'}}>
+      <Grid item xs={10} sx={{ backgroundColor: '#E6E9F2' }} display="flex" justifyContent="center">
+        <Box sx={{width: '953px' }}>
           <WelcomeDashboard />
           <Grid container direction="row" justifyContent={'center'}>
             <PartyCard party={party} />
