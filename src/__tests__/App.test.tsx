@@ -77,5 +77,5 @@ test('Test routing', () => {
   expect(history.location.pathname).toBe('/dashboard/1');
 
   history.push('/dashboard/13/2');
-  expect(history.location.pathname).toBe('/dashboard/13');
+  expect(history.location.pathname).toBe('/dashboard/13/2');
 });
