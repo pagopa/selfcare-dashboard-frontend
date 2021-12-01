@@ -15,11 +15,18 @@ const Dashboard = () => {
   return party && products ? (
     <Grid container pl={10}>
       <Grid item xs={2}>
-        <Box sx={{ backgroundColor: 'background.default', height: '2148px' }}>
+        <Box sx={{ backgroundColor: 'background.default' }}>
           <DashboardSideMenu products={products} party={party} />
         </Box>
       </Grid>
-      <Grid item xs={10} sx={{ backgroundColor: '#E6E9F2' }} display="flex" justifyContent="center">
+      <Grid
+        item
+        xs={10}
+        sx={{ backgroundColor: '#E6E9F2' }}
+        display="flex"
+        justifyContent="center"
+        pb={16}
+      >
         <Box sx={{ width: '953px' }}>
           <WelcomeDashboard />
           <Grid container direction="row" justifyContent={'center'}>

@@ -21,10 +21,8 @@ export default function Layout({ children }: Props) {
       }}
     >
       <Header withSecondHeader={true} subHeaderChild={party && <DashboardMenuContainer />} />
-      {children}
-      <Box mt={16} >
-        <Footer />
-      </Box>
+      <Box sx={{ height: '100%' }}>{children}</Box>
+      <Footer />
     </Box>
   );
 }
