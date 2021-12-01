@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { User } from '../../model/User';
 import { useAppDispatch } from '../../redux/hooks';
 import { userActions } from '../../redux/slices/userSlice';
@@ -16,6 +17,9 @@ export const verifyMockExecution = (state: RootState) => {
 };
 
 export default (WrappedComponent: React.ComponentType<any>) => () => {
-  useAppDispatch()(userActions.setLoggedUser(mockedUser));
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(userActions.setLoggedUser(mockedUser));
+  }, []);
   return <WrappedComponent />;
 };

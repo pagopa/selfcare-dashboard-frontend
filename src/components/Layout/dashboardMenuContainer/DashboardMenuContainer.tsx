@@ -19,7 +19,7 @@ const DashboardMenuContainer = () => {
           color="background.default"
         />
       </Grid>
-      <Grid item xs={1}>
+      <Grid item xs={1} sx={{ height: '100%' }}>
         <DashboardSubMenu
           ownerName={`${user?.name} ${user?.surname}`}
           selectedParty={selectedParty}

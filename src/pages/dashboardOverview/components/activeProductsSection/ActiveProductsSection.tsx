@@ -2,8 +2,8 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
+import TitleBox from '../../../../components/TitleBox';
 import ActiveProductCard from './components/ActiveProductCard';
-import TitleBox from './../TitleBox';
 
 type Props = {
   party: Party;

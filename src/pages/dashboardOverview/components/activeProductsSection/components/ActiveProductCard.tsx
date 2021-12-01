@@ -3,7 +3,7 @@ import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import BaseProductCard from '../../productCard/BaseProductCard';
-import { formatDateAsLongString } from './../../../../../utils/utils';
+import { formatDateAsLongString } from '../../../../../utils/utils';
 
 type Props = {
   party: Party;

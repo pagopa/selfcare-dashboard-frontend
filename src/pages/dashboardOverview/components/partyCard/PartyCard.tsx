@@ -1,7 +1,7 @@
 import { Card, Grid } from '@mui/material';
 import { Party } from '../../../../model/Party';
 import PartyDetail from './components/PartyDetail';
-import { FilePngUploader } from './components/partyLogoUploader/PartyLogoUploader';
+import { PartyLogoUploader } from './components/partyLogoUploader/PartyLogoUploader';
 
 type Props = {
   party: Party;
@@ -23,7 +23,10 @@ export default function PartyCard({ party }: Props) {
         <Grid item xs={3}>
           <Grid container direction="column" alignItems={'center'}>
             <Grid item>
-              <FilePngUploader institutionId={party.institutionId} canUploadLogo={canUploadLogo} />
+              <PartyLogoUploader
+                institutionId={party.institutionId}
+                canUploadLogo={canUploadLogo}
+              />
             </Grid>
           </Grid>
         </Grid>

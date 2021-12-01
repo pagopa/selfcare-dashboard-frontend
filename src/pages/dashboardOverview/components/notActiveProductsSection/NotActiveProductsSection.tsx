@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
+import TitleBox from '../../../../components/TitleBox';
 import NotActiveProductCard from './components/NotActiveProductCard';
-import TitleBox from './../TitleBox';
 
 type Props = {
   products: Array<Product>;

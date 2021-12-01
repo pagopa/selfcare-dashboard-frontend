@@ -32,7 +32,7 @@ export default function NotActiveProductCard({ product, buttonLabel, infoLabel }
           />
           <Grid container height="30px">
             <Grid item xs={12} px={2}>
-              <Box mb={3} >
+              <Box mb={3}>
                 {product.urlPublic && (
                   <Link
                     underline="none"
