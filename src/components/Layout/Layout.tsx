@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { useAppSelector } from '../../redux/hooks';
@@ -21,7 +22,9 @@ export default function Layout({ children }: Props) {
       }}
     >
       <Header withSecondHeader={true} subHeaderChild={party && <DashboardMenuContainer />} />
-      <Box sx={{ height: '100%' }}>{children}</Box>
+      <Grid container direction="row" flexGrow={1}>
+        {children}
+      </Grid>
       <Footer />
     </Box>
   );
