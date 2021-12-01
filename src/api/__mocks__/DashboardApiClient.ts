@@ -23,7 +23,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     authorized: true,
     active: true,
     urlBO: 'http://appio/bo#[identityToken]',
-    activationDateTime: new Date(2021, 1, 1),
+    activationDateTime: new Date(2021, 1, 1, 0, 0, 0, 0),
     urlPublic: 'http://appio/public',
   },
   {
@@ -35,7 +35,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     authorized: false,
     active: true,
     urlBO: 'http://notifiche/bo?token=[identityToken]',
-    activationDateTime: new Date(2021, 1, 2),
+    activationDateTime: new Date(2021, 1, 2, 0, 0, 0, 0),
     urlPublic: 'http://notifiche/public',
   },
   {
@@ -47,7 +47,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     authorized: true,
     active: true,
     urlBO: 'http://pagopa/bo#token=[identityToken]',
-    activationDateTime: new Date(2021, 1, 3),
+    activationDateTime: new Date(2021, 1, 3, 0, 0, 0, 0),
     urlPublic: 'http://pagopa/public',
   },
   {
