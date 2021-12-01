@@ -2,10 +2,7 @@ import { Grid, Box } from '@mui/material';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
-import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
-import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
-import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
-import PartyCard from './components/partyCard/PartyCard';
+import DashboardOverview from '../dashboardOverview/DashboardOverview';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 const Dashboard = () => {
@@ -27,16 +24,7 @@ const Dashboard = () => {
         justifyContent="center"
         pb={16}
       >
-        <Box sx={{ width: '953px' }}>
-          <WelcomeDashboard />
-          <Grid container direction="row" justifyContent={'center'}>
-            <PartyCard party={party} />
-          </Grid>
-          <ActiveProductsSection products={products} party={party} />
-          {products && products.findIndex((product) => product.active === false) > -1 && (
-            <NotActiveProductsSection products={products} />
-          )}
-        </Box>
+        <DashboardOverview party={party} products={products} />
       </Grid>
     </Grid>
   ) : (

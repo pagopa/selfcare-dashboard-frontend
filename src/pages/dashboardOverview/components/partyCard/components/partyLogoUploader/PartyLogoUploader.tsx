@@ -14,7 +14,7 @@ type Props = {
   canUploadLogo: boolean;
 };
 
-export function FilePngUploader({ canUploadLogo, institutionId }: Props) {
+export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
   const [loading, setLoading] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
