@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore } from '../redux/store';
 import { verifyMockExecution as verifyLoginMockExecution } from '../decorators/__mocks__/withLogin';
 import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators/__mocks__/withParties';
+import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router';
 
@@ -44,7 +45,7 @@ test('Test rendering dashboard no parties loaded', () => {
 });
 
 test('Test routing', async () => {
-  const { history } = renderApp();
+  const { history, store } = renderApp();
   expect(history.location.pathname).toBe('/dashboard');
 
   history.push('/dashboard/1');
@@ -52,4 +53,5 @@ test('Test routing', async () => {
 
   history.push('/dashboard/13/2');
   await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13'));
+  verifySelectedPartyMockExecution(store.getState());
 });
