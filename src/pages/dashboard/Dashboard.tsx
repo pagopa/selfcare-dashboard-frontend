@@ -32,7 +32,7 @@ const Dashboard = () => {
           <Grid container direction="row" justifyContent={'center'}>
             <PartyCard party={party} />
           </Grid>
-          <ActiveProductsSection products={products} />
+          <ActiveProductsSection products={products} party={party} />
           {products && products.findIndex((product) => product.active === false) > -1 && (
             <NotActiveProductsSection products={products} />
           )}

@@ -44,4 +44,7 @@ export const DashboardApi = {
     });
     return extractResponse(result, 200);
   },
+  getTokenExchange: async (_hostname: string, _institutionId: string): Promise<string> =>
+    // TODO
+    'dummytoken',
 };

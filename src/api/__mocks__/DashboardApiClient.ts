@@ -22,7 +22,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     code: '1',
     authorized: true,
     active: true,
-    urlBO: 'http://appio/bo',
+    urlBO: 'http://appio/bo#[identityToken]',
     activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'http://appio/public',
   },
@@ -34,7 +34,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Piattaforma Notifiche description',
     authorized: false,
     active: true,
-    urlBO: 'http://notifiche/bo',
+    urlBO: 'http://notifiche/bo?token=[identityToken]',
     activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
   },
@@ -46,7 +46,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Pagamenti pagoPA description',
     authorized: true,
     active: true,
-    urlBO: 'http://pagopa/bo',
+    urlBO: 'http://pagopa/bo#token=[identityToken]',
     activationDateTime: new Date(2021, 1, 3),
     urlPublic: 'http://pagopa/public',
   },
@@ -59,7 +59,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     authorized: true,
     active: false,
     urlPublic: 'http://www.google.it',
-    urlBO: '', // TODO is this present when not active?
+    urlBO: 'http://checkiban/bo#token=[identityToken]',
     activationDateTime: new Date(), // TODO is this present when not active?
   },
   {
@@ -71,7 +71,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     authorized: true,
     active: true,
     urlPublic: undefined,
-    urlBO: '', // TODO is this present when not active?
+    urlBO: 'http://cgn/bo#token=[identityToken]',
     activationDateTime: new Date(), // TODO is this present when not active?
   },
   {
@@ -83,7 +83,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     authorized: true,
     active: false,
     urlPublic: undefined,
-    urlBO: '', // TODO is this present when not active?
+    urlBO: 'http://PDND/bo#token=[identityToken]',
     activationDateTime: new Date(), // TODO is this present when not active?
   },
 ];
@@ -93,4 +93,6 @@ export const DashboardApi = {
     new Promise((resolve) => resolve(mockedInstitutionResource)),
   getProducts: async (): Promise<Array<ProductsResource>> =>
     new Promise((resolve) => resolve(mockedProductResources)),
+  getTokenExchange: async (_hostname: string, _institutionId: string): Promise<string> =>
+    new Promise((resolve) => resolve('DUMMYTOKEN')),
 };

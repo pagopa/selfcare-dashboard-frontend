@@ -6,7 +6,7 @@ export type Product = {
   id: string;
   logo?: string;
   title: string;
-  urlBO?: string;
+  urlBO: string;
   urlPublic?: string;
   tag?: string;
   authorized?: boolean;

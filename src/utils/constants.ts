@@ -15,6 +15,7 @@ export const LOADING_TASK_LOGIN_CHECK = 'LOGIN_CHECK';
 export const LOADING_TASK_SEARCH_PARTIES = 'SEARCH_PARTIES';
 export const LOADING_TASK_SEARCH_PARTY = 'SEARCH_PARTY';
 export const LOADING_TASK_SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
+export const LOADING_TASK_TOKEN_EXCHANGE = 'TOKEN_EXCHANGE';
 
 export const roleLabels: { [key: string]: string } = {
   ADMIN: 'Amministratore',
