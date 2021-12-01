@@ -1,6 +1,7 @@
 import { Redirect, useParams } from 'react-router';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
+import DashboardRoles from './pages/dashboardRoles/DashboardRoles';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 
 export const BASE_ROUTE = process.env.PUBLIC_URL ? process.env.PUBLIC_URL : '/dashboard';
@@ -50,6 +51,18 @@ export const DASHBOARD_ROUTES = {
     path: `${BASE_ROUTE}/:institutionId`,
     exact: true,
     component: DashboardOverview,
+  },
+  ROLES: {
+    path: `${BASE_ROUTE}/:institutionId/roles`,
+    exact: false,
+    component: DashboardRoles,
+    subRoutes: buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
+  },
+  PRODUCT_ROLES: {
+    path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
+    exact: false,
+    component: DashboardRoles,
+    subRoutes: buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId`),
 };

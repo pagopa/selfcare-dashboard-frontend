@@ -1,7 +1,9 @@
 import React from 'react';
 import { List, Grid } from '@mui/material';
-import { useLocation, matchPath } from 'react-router-dom';
-import ROUTES from '../../../../routes';
+import { matchPath } from 'react-router-dom';
+import { useHistory } from 'react-router';
+import { History } from 'history';
+import { DASHBOARD_ROUTES, resolvePathVariables, RouteConfig } from '../../../../routes';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
 import { useTokenExchange } from '../../../../hooks/useTokenExchange';
@@ -12,8 +14,18 @@ type Props = {
   party: Party;
 };
 
+const applicationLinkBehaviour = (
+  history: History,
+  route: RouteConfig,
+  pathVariables?: { [key: string]: string }
+) => ({
+  onClick: () =>
+    history.push(pathVariables ? resolvePathVariables(route.path, pathVariables) : route.path),
+  isSelected: () => matchPath(history.location.pathname, route) !== null,
+});
+
 export default function DashboardSideMenu({ products, party }: Props) {
-  const location = useLocation();
+  const history = useHistory();
   const { invokeProductBo } = useTokenExchange();
 
   const canSeeRoles = party.platformRole === 'ADMIN_REF' || party.platformRole === 'ADMIN';
@@ -28,11 +40,20 @@ export default function DashboardSideMenu({ products, party }: Props) {
           groupId: 'selfCare',
           title: 'Overview',
           active: true,
-
-          isSelected: (location) =>
-            matchPath(location.pathname, ROUTES.PARTY_DASHBOARD.path) !== null,
+          ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.OVERVIEW, {
+            institutionId: party.institutionId,
+          }),
         },
-        canSeeRoles ? { groupId: 'selfCare', title: 'Ruoli', active: true } : undefined,
+        canSeeRoles
+          ? {
+              groupId: 'selfCare',
+              title: 'Ruoli',
+              active: true,
+              ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.ROLES, {
+                institutionId: party.institutionId,
+              }),
+            }
+          : undefined,
       ],
     },
   ];
@@ -52,7 +73,15 @@ export default function DashboardSideMenu({ products, party }: Props) {
             onClick: () => invokeProductBo(p, party),
           },
           canSeeRoles
-            ? { groupId: p.id, title: 'Ruoli', active: p.authorized ?? false }
+            ? {
+                groupId: p.id,
+                title: 'Ruoli',
+                active: p.authorized ?? false,
+                ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.PRODUCT_ROLES, {
+                  institutionId: party.institutionId,
+                  productId: p.id,
+                }),
+              }
             : undefined,
         ],
       }))
@@ -81,7 +110,6 @@ export default function DashboardSideMenu({ products, party }: Props) {
                 item={item}
                 selectedItem={selectedItem}
                 handleClick={handleClick}
-                location={location}
               />
             ))}
         </List>
