@@ -1,16 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import App from '../App';
 import { Provider } from 'react-redux';
 import { createStore } from '../redux/store';
-import { appStateActions } from '../redux/slices/appStateSlice';
 import { verifyMockExecution as verifyLoginMockExecution } from '../decorators/__mocks__/withLogin';
 import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators/__mocks__/withParties';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router';
-import routes from '../routes';
 
 jest.mock('../decorators/withLogin');
 jest.mock('../decorators/withParties');
+jest.mock('../decorators/withSelectedParty');
 
 const renderApp = (
   injectedStore?: ReturnType<typeof createStore>,
@@ -44,32 +43,7 @@ test('Test rendering dashboard no parties loaded', () => {
   expect(store.getState().parties.list).toBeUndefined();
 });
 
-test('Test loading', () => {
-  const { store } = renderApp();
-  checkLoading(false);
-  dispatchLoadingTask(store.dispatch, 't1', true);
-  checkLoading(true);
-  dispatchLoadingTask(store.dispatch, 't2', true);
-  checkLoading(true);
-  dispatchLoadingTask(store.dispatch, 't1', false);
-  checkLoading(true);
-  dispatchLoadingTask(store.dispatch, 't2', false);
-  checkLoading(false);
-});
-
-const dispatchLoadingTask = (dispatch, task, loading) => {
-  dispatch(appStateActions.setLoading({ task, loading }));
-};
-
-const checkLoading = (expectedLoading: boolean) => {
-  if (expectedLoading) {
-    screen.getByRole('loadingSpinner');
-  } else {
-    expect(screen.queryByRole('loadingSpinner')).toBeNull();
-  }
-};
-
-test('Test routing', () => {
+test('Test routing', async () => {
   const { history } = renderApp();
   expect(history.location.pathname).toBe('/dashboard');
 
@@ -77,5 +51,5 @@ test('Test routing', () => {
   expect(history.location.pathname).toBe('/dashboard/1');
 
   history.push('/dashboard/13/2');
-  expect(history.location.pathname).toBe('/dashboard/13/2');
+  await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13'));
 });

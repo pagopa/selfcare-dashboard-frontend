@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { RootState } from '../../redux/store';
@@ -8,6 +9,9 @@ export const verifyMockExecution = (state: RootState) => {
 };
 
 export default (WrappedComponent: React.ComponentType<any>) => () => {
-  useAppDispatch()(partiesActions.setPartiesList(mockedParties));
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(partiesActions.setPartiesList(mockedParties));
+  }, []);
   return <WrappedComponent />;
 };
