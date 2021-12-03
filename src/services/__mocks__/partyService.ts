@@ -35,6 +35,15 @@ export const mockedParties: Array<Party> = [
     status: 'ACTIVE',
     institutionId: '4',
     digitalAddress: '',
+    platformRole: 'TECH_REF',
+  },
+  {
+    role: 'MANAGER',
+    description: 'AGENCY ONBOARDED',
+    urlLogo: 'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/onboarded/logo.png',
+    status: 'ACTIVE',
+    institutionId: 'onboarded',
+    digitalAddress: '',
     platformRole: 'ADMIN_REF',
   },
 ];
