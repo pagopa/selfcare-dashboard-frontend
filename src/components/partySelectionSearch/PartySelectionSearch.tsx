@@ -61,16 +61,17 @@ export default function PartySelectionSearch({
 
   return (
     <Grid container item direction="column">
-      <Grid item mb={3} >
+      <Grid item mb={3}>
         {parties.length > 3 && (
           <Box>
-          <PartySelectionSearchInput
-            disableUnderline={disableUnderline}
-            label="Cerca"
-            onChange={(e) => onFilterChange(e.target.value)}
-            input={input}
-            clearField={() => onFilterChange('')}
-          /></Box>
+            <PartySelectionSearchInput
+              disableUnderline={disableUnderline}
+              label="Cerca"
+              onChange={(e) => onFilterChange(e.target.value)}
+              input={input}
+              clearField={() => onFilterChange('')}
+            />
+          </Box>
         )}
       </Grid>
 
@@ -87,7 +88,7 @@ export default function PartySelectionSearch({
                   borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                   selectedItem={selectedParty === party}
                   title={party.description}
-                  subTitle={roleLabels[party.platformRole]}
+                  subTitle={roleLabels[party.userRole].longLabel}
                   titleColor={isDisabled ? '' : '#0073E6'}
                   image={party.urlLogo}
                   chip={party.status === 'PENDING' ? 'Da completare' : ''}

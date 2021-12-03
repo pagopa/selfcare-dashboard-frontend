@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Party } from '../../model/Party';
-import { URL_FE_LANDING } from '../../utils/constants';
+import { roleLabels, URL_FE_LANDING } from '../../utils/constants';
 import PartyItemContainer from './../../components/partySelectionSearch/PartyItemContainer';
 
 type Props = {
@@ -65,7 +65,7 @@ export default function NoActiveParty({ parties }: Props) {
                       disabled={isDisabled}
                       key={party.institutionId}
                       title={party.description}
-                      subTitle={party.role}
+                      subTitle={roleLabels[party.userRole].longLabel}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? 'Da completare' : ''}

@@ -4,6 +4,7 @@ import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
+import { mockedInstitutionResources } from './__mocks__/DashboardApiClient';
 
 const dashboardBaseUrl = process.env.REACT_APP_URL_API_DASHBOARD;
 const dashboardTimeoutMs = process.env.REACT_APP_API_DASHBOARD_TIMEOUT_MS;
@@ -25,6 +26,10 @@ const apiClient = createClient({
 });
 
 export const DashboardApi = {
+  getInstitutions: async (): Promise<Array<InstitutionResource>> =>
+    //    const result = await apiClient.getInstitutionsUsingGET(); TODO
+    //    return extractResponse(result, 200);
+    new Promise((resolve) => resolve(mockedInstitutionResources)),
   getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
     const result = await apiClient.getInstitutionUsingGET({
       institutionId,
@@ -44,7 +49,16 @@ export const DashboardApi = {
     });
     return extractResponse(result, 200);
   },
-  getTokenExchange: async (_hostname: string, _institutionId: string): Promise<string> =>
-    // TODO
-    'dummytoken',
+  getTokenExchange: async (
+    hostname: string,
+    institutionId: string,
+    productId: string
+  ): Promise<string> => {
+    const result = await apiClient.exchangeUsingGET({
+      'x-selc-institutionId': institutionId,
+      productCode: productId,
+      realm: hostname,
+    });
+    return extractResponse(result, 200);
+  },
 };

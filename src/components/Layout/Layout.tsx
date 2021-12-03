@@ -21,7 +21,7 @@ export default function Layout({ children }: Props) {
         minHeight: '100vh',
       }}
     >
-      <Header withSecondHeader={true} subHeaderChild={party && <DashboardMenuContainer />} />
+      <Header withSecondHeader={!!party} subHeaderChild={party && <DashboardMenuContainer />} />
       <Grid container direction="row" flexGrow={1}>
         {children}
       </Grid>

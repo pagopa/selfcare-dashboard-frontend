@@ -22,13 +22,14 @@ export const useTokenExchange = () => {
           blocking: false,
           error: result,
           techDescription: result.message,
+          toNotify: true,
         })
       );
       return;
     }
 
     setLoading(true);
-    retrieveTokenExchange(result, selectedParty)
+    retrieveTokenExchange(result, selectedParty, product)
       .then((t) => window.location.assign(product.urlBO.replace(tokenPlaceholder, t)))
       .finally(() => setLoading(false));
   };

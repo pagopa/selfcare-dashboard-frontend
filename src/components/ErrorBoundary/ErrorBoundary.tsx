@@ -23,6 +23,7 @@ class ErrorBoundary extends Component<Props> {
       error,
       errorInfo,
       blocking: true,
+      toNotify: true,
     });
   }
 
@@ -54,7 +55,12 @@ class ErrorBoundary extends Component<Props> {
         title="Errore"
         message={error.displayableDescription ?? 'Spiacenti, qualcosa è andato storto.'}
         onConfirm={error.onRetry ? () => this.retryError(error) : undefined}
-        handleClose={() => this.popError(error)}
+        handleClose={() => {
+          this.popError(error);
+          if (error.onClose) {
+            error.onClose();
+          }
+        }}
       />
     );
   }
