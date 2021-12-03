@@ -76,7 +76,7 @@
     ]
   },
   "devDependencies": {
-    "@pagopa/openapi-codegen-ts": "^10.0.5",
+    "@pagopa/openapi-codegen-ts": "^10.0.6",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "api-spec-converter": "^2.12.0",
