@@ -9,12 +9,12 @@ test('Test institutionResource2Party', () => {
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    userRole: 'TECH_REF',
+    userRole: 'LIMITED',
   };
 
   const party = institutionResource2Party(institutionResource);
   expect(party).toStrictEqual({
-    partyRole: 'TECH_REF',
+    userRole: 'LIMITED',
     description: 'Comune di Bari',
     status: 'PENDING',
     institutionId: '1',

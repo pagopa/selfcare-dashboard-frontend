@@ -2,7 +2,7 @@ import { Party } from '../../model/Party';
 
 export const mockedParties: Array<Party> = [
   {
-    partyRole: 'ADMIN',
+    userRole: 'ADMIN',
     description: 'Comune di Bari',
     urlLogo: 'image',
     status: 'PENDING',
@@ -12,7 +12,7 @@ export const mockedParties: Array<Party> = [
     category: '',
   },
   {
-    partyRole: 'ADMIN',
+    userRole: 'ADMIN',
     description: 'Comune di Milano',
     urlLogo: 'image',
     status: 'PENDING',
@@ -22,7 +22,7 @@ export const mockedParties: Array<Party> = [
     category: '',
   },
   {
-    partyRole: 'ADMIN',
+    userRole: 'ADMIN',
     description: 'Comune di Roma',
     urlLogo: 'image',
     status: 'ACTIVE',
@@ -32,7 +32,7 @@ export const mockedParties: Array<Party> = [
     category: '',
   },
   {
-    partyRole: 'TECH_REF',
+    userRole: 'LIMITED',
     description: 'Comune di Napoli',
     urlLogo: 'image',
     status: 'ACTIVE',
@@ -42,7 +42,7 @@ export const mockedParties: Array<Party> = [
     category: '',
   },
   {
-    partyRole: 'ADMIN',
+    userRole: 'ADMIN',
     description: 'AGENCY ONBOARDED',
     urlLogo: 'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/onboarded/logo.png',
     status: 'ACTIVE',

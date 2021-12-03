@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function PartyCard({ party }: Props) {
-  const canUploadLogo = party.platformRole === 'ADMIN_REF' || party.platformRole === 'ADMIN';
+  const canUploadLogo = party.userRole === 'ADMIN';
 
   return (
     <Card

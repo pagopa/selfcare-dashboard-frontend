@@ -28,7 +28,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
   const history = useHistory();
   const { invokeProductBo } = useTokenExchange();
 
-  const canSeeRoles = party.platformRole === 'ADMIN_REF' || party.platformRole === 'ADMIN';
+  const canSeeRoles = party.userRole === 'ADMIN';
   const navigationMenu: Array<MenuItem> = [
     {
       groupId: 'selfCare',

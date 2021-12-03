@@ -1,14 +1,13 @@
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
 
-export type UserRole = 'MANAGER' | 'DELEGATE' | 'OPERATOR';
-export type UserPlatformRole = 'ADMIN' | 'ADMIN_REF' | 'TECH_REF';
+export type UserRole = 'ADMIN' | 'LIMITED';
 
 export type Party = {
   institutionId: string;
   description: string;
   digitalAddress: string;
   status: 'PENDING' | 'ACTIVE';
-  partyRole: UserPlatformRole;
+  userRole: UserRole;
   category: string;
   urlLogo?: string;
   fiscalCode: string;
@@ -24,7 +23,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     description: institutionResource.name,
     digitalAddress: institutionResource.mailAddress,
     status: institutionResource.status as 'ACTIVE' | 'PENDING',
-    partyRole: institutionResource.userRole as UserPlatformRole,
+    userRole: institutionResource.userRole as UserRole,
     category: institutionResource.category,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
