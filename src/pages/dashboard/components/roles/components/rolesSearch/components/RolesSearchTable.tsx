@@ -1,4 +1,4 @@
-// import { ArrowDropDown } from '@mui/icons-material';
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Chip, Link, Typography } from '@mui/material';
 import { Box, styled } from '@mui/system';
 import {
@@ -23,14 +23,27 @@ const headerHeight = 56;
 
 const CustomDataGrid = styled(DataGrid)({
   border: 'none !important',
-  '.MuiDataGrid-columnSeparator': { display: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus':
     { outline: 'none' },
+  '&.MuiDataGrid-root .MuiDataGrid-cell': {
+    whiteSpace: 'normal !important',
+    wordWrap: 'break-word !important',
+    lineHeight: '25px !important',
+  },
+  '&.MuiDataGrid-columnHeaders': { borderBottom: 'none !important' },
+  '.justifyContentBold': {
+    fontSize: '16px',
+    fontWeight: '600',
+    '&>div': {
+      display: 'flex !important',
+      alignItems: 'center',
+    },
+  },
+  '.MuiDataGrid-columnSeparator': { display: 'none' },
   '.MuiDataGrid-cell ': { padding: '0px', borderBottom: 'none' },
   '.MuiDataGrid-columnHeaders': { borderBottom: 'none' },
   '.MuiDataGrid-row': {
-    borderBottom: '1px solid #17324D',
-    // marginBottom: `${rowMargin}px`
+    borderBottom: '1px solid #CCD4DC',
     '&.Mui-selected': {
       backgroundColor: 'transparent',
       '&:hover': { backgroundColor: 'transparent' },
@@ -39,14 +52,23 @@ const CustomDataGrid = styled(DataGrid)({
       backgroundColor: 'transparent',
     },
   },
-  '&.MuiDataGrid-root .MuiDataGrid-cell': {
-    whiteSpace: 'normal !important',
-    wordWrap: 'break-word !important',
-    lineHeight: '25px !important',
-    '&.MuiDataGrid-cell>div': { display: 'flex', alignItems: 'center' },
+  '.justifyContentNormal': {
+    fontSize: '16px',
+    fontWeight: 'normal',
+    '&>div': {
+      display: 'flex !important',
+      alignItems: 'center',
+    },
   },
-  '&.MuiDataGrid-columnHeaders': { borderBottom: 'none !important' },
-  '&.Bold_16_600': { fontSize: '16px', fontWeight: '600' },
+  '.justifyContentNormalRight': {
+    fontSize: '16px',
+    fontWeight: 'normal',
+    '&>div': {
+      display: 'flex !important',
+      alignItems: 'center',
+      justifyContent: 'right',
+    },
+  },
   '.MuiButtonBase-root.MuiPaginationItem-root': {
     fontSize: '16px',
     fontWeight: '600 !important',
@@ -57,10 +79,10 @@ const CustomDataGrid = styled(DataGrid)({
       color: '#000000',
     },
   },
-  '.MuiTablePagination-root': { display: 'none' },
 });
 function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
   const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : undefined;
+  console.log('PARAMS:ROW', params.row);
   return (
     <div
       style={{
@@ -68,7 +90,7 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
         width: '100%',
         height: '100%',
         padding: '0 10px',
-        borderBottom: '1px solid #17324D',
+        borderBottom: '1px solid #CCD4DC',
       }}
     >
       {value}
@@ -91,8 +113,6 @@ function showCustmHeader(params: GridColumnHeaderParams) {
       >
         {params.colDef.headerName}
       </Typography>
-      {/* TODO: handleSortIcons */}
-      {/* <ArrowDropDown sx={{ color: '#5C6F82' }} /> */}
     </React.Fragment>
   );
 }
@@ -136,7 +156,7 @@ function showChip(params: GridRenderCellParams) {
 const columns: Array<GridColDef> = [
   {
     field: 'fullName',
-    cellClassName: 'Bold_16_600',
+    cellClassName: 'justifyContentBold',
     headerName: 'NOME',
     align: 'left',
     headerAlign: 'left',
@@ -144,13 +164,12 @@ const columns: Array<GridColDef> = [
     editable: false,
     disableColumnMenu: true,
     valueGetter: getFullName,
-    // hideSortIcons: true,
     renderHeader: showCustmHeader,
     renderCell,
   },
   {
     field: 'stato',
-    cellClassName: 'Bold_16_600',
+    cellClassName: 'justifyContentBold',
     headerName: '',
     type: 'number',
     align: 'left',
@@ -162,19 +181,19 @@ const columns: Array<GridColDef> = [
   },
   {
     field: 'email',
+    cellClassName: 'justifyContentNormal',
     headerName: 'EMAIL',
     align: 'left',
     headerAlign: 'left',
     width: 320,
     editable: false,
     disableColumnMenu: true,
-    // hideSortIcons: true,
     renderHeader: showCustmHeader,
     renderCell,
   },
   {
     field: 'platformRole',
-    cellClassName: 'Bold_16_600',
+    cellClassName: 'justifyContentBold',
     headerName: 'REFERENTI',
     align: 'left',
     headerAlign: 'left',
@@ -183,14 +202,13 @@ const columns: Array<GridColDef> = [
     editable: false,
     disableColumnMenu: true,
     renderCell: showLabelRef,
-    // renderCell,
-    // hideSortIcons: true,
     renderHeader: showCustmHeader,
   },
   {
     field: 'azione',
+    cellClassName: 'justifyContentNormalRight',
     headerName: '',
-    align: 'center',
+    align: 'right',
     type: 'number',
     width: 99,
     hideSortIcons: true,
@@ -214,23 +232,12 @@ export default function RolesSearchTable({
   sort,
   onPageRequest,
 }: RolesSearchTableProps) {
-  // useLayoutEffect(() => {
-  //     const wrappingBox= document.getElementById('RolesSearchTableBox');
-  //   if(wrappingBox){
-  //     // const headerHeight = parseInt((document.querySelector('.MuiDataGrid-columnHeaders') as HTMLElement)?.style.height.replace('px', ''), 10);
-  //     // const tableBodyHeight = parseInt((document.querySelector('.MuiDataGrid-virtualScrollerContent') as HTMLElement)?.style.height.replace('px', ''), 10);
-
-  //     // eslint-disable-next-line functional/immutable-data
-  //     wrappingBox.style.height= `${headerHeight + (rowHeight*users.length) + 52}px` ;
-  //   }
-  // });
   const sortSplitted = sort ? sort.split(',') : undefined;
   // const userSuspended = users.map( u => u.status === 'SUSPENDED');
   return (
     <Box
       id="RolesSearchTableBox"
       sx={{
-        height: `${headerHeight + rowHeight * users.length + 52}px`,
         position: 'relative',
         width: '100%',
         border: 'none',
@@ -240,27 +247,21 @@ export default function RolesSearchTable({
     >
       <CustomDataGrid
         className="CustomDataGrid"
+        autoHeight={true}
         rows={users}
         columns={columns}
-        pageSize={users.length}
+        pageSize={page.size}
         rowsPerPageOptions={[20]}
         rowHeight={rowHeight}
         headerHeight={headerHeight}
         hideFooterSelectedRowCount={true}
-        components={
-          users.length > 20
-            ? {
-                Pagination: () => (
-                  <CustomPagination sort={sort} page={page} onPageRequest={onPageRequest} />
-                ),
-              }
-            : {}
-        }
-        // componentsProps={{
-        //   row: {
-        //     style: { borderBottom:'1px solid black'  },
-        //   },
-        // }}
+        components={{
+          Pagination: () => (
+            <CustomPagination sort={sort} page={page} onPageRequest={onPageRequest} />
+          ),
+          ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
+          ColumnSortedDescendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
+        }}
         paginationMode="server"
         filterMode="server"
         sortingMode="server"

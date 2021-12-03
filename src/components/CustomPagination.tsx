@@ -4,6 +4,22 @@ import  React  from 'react';
 import { Page } from '../model/Page';
 import { PageRequest } from '../model/PageRequest';
 
+function defaultLabelDisplayedRows(
+  from: number,
+  to: number,
+  count: number
+) {
+  return `${from}-${to} of ${count !== -1 ? count : `more than ${to}`}`;
+}
+
+const getLabelDisplayedRowsTo = (count: number,page: number,size: number ) => {
+  if (count === -1) {
+    return (page + 1) * size;
+  }
+
+  return size === -1 ? count : Math.min(count, (page + 1) * size);
+};
+
 type Props = {
   page: Page;
   sort?: string;
@@ -11,33 +27,17 @@ type Props = {
 };
 
 export default function CustomPagination({ page, onPageRequest, sort }: Props) {
-  // const [pageEl, setPage] = React.useState(2);
-  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
+const count =  page.totalElements;
+const from= count === 0 ? 0 : page.number * page.size + 1;
+const to = getLabelDisplayedRowsTo(count, page.number, page.size);
 
-  // const handleChangePage = (
-  //   _event: React.MouseEvent<HTMLButtonElement> | null,
-  //   newPage: number,
-  // ) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (
-  //   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  // ) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
   return (
     <React.Fragment>
-    {/* <TablePagination
-      component="div"
-      count={100}
-      page={pageEl}
-      onPageChange={handleChangePage}
-      rowsPerPage={rowsPerPage}
-      onRowsPerPageChange={handleChangeRowsPerPage}
-    /> */}
-    <Pagination
+  
+
+  {defaultLabelDisplayedRows(from,to,count)}
+  {/* todo page.totalElements <= page.size */}
+    { page.totalElements > page.size  && <Pagination
       sx={{ display: 'flex' }}
       color="primary"
       variant="outlined"
@@ -52,7 +52,7 @@ export default function CustomPagination({ page, onPageRequest, sort }: Props) {
           sort,
         })
       }
-    />
+    />}
     </React.Fragment>
   
   );
