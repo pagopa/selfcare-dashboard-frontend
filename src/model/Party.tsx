@@ -1,5 +1,4 @@
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
-import { InstitutionInfo } from '../api/generated/party-process/InstitutionInfo';
 
 export type UserRole = 'MANAGER' | 'DELEGATE' | 'OPERATOR';
 export type UserPlatformRole = 'ADMIN' | 'ADMIN_REF' | 'TECH_REF';
@@ -9,33 +8,14 @@ export type Party = {
   description: string;
   digitalAddress: string;
   status: 'PENDING' | 'ACTIVE';
-  role: UserRole;
-  platformRole: UserPlatformRole;
-  category?: string; // TODO fix on CardProduct
+  partyRole: UserPlatformRole;
+  category: string;
   urlLogo?: string;
-  fiscalCode?: string; // TODO is this mandatory?
+  fiscalCode: string;
 };
 
 const buildUrlLog = (institutionId: string) =>
   `${process.env.REACT_APP_URL_INSTITUTION_LOGO_PREFIX}${institutionId}${process.env.REACT_APP_URL_INSTITUTION_LOGO_SUFFIX}`;
-
-export const institutionInfo2Party = (institutionInfo: InstitutionInfo): Party => {
-  const urlLogo = buildUrlLog(institutionInfo.institutionId);
-  return {
-    institutionId: institutionInfo.institutionId,
-    description: institutionInfo.description,
-    digitalAddress: institutionInfo.digitalAddress,
-    status: institutionInfo.state as 'PENDING' | 'ACTIVE',
-    role: institutionInfo.role as UserRole,
-    platformRole: institutionInfo.platformRole as UserPlatformRole,
-    category:
-      institutionInfo.attributes && institutionInfo.attributes.length > 0
-        ? institutionInfo.attributes[0]
-        : undefined,
-    urlLogo,
-    // TODO fiscalCode
-  };
-};
 
 export const institutionResource2Party = (institutionResource: InstitutionResource): Party => {
   const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
@@ -44,10 +24,9 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     description: institutionResource.name,
     digitalAddress: institutionResource.mailAddress,
     status: institutionResource.status as 'ACTIVE' | 'PENDING',
-    role: institutionResource.userRole as UserRole,
-    platformRole: 'ADMIN_REF', // TODO bind after model update
+    partyRole: institutionResource.userRole as UserPlatformRole,
     category: institutionResource.category,
     urlLogo,
-    // TODO fiscalCode
+    fiscalCode: institutionResource.fiscalCode,
   };
 };

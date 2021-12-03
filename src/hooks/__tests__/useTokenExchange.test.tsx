@@ -59,18 +59,20 @@ test('validateUrlBO', () => {
 });
 
 describe('useTokenExchange', () => {
+  let expectedProduct: Product;
+  const expectedParty: Party = mockedParties[0];
+
   const renderApp = (urlBO: string, injectedStore?: ReturnType<typeof createStore>) => {
     const store = injectedStore ? injectedStore : createStore();
 
-    const product: Product = {
+    expectedProduct = {
       ...mockedPartyProducts[0],
       urlBO: urlBO,
     };
-    const party: Party = mockedParties[0];
 
     const Component = () => {
       const { invokeProductBo } = useTokenExchange();
-      useEffect(() => void invokeProductBo(product, party));
+      useEffect(() => void invokeProductBo(expectedProduct, expectedParty));
       return <></>;
     };
     render(
@@ -95,7 +97,7 @@ describe('useTokenExchange', () => {
     await waitFor(() => expect(store.getState().appState.loading.result).toBeFalsy());
 
     expect(retrieveTokenExchangeSpy).toBeCalledTimes(1);
-    expect(retrieveTokenExchangeSpy).toBeCalledWith('hostname', mockedParties[0]);
+    expect(retrieveTokenExchangeSpy).toBeCalledWith('hostname', expectedParty, expectedProduct);
 
     await waitFor(() =>
       expect(mockedLocation.assign).toBeCalledWith('https://hostname/path#DUMMYTOKEN')

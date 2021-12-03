@@ -1,7 +1,5 @@
 import { DashboardApi } from '../api/DashboardApiClient';
-import { PartyProcessApi } from '../api/PartyProcessApiClient';
-import { institutionInfo2Party, institutionResource2Party, Party } from '../model/Party';
-import { ENV } from '../utils/env';
+import { institutionResource2Party, Party } from '../model/Party';
 import { mockedParties } from './__mocks__/partyService';
 
 export const fetchParties = (): Promise<Array<Party>> => {
@@ -9,8 +7,8 @@ export const fetchParties = (): Promise<Array<Party>> => {
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
     return new Promise((resolve) => resolve(mockedParties));
   } else {
-    return PartyProcessApi.getOnBoardingInfo().then((onBoardingInfo) =>
-      onBoardingInfo.institutions ? onBoardingInfo.institutions.map(institutionInfo2Party) : []
+    return DashboardApi.getInstitutions().then((institutionResources) =>
+      institutionResources ? institutionResources.map(institutionResource2Party) : []
     );
   }
 };
@@ -26,17 +24,11 @@ export const fetchPartyDetails = (
     );
   }
 
-  const fetchPartyPromise: (institutionId: string) => Promise<Party | null> =
-    ENV.FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS
-      ? (institutionId) => fetchPartyFromPartyProcess(institutionId, parties)
-      : fetchPartyFromDashboardBE;
-
-  return fetchPartyPromise(institutionId);
+  return retrieveParty(institutionId, parties);
 };
 
-// fetch using PartyProcess
-
-const fetchPartyFromPartyProcess = (
+// check inside parties as first
+const retrieveParty = (
   institutionId: string,
   parties: Array<Party> | undefined
 ): Promise<Party | null> => {
@@ -45,23 +37,14 @@ const fetchPartyFromPartyProcess = (
     if (selected && selected.length > 0) {
       return new Promise((resolve) => resolve(selected[0]));
     } else {
-      return fetchPartyFromPartyProcess_fetch(institutionId);
+      return retrieveParty_fetch(institutionId);
     }
   } else {
-    return fetchPartyFromPartyProcess_fetch(institutionId);
+    return retrieveParty_fetch(institutionId);
   }
 };
 
-const fetchPartyFromPartyProcess_fetch = (institutionId: string): Promise<Party | null> =>
-  PartyProcessApi.getOnBoardingInfo({ institutionId }).then((onBoardingInfo) =>
-    onBoardingInfo.institutions && onBoardingInfo.institutions.length > 0
-      ? institutionInfo2Party(onBoardingInfo.institutions[0])
-      : null
-  );
-
-// fetch using Dashboard BE
-
-const fetchPartyFromDashboardBE = (institutionId: string): Promise<Party | null> =>
+const retrieveParty_fetch = (institutionId: string): Promise<Party | null> =>
   DashboardApi.getInstitution(institutionId).then((institutionResource) =>
     institutionResource ? institutionResource2Party(institutionResource) : null
   );
