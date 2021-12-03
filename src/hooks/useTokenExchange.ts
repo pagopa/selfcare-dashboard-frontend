@@ -22,6 +22,7 @@ export const useTokenExchange = () => {
           blocking: false,
           error: result,
           techDescription: result.message,
+          toNotify: true,
         })
       );
       return;

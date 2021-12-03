@@ -10,6 +10,8 @@ export type AppError = {
   techDescription: string;
   displayableDescription?: string;
   onRetry?: () => void;
+  onClose?: () => void;
+  toNotify: boolean;
 };
 
 interface AppStateState {

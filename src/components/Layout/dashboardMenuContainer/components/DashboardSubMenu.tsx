@@ -48,6 +48,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
           error: reason,
           techDescription: 'An error occurred while fetching parties opening dashboard submenu',
           onRetry: doFetch,
+          toNotify: true,
         });
       });
   };
