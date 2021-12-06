@@ -2,7 +2,7 @@ import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Chip, Link, Typography } from '@mui/material';
 import { Box, styled } from '@mui/system';
 import {
-  DataGrid,
+  DataGrid, 
   GridColDef,
   GridColumnHeaderParams,
   GridRenderCellParams,
@@ -10,13 +10,15 @@ import {
   GridSortModel,
   GridValueGetterParams,
 } from '@mui/x-data-grid';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Page } from '../../../../../../../model/Page';
 import { PageRequest } from '../../../../../../../model/PageRequest';
 import { Product } from '../../../../../../../model/Product';
 import { Role } from '../../../../../../../model/Role';
 import { roleLabels } from '../../../../../../../utils/constants';
 import CustomPagination from './../../../../../../../components/CustomPagination';
+import UserSessionModal from './UserSessionModal';
+import UserToast from './UserToast';
 
 const rowHeight = 81;
 const headerHeight = 56;
@@ -82,7 +84,6 @@ const CustomDataGrid = styled(DataGrid)({
 });
 function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
   const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : undefined;
-  console.log('PARAMS:ROW', params.row);
   return (
     <div
       style={{
@@ -117,16 +118,6 @@ function showCustmHeader(params: GridColumnHeaderParams) {
   );
 }
 
-function showRefStatus(params: GridRenderCellParams<Role>) {
-  return (
-    <React.Fragment>
-      {params.row.status === 'ACTIVE'
-        ? renderCell(params, <Link>Sospendi</Link>)
-        : renderCell(params, <Link>Riabilita</Link>)}
-    </React.Fragment>
-  );
-}
-
 function showLabelRef(params: GridRenderCellParams<Role>) {
   return <React.Fragment>{renderCell(params, roleLabels[params.row.platformRole])}</React.Fragment>;
 }
@@ -153,71 +144,6 @@ function showChip(params: GridRenderCellParams) {
   );
 }
 
-const columns: Array<GridColDef> = [
-  {
-    field: 'fullName',
-    cellClassName: 'justifyContentBold',
-    headerName: 'NOME',
-    align: 'left',
-    headerAlign: 'left',
-    width: 150,
-    editable: false,
-    disableColumnMenu: true,
-    valueGetter: getFullName,
-    renderHeader: showCustmHeader,
-    renderCell,
-  },
-  {
-    field: 'stato',
-    cellClassName: 'justifyContentBold',
-    headerName: '',
-    type: 'number',
-    align: 'left',
-    width: 150,
-    hideSortIcons: true,
-    disableColumnMenu: true,
-    editable: false,
-    renderCell: showChip,
-  },
-  {
-    field: 'email',
-    cellClassName: 'justifyContentNormal',
-    headerName: 'EMAIL',
-    align: 'left',
-    headerAlign: 'left',
-    width: 320,
-    editable: false,
-    disableColumnMenu: true,
-    renderHeader: showCustmHeader,
-    renderCell,
-  },
-  {
-    field: 'platformRole',
-    cellClassName: 'justifyContentBold',
-    headerName: 'REFERENTI',
-    align: 'left',
-    headerAlign: 'left',
-    type: 'number',
-    width: 200,
-    editable: false,
-    disableColumnMenu: true,
-    renderCell: showLabelRef,
-    renderHeader: showCustmHeader,
-  },
-  {
-    field: 'azione',
-    cellClassName: 'justifyContentNormalRight',
-    headerName: '',
-    align: 'right',
-    type: 'number',
-    width: 99,
-    hideSortIcons: true,
-    disableColumnMenu: true,
-    editable: false,
-    renderCell: showRefStatus,
-  },
-];
-
 interface RolesSearchTableProps {
   users: Array<Role>;
   selectedProduct?: Product;
@@ -232,52 +158,171 @@ export default function RolesSearchTable({
   sort,
   onPageRequest,
 }: RolesSearchTableProps) {
+  const columns: Array<GridColDef> = [
+    {
+      field: 'fullName',
+      cellClassName: 'justifyContentBold',
+      headerName: 'NOME',
+      align: 'left',
+      headerAlign: 'left',
+      width: 150,
+      editable: false,
+      disableColumnMenu: true,
+      valueGetter: getFullName,
+      renderHeader: showCustmHeader,
+      renderCell,
+    },
+    {
+      field: 'stato',
+      cellClassName: 'justifyContentBold',
+      headerName: '',
+      type: 'number',
+      align: 'left',
+      width: 150,
+      hideSortIcons: true,
+      disableColumnMenu: true,
+      editable: false,
+      renderCell: showChip,
+    },
+    {
+      field: 'email',
+      cellClassName: 'justifyContentNormal',
+      headerName: 'EMAIL',
+      align: 'left',
+      headerAlign: 'left',
+      width: 320,
+      editable: false,
+      disableColumnMenu: true,
+      renderHeader: showCustmHeader,
+      renderCell,
+    },
+    {
+      field: 'platformRole',
+      cellClassName: 'justifyContentBold',
+      headerName: 'REFERENTI',
+      align: 'left',
+      headerAlign: 'left',
+      type: 'number',
+      width: 200,
+      editable: false,
+      disableColumnMenu: true,
+      renderCell: showLabelRef,
+      renderHeader: showCustmHeader,
+    },
+    {
+      field: 'azione',
+      cellClassName: 'justifyContentNormalRight',
+      headerName: '',
+      align: 'right',
+      type: 'number',
+      width: 99,
+      hideSortIcons: true,
+      disableColumnMenu: true,
+      editable: false,
+      renderCell: showRefStatus,
+    },
+  ];
+
+  const [openModal, setOpenModal] = useState(false);
+  const [openToast, setOpenToast] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<Role>();
+
   const sortSplitted = sort ? sort.split(',') : undefined;
-  // const userSuspended = users.map( u => u.status === 'SUSPENDED');
+  const confirmChangeStatus = () => {
+    setOpenModal(false);
+    setOpenToast(true);
+  };
+  const handleOpen = (params: Role) => {
+    setOpenModal(true);
+    setSelectedUser(params);
+  };
+
+  function showRefStatus(params: GridRenderCellParams<Role>) {
+    return (
+      <React.Fragment>
+        {params.row.status === 'ACTIVE'
+          ? renderCell(params,<Link onClick={() => {handleOpen(params.row);}}>Sospendi</Link>)
+          : renderCell(params, <Link onClick={() => handleOpen(params.row)}>Riabilita</Link>)}
+      </React.Fragment>
+    );
+  }
+
   return (
-    <Box
-      id="RolesSearchTableBox"
-      sx={{
-        position: 'relative',
-        width: '100%',
-        border: 'none',
-        px: '16px',
-      }}
-      justifyContent="start"
-    >
-      <CustomDataGrid
-        className="CustomDataGrid"
-        autoHeight={true}
-        rows={users}
-        columns={columns}
-        pageSize={page.size}
-        rowsPerPageOptions={[20]}
-        rowHeight={rowHeight}
-        headerHeight={headerHeight}
-        hideFooterSelectedRowCount={true}
-        components={{
-          Pagination: () => (
-            <CustomPagination sort={sort} page={page} onPageRequest={onPageRequest} />
-          ),
-          ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
-          ColumnSortedDescendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
+    <React.Fragment>
+      <Box
+        id="RolesSearchTableBox"
+        sx={{
+          position: 'relative',
+          width: '100%',
+          border: 'none',
+          px: '16px',
         }}
-        paginationMode="server"
-        filterMode="server"
-        sortingMode="server"
-        onSortModelChange={(model: GridSortModel) =>
-          onPageRequest({
-            page: page.number,
-            size: page.size,
-            sort: model.length > 0 ? model.map((m) => `${m.field},${m.sort}`)[0] : undefined,
-          })
-        }
-        sortModel={
-          sortSplitted
-            ? [{ field: sortSplitted[0], sort: sortSplitted[1] as GridSortDirection }]
-            : undefined
-        }
-      />
-    </Box>
+        justifyContent="start"
+      >
+        <CustomDataGrid
+          className="CustomDataGrid"
+          autoHeight={true}
+          rows={users}
+          columns={columns}
+          pageSize={page.size}
+          rowsPerPageOptions={[20]}
+          rowHeight={rowHeight}
+          headerHeight={headerHeight}
+          hideFooterSelectedRowCount={true}
+          components={{
+            Pagination: () => (
+              <CustomPagination sort={sort} page={page} onPageRequest={onPageRequest} />
+            ),
+            ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
+            ColumnSortedDescendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
+          }}
+          paginationMode="server"
+          filterMode="server"
+          sortingMode="server"
+          onSortModelChange={(model: GridSortModel) =>
+            onPageRequest({
+              page: page.number,
+              size: page.size,
+              sort: model.length > 0 ? model.map((m) => `${m.field},${m.sort}`)[0] : undefined,
+            })
+          }
+          sortModel={
+            sortSplitted
+              ? [{ field: sortSplitted[0], sort: sortSplitted[1] as GridSortDirection }]
+              : undefined
+          }
+        />
+      </Box>
+
+      {openToast && (
+        <UserToast 
+          userName={selectedUser?.name}
+          userSurname={selectedUser?.surname}
+          userStatus={selectedUser?.status === 'ACTIVE' ? 'sospeso' : 'riabilitato'}
+          closeToast={() => setOpenToast(false)}
+        />
+      )}
+
+      {users.map((user) => {
+        const selectedStatus = selectedUser && selectedUser.status;
+        const selectedName = selectedUser && selectedUser.name;
+        const selectedSurname = selectedUser && selectedUser.surname;
+        return (
+          <UserSessionModal
+            key={user.id}
+            open={openModal}
+            title="Sospendi Referente"
+            message={selectedStatus === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '}
+            userName={selectedName}
+            userSurname={selectedSurname}
+            message2=" vuoi continuare?"
+            onConfirm={confirmChangeStatus}
+            handleClose={() => setOpenModal(false)}
+            buttonLabel1="Conferma"
+            buttonLabel2="Annulla"
+          />
+        );
+      })}
+    </React.Fragment>
   );
 }
