@@ -1,7 +1,12 @@
 import { Card, Grid, Typography } from '@mui/material';
+import { Product } from '../../../../model/Product';
 import RolesSearch from './components/rolesSearch/RolesSearch';
 
-export default function Roles() {
+interface Roles {
+  products: Array<Product>;
+}
+
+export default function Roles({ products }: Roles) {
   const selectedProduct = undefined;
   return (
     <Card
@@ -14,7 +19,7 @@ export default function Roles() {
           {/*    <PartyDetail party={party} /> */}
         </Grid>
         <Grid item xs={12}>
-          <RolesSearch selectedProduct={selectedProduct} />
+          <RolesSearch selectedProduct={selectedProduct} products={products} />
         </Grid>
       </Grid>
     </Card>

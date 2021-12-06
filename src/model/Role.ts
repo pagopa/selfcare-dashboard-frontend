@@ -2,7 +2,7 @@ import { UserPlatformRole } from './Party';
 import { Product } from './Product';
 
 export type Role = {
-  uid: string;
+  id: string;
   name: string;
   surname: string;
   taxCode: string;
@@ -10,4 +10,5 @@ export type Role = {
   // role:UserRole TODO
   platformRole: UserPlatformRole;
   products: Array<Product>;
+  status: 'ACTIVE' | 'SUSPENDED'; // TODO: To verify values
 };

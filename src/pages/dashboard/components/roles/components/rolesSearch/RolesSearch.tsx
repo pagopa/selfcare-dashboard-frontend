@@ -4,7 +4,8 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { useEffect, useState } from 'react';
 import { Product } from '../../../../../../model/Product';
-import { Role } from '../../../../../../api/generated/party-process/Role';
+// import { Role } from '../../../../../../api/generated/party-process/Role';
+import { Role } from '../../../../../../model/Role';
 import { Page } from '../../../../../../model/Page';
 import { PageRequest } from '../../../../../../model/PageRequest';
 import RolesSearchTable from './components/RolesSearchTable';
@@ -12,13 +13,59 @@ import RolesSearchFilter, { RolesSearchFilterConfig } from './components/RolesSe
 
 interface RolesSearchProps {
   selectedProduct?: Product;
+  products: Array<Product>;
 }
 
-export default function RolesSearch({ selectedProduct }: RolesSearchProps) {
+const Users: Array<Role> = [
+  {
+    id: 'uid',
+    name: 'Giuseppe',
+    surname: 'Verdi',
+    taxCode: 'taxCode',
+    email: 'simone.v@comune.milano.it ',
+    platformRole: 'ADMIN_REF',
+    status: 'ACTIVE',
+    products: [
+      {
+        title: 'App IO',
+        description: 'App IO description',
+        id: '1',
+        authorized: true,
+        active: true,
+        urlBO: 'http://appio/bo',
+        activationDateTime: new Date(2021, 1, 1),
+        urlPublic: 'http://appio/public',
+      },
+    ],
+  },
+  {
+    id: 'uid',
+    name: 'Andrea',
+    surname: 'Magica',
+    taxCode: 'taxCode',
+    email: 'simone.v@comune.milano.it ',
+    platformRole: 'ADMIN',
+    status: 'ACTIVE',
+    products: [
+      {
+        title: 'App IO',
+        description: 'App IO description',
+        id: '1',
+        authorized: true,
+        active: true,
+        urlBO: 'http://appio/bo',
+        activationDateTime: new Date(2021, 1, 1),
+        urlPublic: 'http://appio/public',
+      },
+    ],
+  },
+];
+
+export default function RolesSearch({ selectedProduct, products }: RolesSearchProps) {
   const [users, setUsers] = useState<Array<Role>>([]);
   const [page, setPage] = useState<Page>({ number: 0, size: 0, totalElements: 0, totalPages: 0 });
   const [filter, setFilter] = useState<RolesSearchFilterConfig>(
-    selectedProduct ? { product: selectedProduct.id } : {}
+    selectedProduct ? { product: selectedProduct } : {}
   );
   const [pageRequest, setPageRequest] = useState<PageRequest>({
     page: 0,
@@ -26,7 +73,7 @@ export default function RolesSearch({ selectedProduct }: RolesSearchProps) {
   });
   const fetchUsers = (_f: RolesSearchFilterConfig, _pageRequest: PageRequest) => {
     // TODO Fetch
-    setUsers([]); // TODO (fare setUser con mio createData) e setPage
+    setUsers(Users); // TODO (fare setUser con mio createData) e setPage
     setPage(page);
   };
 
@@ -45,19 +92,24 @@ export default function RolesSearch({ selectedProduct }: RolesSearchProps) {
 
   return (
     <Grid container direction="row" alignItems={'center'} px={4}>
-      <Grid>
+      <Grid item xs={8}>
         <RolesSearchFilter
           filterProducts={selectedProduct === undefined}
           filter={filter}
           onFilterChange={handleFilterChange}
+          products={products}
         />
       </Grid>
-      <Grid item xs={2}>
-        <Button variant="contained" startIcon={<AddIcon />}>
-          {/* TODO open addUserForm */}
-          Aggiungi
-        </Button>
-      </Grid>
+      {selectedProduct !== undefined ? (
+        ''
+      ) : (
+        <Grid item xs={2}>
+          <Button variant="contained" startIcon={<AddIcon />}>
+            {/* TODO open addUserForm */}
+            Aggiungi
+          </Button>
+        </Grid>
+      )}
       <RolesSearchTable
         users={users}
         selectedProduct={selectedProduct}

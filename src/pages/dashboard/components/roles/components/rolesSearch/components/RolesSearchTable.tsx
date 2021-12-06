@@ -8,11 +8,11 @@ import {
   TableRow,
   TableSortLabel,
 } from '@mui/material';
-import { Role } from '../../../../../../../api/generated/party-process/Role';
+import { Role } from '../../../../../../../model/Role';
 import { Page } from '../../../../../../../model/Page';
 import { PageRequest } from '../../../../../../../model/PageRequest';
 import { Product } from '../../../../../../../model/Product';
-
+/* 
 interface Data {
   name: string;
   email: string;
@@ -31,10 +31,10 @@ const rows = [
   createData('Dario', 'dario@gmail.com', 'Admin'),
   createData('Luca', 'dario@gmail.com', 'Admin'),
   createData('Stefano', 'dario@gmail.com', 'Admin'),
-];
+]; */
 
 interface HeadCell {
-  id: keyof Data;
+  id: string;
   label: string;
   minWidth: number;
   order: string | null;
@@ -72,7 +72,7 @@ export default function RolesSearchTable(_props: RolesSearchTableProps) {
       align: 'center',
     },
   ];
-
+  const rows = _props.users;
   /* TODO vanno aggiunte due colonne */
 
   return (
@@ -100,7 +100,7 @@ export default function RolesSearchTable(_props: RolesSearchTableProps) {
               <TableRow key={row.name}>
                 <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">{row.email}</TableCell>
-                <TableCell align="right">{row.role}</TableCell>
+                <TableCell align="right">{row.platformRole}</TableCell>
               </TableRow>
             ))}
           </TableBody>
