@@ -2,7 +2,7 @@ import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Chip, Link, Typography } from '@mui/material';
 import { Box, styled } from '@mui/system';
 import {
-  DataGrid, 
+  DataGrid,
   GridColDef,
   GridColumnHeaderParams,
   GridRenderCellParams,
@@ -23,127 +23,6 @@ import UserToast from './UserToast';
 const rowHeight = 81;
 const headerHeight = 56;
 
-const CustomDataGrid = styled(DataGrid)({
-  border: 'none !important',
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus':
-    { outline: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell': {
-    whiteSpace: 'normal !important',
-    wordWrap: 'break-word !important',
-    lineHeight: '25px !important',
-  },
-  '&.MuiDataGrid-columnHeaders': { borderBottom: 'none !important' },
-  '.justifyContentBold': {
-    fontSize: '16px',
-    fontWeight: '600',
-    '&>div': {
-      display: 'flex !important',
-      alignItems: 'center',
-    },
-  },
-  '.MuiDataGrid-columnSeparator': { display: 'none' },
-  '.MuiDataGrid-cell ': { padding: '0px', borderBottom: 'none' },
-  '.MuiDataGrid-columnHeaders': { borderBottom: 'none' },
-  '.MuiDataGrid-row': {
-    borderBottom: '1px solid #CCD4DC',
-    '&.Mui-selected': {
-      backgroundColor: 'transparent',
-      '&:hover': { backgroundColor: 'transparent' },
-    },
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-  '.justifyContentNormal': {
-    fontSize: '16px',
-    fontWeight: 'normal',
-    '&>div': {
-      display: 'flex !important',
-      alignItems: 'center',
-    },
-  },
-  '.justifyContentNormalRight': {
-    fontSize: '16px',
-    fontWeight: 'normal',
-    '&>div': {
-      display: 'flex !important',
-      alignItems: 'center',
-      justifyContent: 'right',
-    },
-  },
-  '.MuiButtonBase-root.MuiPaginationItem-root': {
-    fontSize: '16px',
-    fontWeight: '600 !important',
-    color: '#0073E6',
-    '&.Mui-selected ': {
-      border: 'none !important',
-      backgroundColor: 'transparent !important',
-      color: '#000000',
-    },
-  },
-});
-function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
-  const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : undefined;
-  return (
-    <div
-      style={{
-        backgroundColor: bgColor,
-        width: '100%',
-        height: '100%',
-        padding: '0 10px',
-        borderBottom: '1px solid #CCD4DC',
-      }}
-    >
-      {value}
-    </div>
-  );
-}
-
-function getFullName(params: GridValueGetterParams) {
-  return `${params.getValue(params.id, 'name') || ''} ${
-    params.getValue(params.id, 'surname') || ''
-  }`;
-}
-
-function showCustmHeader(params: GridColumnHeaderParams) {
-  return (
-    <React.Fragment>
-      <Typography
-        color="text.secondary"
-        sx={{ fontSize: '14px', fontWeight: '700', outline: 'none' }}
-      >
-        {params.colDef.headerName}
-      </Typography>
-    </React.Fragment>
-  );
-}
-
-function showLabelRef(params: GridRenderCellParams<Role>) {
-  return <React.Fragment>{renderCell(params, roleLabels[params.row.platformRole])}</React.Fragment>;
-}
-
-function showChip(params: GridRenderCellParams) {
-  return (
-    <React.Fragment>
-      {params.row.status === 'SUSPENDED' &&
-        renderCell(
-          params,
-          <Chip
-            label="Sospeso"
-            sx={{
-              fontSize: '16px',
-              fontWeight: '600',
-              color: '#17324D',
-              backgroundColor: '#00C5CA',
-              paddingBottom: '1px',
-              height: '24px',
-            }}
-          />
-        )}
-    </React.Fragment>
-  );
-}
-
 interface RolesSearchTableProps {
   users: Array<Role>;
   selectedProduct?: Product;
@@ -158,6 +37,129 @@ export default function RolesSearchTable({
   sort,
   onPageRequest,
 }: RolesSearchTableProps) {
+  const CustomDataGrid = styled(DataGrid)({
+    border: 'none !important',
+    '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus':
+      { outline: 'none' },
+    '&.MuiDataGrid-root .MuiDataGrid-cell': {
+      whiteSpace: 'normal !important',
+      wordWrap: 'break-word !important',
+      lineHeight: '25px !important',
+    },
+    '&.MuiDataGrid-columnHeaders': { borderBottom: 'none !important' },
+    '.justifyContentBold': {
+      fontSize: '16px',
+      fontWeight: '600',
+      '&>div': {
+        display: 'flex !important',
+        alignItems: 'center',
+      },
+    },
+    '.MuiDataGrid-columnSeparator': { display: 'none' },
+    '.MuiDataGrid-cell ': { padding: '0px', borderBottom: 'none' },
+    '.MuiDataGrid-columnHeaders': { borderBottom: 'none' },
+    '.MuiDataGrid-row': {
+      borderBottom: '1px solid #CCD4DC',
+      '&.Mui-selected': {
+        backgroundColor: 'transparent',
+        '&:hover': { backgroundColor: 'transparent' },
+      },
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
+    '.justifyContentNormal': {
+      fontSize: '16px',
+      fontWeight: 'normal',
+      '&>div': {
+        display: 'flex !important',
+        alignItems: 'center',
+      },
+    },
+    '.justifyContentNormalRight': {
+      fontSize: '16px',
+      fontWeight: 'normal',
+      '&>div': {
+        display: 'flex !important',
+        alignItems: 'center',
+        justifyContent: 'right',
+      },
+    },
+    '.MuiButtonBase-root.MuiPaginationItem-root': {
+      fontSize: '16px',
+      fontWeight: '600 !important',
+      color: '#0073E6',
+      '&.Mui-selected ': {
+        border: 'none !important',
+        backgroundColor: 'transparent !important',
+        color: '#000000',
+      },
+    },
+  });
+  function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
+    const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : undefined;
+    return (
+      <div
+        style={{
+          backgroundColor: bgColor,
+          width: '100%',
+          height: '100%',
+          padding: '0 10px',
+          borderBottom: '1px solid #CCD4DC',
+        }}
+      >
+        {value}
+      </div>
+    );
+  }
+
+  function getFullName(params: GridValueGetterParams) {
+    return `${params.getValue(params.id, 'name') || ''} ${
+      params.getValue(params.id, 'surname') || ''
+    }`;
+  }
+
+  function showCustmHeader(params: GridColumnHeaderParams) {
+    return (
+      <React.Fragment>
+        <Typography
+          color="text.secondary"
+          sx={{ fontSize: '14px', fontWeight: '700', outline: 'none' }}
+        >
+          {params.colDef.headerName}
+        </Typography>
+      </React.Fragment>
+    );
+  }
+
+  function showLabelRef(params: GridRenderCellParams<Role>) {
+    return (
+      <React.Fragment>{renderCell(params, roleLabels[params.row.platformRole])}</React.Fragment>
+    );
+  }
+
+  function showChip(params: GridRenderCellParams) {
+    return (
+      <React.Fragment>
+        {params.row.status === 'SUSPENDED' &&
+          renderCell(
+            params,
+            <Chip
+              label="Sospeso"
+              sx={{
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#17324D',
+                backgroundColor: '#00C5CA',
+                paddingBottom: '1px',
+                height: '24px',
+              }}
+            />
+          )}
+      </React.Fragment>
+    );
+  }
+
   const columns: Array<GridColDef> = [
     {
       field: 'fullName',
@@ -227,22 +229,41 @@ export default function RolesSearchTable({
   const [openToast, setOpenToast] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Role>();
 
-  const sortSplitted = sort ? sort.split(',') : undefined;
-  const confirmChangeStatus = () => {
+  const [userStatus, setUserStatus] = useState<string>();
+
+   const sortSplitted = sort ? sort.split(',') : undefined;
+
+  const confirmChangeStatus = (user?: Role) => {
+    window.scrollTo(0,document.body.scrollHeight);
+    if (user?.status === 'ACTIVE') {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      // eslint-disable-next-line functional/immutable-data
+      setUserStatus((user.status = 'SUSPENDED'));
+    } else if (user?.status === 'SUSPENDED') {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      // eslint-disable-next-line functional/immutable-data
+      setUserStatus((user.status = 'ACTIVE'));
+    }
     setOpenModal(false);
-    setOpenToast(true);
-  };
-  const handleOpen = (params: Role) => {
-    setOpenModal(true);
-    setSelectedUser(params);
+    if (userStatus) {
+      setOpenToast(true);
+    }
+
   };
 
-  function showRefStatus(params: GridRenderCellParams<Role>) {
+  const handleOpen = (users: Role) => {
+    setOpenToast(false);
+    setOpenModal(true);
+    setSelectedUser(users);
+    setUserStatus(users.status);
+  };
+
+  function showRefStatus(users: GridRenderCellParams<Role>) {
     return (
       <React.Fragment>
-        {params.row.status === 'ACTIVE'
-          ? renderCell(params,<Link onClick={() => {handleOpen(params.row);}}>Sospendi</Link>)
-          : renderCell(params, <Link onClick={() => handleOpen(params.row)}>Riabilita</Link>)}
+        {users.row.status === 'ACTIVE'
+          ? renderCell(users, <Link onClick={() => handleOpen(users.row)}>Sospendi</Link>)
+          : renderCell(users, <Link onClick={() => handleOpen(users.row)}>Riabilita</Link>)}
       </React.Fragment>
     );
   }
@@ -295,34 +316,29 @@ export default function RolesSearchTable({
       </Box>
 
       {openToast && (
-        <UserToast 
+        <UserToast
           userName={selectedUser?.name}
           userSurname={selectedUser?.surname}
-          userStatus={selectedUser?.status === 'ACTIVE' ? 'sospeso' : 'riabilitato'}
+          userStatus={selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato'}
           closeToast={() => setOpenToast(false)}
         />
       )}
 
-      {users.map((user) => {
-        const selectedStatus = selectedUser && selectedUser.status;
-        const selectedName = selectedUser && selectedUser.name;
-        const selectedSurname = selectedUser && selectedUser.surname;
-        return (
-          <UserSessionModal
-            key={user.id}
-            open={openModal}
-            title="Sospendi Referente"
-            message={selectedStatus === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '}
-            userName={selectedName}
-            userSurname={selectedSurname}
-            message2=" vuoi continuare?"
-            onConfirm={confirmChangeStatus}
-            handleClose={() => setOpenModal(false)}
-            buttonLabel1="Conferma"
-            buttonLabel2="Annulla"
-          />
-        );
-      })}
+      <UserSessionModal
+        key={selectedUser?.id}
+        open={openModal}
+        title="Sospendi Referente"
+        message={
+          selectedUser?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '
+        }
+        userName={selectedUser?.name}
+        userSurname={selectedUser?.surname}
+        message2=" vuoi continuare?"
+        onConfirm={() => confirmChangeStatus(selectedUser)}
+        handleClose={() => setOpenModal(false)}
+        buttonLabel1="Conferma"
+        buttonLabel2="Annulla"
+      />
     </React.Fragment>
   );
 }

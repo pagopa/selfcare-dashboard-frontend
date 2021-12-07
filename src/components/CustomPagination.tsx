@@ -44,11 +44,11 @@ export default function CustomPagination({ page, onPageRequest, sort }: Props) {
               count={page.totalPages}
               renderItem={(props2) => <PaginationItem {...props2} sx={{ border: 'none' }} />}
               onChange={(_event: React.ChangeEvent<unknown>, value: number) =>
-                onPageRequest({
+                (onPageRequest({
                   page: value - 1,
                   size: page.size,
                   sort,
-                })
+                }),window.scrollTo(0,0))
               }
             />
           )}

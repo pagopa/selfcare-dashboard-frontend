@@ -18,10 +18,12 @@ export default function UserToast({ userName, userSurname, userStatus, closeToas
       <Grid item xs={12} display="flex" justifyContent="flex-end" >
         <Box sx={{borderLeft:'4px solid #00CF86',borderRadius:'5px',boxShadow: '0px 0px 45px rgba(0, 0, 0, 0.1)'}}> 
         <CustomAlert
+        className='userToast'
           variant="outlined"
           sx={{
-            width: '376px',
-            height: '119px',
+            width:'376px',
+            minHeight:'120px',
+            maxHeight: '100%',
             margin: '0 10px',
             padding:'0',
             border:'none'
@@ -32,13 +34,15 @@ export default function UserToast({ userName, userSurname, userStatus, closeToas
               <SvgIcon
                 component={logo}
                 viewBox="0 0 80 24"
-                sx={{ width: '80px', height: '100%', marginTop:'-27px', marginLeft: '13px'}}
+                sx={{ width: '80px',  height: '37px', marginLeft: '13px'}}
               />
             </Grid>
             <Grid item xs={8} >
-              <Typography pt={1} pb={2}>REFERENTE SOSPESO</Typography>
+              <Typography pt={1} pb={1}>REFERENTE SOSPESO</Typography>
               <Typography>
                 Hai {userStatus} correttamente{' '}
+                </ Typography>
+                <Typography>
                 <strong>
                   {userName} {userSurname}.
                 </strong>
