@@ -1,21 +1,23 @@
 import { Box, Grid, Link, SvgIcon, Typography } from '@mui/material';
 import { ReactComponent as logo } from '../../assets/logo_pago_pa.svg';
-
+import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
 const Footer = () => (
   <Box
     component="footer"
     sx={{
       pt: '32px',
-      mt: 'auto',
       height: '156px',
+      mt: 'auto',
       bgcolor: '#01254C',
       alignItems: 'center',
+      boxSizing:'unset',
+      position: 'relative'
     }}
   >
     <Grid container justifyContent={'center'} alignItems={'center'}>
       <Box sx={{ width: '90%', display: 'flex' }}>
-        <SvgIcon component={logo} viewBox="0 0 120 33" sx={{ width: '119px' }} />
-        <Box sx={{ textAlign: 'end', flexGrow: 1 }}>
+        <SvgIcon component={logo} viewBox="0 0 140 33" sx={{ width: '119px' }} />
+        <Box sx={{ textAlign: 'end', flexGrow: 1 }} pl={8}>
           <Typography
             component="div"
             sx={{
@@ -24,30 +26,31 @@ const Footer = () => (
               lineHeight: '22,82px',
               textAlign: 'left',
               color: 'background.default',
-              paddingLeft: '30px',
+              paddingLeft: '0px',
             }}
           >
             PagoPA S.p.A. - società per azioni con socio unico - capitale sociale di euro 1,000,000
-            interamente versato - sede legale in Roma, Piazza Colonna 370, CAP 00187 - n. di
-            iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009
+            interamente versato - sede legale in Roma, Piazza Colonna 370, CAP 00187 - 
+            <br />
+            n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009
           </Typography>
         </Box>
       </Box>
     </Grid>
-    <Grid container alignItems={'center'} justifyContent={'center'}>
+    <Grid container alignItems={'center'} justifyContent={'center'} sx={{position:'absolute', bottom:'48px'}}>
       <Box sx={{ width: '90%', display: 'flex' }}>
         <Typography
-          style={{
+          sx={{
             fontWeight: 'normal',
             fontSize: '15px',
             lineHeight: '15px',
             textAlign: 'left',
-            padding: '27px 0px',
+            padding: '0px',
           }}
           component="div"
         >
           <Link
-            href="https://www.pagopa.gov.it/it/privacy-policy/"
+            href="https://www.pagopa.it/it/privacy-policy/"
             underline="none"
             sx={{
               marginRight: '10px',
@@ -55,10 +58,10 @@ const Footer = () => (
               textDecoration: 'none !important',
             }}
           >
-            {'Privacy Policy '}{' '}
+            {'Privacy Policy '}
           </Link>
           <Link
-            href="https://pagopa.portaleamministrazionetrasparente.it/"
+            href="https://www.pagopa.it/it/termini-e-condizioni-di-utilizzo-del-sito/"
             underline="none"
             sx={{
               margin: '10px',
@@ -66,7 +69,29 @@ const Footer = () => (
               textDecoration: 'none !important',
             }}
           >
-            {'Società Trasparente '}{' '}
+            {'Termini e condizioni d’uso del sito '}
+          </Link>
+          <Link
+            href="https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdft"
+            underline="none"
+            sx={{
+              marginRight: '10px',
+              color: '#9BB7CB !important',
+              textDecoration: 'none !important',
+            }}
+          >
+            {'Sicurezza delle informazioni '}
+          </Link>
+          <Link
+            href={`mailto:${PAGOPA_HELP_EMAIL}`}
+            underline="none"
+            sx={{
+              margin: '10px',
+              color: '#9BB7CB !important',
+              textDecoration: 'none !important',
+            }}
+          >
+            {'Assistenza '}
           </Link>
         </Typography>
       </Box>

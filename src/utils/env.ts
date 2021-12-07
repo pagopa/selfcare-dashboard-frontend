@@ -1,6 +1,1 @@
-const FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS: boolean =
-  process.env.REACT_APP_FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS.toUpperCase() === 'TRUE';
-
-export const ENV = {
-  FETCH_SELECTED_PARTY_FROM_PARTY_PROCESS,
-};
+export const ENV = {};

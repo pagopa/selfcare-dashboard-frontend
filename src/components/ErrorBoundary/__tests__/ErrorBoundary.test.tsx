@@ -49,6 +49,7 @@ test('Test blocking error', async () => {
     blocking: true,
     displayableDescription: errorDisplayed,
     techDescription: 'DUMMY',
+    toNotify: true,
   });
   renderApp(<Child />);
 
@@ -67,6 +68,7 @@ test('Test not blocking error not retriable', async () => {
     blocking: false,
     displayableDescription: errorDisplayed,
     techDescription: 'DUMMY',
+    toNotify: true,
   });
   renderApp(<Child />);
 
@@ -86,6 +88,7 @@ test('Test not blocking error retriable', async () => {
     blocking: false,
     techDescription: 'DUMMY',
     onRetry: retryMock,
+    toNotify: true,
   });
   renderApp(<Child />);
 

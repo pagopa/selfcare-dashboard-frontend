@@ -1,4 +1,4 @@
-import TitleBox from './../TitleBox';
+import TitleBox from '../../../../components/TitleBox';
 
 export default function WelcomeDashboard() {
   const title = 'Il tuo Ente è attivo sui prodotti PagoPA';

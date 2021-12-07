@@ -1,16 +1,18 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
+import { Party } from '../../../../model/Party';
+import TitleBox from '../../../../components/TitleBox';
 import ActiveProductCard from './components/ActiveProductCard';
-import TitleBox from './../TitleBox';
 
 type Props = {
+  party: Party;
   products: Array<Product>;
 };
 
-export default function ActiveProductsSection({ products }: Props) {
+export default function ActiveProductsSection({ party, products }: Props) {
   const buttonLabel = 'Gestisci il prodotto';
-  const lastServiceActivationDate= undefined;// actually this info is not available
+  const lastServiceActivationDate = undefined; // actually this info is not available
 
   return (
     <React.Fragment>
@@ -30,6 +32,7 @@ export default function ActiveProductsSection({ products }: Props) {
             .map((product) => (
               <ActiveProductCard
                 key={product.id}
+                party={party}
                 product={product}
                 buttonLabel={buttonLabel}
                 lastServiceActivationDate={lastServiceActivationDate}

@@ -28,7 +28,9 @@ variables:
     react_app_url_fe_login: '$(UAT_REACT_APP_URL_FE_LOGIN)'
     react_app_url_fe_onboarding: '$(UAT_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_dashboard: '$(UAT_REACT_APP_URL_FE_DASHBOARD)'
-    react_app_url_api_login: '$(UAT_REACT_APP_URL_API_LOGIN)'
+    react_app_url_fe_landing: '$(UAT_REACT_APP_URL_FE_LANDING)'
+    react_app_url_api_party_process: '$(UAT_REACT_APP_URL_API_PARTY_PROCESS)'
+    react_app_url_api_dashboard: '$(UAT_REACT_APP_URL_API_DASHBOARD)'
     spid_test_env_enabled: 'true'
 
   ${{ elseif eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
@@ -41,7 +43,9 @@ variables:
     react_app_url_fe_login: '$(PROD_REACT_APP_URL_FE_LOGIN)'
     react_app_url_fe_onboarding: '$(PROD_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_dashboard: '$(PROD_REACT_APP_URL_FE_DASHBOARD)'
-    react_app_url_api_login: '$(PROD_REACT_APP_URL_API_LOGIN)'
+    react_app_url_fe_landing: '$(PROD_REACT_APP_URL_FE_LANDING)'
+    react_app_url_api_party_process: '$(PROD_REACT_APP_URL_API_PARTY_PROCESS)'
+    react_app_url_api_dashboard: '$(PROD_REACT_APP_URL_API_DASHBOARD)'
     spid_test_env_enabled: 'false'
 
   # every branch different from past will be considered as DEV
@@ -56,7 +60,9 @@ variables:
     react_app_url_fe_login: '$(DEV_REACT_APP_URL_FE_LOGIN)'
     react_app_url_fe_onboarding: '$(DEV_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_dashboard: '$(DEV_REACT_APP_URL_FE_DASHBOARD)'
-    react_app_url_api_login: '$(DEV_REACT_APP_URL_API_LOGIN)'
+    react_app_url_fe_landing: '$(DEV_REACT_APP_URL_FE_LANDING)'
+    react_app_url_api_party_process: 'https://selc-d-apim.azure-api.net/party-process/v1' # TODO restore me '$(DEV_REACT_APP_URL_API_PARTY_PROCESS)'
+    react_app_url_api_dashboard: '$(DEV_REACT_APP_URL_API_DASHBOARD)'
     spid_test_env_enabled: 'true'
 
 # Automatically triggered on PR
@@ -136,6 +142,9 @@ stages:
               REACT_APP_URL_FE_LOGIN: '$(react_app_url_fe_login)/login'
               REACT_APP_URL_FE_LOGOUT: '$(react_app_url_fe_login)/logout'
               REACT_APP_URL_FE_ONBOARDING: '$(react_app_url_fe_onboarding)/add'
+              REACT_APP_URL_FE_LANDING: '$(react_app_url_fe_landing)'
+              REACT_APP_URL_API_PARTY_PROCESS: '$(react_app_url_api_party_process)'
+              REACT_APP_URL_API_DASHBOARD: '$(react_app_url_api_dashboard)'
           - bash: |
               printf "$EXECUTION_ID\n$(git name-rev --name-only FETCH_HEAD) $(git rev-parse HEAD)" > $(System.DefaultWorkingDirectory)/build/build.info
             env:

@@ -24,6 +24,16 @@ const CustomBadge = styled(Badge)({
   },
 });
 
+const cardSubTitleStyle = {
+  fontSize: '18px',
+  height: '100%',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  display: '-webkit-box',
+  WebkitLineClamp: 3,
+  WebkitBoxOrient: 'vertical' as const,
+};
+
 export default function BaseProductCard({
   cardTitle,
   cardSubTitle,
@@ -41,7 +51,6 @@ export default function BaseProductCard({
     <React.Fragment>
       <Card sx={{ border: 'none', boxShadow: 'none' }}>
         <CardContent>
-          {/* TODO: to verify if is a direct img or an url */}
           <Grid container height={heightLogo}>
             <Grid item xs={6} mb={3}>
               <Box sx={{ width: '100%' }}>
@@ -59,7 +68,7 @@ export default function BaseProductCard({
           </Grid>
           <Grid item xs={12} mb={3} height={heightSubTitle} display="flex" alignItems={'center'}>
             {cardSubTitle && (
-              <Typography variant="body2" sx={{ fontSize: '18px' }}>
+              <Typography variant="body2" sx={cardSubTitleStyle}>
                 {cardSubTitle}
               </Typography>
             )}

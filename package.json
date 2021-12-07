@@ -25,6 +25,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/redux-logger": "^3.0.9",
     "axios": "^0.23.0",
+    "formik": "^2.2.9",
     "fp-ts": "^2.11.5",
     "io-ts": "^2.2.16",
     "lodash": "^4.17.21",
@@ -54,9 +55,7 @@
     "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
     "generate": "npm-run-all generate:*",
     "clean:api-b4f-dashboard": "rimraf src/api/generated/b4f-dashboard && rimraf openApi/generated",
-    "generate:api-b4f-dashboard": "yarn run clean:api-b4f-dashboard && mkdirp openApi/generated && api-spec-converter --from=openapi_3 --to=swagger_2 openApi/dashboard-api-docs.json > openApi/generated/dashboard-swagger20.json && node openApi/scripts/fixSwagger20ArraySchemaDef.js openApi/generated/dashboard-swagger20.json && gen-api-models --api-spec openApi/generated/dashboard-swagger20.json --out-dir src/api/generated/b4f-dashboard --no-strict --request-types --response-decoders --client && node openApi/scripts/api-b4f-dashboard_fixPostGen.js",
-    "clean:api-party-process": "rimraf src/api/generated/party-process",
-    "generate:api-party-process": "yarn run clean:api-party-process && gen-api-models --api-spec openApi/party-process-swagger20.json --out-dir src/api/generated/party-process --no-strict --request-types --response-decoders --client"
+    "generate:api-b4f-dashboard": "yarn run clean:api-b4f-dashboard && mkdirp openApi/generated && api-spec-converter --from=openapi_3 --to=swagger_2 openApi/dashboard-api-docs.json > openApi/generated/dashboard-swagger20.json && node openApi/scripts/fixSwagger20ArraySchemaDef.js openApi/generated/dashboard-swagger20.json && gen-api-models --api-spec openApi/generated/dashboard-swagger20.json --out-dir src/api/generated/b4f-dashboard --no-strict --request-types --response-decoders --client"
   },
   "eslintConfig": {
     "extends": [
@@ -77,7 +76,7 @@
     ]
   },
   "devDependencies": {
-    "@pagopa/openapi-codegen-ts": "^10.0.5",
+    "@pagopa/openapi-codegen-ts": "^10.0.6",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "api-spec-converter": "^2.12.0",
