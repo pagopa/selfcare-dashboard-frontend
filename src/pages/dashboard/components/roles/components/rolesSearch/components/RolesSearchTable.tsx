@@ -135,16 +135,18 @@ export default function RolesSearchTable({
 
   function showLabelRef(params: GridRenderCellParams<Role>) {
     return (
-      <React.Fragment>{renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}</React.Fragment>
+      <React.Fragment>
+        {renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}
+      </React.Fragment>
     );
   }
 
   function showChip(params: GridRenderCellParams) {
     return (
       <React.Fragment>
-          {renderCell(
-            params,
-            params.row.status === 'SUSPENDED' &&
+        {renderCell(
+          params,
+          params.row.status === 'SUSPENDED' && (
             <Chip
               label="Sospeso"
               sx={{
@@ -156,7 +158,8 @@ export default function RolesSearchTable({
                 height: '24px',
               }}
             />
-          )}
+          )
+        )}
       </React.Fragment>
     );
   }
@@ -229,12 +232,10 @@ export default function RolesSearchTable({
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Role>();
- // const [userStatus, setUserStatus] = useState<string>();
+  const sortSplitted = sort ? sort.split(',') : undefined;
 
-   const sortSplitted = sort ? sort.split(',') : undefined;
-
-  const confirmChangeStatus = (user?: Role) => {
-    window.scrollTo(0,document.body.scrollHeight);
+  const confirmChangeStatus = (user?: Role) => {   
+    setOpenModal(false);
     if (user?.status === 'ACTIVE') {
       // eslint-disable-next-line functional/immutable-data
       user.status = 'SUSPENDED';
@@ -242,11 +243,12 @@ export default function RolesSearchTable({
       // eslint-disable-next-line functional/immutable-data
       user.status = 'ACTIVE';
     }
-    setOpenModal(false);
+    
+
     if (user?.status) {
       setOpenToast(true);
-    }
-
+      
+    }    
   };
 
   const handleOpen = (users: Role) => {
@@ -309,18 +311,16 @@ export default function RolesSearchTable({
               ? [{ field: sortSplitted[0], sort: sortSplitted[1] as GridSortDirection }]
               : undefined
           }
-        />
+        />   
       </Box>
-
       {openToast && (
-        <UserToast
-          userName={selectedUser?.name}
-          userSurname={selectedUser?.surname}
-          userStatus={selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato'}
-          closeToast={() => setOpenToast(false)}
-        />
-      )}
-
+            <UserToast
+              userName={selectedUser?.name}
+              userSurname={selectedUser?.surname}
+              userStatus={selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato'}
+              closeToast={() => setOpenToast(false)}
+            />
+          )}
       <UserSessionModal
         key={selectedUser?.id}
         open={openModal}

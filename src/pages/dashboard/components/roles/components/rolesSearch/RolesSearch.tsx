@@ -488,7 +488,7 @@ export default function RolesSearch({ selectedProduct }: RolesSearchProps) {
   };
 
   return (
-      <Grid container alignItems={'center'} xs={12} >
+      <Grid container alignItems={'center'} >
         <Grid item xs={10}>
           <RolesSearchFilter
             filterProducts={selectedProduct === undefined}

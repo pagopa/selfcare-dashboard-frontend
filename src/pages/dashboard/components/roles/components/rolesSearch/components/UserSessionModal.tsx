@@ -40,7 +40,7 @@ export default function UserSessionModal({
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <Grid container direction="column" sx={{ height: '16em', width: '21.9em' }}>
+      <Grid container direction="column" sx={{ height: '100%', width: '21.9em' }}>
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>

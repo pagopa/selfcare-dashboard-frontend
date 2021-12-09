@@ -14,18 +14,20 @@ const CustomAlert = styled(Alert)({
 
 export default function UserToast({ userName, userSurname, userStatus, closeToast }: Props) {
   return (
-    <Grid container justifyContent="end">
+    <Grid container justifyContent="end" px={2}>
       <Grid item xs={12} display="flex" justifyContent="flex-end" >
-        <Box sx={{borderLeft:'4px solid #00CF86',borderRadius:'5px',boxShadow: '0px 0px 45px rgba(0, 0, 0, 0.1)'}}> 
+        <Box sx={{}}> 
         <CustomAlert
         className='userToast'
           variant="outlined"
           sx={{
+            position: 'fixed',
+            left: '82%',
+            top: '60%',
+            marginLeft: '-290px',
             width:'376px',
-            minHeight:'120px',
-            maxHeight: '100%',
-            margin: '0 10px',
-            padding:'0',
+            backgroundColor:'white',
+            borderLeft:'4px solid #00CF86 !important',borderRadius:'5px',boxShadow: '0px 0px 45px rgba(0, 0, 0, 0.1) ',
             border:'none'
           }}
         >
