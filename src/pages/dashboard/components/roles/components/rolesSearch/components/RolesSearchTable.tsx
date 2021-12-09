@@ -17,9 +17,9 @@ import { Product } from '../../../../../../../model/Product';
 import { Role } from '../../../../../../../model/Role';
 import { UserRole } from '../../../../../../../model/Party';
 import { roleLabels } from '../../../../../../../utils/constants';
+import SessionModal from '../../../../../../../components/SessionModal';
+import Toast from '../../../../../../../components/Toast';
 import CustomPagination from './../../../../../../../components/CustomPagination';
-import UserSessionModal from './UserSessionModal';
-import UserToast from './UserToast';
 
 const rowHeight = 81;
 const headerHeight = 56;
@@ -234,7 +234,9 @@ export default function RolesSearchTable({
   const [selectedUser, setSelectedUser] = useState<Role>();
   const sortSplitted = sort ? sort.split(',') : undefined;
 
-  const confirmChangeStatus = (user?: Role) => {   
+  const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
+
+  const confirmChangeStatus = (user?: Role) => {
     setOpenModal(false);
     if (user?.status === 'ACTIVE') {
       // eslint-disable-next-line functional/immutable-data
@@ -243,12 +245,10 @@ export default function RolesSearchTable({
       // eslint-disable-next-line functional/immutable-data
       user.status = 'ACTIVE';
     }
-    
 
     if (user?.status) {
       setOpenToast(true);
-      
-    }    
+    }
   };
 
   const handleOpen = (users: Role) => {
@@ -261,8 +261,18 @@ export default function RolesSearchTable({
     return (
       <React.Fragment>
         {users.row.status === 'ACTIVE'
-          ? renderCell(users, <Link onClick={() => handleOpen(users.row)}>Sospendi</Link>)
-          : renderCell(users, <Link onClick={() => handleOpen(users.row)}>Riabilita</Link>)}
+          ? renderCell(
+              users,
+              <Link onClick={() => handleOpen(users.row)} sx={{ cursor: 'pointer' }}>
+                Sospendi
+              </Link>
+            )
+          : renderCell(
+              users,
+              <Link onClick={() => handleOpen(users.row)} sx={{ cursor: 'pointer' }}>
+                Riabilita
+              </Link>
+            )}
       </React.Fragment>
     );
   }
@@ -311,30 +321,36 @@ export default function RolesSearchTable({
               ? [{ field: sortSplitted[0], sort: sortSplitted[1] as GridSortDirection }]
               : undefined
           }
-        />   
+        />
       </Box>
       {openToast && (
-            <UserToast
-              userName={selectedUser?.name}
-              userSurname={selectedUser?.surname}
-              userStatus={selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato'}
-              closeToast={() => setOpenToast(false)}
-            />
-          )}
-      <UserSessionModal
-        key={selectedUser?.id}
+        <Toast
+          title={`REFERENTE ${selectedUserStatus?.toUpperCase()}`}
+          message={
+            <>
+              {`Hai ${selectedUserStatus} correttamente `}
+              <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}.`}</strong>
+            </>
+          }
+          closeToast={() => setOpenToast(false)}
+        />
+      )}
+      <SessionModal
         open={openModal}
         title="Sospendi Referente"
         message={
-          selectedUser?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '
+          <>
+            {selectedUser?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '}
+            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}.`}</strong>
+            <br />
+            {' vuoi continuare?'}
+          </>
         }
-        userName={selectedUser?.name}
-        userSurname={selectedUser?.surname}
-        message2=" vuoi continuare?"
         onConfirm={() => confirmChangeStatus(selectedUser)}
         handleClose={() => setOpenModal(false)}
-        buttonLabel1="Conferma"
-        buttonLabel2="Annulla"
+        onConfirmLabel="Conferma"
+        onCloseLabel="Annulla"
+        height="100%"
       />
     </React.Fragment>
   );
