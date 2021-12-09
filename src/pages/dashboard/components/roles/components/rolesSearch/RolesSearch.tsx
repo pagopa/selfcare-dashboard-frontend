@@ -92,7 +92,7 @@ export default function RolesSearch({ selectedProduct, products }: RolesSearchPr
 
   return (
     <Grid container direction="row" alignItems={'center'} px={4}>
-      <Grid item xs={8}>
+      <Grid item xs={9} justifyContent="flex-end" display="flex">
         <RolesSearchFilter
           filterProducts={selectedProduct === undefined}
           filter={filter}
@@ -100,10 +100,10 @@ export default function RolesSearch({ selectedProduct, products }: RolesSearchPr
           products={products}
         />
       </Grid>
-      {selectedProduct !== undefined ? (
+      {selectedProduct === undefined ? (
         ''
       ) : (
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Button variant="contained" startIcon={<AddIcon />}>
             {/* TODO open addUserForm */}
             Aggiungi

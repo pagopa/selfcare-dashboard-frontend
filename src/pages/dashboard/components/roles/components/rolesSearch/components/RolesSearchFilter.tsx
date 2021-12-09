@@ -79,9 +79,16 @@ export default function RolesSearchFilter({
   };
 
   return (
-    <Grid container direction="row" alignItems={'center'} px={4}>
+    <Grid
+      container
+      direction="row"
+      alignItems={'center'}
+      justifyContent="flex-end"
+      mx={2}
+      // spacing={2}
+    >
       {filterProducts === true ? (
-        <Grid item xs={4}>
+        <Grid item xs={3} display="flex" justifyContent="flex-end">
           {filter.product ? (
             <Chip
               className="UserProducts"
@@ -90,6 +97,9 @@ export default function RolesSearchFilter({
               sx={{
                 backgroundColor: '#8B98A6',
                 color: '#FFFFFF',
+                textOverflow: 'ellipsis',
+                width: '13ch',
+                marginRight: '20px',
               }}
               variant={'filled'}
               onDelete={handleDeleteFilterProduct}
@@ -103,6 +113,10 @@ export default function RolesSearchFilter({
               sx={{
                 backgroundColor: undefined,
                 color: '#5C6F82',
+                textOverflow: 'ellipsis',
+                width: '13ch',
+                marginRight: '16px',
+                border: '1px solid #E6E9F2',
               }}
               variant={'outlined'}
               onDelete={undefined}
@@ -111,9 +125,9 @@ export default function RolesSearchFilter({
           )}
         </Grid>
       ) : (
-        <Grid item xs={4}></Grid>
+        <Grid item xs={3}></Grid>
       )}
-      <Grid item xs={4}>
+      <Grid item xs={3} display="flex" justifyContent="flex-end">
         {filter.role ? (
           <Chip
             className="UserRoles"
@@ -122,6 +136,9 @@ export default function RolesSearchFilter({
             sx={{
               backgroundColor: '#8B98A6',
               color: '#FFFFFF',
+              textOverflow: 'ellipsis',
+              width: '13ch',
+              marginRight: '16px',
             }}
             variant={'filled'}
             onDelete={handleDeleteFilterRole}
@@ -135,6 +152,10 @@ export default function RolesSearchFilter({
             sx={{
               backgroundColor: undefined,
               color: '#5C6F82',
+              textOverflow: 'ellipsis',
+              width: '13ch',
+              marginRight: '16px',
+              border: '1px solid #E6E9F2',
             }}
             variant={'outlined'}
             onDelete={undefined}
