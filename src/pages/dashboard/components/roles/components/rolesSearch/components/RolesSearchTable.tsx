@@ -205,7 +205,7 @@ export default function RolesSearchTable({
     {
       field: 'userRole',
       cellClassName: 'justifyContentBold',
-      headerName: 'RUOLI',
+      headerName: 'RUOLO',
       align: 'left',
       headerAlign: 'left',
       type: 'number',
