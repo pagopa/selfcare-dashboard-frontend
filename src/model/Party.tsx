@@ -1,12 +1,13 @@
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
 
 export type UserRole = 'ADMIN' | 'LIMITED';
+export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED';
 
 export type Party = {
   institutionId: string;
   description: string;
   digitalAddress: string;
-  status: 'PENDING' | 'ACTIVE';
+  status: UserStatus;
   userRole: UserRole;
   category: string;
   urlLogo?: string;

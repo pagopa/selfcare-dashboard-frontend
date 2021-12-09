@@ -7,12 +7,26 @@ import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
 type Props = {
   open: boolean;
-  handleClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
-  message: string;
   title: string;
+  message: React.ReactNode;
   onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onConfirmLabel?: string;
+  handleClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onCloseLabel?: string;
+  height?: string;
+  width?: string;
 };
-export default function SessionModal({ open, handleClose, message, onConfirm, title }: Props) {
+export default function SessionModal({
+  open,
+  title,
+  message,
+  onConfirm,
+  onConfirmLabel = 'Riprova',
+  handleClose,
+  onCloseLabel = 'Annulla',
+  height = '16em',
+  width = '21.9em',
+}: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
@@ -23,7 +37,7 @@ export default function SessionModal({ open, handleClose, message, onConfirm, ti
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <Grid container direction="column" sx={{ height: '16em', width: '21.9em' }}>
+      <Grid container direction="column" sx={{ height, width }}>
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>
@@ -53,14 +67,14 @@ export default function SessionModal({ open, handleClose, message, onConfirm, ti
                 variant="contained"
                 onClick={onConfirm}
               >
-                Riprova
+                {onConfirmLabel}
               </Button>
             </Grid>
           )}
 
           <Grid item xs={12} mb={3} mt={onConfirm ? 0 : 7}>
             <Button onClick={handleClose} sx={{ width: '100%' }} color="primary" variant="outlined">
-              Annulla
+              {onCloseLabel}
             </Button>
           </Grid>
         </Box>

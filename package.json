@@ -9,6 +9,8 @@
     "@fontsource/titillium-web": "^4.5.0",
     "@mui/icons-material": "^5.0.3",
     "@mui/material": "^5.0.3",
+    "@mui/x-data-grid": "^5.0.1",
+    "@mui/x-data-grid-generator": "^5.0.1",
     "@pagopa/mui-italia": "pagopa/mui-italia",
     "@pagopa/ts-commons": "^10.2.1",
     "@reduxjs/toolkit": "^1.6.2",
