@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import { useParams } from 'react-router';
 import { Product } from '../../../../model/Product';
 import RolesSearch from './components/rolesSearch/RolesSearch';
 
@@ -7,7 +8,8 @@ interface Roles {
 }
 
 export default function Roles({ products }: Roles) {
-  const selectedProduct = undefined;
+  const { productId } = useParams<any>();
+  const selectedProduct = productId ? products.find((p) => p.id === productId) : undefined;
   return (
     // <Card
     //   variant="outlined"

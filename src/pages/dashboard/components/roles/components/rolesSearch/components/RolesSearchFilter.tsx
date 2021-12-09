@@ -88,7 +88,7 @@ export default function RolesSearchFilter({
       // spacing={2}
     >
       {filterProducts === true ? (
-        <Grid item xs={3} display="flex" justifyContent="flex-end">
+        <Grid item xs={filterProducts === true ? 2 : 3} display="flex" justifyContent="flex-end">
           {filter.product ? (
             <Chip
               className="UserProducts"
@@ -127,7 +127,7 @@ export default function RolesSearchFilter({
       ) : (
         <Grid item xs={3}></Grid>
       )}
-      <Grid item xs={3} display="flex" justifyContent="flex-end">
+      <Grid item xs={filterProducts === true ? 2 : 3} display="flex" justifyContent="flex-end">
         {filter.role ? (
           <Chip
             className="UserRoles"
