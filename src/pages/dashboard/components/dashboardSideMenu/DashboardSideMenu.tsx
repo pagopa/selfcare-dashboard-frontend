@@ -72,7 +72,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
             active: p.authorized ?? false,
             onClick: () => invokeProductBo(p, party),
           },
-          canSeeRoles
+          p.userRole === 'ADMIN'
             ? {
                 groupId: p.id,
                 title: 'Ruoli',
