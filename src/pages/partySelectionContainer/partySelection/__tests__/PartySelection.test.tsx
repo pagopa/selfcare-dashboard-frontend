@@ -10,7 +10,7 @@ const parties: Array<Party> = [
     status: 'PENDING',
     institutionId: '1',
     digitalAddress: '',
-    platformRole: 'ADMIN_REF',
+    userRole: 'ADMIN',
   },
   {
     role: 'MANAGER',
@@ -19,7 +19,7 @@ const parties: Array<Party> = [
     status: 'PENDING',
     institutionId: '2',
     digitalAddress: '',
-    platformRole: 'ADMIN_REF',
+    userRole: 'ADMIN',
   },
   {
     role: 'MANAGER',
@@ -28,7 +28,7 @@ const parties: Array<Party> = [
     status: 'ACTIVE',
     institutionId: '3',
     digitalAddress: '',
-    platformRole: 'ADMIN_REF',
+    userRole: 'ADMIN',
   },
   {
     role: 'MANAGER',
@@ -37,7 +37,7 @@ const parties: Array<Party> = [
     status: 'ACTIVE',
     institutionId: '4',
     digitalAddress: '',
-    platformRole: 'ADMIN_REF',
+    userRole: 'ADMIN',
   },
 ];
 test('Test rendering', () => {

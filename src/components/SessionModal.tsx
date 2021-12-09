@@ -18,7 +18,6 @@ export default function SessionModal({ open, handleClose, message, onConfirm, ti
 
   return (
     <Dialog
-      // sx={{ backgroundColor:'white'}}
       fullScreen={fullScreen}
       open={open}
       onClose={handleClose}
@@ -29,7 +28,6 @@ export default function SessionModal({ open, handleClose, message, onConfirm, ti
           <Grid container item mt={4}>
             <Grid item xs={10}>
               <IconButton
-                // color="primary"
                 onClick={handleClose}
                 style={{ position: 'absolute', top: '20px', right: '16px', zIndex: 100 }}
               >
@@ -60,7 +58,7 @@ export default function SessionModal({ open, handleClose, message, onConfirm, ti
             </Grid>
           )}
 
-          <Grid item xs={12} mb={3}>
+          <Grid item xs={12} mb={3} mt={onConfirm ? 0 : 7}>
             <Button onClick={handleClose} sx={{ width: '100%' }} color="primary" variant="outlined">
               Annulla
             </Button>

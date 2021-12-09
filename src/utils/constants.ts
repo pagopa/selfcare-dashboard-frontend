@@ -1,3 +1,5 @@
+import { UserRole } from '../model/Party';
+
 const IS_DEVELOP = process.env.NODE_ENV === 'development';
 
 export const MOCK_USER = IS_DEVELOP;
@@ -15,9 +17,11 @@ export const LOADING_TASK_LOGIN_CHECK = 'LOGIN_CHECK';
 export const LOADING_TASK_SEARCH_PARTIES = 'SEARCH_PARTIES';
 export const LOADING_TASK_SEARCH_PARTY = 'SEARCH_PARTY';
 export const LOADING_TASK_SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
+export const LOADING_TASK_TOKEN_EXCHANGE = 'TOKEN_EXCHANGE';
 
-export const roleLabels: { [key: string]: string } = {
-  ADMIN: 'Amministratore',
-  ADMIN_REF: 'Referente Amministrativo',
-  TECH_REF: 'Referente Tecnico',
+export const roleLabels: { [key in UserRole]: { shortLabel: string; longLabel: string } } = {
+  ADMIN: { shortLabel: 'Amministrativo', longLabel: 'Referente Amministrativo' },
+  LIMITED: { shortLabel: 'Operativo', longLabel: 'Referente Operativo' },
 };
+
+export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;

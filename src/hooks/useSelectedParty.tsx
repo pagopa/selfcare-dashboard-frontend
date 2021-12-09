@@ -20,32 +20,41 @@ export const useSelectedParty = (): {
   const setLoadingDetails = useLoading(LOADING_TASK_SEARCH_PARTY);
   const setLoadingProducts = useLoading(LOADING_TASK_SEARCH_PRODUCTS);
 
+  const fetchParty = (institutionId: string): Promise<Party | null> =>
+    fetchPartyDetails(institutionId, parties).then((party) => {
+      if (party) {
+        if (party.status !== 'ACTIVE') {
+          throw new Error(`INVALID_PARTY_STATE_${party.status}`);
+        }
+        setParty(party);
+        return party;
+      } else {
+        throw new Error(`Cannot find institutionId ${institutionId}`);
+      }
+    });
+
+  const fetchProductLists = (institutionId: string) =>
+    fetchProducts(institutionId).then((products) => {
+      if (products) {
+        setPartyProducts(products);
+        return products;
+      } else {
+        throw new Error(`Cannot find products of institutionId ${institutionId}`);
+      }
+    });
+
   const fetchSelectedParty = (institutionId: string) => {
     if (!selectedParty || selectedParty.institutionId !== institutionId) {
       setLoadingDetails(true);
       setLoadingProducts(true);
 
-      const partyDetailPromise: Promise<Party | null> = fetchPartyDetails(institutionId, parties)
-        .then((party) => {
-          if (party) {
-            setParty(party);
-            return party;
-          } else {
-            throw new Error(`Cannot find institutionId ${institutionId}`);
-          }
-        })
-        .finally(() => setLoadingDetails(false));
+      const partyDetailPromise: Promise<Party | null> = fetchParty(institutionId).finally(() =>
+        setLoadingDetails(false)
+      );
 
-      const partyProductsPromise: Promise<Array<Product> | null> = fetchProducts(institutionId)
-        .then((products) => {
-          if (products) {
-            setPartyProducts(products);
-            return products;
-          } else {
-            throw new Error(`Cannot find products of institutionId ${institutionId}`);
-          }
-        })
-        .finally(() => setLoadingProducts(false));
+      const partyProductsPromise: Promise<Array<Product> | null> = fetchProductLists(
+        institutionId
+      ).finally(() => setLoadingProducts(false));
 
       return Promise.all([partyDetailPromise, partyProductsPromise]);
     } else {

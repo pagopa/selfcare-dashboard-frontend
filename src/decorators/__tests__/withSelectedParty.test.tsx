@@ -6,11 +6,12 @@ import { verifyFetchPartyDetailsMockExecution } from '../../services/__mocks__/p
 import { verifyFetchPartyProductsMockExecution } from '../../services/__mocks__/productService';
 import { createMemoryHistory } from 'history';
 import { Route, Router, Switch } from 'react-router';
+import { boolean } from 'fp-ts';
 
 jest.mock('../../services/partyService');
 jest.mock('../../services/productService');
 
-const expectedInstitutionId: string = '1';
+const expectedInstitutionId: string = '3';
 
 let fetchPartyDetailsSpy: jest.SpyInstance;
 let fetchPartyProductsSpy: jest.SpyInstance;
@@ -21,6 +22,7 @@ beforeEach(() => {
 });
 
 const renderApp = async (
+  waitSelectedParty: boolean,
   injectedStore?: ReturnType<typeof createStore>,
   injectedHistory?: ReturnType<typeof createMemoryHistory>
 ) => {
@@ -28,7 +30,7 @@ const renderApp = async (
   const history = injectedHistory ? injectedHistory : createMemoryHistory();
 
   if (!injectedHistory) {
-    history.push('/1');
+    history.push(`/${expectedInstitutionId}`);
   }
 
   const Component = () => <></>;
@@ -46,18 +48,30 @@ const renderApp = async (
     </Router>
   );
 
-  await waitFor(() => expect(store.getState().parties.selected).not.toBeUndefined());
+  if (waitSelectedParty) {
+    await waitFor(() => expect(store.getState().parties.selected).not.toBeUndefined());
+  }
 
   return { store, history };
 };
 
 test('Test default behavior when no parties', async () => {
-  const { store } = await renderApp();
+  const { store } = await renderApp(true);
   checkSelectedParty(store.getState());
 
   // test when selected party already in store
-  await renderApp(store);
+  await renderApp(true, store);
   checkMockInvocation(1);
+});
+
+test('Test party not active', async () => {
+  const store = createStore();
+  const history = createMemoryHistory();
+  history.push(`/1`);
+  await renderApp(false, store, history);
+
+  await waitFor(() => expect(store.getState().appState.errors.length).toBe(1));
+  expect(store.getState().parties.selected).toBeUndefined();
 });
 
 const checkSelectedParty = (state: RootState) => {

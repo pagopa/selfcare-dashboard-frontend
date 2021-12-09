@@ -23,6 +23,7 @@ export default function withParties<T>(
           error: reason,
           techDescription: `An error occurred while fetching parties in component ${ComponentWithParties.displayName}`,
           onRetry: doFetch,
+          toNotify: true,
         });
       });
     };

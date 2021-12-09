@@ -1,37 +1,42 @@
 import { Grid, Box } from '@mui/material';
+import { Route, Switch } from 'react-router';
 import withSelectedParty from '../../decorators/withSelectedParty';
+import { Party } from '../../model/Party';
+import { Product } from '../../model/Product';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
-/* import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
-import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
-import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
-import PartyCard from './components/partyCard/PartyCard'; */
+import { DASHBOARD_ROUTES, RoutesObject } from '../../routes';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
-import Roles from './components/roles/Roles';
+// import Roles from './components/roles/Roles';
+
+const buildRoutes = (party: Party, products: Array<Product>, rs: RoutesObject) =>
+  Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
+    <Route path={path} exact={exact} key={i}>
+      {Component && <Component party={party} products={products} />}
+      {subRoutes && buildRoutes(party, products, subRoutes)}
+    </Route>
+  ));
 
 const Dashboard = () => {
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
 
   return party && products ? (
-    <Grid container pl={10}>
+    <Grid container item pl={10} xs={12}>
       <Grid item xs={2}>
-        <Box sx={{ backgroundColor: 'background.default', height: '2148px' }}>
-          <DashboardSideMenu products={products} />
+        <Box sx={{ backgroundColor: 'background.default' }}>
+          <DashboardSideMenu products={products} party={party} />
         </Box>
       </Grid>
-      <Grid item xs={10} sx={{ backgroundColor: '#E6E9F2' }} display="flex" justifyContent="center">
-        <Roles></Roles>
-        {/*      <Box sx={{width: '953px'}}>
-          <WelcomeDashboard />
-          <Grid container direction="row" justifyContent={'center'}>
-            <PartyCard party={party} />
-          </Grid>
-          <ActiveProductsSection products={products} />
-          {products && products.findIndex((product) => product.active === false) > -1 && (
-            <NotActiveProductsSection products={products} />
-          )}
-        </Box> */}
+      <Grid
+        item
+        xs={10}
+        sx={{ backgroundColor: '#E6E9F2' }}
+        display="flex"
+        justifyContent="center"
+        pb={16}
+      >
+        <Switch>{buildRoutes(party, products, DASHBOARD_ROUTES)}</Switch>
       </Grid>
     </Grid>
   ) : (
