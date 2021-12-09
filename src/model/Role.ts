@@ -1,4 +1,4 @@
-import { UserPlatformRole } from './Party';
+import { UserRole, UserStatus } from './Party';
 import { Product } from './Product';
 
 export type Role = {
@@ -7,8 +7,7 @@ export type Role = {
   surname: string;
   taxCode: string;
   email: string;
-  // role:UserRole TODO
-  platformRole: UserPlatformRole;
+  userRole: UserRole;
   products: Array<Product>;
-  status: 'ACTIVE' | 'SUSPENDED'; // TODO: To verify values
+  status: UserStatus;
 };

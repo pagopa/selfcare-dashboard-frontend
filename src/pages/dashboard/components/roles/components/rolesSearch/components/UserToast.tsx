@@ -38,7 +38,7 @@ export default function UserToast({ userName, userSurname, userStatus, closeToas
               />
             </Grid>
             <Grid item xs={8} >
-              <Typography pt={1} pb={1}>REFERENTE SOSPESO</Typography>
+              <Typography pt={1} pb={1}>REFERENTE {userStatus?.toUpperCase()}</Typography>
               <Typography>
                 Hai {userStatus} correttamente{' '}
                 </ Typography>

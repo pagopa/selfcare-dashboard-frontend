@@ -2,7 +2,7 @@ import { Grid, Chip, IconButton, TextField } from '@mui/material';
 // import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 
-import { UserPlatformRole } from '../../../../../../../model/Party';
+import { UserRole } from '../../../../../../../model/Party';
 
 interface RolesSearchFilterProps {
   filter: RolesSearchFilterConfig;
@@ -13,7 +13,7 @@ interface RolesSearchFilterProps {
 export type RolesSearchFilterConfig = {
   name?: string;
   product?: string;
-  role?: UserPlatformRole;
+  role?: UserRole;
 };
 export default function RolesSearchFilter({
   filter,

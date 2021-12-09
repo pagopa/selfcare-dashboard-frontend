@@ -5,7 +5,8 @@ import { Page } from '../model/Page';
 import { PageRequest } from '../model/PageRequest';
 
 function defaultLabelDisplayedRows(from: number, to: number, count: number) {
-  return `${from}-${to} of ${count !== -1 ? count : `more than ${to}`}`;
+  // eslint-disable-next-line sonarjs/no-nested-template-literals
+  return `${from}-${to} di ${count !== -1 ? count : `più di ${to}`}`;
 }
 
 const getLabelDisplayedRowsTo = (count: number, page: number, size: number) => {
