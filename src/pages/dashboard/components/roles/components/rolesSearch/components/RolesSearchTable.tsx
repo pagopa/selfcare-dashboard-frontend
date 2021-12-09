@@ -15,6 +15,7 @@ import { Page } from '../../../../../../../model/Page';
 import { PageRequest } from '../../../../../../../model/PageRequest';
 import { Product } from '../../../../../../../model/Product';
 import { Role } from '../../../../../../../model/Role';
+import { UserRole } from '../../../../../../../model/Party';
 import { roleLabels } from '../../../../../../../utils/constants';
 import CustomPagination from './../../../../../../../components/CustomPagination';
 import UserSessionModal from './UserSessionModal';
@@ -97,7 +98,7 @@ export default function RolesSearchTable({
     },
   });
   function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
-    const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : undefined;
+    const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : 'white';
     return (
       <div
         style={{
@@ -134,16 +135,16 @@ export default function RolesSearchTable({
 
   function showLabelRef(params: GridRenderCellParams<Role>) {
     return (
-      <React.Fragment>{renderCell(params, roleLabels[params.row.platformRole])}</React.Fragment>
+      <React.Fragment>{renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}</React.Fragment>
     );
   }
 
   function showChip(params: GridRenderCellParams) {
     return (
       <React.Fragment>
-        {params.row.status === 'SUSPENDED' &&
-          renderCell(
+          {renderCell(
             params,
+            params.row.status === 'SUSPENDED' &&
             <Chip
               label="Sospeso"
               sx={{
@@ -199,9 +200,9 @@ export default function RolesSearchTable({
       renderCell,
     },
     {
-      field: 'platformRole',
+      field: 'userRole',
       cellClassName: 'justifyContentBold',
-      headerName: 'REFERENTI',
+      headerName: 'RUOLI',
       align: 'left',
       headerAlign: 'left',
       type: 'number',
@@ -228,24 +229,21 @@ export default function RolesSearchTable({
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Role>();
-
-  const [userStatus, setUserStatus] = useState<string>();
+ // const [userStatus, setUserStatus] = useState<string>();
 
   const sortSplitted = sort ? sort.split(',') : undefined;
 
   const confirmChangeStatus = (user?: Role) => {
     window.scrollTo(0, document.body.scrollHeight);
     if (user?.status === 'ACTIVE') {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       // eslint-disable-next-line functional/immutable-data
-      setUserStatus((user.status = 'SUSPENDED'));
+      user.status = 'SUSPENDED';
     } else if (user?.status === 'SUSPENDED') {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       // eslint-disable-next-line functional/immutable-data
-      setUserStatus((user.status = 'ACTIVE'));
+      user.status = 'ACTIVE';
     }
     setOpenModal(false);
-    if (userStatus) {
+    if (user?.status) {
       setOpenToast(true);
     }
   };
@@ -254,7 +252,6 @@ export default function RolesSearchTable({
     setOpenToast(false);
     setOpenModal(true);
     setSelectedUser(users);
-    setUserStatus(users.status);
   };
 
   function showRefStatus(users: GridRenderCellParams<Role>) {

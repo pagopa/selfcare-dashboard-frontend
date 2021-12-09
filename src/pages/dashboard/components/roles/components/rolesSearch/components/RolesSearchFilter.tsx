@@ -4,7 +4,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useState } from 'react';
 
 // import { styled } from '@mui/system';
-import { UserPlatformRole } from '../../../../../../../model/Party';
+import { UserRole } from '../../../../../../../model/Party';
 import FilterModal, { FilterModalConfig } from '../../../../../../../components/FilterModal';
 import { Product } from '../../../../../../../model/Product';
 import { roleLabels } from '../../../../../../../utils/constants';
@@ -29,7 +29,7 @@ interface RolesSearchFilterProps {
 
 export type RolesSearchFilterConfig = {
   product?: Product;
-  role?: UserPlatformRole;
+  role?: UserRole;
 };
 export default function RolesSearchFilter({
   filter,
@@ -72,9 +72,9 @@ export default function RolesSearchFilter({
     setTitleModal('Ruoli');
     setFilterModalConfig({
       data: Object.entries(roleLabels),
-      getLabel: (r: Array<string>) => r[1],
-      getValue: (r: Array<string>) => r[0] as UserPlatformRole,
-      onFilterChange: (r: UserPlatformRole) => onFilterChange({ ...filter, role: r }),
+      getLabel: (r: Array<any>) => r[1].longLabel,
+      getValue: (r: Array<any>) => r[0] as UserRole,
+      onFilterChange: (r: UserRole) => onFilterChange({ ...filter, role: r }),
     });
   };
 
@@ -131,7 +131,7 @@ export default function RolesSearchFilter({
         {filter.role ? (
           <Chip
             className="UserRoles"
-            label={roleLabels[filter.role]}
+            label={roleLabels[filter.role].longLabel}
             onClick={onClickFilterRole}
             sx={{
               backgroundColor: '#8B98A6',

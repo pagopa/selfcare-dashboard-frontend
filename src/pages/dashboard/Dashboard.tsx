@@ -31,7 +31,7 @@ const Dashboard = () => {
       <Grid
         item
         xs={10}
-        sx={{ backgroundColor: '#E6E9F2' }}
+        sx={{ backgroundColor: '#F5F6F7'}}
         display="flex"
         justifyContent="center"
         pb={16}

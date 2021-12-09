@@ -19,6 +19,8 @@ declare namespace NodeJS {
     REACT_APP_API_MOCK_PRODUCTS: string;
 
     REACT_APP_PAGOPA_HELP_EMAIL: string;
+
+    REACT_APP_ROLES_PAGE_SIZE: number;
   }
 }
 interface Window {
