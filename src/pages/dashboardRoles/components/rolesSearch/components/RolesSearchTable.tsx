@@ -33,6 +33,7 @@ interface RolesSearchTableProps {
 }
 
 export default function RolesSearchTable({
+  selectedProduct,
   users,
   page,
   sort,
@@ -97,6 +98,7 @@ export default function RolesSearchTable({
       },
     },
   });
+
   function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
     const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : 'white';
     return (
@@ -116,6 +118,10 @@ export default function RolesSearchTable({
 
   function getFullName(params: GridValueGetterParams) {
     return `${params.row.name} ${params.row.surname}`;
+  }
+
+  function getProducts(params: GridValueGetterParams) {
+    return params.row.products.map((p: Product) => p.title).join(',');
   }
 
   function showCustmHeader(params: GridColumnHeaderParams) {
@@ -162,70 +168,88 @@ export default function RolesSearchTable({
     );
   }
 
-  const columns: Array<GridColDef> = [
-    {
-      field: 'fullName',
-      cellClassName: 'justifyContentBold',
-      headerName: 'NOME',
-      align: 'left',
-      headerAlign: 'left',
-      width: 150,
-      editable: false,
-      disableColumnMenu: true,
-      valueGetter: getFullName,
-      renderHeader: showCustmHeader,
-      renderCell,
-    },
-    {
-      field: 'stato',
-      cellClassName: 'justifyContentBold',
-      headerName: '',
-      type: 'number',
-      align: 'left',
-      width: 150,
-      hideSortIcons: true,
-      disableColumnMenu: true,
-      editable: false,
-      renderCell: showChip,
-    },
-    {
-      field: 'email',
-      cellClassName: 'justifyContentNormal',
-      headerName: 'EMAIL',
-      align: 'left',
-      headerAlign: 'left',
-      width: 320,
-      editable: false,
-      disableColumnMenu: true,
-      renderHeader: showCustmHeader,
-      renderCell,
-    },
-    {
-      field: 'userRole',
-      cellClassName: 'justifyContentBold',
-      headerName: 'RUOLO',
-      align: 'left',
-      headerAlign: 'left',
-      type: 'number',
-      width: 200,
-      editable: false,
-      disableColumnMenu: true,
-      renderCell: showLabelRef,
-      renderHeader: showCustmHeader,
-    },
-    {
-      field: 'azione',
-      cellClassName: 'justifyContentNormalRight',
-      headerName: '',
-      align: 'right',
-      type: 'number',
-      width: 99,
-      hideSortIcons: true,
-      disableColumnMenu: true,
-      editable: false,
-      renderCell: showRefStatus,
-    },
-  ];
+  const columns: Array<GridColDef> = (
+    [
+      {
+        field: 'fullName',
+        cellClassName: 'justifyContentBold',
+        headerName: 'NOME',
+        align: 'left',
+        headerAlign: 'left',
+        width: 150,
+        editable: false,
+        disableColumnMenu: true,
+        valueGetter: getFullName,
+        renderHeader: showCustmHeader,
+        renderCell,
+      },
+      {
+        field: 'stato',
+        cellClassName: 'justifyContentBold',
+        headerName: '',
+        align: 'left',
+        width: 100,
+        hideSortIcons: true,
+        disableColumnMenu: true,
+        editable: false,
+        renderCell: showChip,
+      },
+      {
+        field: 'email',
+        cellClassName: 'justifyContentNormal',
+        headerName: 'EMAIL',
+        align: 'left',
+        headerAlign: 'left',
+        width: !selectedProduct ? 250 : 300,
+        editable: false,
+        disableColumnMenu: true,
+        renderHeader: showCustmHeader,
+        renderCell,
+      },
+      {
+        field: 'userRole',
+        cellClassName: 'justifyContentBold',
+        headerName: 'RUOLO',
+        align: 'left',
+        headerAlign: 'left',
+        width: 200,
+        editable: false,
+        disableColumnMenu: true,
+        renderCell: showLabelRef,
+        renderHeader: showCustmHeader,
+      },
+    ] as Array<GridColDef>
+  ).concat(
+    !selectedProduct
+      ? [
+          {
+            field: 'products',
+            cellClassName: 'justifyContentNormal',
+            headerName: 'PRODOTTI',
+            align: 'left',
+            width: 219,
+            hideSortIcons: false,
+            disableColumnMenu: true,
+            valueGetter: getProducts,
+            editable: false,
+            renderCell,
+            renderHeader: showCustmHeader,
+          },
+        ]
+      : [
+          {
+            field: 'azione',
+            cellClassName: 'justifyContentNormalRight',
+            headerName: '',
+            align: 'right',
+            width: 169,
+            hideSortIcons: true,
+            disableColumnMenu: true,
+            editable: false,
+            renderCell: showRefStatus,
+          },
+        ]
+  );
 
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
