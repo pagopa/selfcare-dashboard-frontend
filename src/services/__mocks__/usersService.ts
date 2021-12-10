@@ -1,4 +1,8 @@
+import { PageRequest } from '../../model/PageRequest';
+import { PageResource } from '../../model/PageResource';
+import { Party, UserRole } from '../../model/Party';
 import { PartyUser } from '../../model/PartyUser';
+import { Product } from '../../model/Product';
 
 export const mockedUsers: Array<PartyUser> = [
   {
@@ -485,3 +489,22 @@ export const mockedUsers: Array<PartyUser> = [
     ],
   },
 ];
+
+export const fetchPartyUsers = (
+  pageRequest: PageRequest,
+  _party: Party,
+  product?: Product,
+  role?: UserRole
+): Promise<PageResource<PartyUser>> => {
+  const content = pageRequest.page === 9 ? mockedUsers.slice(1, 5) : mockedUsers;
+  const filteredContent = content.map((u) =>
+    Object.assign({}, u, product ? { products: [product] } : {}, role ? { userRole: role } : {})
+  );
+  const page = {
+    number: pageRequest.page,
+    size: pageRequest.size,
+    totalElements: 195,
+    totalPages: 10,
+  };
+  return new Promise((resolve) => resolve({ content: filteredContent, page }));
+};
