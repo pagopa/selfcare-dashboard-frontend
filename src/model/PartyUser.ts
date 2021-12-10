@@ -11,3 +11,11 @@ export type PartyUser = {
   products: Array<Product>;
   status: UserStatus;
 };
+
+export type PartyUserOnCreation = {
+  name: string;
+  surname: string;
+  taxCode: string;
+  email: string;
+  userRole: UserRole;
+};

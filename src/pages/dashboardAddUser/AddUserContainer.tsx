@@ -51,7 +51,7 @@ function AddUserContainer({ party, selectedProduct }: Props) {
         />
       </Grid>
       <Grid item xs={12}>
-        <AddUserForm />
+        <AddUserForm party={party} selectedProduct={selectedProduct} />
       </Grid>
     </Grid>
   );

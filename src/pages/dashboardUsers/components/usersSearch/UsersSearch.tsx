@@ -48,14 +48,14 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
 
   const fetchUsers = (f: UsersSearchFilterConfig, pageRequest: PageRequest) => {
     setLoading(true);
-    fetchPartyUsers(pageRequest, party.institutionId, f.product, f.role)
+    fetchPartyUsers(pageRequest, party, f.product, f.role)
       .then((r) => {
         setUsers(r.content);
         setPage(r.page);
       })
       .catch((reason) =>
         addError({
-          id: 'FETCH_USER_ROLE',
+          id: 'FETCH_PARTY_USERS',
           blocking: false,
           error: reason,
           techDescription: `An error occurred while fetching party users ${party.institutionId} and filter ${f}`,

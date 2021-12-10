@@ -10,22 +10,32 @@ import {
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import { UserRole } from '../../../model/Party';
+import { Party } from '../../../model/Party';
+import { savePartyUser } from '../../../services/usersService';
+import useLoading from '../../../hooks/useLoading';
+import { AppError, appStateActions } from '../../../redux/slices/appStateSlice';
+import { useAppDispatch } from '../../../redux/hooks';
+import { LOADING_TASK_SAVE_PARTY_USER } from '../../../utils/constants';
+import { Product } from '../../../model/Product';
+import { PartyUserOnCreation } from '../../../model/PartyUser';
 
-interface FormValues {
-  name: string;
-  surname: string;
-  taxCode: string; // This should not be optional, it is temporarily because of the "from" below
-  email: string;
-  userRole: UserRole | null;
-}
 const taxCodeRegexp = new RegExp(
   '^[A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1}$'
 );
 const emailRegexp = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 const requiredError = 'Required';
-export default function AddUserForm() {
-  const validate = (values: FormValues) =>
+
+type Props = {
+  party: Party;
+  selectedProduct: Product;
+};
+
+export default function AddUserForm({ party, selectedProduct }: Props) {
+  const dispatch = useAppDispatch();
+  const setLoading = useLoading(LOADING_TASK_SAVE_PARTY_USER);
+  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+
+  const validate = (values: Partial<PartyUserOnCreation>) =>
     Object.fromEntries(
       Object.entries({
         name: !values.name ? requiredError : undefined,
@@ -44,21 +54,36 @@ export default function AddUserForm() {
       }).filter(([_key, value]) => value)
     );
 
-  const formik = useFormik({
+  const formik = useFormik<Partial<PartyUserOnCreation>>({
     initialValues: {
       name: '',
       surname: '',
       taxCode: '',
       email: '',
-      userRole: null,
+      userRole: undefined,
     },
     validate,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      setLoading(true);
+      savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
+        .catch((reason) =>
+          addError({
+            id: 'SAVE_PARTY_USER',
+            blocking: false,
+            error: reason,
+            techDescription: `An error occurred while saving party user ${party.institutionId}`,
+            toNotify: true,
+          })
+        )
+        .finally(() => setLoading(false));
     },
   });
 
-  const baseTextFieldProps = (field: keyof FormValues, label: string, placeholder: string) => {
+  const baseTextFieldProps = (
+    field: keyof PartyUserOnCreation,
+    label: string,
+    placeholder: string
+  ) => {
     const isError = !!formik.errors[field] && formik.errors[field] !== requiredError;
 
     return {
@@ -142,7 +167,6 @@ export default function AddUserForm() {
             sx={{ width: '100%' }}
             color="primary"
             variant="contained"
-            // onClick={onConfirm}
             type="submit"
           >
             Conferma
