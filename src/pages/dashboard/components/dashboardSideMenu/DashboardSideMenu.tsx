@@ -47,7 +47,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
         canSeeRoles
           ? {
               groupId: 'selfCare',
-              title: 'Ruoli',
+              title: 'Referenti',
               active: true,
               ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.ROLES, {
                 institutionId: party.institutionId,
@@ -75,7 +75,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
           p.userRole === 'ADMIN'
             ? {
                 groupId: p.id,
-                title: 'Ruoli',
+                title: 'Referenti',
                 active: p.authorized ?? false,
                 ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.PRODUCT_ROLES, {
                   institutionId: party.institutionId,

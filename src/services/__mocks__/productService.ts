@@ -10,6 +10,7 @@ export const mockedPartyProducts: Array<Product> = [
     authorized: true,
     active: true,
     urlBO: 'http://appio/bo#[identityToken]',
+    userRole: 'ADMIN',
     activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'http://appio/public',
   },
