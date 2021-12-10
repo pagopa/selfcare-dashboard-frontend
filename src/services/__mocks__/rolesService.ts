@@ -1,6 +1,6 @@
-import { Role } from '../../model/Role';
+import { PartyUser } from '../../model/PartyUser';
 
-export const mockedUsers: Array<Role> = [
+export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid',
     name: 'ELENA',

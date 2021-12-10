@@ -1,7 +1,7 @@
 import { UserRole, UserStatus } from './Party';
 import { Product } from './Product';
 
-export type Role = {
+export type PartyUser = {
   id: string;
   name: string;
   surname: string;

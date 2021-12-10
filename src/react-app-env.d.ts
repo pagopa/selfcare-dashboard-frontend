@@ -17,11 +17,11 @@ declare namespace NodeJS {
 
     REACT_APP_API_MOCK_PARTIES: string;
     REACT_APP_API_MOCK_PRODUCTS: string;
-    REACT_APP_API_MOCK_ROLES: string;
+    REACT_APP_API_MOCK_PARTY_USERS: string;
 
     REACT_APP_PAGOPA_HELP_EMAIL: string;
 
-    REACT_APP_ROLES_PAGE_SIZE: string;
+    REACT_APP_PARTY_USERS_PAGE_SIZE: string;
   }
 }
 interface Window {

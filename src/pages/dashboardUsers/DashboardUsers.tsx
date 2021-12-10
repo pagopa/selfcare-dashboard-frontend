@@ -3,7 +3,7 @@ import { Product } from '../../model/Product';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import TitleBox from '../../components/TitleBox';
 import { Party } from '../../model/Party';
-import RolesSearch from './components/rolesSearch/RolesSearch';
+import UsersSearch from './components/usersSearch/UsersSearch';
 
 interface Props {
   party: Party;
@@ -17,7 +17,7 @@ const paths = [
   },
 ];
 
-export default function DashboardRoles({ party, selectedProduct, products }: Props) {
+export default function DashboardUsers({ party, selectedProduct, products }: Props) {
   return (
     <Grid
       container
@@ -42,7 +42,7 @@ export default function DashboardRoles({ party, selectedProduct, products }: Pro
         />
       </Grid>
       <Grid item xs={12}>
-        <RolesSearch party={party} selectedProduct={selectedProduct} products={products} />
+        <UsersSearch party={party} selectedProduct={selectedProduct} products={products} />
       </Grid>
     </Grid>
   );

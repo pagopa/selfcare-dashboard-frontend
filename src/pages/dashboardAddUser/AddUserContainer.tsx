@@ -22,7 +22,7 @@ function AddUserContainer({ party, selectedProduct }: Props) {
       description: 'Referenti',
       onClick: () =>
         history.push(
-          resolvePathVariables(DASHBOARD_ROUTES.PRODUCT_ROLES.subRoutes.MAIN.path, {
+          resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.MAIN.path, {
             institutionId: party.institutionId,
             productId: selectedProduct.id,
           })

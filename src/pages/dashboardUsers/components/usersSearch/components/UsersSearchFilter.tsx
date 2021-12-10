@@ -9,9 +9,9 @@ import FilterModal, { FilterModalConfig } from '../../../../../components/Filter
 import { Product } from '../../../../../model/Product';
 import { roleLabels } from '../../../../../utils/constants';
 
-interface RolesSearchFilterProps {
-  filter: RolesSearchFilterConfig;
-  onFilterChange: (f: RolesSearchFilterConfig) => void;
+interface UsersSearchFilterProps {
+  filter: UsersSearchFilterConfig;
+  onFilterChange: (f: UsersSearchFilterConfig) => void;
   filterProducts: boolean;
   data?: Array<Product> | Array<string>;
   products: Array<Product>;
@@ -25,16 +25,16 @@ const chipStyle = {
   border: '1px solid #E6E9F2',
 };
 
-export type RolesSearchFilterConfig = {
+export type UsersSearchFilterConfig = {
   product?: Product;
   role?: UserRole;
 };
-export default function RolesSearchFilter({
+export default function UsersSearchFilter({
   filter,
   onFilterChange,
   filterProducts,
   products,
-}: RolesSearchFilterProps) {
+}: UsersSearchFilterProps) {
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const [filterModalConfig, setFilterModalConfig] = useState<FilterModalConfig<any, any>>();
   const [titleModal, setTitleModal] = useState('');

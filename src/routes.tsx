@@ -3,7 +3,7 @@ import withSelectedPartyProduct from './decorators/withSelectedPartyProduct';
 import Dashboard from './pages/dashboard/Dashboard';
 import AddUserContainer from './pages/dashboardAddUser/AddUserContainer';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
-import DashboardRoles from './pages/dashboardRoles/DashboardRoles';
+import DashboardUsers from './pages/dashboardUsers/DashboardUsers';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 
 export const BASE_ROUTE = process.env.PUBLIC_URL ? process.env.PUBLIC_URL : '/dashboard';
@@ -54,22 +54,22 @@ export const DASHBOARD_ROUTES = {
     exact: true,
     component: DashboardOverview,
   },
-  ROLES: {
+  PARTY_USERS: {
     path: `${BASE_ROUTE}/:institutionId/roles`,
     exact: false,
-    component: DashboardRoles,
+    component: DashboardUsers,
     subRoutes: buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
   },
-  PRODUCT_ROLES: {
+  PARTY_PRODUCT_USERS: {
     path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
     exact: false,
     subRoutes: {
       MAIN: {
         path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
         exact: true,
-        component: withSelectedPartyProduct(DashboardRoles),
+        component: withSelectedPartyProduct(DashboardUsers),
       },
-      ADD_PRODUCT_USER: {
+      ADD_PARTY_PRODUCT_USER: {
         path: `${BASE_ROUTE}/:institutionId/:productId/roles/add`,
         exact: true,
         component: AddUserContainer,

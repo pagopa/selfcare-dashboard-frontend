@@ -14,7 +14,7 @@ import React, { ReactNode, useState } from 'react';
 import { Page } from '../../../../../model/Page';
 import { PageRequest } from '../../../../../model/PageRequest';
 import { Product } from '../../../../../model/Product';
-import { Role } from '../../../../../model/Role';
+import { PartyUser } from '../../../../../model/PartyUser';
 import { UserRole } from '../../../../../model/Party';
 import { roleLabels } from '../../../../../utils/constants';
 import SessionModal from '../../../../../components/SessionModal';
@@ -24,21 +24,21 @@ import CustomPagination from '../../../../../components/CustomPagination';
 const rowHeight = 81;
 const headerHeight = 56;
 
-interface RolesSearchTableProps {
-  users: Array<Role>;
+interface UsersSearchTableProps {
+  users: Array<PartyUser>;
   selectedProduct?: Product;
   page: Page;
   sort?: string;
   onPageRequest: (p: PageRequest) => void;
 }
 
-export default function RolesSearchTable({
+export default function UsersSearchTable({
   selectedProduct,
   users,
   page,
   sort,
   onPageRequest,
-}: RolesSearchTableProps) {
+}: UsersSearchTableProps) {
   const CustomDataGrid = styled(DataGrid)({
     border: 'none !important',
     '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus':
@@ -137,7 +137,7 @@ export default function RolesSearchTable({
     );
   }
 
-  function showLabelRef(params: GridRenderCellParams<Role>) {
+  function showLabelRef(params: GridRenderCellParams<PartyUser>) {
     return (
       <React.Fragment>
         {renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}
@@ -253,12 +253,12 @@ export default function RolesSearchTable({
 
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<Role>();
+  const [selectedUser, setSelectedUser] = useState<PartyUser>();
   const sortSplitted = sort ? sort.split(',') : undefined;
 
   const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
 
-  const confirmChangeStatus = (user?: Role) => {
+  const confirmChangeStatus = (user?: PartyUser) => {
     setOpenModal(false);
     if (user?.status === 'ACTIVE') {
       // eslint-disable-next-line functional/immutable-data
@@ -273,13 +273,13 @@ export default function RolesSearchTable({
     }
   };
 
-  const handleOpen = (users: Role) => {
+  const handleOpen = (users: PartyUser) => {
     setOpenToast(false);
     setOpenModal(true);
     setSelectedUser(users);
   };
 
-  function showRefStatus(users: GridRenderCellParams<Role>) {
+  function showRefStatus(users: GridRenderCellParams<PartyUser>) {
     return (
       <React.Fragment>
         {users.row.status === 'ACTIVE'
@@ -302,7 +302,7 @@ export default function RolesSearchTable({
   return (
     <React.Fragment>
       <Box
-        id="RolesSearchTableBox"
+        id="UsersSearchTableBox"
         sx={{
           position: 'relative',
           width: '100%',

@@ -6,34 +6,34 @@ import { useHistory } from 'react-router-dom';
 import { Product } from '../../../../model/Product';
 import { Page } from '../../../../model/Page';
 import { PageRequest } from '../../../../model/PageRequest';
-import { Role } from '../../../../model/Role';
+import { PartyUser } from '../../../../model/PartyUser';
 import { DASHBOARD_ROUTES, resolvePathVariables } from '../../../../routes';
 import { Party } from '../../../../model/Party';
-import { fetchPartyRoles } from '../../../../services/rolesService';
+import { fetchPartyUsers } from '../../../../services/usersService';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { AppError, appStateActions } from '../../../../redux/slices/appStateSlice';
 import useLoading from '../../../../hooks/useLoading';
-import { LOADING_TASK_PARTY_ROLES } from '../../../../utils/constants';
-import RolesSearchFilter, { RolesSearchFilterConfig } from './components/RolesSearchFilter';
-import RolesSearchTable from './components/RolesSearchTable';
+import { LOADING_TASK_PARTY_USERS } from '../../../../utils/constants';
+import UsersSearchFilter, { UsersSearchFilterConfig } from './components/UsersSearchFilter';
+import UsersSearchTable from './components/UsersSearchTable';
 
-interface RolesSearchProps {
+interface UsersSearchProps {
   party: Party;
   selectedProduct?: Product;
   products: Array<Product>;
 }
 
-const pageSize: number = Number.parseInt(process.env.REACT_APP_ROLES_PAGE_SIZE, 10);
+const pageSize: number = Number.parseInt(process.env.REACT_APP_PARTY_USERS_PAGE_SIZE, 10);
 
-export default function RolesSearch({ party, selectedProduct, products }: RolesSearchProps) {
-  const [users, setUsers] = useState<Array<Role>>([]);
+export default function UsersSearch({ party, selectedProduct, products }: UsersSearchProps) {
+  const [users, setUsers] = useState<Array<PartyUser>>([]);
   const [page, setPage] = useState<Page>({
     number: 0,
     size: pageSize,
     totalElements: 0,
     totalPages: 0,
   });
-  const [filter, setFilter] = useState<RolesSearchFilterConfig>(
+  const [filter, setFilter] = useState<UsersSearchFilterConfig>(
     selectedProduct ? { product: selectedProduct } : {}
   );
   const [pageRequest, setPageRequest] = useState<PageRequest>({
@@ -42,13 +42,13 @@ export default function RolesSearch({ party, selectedProduct, products }: RolesS
   });
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const setLoading = useLoading(LOADING_TASK_PARTY_ROLES);
+  const setLoading = useLoading(LOADING_TASK_PARTY_USERS);
 
   const addError = (error: AppError) => dispatch(appStateActions.addError(error));
 
-  const fetchUsers = (f: RolesSearchFilterConfig, pageRequest: PageRequest) => {
+  const fetchUsers = (f: UsersSearchFilterConfig, pageRequest: PageRequest) => {
     setLoading(true);
-    fetchPartyRoles(pageRequest, party.institutionId, f.product, f.role)
+    fetchPartyUsers(pageRequest, party.institutionId, f.product, f.role)
       .then((r) => {
         setUsers(r.content);
         setPage(r.page);
@@ -70,7 +70,7 @@ export default function RolesSearch({ party, selectedProduct, products }: RolesS
     fetchUsers(filter, pageRequest);
   }, []);
 
-  const handleFilterChange = (f: RolesSearchFilterConfig) => {
+  const handleFilterChange = (f: UsersSearchFilterConfig) => {
     setFilter(f);
     fetchUsers(f, pageRequest);
   };
@@ -84,7 +84,7 @@ export default function RolesSearch({ party, selectedProduct, products }: RolesS
       <Grid item xs={12}>
         <Grid container direction="row" justifyContent={'flex-end'} alignItems={'center'} px={2}>
           <Grid item>
-            <RolesSearchFilter
+            <UsersSearchFilter
               filterProducts={selectedProduct === undefined}
               filter={filter}
               onFilterChange={handleFilterChange}
@@ -100,7 +100,7 @@ export default function RolesSearch({ party, selectedProduct, products }: RolesS
                 onClick={() =>
                   history.push(
                     resolvePathVariables(
-                      DASHBOARD_ROUTES.PRODUCT_ROLES.subRoutes.ADD_PRODUCT_USER.path,
+                      DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.ADD_PARTY_PRODUCT_USER.path,
                       { institutionId: party.institutionId, productId: selectedProduct.id }
                     )
                   )
@@ -114,7 +114,7 @@ export default function RolesSearch({ party, selectedProduct, products }: RolesS
       </Grid>
       <Grid item xs={12} my={8}>
         <Box>
-          <RolesSearchTable
+          <UsersSearchTable
             users={users}
             selectedProduct={selectedProduct}
             page={page}
