@@ -2,13 +2,15 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { Product } from '../../../../model/Product';
 import TitleBox from '../../../../components/TitleBox';
+import { Party } from '../../../../model/Party';
 import NotActiveProductCard from './components/NotActiveProductCard';
 
 type Props = {
+  party: Party;
   products: Array<Product>;
 };
 
-export default function NotActiveProductsSection({ products }: Props) {
+export default function NotActiveProductsSection({ party, products }: Props) {
   const buttonLabel = 'Aderisci al prodotto';
   const infoLabel = 'SCOPRI DI PIÙ →';
 
@@ -31,6 +33,7 @@ export default function NotActiveProductsSection({ products }: Props) {
             .map((product) => (
               <NotActiveProductCard
                 key={product.id}
+                party={party}
                 product={product}
                 buttonLabel={buttonLabel}
                 infoLabel={infoLabel}
