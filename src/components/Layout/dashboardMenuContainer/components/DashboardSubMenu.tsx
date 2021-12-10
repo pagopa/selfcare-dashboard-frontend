@@ -127,7 +127,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                       sx={{ height: '40px', width: '100%' }}
                       onClick={() => window.location.assign(URL_FE_LOGOUT)}
                     >
-                      Logout
+                      Esci
                     </Button>
                   </Grid>
                 </Grid>
