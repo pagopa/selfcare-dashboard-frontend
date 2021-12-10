@@ -11,7 +11,7 @@ export default function AddUserContainer({ selectedProduct }: Props) {
   // const [products, setProducts]=useState:()
   const paths = [
     {
-      description: 'Ruoli',
+      description: 'Referenti',
       onClick: () => {}, // TODO redirect to Ruoli Page
     },
     {

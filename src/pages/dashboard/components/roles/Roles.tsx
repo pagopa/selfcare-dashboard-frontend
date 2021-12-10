@@ -12,7 +12,7 @@ interface Roles {
 export default function Roles({ products }: Roles) {
   const paths = [
     {
-      description: 'Ruoli',
+      description: 'Referenti',
       onClick: () => {}, // TODO redirect to Ruoli Page
     },
   ];
@@ -33,7 +33,7 @@ export default function Roles({ products }: Roles) {
       )}
       <Grid item xs={12} mb={9} px={'16px'}>
         <UserTitleComponent
-          title="Aggiungi un Referente"
+          title="Referenti"
           subTitle={
             selectedProduct
               ? `Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.description}`
