@@ -4,10 +4,10 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useState } from 'react';
 
 // import { styled } from '@mui/system';
-import { UserRole } from '../../../../../../../model/Party';
-import FilterModal, { FilterModalConfig } from '../../../../../../../components/FilterModal';
-import { Product } from '../../../../../../../model/Product';
-import { roleLabels } from '../../../../../../../utils/constants';
+import { UserRole } from '../../../../../model/Party';
+import FilterModal, { FilterModalConfig } from '../../../../../components/FilterModal';
+import { Product } from '../../../../../model/Product';
+import { roleLabels } from '../../../../../utils/constants';
 
 interface RolesSearchFilterProps {
   filter: RolesSearchFilterConfig;

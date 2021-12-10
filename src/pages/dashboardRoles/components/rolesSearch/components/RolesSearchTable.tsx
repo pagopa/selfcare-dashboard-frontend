@@ -11,15 +11,15 @@ import {
   GridValueGetterParams,
 } from '@mui/x-data-grid';
 import React, { ReactNode, useState } from 'react';
-import { Page } from '../../../../../../../model/Page';
-import { PageRequest } from '../../../../../../../model/PageRequest';
-import { Product } from '../../../../../../../model/Product';
-import { Role } from '../../../../../../../model/Role';
-import { UserRole } from '../../../../../../../model/Party';
-import { roleLabels } from '../../../../../../../utils/constants';
-import SessionModal from '../../../../../../../components/SessionModal';
-import Toast from '../../../../../../../components/Toast';
-import CustomPagination from './../../../../../../../components/CustomPagination';
+import { Page } from '../../../../../model/Page';
+import { PageRequest } from '../../../../../model/PageRequest';
+import { Product } from '../../../../../model/Product';
+import { Role } from '../../../../../model/Role';
+import { UserRole } from '../../../../../model/Party';
+import { roleLabels } from '../../../../../utils/constants';
+import SessionModal from '../../../../../components/SessionModal';
+import Toast from '../../../../../components/Toast';
+import CustomPagination from '../../../../../components/CustomPagination';
 
 const rowHeight = 81;
 const headerHeight = 56;

@@ -2,10 +2,10 @@ import { Grid, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
-import { Product } from '../../../../../../model/Product';
-import { Page } from '../../../../../../model/Page';
-import { PageRequest } from '../../../../../../model/PageRequest';
-import { Role } from '../../../../../../model/Role';
+import { Product } from '../../../../model/Product';
+import { Page } from '../../../../model/Page';
+import { PageRequest } from '../../../../model/PageRequest';
+import { Role } from '../../../../model/Role';
 import RolesSearchTable from './components/RolesSearchTable';
 import RolesSearchFilter, { RolesSearchFilterConfig } from './components/RolesSearchFilter';
 

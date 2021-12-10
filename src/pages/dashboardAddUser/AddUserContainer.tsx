@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material';
-import { Product } from '../../../model/Product';
-import AddUserForm from './AddUserForm';
-import UserTitleComponent from './UserTitleComponent';
-import ProductNavigationBar from './ProductNavigationBar';
+import { Product } from '../../model/Product';
+import ProductNavigationBar from '../../components/ProductNavigationBar';
+import TitleBox from '../../components/TitleBox';
+import AddUserForm from './components/AddUserForm';
 
 type Props = {
   selectedProduct: Product;
@@ -24,7 +24,7 @@ export default function AddUserContainer({ selectedProduct }: Props) {
         <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
       </Grid>
       <Grid item xs={12} mb={9}>
-        <UserTitleComponent
+        <TitleBox
           title="Aggiungi un Referente"
           subTitle={`Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.description}`}
         />
