@@ -13,8 +13,6 @@ import Dialog from '@mui/material/Dialog';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-/* import { UserPlatformRole } from '../model/Party'; */
-// import { Product } from '../model/Product';
 
 type Props = {
   open: boolean;
@@ -41,25 +39,18 @@ export default function FilterModal({ open, handleClose, title, filterModalConfi
 
   const submitFilter = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const i = data.filter((value) => value.id === valueRadio).map((x) => x)[0];
-    //  filterModalConfig?.onFilterChange(i[0]);
     filterModalConfig?.onFilterChange(i === undefined ? valueRadio : i);
     handleClose(event);
   };
 
   const data = filterModalConfig?.data !== undefined ? filterModalConfig?.data : [];
   return (
-    <Dialog
-      // sx={{ backgroundColor:'white'}}
-      fullScreen={fullScreen}
-      open={open}
-      aria-labelledby="responsive-dialog-title"
-    >
+    <Dialog fullScreen={fullScreen} open={open} aria-labelledby="responsive-dialog-title">
       <Grid container direction="column" sx={{ height: '16em', width: '21.9em' }}>
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>
               <IconButton
-                // color="primary"
                 onClick={handleClose}
                 style={{ position: 'absolute', top: '20px', right: '16px', zIndex: 100 }}
               >

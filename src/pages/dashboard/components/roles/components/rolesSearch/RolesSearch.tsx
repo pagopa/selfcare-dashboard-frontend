@@ -539,29 +539,26 @@ export default function RolesSearch({ selectedProduct, products }: RolesSearchPr
 
   return (
     <Grid container direction="row" alignItems={'center'}>
-      <Grid
-        item
-        xs={selectedProduct === undefined ? 12 : 9}
-        justifyContent="flex-end"
-        display="flex"
-      >
-        <RolesSearchFilter
-          filterProducts={selectedProduct === undefined}
-          filter={filter}
-          onFilterChange={handleFilterChange}
-          products={products}
-        />
-      </Grid>
-      {selectedProduct === undefined ? (
-        ''
-      ) : (
-        <Grid item xs={3}>
-          <Button variant="contained" startIcon={<AddIcon />}>
-            {/* TODO open addUserForm */}
-            Aggiungi
-          </Button>
+      <Grid item xs={12}>
+        <Grid container direction="row" justifyContent={'flex-end'} alignItems={'center'} px={2}>
+          <Grid item>
+            <RolesSearchFilter
+              filterProducts={selectedProduct === undefined}
+              filter={filter}
+              onFilterChange={handleFilterChange}
+              products={products}
+            />
+          </Grid>
+          {selectedProduct && (
+            <Grid item pl={4}>
+              <Button variant="contained" startIcon={<AddIcon />} sx={{ py: '10px' }}>
+                {/* TODO open addUserForm */}
+                Aggiungi
+              </Button>
+            </Grid>
+          )}
         </Grid>
-      )}
+      </Grid>
       <Grid item xs={12} my={8}>
         <Box>
           <RolesSearchTable

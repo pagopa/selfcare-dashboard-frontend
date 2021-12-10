@@ -26,8 +26,7 @@ export default function AddUserContainer({ selectedProduct }: Props) {
       <Grid item xs={12} mb={9}>
         <UserTitleComponent
           title="Aggiungi un Referente"
-          subTitle="Inserisci i dati della persona che vuoi autorizzare a gestire "
-          selectedProduct={selectedProduct}
+          subTitle={`Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.description}`}
         />
       </Grid>
       <Grid item xs={12}>
