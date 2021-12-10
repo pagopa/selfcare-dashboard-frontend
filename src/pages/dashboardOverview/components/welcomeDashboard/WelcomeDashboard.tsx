@@ -1,9 +1,9 @@
 import TitleBox from '../../../../components/TitleBox';
 
 export default function WelcomeDashboard() {
-  const title = 'Il tuo Ente è attivo sui prodotti PagoPA';
+  const title = 'La panoramica del tuo Ente';
   const subTitle =
-    'Benvenuto nell’area di Self Care riservata al tuo Ente, puoi gestire qui i prodotti PagoPA che hai già attivato. ';
+    'Visualizza e gestisci i prodotti PagoPA a cui il tuo Ente ha aderito.';
   return (
     <TitleBox
       title={title}

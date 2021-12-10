@@ -11,9 +11,9 @@ type Props = {
 };
 
 export default function PartySelection({ parties }: Props) {
-  const bodyTitle = "Seleziona l'Ente per cui accedi";
+  const bodyTitle = "Seleziona il tuo Ente";
   const bodyDescription =
-    "Potrai in ogni momento cambiare Ente/ruolo anche all'interno dell'interfaccia di gestione dei prodotti";
+    "Se operi per più Enti, puoi modificare la tua scelta all'interno del portale.";
 
   const [selectedParty, setSelectedParty] = React.useState<Party | null>();
   const [disableBtn, setBtnDisable] = React.useState(true);

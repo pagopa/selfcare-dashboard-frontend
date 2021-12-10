@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function ActiveProductsSection({ party, products }: Props) {
-  const buttonLabel = 'Gestisci il prodotto';
+  const buttonLabel = 'Gestisci';
   const lastServiceActivationDate = undefined; // actually this info is not available
 
   return (

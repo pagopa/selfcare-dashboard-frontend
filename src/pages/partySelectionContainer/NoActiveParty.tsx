@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function NoActiveParty({ parties }: Props) {
-  const bodyTitle = 'Non risultano richieste per il tuo Ente';
+  const bodyTitle = 'Non risultano richieste di adesione per il tuo Ente';
   const bodyDescription = "L'adesione potrebbe essere ancora in corso.";
   const bodyDescription2 = 'Verifica di aver completato tutti i passaggi richiesti.';
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);

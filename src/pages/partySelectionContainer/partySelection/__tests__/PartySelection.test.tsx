@@ -44,7 +44,7 @@ test('Test rendering', () => {
   render(<PartySelection parties={parties} />);
   const input = screen.getByLabelText('Cerca');
 
-  screen.getByText("Seleziona l'Ente per cui accedi");
+  screen.getByText("Seleziona il tuo Ente");
 
   // search button  "Cerca"
   expect(input.tagName).toBe('INPUT');

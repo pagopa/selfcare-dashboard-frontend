@@ -32,13 +32,13 @@ export default function DashboardSideMenu({ products, party }: Props) {
   const navigationMenu: Array<MenuItem> = [
     {
       groupId: 'selfCare',
-      title: 'Gestione ente',
+      title: 'Gestione Ente',
       active: true,
       isSelected: () => true,
       subMenu: [
         {
           groupId: 'selfCare',
-          title: 'Overview',
+          title: 'Panoramica',
           active: true,
           ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.OVERVIEW, {
             institutionId: party.institutionId,
@@ -68,7 +68,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
         subMenu: [
           {
             groupId: p.id,
-            title: 'Overview',
+            title: 'Panoramica',
             active: p.authorized ?? false,
             onClick: () => invokeProductBo(p, party),
           },

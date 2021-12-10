@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function NotActiveProductsSection({ products }: Props) {
-  const buttonLabel = 'Aderisci al prodotto';
+  const buttonLabel = 'Aderisci';
   const infoLabel = 'SCOPRI DI PIÙ →';
 
   return (
