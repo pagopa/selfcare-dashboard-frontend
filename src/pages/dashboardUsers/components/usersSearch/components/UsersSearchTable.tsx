@@ -166,19 +166,31 @@ function showChip(params: GridRenderCellParams) {
   );
 }
 
-export default function UsersSearchTable({
-  party,
-  selectedProduct,
-  users,
-  page,
-  sort,
-  onPageRequest,
-}: UsersSearchTableProps) {
-  const dispatch = useAppDispatch();
-  const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
-  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+function showRefStatus(
+  users: GridRenderCellParams<PartyUser>,
+  onChangeState: (user: PartyUser) => void
+) {
+  return (
+    <React.Fragment>
+      {users.row.status === 'ACTIVE'
+        ? renderCell(
+            users,
+            <Link onClick={() => onChangeState(users.row)} sx={{ cursor: 'pointer' }}>
+              Sospendi
+            </Link>
+          )
+        : renderCell(
+            users,
+            <Link onClick={() => onChangeState(users.row)} sx={{ cursor: 'pointer' }}>
+              Riabilita
+            </Link>
+          )}
+    </React.Fragment>
+  );
+}
 
-  const columns: Array<GridColDef> = (
+function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: PartyUser) => void) {
+  return (
     [
       {
         field: 'fullName',
@@ -210,7 +222,7 @@ export default function UsersSearchTable({
         headerName: 'EMAIL',
         align: 'left',
         headerAlign: 'left',
-        width: !selectedProduct ? 250 : 300,
+        width: !isSelectedProduct ? 250 : 300,
         editable: false,
         disableColumnMenu: true,
         renderHeader: showCustmHeader,
@@ -230,7 +242,7 @@ export default function UsersSearchTable({
       },
     ] as Array<GridColDef>
   ).concat(
-    !selectedProduct
+    !isSelectedProduct
       ? [
           {
             field: 'products',
@@ -256,15 +268,35 @@ export default function UsersSearchTable({
             hideSortIcons: true,
             disableColumnMenu: true,
             editable: false,
-            renderCell: showRefStatus,
+            renderCell: (p) => showRefStatus(p, onChangeState),
           },
         ]
   );
+}
+
+export default function UsersSearchTable({
+  party,
+  selectedProduct,
+  users,
+  page,
+  sort,
+  onPageRequest,
+}: UsersSearchTableProps) {
+  const dispatch = useAppDispatch();
+  const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
+  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
 
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [selectedUser, setSelectedUser] = useState<PartyUser>();
   const sortSplitted = sort ? sort.split(',') : undefined;
+
+  const handleOpen = (users: PartyUser) => {
+    setOpenToast(false);
+    setOpenModal(true);
+    setSelectedUser(users);
+  };
+  const columns: Array<GridColDef> = buildColumnDefs(!!selectedProduct, handleOpen);
 
   const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
 
@@ -305,32 +337,6 @@ export default function UsersSearchTable({
         .finally(() => setLoading(false));
     }
   };
-
-  const handleOpen = (users: PartyUser) => {
-    setOpenToast(false);
-    setOpenModal(true);
-    setSelectedUser(users);
-  };
-
-  function showRefStatus(users: GridRenderCellParams<PartyUser>) {
-    return (
-      <React.Fragment>
-        {users.row.status === 'ACTIVE'
-          ? renderCell(
-              users,
-              <Link onClick={() => handleOpen(users.row)} sx={{ cursor: 'pointer' }}>
-                Sospendi
-              </Link>
-            )
-          : renderCell(
-              users,
-              <Link onClick={() => handleOpen(users.row)} sx={{ cursor: 'pointer' }}>
-                Riabilita
-              </Link>
-            )}
-      </React.Fragment>
-    );
-  }
 
   return (
     <React.Fragment>
