@@ -17,7 +17,7 @@ export default function ProductNavigationBar({ selectedProduct, paths }: Props) 
     <React.Fragment>
       <Breadcrumbs aria-label="breadcrumb">
         <Typography variant="body2" sx={{ fontWeight: '700', color: 'text.secondary' }}>
-          {selectedProduct.description}
+          {selectedProduct.title}
         </Typography>
         {paths.map((p) =>
           p.onClick ? (
@@ -29,6 +29,7 @@ export default function ProductNavigationBar({ selectedProduct, paths }: Props) 
                 fontWeight: '700',
                 color: '#5C6F82 !important',
                 textDecoration: 'none !important',
+                cursor: 'pointer',
               }}
             >
               {p.description}

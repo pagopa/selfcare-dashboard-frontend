@@ -1,23 +1,23 @@
 import { Grid } from '@mui/material';
-import { useParams } from 'react-router';
 import { Product } from '../../model/Product';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import TitleBox from '../../components/TitleBox';
+import { Party } from '../../model/Party';
 import RolesSearch from './components/rolesSearch/RolesSearch';
 
 interface Props {
+  party: Party;
   products: Array<Product>;
+  selectedProduct?: Product;
 }
 
-export default function DashboardRoles({ products }: Props) {
-  const paths = [
-    {
-      description: 'Referenti',
-      onClick: () => {}, // TODO redirect to Ruoli Page
-    },
-  ];
-  const { productId } = useParams<any>();
-  const selectedProduct = productId ? products.find((p) => p.id === productId) : undefined;
+const paths = [
+  {
+    description: 'Referenti',
+  },
+];
+
+export default function DashboardRoles({ party, selectedProduct, products }: Props) {
   return (
     <Grid
       container
@@ -42,7 +42,7 @@ export default function DashboardRoles({ products }: Props) {
         />
       </Grid>
       <Grid item xs={12}>
-        <RolesSearch selectedProduct={selectedProduct} products={products} />
+        <RolesSearch party={party} selectedProduct={selectedProduct} products={products} />
       </Grid>
     </Grid>
   );

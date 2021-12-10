@@ -115,9 +115,7 @@ export default function RolesSearchTable({
   }
 
   function getFullName(params: GridValueGetterParams) {
-    return `${params.getValue(params.id, 'name') || ''} ${
-      params.getValue(params.id, 'surname') || ''
-    }`;
+    return `${params.row.name} ${params.row.surname}`;
   }
 
   function showCustmHeader(params: GridColumnHeaderParams) {

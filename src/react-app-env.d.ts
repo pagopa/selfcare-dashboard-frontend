@@ -20,7 +20,7 @@ declare namespace NodeJS {
 
     REACT_APP_PAGOPA_HELP_EMAIL: string;
 
-    REACT_APP_ROLES_PAGE_SIZE: number;
+    REACT_APP_ROLES_PAGE_SIZE: string;
   }
 }
 interface Window {

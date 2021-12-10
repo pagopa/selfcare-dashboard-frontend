@@ -2,10 +2,13 @@ import { Grid, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
+import { useHistory } from 'react-router-dom';
 import { Product } from '../../../../model/Product';
 import { Page } from '../../../../model/Page';
 import { PageRequest } from '../../../../model/PageRequest';
 import { Role } from '../../../../model/Role';
+import { DASHBOARD_ROUTES, resolvePathVariables } from '../../../../routes';
+import { Party } from '../../../../model/Party';
 import RolesSearchTable from './components/RolesSearchTable';
 import RolesSearchFilter, { RolesSearchFilterConfig } from './components/RolesSearchFilter';
 
@@ -495,14 +498,18 @@ const mockedUsers: Array<Role> = [
   },
 ];
 interface RolesSearchProps {
+  party: Party;
   selectedProduct?: Product;
   products: Array<Product>;
 }
-export default function RolesSearch({ selectedProduct, products }: RolesSearchProps) {
+
+const pageSize: number = Number.parseInt(process.env.REACT_APP_ROLES_PAGE_SIZE, 10);
+
+export default function RolesSearch({ party, selectedProduct, products }: RolesSearchProps) {
   const [users, setUsers] = useState<Array<Role>>([]);
   const [page, setPage] = useState<Page>({
     number: 0,
-    size: process.env.REACT_APP_ROLES_PAGE_SIZE,
+    size: pageSize,
     totalElements: 0,
     totalPages: 0,
   });
@@ -511,8 +518,10 @@ export default function RolesSearch({ selectedProduct, products }: RolesSearchPr
   );
   const [pageRequest, setPageRequest] = useState<PageRequest>({
     page: 0,
-    size: process.env.REACT_APP_ROLES_PAGE_SIZE,
+    size: pageSize,
   });
+  const history = useHistory();
+
   const fetchUsers = (_f: RolesSearchFilterConfig, pageRequest: PageRequest) => {
     // TODO Fetch
     setUsers(pageRequest.page === 9 ? mockedUsers.slice(1, 5) : mockedUsers); // TODO (fare setUser con mio createData) e setPage
@@ -551,8 +560,19 @@ export default function RolesSearch({ selectedProduct, products }: RolesSearchPr
           </Grid>
           {selectedProduct && (
             <Grid item pl={4}>
-              <Button variant="contained" startIcon={<AddIcon />} sx={{ py: '10px' }}>
-                {/* TODO open addUserForm */}
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                sx={{ py: '10px' }}
+                onClick={() =>
+                  history.push(
+                    resolvePathVariables(
+                      DASHBOARD_ROUTES.PRODUCT_ROLES.subRoutes.ADD_PRODUCT_USER.path,
+                      { institutionId: party.institutionId, productId: selectedProduct.id }
+                    )
+                  )
+                }
+              >
                 Aggiungi
               </Button>
             </Grid>

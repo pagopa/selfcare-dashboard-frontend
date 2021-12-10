@@ -1,26 +1,47 @@
 import { Grid } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 import { Product } from '../../model/Product';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import TitleBox from '../../components/TitleBox';
+import withSelectedPartyProduct from '../../decorators/withSelectedPartyProduct';
+import { DASHBOARD_ROUTES, resolvePathVariables } from '../../routes';
+import { Party } from '../../model/Party';
 import AddUserForm from './components/AddUserForm';
 
 type Props = {
+  party: Party;
+  products: Array<Product>;
   selectedProduct: Product;
 };
-export default function AddUserContainer({ selectedProduct }: Props) {
-  // const [products, setProducts]=useState:()
+
+function AddUserContainer({ party, selectedProduct }: Props) {
+  const history = useHistory();
+
   const paths = [
     {
       description: 'Referenti',
-      onClick: () => {}, // TODO redirect to Ruoli Page
+      onClick: () =>
+        history.push(
+          resolvePathVariables(DASHBOARD_ROUTES.PRODUCT_ROLES.subRoutes.MAIN.path, {
+            institutionId: party.institutionId,
+            productId: selectedProduct.id,
+          })
+        ),
     },
     {
       description: 'Aggiungi un Referente',
     },
   ];
+
   return (
-    <Grid container className="FormComponentContainer">
-      <Grid item xs={12} mt={10} mb={3}>
+    <Grid
+      container
+      alignItems={'center'}
+      px={0}
+      mt={10}
+      sx={{ width: '953px', backgroundColor: 'transparent !important' }}
+    >
+      <Grid item xs={12} mb={3}>
         <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
       </Grid>
       <Grid item xs={12} mb={9}>
@@ -35,3 +56,5 @@ export default function AddUserContainer({ selectedProduct }: Props) {
     </Grid>
   );
 }
+
+export default withSelectedPartyProduct(AddUserContainer);

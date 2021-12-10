@@ -1,5 +1,7 @@
 import { Redirect, useParams } from 'react-router';
+import withSelectedPartyProduct from './decorators/withSelectedPartyProduct';
 import Dashboard from './pages/dashboard/Dashboard';
+import AddUserContainer from './pages/dashboardAddUser/AddUserContainer';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import DashboardRoles from './pages/dashboardRoles/DashboardRoles';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
@@ -12,7 +14,7 @@ export type RouteConfig = {
   path: string;
   exact?: boolean;
   subRoutes?: RoutesObject;
-  component?: React.FunctionComponent<any>;
+  component?: React.ComponentType<any>;
 };
 
 export const resolvePathVariables = (path: string, pathVariables: { [key: string]: string }) =>
@@ -61,8 +63,19 @@ export const DASHBOARD_ROUTES = {
   PRODUCT_ROLES: {
     path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
     exact: false,
-    component: DashboardRoles,
-    subRoutes: buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
+    subRoutes: {
+      MAIN: {
+        path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
+        exact: true,
+        component: withSelectedPartyProduct(DashboardRoles),
+      },
+      ADD_PRODUCT_USER: {
+        path: `${BASE_ROUTE}/:institutionId/:productId/roles/add`,
+        exact: true,
+        component: AddUserContainer,
+      },
+      ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
+    },
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId`),
 };

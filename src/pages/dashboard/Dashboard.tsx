@@ -12,7 +12,7 @@ const buildRoutes = (party: Party, products: Array<Product>, rs: RoutesObject) =
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
     <Route path={path} exact={exact} key={i}>
       {Component && <Component party={party} products={products} />}
-      {subRoutes && buildRoutes(party, products, subRoutes)}
+      {subRoutes && <Switch>{buildRoutes(party, products, subRoutes)}</Switch>}
     </Route>
   ));
 
