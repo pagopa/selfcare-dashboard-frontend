@@ -4,14 +4,14 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useState } from 'react';
 
 // import { styled } from '@mui/system';
-import { UserRole } from '../../../../../../../model/Party';
-import FilterModal, { FilterModalConfig } from '../../../../../../../components/FilterModal';
-import { Product } from '../../../../../../../model/Product';
-import { roleLabels } from '../../../../../../../utils/constants';
+import { UserRole } from '../../../../../model/Party';
+import FilterModal, { FilterModalConfig } from '../../../../../components/FilterModal';
+import { Product } from '../../../../../model/Product';
+import { roleLabels } from '../../../../../utils/constants';
 
-interface RolesSearchFilterProps {
-  filter: RolesSearchFilterConfig;
-  onFilterChange: (f: RolesSearchFilterConfig) => void;
+interface UsersSearchFilterProps {
+  filter: UsersSearchFilterConfig;
+  onFilterChange: (f: UsersSearchFilterConfig) => void;
   filterProducts: boolean;
   data?: Array<Product> | Array<string>;
   products: Array<Product>;
@@ -25,16 +25,16 @@ const chipStyle = {
   border: '1px solid #E6E9F2',
 };
 
-export type RolesSearchFilterConfig = {
+export type UsersSearchFilterConfig = {
   product?: Product;
   role?: UserRole;
 };
-export default function RolesSearchFilter({
+export default function UsersSearchFilter({
   filter,
   onFilterChange,
   filterProducts,
   products,
-}: RolesSearchFilterProps) {
+}: UsersSearchFilterProps) {
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const [filterModalConfig, setFilterModalConfig] = useState<FilterModalConfig<any, any>>();
   const [titleModal, setTitleModal] = useState('');

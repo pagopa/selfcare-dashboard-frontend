@@ -49,7 +49,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
               groupId: 'selfCare',
               title: 'Referenti',
               active: true,
-              ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.ROLES, {
+              ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.PARTY_USERS, {
                 institutionId: party.institutionId,
               }),
             }
@@ -77,7 +77,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
                 groupId: p.id,
                 title: 'Referenti',
                 active: p.authorized ?? false,
-                ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.PRODUCT_ROLES, {
+                ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.PARTY_PRODUCT_USERS, {
                   institutionId: party.institutionId,
                   productId: p.id,
                 }),
