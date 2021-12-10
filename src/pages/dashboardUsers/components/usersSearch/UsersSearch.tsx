@@ -115,8 +115,9 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
       <Grid item xs={12} my={8}>
         <Box>
           <UsersSearchTable
-            users={users}
+            party={party}
             selectedProduct={selectedProduct}
+            users={users}
             page={page}
             sort={pageRequest.sort}
             onPageRequest={handlePageRequestChange}

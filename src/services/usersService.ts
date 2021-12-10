@@ -1,6 +1,6 @@
 import { PageRequest } from '../model/PageRequest';
 import { PageResource } from '../model/PageResource';
-import { Party, UserRole } from '../model/Party';
+import { Party, UserRole, UserStatus } from '../model/Party';
 import { Product } from '../model/Product';
 import { PartyUser, PartyUserOnCreation } from '../model/PartyUser';
 import { mockedUsers } from './__mocks__/rolesService';
@@ -36,3 +36,10 @@ export const savePartyUser = (
 ): Promise<any> => {
   throw new Error('TODO');
 };
+
+export const updatePartyUserStatus = (
+  _party: Party,
+  _product: Product,
+  _user: PartyUser,
+  _status: UserStatus
+): Promise<any> => new Promise((resolve) => resolve('ok')); // TODO

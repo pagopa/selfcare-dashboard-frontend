@@ -20,6 +20,7 @@ export const LOADING_TASK_SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
 export const LOADING_TASK_TOKEN_EXCHANGE = 'TOKEN_EXCHANGE';
 export const LOADING_TASK_PARTY_USERS = 'PARTY_USERS';
 export const LOADING_TASK_SAVE_PARTY_USER = 'SAVE_PARTY_USER';
+export const LOADING_TASK_UPDATE_PARTY_USER_STATUS = 'UPDATE_PARTY_USER_STATUS';
 
 export const roleLabels: { [key in UserRole]: { shortLabel: string; longLabel: string } } = {
   ADMIN: { shortLabel: 'Ref. Amministrativo', longLabel: 'Referente Amministrativo' },

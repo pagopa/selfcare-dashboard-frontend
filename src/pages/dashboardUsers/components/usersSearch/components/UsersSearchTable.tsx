@@ -15,16 +15,21 @@ import { Page } from '../../../../../model/Page';
 import { PageRequest } from '../../../../../model/PageRequest';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
-import { UserRole } from '../../../../../model/Party';
-import { roleLabels } from '../../../../../utils/constants';
+import { Party, UserRole, UserStatus } from '../../../../../model/Party';
+import { LOADING_TASK_UPDATE_PARTY_USER_STATUS, roleLabels } from '../../../../../utils/constants';
 import SessionModal from '../../../../../components/SessionModal';
 import Toast from '../../../../../components/Toast';
 import CustomPagination from '../../../../../components/CustomPagination';
+import { updatePartyUserStatus } from '../../../../../services/usersService';
+import { useAppDispatch } from '../../../../../redux/hooks';
+import useLoading from '../../../../../hooks/useLoading';
+import { AppError, appStateActions } from '../../../../../redux/slices/appStateSlice';
 
 const rowHeight = 81;
 const headerHeight = 56;
 
 interface UsersSearchTableProps {
+  party: Party;
   users: Array<PartyUser>;
   selectedProduct?: Product;
   page: Page;
@@ -32,141 +37,146 @@ interface UsersSearchTableProps {
   onPageRequest: (p: PageRequest) => void;
 }
 
+const CustomDataGrid = styled(DataGrid)({
+  border: 'none !important',
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus':
+    { outline: 'none' },
+  '&.MuiDataGrid-root .MuiDataGrid-cell': {
+    whiteSpace: 'normal !important',
+    wordWrap: 'break-word !important',
+    lineHeight: '25px !important',
+  },
+  '&.MuiDataGrid-columnHeaders': { borderBottom: 'none !important' },
+  '.justifyContentBold': {
+    fontSize: '16px',
+    fontWeight: '600',
+    '&>div': {
+      display: 'flex !important',
+      alignItems: 'center',
+    },
+  },
+  '.MuiDataGrid-columnSeparator': { display: 'none' },
+  '.MuiDataGrid-cell ': { padding: '0px', borderBottom: 'none' },
+  '.MuiDataGrid-columnHeaders': { borderBottom: 'none' },
+  '.MuiDataGrid-row': {
+    borderBottom: '1px solid #CCD4DC',
+    '&.Mui-selected': {
+      backgroundColor: 'transparent',
+      '&:hover': { backgroundColor: 'transparent' },
+    },
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  '.justifyContentNormal': {
+    fontSize: '16px',
+    fontWeight: 'normal',
+    '&>div': {
+      display: 'flex !important',
+      alignItems: 'center',
+    },
+  },
+  '.justifyContentNormalRight': {
+    fontSize: '16px',
+    fontWeight: 'normal',
+    '&>div': {
+      display: 'flex !important',
+      alignItems: 'center',
+      justifyContent: 'right',
+    },
+  },
+  '.MuiButtonBase-root.MuiPaginationItem-root': {
+    fontSize: '16px',
+    fontWeight: '600 !important',
+    color: '#0073E6',
+    '&.Mui-selected ': {
+      border: 'none !important',
+      backgroundColor: 'transparent !important',
+      color: '#000000',
+    },
+  },
+});
+
+function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
+  const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : 'white';
+  return (
+    <div
+      style={{
+        backgroundColor: bgColor,
+        width: '100%',
+        height: '100%',
+        padding: '0 10px',
+        borderBottom: '1px solid #CCD4DC',
+      }}
+    >
+      {value}
+    </div>
+  );
+}
+
+function getFullName(params: GridValueGetterParams) {
+  return `${params.row.name} ${params.row.surname}`;
+}
+
+function getProducts(params: GridValueGetterParams) {
+  return params.row.products.map((p: Product) => p.title).join(',');
+}
+
+function showCustmHeader(params: GridColumnHeaderParams) {
+  return (
+    <React.Fragment>
+      <Typography
+        color="text.secondary"
+        sx={{ fontSize: '14px', fontWeight: '700', outline: 'none' }}
+      >
+        {params.colDef.headerName}
+      </Typography>
+    </React.Fragment>
+  );
+}
+
+function showLabelRef(params: GridRenderCellParams<PartyUser>) {
+  return (
+    <React.Fragment>
+      {renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}
+    </React.Fragment>
+  );
+}
+
+function showChip(params: GridRenderCellParams) {
+  return (
+    <React.Fragment>
+      {renderCell(
+        params,
+        params.row.status === 'SUSPENDED' && (
+          <Chip
+            label="Sospeso"
+            sx={{
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#17324D',
+              backgroundColor: '#00C5CA',
+              paddingBottom: '1px',
+              height: '24px',
+            }}
+          />
+        )
+      )}
+    </React.Fragment>
+  );
+}
+
 export default function UsersSearchTable({
+  party,
   selectedProduct,
   users,
   page,
   sort,
   onPageRequest,
 }: UsersSearchTableProps) {
-  const CustomDataGrid = styled(DataGrid)({
-    border: 'none !important',
-    '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus':
-      { outline: 'none' },
-    '&.MuiDataGrid-root .MuiDataGrid-cell': {
-      whiteSpace: 'normal !important',
-      wordWrap: 'break-word !important',
-      lineHeight: '25px !important',
-    },
-    '&.MuiDataGrid-columnHeaders': { borderBottom: 'none !important' },
-    '.justifyContentBold': {
-      fontSize: '16px',
-      fontWeight: '600',
-      '&>div': {
-        display: 'flex !important',
-        alignItems: 'center',
-      },
-    },
-    '.MuiDataGrid-columnSeparator': { display: 'none' },
-    '.MuiDataGrid-cell ': { padding: '0px', borderBottom: 'none' },
-    '.MuiDataGrid-columnHeaders': { borderBottom: 'none' },
-    '.MuiDataGrid-row': {
-      borderBottom: '1px solid #CCD4DC',
-      '&.Mui-selected': {
-        backgroundColor: 'transparent',
-        '&:hover': { backgroundColor: 'transparent' },
-      },
-      '&:hover': {
-        backgroundColor: 'transparent',
-      },
-    },
-    '.justifyContentNormal': {
-      fontSize: '16px',
-      fontWeight: 'normal',
-      '&>div': {
-        display: 'flex !important',
-        alignItems: 'center',
-      },
-    },
-    '.justifyContentNormalRight': {
-      fontSize: '16px',
-      fontWeight: 'normal',
-      '&>div': {
-        display: 'flex !important',
-        alignItems: 'center',
-        justifyContent: 'right',
-      },
-    },
-    '.MuiButtonBase-root.MuiPaginationItem-root': {
-      fontSize: '16px',
-      fontWeight: '600 !important',
-      color: '#0073E6',
-      '&.Mui-selected ': {
-        border: 'none !important',
-        backgroundColor: 'transparent !important',
-        color: '#000000',
-      },
-    },
-  });
-
-  function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
-    const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : 'white';
-    return (
-      <div
-        style={{
-          backgroundColor: bgColor,
-          width: '100%',
-          height: '100%',
-          padding: '0 10px',
-          borderBottom: '1px solid #CCD4DC',
-        }}
-      >
-        {value}
-      </div>
-    );
-  }
-
-  function getFullName(params: GridValueGetterParams) {
-    return `${params.row.name} ${params.row.surname}`;
-  }
-
-  function getProducts(params: GridValueGetterParams) {
-    return params.row.products.map((p: Product) => p.title).join(',');
-  }
-
-  function showCustmHeader(params: GridColumnHeaderParams) {
-    return (
-      <React.Fragment>
-        <Typography
-          color="text.secondary"
-          sx={{ fontSize: '14px', fontWeight: '700', outline: 'none' }}
-        >
-          {params.colDef.headerName}
-        </Typography>
-      </React.Fragment>
-    );
-  }
-
-  function showLabelRef(params: GridRenderCellParams<PartyUser>) {
-    return (
-      <React.Fragment>
-        {renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}
-      </React.Fragment>
-    );
-  }
-
-  function showChip(params: GridRenderCellParams) {
-    return (
-      <React.Fragment>
-        {renderCell(
-          params,
-          params.row.status === 'SUSPENDED' && (
-            <Chip
-              label="Sospeso"
-              sx={{
-                fontSize: '16px',
-                fontWeight: '600',
-                color: '#17324D',
-                backgroundColor: '#00C5CA',
-                paddingBottom: '1px',
-                height: '24px',
-              }}
-            />
-          )
-        )}
-      </React.Fragment>
-    );
-  }
+  const dispatch = useAppDispatch();
+  const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
+  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
 
   const columns: Array<GridColDef> = (
     [
@@ -259,17 +269,40 @@ export default function UsersSearchTable({
   const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
 
   const confirmChangeStatus = (user?: PartyUser) => {
-    setOpenModal(false);
-    if (user?.status === 'ACTIVE') {
-      // eslint-disable-next-line functional/immutable-data
-      user.status = 'SUSPENDED';
-    } else if (user?.status === 'SUSPENDED') {
-      // eslint-disable-next-line functional/immutable-data
-      user.status = 'ACTIVE';
-    }
+    if (user && selectedProduct) {
+      const nextStatus: UserStatus | undefined =
+        user.status === 'ACTIVE' ? 'SUSPENDED' : user.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
+      if (!nextStatus) {
+        addError({
+          id: 'INVALID_STATUS_TRANSITION',
+          blocking: false,
+          error: new Error('INVALID_STATUS_TRANSITION'),
+          techDescription: `Invalid status transition while updating party (${party.institutionId}) user (${user.id}): ${user.status}`,
+          toNotify: true,
+        });
 
-    if (user?.status) {
-      setOpenToast(true);
+        return;
+      }
+
+      setLoading(true);
+      updatePartyUserStatus(party, selectedProduct, user, nextStatus)
+        .then((_) => {
+          setOpenModal(false);
+          // eslint-disable-next-line functional/immutable-data
+          user.status = nextStatus;
+
+          setOpenToast(true);
+        })
+        .catch((reason) =>
+          addError({
+            id: 'UPDATE_PARTY_USER_STATUS',
+            blocking: false,
+            error: reason,
+            techDescription: `An error occurred while updating party (${party.institutionId}) user (${user.id}): ${user.status} -> ${nextStatus}`,
+            toNotify: true,
+          })
+        )
+        .finally(() => setLoading(false));
     }
   };
 
