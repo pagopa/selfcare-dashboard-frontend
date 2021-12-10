@@ -20,8 +20,8 @@ export const LOADING_TASK_SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
 export const LOADING_TASK_TOKEN_EXCHANGE = 'TOKEN_EXCHANGE';
 
 export const roleLabels: { [key in UserRole]: { shortLabel: string; longLabel: string } } = {
-  ADMIN: { shortLabel: 'Amministrativo', longLabel: 'Referente Amministrativo' },
-  LIMITED: { shortLabel: 'Operativo', longLabel: 'Referente Operativo' },
+  ADMIN: { shortLabel: 'Ref. Amministrativo', longLabel: 'Referente Amministrativo' },
+  LIMITED: { shortLabel: 'Ref. Operativo', longLabel: 'Referente Operativo' },
 };
 
 export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;

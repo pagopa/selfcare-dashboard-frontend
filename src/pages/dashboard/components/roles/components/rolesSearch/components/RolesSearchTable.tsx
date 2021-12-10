@@ -17,9 +17,9 @@ import { Product } from '../../../../../../../model/Product';
 import { Role } from '../../../../../../../model/Role';
 import { UserRole } from '../../../../../../../model/Party';
 import { roleLabels } from '../../../../../../../utils/constants';
+import SessionModal from '../../../../../../../components/SessionModal';
+import Toast from '../../../../../../../components/Toast';
 import CustomPagination from './../../../../../../../components/CustomPagination';
-import UserSessionModal from './UserSessionModal';
-import UserToast from './UserToast';
 
 const rowHeight = 81;
 const headerHeight = 56;
@@ -135,16 +135,18 @@ export default function RolesSearchTable({
 
   function showLabelRef(params: GridRenderCellParams<Role>) {
     return (
-      <React.Fragment>{renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}</React.Fragment>
+      <React.Fragment>
+        {renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}
+      </React.Fragment>
     );
   }
 
   function showChip(params: GridRenderCellParams) {
     return (
       <React.Fragment>
-          {renderCell(
-            params,
-            params.row.status === 'SUSPENDED' &&
+        {renderCell(
+          params,
+          params.row.status === 'SUSPENDED' && (
             <Chip
               label="Sospeso"
               sx={{
@@ -156,7 +158,8 @@ export default function RolesSearchTable({
                 height: '24px',
               }}
             />
-          )}
+          )
+        )}
       </React.Fragment>
     );
   }
@@ -202,7 +205,7 @@ export default function RolesSearchTable({
     {
       field: 'userRole',
       cellClassName: 'justifyContentBold',
-      headerName: 'RUOLI',
+      headerName: 'RUOLO',
       align: 'left',
       headerAlign: 'left',
       type: 'number',
@@ -229,12 +232,12 @@ export default function RolesSearchTable({
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Role>();
- // const [userStatus, setUserStatus] = useState<string>();
-
   const sortSplitted = sort ? sort.split(',') : undefined;
 
+  const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
+
   const confirmChangeStatus = (user?: Role) => {
-    window.scrollTo(0, document.body.scrollHeight);
+    setOpenModal(false);
     if (user?.status === 'ACTIVE') {
       // eslint-disable-next-line functional/immutable-data
       user.status = 'SUSPENDED';
@@ -242,7 +245,7 @@ export default function RolesSearchTable({
       // eslint-disable-next-line functional/immutable-data
       user.status = 'ACTIVE';
     }
-    setOpenModal(false);
+
     if (user?.status) {
       setOpenToast(true);
     }
@@ -258,8 +261,18 @@ export default function RolesSearchTable({
     return (
       <React.Fragment>
         {users.row.status === 'ACTIVE'
-          ? renderCell(users, <Link onClick={() => handleOpen(users.row)}>Sospendi</Link>)
-          : renderCell(users, <Link onClick={() => handleOpen(users.row)}>Riabilita</Link>)}
+          ? renderCell(
+              users,
+              <Link onClick={() => handleOpen(users.row)} sx={{ cursor: 'pointer' }}>
+                Sospendi
+              </Link>
+            )
+          : renderCell(
+              users,
+              <Link onClick={() => handleOpen(users.row)} sx={{ cursor: 'pointer' }}>
+                Riabilita
+              </Link>
+            )}
       </React.Fragment>
     );
   }
@@ -310,30 +323,34 @@ export default function RolesSearchTable({
           }
         />
       </Box>
-
       {openToast && (
-        <UserToast
-          userName={selectedUser?.name}
-          userSurname={selectedUser?.surname}
-          userStatus={selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato'}
+        <Toast
+          title={`REFERENTE ${selectedUserStatus?.toUpperCase()}`}
+          message={
+            <>
+              {`Hai ${selectedUserStatus} correttamente `}
+              <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}.`}</strong>
+            </>
+          }
           closeToast={() => setOpenToast(false)}
         />
       )}
-
-      <UserSessionModal
-        key={selectedUser?.id}
+      <SessionModal
         open={openModal}
         title="Sospendi Referente"
         message={
-          selectedUser?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '
+          <>
+            {selectedUser?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '}
+            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}.`}</strong>
+            <br />
+            {' vuoi continuare?'}
+          </>
         }
-        userName={selectedUser?.name}
-        userSurname={selectedUser?.surname}
-        message2=" vuoi continuare?"
         onConfirm={() => confirmChangeStatus(selectedUser)}
         handleClose={() => setOpenModal(false)}
-        buttonLabel1="Conferma"
-        buttonLabel2="Annulla"
+        onConfirmLabel="Conferma"
+        onCloseLabel="Annulla"
+        height="100%"
       />
     </React.Fragment>
   );

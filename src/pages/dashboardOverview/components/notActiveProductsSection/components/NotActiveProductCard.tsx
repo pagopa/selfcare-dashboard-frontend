@@ -1,6 +1,7 @@
 import { Card, Grid, Link } from '@mui/material';
 import { Box } from '@mui/material';
 import { Product } from '../../../../../model/Product';
+import { URL_FE_ONBOARDING } from '../../../../../utils/constants';
 import BaseProductCard from '../../productCard/BaseProductCard';
 
 type Props = {
@@ -10,7 +11,6 @@ type Props = {
 };
 
 export default function NotActiveProductCard({ product, buttonLabel, infoLabel }: Props) {
-  const isDisabled = product.authorized === false;
   return (
     <Grid item xs={4} key={product.id}>
       <Card
@@ -18,13 +18,13 @@ export default function NotActiveProductCard({ product, buttonLabel, infoLabel }
       >
         <Box mx={3} my={4}>
           <BaseProductCard
-            disableBtn={isDisabled}
+            disableBtn={false}
             cardTitle={product.title}
             cardSubTitle={product.description}
             buttonLabel={buttonLabel}
             logoCard={product.logo}
             tag={product.tag}
-            btnAction={() => product.urlPublic && window.location.assign(product.urlPublic)}
+            btnAction={() => window.location.assign(`${URL_FE_ONBOARDING}/${product.id}`)}
             heightLogo="70px"
             heightTitle="80px"
             heightSubTitle="80px"
@@ -37,6 +37,7 @@ export default function NotActiveProductCard({ product, buttonLabel, infoLabel }
                   <Link
                     underline="none"
                     sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
+                    href={product.urlPublic}
                   >
                     {infoLabel}
                   </Link>

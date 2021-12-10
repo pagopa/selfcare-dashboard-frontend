@@ -11,11 +11,6 @@ export default function Roles({ products }: Roles) {
   const { productId } = useParams<any>();
   const selectedProduct = productId ? products.find((p) => p.id === productId) : undefined;
   return (
-    // <Card
-    //   variant="outlined"
-    //   sx={{ width: '100%',height:'100%', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)', py: 5 }}
-    // >
-
     <Grid
       container
       alignItems={'center'}
@@ -30,7 +25,5 @@ export default function Roles({ products }: Roles) {
         <RolesSearch selectedProduct={selectedProduct} products={products} />
       </Grid>
     </Grid>
-
-    // </Card>
   );
 }
