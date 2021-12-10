@@ -1,16 +1,18 @@
 import { Card, Grid, Link } from '@mui/material';
 import { Box } from '@mui/material';
+import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { URL_FE_ONBOARDING } from '../../../../../utils/constants';
 import BaseProductCard from '../../productCard/BaseProductCard';
 
 type Props = {
+  party: Party;
   product: Product;
   buttonLabel: string;
   infoLabel?: string;
 };
 
-export default function NotActiveProductCard({ product, buttonLabel, infoLabel }: Props) {
+export default function NotActiveProductCard({ party, product, buttonLabel, infoLabel }: Props) {
   return (
     <Grid item xs={4} key={product.id}>
       <Card
@@ -24,7 +26,11 @@ export default function NotActiveProductCard({ product, buttonLabel, infoLabel }
             buttonLabel={buttonLabel}
             logoCard={product.logo}
             tag={product.tag}
-            btnAction={() => window.location.assign(`${URL_FE_ONBOARDING}/${product.id}`)}
+            btnAction={() =>
+              window.location.assign(
+                `${URL_FE_ONBOARDING}/${product.id}?institutionId=${party.institutionId}`
+              )
+            }
             heightLogo="70px"
             heightTitle="80px"
             heightSubTitle="80px"
