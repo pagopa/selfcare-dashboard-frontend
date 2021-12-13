@@ -490,6 +490,17 @@ export const mockedUsers: Array<PartyUser> = [
   },
 ];
 
+export const mockedProductRoles = [
+  {
+    productRole:'Incaricato Ente Creditore',
+  },
+  {
+    productRole:'Referente dei Pagamenti',
+  },
+  {
+    productRole:'Referente Tecnico',
+  }];
+
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
   _party: Party,

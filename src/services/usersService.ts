@@ -3,7 +3,8 @@ import { PageResource } from '../model/PageResource';
 import { Party, UserRole, UserStatus } from '../model/Party';
 import { Product } from '../model/Product';
 import { PartyUser, PartyUserOnCreation } from '../model/PartyUser';
-import { fetchPartyUsers as fetchPartyUsersMocked } from './__mocks__/usersService';
+import { ProductRole } from '../model/ProductRole';
+import { fetchPartyUsers as fetchPartyUsersMocked, mockedProductRoles } from './__mocks__/usersService';
 
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
@@ -31,3 +32,14 @@ export const updatePartyUserStatus = (
   _user: PartyUser,
   _status: UserStatus
 ): Promise<any> => new Promise((resolve) => resolve('ok')); // TODO
+
+export const fetchProductRoles = (
+  _product?: Product,
+): Promise<Array<ProductRole>> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return new Promise((resolve)=> resolve(mockedProductRoles));
+  } else {
+    return new Promise((_, error) => error('TODO'));
+  }
+}; 
