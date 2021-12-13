@@ -1,7 +1,7 @@
 import { UserRole, UserStatus } from './Party';
 import { Product } from './Product';
 
-export type Role = {
+export type PartyUser = {
   id: string;
   name: string;
   surname: string;
@@ -10,4 +10,12 @@ export type Role = {
   userRole: UserRole;
   products: Array<Product>;
   status: UserStatus;
+};
+
+export type PartyUserOnCreation = {
+  name: string;
+  surname: string;
+  taxCode: string;
+  email: string;
+  userRole: UserRole;
 };

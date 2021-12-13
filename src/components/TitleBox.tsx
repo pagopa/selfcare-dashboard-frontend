@@ -16,11 +16,11 @@ type Props = {
 export default function TitleBox({
   title,
   subTitle,
-  mbTitle,
+  mbTitle = 2,
   mtGrid,
   mbSubTitle,
-  variantTitle,
-  variantSubTitle,
+  variantTitle = 'h1',
+  variantSubTitle = 'h5',
 }: Props) {
   return (
     <Grid container mt={mtGrid}>

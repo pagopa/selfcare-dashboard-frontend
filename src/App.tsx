@@ -9,7 +9,7 @@ const buildRoutes = (rs: RoutesObject) =>
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
     <Route path={path} exact={exact} key={i}>
       {Component && <Component />}
-      {subRoutes && buildRoutes(subRoutes)}
+      {subRoutes && <Switch>{buildRoutes(subRoutes)}</Switch>}
     </Route>
   ));
 
