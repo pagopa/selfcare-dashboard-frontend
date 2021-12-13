@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormControlLabel,
   Grid,
@@ -8,16 +8,17 @@ import {
   Radio,
   Button,
   Typography,
+  Box,
 } from '@mui/material';
-import { useFormik } from 'formik';
-import { Party } from '../../../model/Party';
-import { savePartyUser } from '../../../services/usersService';
+import { useFormik } from 'formik';import { Party } from '../../../model/Party';
+import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
 import useLoading from '../../../hooks/useLoading';
 import { AppError, appStateActions } from '../../../redux/slices/appStateSlice';
 import { useAppDispatch } from '../../../redux/hooks';
-import { LOADING_TASK_SAVE_PARTY_USER } from '../../../utils/constants';
+import { LOADING_TASK_SAVE_PARTY_USER, LOADING_TASK_FETCH_PRODUCT_ROLES } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
+import { ProductRole } from '../../../model/ProductRole';
 
 const taxCodeRegexp = new RegExp(
   '^[A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1}$'
@@ -32,8 +33,27 @@ type Props = {
 
 export default function AddUserForm({ party, selectedProduct }: Props) {
   const dispatch = useAppDispatch();
-  const setLoading = useLoading(LOADING_TASK_SAVE_PARTY_USER);
+  const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
+  const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
   const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+
+  const [productRoles, setProductRoles ] = useState <Array<ProductRole>>();
+
+  useEffect(() => {
+  setLoadingFetchRoles(true);
+   fetchProductRoles(selectedProduct)
+   .then(productRoles => setProductRoles(productRoles))
+   .catch((reason) =>
+    addError({
+      id: 'FETCH_PRODUCT_ROLES',
+      blocking: false,
+      error: reason,
+      techDescription: `An error occurred while fetching Product Roles of Product ${selectedProduct.id}`,
+      toNotify: true,
+      })
+    )
+    .finally(() => setLoadingFetchRoles(false));
+  },[]);
 
   const validate = (values: Partial<PartyUserOnCreation>) =>
     Object.fromEntries(
@@ -50,7 +70,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
           : !emailRegexp.test(values.email)
           ? 'L’indirizzo email non è valido'
           : undefined,
-        userRole: !values.userRole ? requiredError : undefined,
+        userRole: !values.productRole ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
 
@@ -60,11 +80,11 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       surname: '',
       taxCode: '',
       email: '',
-      userRole: undefined,
+      productRole: undefined,
     },
     validate,
     onSubmit: (values) => {
-      setLoading(true);
+      setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .catch((reason) =>
           addError({
@@ -75,7 +95,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
             toNotify: true,
           })
         )
-        .finally(() => setLoading(false));
+        .finally(() => setLoadingSaveUser(false));
     },
   });
 
@@ -143,20 +163,23 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
           </Grid>
 
           <Grid item xs={8} mb={3}>
-            <Typography> Ruoli* </Typography>
+            <Typography> Ruoli * </Typography>
+            
             <RadioGroup
               aria-label="user"
               name="userRole"
-              value={formik.values.userRole}
+              value={formik.values.productRole}
               onChange={formik.handleChange}
             >
-              <FormControlLabel
-                value="ADMIN"
+             {productRoles?.map((p, index) => 
+             <Box key={p.productRole}>  
+             <FormControlLabel
+                value={p.productRole}
                 control={<Radio />}
-                label="Referente amministrativo"
+                label={p.productRole}
               />
-              <Divider sx={{ border: '1px solid #CFDCE6', my: '8px' }} />
-              <FormControlLabel value="LIMITED" control={<Radio />} label="Referente tecnico" />
+              {index !== productRoles.length -1 && <Divider sx={{ border: '1px solid #CFDCE6', my: '8px' }} />}
+              </Box>)}
             </RadioGroup>
           </Grid>
         </Grid>

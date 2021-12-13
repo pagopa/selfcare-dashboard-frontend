@@ -17,5 +17,5 @@ export type PartyUserOnCreation = {
   surname: string;
   taxCode: string;
   email: string;
-  userRole: UserRole;
+  productRole : string;
 };
