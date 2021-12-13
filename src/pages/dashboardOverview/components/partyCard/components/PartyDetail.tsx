@@ -1,5 +1,7 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid, Link, Typography } from '@mui/material';
 import Chip from '@mui/material/Chip';
+import { InfoOutlined } from '@mui/icons-material';
+import { Box } from '@mui/system';
 import { Party } from '../../../../../model/Party';
 
 type Props = {
@@ -131,6 +133,14 @@ export default function PartyDetail({ party }: Props) {
         >
           {party.digitalAddress}
         </Typography>
+        <Box display="flex" alignItems="center" pt={3}>
+          <InfoOutlined sx={{ width: '20px', height: '20spx', mr: '4px', color: '#5C6F82' }} />
+          <Typography variant="body2" sx={{ fontSize: '12px' }}>
+            Per modificare questi dati,&nbsp;
+            <Link href="https://indicepa.gov.it/ipa-portale/contatti">contatta</Link>
+            &nbsp;l&apos;Indice della Pubblica Amministrazione (IPA)
+          </Typography>
+        </Box>
       </Grid>
     </Grid>
   );
