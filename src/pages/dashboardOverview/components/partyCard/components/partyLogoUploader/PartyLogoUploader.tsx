@@ -75,8 +75,10 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         handleClose={() => setOpenLogoutModal(false)}
         onConfirm={handleOpen}
         open={openLogoutModal}
-        title={'Errore Caricamento'}
-        message={'Il formato o la dimensione del file potrebbero esser diversi da quelli indicati'}
+        title={'Caricamento non riuscito'}
+        message={
+          'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo'
+        }
       />
     </Grid>
   );
