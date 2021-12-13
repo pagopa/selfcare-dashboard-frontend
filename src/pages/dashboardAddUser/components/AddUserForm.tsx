@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormControlLabel,
   Grid,
@@ -8,16 +8,15 @@ import {
   Radio,
   Button,
   Typography,
+  Box,
 } from '@mui/material';
-import { useFormik } from 'formik';
-import { Party } from '../../../model/Party';
+import { useFormik } from 'formik';import { Party } from '../../../model/Party';
 import { savePartyUser } from '../../../services/usersService';
 import useLoading from '../../../hooks/useLoading';
 import { AppError, appStateActions } from '../../../redux/slices/appStateSlice';
 import { useAppDispatch } from '../../../redux/hooks';
 import { LOADING_TASK_SAVE_PARTY_USER } from '../../../utils/constants';
-import { Product } from '../../../model/Product';
-import { PartyUserOnCreation } from '../../../model/PartyUser';
+import { Product } from '../../../model/Product';import { PartyUserOnCreation } from '../../../model/PartyUser';
 
 const taxCodeRegexp = new RegExp(
   '^[A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1}$'
@@ -34,6 +33,28 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
   const dispatch = useAppDispatch();
   const setLoading = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+
+  const [productsRole, setProductsRole] = useState <Array<any>>();
+  useEffect(() => {
+    const mockedUsers = [
+      {
+        id: 'uid1',
+        value:'ADMIN',
+        productRole:'Ref. Amministrativo',
+      },
+      {
+        id: 'uid2',
+        value:'TECH_ADMIN',
+        productRole:'Ref. Tecninco',
+      },
+      {
+        id: 'uid3',
+        value:'ADMIN',
+        productRole:'Ref. Amministrativo',
+      }];
+     
+    setProductsRole(mockedUsers);
+  }, []);
 
   const validate = (values: Partial<PartyUserOnCreation>) =>
     Object.fromEntries(
@@ -144,19 +165,22 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
 
           <Grid item xs={8} mb={3}>
             <Typography> Ruoli* </Typography>
+            
             <RadioGroup
               aria-label="user"
               name="userRole"
               value={formik.values.userRole}
               onChange={formik.handleChange}
             >
-              <FormControlLabel
-                value="ADMIN"
+             {productsRole?.map((p, index) => 
+             <Box key={p.id}>  
+             <FormControlLabel
+                value={p.value}
                 control={<Radio />}
-                label="Referente amministrativo"
+                label={p.productRole}
               />
-              <Divider sx={{ border: '1px solid #CFDCE6', my: '8px' }} />
-              <FormControlLabel value="LIMITED" control={<Radio />} label="Referente tecnico" />
+              {index !== productsRole.length -1 && <Divider sx={{ border: '1px solid #CFDCE6', my: '8px' }} />}
+              </Box>)}
             </RadioGroup>
           </Grid>
         </Grid>
