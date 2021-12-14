@@ -114,7 +114,7 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
         borderBottom: '1px solid #CCD4DC',
               }}
     >
-      <p 
+      <div
       title={value?.toString()}
       style={{
         overflow: 'hidden',
@@ -124,7 +124,7 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
         WebkitBoxOrient: 'vertical' as const,
         paddingBottom:'8px'
         }}>
-      {value}</p>
+      {value}</div>
     </div>
   );
 }
