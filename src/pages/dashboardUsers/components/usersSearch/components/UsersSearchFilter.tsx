@@ -119,6 +119,7 @@ export default function UsersSearchFilter({
         filterModalConfig={filterModalConfig}
         open={openLogoutModal}
         title={titleModal}
+        height='100%'
       />
     </Grid>
   );

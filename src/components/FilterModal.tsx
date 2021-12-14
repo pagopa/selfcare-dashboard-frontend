@@ -19,6 +19,8 @@ type Props = {
   handleClose: React.MouseEventHandler<HTMLButtonElement>;
   title: string;
   filterModalConfig?: FilterModalConfig<any, any>;
+  height?: string;
+  minHeight?: string;
 };
 export type FilterModalConfig<T, V> = {
   data: Array<T>;
@@ -27,7 +29,7 @@ export type FilterModalConfig<T, V> = {
   onFilterChange: (v: V) => void;
 };
 
-export default function FilterModal({ open, handleClose, title, filterModalConfig }: Props) {
+export default function FilterModal({ open, handleClose, title, filterModalConfig,height = '16em', minHeight = '16em' }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
@@ -46,7 +48,7 @@ export default function FilterModal({ open, handleClose, title, filterModalConfi
   const data = filterModalConfig?.data !== undefined ? filterModalConfig?.data : [];
   return (
     <Dialog fullScreen={fullScreen} open={open} aria-labelledby="responsive-dialog-title">
-      <Grid container direction="column" sx={{ height: '16em', width: '21.9em' }}>
+      <Grid container direction="column" sx={{ height, minHeight, width: '21.9em'}}>
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>

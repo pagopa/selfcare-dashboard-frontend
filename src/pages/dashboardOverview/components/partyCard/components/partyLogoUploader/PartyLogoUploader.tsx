@@ -79,6 +79,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         message={
           'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo'
         }
+       height='100%'
       />
     </Grid>
   );
