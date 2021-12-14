@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Button, Box, Grid, Badge, Card, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import SessionModal from '../../../../components/SessionModal';
 
 type Props = {
   cardTitle: string;
@@ -14,6 +15,7 @@ type Props = {
   heightTitle?: string;
   heightSubTitle?: string;
   heightButton?: string;
+  status?: string;
 };
 
 const CustomBadge = styled(Badge)({
@@ -46,7 +48,10 @@ export default function BaseProductCard({
   heightTitle,
   heightSubTitle,
   heightButton,
+  status,
 }: Props) {
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
+
   return (
     <React.Fragment>
       <Card sx={{ border: 'none', boxShadow: 'none' }}>
@@ -77,7 +82,7 @@ export default function BaseProductCard({
           <Grid item xs={12} justifyContent="center" height={heightButton}>
             <Box sx={{ width: '100%' }}>
               <Button
-                onClick={btnAction}
+                onClick={status === 'PENDING' ? () => setOpenLogoutModal(true) : btnAction}
                 disabled={disableBtn}
                 variant="contained"
                 sx={{ width: '100%', height: '48px' }}
@@ -88,6 +93,16 @@ export default function BaseProductCard({
           </Grid>
         </CardContent>
       </Card>
+      <SessionModal
+        handleClose={() => setOpenLogoutModal(false)}
+        onConfirm={btnAction}
+        open={openLogoutModal}
+        title={'Adesione in corso'}
+        message={
+          'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?'
+        }
+        onConfirmLabel={'Procedi con una nuova adesione'}
+      />
     </React.Fragment>
   );
 }

@@ -13,6 +13,7 @@ export type Product = {
   userRole?: string;
   authorized?: boolean;
   active: boolean;
+  status?: string; // TODO to be remove later on ?
 };
 
 export const productResource2Product = (resource: ProductsResource): Product => ({
