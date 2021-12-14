@@ -219,6 +219,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         valueGetter: getFullName,
         renderHeader: showCustmHeader,
         renderCell,
+        sortable: false
       },
       {
         field: 'stato',
@@ -230,6 +231,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         disableColumnMenu: true,
         editable: false,
         renderCell: showChip,
+        sortable: false
       },
       {
         field: 'email',
@@ -242,6 +244,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         disableColumnMenu: true,
         renderHeader: showCustmHeader,
         renderCell,
+        sortable: false
       },
       {
         field: 'userRole',
@@ -254,6 +257,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         disableColumnMenu: true,
         renderCell: showLabelRef,
         renderHeader: showCustmHeader,
+        sortable: false
       },
     ] as Array<GridColDef>
   ).concat(
@@ -271,6 +275,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
             editable: false,
             renderCell,
             renderHeader: showCustmHeader,
+            sortable: false
           },
         ]
       : [
@@ -284,6 +289,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
             disableColumnMenu: true,
             editable: false,
             renderCell: (p) => showRefStatus(p, onChangeState),
+            sortable: false
           },
         ]
   );
