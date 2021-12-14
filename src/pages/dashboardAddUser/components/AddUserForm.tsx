@@ -10,16 +10,51 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import { useFormik } from 'formik';import { Party } from '../../../model/Party';
+import { useFormik } from 'formik';
+import { styled } from '@mui/system';
+import { Party } from '../../../model/Party';
 import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
 import useLoading from '../../../hooks/useLoading';
 import { AppError, appStateActions } from '../../../redux/slices/appStateSlice';
 import { useAppDispatch } from '../../../redux/hooks';
-import { LOADING_TASK_SAVE_PARTY_USER, LOADING_TASK_FETCH_PRODUCT_ROLES } from '../../../utils/constants';
+import {
+  LOADING_TASK_SAVE_PARTY_USER,
+  LOADING_TASK_FETCH_PRODUCT_ROLES,
+} from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
 import { ProductRole } from '../../../model/ProductRole';
 
+const CustomTextField = styled(TextField)({
+  '.MuiInput-root': {
+    '&:after': {
+      borderBottom: '2px solid #5C6F82',
+      color: 'green',
+    },
+  },
+  '.MuiInputLabel-root.Mui-focused': {
+    color: '#5C6F82',
+    fontWeight: '700',
+  },
+  '.MuiInputLabel-root': {
+    color: '#5C6F82',
+    fontSize: '16px',
+    fontWeight: '700',
+  },
+  input: {
+    '&::placeholder': {
+      fontStyle: 'italic',
+      color:'#5C6F82',
+      opacity: '1',
+    },
+  },
+});
+
+const CustomFormControlLabel = styled(FormControlLabel)({
+  '.MuiRadio-root': {
+    color: '#0073E6',
+  },
+});
 const taxCodeRegexp = new RegExp(
   '^[A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1}$'
 );
@@ -37,23 +72,23 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
   const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
   const addError = (error: AppError) => dispatch(appStateActions.addError(error));
 
-  const [productRoles, setProductRoles ] = useState <Array<ProductRole>>();
+  const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
 
   useEffect(() => {
-  setLoadingFetchRoles(true);
-   fetchProductRoles(selectedProduct)
-   .then(productRoles => setProductRoles(productRoles))
-   .catch((reason) =>
-    addError({
-      id: 'FETCH_PRODUCT_ROLES',
-      blocking: false,
-      error: reason,
-      techDescription: `An error occurred while fetching Product Roles of Product ${selectedProduct.id}`,
-      toNotify: true,
-      })
-    )
-    .finally(() => setLoadingFetchRoles(false));
-  },[]);
+    setLoadingFetchRoles(true);
+    fetchProductRoles(selectedProduct)
+      .then((productRoles) => setProductRoles(productRoles))
+      .catch((reason) =>
+        addError({
+          id: 'FETCH_PRODUCT_ROLES',
+          blocking: false,
+          error: reason,
+          techDescription: `An error occurred while fetching Product Roles of Product ${selectedProduct.id}`,
+          toNotify: true,
+        })
+      )
+      .finally(() => setLoadingFetchRoles(false));
+  }, []);
 
   const validate = (values: Partial<PartyUserOnCreation>) =>
     Object.fromEntries(
@@ -121,7 +156,6 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       InputProps: {
         style: {
           fontSize: '16px',
-          fontStyle: 'italic',
           fontWeight: 400,
           lineHeight: '24px',
           color: '#5C6F82',
@@ -136,15 +170,17 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-            <TextField {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')} />
+            <CustomTextField
+              {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
+            />
           </Grid>
           <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-            <TextField
+            <CustomTextField
               {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
             />
           </Grid>
           <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
-            <TextField
+            <CustomTextField
               {...baseTextFieldProps(
                 'taxCode',
                 'Codice Fiscale',
@@ -153,7 +189,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
             />
           </Grid>
           <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
-            <TextField
+            <CustomTextField
               {...baseTextFieldProps(
                 'email',
                 'Email',
@@ -163,23 +199,28 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
           </Grid>
 
           <Grid item xs={8} mb={3}>
-            <Typography> Ruoli * </Typography>
-            
+            <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+              Ruolo *
+            </Typography>
+
             <RadioGroup
               aria-label="user"
               name="userRole"
               value={formik.values.productRole}
               onChange={formik.handleChange}
             >
-             {productRoles?.map((p, index) => 
-             <Box key={p.productRole}>  
-             <FormControlLabel
-                value={p.productRole}
-                control={<Radio />}
-                label={p.productRole}
-              />
-              {index !== productRoles.length -1 && <Divider sx={{ border: '1px solid #CFDCE6', my: '8px' }} />}
-              </Box>)}
+              {productRoles?.map((p, index) => (
+                <Box key={p.productRole}>
+                  <CustomFormControlLabel
+                    value={p.productRole}
+                    control={<Radio />}
+                    label={p.productRole}
+                  />
+                  {index !== productRoles.length - 1 && (
+                    <Divider sx={{ border: '1px solid #CFDCE6', my: '8px' }} />
+                  )}
+                </Box>
+              ))}
             </RadioGroup>
           </Grid>
         </Grid>

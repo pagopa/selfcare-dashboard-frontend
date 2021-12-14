@@ -105,11 +105,26 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
         backgroundColor: bgColor,
         width: '100%',
         height: '100%',
-        padding: '0 10px',
+        paddingRight: '24px',
+        paddingLeft:'24px', 
+        paddingTop:'-16px',
+        paddingBottom:'-16px',
+        marginTop:'16px',
+        // marginBottom:'16px',
         borderBottom: '1px solid #CCD4DC',
-      }}
+              }}
     >
-      {value}
+      <p 
+      title={value?.toString()}
+      style={{
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 3,
+        WebkitBoxOrient: 'vertical' as const,
+        paddingBottom:'8px'
+        }}>
+      {value}</p>
     </div>
   );
 }
@@ -210,7 +225,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         cellClassName: 'justifyContentBold',
         headerName: '',
         align: 'left',
-        width: 100,
+        width: 134,
         hideSortIcons: true,
         disableColumnMenu: true,
         editable: false,
@@ -249,7 +264,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
             cellClassName: 'justifyContentNormal',
             headerName: 'PRODOTTI',
             align: 'left',
-            width: 219,
+            width: 186,
             hideSortIcons: false,
             disableColumnMenu: true,
             valueGetter: getProducts,
@@ -264,7 +279,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
             cellClassName: 'justifyContentNormalRight',
             headerName: '',
             align: 'right',
-            width: 169,
+            width: 134,
             hideSortIcons: true,
             disableColumnMenu: true,
             editable: false,
@@ -390,7 +405,8 @@ export default function UsersSearchTable({
           message={
             <>
               {`Hai ${selectedUserStatus} correttamente `}
-              <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}.`}</strong>
+              <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}`}</strong>
+              {'.'}
             </>
           }
           closeToast={() => setOpenToast(false)}
@@ -402,9 +418,10 @@ export default function UsersSearchTable({
         message={
           <>
             {selectedUser?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '}
-            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}.`}</strong>
+            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}`}</strong>
+            {'.'}
             <br />
-            {' vuoi continuare?'}
+            {'Vuoi continuare?'}
           </>
         }
         onConfirm={() => confirmChangeStatus(selectedUser)}
