@@ -14,6 +14,7 @@ type Props = {
   handleClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
   onCloseLabel?: string;
   height?: string;
+  minHeight?: string;
   width?: string;
 };
 export default function SessionModal({
@@ -25,6 +26,7 @@ export default function SessionModal({
   handleClose,
   onCloseLabel = 'Annulla',
   height = '16em',
+  minHeight = '16em',
   width = '21.9em',
 }: Props) {
   const theme = useTheme();
@@ -37,7 +39,7 @@ export default function SessionModal({
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <Grid container direction="column" sx={{ height, width }}>
+      <Grid container direction="column" sx={{ height,minHeight, width }}>
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>

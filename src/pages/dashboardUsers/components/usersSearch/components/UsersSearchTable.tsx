@@ -105,11 +105,26 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
         backgroundColor: bgColor,
         width: '100%',
         height: '100%',
-        padding: '0 10px',
+        paddingRight: '24px',
+        paddingLeft:'24px', 
+        paddingTop:'-16px',
+        paddingBottom:'-16px',
+        marginTop:'16px',
+        // marginBottom:'16px',
         borderBottom: '1px solid #CCD4DC',
-      }}
+              }}
     >
-      {value}
+      <div
+      title={value?.toString()}
+      style={{
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 3,
+        WebkitBoxOrient: 'vertical' as const,
+        paddingBottom:'8px'
+        }}>
+      {value}</div>
     </div>
   );
 }
@@ -204,17 +219,19 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         valueGetter: getFullName,
         renderHeader: showCustmHeader,
         renderCell,
+        sortable: false
       },
       {
         field: 'stato',
         cellClassName: 'justifyContentBold',
         headerName: '',
         align: 'left',
-        width: 100,
+        width: 134,
         hideSortIcons: true,
         disableColumnMenu: true,
         editable: false,
         renderCell: showChip,
+        sortable: false
       },
       {
         field: 'email',
@@ -227,6 +244,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         disableColumnMenu: true,
         renderHeader: showCustmHeader,
         renderCell,
+        sortable: false
       },
       {
         field: 'userRole',
@@ -239,6 +257,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         disableColumnMenu: true,
         renderCell: showLabelRef,
         renderHeader: showCustmHeader,
+        sortable: false
       },
     ] as Array<GridColDef>
   ).concat(
@@ -249,13 +268,14 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
             cellClassName: 'justifyContentNormal',
             headerName: 'PRODOTTI',
             align: 'left',
-            width: 219,
+            width: 186,
             hideSortIcons: false,
             disableColumnMenu: true,
             valueGetter: getProducts,
             editable: false,
             renderCell,
             renderHeader: showCustmHeader,
+            sortable: false
           },
         ]
       : [
@@ -264,11 +284,12 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
             cellClassName: 'justifyContentNormalRight',
             headerName: '',
             align: 'right',
-            width: 169,
+            width: 134,
             hideSortIcons: true,
             disableColumnMenu: true,
             editable: false,
             renderCell: (p) => showRefStatus(p, onChangeState),
+            sortable: false
           },
         ]
   );
@@ -390,7 +411,8 @@ export default function UsersSearchTable({
           message={
             <>
               {`Hai ${selectedUserStatus} correttamente `}
-              <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}.`}</strong>
+              <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}`}</strong>
+              {'.'}
             </>
           }
           closeToast={() => setOpenToast(false)}
@@ -402,9 +424,10 @@ export default function UsersSearchTable({
         message={
           <>
             {selectedUser?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '}
-            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}.`}</strong>
+            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}`}</strong>
+            {'.'}
             <br />
-            {' vuoi continuare?'}
+            {'Vuoi continuare?'}
           </>
         }
         onConfirm={() => confirmChangeStatus(selectedUser)}

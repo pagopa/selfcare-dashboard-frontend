@@ -6,9 +6,10 @@ import { Party } from '../../../../../model/Party';
 
 type Props = {
   party: Party;
+  canUploadLogo: boolean;
 };
 
-export default function PartyDetail({ party }: Props) {
+export default function PartyDetail({ party, canUploadLogo }: Props) {
   return (
     <Grid container direction="column" alignItems={'flex-start'}>
       <Grid item>
@@ -133,14 +134,14 @@ export default function PartyDetail({ party }: Props) {
         >
           {party.digitalAddress}
         </Typography>
-        <Box display="flex" alignItems="center" pt={3}>
+        {canUploadLogo && <Box display="flex" alignItems="center" pt={3}>
           <InfoOutlined sx={{ width: '20px', height: '20spx', mr: '4px', color: '#5C6F82' }} />
           <Typography variant="body2" sx={{ fontSize: '12px' }}>
             Per modificare questi dati,&nbsp;
             <Link href="https://indicepa.gov.it/ipa-portale/contatti">contatta</Link>
             &nbsp;l&apos;Indice della Pubblica Amministrazione (IPA)
           </Typography>
-        </Box>
+        </Box>}
       </Grid>
     </Grid>
   );

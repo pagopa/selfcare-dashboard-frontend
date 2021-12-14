@@ -17,7 +17,7 @@ export default function PartyCard({ party }: Props) {
     >
       <Grid container direction="row" alignItems={'center'} px={4}>
         <Grid item xs={9}>
-          <PartyDetail party={party} />
+          <PartyDetail party={party} canUploadLogo={canUploadLogo}/>
         </Grid>
 
         <Grid item xs={3}>

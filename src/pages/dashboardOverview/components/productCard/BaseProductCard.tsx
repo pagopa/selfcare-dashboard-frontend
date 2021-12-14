@@ -73,7 +73,7 @@ export default function BaseProductCard({
           </Grid>
           <Grid item xs={12} mb={3} height={heightSubTitle} display="flex" alignItems={'center'}>
             {cardSubTitle && (
-              <Typography variant="body2" sx={cardSubTitleStyle}>
+              <Typography variant="body2" sx={cardSubTitleStyle} title={cardSubTitle.toString()}>
                 {cardSubTitle}
               </Typography>
             )}
