@@ -8,6 +8,7 @@ export type AppError = {
   errorInfo?: ErrorInfo;
   blocking: boolean;
   techDescription: string;
+  displayableTitle?: string;
   displayableDescription?: string;
   onRetry?: () => void;
   onClose?: () => void;
