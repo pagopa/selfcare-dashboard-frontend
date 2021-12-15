@@ -22,6 +22,8 @@ declare namespace NodeJS {
     REACT_APP_PAGOPA_HELP_EMAIL: string;
 
     REACT_APP_PARTY_USERS_PAGE_SIZE: string;
+
+    REACT_APP_ENABLE_ASSISTANCE: string;
   }
 }
 interface Window {
