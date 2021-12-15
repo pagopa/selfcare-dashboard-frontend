@@ -29,3 +29,5 @@ export const roleLabels: { [key in UserRole]: { shortLabel: string; longLabel: s
 };
 
 export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;
+
+export const ENABLE_ASSISTANCE = process.env.REACT_APP_ENABLE_ASSISTANCE === 'true';
