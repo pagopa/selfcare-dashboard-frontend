@@ -217,7 +217,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
                     label={p.productRole}
                   />
                   {index !== productRoles.length - 1 && (
-                    <Divider sx={{ border: '1px solid #CFDCE6', my: '8px' }} />
+                    <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
                   )}
                 </Box>
               ))}

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Button, Box, Grid, Badge, Card, CardContent } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Typography, Button, Box, Grid, Card, CardContent } from '@mui/material';
 import SessionModal from '../../../../components/SessionModal';
 
 type Props = {
@@ -17,14 +16,6 @@ type Props = {
   heightButton?: string;
   status?: string;
 };
-
-const CustomBadge = styled(Badge)({
-  '.MuiBadge-badge': {
-    backgroundColor: '#00C5CA',
-    color: 'text.primary',
-    fontWeight: '600',
-  },
-});
 
 const cardSubTitleStyle = {
   fontSize: '18px',
@@ -63,8 +54,35 @@ export default function BaseProductCard({
               </Box>
             </Grid>
             {tag && (
-              <Grid item xs={6}>
-                <CustomBadge badgeContent={tag} sx={{ minWidth: '113px' }} />
+              <Grid item xs={6} 
+              display="flex" justifyContent="end"
+              >
+                <Box
+                  sx={{
+                    display:"flex",
+                    justifyContent:"center",
+                    maxWidth: '103px',
+                    minWidth: '50px',
+                    height: '18px',
+                    backgroundColor: '#00C5CA',
+                    color: 'text.primary',
+                    padding: '0 10px',
+                    borderRadius: '56px',
+                  }}
+                >
+                  <Typography
+                  title={tag}
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {tag}
+                  </Typography>
+                </Box>
               </Grid>
             )}
           </Grid>

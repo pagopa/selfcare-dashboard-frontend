@@ -21,7 +21,7 @@ const Dashboard = () => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
 
   return party && products ? (
-    <Grid container item pl={10} xs={12}>
+    <Grid container item  pl={{xs:2,lg:4}} xs={12}>
       <Grid item xs={2}>
         <Box sx={{ backgroundColor: 'background.default' }}>
           <DashboardSideMenu products={products} party={party} />
