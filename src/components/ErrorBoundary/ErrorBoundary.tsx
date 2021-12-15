@@ -52,7 +52,7 @@ class ErrorBoundary extends Component<Props> {
     return (
       <SessionModal
         open={true}
-        title="Errore"
+        title={error.displayableTitle ?? 'Errore'}
         message={error.displayableDescription ?? 'Spiacenti, qualcosa è andato storto.'}
         onConfirm={error.onRetry ? () => this.retryError(error) : undefined}
         handleClose={() => {

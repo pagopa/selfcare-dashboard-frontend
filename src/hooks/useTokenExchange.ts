@@ -3,7 +3,7 @@ import { useAppDispatch } from '../redux/hooks';
 import { Product } from '../model/Product';
 import { retrieveTokenExchange } from '../services/tokenExchangeService';
 import { Party } from '../model/Party';
-import { appStateActions } from '../redux/slices/appStateSlice';
+import { AppError, appStateActions } from '../redux/slices/appStateSlice';
 import useLoading from './useLoading';
 
 const tokenPlaceholder = '[identityToken]';
@@ -11,26 +11,36 @@ const hostnameRegexp = /(?<=^https?:\/\/)[-.a-zA-Z0-9_]+/;
 
 export const useTokenExchange = () => {
   const dispatch = useAppDispatch();
+  const addError = (error: AppError): void => {
+    dispatch(appStateActions.addError(error));
+  };
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE);
 
   const invokeProductBo = async (product: Product, selectedParty: Party): Promise<void> => {
     const result = validateUrlBO(product.urlBO);
     if (result instanceof Error) {
-      dispatch(
-        appStateActions.addError({
-          id: `ValidationUrlError-${product.id}`,
-          blocking: false,
-          error: result,
-          techDescription: result.message,
-          toNotify: true,
-        })
-      );
+      addError({
+        id: `ValidationUrlError-${product.id}`,
+        blocking: false,
+        error: result,
+        techDescription: result.message,
+        toNotify: true,
+      });
       return;
     }
 
     setLoading(true);
     retrieveTokenExchange(result, selectedParty, product)
       .then((t) => window.location.assign(product.urlBO.replace(tokenPlaceholder, t)))
+      .catch((error) =>
+        addError({
+          id: `TokenExchangeError-${product.id}`,
+          blocking: false,
+          error,
+          techDescription: `Something gone wrong retrieving token exchange for product ${product.id}`,
+          toNotify: true,
+        })
+      )
       .finally(() => setLoading(false));
   };
 

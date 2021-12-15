@@ -1,5 +1,7 @@
 import { storageRead } from '../utils/storage-utils';
 import { STORAGE_KEY_TOKEN } from '../utils/constants';
+import { store } from '../redux/store';
+import { appStateActions } from '../redux/slices/appStateSlice';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
@@ -24,27 +26,40 @@ const apiClient = createClient({
   withDefaults: withBearerAndInstitutionId,
 });
 
+const onRedirectToLogin = () =>
+  store.dispatch(
+    appStateActions.addError({
+      id: 'tokenNotValid',
+      error: new Error(),
+      techDescription: 'token expired or not valid',
+      toNotify: false,
+      blocking: false,
+      displayableTitle: 'Sessione scaduta',
+      displayableDescription: 'Stai per essere rediretto alla pagina di login...',
+    })
+  );
+
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionResource>> => {
     const result = await apiClient.getInstitutionsUsingGET({});
-    return extractResponse(result, 200);
+    return extractResponse(result, 200, onRedirectToLogin);
   },
   getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
     const result = await apiClient.getInstitutionUsingGET({
       institutionId,
     });
-    return extractResponse(result, 200);
+    return extractResponse(result, 200, onRedirectToLogin);
   },
   getProducts: async (institutionId: string): Promise<Array<ProductsResource>> => {
     const result = await apiClient.getInstitutionProductsUsingGET({ institutionId });
-    return extractResponse(result, 200);
+    return extractResponse(result, 200, onRedirectToLogin);
   },
   uploadLogo: async (institutionId: string, logo: File): Promise<boolean> => {
     const result = await apiClient.saveInstitutionLogoUsingPUT({
       institutionId,
       logo,
     });
-    return extractResponse(result, 200);
+    return extractResponse(result, 200, onRedirectToLogin);
   },
   getTokenExchange: async (
     hostname: string,
@@ -55,6 +70,6 @@ export const DashboardApi = {
       productId,
       realm: hostname,
     });
-    return extractResponse(result, 200);
+    return extractResponse(result, 200, onRedirectToLogin);
   },
 };
