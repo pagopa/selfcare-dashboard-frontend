@@ -44,16 +44,19 @@ export const DashboardApi = {
     const result = await apiClient.getInstitutionsUsingGET({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
+
   getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
     const result = await apiClient.getInstitutionUsingGET({
       institutionId,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
+
   getProducts: async (institutionId: string): Promise<Array<ProductsResource>> => {
     const result = await apiClient.getInstitutionProductsUsingGET({ institutionId });
     return extractResponse(result, 200, onRedirectToLogin);
   },
+
   uploadLogo: async (institutionId: string, logo: File): Promise<boolean> => {
     const result = await apiClient.saveInstitutionLogoUsingPUT({
       institutionId,
@@ -61,15 +64,22 @@ export const DashboardApi = {
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
+
   getTokenExchange: async (
     hostname: string,
-    _institutionId: string,
+    institutionId: string,
     productId: string
   ): Promise<string> => {
     const result = await apiClient.exchangeUsingGET({
       productId,
+      institutionId,
       realm: hostname,
     });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getPartyUsers: async (institutionId: string): Promise<> => {
+    const result = await apiClient.getInstitutionUsersUsingGET({ institutionId });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 };
