@@ -37,7 +37,7 @@ function AddUserContainer({ party, selectedProduct }: Props) {
     <Grid
       container
       alignItems={'center'}
-      px={0}
+      px={2}
       mt={10}
       sx={{ width: '953px', backgroundColor: 'transparent !important' }}
     >
@@ -50,7 +50,7 @@ function AddUserContainer({ party, selectedProduct }: Props) {
           subTitle={`Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.description}`}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} >
         <AddUserForm party={party} selectedProduct={selectedProduct} />
       </Grid>
     </Grid>

@@ -12,7 +12,7 @@ type Props = {
 };
 
 const DashboardOverview = ({ party, products }: Props) => (
-  <Box sx={{ width: '953px' }}>
+  <Box sx={{ width: '953px',padding:'0 16px'}} >
     <WelcomeDashboard />
     <Grid container direction="row" justifyContent={'center'}>
       <PartyCard party={party} />

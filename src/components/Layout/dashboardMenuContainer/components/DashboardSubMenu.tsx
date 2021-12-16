@@ -4,6 +4,7 @@ import { IconButton, Grid, Divider, Button, Popper, ClickAwayListener, Paper } f
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useHistory } from 'react-router';
 import { uniqueId } from 'lodash';
+import styled from '@emotion/styled';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import ROUTES, { resolvePathVariables } from '../../../../routes';
@@ -13,6 +14,11 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../redux/slices/partiesSlice';
 import { AppError, appStateActions } from '../../../../redux/slices/appStateSlice';
 import LogoSubMenu from './LogoSubMenu';
+
+const CustomIconButton = styled(IconButton)({
+  '&:hover':{ backgroundColor:'transparent' },
+});
+
 
 type Props = {
   ownerName: string;
@@ -75,9 +81,9 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
   return (
     <Grid container justifyContent="center" sx={{ height: '100%' }}>
       <Grid item>
-        <IconButton onClick={handleClick} sx={{ height: '100%' }}>
+        <CustomIconButton onClick={handleClick} sx={{ height: '100%' }} disableRipple={true}>
           {open ? <ExpandLess sx={{ color: 'white' }} /> : <ExpandMore sx={{ color: 'white' }} />}
-        </IconButton>
+        </CustomIconButton>
         <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
           <ClickAwayListener onClickAway={handleClose}>
             <Paper
@@ -100,7 +106,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                   <LogoSubMenu title={description} subTitle={role} />
                 </Grid>
                 <Grid item xs={12}>
-                  <Divider sx={{ border: '1px solid #CCD4DC' }} />
+                  <Divider sx={{ borderColor: '#CCD4DC' }} />
                 </Grid>
                 <Grid item mx={3} mb={3} xs={12}>
                   {parties2Show && (
