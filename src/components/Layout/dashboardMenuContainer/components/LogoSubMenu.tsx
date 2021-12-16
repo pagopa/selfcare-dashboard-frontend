@@ -15,7 +15,7 @@ export default function LogoSubMenu({ title, subTitle, color }: Props) {
     <React.Fragment>
       <Grid container>
         <Grid item xs={3}>
-          <Box px={1}>
+          <Box>
             <CustomAvatar customAlt="" customSrc={urlLogo} />
           </Box>
         </Grid>
