@@ -492,11 +492,11 @@
       }
     },
     "/products/{productId}/roles": {
-      "post": {
+      "get": {
         "tags": ["products"],
         "summary": "getProductRoles",
         "description": "Service to get the Product roles",
-        "operationId": "getProductRolesUsingPOST",
+        "operationId": "getProductRolesUsingGET",
         "parameters": [
           {
             "name": "productId",
@@ -532,9 +532,6 @@
                 }
               }
             }
-          },
-          "201": {
-            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -582,11 +579,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "201": {
             "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized"
@@ -634,11 +631,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "201": {
             "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized"

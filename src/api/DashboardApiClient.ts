@@ -99,31 +99,31 @@ export const DashboardApi = {
     institutionId: string,
     productId: string,
     user: PartyUserOnCreation
-  ): Promise<Array<InstitutionUserResource>> => {
+  ): Promise<void> => {
     const result = await apiClient.createInstitutionProductUserUsingPOST({
       institutionId,
       productId,
       body: user,
     });
-    return extractResponse(result, 200, onRedirectToLogin);
+    return extractResponse(result, 201, onRedirectToLogin);
   },
 
   suspendPartyRelation: async (relationshipId: string): Promise<void> => {
     const result = await apiClient.suspendRelationshipUsingPOST({
       relationshipId,
     });
-    return extractResponse(result, 200, onRedirectToLogin);
+    return extractResponse(result, 204, onRedirectToLogin);
   },
 
   activatePartyRelation: async (relationshipId: string): Promise<void> => {
     const result = await apiClient.activateRelationshipUsingPOST({
       relationshipId,
     });
-    return extractResponse(result, 200, onRedirectToLogin);
+    return extractResponse(result, 204, onRedirectToLogin);
   },
 
   getProductRoles: async (productId: string): Promise<Array<string>> => {
-    const result = await apiClient.getProductRolesUsingPOST({
+    const result = await apiClient.getProductRolesUsingGET({
       productId,
     });
     return extractResponse(result, 200, onRedirectToLogin);

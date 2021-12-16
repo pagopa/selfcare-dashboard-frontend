@@ -3,6 +3,7 @@ import { PageResource } from '../../model/PageResource';
 import { Party, UserRole } from '../../model/Party';
 import { PartyUser } from '../../model/PartyUser';
 import { Product } from '../../model/Product';
+import { ProductRole } from '../../model/ProductRole';
 
 export const mockedUsers: Array<PartyUser> = [
   {
@@ -352,3 +353,6 @@ export const fetchPartyUsers = (
   };
   return new Promise((resolve) => resolve({ content: filteredContent, page }));
 };
+
+export const fetchProductRoles = (_product: Product): Promise<Array<ProductRole>> =>
+  new Promise((resolve) => resolve(mockedProductRoles));
