@@ -44,7 +44,7 @@ const CustomTextField = styled(TextField)({
   input: {
     '&::placeholder': {
       fontStyle: 'italic',
-      color:'#5C6F82',
+      color: '#5C6F82',
       opacity: '1',
     },
   },
@@ -105,17 +105,17 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
           : !emailRegexp.test(values.email)
           ? 'L’indirizzo email non è valido'
           : undefined,
-        userRole: !values.productRole ? requiredError : undefined,
+        productRole: !values.productRole ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
 
-  const formik = useFormik<Partial<PartyUserOnCreation>>({
+  const formik = useFormik<PartyUserOnCreation>({
     initialValues: {
       name: '',
       surname: '',
       taxCode: '',
       email: '',
-      productRole: undefined,
+      productRole: '',
     },
     validate,
     onSubmit: (values) => {
@@ -205,7 +205,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
 
             <RadioGroup
               aria-label="user"
-              name="userRole"
+              name="productRole"
               value={formik.values.productRole}
               onChange={formik.handleChange}
             >
