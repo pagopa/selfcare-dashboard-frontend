@@ -36,25 +36,25 @@ beforeEach(() => {
 });
 
 test('validateUrlBO', () => {
-  expect(validateUrlBO('https://hostname/path[identityToken]')).toBe('hostname');
-  expect(validateUrlBO('http://hostname/path[identityToken]')).toBe('hostname');
+  expect(validateUrlBO('https://hostname/path<identityToken>')).toBe('hostname');
+  expect(validateUrlBO('http://hostname/path<identityToken>')).toBe('hostname');
 
-  const wrongProtocolError = validateUrlBO('wrongprotocolhttp://hostname/path[identityToken]');
+  const wrongProtocolError = validateUrlBO('wrongprotocolhttp://hostname/path<identityToken>');
   expect(wrongProtocolError instanceof Error).toBeTruthy();
   expect((wrongProtocolError as Error).message).toBe(
-    'Cannot extract hostname from URL: wrongprotocolhttp://hostname/path[identityToken]'
+    'Cannot extract hostname from URL: wrongprotocolhttp://hostname/path<identityToken>'
   );
 
-  const wrongUrlError = validateUrlBO('wrongUrl/[identityToken]');
+  const wrongUrlError = validateUrlBO('wrongUrl/<identityToken>');
   expect(wrongUrlError instanceof Error).toBeTruthy();
   expect((wrongUrlError as Error).message).toBe(
-    'Cannot extract hostname from URL: wrongUrl/[identityToken]'
+    'Cannot extract hostname from URL: wrongUrl/<identityToken>'
   );
 
   const missingTokenPlaceholderError = validateUrlBO('https://hostname/path');
   expect(missingTokenPlaceholderError instanceof Error).toBeTruthy();
   expect((missingTokenPlaceholderError as Error).message).toBe(
-    "URL doesn't contain token placeholder [identityToken]: https://hostname/path"
+    "URL doesn't contain token placeholder <identityToken>: https://hostname/path"
   );
 });
 
@@ -92,7 +92,7 @@ describe('useTokenExchange', () => {
   });
 
   test('test redirect', async () => {
-    const store = renderApp('https://hostname/path#[identityToken]');
+    const store = renderApp('https://hostname/path#<identityToken>');
     expect(store.getState().appState.errors.length).toBe(0);
     await waitFor(() => expect(store.getState().appState.loading.result).toBeFalsy());
 
