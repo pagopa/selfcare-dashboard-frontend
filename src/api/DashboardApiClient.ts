@@ -1,9 +1,7 @@
-import { string } from 'fp-ts';
 import { storageRead } from '../utils/storage-utils';
 import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { store } from '../redux/store';
 import { appStateActions } from '../redux/slices/appStateSlice';
-import { PartyUserOnCreation } from '../model/PartyUser';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
