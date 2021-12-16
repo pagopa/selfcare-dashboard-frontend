@@ -2,9 +2,28 @@ import { PageRequest } from '../model/PageRequest';
 import { PageResource } from '../model/PageResource';
 import { Party, UserRole, UserStatus } from '../model/Party';
 import { Product } from '../model/Product';
-import { PartyUser, PartyUserOnCreation } from '../model/PartyUser';
+import {
+  institutionUserResource2PartyUser,
+  PartyUser,
+  PartyUserOnCreation,
+  productUserResource2PartyUser,
+} from '../model/PartyUser';
 import { ProductRole } from '../model/ProductRole';
-import { fetchPartyUsers as fetchPartyUsersMocked, mockedProductRoles } from './__mocks__/usersService';
+import { DashboardApi } from '../api/DashboardApiClient';
+import {
+  fetchPartyUsers as fetchPartyUsersMocked,
+  mockedProductRoles,
+} from './__mocks__/usersService';
+
+const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
+  content,
+  page: {
+    number: 0,
+    size: content.length,
+    totalElements: content.length,
+    totalPages: 1,
+  },
+});
 
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
@@ -16,30 +35,53 @@ export const fetchPartyUsers = (
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return fetchPartyUsersMocked(pageRequest, party, product, role);
   } else {
-    return new Promise((_, error) => error('TODO'));
+    if (product) {
+      return DashboardApi.getPartyProductUsers(party.institutionId, product.id).then((r) =>
+        toFakePagination(r.map((r) => productUserResource2PartyUser(product, r)))
+      );
+    } else {
+      return DashboardApi.getPartyUsers(party.institutionId).then((r) =>
+        toFakePagination(r.map(institutionUserResource2PartyUser))
+      );
+    }
   }
 };
 
 export const savePartyUser = (
-  _party: Party,
-  _product: Product,
-  _user: PartyUserOnCreation
-): Promise<any> => new Promise((_, error) => error('TODO'));
+  party: Party,
+  product: Product,
+  user: PartyUserOnCreation
+): Promise<any> => DashboardApi.savePartyUser(party.institutionId, product.id, user);
 
-export const updatePartyUserStatus = (
-  _party: Party,
-  _product: Product,
-  _user: PartyUser,
-  _status: UserStatus
-): Promise<any> => new Promise((resolve) => resolve('ok')); // TODO
+export const updatePartyUserStatus = (user: PartyUser, status: UserStatus): Promise<any> => {
+  if (user.products.length !== 1) {
+    throw new Error(
+      `Updated allowed only for users having selected only 1 product: ${user.products.length}`
+    );
+  }
+  if (!user.products[0].relationshipId) {
+    throw new Error(
+      `Updated allowed only for users retrieved using getPartyProductUsers (no relationshipId): ${JSON.stringify(
+        user.products[0]
+      )}`
+    );
+  }
+  if (status === 'ACTIVE') {
+    return DashboardApi.activatePartyRelation(user.products[0].relationshipId);
+  } else if (status === 'SUSPENDED') {
+    return DashboardApi.suspendPartyRelation(user.products[0].relationshipId);
+  } else {
+    throw new Error(`Not allowed next status: ${status}`);
+  }
+};
 
-export const fetchProductRoles = (
-  _product?: Product,
-): Promise<Array<ProductRole>> => {
+export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
-    return new Promise((resolve)=> resolve(mockedProductRoles));
+    return new Promise((resolve) => resolve(mockedProductRoles));
   } else {
-    return new Promise((_, error) => error('TODO'));
+    return DashboardApi.getProductRoles(product.id).then((roles) =>
+      roles.map((r) => ({ productRole: r }))
+    );
   }
-}; 
+};

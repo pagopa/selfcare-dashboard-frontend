@@ -106,25 +106,27 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
         width: '100%',
         height: '100%',
         paddingRight: '24px',
-        paddingLeft:'24px', 
-        paddingTop:'-16px',
-        paddingBottom:'-16px',
-        marginTop:'16px',
+        paddingLeft: '24px',
+        paddingTop: '-16px',
+        paddingBottom: '-16px',
+        marginTop: '16px',
         // marginBottom:'16px',
         borderBottom: '1px solid #CCD4DC',
-              }}
+      }}
     >
       <div
-      title={value?.toString()}
-      style={{
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: '-webkit-box',
-        WebkitLineClamp: 3,
-        WebkitBoxOrient: 'vertical' as const,
-        paddingBottom:'8px'
-        }}>
-      {value}</div>
+        title={value?.toString()}
+        style={{
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical' as const,
+          paddingBottom: '8px',
+        }}
+      >
+        {value}
+      </div>
     </div>
   );
 }
@@ -219,7 +221,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         valueGetter: getFullName,
         renderHeader: showCustmHeader,
         renderCell,
-        sortable: false
+        sortable: false,
       },
       {
         field: 'stato',
@@ -231,7 +233,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         disableColumnMenu: true,
         editable: false,
         renderCell: showChip,
-        sortable: false
+        sortable: false,
       },
       {
         field: 'email',
@@ -244,7 +246,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         disableColumnMenu: true,
         renderHeader: showCustmHeader,
         renderCell,
-        sortable: false
+        sortable: false,
       },
       {
         field: 'userRole',
@@ -257,7 +259,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
         disableColumnMenu: true,
         renderCell: showLabelRef,
         renderHeader: showCustmHeader,
-        sortable: false
+        sortable: false,
       },
     ] as Array<GridColDef>
   ).concat(
@@ -275,7 +277,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
             editable: false,
             renderCell,
             renderHeader: showCustmHeader,
-            sortable: false
+            sortable: false,
           },
         ]
       : [
@@ -289,7 +291,7 @@ function buildColumnDefs(isSelectedProduct: boolean, onChangeState: (user: Party
             disableColumnMenu: true,
             editable: false,
             renderCell: (p) => showRefStatus(p, onChangeState),
-            sortable: false
+            sortable: false,
           },
         ]
   );
@@ -338,7 +340,7 @@ export default function UsersSearchTable({
       }
 
       setLoading(true);
-      updatePartyUserStatus(party, selectedProduct, user, nextStatus)
+      updatePartyUserStatus(user, nextStatus)
         .then((_) => {
           setOpenModal(false);
           // eslint-disable-next-line functional/immutable-data

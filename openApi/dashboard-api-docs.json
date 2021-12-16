@@ -17,8 +17,16 @@
       "description": "Institution operations"
     },
     {
+      "name": "products",
+      "description": "Products operations"
+    },
+    {
+      "name": "relationships",
+      "description": "Relationships operations"
+    },
+    {
       "name": "token",
-      "description": "Token Controller"
+      "description": "Token operations"
     }
   ],
   "paths": {
@@ -26,7 +34,7 @@
       "get": {
         "tags": ["institutions"],
         "summary": "getInstitutions",
-        "description": "${swagger.dashboard.institutions.api.getInstitutions}",
+        "description": "Service to get all the institutions related to logged user",
         "operationId": "getInstitutionsUsingGET",
         "parameters": [
           {
@@ -75,7 +83,7 @@
       "get": {
         "tags": ["institutions"],
         "summary": "getInstitution",
-        "description": "The service allows the recovery of an Entity based on its id",
+        "description": "Service to get a specific institution related to logged user",
         "operationId": "getInstitutionUsingGET",
         "parameters": [
           {
@@ -212,7 +220,7 @@
       "get": {
         "tags": ["institutions"],
         "summary": "getInstitutionProducts",
-        "description": "Service that returns the list of products related to the institution",
+        "description": "Service to get all the products related to a specific institution",
         "operationId": "getInstitutionProductsUsingGET",
         "parameters": [
           {
@@ -271,7 +279,7 @@
       "get": {
         "tags": ["institutions"],
         "summary": "getInstitutionProductUsers",
-        "description": "Service that returns the list of products related to the institution",
+        "description": "Service to get all the users related to a specific pair of institution-product",
         "operationId": "getInstitutionProductUsersUsingGET",
         "parameters": [
           {
@@ -302,6 +310,17 @@
             "style": "simple",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "description": "User's role",
+            "required": false,
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "enum": ["ADMIN", "LIMITED"]
             }
           }
         ],
@@ -334,13 +353,79 @@
             "bearerAuth": ["global"]
           }
         ]
+      },
+      "post": {
+        "tags": ["institutions"],
+        "summary": "createInstitutionProductUser",
+        "description": "Service to Create a user related to a specific pair of institution-product",
+        "operationId": "createInstitutionProductUserUsingPOST",
+        "parameters": [
+          {
+            "name": "institutionId",
+            "in": "path",
+            "description": "Institution's unique identifier (i.e.: IPA code)",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-selc-institutionId",
+            "in": "header",
+            "description": "Institution's unique identifier (i.e.: IPA code)",
+            "required": false,
+            "allowReserved": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product's unique identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
       }
     },
     "/institutions/{institutionId}/users": {
       "get": {
         "tags": ["institutions"],
         "summary": "getInstitutionUsers",
-        "description": "Service that returns the list of products related to the institution",
+        "description": "Service to get all the users related to a specific institution",
         "operationId": "getInstitutionUsersUsingGET",
         "parameters": [
           {
@@ -361,6 +446,17 @@
             "allowReserved": false,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "description": "User's role",
+            "required": false,
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "enum": ["ADMIN", "LIMITED"]
             }
           }
         ],
@@ -395,10 +491,177 @@
         ]
       }
     },
+    "/products/{productId}/roles": {
+      "post": {
+        "tags": ["products"],
+        "summary": "getProductRoles",
+        "description": "Service to get the Product roles",
+        "operationId": "getProductRolesUsingPOST",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product's unique identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-selc-institutionId",
+            "in": "header",
+            "description": "Institution's unique identifier (i.e.: IPA code)",
+            "required": false,
+            "allowReserved": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
+    },
+    "/relationships/{relationshipId}/activate": {
+      "post": {
+        "tags": ["relationships"],
+        "summary": "activateRelationship",
+        "description": "Activate the relationship",
+        "operationId": "activateRelationshipUsingPOST",
+        "parameters": [
+          {
+            "name": "relationshipId",
+            "in": "path",
+            "description": "Unique relationship identifier between User and Product",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-selc-institutionId",
+            "in": "header",
+            "description": "Institution's unique identifier (i.e.: IPA code)",
+            "required": false,
+            "allowReserved": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
+    },
+    "/relationships/{relationshipId}/suspend": {
+      "post": {
+        "tags": ["relationships"],
+        "summary": "suspendRelationship",
+        "description": "Suspend the relationship",
+        "operationId": "suspendRelationshipUsingPOST",
+        "parameters": [
+          {
+            "name": "relationshipId",
+            "in": "path",
+            "description": "Unique relationship identifier between User and Product",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-selc-institutionId",
+            "in": "header",
+            "description": "Institution's unique identifier (i.e.: IPA code)",
+            "required": false,
+            "allowReserved": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
+    },
     "/token/exchange": {
       "get": {
         "tags": ["token"],
         "summary": "exchange",
+        "description": "Service create an 'Identity Token' based on a Self Care session token",
         "operationId": "exchangeUsingGET",
         "parameters": [
           {
@@ -473,6 +736,33 @@
   },
   "components": {
     "schemas": {
+      "CreateUserDto": {
+        "title": "CreateUserDto",
+        "required": ["email", "name", "productRole", "surname", "taxCode"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Institution's unique identifier (i.e.: IPA code)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Institution's unique identifier (i.e.: IPA code)"
+          },
+          "productRole": {
+            "type": "string",
+            "description": "Institution's unique identifier (i.e.: IPA code)"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Institution's unique identifier (i.e.: IPA code)"
+          },
+          "taxCode": {
+            "type": "string",
+            "description": "Institution's unique identifier (i.e.: IPA code)"
+          }
+        }
+      },
       "IdentityTokenResource": {
         "title": "IdentityTokenResource",
         "required": ["token"],

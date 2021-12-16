@@ -2,12 +2,14 @@ import { storageRead } from '../utils/storage-utils';
 import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { store } from '../redux/store';
 import { appStateActions } from '../redux/slices/appStateSlice';
+import { PartyUserOnCreation } from '../model/PartyUser';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
+import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 
 const dashboardBaseUrl = process.env.REACT_APP_URL_API_DASHBOARD;
 const dashboardTimeoutMs = process.env.REACT_APP_API_DASHBOARD_TIMEOUT_MS;
@@ -71,7 +73,7 @@ export const DashboardApi = {
     hostname: string,
     institutionId: string,
     productId: string
-  ): Promise<string> => {
+  ): Promise<IdentityTokenResource> => {
     const result = await apiClient.exchangeUsingGET({
       productId,
       institutionId,
@@ -85,16 +87,45 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  /* savePartyUser: async (institutionId: string, productId: string, user: PartyUserOnCreation): Promise<Array<InstitutionUserResource>> => {
-    const result = await apiClient.saveInstitutionLogoUsingPUT({ institutionId, productId, user });
-    return extractResponse(result, 200, onRedirectToLogin);
-  }, */
-
   getPartyProductUsers: async (
     institutionId: string,
     productId: string
   ): Promise<Array<ProductUserResource>> => {
     const result = await apiClient.getInstitutionProductUsersUsingGET({ institutionId, productId });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  savePartyUser: async (
+    institutionId: string,
+    productId: string,
+    user: PartyUserOnCreation
+  ): Promise<Array<InstitutionUserResource>> => {
+    const result = await apiClient.createInstitutionProductUserUsingPOST({
+      institutionId,
+      productId,
+      body: user,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  suspendPartyRelation: async (relationshipId: string): Promise<void> => {
+    const result = await apiClient.suspendRelationshipUsingPOST({
+      relationshipId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  activatePartyRelation: async (relationshipId: string): Promise<void> => {
+    const result = await apiClient.activateRelationshipUsingPOST({
+      relationshipId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getProductRoles: async (productId: string): Promise<Array<string>> => {
+    const result = await apiClient.getProductRolesUsingPOST({
+      productId,
+    });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 };
