@@ -6,6 +6,7 @@ import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
+import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
 
 const dashboardBaseUrl = process.env.REACT_APP_URL_API_DASHBOARD;
 const dashboardTimeoutMs = process.env.REACT_APP_API_DASHBOARD_TIMEOUT_MS;
@@ -78,7 +79,7 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getPartyUsers: async (institutionId: string): Promise<> => {
+  getPartyUsers: async (institutionId: string): Promise<Array<InstitutionUserResource>> => {
     const result = await apiClient.getInstitutionUsersUsingGET({ institutionId });
     return extractResponse(result, 200, onRedirectToLogin);
   },

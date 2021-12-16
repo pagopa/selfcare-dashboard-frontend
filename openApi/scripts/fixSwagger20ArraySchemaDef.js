@@ -5,7 +5,7 @@ console.log(`Fixing Swagger 2.0 schema array definition in ${process.argv[2]}`);
 
 const filePath = process.argv[2];
 const pattern =
-  /"schema"\s*:\s*\{[^{]+\{\s*"\$ref"\s*:\s*"#\/definitions\/([^"]+)"[^,]+,\s+"type"\s*:\s*"array"[^}]+}((?:\n|.)*"definitions"\s*:\s*\{)/gms;
+  /"schema"\s*:\s*\{[^{]+\{\s*"\$ref"\s*:\s*"#\/definitions\/([^"]+)"[^,]+,\s+"type"\s*:\s*"array"[^}]+}((?:\n|.)*"definitions"\s*:\s*\{)/gm;
 
 function fixArrayDef() {
   regexReplace(
@@ -14,7 +14,6 @@ function fixArrayDef() {
     filePath
   ).then((r) => {
     fs.readFile(filePath, 'utf8', function (err, doc) {
-      console.log(doc.match('get'));
       if (doc.match(pattern)) {
         fixArrayDef();
       }
