@@ -62,7 +62,7 @@ variables:
     react_app_url_fe_onboarding: '$(DEV_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_dashboard: '$(DEV_REACT_APP_URL_FE_DASHBOARD)'
     react_app_url_fe_landing: '$(DEV_REACT_APP_URL_FE_LANDING)'
-    react_app_url_api_party_process: 'https://selc-d-apim.azure-api.net/party-process/v1' # TODO restore me '$(DEV_REACT_APP_URL_API_PARTY_PROCESS)'
+    react_app_url_api_party_process: '$(DEV_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_dashboard: '$(DEV_REACT_APP_URL_API_DASHBOARD)'
     spid_test_env_enabled: 'true'
     react_app_enable_assistance: 'true'
