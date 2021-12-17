@@ -343,7 +343,7 @@ export const fetchPartyUsers = (
 ): Promise<PageResource<PartyUser>> => {
   const content = pageRequest.page === 9 ? mockedUsers.slice(1, 5) : mockedUsers;
   const filteredContent = content.map((u) =>
-    Object.assign({}, u, product ? { products: [product] } : {}, role ? { userRole: role } : {})
+    Object.assign({}, u, product ? { products: u.products } : {}, role ? { userRole: role } : {})
   );
   const page = {
     number: pageRequest.page,
