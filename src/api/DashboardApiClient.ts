@@ -82,16 +82,24 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getPartyUsers: async (institutionId: string): Promise<Array<InstitutionUserResource>> => {
-    const result = await apiClient.getInstitutionUsersUsingGET({ institutionId });
+  getPartyUsers: async (
+    institutionId: string,
+    role?: string
+  ): Promise<Array<InstitutionUserResource>> => {
+    const result = await apiClient.getInstitutionUsersUsingGET({ institutionId, role });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
   getPartyProductUsers: async (
     institutionId: string,
-    productId: string
+    productId: string,
+    role?: string
   ): Promise<Array<ProductUserResource>> => {
-    const result = await apiClient.getInstitutionProductUsersUsingGET({ institutionId, productId });
+    const result = await apiClient.getInstitutionProductUsersUsingGET({
+      institutionId,
+      productId,
+      role,
+    });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 

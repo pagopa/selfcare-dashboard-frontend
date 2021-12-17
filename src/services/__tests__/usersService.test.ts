@@ -31,7 +31,12 @@ beforeEach(() => {
 });
 
 test('Test fetchPartyUsers', async () => {
-  const partyUsers = await fetchPartyUsers({ page: 0, size: 20 }, mockedParties[0]);
+  const partyUsers = await fetchPartyUsers(
+    { page: 0, size: 20 },
+    mockedParties[0],
+    undefined,
+    'ADMIN'
+  );
 
   expect(partyUsers).toMatchObject({
     page: {
@@ -44,13 +49,14 @@ test('Test fetchPartyUsers', async () => {
   });
 
   expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
-  expect(DashboardApi.getPartyUsers).toBeCalledWith(mockedParties[0].institutionId);
+  expect(DashboardApi.getPartyUsers).toBeCalledWith(mockedParties[0].institutionId, 'ADMIN');
   expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
 
   const partyProductUsers = await fetchPartyUsers(
     { page: 0, size: 20 },
     mockedParties[0],
-    mockedPartyProducts[0]
+    mockedPartyProducts[0],
+    'LIMITED'
   );
 
   expect(partyProductUsers).toMatchObject({
@@ -69,7 +75,8 @@ test('Test fetchPartyUsers', async () => {
   expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(1);
   expect(DashboardApi.getPartyProductUsers).toBeCalledWith(
     mockedParties[0].institutionId,
-    mockedPartyProducts[0].id
+    mockedPartyProducts[0].id,
+    'LIMITED'
   );
 });
 
