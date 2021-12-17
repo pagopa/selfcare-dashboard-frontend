@@ -1,4 +1,5 @@
 import { PartyUserOnCreation } from '../../model/PartyUser';
+import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
 import {
   InstitutionUserResource,
@@ -156,7 +157,7 @@ export const DashboardApi = {
     _hostname: string,
     _institutionId: string,
     _productId: string
-  ): Promise<string> => new Promise((resolve) => resolve('DUMMYTOKEN')),
+  ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
   getPartyUsers: async (_institutionId: string): Promise<Array<InstitutionUserResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionUserResource)),
