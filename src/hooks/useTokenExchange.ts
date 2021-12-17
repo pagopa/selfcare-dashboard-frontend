@@ -6,7 +6,7 @@ import { Party } from '../model/Party';
 import { AppError, appStateActions } from '../redux/slices/appStateSlice';
 import useLoading from './useLoading';
 
-const tokenPlaceholder = '[identityToken]';
+const tokenPlaceholder = '<IdentityToken>';
 const hostnameRegexp = /(?<=^https?:\/\/)[-.a-zA-Z0-9_]+/;
 
 export const useTokenExchange = () => {

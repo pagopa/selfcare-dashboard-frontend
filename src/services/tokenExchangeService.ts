@@ -7,4 +7,6 @@ export const retrieveTokenExchange = (
   selectedParty: Party,
   product: Product
 ): Promise<string> =>
-  DashboardApi.getTokenExchange(hostname, selectedParty.institutionId, product.id);
+  DashboardApi.getTokenExchange(hostname, selectedParty.institutionId, product.id).then(
+    (r) => r.token
+  );

@@ -9,7 +9,7 @@ export type Party = {
   digitalAddress: string;
   status: UserStatus;
   userRole: UserRole;
-  category: string;
+  category?: string;
   urlLogo?: string;
   fiscalCode: string;
 };
