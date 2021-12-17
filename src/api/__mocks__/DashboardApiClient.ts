@@ -159,12 +159,16 @@ export const DashboardApi = {
     _productId: string
   ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
-  getPartyUsers: async (_institutionId: string): Promise<Array<InstitutionUserResource>> =>
+  getPartyUsers: async (
+    _institutionId: string,
+    _role?: string
+  ): Promise<Array<InstitutionUserResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionUserResource)),
 
   getPartyProductUsers: async (
     _institutionId: string,
-    _productId: string
+    _productId: string,
+    _role?: string
   ): Promise<Array<ProductUserResource>> =>
     new Promise((resolve) => resolve(mockedProductUserResource)),
 

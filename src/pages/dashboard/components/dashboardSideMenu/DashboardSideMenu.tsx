@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { List, Grid } from '@mui/material';
 import { matchPath } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -34,7 +34,6 @@ export default function DashboardSideMenu({ products, party }: Props) {
       groupId: 'selfCare',
       title: 'Gestione Ente',
       active: true,
-      isSelected: () => true,
       subMenu: [
         {
           groupId: 'selfCare',
@@ -85,6 +84,16 @@ export default function DashboardSideMenu({ products, party }: Props) {
             : undefined,
         ],
       }))
+  );
+
+  useEffect(
+    () =>
+      setSelectedItem(
+        arrayMenu.find(
+          (m) => m.isSelected || (m.subMenu && m.subMenu.findIndex((m) => m?.isSelected))
+        ) ?? null
+      ),
+    []
   );
 
   const handleClick = (

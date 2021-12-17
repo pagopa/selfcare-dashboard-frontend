@@ -36,11 +36,11 @@ export const fetchPartyUsers = (
     return fetchPartyUsersMocked(pageRequest, party, product, role);
   } else {
     if (product) {
-      return DashboardApi.getPartyProductUsers(party.institutionId, product.id).then((r) =>
+      return DashboardApi.getPartyProductUsers(party.institutionId, product.id, role).then((r) =>
         toFakePagination(r.map((r) => productUserResource2PartyUser(product, r)))
       );
     } else {
-      return DashboardApi.getPartyUsers(party.institutionId).then((r) =>
+      return DashboardApi.getPartyUsers(party.institutionId, role).then((r) =>
         toFakePagination(r.map(institutionUserResource2PartyUser))
       );
     }
