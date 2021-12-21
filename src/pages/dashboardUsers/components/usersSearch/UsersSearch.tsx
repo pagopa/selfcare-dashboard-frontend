@@ -51,7 +51,14 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
 
   const fetchUsers = (f: UsersSearchFilterConfig, pageRequest: PageRequest) => {
     setLoading(true);
-    fetchPartyUsers(pageRequest, party, currentUser ?? ({ uid: 'NONE' } as User), f.product, f.role)
+    fetchPartyUsers(
+      pageRequest,
+      party,
+      currentUser ?? ({ uid: 'NONE' } as User),
+      !!selectedProduct,
+      f.product,
+      f.role
+    )
       .then((r) => {
         setUsers(r.content);
         setPage(r.page);

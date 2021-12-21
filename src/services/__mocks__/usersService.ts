@@ -361,6 +361,7 @@ export const fetchPartyUsers = (
   pageRequest: PageRequest,
   _party: Party,
   _currentUser: User,
+  _checkPermission: boolean,
   product?: Product,
   role?: UserRole
 ): Promise<PageResource<PartyUser>> => {
