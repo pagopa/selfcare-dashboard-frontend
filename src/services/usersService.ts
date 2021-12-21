@@ -10,6 +10,7 @@ import {
 } from '../model/PartyUser';
 import { ProductRole } from '../model/ProductRole';
 import { DashboardApi } from '../api/DashboardApiClient';
+import { User } from '../model/User';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
   mockedProductRoles,
@@ -28,21 +29,22 @@ const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
   party: Party,
+  currentUser: User,
   checkPermission: boolean,
   product?: Product,
   role?: UserRole
 ): Promise<PageResource<PartyUser>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
-    return fetchPartyUsersMocked(pageRequest, party, checkPermission, product, role);
+    return fetchPartyUsersMocked(pageRequest, party, currentUser, checkPermission, product, role);
   } else {
     if (product && checkPermission) {
       return DashboardApi.getPartyProductUsers(party.institutionId, product.id, role).then((r) =>
-        toFakePagination(r.map((r) => productUserResource2PartyUser(product, r)))
+        toFakePagination(r.map((u) => productUserResource2PartyUser(product, u, currentUser)))
       );
     } else {
       return DashboardApi.getPartyUsers(party.institutionId, product?.id, role).then((r) =>
-        toFakePagination(r.map(institutionUserResource2PartyUser))
+        toFakePagination(r.map((u) => institutionUserResource2PartyUser(u, currentUser)))
       );
     }
   }

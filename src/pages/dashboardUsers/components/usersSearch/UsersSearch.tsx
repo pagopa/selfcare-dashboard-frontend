@@ -10,10 +10,12 @@ import { PartyUser } from '../../../../model/PartyUser';
 import { DASHBOARD_ROUTES, resolvePathVariables } from '../../../../routes';
 import { Party } from '../../../../model/Party';
 import { fetchPartyUsers } from '../../../../services/usersService';
-import { useAppDispatch } from '../../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { AppError, appStateActions } from '../../../../redux/slices/appStateSlice';
 import useLoading from '../../../../hooks/useLoading';
 import { LOADING_TASK_PARTY_USERS } from '../../../../utils/constants';
+import { userSelectors } from '../../../../redux/slices/userSlice';
+import { User } from '../../../../model/User';
 import UsersSearchFilter, { UsersSearchFilterConfig } from './components/UsersSearchFilter';
 import UsersSearchTable from './components/UsersSearchTable';
 
@@ -26,6 +28,7 @@ interface UsersSearchProps {
 const pageSize: number = Number.parseInt(process.env.REACT_APP_PARTY_USERS_PAGE_SIZE, 10);
 
 export default function UsersSearch({ party, selectedProduct, products }: UsersSearchProps) {
+  const currentUser = useAppSelector(userSelectors.selectLoggedUser);
   const [users, setUsers] = useState<Array<PartyUser>>([]);
   const [page, setPage] = useState<Page>({
     number: 0,
@@ -48,7 +51,14 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
 
   const fetchUsers = (f: UsersSearchFilterConfig, pageRequest: PageRequest) => {
     setLoading(true);
-    fetchPartyUsers(pageRequest, party, !!selectedProduct, f.product, f.role)
+    fetchPartyUsers(
+      pageRequest,
+      party,
+      currentUser ?? ({ uid: 'NONE' } as User),
+      !!selectedProduct,
+      f.product,
+      f.role
+    )
       .then((r) => {
         setUsers(r.content);
         setPage(r.page);

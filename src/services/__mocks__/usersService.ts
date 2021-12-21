@@ -4,6 +4,7 @@ import { Party, UserRole } from '../../model/Party';
 import { PartyUser } from '../../model/PartyUser';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
+import { User } from '../../model/User';
 
 export const mockedUsers: Array<PartyUser> = [
   {
@@ -20,14 +21,15 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel1',
       },
     ],
+    isCurrentUser: false,
   },
   {
-    id: 'uid2',
-    name: 'Simone',
-    surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    id: '0',
+    name: 'loggedName',
+    surname: 'loggedSurname',
+    email: 'loggedName.b@email.it ',
     userRole: 'LIMITED',
-    status: 'SUSPENDED',
+    status: 'ACTIVE',
     products: [
       {
         title: 'App IO',
@@ -35,6 +37,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel2',
       },
     ],
+    isCurrentUser: true,
   },
   {
     id: 'uid3',
@@ -50,6 +53,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel3',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid4',
@@ -65,6 +69,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel4',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid5',
@@ -80,6 +85,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel5',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid6',
@@ -95,6 +101,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel6',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid7',
@@ -110,6 +117,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel7',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid8',
@@ -125,6 +133,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel8',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid9',
@@ -140,6 +149,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel9',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid10',
@@ -155,6 +165,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel10',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid11',
@@ -170,6 +181,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel11',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid12',
@@ -185,6 +197,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel12',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid13',
@@ -200,6 +213,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel13',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid14',
@@ -215,6 +229,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel14',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid15',
@@ -230,6 +245,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel15',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid16',
@@ -245,6 +261,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel16',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid17',
@@ -260,6 +277,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel17',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid18',
@@ -275,6 +293,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel18',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid19',
@@ -290,6 +309,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel19',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid20',
@@ -305,6 +325,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel20',
       },
     ],
+    isCurrentUser: false,
   },
   {
     id: 'uid21',
@@ -320,6 +341,7 @@ export const mockedUsers: Array<PartyUser> = [
         relationshipId: 'rel21',
       },
     ],
+    isCurrentUser: false,
   },
 ];
 
@@ -338,6 +360,7 @@ export const mockedProductRoles = [
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
   _party: Party,
+  _currentUser: User,
   _checkPermission: boolean,
   product?: Product,
   role?: UserRole

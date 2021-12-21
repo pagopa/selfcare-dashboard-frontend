@@ -12,6 +12,7 @@ import {
 } from '../usersService';
 import { mockedParties } from '../__mocks__/partyService';
 import { mockedPartyProducts } from '../__mocks__/productService';
+import { mockedUser } from '../../decorators/__mocks__/withLogin';
 import {
   institutionUserResource2PartyUser,
   PartyUser,
@@ -35,6 +36,7 @@ describe('Test fetchPartyUsers', () => {
     const partyUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
       mockedParties[0],
+      mockedUser,
       checkPermission,
       undefined,
       'ADMIN'
@@ -47,7 +49,9 @@ describe('Test fetchPartyUsers', () => {
         totalElements: mockedInstitutionUserResource.length,
         totalPages: 1,
       },
-      content: mockedInstitutionUserResource.map(institutionUserResource2PartyUser),
+      content: mockedInstitutionUserResource.map((u) =>
+        institutionUserResource2PartyUser(u, mockedUser)
+      ),
     });
 
     expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
@@ -65,6 +69,7 @@ describe('Test fetchPartyUsers', () => {
     const partyProductUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
       mockedParties[0],
+      mockedUser,
       true,
       mockedPartyProducts[0],
       'LIMITED'
@@ -78,7 +83,7 @@ describe('Test fetchPartyUsers', () => {
         totalPages: 1,
       },
       content: mockedProductUserResource.map((r) =>
-        productUserResource2PartyUser(mockedPartyProducts[0], r)
+        productUserResource2PartyUser(mockedPartyProducts[0], r, mockedUser)
       ),
     });
 
@@ -97,6 +102,7 @@ describe('Test fetchPartyUsers', () => {
     const partyProductUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
       mockedParties[0],
+      mockedUser,
       false,
       mockedPartyProducts[0],
       'LIMITED'
@@ -109,7 +115,9 @@ describe('Test fetchPartyUsers', () => {
         totalElements: mockedProductUserResource.length,
         totalPages: 1,
       },
-      content: mockedInstitutionUserResource.map(institutionUserResource2PartyUser),
+      content: mockedInstitutionUserResource.map((u) =>
+        institutionUserResource2PartyUser(u, mockedUser)
+      ),
     });
 
     expect(DashboardApi.getPartyUsers).toBeCalledTimes(2);
@@ -158,6 +166,7 @@ describe('Test updatePartyUserStatus', () => {
       userRole: 'ADMIN',
       products: [{ id: 'productId', title: 'productTitle', relationshipId: 'relationshipId' }],
       status: 'ACTIVE',
+      isCurrentUser: false,
     };
 
     await updatePartyUserStatus(partyUser, 'SUSPENDED');
@@ -183,6 +192,7 @@ describe('Test updatePartyUserStatus', () => {
         { id: 'productId2', title: 'productTitle2', relationshipId: 'relationshipId2' },
       ],
       status: 'ACTIVE',
+      isCurrentUser: false,
     };
 
     try {
@@ -211,6 +221,7 @@ describe('Test updatePartyUserStatus', () => {
       userRole: 'ADMIN',
       products: [{ id: 'productId', title: 'productTitle' }],
       status: 'ACTIVE',
+      isCurrentUser: false,
     };
 
     try {
