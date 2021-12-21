@@ -29,7 +29,7 @@ const pageSize: number = Number.parseInt(process.env.REACT_APP_PARTY_USERS_PAGE_
 
 export default function UsersSearch({ party, selectedProduct, products }: UsersSearchProps) {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
-  const [users, setUsers] = useState<Array<PartyUser>>([]);
+  const [users, setUsers] = useState<Array<PartyUser> | null>(null);
   const [page, setPage] = useState<Page>({
     number: 0,
     size: pageSize,
@@ -63,7 +63,7 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
         setUsers(r.content);
         setPage(r.page);
       })
-      .catch((reason) =>
+      .catch((reason) => {
         addError({
           id: 'FETCH_PARTY_USERS',
           blocking: false,
@@ -71,8 +71,9 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
           techDescription: `An error occurred while fetching party users ${party.institutionId} and filter ${f}`,
           onRetry: () => fetchUsers(f, pageRequest),
           toNotify: true,
-        })
-      )
+        });
+        setUsers([]);
+      })
       .finally(() => setLoading(false));
   };
 
@@ -124,14 +125,16 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
       </Grid>
       <Grid item xs={12} my={8}>
         <Box>
-          <UsersSearchTable
-            party={party}
-            selectedProduct={selectedProduct}
-            users={users}
-            page={page}
-            sort={pageRequest.sort}
-            onPageRequest={handlePageRequestChange}
-          />
+          {users != null && (
+            <UsersSearchTable
+              party={party}
+              selectedProduct={selectedProduct}
+              users={users}
+              page={page}
+              sort={pageRequest.sort}
+              onPageRequest={handlePageRequestChange}
+            />
+          )}
         </Box>
       </Grid>
     </Grid>

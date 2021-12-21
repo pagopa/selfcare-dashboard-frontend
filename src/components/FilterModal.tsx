@@ -29,11 +29,18 @@ export type FilterModalConfig<T, V> = {
   onFilterChange: (v: V) => void;
 };
 
-export default function FilterModal({ open, handleClose, title, filterModalConfig,height = '16em', minHeight = '16em' }: Props) {
+export default function FilterModal({
+  open,
+  handleClose,
+  title,
+  filterModalConfig,
+  height = '16em',
+  minHeight = '16em',
+}: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const [valueRadio, setValueRadio] = React.useState<string | undefined>();
+  const [valueRadio, setValueRadio] = React.useState<string>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueRadio(event.target.value);
@@ -48,12 +55,15 @@ export default function FilterModal({ open, handleClose, title, filterModalConfi
   const data = filterModalConfig?.data !== undefined ? filterModalConfig?.data : [];
   return (
     <Dialog fullScreen={fullScreen} open={open} aria-labelledby="responsive-dialog-title">
-      <Grid container direction="column" sx={{ height, minHeight, width: '21.9em'}}>
+      <Grid container direction="column" sx={{ height, minHeight, width: '21.9em' }}>
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>
               <IconButton
-                onClick={handleClose}
+                onClick={(e) => {
+                  setValueRadio('');
+                  handleClose(e);
+                }}
                 style={{ position: 'absolute', top: '20px', right: '16px', zIndex: 100 }}
               >
                 <ClearOutlinedIcon />
