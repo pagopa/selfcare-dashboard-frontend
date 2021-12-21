@@ -12,18 +12,27 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { styled } from '@mui/system';
+import { History } from 'history';
+import { useHistory } from 'react-router';
 import { Party } from '../../../model/Party';
-import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
+import { fetchProductRoles } from '../../../services/usersService';
+
 import useLoading from '../../../hooks/useLoading';
 import { AppError, appStateActions } from '../../../redux/slices/appStateSlice';
 import { useAppDispatch } from '../../../redux/hooks';
 import {
   LOADING_TASK_SAVE_PARTY_USER,
   LOADING_TASK_FETCH_PRODUCT_ROLES,
+  STORAGE_KEY_NOTIFY_MESSAGE,
 } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
 import { ProductRole } from '../../../model/ProductRole';
+import { storageRead, storageWrite } from '../../../utils/storage-utils';
+import { DASHBOARD_ROUTES, resolvePathVariables, RouteConfig } from '../../../routes';
+import { savePartyUser } from './../../../services/__mocks__/usersService';
+
+const notifyMessage = 'REFERENTE AGGIUNTO';
 
 const CustomTextField = styled(TextField)({
   '.MuiInput-root': {
@@ -71,8 +80,14 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
   const addError = (error: AppError) => dispatch(appStateActions.addError(error));
-
+  const history = useHistory();
   const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
+
+  const applicationLinkBehaviour = (
+    history: History,
+    route: RouteConfig,
+    pathVariables: { [key: string]: string }
+  ) => (() => history.push(resolvePathVariables(route.path, pathVariables)));
 
   useEffect(() => {
     setLoadingFetchRoles(true);
@@ -119,8 +134,18 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
     },
     validate,
     onSubmit: (values) => {
+
       setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
+        .then(() => {
+          console.log('prima di storage');
+          storageWrite(STORAGE_KEY_NOTIFY_MESSAGE, notifyMessage, 'string');
+          console.log('dopo di storage',storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string'));
+          applicationLinkBehaviour(history, DASHBOARD_ROUTES.PARTY_PRODUCT_USERS, {
+            institutionId: party.institutionId,
+            productId: selectedProduct.id,
+          });
+        })
         .catch((reason) =>
           addError({
             id: 'SAVE_PARTY_USER',

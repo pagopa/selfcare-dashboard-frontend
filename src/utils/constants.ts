@@ -12,6 +12,7 @@ export const URL_FE_LANDING: string = process.env.REACT_APP_URL_FE_LANDING;
 
 export const STORAGE_KEY_USER = 'user';
 export const STORAGE_KEY_TOKEN = 'token';
+export const STORAGE_KEY_NOTIFY_MESSAGE = 'notify_message'; 
 
 export const LOADING_TASK_LOGIN_CHECK = 'LOGIN_CHECK';
 export const LOADING_TASK_SEARCH_PARTIES = 'SEARCH_PARTIES';
