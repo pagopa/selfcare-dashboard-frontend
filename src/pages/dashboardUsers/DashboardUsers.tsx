@@ -24,7 +24,7 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
       alignItems={'center'}
       px={0}
       mt={10}
-      sx={{ width: '953px', backgroundColor: 'transparent !important' }}
+      sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
       {selectedProduct && (
         <Grid item xs={12} mb={3} px={'16px'}>
