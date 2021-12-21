@@ -15,10 +15,11 @@ type Props = {
   heightSubTitle?: string;
   heightButton?: string;
   status?: string;
+  titleFontSize?: string;
+  subTitleFontSize?: string;
 };
 
 const cardSubTitleStyle = {
-  fontSize: '18px',
   height: '100%',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -40,6 +41,8 @@ export default function BaseProductCard({
   heightSubTitle,
   heightButton,
   status,
+  titleFontSize = '32px',
+  subTitleFontSize = '18px',
 }: Props) {
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
@@ -54,13 +57,11 @@ export default function BaseProductCard({
               </Box>
             </Grid>
             {tag && (
-              <Grid item xs={6} 
-              display="flex" justifyContent="end"
-              >
+              <Grid item xs={6} display="flex" justifyContent="end">
                 <Box
                   sx={{
-                    display:"flex",
-                    justifyContent:"center",
+                    display: 'flex',
+                    justifyContent: 'center',
                     maxWidth: '103px',
                     minWidth: '50px',
                     height: '18px',
@@ -71,7 +72,7 @@ export default function BaseProductCard({
                   }}
                 >
                   <Typography
-                  title={tag}
+                    title={tag}
                     sx={{
                       fontSize: '12px',
                       fontWeight: '600',
@@ -87,11 +88,19 @@ export default function BaseProductCard({
             )}
           </Grid>
           <Grid item xs={12} height={heightTitle} display="flex" alignItems={'center'}>
-            {cardTitle && <Typography variant="h2">{cardTitle}</Typography>}
+            {cardTitle && (
+              <Typography variant="h2" sx={{ fontSize: titleFontSize }}>
+                {cardTitle}
+              </Typography>
+            )}
           </Grid>
           <Grid item xs={12} mb={3} height={heightSubTitle} display="flex" alignItems={'center'}>
             {cardSubTitle && (
-              <Typography variant="body2" sx={cardSubTitleStyle} title={cardSubTitle.toString()}>
+              <Typography
+                variant="body2"
+                sx={{ ...cardSubTitleStyle, fontSize: subTitleFontSize }}
+                title={cardSubTitle.toString()}
+              >
                 {cardSubTitle}
               </Typography>
             )}
