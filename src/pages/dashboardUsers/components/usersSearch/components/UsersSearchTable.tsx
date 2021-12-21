@@ -189,7 +189,9 @@ function showRefStatus(
 ) {
   return (
     <React.Fragment>
-      {users.row.status === 'ACTIVE'
+      {users.row.isCurrentUser
+        ? renderCell(users, '')
+        : users.row.status === 'ACTIVE'
         ? renderCell(
             users,
             <Link onClick={() => onChangeState(users.row)} sx={{ cursor: 'pointer' }}>

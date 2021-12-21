@@ -4,6 +4,7 @@ import {
 } from '../../api/generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from '../../api/generated/b4f-dashboard/ProductUserResource';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
+import { mockedUser } from '../../decorators/__mocks__/withLogin';
 import { institutionUserResource2PartyUser, productUserResource2PartyUser } from '../PartyUser';
 
 test('Test institutionUserResource2PartyUser', () => {
@@ -17,7 +18,7 @@ test('Test institutionUserResource2PartyUser', () => {
     products: [{ id: 'productId', title: 'productTitle' }],
   };
 
-  const partyUser = institutionUserResource2PartyUser(institutionUserResource);
+  const partyUser = institutionUserResource2PartyUser(institutionUserResource, mockedUser);
   expect(partyUser).toStrictEqual({
     id: '1',
     name: 'Name',
@@ -26,7 +27,13 @@ test('Test institutionUserResource2PartyUser', () => {
     userRole: 'LIMITED',
     email: 'address',
     products: [{ id: 'productId', title: 'productTitle' }],
+    isCurrentUser: false,
   });
+
+  institutionUserResource.id = mockedUser.uid;
+  expect(
+    institutionUserResource2PartyUser(institutionUserResource, mockedUser).isCurrentUser
+  ).toBeTruthy();
 });
 
 test('Test productUserResource2PartyUser', () => {
@@ -40,7 +47,11 @@ test('Test productUserResource2PartyUser', () => {
     relationshipId: 'relationshipId',
   };
 
-  const partyUser = productUserResource2PartyUser(mockedPartyProducts[0], productUserResource);
+  const partyUser = productUserResource2PartyUser(
+    mockedPartyProducts[0],
+    productUserResource,
+    mockedUser
+  );
   expect(partyUser).toStrictEqual({
     id: '1',
     name: 'Name',
@@ -55,5 +66,12 @@ test('Test productUserResource2PartyUser', () => {
         relationshipId: 'relationshipId',
       },
     ],
+    isCurrentUser: false,
   });
+
+  productUserResource.id = mockedUser.uid;
+  expect(
+    productUserResource2PartyUser(mockedPartyProducts[0], productUserResource, mockedUser)
+      .isCurrentUser
+  ).toBeTruthy();
 });
