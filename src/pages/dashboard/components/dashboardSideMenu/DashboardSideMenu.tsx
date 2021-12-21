@@ -90,7 +90,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
     () =>
       setSelectedItem(
         arrayMenu.find(
-          (m) => m.isSelected || (m.subMenu && m.subMenu.findIndex((m) => m?.isSelected))
+          (m) => m.isSelected || (m.subMenu && m.subMenu.findIndex((m) => m?.isSelected) > -1)
         ) ?? null
       ),
     []
