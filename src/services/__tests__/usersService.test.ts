@@ -49,7 +49,9 @@ describe('Test fetchPartyUsers', () => {
         totalElements: mockedInstitutionUserResource.length,
         totalPages: 1,
       },
-      content: mockedInstitutionUserResource.map(institutionUserResource2PartyUser),
+      content: mockedInstitutionUserResource.map((u) =>
+        institutionUserResource2PartyUser(u, mockedUser)
+      ),
     });
 
     expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
@@ -81,7 +83,7 @@ describe('Test fetchPartyUsers', () => {
         totalPages: 1,
       },
       content: mockedProductUserResource.map((r) =>
-        productUserResource2PartyUser(mockedPartyProducts[0], r)
+        productUserResource2PartyUser(mockedPartyProducts[0], r, mockedUser)
       ),
     });
 
@@ -113,7 +115,9 @@ describe('Test fetchPartyUsers', () => {
         totalElements: mockedProductUserResource.length,
         totalPages: 1,
       },
-      content: mockedInstitutionUserResource.map(institutionUserResource2PartyUser),
+      content: mockedInstitutionUserResource.map((u) =>
+        institutionUserResource2PartyUser(u, mockedUser)
+      ),
     });
 
     expect(DashboardApi.getPartyUsers).toBeCalledTimes(2);
