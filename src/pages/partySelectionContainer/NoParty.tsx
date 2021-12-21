@@ -50,7 +50,7 @@ export default function NoParty() {
             sx={{ width: '190px', height: '40px' }}
             onClick={() => window.location.assign(URL_FE_LANDING)}
           >
-            Torna al portale
+            Torna alla Home
           </Button>
         </Grid>
       </Grid>
