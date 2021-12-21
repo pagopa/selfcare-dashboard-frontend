@@ -28,19 +28,20 @@ const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
   party: Party,
+  checkPermission: boolean,
   product?: Product,
   role?: UserRole
 ): Promise<PageResource<PartyUser>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
-    return fetchPartyUsersMocked(pageRequest, party, product, role);
+    return fetchPartyUsersMocked(pageRequest, party, checkPermission, product, role);
   } else {
-    if (product) {
+    if (product && checkPermission) {
       return DashboardApi.getPartyProductUsers(party.institutionId, product.id, role).then((r) =>
         toFakePagination(r.map((r) => productUserResource2PartyUser(product, r)))
       );
     } else {
-      return DashboardApi.getPartyUsers(party.institutionId, role).then((r) =>
+      return DashboardApi.getPartyUsers(party.institutionId, product?.id, role).then((r) =>
         toFakePagination(r.map(institutionUserResource2PartyUser))
       );
     }
