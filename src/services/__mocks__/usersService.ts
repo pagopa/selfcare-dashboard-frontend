@@ -338,6 +338,7 @@ export const mockedProductRoles = [
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
   _party: Party,
+  _checkPermission: boolean,
   product?: Product,
   role?: UserRole
 ): Promise<PageResource<PartyUser>> => {
