@@ -31,11 +31,11 @@ beforeEach(() => {
 });
 
 describe('Test fetchPartyUsers', () => {
-  test('Test CheckPermission True', async () => {
+  const testNoProductFilter = async (checkPermission: boolean) => {
     const partyUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
       mockedParties[0],
-      true,
+      checkPermission,
       undefined,
       'ADMIN'
     );
@@ -57,6 +57,10 @@ describe('Test fetchPartyUsers', () => {
       'ADMIN'
     );
     expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
+  };
+
+  test('Test CheckPermission True', async () => {
+    await testNoProductFilter(true);
 
     const partyProductUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
@@ -88,31 +92,7 @@ describe('Test fetchPartyUsers', () => {
   });
 
   test('Test CheckPermission False', async () => {
-    const partyUsers = await fetchPartyUsers(
-      { page: 0, size: 20 },
-      mockedParties[0],
-      false,
-      undefined,
-      'ADMIN'
-    );
-
-    expect(partyUsers).toMatchObject({
-      page: {
-        number: 0,
-        size: mockedInstitutionUserResource.length,
-        totalElements: mockedInstitutionUserResource.length,
-        totalPages: 1,
-      },
-      content: mockedInstitutionUserResource.map(institutionUserResource2PartyUser),
-    });
-
-    expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
-    expect(DashboardApi.getPartyUsers).toBeCalledWith(
-      mockedParties[0].institutionId,
-      undefined,
-      'ADMIN'
-    );
-    expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
+    await testNoProductFilter(false);
 
     const partyProductUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
@@ -133,12 +113,12 @@ describe('Test fetchPartyUsers', () => {
     });
 
     expect(DashboardApi.getPartyUsers).toBeCalledTimes(2);
-    expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
     expect(DashboardApi.getPartyUsers).toBeCalledWith(
       mockedParties[0].institutionId,
-      undefined,
-      'ADMIN'
+      mockedPartyProducts[0].id,
+      'LIMITED'
     );
+    expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
   });
 });
 
