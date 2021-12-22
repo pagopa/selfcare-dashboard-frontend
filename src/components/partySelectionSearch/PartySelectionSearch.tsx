@@ -67,7 +67,7 @@ export default function PartySelectionSearch({
           <Box>
             <PartySelectionSearchInput
               disableUnderline={disableUnderline}
-              label="Cerca"
+              placeholder ="Cerca"
               onChange={(e) => onFilterChange(e.target.value)}
               input={input}
               clearField={() => onFilterChange('')}
