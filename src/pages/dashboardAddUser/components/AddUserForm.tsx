@@ -27,11 +27,9 @@ import {
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
 import { ProductRole } from '../../../model/ProductRole';
-import { storageRead, storageWrite } from '../../../utils/storage-utils';
+import { storageWrite } from '../../../utils/storage-utils';
 import { DASHBOARD_ROUTES, resolvePathVariables } from '../../../routes';
 import { savePartyUser } from './../../../services/__mocks__/usersService';
-
-const notifyMessage = 'REFERENTE AGGIUNTO';
 
 const CustomTextField = styled(TextField)({
   '.MuiInput-root': {
@@ -127,17 +125,16 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
     },
     validate,
     onSubmit: (values) => {
-
       setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .then(() => {
-          console.log('prima di storage');
           storageWrite(STORAGE_KEY_NOTIFY_MESSAGE, notifyMessage, 'string');
-          console.log('dopo di storage',storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string'));
-          history.push(resolvePathVariables( DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
-            institutionId: party.institutionId,
-            productId: selectedProduct.id,
-          }));
+          history.push(
+            resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
+              institutionId: party.institutionId,
+              productId: selectedProduct.id,
+            })
+          );
         })
         .catch((reason) =>
           addError({
@@ -183,6 +180,13 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       },
     };
   };
+
+  const notifyMessage = `Hai aggiunto ${
+    baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente').value
+  } ${
+    baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente').value
+  } correttamente `;
+
   return (
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>

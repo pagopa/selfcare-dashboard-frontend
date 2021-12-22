@@ -1,8 +1,12 @@
 import { Grid } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { Product } from '../../model/Product';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import TitleBox from '../../components/TitleBox';
 import { Party } from '../../model/Party';
+import Toast from '../../components/Toast';
+import { STORAGE_KEY_NOTIFY_MESSAGE } from '../../utils/constants';
+import { storageDelete, storageRead } from '../../utils/storage-utils';
 import UsersSearch from './components/usersSearch/UsersSearch';
 
 interface Props {
@@ -18,6 +22,16 @@ const paths = [
 ];
 
 export default function DashboardUsers({ party, selectedProduct, products }: Props) {
+  const [openToast, setOpenToast] = useState(false);
+  const [messagge, setMessage] = useState();
+  useEffect(() => {
+    if (storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string') !== undefined) {
+      setOpenToast(true);
+      setMessage(storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string'));
+      storageDelete(STORAGE_KEY_NOTIFY_MESSAGE);
+    }
+  }, [storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string')]);
+
   return (
     <Grid
       container
@@ -44,6 +58,19 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
       <Grid item xs={12}>
         <UsersSearch party={party} selectedProduct={selectedProduct} products={products} />
       </Grid>
+      {openToast && (
+        <Toast
+          title={`REFERENTE AGGIUNTO`}
+          message={
+            <>
+              {messagge}
+              <strong></strong>
+              {'.'}
+            </>
+          }
+          closeToast={() => setOpenToast(false)}
+        />
+      )}
     </Grid>
   );
 }
