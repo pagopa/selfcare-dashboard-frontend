@@ -42,7 +42,7 @@ const parties: Array<Party> = [
 ];
 test('Test rendering', () => {
   render(<PartySelection parties={parties} />);
-  const input = screen.getByLabelText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca');
 
   screen.getByText("Seleziona il tuo Ente");
 
@@ -72,7 +72,7 @@ test('Test rendering', () => {
 
 test('Test filter', () => {
   render(<PartySelection parties={parties} />);
-  const input = screen.getByLabelText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca');
   const filterNapoli = 'Napoli';
 
   // modify input field
@@ -103,7 +103,7 @@ test('Test filter', () => {
 
 test('Test selection', () => {
   render(<PartySelection parties={parties} />);
-  const input = screen.getByLabelText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca');
   const filterPartyNapoli = 'Comune di Napoli Referente Amministrativo';
   // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
   const filterNapoli = 'Napoli';
