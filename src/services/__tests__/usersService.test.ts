@@ -12,6 +12,7 @@ import {
 } from '../usersService';
 import { mockedParties } from '../__mocks__/partyService';
 import { mockedPartyProducts } from '../__mocks__/productService';
+import { mockedUser } from '../../decorators/__mocks__/withLogin';
 import {
   institutionUserResource2PartyUser,
   PartyUser,
@@ -30,54 +31,103 @@ beforeEach(() => {
   jest.spyOn(DashboardApi, 'getProductRoles');
 });
 
-test('Test fetchPartyUsers', async () => {
-  const partyUsers = await fetchPartyUsers(
-    { page: 0, size: 20 },
-    mockedParties[0],
-    undefined,
-    'ADMIN'
-  );
+describe('Test fetchPartyUsers', () => {
+  const testNoProductFilter = async (checkPermission: boolean) => {
+    const partyUsers = await fetchPartyUsers(
+      { page: 0, size: 20 },
+      mockedParties[0],
+      mockedUser,
+      checkPermission,
+      undefined,
+      'ADMIN'
+    );
 
-  expect(partyUsers).toMatchObject({
-    page: {
-      number: 0,
-      size: mockedInstitutionUserResource.length,
-      totalElements: mockedInstitutionUserResource.length,
-      totalPages: 1,
-    },
-    content: mockedInstitutionUserResource.map(institutionUserResource2PartyUser),
+    expect(partyUsers).toMatchObject({
+      page: {
+        number: 0,
+        size: mockedInstitutionUserResource.length,
+        totalElements: mockedInstitutionUserResource.length,
+        totalPages: 1,
+      },
+      content: mockedInstitutionUserResource.map((u) =>
+        institutionUserResource2PartyUser(u, mockedUser)
+      ),
+    });
+
+    expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
+    expect(DashboardApi.getPartyUsers).toBeCalledWith(
+      mockedParties[0].institutionId,
+      undefined,
+      'ADMIN'
+    );
+    expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
+  };
+
+  test('Test CheckPermission True', async () => {
+    await testNoProductFilter(true);
+
+    const partyProductUsers = await fetchPartyUsers(
+      { page: 0, size: 20 },
+      mockedParties[0],
+      mockedUser,
+      true,
+      mockedPartyProducts[0],
+      'LIMITED'
+    );
+
+    expect(partyProductUsers).toMatchObject({
+      page: {
+        number: 0,
+        size: mockedProductUserResource.length,
+        totalElements: mockedProductUserResource.length,
+        totalPages: 1,
+      },
+      content: mockedProductUserResource.map((r) =>
+        productUserResource2PartyUser(mockedPartyProducts[0], r, mockedUser)
+      ),
+    });
+
+    expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
+    expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(1);
+    expect(DashboardApi.getPartyProductUsers).toBeCalledWith(
+      mockedParties[0].institutionId,
+      mockedPartyProducts[0].id,
+      'LIMITED'
+    );
   });
 
-  expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
-  expect(DashboardApi.getPartyUsers).toBeCalledWith(mockedParties[0].institutionId, 'ADMIN');
-  expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
+  test('Test CheckPermission False', async () => {
+    await testNoProductFilter(false);
 
-  const partyProductUsers = await fetchPartyUsers(
-    { page: 0, size: 20 },
-    mockedParties[0],
-    mockedPartyProducts[0],
-    'LIMITED'
-  );
+    const partyProductUsers = await fetchPartyUsers(
+      { page: 0, size: 20 },
+      mockedParties[0],
+      mockedUser,
+      false,
+      mockedPartyProducts[0],
+      'LIMITED'
+    );
 
-  expect(partyProductUsers).toMatchObject({
-    page: {
-      number: 0,
-      size: mockedProductUserResource.length,
-      totalElements: mockedProductUserResource.length,
-      totalPages: 1,
-    },
-    content: mockedProductUserResource.map((r) =>
-      productUserResource2PartyUser(mockedPartyProducts[0], r)
-    ),
+    expect(partyProductUsers).toMatchObject({
+      page: {
+        number: 0,
+        size: mockedProductUserResource.length,
+        totalElements: mockedProductUserResource.length,
+        totalPages: 1,
+      },
+      content: mockedInstitutionUserResource.map((u) =>
+        institutionUserResource2PartyUser(u, mockedUser)
+      ),
+    });
+
+    expect(DashboardApi.getPartyUsers).toBeCalledTimes(2);
+    expect(DashboardApi.getPartyUsers).toBeCalledWith(
+      mockedParties[0].institutionId,
+      mockedPartyProducts[0].id,
+      'LIMITED'
+    );
+    expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
   });
-
-  expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
-  expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(1);
-  expect(DashboardApi.getPartyProductUsers).toBeCalledWith(
-    mockedParties[0].institutionId,
-    mockedPartyProducts[0].id,
-    'LIMITED'
-  );
 });
 
 test('Test fetchProductRoles', async () => {
@@ -116,6 +166,7 @@ describe('Test updatePartyUserStatus', () => {
       userRole: 'ADMIN',
       products: [{ id: 'productId', title: 'productTitle', relationshipId: 'relationshipId' }],
       status: 'ACTIVE',
+      isCurrentUser: false,
     };
 
     await updatePartyUserStatus(partyUser, 'SUSPENDED');
@@ -141,6 +192,7 @@ describe('Test updatePartyUserStatus', () => {
         { id: 'productId2', title: 'productTitle2', relationshipId: 'relationshipId2' },
       ],
       status: 'ACTIVE',
+      isCurrentUser: false,
     };
 
     try {
@@ -169,6 +221,7 @@ describe('Test updatePartyUserStatus', () => {
       userRole: 'ADMIN',
       products: [{ id: 'productId', title: 'productTitle' }],
       status: 'ACTIVE',
+      isCurrentUser: false,
     };
 
     try {

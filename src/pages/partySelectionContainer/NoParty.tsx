@@ -1,12 +1,13 @@
 import React from 'react';
-import { Grid, Button, Typography,} from '@mui/material';
+import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { URL_FE_LANDING} from '../../utils/constants';
+import { URL_FE_LANDING } from '../../utils/constants';
 
 export default function NoParty() {
   const bodyTitle = 'Non risulta nessun Ente associato';
-  const bodyDescription = 'Il tuo profilo non è associato a nessun ente.';
-  const bodyDescription2 = 'In tal caso prova ad accedere in un secondo momento.';
+  const bodyDescription = 'Il tuo profilo non è associato a nessun Ente.';
+  const bodyDescription2 =
+    'Per accedere, chiedi al Referente incaricato di aggiungerti al portale Self Care del tuo Ente.';
 
   return (
     <React.Fragment>
@@ -49,10 +50,10 @@ export default function NoParty() {
             sx={{ width: '190px', height: '40px' }}
             onClick={() => window.location.assign(URL_FE_LANDING)}
           >
-            Torna al portale
+            Torna alla Home
           </Button>
         </Grid>
-      </Grid> 
+      </Grid>
     </React.Fragment>
   );
 }

@@ -36,6 +36,8 @@ export default function NotActiveProductCard({ party, product, buttonLabel, info
             heightSubTitle="80px"
             heightButton="45px"
             status={product.status}
+            titleFontSize="24px"
+            subTitleFontSize="16px"
           />
           <Grid container height="30px">
             <Grid item xs={12} px={2}>
