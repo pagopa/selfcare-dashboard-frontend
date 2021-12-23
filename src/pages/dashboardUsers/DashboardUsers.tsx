@@ -34,7 +34,6 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
     }
   }, [notifyMessage]);
 
-
   return (
     <Grid
       container
@@ -64,13 +63,7 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
       {openToast && (
         <Toast
           title={`REFERENTE AGGIUNTO`}
-          message={
-            <>
-              {message}
-
-              {'.'}
-            </>
-          }
+          message={<>{message}</>}
           closeToast={() => setOpenToast(false)}
         />
       )}
