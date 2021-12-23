@@ -23,14 +23,17 @@ const paths = [
 
 export default function DashboardUsers({ party, selectedProduct, products }: Props) {
   const [openToast, setOpenToast] = useState(false);
-  const [messagge, setMessage] = useState();
+  const [message, setMessage] = useState();
+
+  const notifyMessage = storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string');
   useEffect(() => {
-    if (storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string') !== undefined) {
+    if (notifyMessage) {
       setOpenToast(true);
-      setMessage(storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string'));
+      setMessage(notifyMessage);
       storageDelete(STORAGE_KEY_NOTIFY_MESSAGE);
     }
-  }, [storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string')]);
+  }, [notifyMessage]);
+
 
   return (
     <Grid
@@ -63,8 +66,8 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
           title={`REFERENTE AGGIUNTO`}
           message={
             <>
-              {messagge}
-              <strong></strong>
+              {message}
+
               {'.'}
             </>
           }

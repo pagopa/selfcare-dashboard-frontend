@@ -14,8 +14,7 @@ import { useFormik } from 'formik';
 import { styled } from '@mui/system';
 import { useHistory } from 'react-router';
 import { Party } from '../../../model/Party';
-import { fetchProductRoles } from '../../../services/usersService';
-
+import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
 import useLoading from '../../../hooks/useLoading';
 import { AppError, appStateActions } from '../../../redux/slices/appStateSlice';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -29,8 +28,6 @@ import { PartyUserOnCreation } from '../../../model/PartyUser';
 import { ProductRole } from '../../../model/ProductRole';
 import { storageWrite } from '../../../utils/storage-utils';
 import { DASHBOARD_ROUTES, resolvePathVariables } from '../../../routes';
-import { savePartyUser } from './../../../services/__mocks__/usersService';
-
 const CustomTextField = styled(TextField)({
   '.MuiInput-root': {
     '&:after': {
@@ -128,6 +125,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .then(() => {
+          const notifyMessage = `Hai aggiunto ${values.name} ${values.surname} correttamente `;
           storageWrite(STORAGE_KEY_NOTIFY_MESSAGE, notifyMessage, 'string');
           history.push(
             resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
@@ -180,12 +178,6 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       },
     };
   };
-
-  const notifyMessage = `Hai aggiunto ${
-    baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente').value
-  } ${
-    baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente').value
-  } correttamente `;
 
   return (
     <React.Fragment>
