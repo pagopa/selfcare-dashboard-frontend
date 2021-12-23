@@ -48,7 +48,7 @@ export default function UsersSearchFilter({
 
   const onClickFilterProduct = () => {
     setOpenLogoutModal(true);
-    setTitleModal('Prodotti');
+    setTitleModal('Prodotto');
     setFilterModalConfig({
       data: products.filter((p) => p.active),
       getLabel: (p: Product) => p.title,
@@ -59,7 +59,7 @@ export default function UsersSearchFilter({
 
   const onClickFilterRole = () => {
     setOpenLogoutModal(true);
-    setTitleModal('Ruoli');
+    setTitleModal('Ruolo');
     setFilterModalConfig({
       data: Object.entries(roleLabels),
       getLabel: (r: Array<any>) => r[1].shortLabel,
@@ -119,7 +119,7 @@ export default function UsersSearchFilter({
         filterModalConfig={filterModalConfig}
         open={openLogoutModal}
         title={titleModal}
-        height='100%'
+        height="100%"
       />
     </Grid>
   );
