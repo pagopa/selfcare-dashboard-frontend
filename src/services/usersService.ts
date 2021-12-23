@@ -13,6 +13,7 @@ import { DashboardApi } from '../api/DashboardApiClient';
 import { User } from '../model/User';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
+  savePartyUser as savePartyUserMocked,
   mockedProductRoles,
 } from './__mocks__/usersService';
 
@@ -54,7 +55,14 @@ export const savePartyUser = (
   party: Party,
   product: Product,
   user: PartyUserOnCreation
-): Promise<any> => DashboardApi.savePartyUser(party.institutionId, product.id, user);
+): Promise<any> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return savePartyUserMocked(party, product, user);
+  } else {
+    return DashboardApi.savePartyUser(party.institutionId, product.id, user);
+  }
+};
 
 export const updatePartyUserStatus = (user: PartyUser, status: UserStatus): Promise<any> => {
   if (user.products.length !== 1) {
