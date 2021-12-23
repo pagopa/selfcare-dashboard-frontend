@@ -52,7 +52,7 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
           title="Referenti"
           subTitle={
             selectedProduct
-              ? `Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.description}`
+              ? `Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione del prodotto ${selectedProduct.title}.`
               : 'Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione dei prodotti del tuo Ente.'
           }
         />
