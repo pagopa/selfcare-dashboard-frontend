@@ -14,8 +14,8 @@ export const useSelectedParty = (): {
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
   const selectedPartyProducts = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const parties = useAppSelector(partiesSelectors.selectPartiesList);
-  const setParty = (party: Party) => dispatch(partiesActions.setPartySelected(party));
-  const setPartyProducts = (products: Array<Product>) =>
+  const setParty = (party?: Party) => dispatch(partiesActions.setPartySelected(party));
+  const setPartyProducts = (products?: Array<Product>) =>
     dispatch(partiesActions.setPartySelectedProducts(products));
   const setLoadingDetails = useLoading(LOADING_TASK_SEARCH_PARTY);
   const setLoadingProducts = useLoading(LOADING_TASK_SEARCH_PRODUCTS);
@@ -56,7 +56,11 @@ export const useSelectedParty = (): {
         institutionId
       ).finally(() => setLoadingProducts(false));
 
-      return Promise.all([partyDetailPromise, partyProductsPromise]);
+      return Promise.all([partyDetailPromise, partyProductsPromise]).catch((e) => {
+        setParty(undefined);
+        setPartyProducts(undefined);
+        throw e;
+      });
     } else {
       return Promise.all([
         new Promise<Party>((resolve) => resolve(selectedParty)),
