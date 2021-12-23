@@ -62,7 +62,7 @@ export function buildColumnDefs(
         headerName: 'RUOLO',
         align: 'left',
         headerAlign: 'left',
-        width: 200,
+        width: !isSelectedProduct ? 233 : 235,
         editable: false,
         disableColumnMenu: true,
         renderCell: showLabelRef,
@@ -206,12 +206,13 @@ function showRefStatus(
               Sospendi
             </Link>
           )
-        : renderCell(
+          : users.row.status === 'SUSPENDED' 
+          ? renderCell(
             users,
             <Link onClick={() => onChangeState(users.row)} sx={{ cursor: 'pointer' }}>
               Riabilita
             </Link>
-          )}
+          ) : renderCell(users,'')}
     </React.Fragment>
   );
 }
