@@ -39,7 +39,6 @@ export default function PartySelectionSearchInput({
             color: '#5C6F82',
             textAlign: 'start',
             paddingLeft: '16px',
-            textTransform: 'capitalize',
           },
           disableUnderline,
         }}
