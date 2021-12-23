@@ -125,7 +125,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .then(() => {
-          const notifyMessage = `Hai aggiunto ${values.name} ${values.surname} correttamente `;
+          const notifyMessage = `Hai aggiunto correttamente ${values.name} ${values.surname}.`;
           storageWrite(STORAGE_KEY_NOTIFY_MESSAGE, notifyMessage, 'string');
           history.push(
             resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
