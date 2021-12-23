@@ -50,7 +50,7 @@ export default function UsersSearchFilter({
     setOpenLogoutModal(true);
     setTitleModal('Prodotti');
     setFilterModalConfig({
-      data: products,
+      data: products.filter((p) => p.active),
       getLabel: (p: Product) => p.title,
       getValue: (p: Product) => p.id,
       onFilterChange: (p: Product) => onFilterChange({ ...filter, product: p }),
