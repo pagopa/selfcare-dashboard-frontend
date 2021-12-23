@@ -32,7 +32,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
             ? 'Carica il logo del tuo Ente'
             : 'Modifica Logo'
         ),
-      100
+      400
     );
   }, [urlLogo]);
 
