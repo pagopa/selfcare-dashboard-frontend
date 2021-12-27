@@ -1,7 +1,7 @@
 import { PageRequest } from '../../model/PageRequest';
 import { PageResource } from '../../model/PageResource';
 import { Party, UserRole } from '../../model/Party';
-import { PartyUser } from '../../model/PartyUser';
+import { PartyUser, PartyUserOnCreation } from '../../model/PartyUser';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
 import { User } from '../../model/User';
@@ -380,3 +380,9 @@ export const fetchPartyUsers = (
 
 export const fetchProductRoles = (_product: Product): Promise<Array<ProductRole>> =>
   new Promise((resolve) => resolve(mockedProductRoles));
+
+  export const savePartyUser = (
+    _party: Party,
+    _product: Product,
+    _user: PartyUserOnCreation
+  ): Promise<any> => new Promise((resolve) => resolve(200));

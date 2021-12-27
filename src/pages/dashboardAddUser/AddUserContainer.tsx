@@ -47,7 +47,7 @@ function AddUserContainer({ party, selectedProduct }: Props) {
       <Grid item xs={12} mb={9}>
         <TitleBox
           title="Aggiungi un Referente"
-          subTitle={`Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.description}`}
+          subTitle={`Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.title}`}
         />
       </Grid>
       <Grid item xs={12}>

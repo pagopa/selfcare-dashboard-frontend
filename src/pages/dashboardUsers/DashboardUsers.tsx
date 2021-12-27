@@ -1,8 +1,12 @@
 import { Grid } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { Product } from '../../model/Product';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import TitleBox from '../../components/TitleBox';
 import { Party } from '../../model/Party';
+import Toast from '../../components/Toast';
+import { STORAGE_KEY_NOTIFY_MESSAGE } from '../../utils/constants';
+import { storageDelete, storageRead } from '../../utils/storage-utils';
 import UsersSearch from './components/usersSearch/UsersSearch';
 
 interface Props {
@@ -18,6 +22,18 @@ const paths = [
 ];
 
 export default function DashboardUsers({ party, selectedProduct, products }: Props) {
+  const [openToast, setOpenToast] = useState(false);
+  const [message, setMessage] = useState();
+
+  const notifyMessage = storageRead(STORAGE_KEY_NOTIFY_MESSAGE, 'string');
+  useEffect(() => {
+    if (notifyMessage) {
+      setOpenToast(true);
+      setMessage(notifyMessage);
+      storageDelete(STORAGE_KEY_NOTIFY_MESSAGE);
+    }
+  }, [notifyMessage]);
+
   return (
     <Grid
       container
@@ -36,7 +52,7 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
           title="Referenti"
           subTitle={
             selectedProduct
-              ? `Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.description}`
+              ? `Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione del prodotto ${selectedProduct.title}.`
               : 'Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione dei prodotti del tuo Ente.'
           }
         />
@@ -44,6 +60,13 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
       <Grid item xs={12}>
         <UsersSearch party={party} selectedProduct={selectedProduct} products={products} />
       </Grid>
+      {openToast && (
+        <Toast
+          title={`REFERENTE AGGIUNTO`}
+          message={<>{message}</>}
+          closeToast={() => setOpenToast(false)}
+        />
+      )}
     </Grid>
   );
 }

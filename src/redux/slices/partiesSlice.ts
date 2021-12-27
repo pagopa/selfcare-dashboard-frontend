@@ -20,9 +20,9 @@ export const partiesSlice = createSlice({
     setPartiesList: (state, action: PayloadAction<Array<Party>>) => {
       state.list = action.payload;
     },
-    setPartySelected: (state, action: PayloadAction<Party>) => {
+    setPartySelected: (state, action: PayloadAction<Party | undefined>) => {
       state.selected = action.payload;
-      state.selectedPartyLogoUrl = action.payload.urlLogo;
+      state.selectedPartyLogoUrl = action.payload?.urlLogo;
     },
     setPartySelectedPartyLogo: (state, action: PayloadAction<string | undefined>) => {
       state.selectedPartyLogoUrl = `${action.payload}?${new Date()}`;
@@ -32,7 +32,7 @@ export const partiesSlice = createSlice({
           .forEach((p) => (p.urlLogo = state.selectedPartyLogoUrl));
       }
     },
-    setPartySelectedProducts: (state, action: PayloadAction<Array<Product>>) => {
+    setPartySelectedProducts: (state, action: PayloadAction<Array<Product> | undefined>) => {
       state.selectedProducts = action.payload;
     },
   },

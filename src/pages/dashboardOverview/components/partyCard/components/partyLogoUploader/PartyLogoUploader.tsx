@@ -1,11 +1,12 @@
 import { Grid } from '@mui/material';
-import { useDropzone } from 'react-dropzone';
+import { FileRejection, useDropzone } from 'react-dropzone';
 import { Box } from '@mui/system';
 import { useState, useEffect } from 'react';
 import SessionModal from '../../../../../../components/SessionModal';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
+import { AppError, appStateActions } from '../../../../../../redux/slices/appStateSlice';
 import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
 
@@ -13,6 +14,11 @@ type Props = {
   institutionId: string;
   canUploadLogo: boolean;
 };
+
+const getLabelLinkText = () =>
+  document.querySelector('#partyLogo')?.children[0].tagName === 'svg'
+    ? 'Carica il logo del tuo Ente'
+    : 'Modifica Logo';
 
 export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
   const [loading, setLoading] = useState(false);
@@ -23,17 +29,10 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
     dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
   const [labelLink, setLabelLink] = useState('Modifica Logo');
+  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
 
   useEffect(() => {
-    setTimeout(
-      () =>
-        setLabelLink(
-          document.querySelector('#partyLogo')?.children[0].tagName === 'svg'
-            ? 'Carica il logo del tuo Ente'
-            : 'Modifica Logo'
-        ),
-      100
-    );
+    setTimeout(() => setLabelLink(getLabelLinkText()), 400);
   }, [urlLogo]);
 
   const handleOpen = () => {
@@ -55,7 +54,18 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         .catch(() => {
           setLoading(false);
           setOpenLogoutModal(true);
+          setLabelLink(getLabelLinkText());
         });
+    },
+    onDropRejected: async (files: Array<FileRejection>) => {
+      addError({
+        id: 'WRONG_FILE_EXTENSION',
+        blocking: false,
+        error: new Error(),
+        techDescription: `Wrong File Extension : ${files[0]}`,
+        displayableDescription: "E' possibile caricare un solo file di tipo PNG",
+        toNotify: false,
+      });
     },
     // Disable click and keydown behavior
     noClick: true,
@@ -79,7 +89,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         message={
           'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo'
         }
-       height='100%'
+        height="100%"
       />
     </Grid>
   );

@@ -13,7 +13,12 @@ type Props = {
 export function PartyDescription({ labelLink, open }: Props) {
   return (
     <Grid container direction="column" justifyContent={'center'} alignItems={'center'}>
-      <Link component="button" underline={'always'} color={'primary'} onClick={open}>
+      <Link
+        underline={'always'}
+        color={'primary'}
+        onClick={open}
+        sx={{ fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
+      >
         {labelLink}
       </Link>
       <Typography

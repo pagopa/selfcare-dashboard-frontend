@@ -7,38 +7,42 @@ import { ChangeEventHandler } from 'react';
 type Props = {
   onChange: ChangeEventHandler<HTMLInputElement>;
   input: string;
-  label: string;
   disableUnderline?: boolean;
   clearField?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  placeholder: string;
 };
 
 export default function PartySelectionSearchInput({
   onChange,
   input,
-  label,
   disableUnderline,
   clearField,
+  placeholder
 }: Props) {
   return (
     // <Grid container item  >
     <Grid item mx={-1} display="flex" justifyContent="center" xs={12}>
       <TextField
         name="partySearchInput"
-        // type="search"
         sx={{ width: '100%' }}
         value={input}
+        placeholder={placeholder}
         onChange={onChange}
         id="search"
-        label={label}
-        InputProps={{
+        inputProps={{
           style: {
+            fontFamily: 'Titillium Web',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
             fontSize: '16px',
             lineHeight: '24px',
-            color: '#C1C9D2',
+            color: '#5C6F82',
             textAlign: 'start',
             paddingLeft: '16px',
           },
           disableUnderline,
+        }}
+          InputProps={{
           endAdornment: (
             <InputAdornment position="end">
               {!input ? (

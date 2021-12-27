@@ -49,7 +49,7 @@ test('Test rendering', () => {
   render(
     <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
   );
-  const input = screen.getByLabelText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca');
 
   // search button  "Cerca"
   expect(input.tagName).toBe('INPUT');
@@ -72,7 +72,7 @@ test('Test filter', () => {
   render(
     <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
   );
-  const input = screen.getByLabelText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca');
   const filterNapoli = 'Napoli';
 
   // modify input field
@@ -105,7 +105,7 @@ test('Test selection', () => {
   render(
     <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
   );
-  const input = screen.getByLabelText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca');
   const filterPartyNapoli = 'Comune di Napoli Referente Amministrativo';
   // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
   const filterNapoli = 'Napoli';

@@ -27,10 +27,10 @@ export default function ActiveProductCard({
             disableBtn={isDisabled}
             cardTitle={product.title}
             cardSubTitle={
-              product.activationDateTime &&
-              `Attivo da ${
+              product.activationDateTime ?
+              `Attivo dal ${
                 product.activationDateTime && formatDateAsLongString(product.activationDateTime)
-              }`
+              }` : 'Attivo'
             }
             buttonLabel={buttonLabel}
             logoCard={product.logo}

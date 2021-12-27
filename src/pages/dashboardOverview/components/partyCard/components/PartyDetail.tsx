@@ -67,7 +67,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             mt: 1,
           }}
         >
-          {'Ragione Sociale'}
+          {'Ragione sociale'}
         </Typography>
         <Typography
           variant="body2"
@@ -94,7 +94,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             mt: 1,
           }}
         >
-          {'Codice Fiscale'}
+          {'Codice fiscale'}
         </Typography>
         <Typography
           variant="body2"
