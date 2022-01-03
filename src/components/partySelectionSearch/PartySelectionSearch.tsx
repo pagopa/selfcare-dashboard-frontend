@@ -11,6 +11,8 @@ type Props = {
   parties: Array<Party>;
   onPartySelectionChange: (selectedParty: Party | null) => void;
   disableUnderline?: boolean;
+  label?: string;
+  showAvatar?:boolean;
 };
 
 const verifyPartyFilter = (party: Party, filter: string) =>
@@ -34,6 +36,8 @@ export default function PartySelectionSearch({
   parties,
   onPartySelectionChange,
   disableUnderline = false,
+  label,
+  showAvatar,
 }: Props) {
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
@@ -62,10 +66,11 @@ export default function PartySelectionSearch({
 
   return (
     <Grid container item direction="column">
-      <Grid item mb={3}>
+      <Grid item mt={3} mb={2}>
         {parties.length > 3 && (
           <Box>
             <PartySelectionSearchInput
+              label={label}
               disableUnderline={disableUnderline}
               placeholder ="Cerca"
               onChange={(e) => onFilterChange(e.target.value)}
@@ -83,6 +88,7 @@ export default function PartySelectionSearch({
               const isDisabled = party.status === 'PENDING';
               return (
                 <PartyItemContainer
+                  showAvatar={showAvatar}
                   isDisabled={isDisabled}
                   disabled={isDisabled}
                   key={party.institutionId}

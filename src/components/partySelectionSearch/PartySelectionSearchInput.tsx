@@ -3,13 +3,21 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import { ChangeEventHandler } from 'react';
+import { styled } from '@mui/system';
 
+const CustomTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    display: 'none',
+  },
+  'label':{fontSize:'14px', fontWeight:'600', color:'#475A6D', marginLeft:'8px'}
+});
 type Props = {
   onChange: ChangeEventHandler<HTMLInputElement>;
   input: string;
   disableUnderline?: boolean;
   clearField?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   placeholder: string;
+  label?: string;
 };
 
 export default function PartySelectionSearchInput({
@@ -17,12 +25,14 @@ export default function PartySelectionSearchInput({
   input,
   disableUnderline,
   clearField,
-  placeholder
+  placeholder,
+  label,
 }: Props) {
   return (
     // <Grid container item  >
     <Grid item mx={-1} display="flex" justifyContent="center" xs={12}>
-      <TextField
+      <CustomTextField
+        label={label}
         name="partySearchInput"
         sx={{ width: '100%' }}
         value={input}
@@ -40,9 +50,9 @@ export default function PartySelectionSearchInput({
             textAlign: 'start',
             paddingLeft: '16px',
           },
-          disableUnderline,
         }}
           InputProps={{
+          disableUnderline,
           endAdornment: (
             <InputAdornment position="end">
               {!input ? (
