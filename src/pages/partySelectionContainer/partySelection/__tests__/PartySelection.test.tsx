@@ -53,7 +53,7 @@ test('Test rendering', () => {
   const button = screen.getByRole('button', { name: 'Entra' });
   expect(button).toBeDisabled();
 
-  const button2 = document.querySelectorAll("*[type='button']")[0];
+  const button2 = document.querySelectorAll("*[type='button']")[1];
   expect(button).toBe(button2);
 
   parties
