@@ -2,14 +2,22 @@ import { Grid, TextField, IconButton } from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
-import { ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler } from 'react';
 import { styled } from '@mui/system';
 
+
+const CustomIconButton = styled(IconButton)({
+  '&:hover': {
+    backgroundColor: 'transparent !important',
+  }
+});
 const CustomTextField = styled(TextField)({
+  
   '& label.Mui-focused': {
     display: 'none',
   },
-  'label':{fontSize:'14px', fontWeight:'600', color:'#475A6D', marginLeft:'8px'}
+  'label':{fontSize:'14px', fontWeight:'600', color:'#475A6D', marginLeft:'8px'},
+  'input':{cursor:'pointer',}
 });
 type Props = {
   onChange: ChangeEventHandler<HTMLInputElement>;
@@ -18,7 +26,10 @@ type Props = {
   clearField?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   placeholder: string;
   label?: string;
+  iconColor?: string;
+  iconMarginRight?: string;
 };
+
 
 export default function PartySelectionSearchInput({
   onChange,
@@ -27,11 +38,24 @@ export default function PartySelectionSearchInput({
   clearField,
   placeholder,
   label,
-}: Props) {
+  iconColor ='#475A6D',
+  iconMarginRight
+}: Props) 
+{
+  const inputRef = React.useRef<HTMLInputElement>(); 
+
+  const focusTextInput = () =>{
+    if (inputRef.current){
+      inputRef.current.focus();
+    }
+  };
+  
   return (
+   
     // <Grid container item  >
     <Grid item mx={-1} display="flex" justifyContent="center" xs={12}>
       <CustomTextField
+        inputRef={inputRef}
         label={label}
         name="partySearchInput"
         sx={{ width: '100%' }}
@@ -56,21 +80,27 @@ export default function PartySelectionSearchInput({
           endAdornment: (
             <InputAdornment position="end">
               {!input ? (
-                <SearchOutlinedIcon />
+                <CustomIconButton
+                disableRipple={true}
+                onClick={focusTextInput}
+                style={{ marginRight: iconMarginRight }}
+              >
+                <SearchOutlinedIcon sx={{color:iconColor}}/>
+                </CustomIconButton>
               ) : (
-                <IconButton
-                  // color="primary"
+                <CustomIconButton
+                  disableRipple={true}
                   onClick={clearField}
                   style={{ marginRight: '-10px' }}
                 >
                   <ClearOutlinedIcon />
-                </IconButton>
+                </CustomIconButton>
               )}
             </InputAdornment>
           ),
         }}
         variant="standard"
-      />
+      /> 
     </Grid>
     // </Grid>
   );

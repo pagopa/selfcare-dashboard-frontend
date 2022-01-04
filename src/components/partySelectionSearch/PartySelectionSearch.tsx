@@ -13,6 +13,8 @@ type Props = {
   disableUnderline?: boolean;
   label?: string;
   showAvatar?:boolean;
+  iconColor?:string;
+  iconMarginRight?: string;
 };
 
 const verifyPartyFilter = (party: Party, filter: string) =>
@@ -38,6 +40,8 @@ export default function PartySelectionSearch({
   disableUnderline = false,
   label,
   showAvatar,
+  iconColor,
+  iconMarginRight
 }: Props) {
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
@@ -71,11 +75,13 @@ export default function PartySelectionSearch({
           <Box>
             <PartySelectionSearchInput
               label={label}
+              iconMarginRight={iconMarginRight}
               disableUnderline={disableUnderline}
               placeholder ="Cerca"
               onChange={(e) => onFilterChange(e.target.value)}
               input={input}
               clearField={() => onFilterChange('')}
+              iconColor={iconColor}
             />
           </Box>
         )}
