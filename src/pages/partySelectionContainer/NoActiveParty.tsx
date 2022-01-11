@@ -54,7 +54,7 @@ export default function NoActiveParty({ parties }: Props) {
           </Grid>
         </Grid>
         <Grid item container justifyContent="center">
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Box>
               {filteredParties &&
                 filteredParties.map((party) => {
