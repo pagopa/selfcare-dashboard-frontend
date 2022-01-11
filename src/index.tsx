@@ -1,5 +1,10 @@
 import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
+import 'core-js/es/object/values';
+import 'core-js/es/promise';
+import 'core-js/es/array';
+import 'core-js/stable/string';
+import 'core-js/stable/number';
+import 'core-js/stable/url-search-params';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
