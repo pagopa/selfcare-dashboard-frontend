@@ -7,7 +7,7 @@ import { AppError, appStateActions } from '../redux/slices/appStateSlice';
 import useLoading from './useLoading';
 
 const tokenPlaceholder = '<IdentityToken>';
-const hostnameRegexp = /(?<=^https?:\/\/)[-.a-zA-Z0-9_]+/;
+const hostnameRegexp = /^(?:https?:\/\/)([-.a-zA-Z0-9_]+)/;
 
 export const useTokenExchange = () => {
   const dispatch = useAppDispatch();
@@ -62,8 +62,8 @@ export const validateUrlBO = (url: string): string | Error => {
 
 const hostnameFromUrl = (url: string): string | null => {
   const regexpResults = hostnameRegexp.exec(url);
-  if (regexpResults && regexpResults.length > 0) {
-    return regexpResults[0];
+  if (regexpResults && regexpResults.length > 1) {
+    return regexpResults[1];
   } else {
     return null;
   }
