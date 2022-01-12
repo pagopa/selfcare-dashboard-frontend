@@ -31,7 +31,6 @@ export default function PartySelectionSearchInput({
         id="search"
         inputProps={{
           style: {
-            fontFamily: 'Titillium Web',
             fontStyle: 'normal',
             fontWeight: 'normal',
             fontSize: '16px',
