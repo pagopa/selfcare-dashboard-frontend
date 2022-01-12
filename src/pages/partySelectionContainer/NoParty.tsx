@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { URL_FE_LANDING } from '../../utils/constants';
+import { URL_FE_LANDING } from '../../utils/env';
 
 export default function NoParty() {
   const bodyTitle = 'Non risulta nessun Ente associato';

@@ -4,7 +4,7 @@ import * as t from 'io-ts';
 import { agent } from '@pagopa/ts-commons';
 import { AbortableFetch, setFetchTimeout, toFetch } from '@pagopa/ts-commons/lib/fetch';
 import { Millisecond } from '@pagopa/ts-commons/lib/units';
-import { URL_FE_LOGOUT } from '../utils/constants';
+import { URL_FE_LOGOUT } from '../utils/env';
 
 export const buildFetchApi = (timeoutMs: number = 300000): typeof fetchWithTimeout => {
   // Must be an https endpoint so we use an https agent

@@ -2,7 +2,7 @@ import { Card, Grid, Link } from '@mui/material';
 import { Box } from '@mui/material';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { URL_FE_ONBOARDING } from '../../../../../utils/constants';
+import { URL_FE_ONBOARDING } from '../../../../../utils/env';
 import BaseProductCard from '../../productCard/BaseProductCard';
 
 type Props = {

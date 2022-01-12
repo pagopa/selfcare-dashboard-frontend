@@ -1,4 +1,5 @@
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
+import { URL_INSTITUTION_LOGO_PREFIX, URL_INSTITUTION_LOGO_SUFFIX } from '../utils/env';
 
 export type UserRole = 'ADMIN' | 'LIMITED';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED';
@@ -15,7 +16,7 @@ export type Party = {
 };
 
 const buildUrlLog = (institutionId: string) =>
-  `${process.env.REACT_APP_URL_INSTITUTION_LOGO_PREFIX}${institutionId}${process.env.REACT_APP_URL_INSTITUTION_LOGO_SUFFIX}`;
+  `${URL_INSTITUTION_LOGO_PREFIX}${institutionId}${URL_INSTITUTION_LOGO_SUFFIX}`;
 
 export const institutionResource2Party = (institutionResource: InstitutionResource): Party => {
   const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);

@@ -3,6 +3,7 @@ import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { store } from '../redux/store';
 import { appStateActions } from '../redux/slices/appStateSlice';
 import { PartyUserOnCreation } from '../model/PartyUser';
+import { API_DASHBOARD_TIMEOUT_MS, URL_API_DASHBOARD } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
@@ -11,8 +12,8 @@ import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUs
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 
-const dashboardBaseUrl = process.env.REACT_APP_URL_API_DASHBOARD;
-const dashboardTimeoutMs = process.env.REACT_APP_API_DASHBOARD_TIMEOUT_MS;
+const dashboardBaseUrl = URL_API_DASHBOARD;
+const dashboardTimeoutMs = API_DASHBOARD_TIMEOUT_MS;
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {

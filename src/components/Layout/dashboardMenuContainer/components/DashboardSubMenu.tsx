@@ -8,7 +8,7 @@ import styled from '@emotion/styled';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import ROUTES, { resolvePathVariables } from '../../../../routes';
-import { URL_FE_LOGOUT } from '../../../../utils/constants';
+import { URL_FE_LOGOUT } from '../../../../utils/env';
 import { useParties } from '../../../../hooks/useParties';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../redux/slices/partiesSlice';
@@ -16,9 +16,8 @@ import { AppError, appStateActions } from '../../../../redux/slices/appStateSlic
 import LogoSubMenu from './LogoSubMenu';
 
 const CustomIconButton = styled(IconButton)({
-  '&:hover':{ backgroundColor:'transparent' },
+  '&:hover': { backgroundColor: 'transparent' },
 });
-
 
 type Props = {
   ownerName: string;

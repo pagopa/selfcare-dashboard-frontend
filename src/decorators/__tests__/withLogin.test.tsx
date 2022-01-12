@@ -1,7 +1,8 @@
 import { render, waitFor, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { storageDelete, storageWrite } from '../../utils/storage-utils';
-import { STORAGE_KEY_USER, URL_FE_LOGIN } from '../../utils/constants';
+import { STORAGE_KEY_USER } from '../../utils/constants';
+import { URL_FE_LOGIN } from '../../utils/env';
 import { User } from '../../model/User';
 import { createStore } from '../../redux/store';
 import withLogin from '../withLogin';

@@ -1,6 +1,7 @@
 import isEmpty from 'lodash/isEmpty';
 import { storageDelete, storageRead, storageWrite } from '../utils/storage-utils';
-import { MOCK_USER, STORAGE_KEY_TOKEN, STORAGE_KEY_USER, URL_FE_LOGIN } from '../utils/constants';
+import { URL_FE_LOGIN } from '../utils/env';
+import { MOCK_USER, STORAGE_KEY_TOKEN, STORAGE_KEY_USER } from '../utils/constants';
 import { useAppDispatch } from '../redux/hooks';
 import { User } from '../model/User';
 import { userActions } from '../redux/slices/userSlice';

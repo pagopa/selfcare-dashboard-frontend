@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Party } from '../../model/Party';
-import { roleLabels, URL_FE_LANDING } from '../../utils/constants';
+import { URL_FE_LANDING } from '../../utils/env';
+import { roleLabels } from '../../utils/constants';
 import PartyItemContainer from './../../components/partySelectionSearch/PartyItemContainer';
 
 type Props = {
