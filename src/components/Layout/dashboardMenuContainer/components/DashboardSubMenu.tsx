@@ -96,7 +96,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 },
               }}
             >
-              <Grid container px={4} width="392px" maxHeight="520px">
+              <Grid container px={4} width="392px" maxHeight="560px">
                 <Grid item xs={12} mt={4} mb={4}>
                   <Typography variant="h3" sx={{ fontSize: '26px' }}>
                     {ownerName}
@@ -108,9 +108,14 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 <Grid item xs={12}>
                   <Divider sx={{ borderColor: '#CCD4DC' }} />
                 </Grid>
-                <Grid item mx={3} mb={3} xs={12}>
+                <Grid item mb={3} xs={12}>
                   {parties2Show && (
                     <PartySelectionSearch
+                      pxTitleSubTitle='32px'
+                      iconMarginRight='-10px'
+                      showAvatar={false}
+                      iconColor='#0073E6'
+                      label='I tuoi enti'
                       disableUnderline={true}
                       parties={parties2Show}
                       onPartySelectionChange={(selectedParty: Party | null) => {
