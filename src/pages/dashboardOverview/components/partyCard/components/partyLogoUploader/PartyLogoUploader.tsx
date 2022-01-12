@@ -21,7 +21,6 @@ const getLabelLinkText = () =>
 
 export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
   const [loading, setLoading] = useState(false);
-  // const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
   const dispatch = useAppDispatch();
   const setUrlLogo = (urlLogo?: string) =>
@@ -36,7 +35,6 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
 
   const handleOpen = () => {
     open();
-    // setOpenLogoutModal(false);
   };
   const maxLength = 400;
   const minLegth = 300;
@@ -55,10 +53,10 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         .catch((reason) => {
           setLoading(false);
           addError({
-            id: 'WRONG_FILE_EXTENSION',
+            id: 'FILE_UPLOAD_ERROR',
             blocking: false,
             error: reason,
-            techDescription: `Wrong File Extension : ${files[0]}`,
+            techDescription: 'An error occurred while uploading new logo',
             displayableTitle: 'Caricamento non riuscito',
             displayableDescription: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
             toNotify: true,
