@@ -5,8 +5,9 @@ import AddUserContainer from './pages/dashboardAddUser/AddUserContainer';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import DashboardUsers from './pages/dashboardUsers/DashboardUsers';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
+import { ENV } from './utils/env';
 
-export const BASE_ROUTE = process.env.PUBLIC_URL ? process.env.PUBLIC_URL : '/dashboard';
+export const BASE_ROUTE = ENV.PUBLIC_URL;
 
 export type RoutesObject = { [key: string]: RouteConfig };
 

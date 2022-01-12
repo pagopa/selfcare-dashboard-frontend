@@ -3,6 +3,7 @@ import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { store } from '../redux/store';
 import { appStateActions } from '../redux/slices/appStateSlice';
 import { PartyUserOnCreation } from '../model/PartyUser';
+import { ENV } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
@@ -10,9 +11,6 @@ import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
-
-const dashboardBaseUrl = process.env.REACT_APP_URL_API_DASHBOARD;
-const dashboardTimeoutMs = process.env.REACT_APP_API_DASHBOARD_TIMEOUT_MS;
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
@@ -24,9 +22,9 @@ const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   };
 
 const apiClient = createClient({
-  baseUrl: dashboardBaseUrl,
+  baseUrl: ENV.URL_API.API_DASHBOARD,
   basePath: '',
-  fetchApi: buildFetchApi(dashboardTimeoutMs),
+  fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.DASHBOARD),
   withDefaults: withBearerAndInstitutionId,
 });
 
