@@ -18,6 +18,7 @@ type Props = {
   titleSize?: string;
   subTitleSize?: string;
   showAvatar?: boolean;
+  pxTitleSubTitle?:string;
 };
 
 const CustomList = styled(List)({
@@ -52,7 +53,8 @@ export default function PartyItem({
   titleColor,
   titleSize,
   subTitleSize,
-  showAvatar=true
+  showAvatar=true,
+  pxTitleSubTitle
 }: Props) {
   return (
     <CustomList
@@ -69,7 +71,7 @@ export default function PartyItem({
         {showAvatar && <Box pl={1} pr={2}>
           <CustomAvatar customAlt="" customSrc={image} />
         </Box>}
-        <Grid container>
+        <Grid container sx={{px:pxTitleSubTitle}}>
           <Grid item xs={12}>
             <Typography variant="h1" sx={{ fontSize: titleSize, color: titleColor }}>
               {title}

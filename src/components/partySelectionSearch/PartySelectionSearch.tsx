@@ -15,6 +15,7 @@ type Props = {
   showAvatar?:boolean;
   iconColor?:string;
   iconMarginRight?: string;
+  pxTitleSubTitle?: string;
 };
 
 const verifyPartyFilter = (party: Party, filter: string) =>
@@ -41,7 +42,8 @@ export default function PartySelectionSearch({
   label,
   showAvatar,
   iconColor,
-  iconMarginRight
+  iconMarginRight,
+  pxTitleSubTitle
 }: Props) {
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
@@ -88,12 +90,13 @@ export default function PartySelectionSearch({
       </Grid>
 
       <Grid item>
-        <CustomBox>
+        <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)'}} >
           {filteredParties &&
             filteredParties.map((party) => {
               const isDisabled = party.status === 'PENDING';
               return (
                 <PartyItemContainer
+                  pxTitleSubTitle={pxTitleSubTitle}
                   showAvatar={showAvatar}
                   isDisabled={isDisabled}
                   disabled={isDisabled}
