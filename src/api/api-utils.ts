@@ -4,7 +4,7 @@ import * as t from 'io-ts';
 import { agent } from '@pagopa/ts-commons';
 import { AbortableFetch, setFetchTimeout, toFetch } from '@pagopa/ts-commons/lib/fetch';
 import { Millisecond } from '@pagopa/ts-commons/lib/units';
-import { URL_FE_LOGOUT } from '../utils/env';
+import { ENV } from '../utils/env';
 
 export const buildFetchApi = (timeoutMs: number = 300000): typeof fetchWithTimeout => {
   // Must be an https endpoint so we use an https agent
@@ -28,7 +28,7 @@ export const extractResponse = async <R>(
       return response.right.value;
     } else if (notValidTokenHttpStatus && response.right.status === notValidTokenHttpStatus) {
       onRedirectToLogin();
-      window.setTimeout(() => window.location.assign(URL_FE_LOGOUT), 2000);
+      window.setTimeout(() => window.location.assign(ENV.URL_FE.LOGOUT), 2000);
       return new Promise(() => null);
     } else if (
       notAuthorizedTokenHttpStatus &&

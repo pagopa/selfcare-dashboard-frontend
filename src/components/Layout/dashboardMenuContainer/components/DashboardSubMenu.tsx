@@ -8,7 +8,7 @@ import styled from '@emotion/styled';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import ROUTES, { resolvePathVariables } from '../../../../routes';
-import { URL_FE_LOGOUT } from '../../../../utils/env';
+import { ENV } from '../../../../utils/env';
 import { useParties } from '../../../../hooks/useParties';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../redux/slices/partiesSlice';
@@ -130,7 +130,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                     <Button
                       variant="contained"
                       sx={{ height: '40px', width: '100%' }}
-                      onClick={() => window.location.assign(URL_FE_LOGOUT)}
+                      onClick={() => window.location.assign(ENV.URL_FE.LOGOUT)}
                     >
                       Esci
                     </Button>

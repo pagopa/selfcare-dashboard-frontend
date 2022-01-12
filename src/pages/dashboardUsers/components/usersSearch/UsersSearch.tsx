@@ -16,7 +16,7 @@ import useLoading from '../../../../hooks/useLoading';
 import { LOADING_TASK_PARTY_USERS } from '../../../../utils/constants';
 import { userSelectors } from '../../../../redux/slices/userSlice';
 import { User } from '../../../../model/User';
-import { PARTY_USERS_PAGE_SIZE } from '../../../../utils/env';
+import { ENV } from '../../../../utils/env';
 import UsersSearchFilter, { UsersSearchFilterConfig } from './components/UsersSearchFilter';
 import UsersSearchTable from './components/UsersSearchTable';
 
@@ -31,7 +31,7 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
   const [users, setUsers] = useState<Array<PartyUser> | null>(null);
   const [page, setPage] = useState<Page>({
     number: 0,
-    size: PARTY_USERS_PAGE_SIZE,
+    size: ENV.PARTY_USERS_PAGE_SIZE,
     totalElements: 0,
     totalPages: 0,
   });
@@ -40,7 +40,7 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
   );
   const [pageRequest, setPageRequest] = useState<PageRequest>({
     page: 0,
-    size: PARTY_USERS_PAGE_SIZE,
+    size: ENV.PARTY_USERS_PAGE_SIZE,
   });
   const history = useHistory();
   const dispatch = useAppDispatch();

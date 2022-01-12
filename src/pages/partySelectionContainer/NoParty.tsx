@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { URL_FE_LANDING } from '../../utils/env';
+import { ENV } from '../../utils/env';
 
 export default function NoParty() {
   const bodyTitle = 'Non risulta nessun Ente associato';
@@ -48,7 +48,7 @@ export default function NoParty() {
           <Button
             variant="contained"
             sx={{ width: '190px', height: '40px' }}
-            onClick={() => window.location.assign(URL_FE_LANDING)}
+            onClick={() => window.location.assign(ENV.URL_FE.LANDING)}
           >
             Torna alla Home
           </Button>

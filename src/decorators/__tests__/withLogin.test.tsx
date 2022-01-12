@@ -2,7 +2,7 @@ import { render, waitFor, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { storageDelete, storageWrite } from '../../utils/storage-utils';
 import { STORAGE_KEY_USER } from '../../utils/constants';
-import { URL_FE_LOGIN } from '../../utils/env';
+import { ENV } from '../../utils/env';
 import { User } from '../../model/User';
 import { createStore } from '../../redux/store';
 import withLogin from '../withLogin';
@@ -57,7 +57,7 @@ const mockUser = (): User => {
 
 test('Test no auth session', async () => {
   renderApp();
-  await waitFor(() => expect(global.window.location.assign).toBeCalledWith(URL_FE_LOGIN));
+  await waitFor(() => expect(global.window.location.assign).toBeCalledWith(ENV.URL_FE.LOGIN));
 });
 
 test('Test auth session', async () => {

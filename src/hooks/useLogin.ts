@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import { storageDelete, storageRead, storageWrite } from '../utils/storage-utils';
-import { URL_FE_LOGIN } from '../utils/env';
+import { ENV } from '../utils/env';
 import { MOCK_USER, STORAGE_KEY_TOKEN, STORAGE_KEY_USER } from '../utils/constants';
 import { useAppDispatch } from '../redux/hooks';
 import { User } from '../model/User';
@@ -33,7 +33,7 @@ export const useLogin = () => {
       // Remove any partial data that might have remained, just for safety
       storageDelete(STORAGE_KEY_USER);
       // Go to the login view
-      window.location.assign(URL_FE_LOGIN);
+      window.location.assign(ENV.URL_FE.LOGIN);
       // This return is necessary
       return;
     }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Party } from '../../model/Party';
-import { URL_FE_LANDING } from '../../utils/env';
+import { ENV } from '../../utils/env';
 import { roleLabels } from '../../utils/constants';
 import PartyItemContainer from './../../components/partySelectionSearch/PartyItemContainer';
 
@@ -81,7 +81,7 @@ export default function NoActiveParty({ parties }: Props) {
           <Button
             variant="contained"
             sx={{ width: '190px', height: '40px' }}
-            onClick={() => window.location.assign(URL_FE_LANDING)}
+            onClick={() => window.location.assign(ENV.URL_FE.LANDING)}
           >
             Torna alla Home
           </Button>

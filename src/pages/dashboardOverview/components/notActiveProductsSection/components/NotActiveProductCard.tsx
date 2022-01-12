@@ -2,7 +2,7 @@ import { Card, Grid, Link } from '@mui/material';
 import { Box } from '@mui/material';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { URL_FE_ONBOARDING } from '../../../../../utils/env';
+import { ENV } from '../../../../../utils/env';
 import BaseProductCard from '../../productCard/BaseProductCard';
 
 type Props = {
@@ -28,7 +28,7 @@ export default function NotActiveProductCard({ party, product, buttonLabel, info
             tag={product.tag}
             btnAction={() =>
               window.location.assign(
-                `${URL_FE_ONBOARDING}/${product.id}?institutionId=${party.institutionId}`
+                `${ENV.URL_FE.ONBOARDING}/${product.id}?institutionId=${party.institutionId}`
               )
             }
             heightLogo="70px"
