@@ -12,6 +12,7 @@ type Props = {
   onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   onConfirmLabel?: string;
   handleClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  handleExit?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   onCloseLabel?: string;
   height?: string;
   minHeight?: string;
@@ -24,6 +25,7 @@ export default function SessionModal({
   onConfirm,
   onConfirmLabel = 'Riprova',
   handleClose,
+  handleExit = handleClose,
   onCloseLabel = 'Annulla',
   height = '16em',
   minHeight = '16em',
@@ -39,12 +41,12 @@ export default function SessionModal({
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <Grid container direction="column" sx={{ height,minHeight, width }}>
+      <Grid container direction="column" sx={{ height, minHeight, width }}>
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>
               <IconButton
-                onClick={handleClose}
+                onClick={handleExit}
                 style={{ position: 'absolute', top: '20px', right: '16px', zIndex: 100 }}
               >
                 <ClearOutlinedIcon />
