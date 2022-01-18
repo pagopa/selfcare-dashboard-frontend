@@ -24,6 +24,7 @@ export default function PartySelection({ parties }: Props) {
 
   useEffect(() => {
     dispatch(partiesActions.setPartySelected(undefined));
+    dispatch(partiesActions.setPartySelectedProducts(undefined));
   }, []);
 
   return (
