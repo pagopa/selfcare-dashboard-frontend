@@ -16,6 +16,7 @@ type Props = {
   iconColor?:string;
   iconMarginRight?: string;
   pxTitleSubTitle?: string;
+  partyTitle?:string;
 };
 
 const verifyPartyFilter = (party: Party, filter: string) =>
@@ -43,7 +44,8 @@ export default function PartySelectionSearch({
   showAvatar,
   iconColor,
   iconMarginRight,
-  pxTitleSubTitle
+  pxTitleSubTitle,
+  partyTitle
 }: Props) {
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
@@ -88,7 +90,7 @@ export default function PartySelectionSearch({
           </Box>
         ) : 
         <Box> 
-          <Typography variant='h6' sx={{fontSize:'14px', color:'text.disabled'}} > I tuoi enti </Typography>
+          <Typography variant='h6' sx={{fontSize:'14px', color:'text.disabled'}} > {partyTitle} </Typography>
         </Box>
         }
       </Grid>
