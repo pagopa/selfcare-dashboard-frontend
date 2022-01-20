@@ -74,9 +74,9 @@ export default function PartySelectionSearch({
 
   return (
     <Grid container item direction="column">
-      <Grid item mt={3} mb={2}>
-        {parties.length > 3 ? (
-          <Box>
+     {(partyTitle || parties.length > 3) && <Grid item my={2}>
+        {parties.length > 3 ? 
+          (<Box>
             <PartySelectionSearchInput
               label={label}
               iconMarginRight={iconMarginRight}
@@ -87,13 +87,10 @@ export default function PartySelectionSearch({
               clearField={() => onFilterChange('')}
               iconColor={iconColor}
             />
-          </Box>
-        ) : 
-        <Box> 
-          <Typography variant='h6' sx={{fontSize:'14px', color:'text.disabled'}} > {partyTitle} </Typography>
-        </Box>
+          </Box>)
+         : (<Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}> {partyTitle}</Typography>)
         }
-      </Grid>
+      </Grid>}
 
       <Grid item>
         <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)'}} >
