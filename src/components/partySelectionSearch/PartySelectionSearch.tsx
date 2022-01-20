@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Party } from '../../model/Party';
@@ -73,7 +73,7 @@ export default function PartySelectionSearch({
   return (
     <Grid container item direction="column">
       <Grid item mt={3} mb={2}>
-        {parties.length > 3 && (
+        {parties.length > 3 ? (
           <Box>
             <PartySelectionSearchInput
               label={label}
@@ -86,7 +86,11 @@ export default function PartySelectionSearch({
               iconColor={iconColor}
             />
           </Box>
-        )}
+        ) : 
+        <Box> 
+          <Typography variant='h6' sx={{fontSize:'14px', color:'text.disabled'}} > I tuoi enti </Typography>
+        </Box>
+        }
       </Grid>
 
       <Grid item>
