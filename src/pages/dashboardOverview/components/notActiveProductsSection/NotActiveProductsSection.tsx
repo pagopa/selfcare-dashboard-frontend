@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
+import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
 import { Product } from '../../../../model/Product';
-import TitleBox from '../../../../components/TitleBox';
 import { Party } from '../../../../model/Party';
 import NotActiveProductCard from './components/NotActiveProductCard';
 
@@ -20,7 +20,7 @@ export default function NotActiveProductsSection({ party, products }: Props) {
         title="Scopri i nuovi prodotti"
         subTitle="Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi."
         mbTitle={1}
-        mtGrid={10}
+        mtTitle={10}
         mbSubTitle={6}
         variantTitle="h2"
         variantSubTitle="body2"

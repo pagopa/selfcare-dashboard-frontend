@@ -1,8 +1,8 @@
+import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { InstitutionUserResource } from '../api/generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from '../api/generated/b4f-dashboard/ProductUserResource';
 import { UserRole, UserStatus } from './Party';
 import { Product } from './Product';
-import { User } from './User';
 
 export type PartyUser = {
   id: string;

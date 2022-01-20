@@ -6,10 +6,10 @@ import {
   GridValueGetterParams,
 } from '@mui/x-data-grid';
 import React, { ReactNode } from 'react';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
 import { UserRole } from '../../../../../model/Party';
-import { roleLabels } from '../../../../../utils/constants';
 
 export function buildColumnDefs(
   isSelectedProduct: boolean,
@@ -206,13 +206,14 @@ function showRefStatus(
               Sospendi
             </Link>
           )
-          : users.row.status === 'SUSPENDED' 
-          ? renderCell(
+        : users.row.status === 'SUSPENDED'
+        ? renderCell(
             users,
             <Link onClick={() => onChangeState(users.row)} sx={{ cursor: 'pointer' }}>
               Riabilita
             </Link>
-          ) : renderCell(users,'')}
+          )
+        : renderCell(users, '')}
     </React.Fragment>
   );
 }

@@ -1,4 +1,5 @@
 import { Redirect, useParams } from 'react-router';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import withSelectedPartyProduct from './decorators/withSelectedPartyProduct';
 import Dashboard from './pages/dashboard/Dashboard';
 import AddUserContainer from './pages/dashboardAddUser/AddUserContainer';
@@ -17,12 +18,6 @@ export type RouteConfig = {
   subRoutes?: RoutesObject;
   component?: React.ComponentType<any>;
 };
-
-export const resolvePathVariables = (path: string, pathVariables: { [key: string]: string }) =>
-  Object.keys(pathVariables).reduce(
-    (result, key) => result.replace(`:${key}`, pathVariables[key]),
-    path
-  );
 
 const buildRedirectToBasePath = (basePath: string): RoutesObject => ({
   SUBPATH_DEFAULT: {

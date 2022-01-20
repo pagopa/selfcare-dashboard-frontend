@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Button, Box, Grid, Card, CardContent } from '@mui/material';
-import SessionModal from '../../../../components/SessionModal';
+import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionModal';
 
 type Props = {
   cardTitle: string;

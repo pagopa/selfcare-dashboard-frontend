@@ -1,10 +1,9 @@
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
+import { Footer, Header } from '@pagopa/selfcare-common-frontend';
 import React from 'react';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
-import Footer from '../Footer/Footer';
-import Header from '../Header/Header';
 import DashboardMenuContainer from './dashboardMenuContainer/DashboardMenuContainer';
 
 type Props = {
