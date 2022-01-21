@@ -209,7 +209,6 @@ export default function UsersSearchTable({
         }
         onCloseToast={() => setOpenToast(false)}
       />
-      )
       <SessionModal
         open={openModal}
         title={selectedUser?.status === 'ACTIVE' ? 'Sospendi Referente' : 'Riabilita Referente'}

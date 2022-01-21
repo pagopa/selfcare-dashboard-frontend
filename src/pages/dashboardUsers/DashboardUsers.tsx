@@ -66,7 +66,6 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
         message={<>{message}</>}
         onCloseToast={() => setOpenToast(false)}
       />
-      )
     </Grid>
   );
 }
