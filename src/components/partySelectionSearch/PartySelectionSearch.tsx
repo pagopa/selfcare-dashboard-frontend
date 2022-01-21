@@ -73,8 +73,9 @@ export default function PartySelectionSearch({
   };
 
   return (
-    <Grid container item direction="column">
-     {(partyTitle || parties.length > 3) && <Grid item my={2}>
+    <React.Fragment>
+    {parties.length >= 1 && <Grid container item direction="column">
+     {(partyTitle || parties.length > 3 ) && <Grid item my={2} className='pippo'>
         {parties.length > 3 ? 
           (<Box>
             <PartySelectionSearchInput
@@ -88,7 +89,7 @@ export default function PartySelectionSearch({
               iconColor={iconColor}
             />
           </Box>)
-         : (<Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}> {partyTitle}</Typography>)
+        : parties.length >= 1 && (<Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}> {partyTitle}</Typography>) 
         }
       </Grid>}
 
@@ -119,6 +120,7 @@ export default function PartySelectionSearch({
             })}
         </CustomBox>
       </Grid>
-    </Grid>
+    </Grid>} </React.Fragment>
   );
+  
 }
