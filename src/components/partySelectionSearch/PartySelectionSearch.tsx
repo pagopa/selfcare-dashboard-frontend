@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
@@ -16,6 +16,7 @@ type Props = {
   iconColor?: string;
   iconMarginRight?: string;
   pxTitleSubTitle?: string;
+  partyTitle?: string;
 };
 
 const verifyPartyFilter = (party: Party, filter: string) =>
@@ -44,6 +45,7 @@ export default function PartySelectionSearch({
   iconColor,
   iconMarginRight,
   pxTitleSubTitle,
+  partyTitle,
 }: Props) {
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
@@ -72,22 +74,29 @@ export default function PartySelectionSearch({
 
   return (
     <Grid container item direction="column">
-      <Grid item mt={3} mb={2}>
-        {parties.length > 3 && (
-          <Box>
-            <PartySelectionSearchInput
-              label={label}
-              iconMarginRight={iconMarginRight}
-              disableUnderline={disableUnderline}
-              placeholder="Cerca"
-              onChange={(e) => onFilterChange(e.target.value)}
-              input={input}
-              clearField={() => onFilterChange('')}
-              iconColor={iconColor}
-            />
-          </Box>
-        )}
-      </Grid>
+      {(partyTitle || parties.length > 3) && (
+        <Grid item my={2}>
+          {parties.length > 3 ? (
+            <Box>
+              <PartySelectionSearchInput
+                label={label}
+                iconMarginRight={iconMarginRight}
+                disableUnderline={disableUnderline}
+                placeholder="Cerca"
+                onChange={(e) => onFilterChange(e.target.value)}
+                input={input}
+                clearField={() => onFilterChange('')}
+                iconColor={iconColor}
+              />
+            </Box>
+          ) : (
+            <Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}>
+              {' '}
+              {partyTitle}
+            </Typography>
+          )}
+        </Grid>
+      )}
 
       <Grid item>
         <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>

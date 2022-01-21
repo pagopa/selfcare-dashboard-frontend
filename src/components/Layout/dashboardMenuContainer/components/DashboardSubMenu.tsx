@@ -111,6 +111,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 <Grid item mb={3} xs={12}>
                   {parties2Show && (
                     <PartySelectionSearch
+                      partyTitle="I tuoi enti"
                       pxTitleSubTitle="32px"
                       iconMarginRight="-10px"
                       showAvatar={false}
