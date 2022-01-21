@@ -1,7 +1,7 @@
-import { storageRead } from '../utils/storage-utils';
+import { storageRead } from '@pagopa/selfcare-common-frontend/utils/storage-utils';
+import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { store } from '../redux/store';
-import { appStateActions } from '../redux/slices/appStateSlice';
 import { PartyUserOnCreation } from '../model/PartyUser';
 import { ENV } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';

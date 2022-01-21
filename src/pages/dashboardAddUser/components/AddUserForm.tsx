@@ -13,11 +13,12 @@ import {
 import { useFormik } from 'formik';
 import { styled } from '@mui/system';
 import { useHistory } from 'react-router';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import { storageWrite } from '@pagopa/selfcare-common-frontend/utils/storage-utils';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { Party } from '../../../model/Party';
 import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
-import useLoading from '../../../hooks/useLoading';
-import { AppError, appStateActions } from '../../../redux/slices/appStateSlice';
-import { useAppDispatch } from '../../../redux/hooks';
 import {
   LOADING_TASK_SAVE_PARTY_USER,
   LOADING_TASK_FETCH_PRODUCT_ROLES,
@@ -26,8 +27,7 @@ import {
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
 import { ProductRole } from '../../../model/ProductRole';
-import { storageWrite } from '../../../utils/storage-utils';
-import { DASHBOARD_ROUTES, resolvePathVariables } from '../../../routes';
+import { DASHBOARD_ROUTES } from '../../../routes';
 const CustomTextField = styled(TextField)({
   '.MuiInput-root': {
     '&:after': {
@@ -70,10 +70,9 @@ type Props = {
 };
 
 export default function AddUserForm({ party, selectedProduct }: Props) {
-  const dispatch = useAppDispatch();
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
-  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+  const addError = useErrorDispatcher();
   const history = useHistory();
   const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
 

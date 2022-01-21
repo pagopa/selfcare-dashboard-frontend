@@ -1,12 +1,12 @@
 import { Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
+import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import Toast from '@pagopa/selfcare-common-frontend/components/Toast';
+import { storageDelete, storageRead } from '@pagopa/selfcare-common-frontend/utils/storage-utils';
 import { Product } from '../../model/Product';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
-import TitleBox from '../../components/TitleBox';
 import { Party } from '../../model/Party';
-import Toast from '../../components/Toast';
 import { STORAGE_KEY_NOTIFY_MESSAGE } from '../../utils/constants';
-import { storageDelete, storageRead } from '../../utils/storage-utils';
 import UsersSearch from './components/usersSearch/UsersSearch';
 
 interface Props {
@@ -60,13 +60,12 @@ export default function DashboardUsers({ party, selectedProduct, products }: Pro
       <Grid item xs={12}>
         <UsersSearch party={party} selectedProduct={selectedProduct} products={products} />
       </Grid>
-      {openToast && (
-        <Toast
-          title={`REFERENTE AGGIUNTO`}
-          message={<>{message}</>}
-          closeToast={() => setOpenToast(false)}
-        />
-      )}
+      <Toast
+        open={openToast}
+        title={`REFERENTE AGGIUNTO`}
+        message={<>{message}</>}
+        onCloseToast={() => setOpenToast(false)}
+      />
     </Grid>
   );
 }

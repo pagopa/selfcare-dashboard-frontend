@@ -3,19 +3,20 @@ import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
 import { useHistory } from 'react-router-dom';
+import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
+import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { Product } from '../../../../model/Product';
-import { Page } from '../../../../model/Page';
-import { PageRequest } from '../../../../model/PageRequest';
 import { PartyUser } from '../../../../model/PartyUser';
-import { DASHBOARD_ROUTES, resolvePathVariables } from '../../../../routes';
+import { DASHBOARD_ROUTES } from '../../../../routes';
 import { Party } from '../../../../model/Party';
 import { fetchPartyUsers } from '../../../../services/usersService';
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
-import { AppError, appStateActions } from '../../../../redux/slices/appStateSlice';
-import useLoading from '../../../../hooks/useLoading';
+import { useAppSelector } from '../../../../redux/hooks';
 import { LOADING_TASK_PARTY_USERS } from '../../../../utils/constants';
-import { userSelectors } from '../../../../redux/slices/userSlice';
-import { User } from '../../../../model/User';
 import { ENV } from '../../../../utils/env';
 import UsersSearchFilter, { UsersSearchFilterConfig } from './components/UsersSearchFilter';
 import UsersSearchTable from './components/UsersSearchTable';
@@ -43,10 +44,9 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
     size: ENV.PARTY_USERS_PAGE_SIZE,
   });
   const history = useHistory();
-  const dispatch = useAppDispatch();
   const setLoading = useLoading(LOADING_TASK_PARTY_USERS);
 
-  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+  const addError = useErrorDispatcher();
 
   const fetchUsers = (f: UsersSearchFilterConfig, pageRequest: PageRequest) => {
     setLoading(true);

@@ -5,14 +5,15 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useHistory } from 'react-router';
 import { uniqueId } from 'lodash';
 import styled from '@emotion/styled';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
-import ROUTES, { resolvePathVariables } from '../../../../routes';
+import ROUTES from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { useParties } from '../../../../hooks/useParties';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../redux/slices/partiesSlice';
-import { AppError, appStateActions } from '../../../../redux/slices/appStateSlice';
 import LogoSubMenu from './LogoSubMenu';
 
 const CustomIconButton = styled(IconButton)({
@@ -33,7 +34,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
   const parties = useAppSelector(partiesSelectors.selectPartiesList);
   const setParties = (parties: Array<Party>) => dispatch(partiesActions.setPartiesList(parties));
   const [parties2Show, setParties2Show] = useState<Array<Party>>();
-  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+  const addError = useErrorDispatcher();
   const { fetchParties } = useParties();
 
   const doFetch = (): void => {
@@ -110,12 +111,12 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 <Grid item mb={3} xs={12}>
                   {parties2Show && (
                     <PartySelectionSearch
-                      partyTitle='I tuoi enti'
-                      pxTitleSubTitle='32px'
-                      iconMarginRight='-10px'
+                      partyTitle="I tuoi enti"
+                      pxTitleSubTitle="32px"
+                      iconMarginRight="-10px"
                       showAvatar={false}
-                      iconColor='#0073E6'
-                      label='I tuoi enti'
+                      iconColor="#0073E6"
+                      label="I tuoi enti"
                       disableUnderline={true}
                       parties={parties2Show}
                       onPartySelectionChange={(selectedParty: Party | null) => {
