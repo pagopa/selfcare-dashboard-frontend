@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { User } from '../../model/User';
-import { useAppDispatch } from '../../redux/hooks';
-import { userActions } from '../../redux/slices/userSlice';
-import { RootState } from '../../redux/store';
+import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import { userActions } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
+import { useAppDispatch } from '../../../../redux/hooks';
+import { RootState } from '../../../../redux/store';
 
 export const mockedUser: User = {
   name: 'NAME',

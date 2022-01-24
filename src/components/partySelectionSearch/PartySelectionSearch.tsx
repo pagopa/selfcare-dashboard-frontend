@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Party } from '../../model/Party';
-import { roleLabels } from '../../utils/constants';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
 
@@ -12,11 +12,11 @@ type Props = {
   onPartySelectionChange: (selectedParty: Party | null) => void;
   disableUnderline?: boolean;
   label?: string;
-  showAvatar?:boolean;
-  iconColor?:string;
+  showAvatar?: boolean;
+  iconColor?: string;
   iconMarginRight?: string;
   pxTitleSubTitle?: string;
-  partyTitle?:string;
+  partyTitle?: string;
 };
 
 const verifyPartyFilter = (party: Party, filter: string) =>
@@ -33,7 +33,7 @@ const CustomBox = styled(Box)({
   },
   overflowY: 'auto',
   height: '100%',
-  maxHeight: '200px'
+  maxHeight: '200px',
 });
 
 export default function PartySelectionSearch({
@@ -45,7 +45,7 @@ export default function PartySelectionSearch({
   iconColor,
   iconMarginRight,
   pxTitleSubTitle,
-  partyTitle
+  partyTitle,
 }: Props) {
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
@@ -94,7 +94,7 @@ export default function PartySelectionSearch({
       </Grid>}
 
       <Grid item>
-        <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)'}} >
+        <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
           {filteredParties &&
             filteredParties.map((party) => {
               const isDisabled = party.status === 'PENDING';

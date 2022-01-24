@@ -1,19 +1,15 @@
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { LOADING_TASK_TOKEN_EXCHANGE } from '../utils/constants';
-import { useAppDispatch } from '../redux/hooks';
 import { Product } from '../model/Product';
 import { retrieveTokenExchange } from '../services/tokenExchangeService';
 import { Party } from '../model/Party';
-import { AppError, appStateActions } from '../redux/slices/appStateSlice';
-import useLoading from './useLoading';
 
 const tokenPlaceholder = '<IdentityToken>';
 const hostnameRegexp = /^(?:https?:\/\/)([-.a-zA-Z0-9_]+)/;
 
 export const useTokenExchange = () => {
-  const dispatch = useAppDispatch();
-  const addError = (error: AppError): void => {
-    dispatch(appStateActions.addError(error));
-  };
+  const addError = useErrorDispatcher();
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE);
 
   const invokeProductBo = async (product: Product, selectedParty: Party): Promise<void> => {

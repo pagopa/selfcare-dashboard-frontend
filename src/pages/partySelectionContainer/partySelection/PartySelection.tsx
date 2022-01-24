@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Grid, Button } from '@mui/material';
 import { useHistory } from 'react-router';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Party } from '../../../model/Party';
 import PartySelectionSearch from '../../../components/partySelectionSearch/PartySelectionSearch';
-import ROUTES, { resolvePathVariables } from '../../../routes';
+import ROUTES from '../../../routes';
 import { useAppDispatch } from '../../../redux/hooks';
 import { partiesActions } from '../../../redux/slices/partiesSlice';
 import PartySelectionTitle from './components/PartySelectionTitle';

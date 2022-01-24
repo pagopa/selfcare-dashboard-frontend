@@ -1,9 +1,9 @@
 import { Card, Grid, Box, Typography } from '@mui/material';
+import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import BaseProductCard from '../../productCard/BaseProductCard';
-import { formatDateAsLongString } from '../../../../../utils/utils';
 
 type Props = {
   party: Party;
@@ -27,10 +27,11 @@ export default function ActiveProductCard({
             disableBtn={isDisabled}
             cardTitle={product.title}
             cardSubTitle={
-              product.activationDateTime ?
-              `Attivo dal ${
-                product.activationDateTime && formatDateAsLongString(product.activationDateTime)
-              }` : 'Attivo'
+              product.activationDateTime
+                ? `Attivo dal ${
+                    product.activationDateTime && formatDateAsLongString(product.activationDateTime)
+                  }`
+                : 'Attivo'
             }
             buttonLabel={buttonLabel}
             logoCard={product.logo}

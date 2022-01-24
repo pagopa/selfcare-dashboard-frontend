@@ -2,10 +2,10 @@ import { Grid } from '@mui/material';
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
 import { Box } from '@mui/system';
 import { useState, useEffect } from 'react';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
-import { AppError, appStateActions } from '../../../../../../redux/slices/appStateSlice';
 import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
 
@@ -27,7 +27,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
     dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
   const [labelLink, setLabelLink] = useState('Modifica Logo');
-  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+  const addError = useErrorDispatcher();
 
   useEffect(() => {
     setTimeout(() => setLabelLink(getLabelLinkText()), 400);
