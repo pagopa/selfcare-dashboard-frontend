@@ -117,6 +117,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
             arrayMenu.map((item) => (
               <DashboardSideMenuItem
                 key={item.title}
+                color= {!item.active ? '#CCD4DC' : 'primary.main'}
                 item={item}
                 selectedItem={selectedItem}
                 handleClick={handleClick}
