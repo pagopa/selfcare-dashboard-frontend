@@ -73,30 +73,25 @@ export default function PartySelectionSearch({
   };
 
   return (
-    <Grid container item direction="column">
-      {(partyTitle || parties.length > 3) && (
-        <Grid item my={2}>
-          {parties.length > 3 ? (
-            <Box>
-              <PartySelectionSearchInput
-                label={label}
-                iconMarginRight={iconMarginRight}
-                disableUnderline={disableUnderline}
-                placeholder="Cerca"
-                onChange={(e) => onFilterChange(e.target.value)}
-                input={input}
-                clearField={() => onFilterChange('')}
-                iconColor={iconColor}
-              />
-            </Box>
-          ) : (
-            <Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}>
-              {' '}
-              {partyTitle}
-            </Typography>
-          )}
-        </Grid>
-      )}
+    <React.Fragment>
+    {parties.length >= 1 && <Grid container item direction="column">
+     {(partyTitle || parties.length > 3 ) && <Grid item my={2} className='pippo'>
+        {parties.length > 3 ? 
+          (<Box>
+            <PartySelectionSearchInput
+              label={label}
+              iconMarginRight={iconMarginRight}
+              disableUnderline={disableUnderline}
+              placeholder ="Cerca"
+              onChange={(e) => onFilterChange(e.target.value)}
+              input={input}
+              clearField={() => onFilterChange('')}
+              iconColor={iconColor}
+            />
+          </Box>)
+        : parties.length >= 1 && (<Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}> {partyTitle}</Typography>) 
+        }
+      </Grid>}
 
       <Grid item>
         <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
@@ -125,6 +120,7 @@ export default function PartySelectionSearch({
             })}
         </CustomBox>
       </Grid>
-    </Grid>
+    </Grid>} </React.Fragment>
   );
+  
 }
