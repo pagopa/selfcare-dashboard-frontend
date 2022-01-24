@@ -29,6 +29,7 @@ interface UsersSearchProps {
 
 export default function UsersSearch({ party, selectedProduct, products }: UsersSearchProps) {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
+  const selectedProductId = selectedProduct?.id;
   const [users, setUsers] = useState<Array<PartyUser> | null>(null);
   const [page, setPage] = useState<Page>({
     number: 0,
@@ -55,7 +56,7 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
       party,
       currentUser ?? ({ uid: 'NONE' } as User),
       !!selectedProduct,
-      f.product,
+      selectedProduct,
       f.role
     )
       .then((r) => {
@@ -77,8 +78,8 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
   };
 
   useEffect(() => {
-    fetchUsers(filter, pageRequest);
-  }, []);
+   fetchUsers(filter, pageRequest);
+  }, [selectedProductId]);
 
   const handleFilterChange = (f: UsersSearchFilterConfig) => {
     setFilter(f);
