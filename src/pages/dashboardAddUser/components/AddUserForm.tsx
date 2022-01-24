@@ -29,6 +29,9 @@ import { PartyUserOnCreation } from '../../../model/PartyUser';
 import { ProductRole } from '../../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../../routes';
 const CustomTextField = styled(TextField)({
+  '.MuiInputLabel-asterisk': {
+    display: 'none',
+  },
   '.MuiInput-root': {
     '&:after': {
       borderBottom: '2px solid #5C6F82',
@@ -213,7 +216,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
 
           <Grid item xs={8} mb={3}>
             <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-              Ruolo *
+              Ruolo
             </Typography>
 
             <RadioGroup
