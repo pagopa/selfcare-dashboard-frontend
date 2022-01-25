@@ -37,9 +37,7 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
     totalElements: 0,
     totalPages: 0,
   });
-  const [filter, setFilter] = useState<UsersSearchFilterConfig>(
-    selectedProduct ? { product: selectedProduct } : {}
-  );
+  const [filter, setFilter] = useState<UsersSearchFilterConfig>({});
   const [pageRequest, setPageRequest] = useState<PageRequest>({
     page: 0,
     size: ENV.PARTY_USERS_PAGE_SIZE,
@@ -56,7 +54,7 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
       party,
       currentUser ?? ({ uid: 'NONE' } as User),
       !!selectedProduct,
-      selectedProduct,
+      f.product,
       f.role
     )
       .then((r) => {
@@ -78,7 +76,12 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
   };
 
   useEffect(() => {
-   fetchUsers(filter, pageRequest);
+    const newFilter = {
+      ...filter, 
+      product: selectedProduct
+    };
+  setFilter(newFilter);
+  fetchUsers(newFilter, pageRequest);
   }, [selectedProductId]);
 
   const handleFilterChange = (f: UsersSearchFilterConfig) => {
