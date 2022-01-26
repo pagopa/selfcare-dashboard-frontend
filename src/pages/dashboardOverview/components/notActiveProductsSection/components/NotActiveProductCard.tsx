@@ -1,5 +1,7 @@
 import { Card, Grid, Link } from '@mui/material';
 import { Box } from '@mui/material';
+import { SessionModal } from '@pagopa/selfcare-common-frontend';
+import { useState } from 'react';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { ENV } from '../../../../../utils/env';
@@ -8,11 +10,16 @@ import BaseProductCard from '../../productCard/BaseProductCard';
 type Props = {
   party: Party;
   product: Product;
-  buttonLabel: string;
-  infoLabel?: string;
 };
 
-export default function NotActiveProductCard({ party, product, buttonLabel, infoLabel }: Props) {
+const goToOnboarding = (product: Product, party: Party): void =>
+  window.location.assign(
+    `${ENV.URL_FE.ONBOARDING}/${product.id}?institutionId=${party.institutionId}`
+  );
+
+export default function NotActiveProductCard({ party, product }: Props) {
+  const [onboardingPendingProduct, setOnboardingPendingProduct] = useState<Product | undefined>();
+
   return (
     <Grid item xs={4} key={product.id}>
       <Card
@@ -23,19 +30,20 @@ export default function NotActiveProductCard({ party, product, buttonLabel, info
             disableBtn={false}
             cardTitle={product.title}
             cardSubTitle={product.description}
-            buttonLabel={buttonLabel}
+            buttonLabel="Aderisci"
             logoCard={product.logo}
             tag={product.tag}
-            btnAction={() =>
-              window.location.assign(
-                `${ENV.URL_FE.ONBOARDING}/${product.id}?institutionId=${party.institutionId}`
-              )
-            }
+            btnAction={() => {
+              if (product.status === 'PENDING') {
+                setOnboardingPendingProduct(product);
+              } else {
+                goToOnboarding(product, party);
+              }
+            }}
             heightLogo="70px"
             heightTitle="80px"
             heightSubTitle="80px"
             heightButton="45px"
-            status={product.status}
             titleFontSize="24px"
             subTitleFontSize="16px"
           />
@@ -48,7 +56,7 @@ export default function NotActiveProductCard({ party, product, buttonLabel, info
                     sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
                     href={product.urlPublic}
                   >
-                    {infoLabel}
+                    {'SCOPRI DI PIÙ →'}
                   </Link>
                 )}
               </Box>
@@ -56,6 +64,15 @@ export default function NotActiveProductCard({ party, product, buttonLabel, info
           </Grid>
         </Box>
       </Card>
+      <SessionModal
+        open={!!onboardingPendingProduct}
+        handleClose={() => setOnboardingPendingProduct(undefined)}
+        title="Adesione in corso"
+        message="Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?"
+        onConfirmLabel="Procedi con una nuova adesione"
+        onConfirm={() => goToOnboarding(onboardingPendingProduct as Product, party)}
+        onCloseLabel="Esci"
+      />
     </Grid>
   );
 }

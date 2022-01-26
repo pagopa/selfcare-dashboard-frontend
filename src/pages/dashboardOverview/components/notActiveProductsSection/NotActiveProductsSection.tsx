@@ -11,9 +11,6 @@ type Props = {
 };
 
 export default function NotActiveProductsSection({ party, products }: Props) {
-  const buttonLabel = 'Aderisci';
-  const infoLabel = 'SCOPRI DI PIÙ →';
-
   return (
     <React.Fragment>
       <TitleBox
@@ -27,17 +24,10 @@ export default function NotActiveProductsSection({ party, products }: Props) {
       />
       <Grid container spacing={3}>
         {products &&
-          products.findIndex((product) => product.active === false) > -1 &&
           products
-            .filter((product) => product.active === false)
+            .filter((product) => product.status !== 'ACTIVE')
             .map((product) => (
-              <NotActiveProductCard
-                key={product.id}
-                party={party}
-                product={product}
-                buttonLabel={buttonLabel}
-                infoLabel={infoLabel}
-              />
+              <NotActiveProductCard key={product.id} party={party} product={product} />
             ))}
       </Grid>
     </React.Fragment>

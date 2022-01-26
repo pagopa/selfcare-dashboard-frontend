@@ -52,7 +52,7 @@ export default function UsersSearchFilter({
     setOpenLogoutModal(true);
     setTitleModal('Prodotto');
     setFilterModalConfig({
-      data: products.filter((p) => p.active),
+      data: products.filter((p) => p.status === 'ACTIVE'),
       getLabel: (p: Product) => p.title,
       getValue: (p: Product) => p.id,
       onFilterChange: (p: Product) => onFilterChange({ ...filter, product: p }),

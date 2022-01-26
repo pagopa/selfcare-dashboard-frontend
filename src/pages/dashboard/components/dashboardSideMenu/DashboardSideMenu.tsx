@@ -60,7 +60,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
   const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(navigationMenu[0]);
   const arrayMenu: Array<MenuItem> = navigationMenu.concat(
     products
-      .filter((p) => p.active)
+      .filter((p) => p.status === 'ACTIVE')
       .map((p) => ({
         groupId: p.id,
         title: p.title,
@@ -117,7 +117,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
             arrayMenu.map((item) => (
               <DashboardSideMenuItem
                 key={item.title}
-                color= {!item.active ? '#CCD4DC' : 'primary.main'}
+                color={!item.active ? '#CCD4DC' : 'primary.main'}
                 item={item}
                 selectedItem={selectedItem}
                 handleClick={handleClick}
