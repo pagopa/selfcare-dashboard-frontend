@@ -18,6 +18,9 @@ variables:
 
   basePath: dashboard
 
+  # global variables
+  react_app_pagopa_help_email: '$(REACT_APP_ASSISTANCE_EMAIL)'
+
   ${{ if or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release-uat'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix')) }}:
     environment: 'UAT'
     azure_subscription: $(UAT_AZURE_SUBSCRIPTION)
@@ -29,6 +32,7 @@ variables:
     react_app_url_fe_onboarding: '$(UAT_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_dashboard: '$(UAT_REACT_APP_URL_FE_DASHBOARD)'
     react_app_url_fe_landing: '$(UAT_REACT_APP_URL_FE_LANDING)'
+    react_app_url_fe_assistance: '$(UAT_REACT_APP_URL_FE_ASSISTANCE)'
     react_app_url_api_party_process: '$(UAT_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_dashboard: '$(UAT_REACT_APP_URL_API_DASHBOARD)'
     spid_test_env_enabled: 'true'
@@ -46,6 +50,7 @@ variables:
     react_app_url_fe_onboarding: '$(PROD_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_dashboard: '$(PROD_REACT_APP_URL_FE_DASHBOARD)'
     react_app_url_fe_landing: '$(PROD_REACT_APP_URL_FE_LANDING)'
+    react_app_url_fe_assistance: '$(PROD_REACT_APP_URL_FE_ASSISTANCE)'
     react_app_url_api_party_process: '$(PROD_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_dashboard: '$(PROD_REACT_APP_URL_API_DASHBOARD)'
     spid_test_env_enabled: 'false'
@@ -65,6 +70,7 @@ variables:
     react_app_url_fe_onboarding: '$(DEV_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_dashboard: '$(DEV_REACT_APP_URL_FE_DASHBOARD)'
     react_app_url_fe_landing: '$(DEV_REACT_APP_URL_FE_LANDING)'
+    react_app_url_fe_assistance: '$(DEV_REACT_APP_URL_FE_ASSISTANCE)'
     react_app_url_api_party_process: '$(DEV_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_dashboard: '$(DEV_REACT_APP_URL_API_DASHBOARD)'
     spid_test_env_enabled: 'true'
@@ -152,9 +158,11 @@ stages:
               REACT_APP_URL_FE_LOGOUT: '$(react_app_url_fe_login)/logout'
               REACT_APP_URL_FE_ONBOARDING: '$(react_app_url_fe_onboarding)/add'
               REACT_APP_URL_FE_LANDING: '$(react_app_url_fe_landing)'
+              REACT_APP_URL_FE_ASSISTANCE: '$(react_app_url_fe_assistance)'
               REACT_APP_URL_API_PARTY_PROCESS: '$(react_app_url_api_party_process)'
               REACT_APP_URL_API_DASHBOARD: '$(react_app_url_api_dashboard)'
               REACT_APP_ENABLE_ASSISTANCE: '$(react_app_enable_assistance)'
+              REACT_APP_PAGOPA_HELP_EMAIL: '$(react_app_pagopa_help_email)'
               REACT_APP_URL_INSTITUTION_LOGO_PREFIX: '$(react_app_url_storage)/institutions/'
           - bash: |
               printf "$EXECUTION_ID\n$(git name-rev --name-only FETCH_HEAD) $(git rev-parse HEAD)" > $(System.DefaultWorkingDirectory)/build/build.info

@@ -14,6 +14,7 @@ export const ENV = {
     LOGOUT: env.get('REACT_APP_URL_FE_LOGOUT').required().asString(),
     ONBOARDING: env.get('REACT_APP_URL_FE_ONBOARDING').required().asString(),
     LANDING: env.get('REACT_APP_URL_FE_LANDING').required().asString(),
+    ASSISTANCE: env.get('REACT_APP_URL_FE_ASSISTANCE').required().asString(),
   },
 
   URL_API: {
