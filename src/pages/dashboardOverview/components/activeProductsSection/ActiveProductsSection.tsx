@@ -11,9 +11,6 @@ type Props = {
 };
 
 export default function ActiveProductsSection({ party, products }: Props) {
-  const buttonLabel = 'Gestisci';
-  const lastServiceActivationDate = undefined; // actually this info is not available
-
   return (
     <React.Fragment>
       <TitleBox
@@ -28,15 +25,9 @@ export default function ActiveProductsSection({ party, products }: Props) {
       <Grid container spacing={4}>
         {products &&
           products
-            .filter((p) => p.active)
+            .filter((p) => p.status === 'ACTIVE')
             .map((product) => (
-              <ActiveProductCard
-                key={product.id}
-                party={party}
-                product={product}
-                buttonLabel={buttonLabel}
-                lastServiceActivationDate={lastServiceActivationDate}
-              />
+              <ActiveProductCard key={product.id} party={party} product={product} />
             ))}
       </Grid>
     </React.Fragment>
