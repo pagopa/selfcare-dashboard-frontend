@@ -4,9 +4,8 @@ import { Box } from '@mui/system';
 import { ENV } from '../../utils/env';
 
 export default function NoParty() {
-  const bodyTitle = 'Non risulta nessun Ente associato';
-  const bodyDescription = 'Il tuo profilo non è associato a nessun Ente.';
-  const bodyDescription2 =
+  const bodyTitle = 'Il tuo profilo non è associato a nessun Ente.';
+  const bodyDescription =
     'Per accedere, chiedi al Referente incaricato di aggiungerti al portale Self Care del tuo Ente.';
 
   return (
@@ -34,11 +33,6 @@ export default function NoParty() {
             <Box>
               <Typography variant="subtitle2" component="h2">
                 {bodyDescription}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle2" component="h2">
-                {bodyDescription2}
               </Typography>
             </Box>
           </Grid>
