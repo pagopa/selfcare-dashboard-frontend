@@ -184,60 +184,67 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
   return (
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-            <CustomTextField
-              {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
-            />
+        <Grid container direction="column">
+          <Grid item container spacing={3}>
+            <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps(
+                  'taxCode',
+                  'Codice Fiscale',
+                  'Inserisci il Codice Fiscale del referente'
+                )}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-            <CustomTextField
-              {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
-            />
+          <Grid item container spacing={3}>
+            <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
+              />
+            </Grid>
+            <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
-            <CustomTextField
-              {...baseTextFieldProps(
-                'taxCode',
-                'Codice Fiscale',
-                'Inserisci il Codice Fiscale del referente'
-              )}
-            />
+          <Grid item container spacing={3}>
+            <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps(
+                  'email',
+                  'Email',
+                  'Inserisci l’indirizzo email istituzionale del referente'
+                )}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
-            <CustomTextField
-              {...baseTextFieldProps(
-                'email',
-                'Email',
-                'Inserisci l’indirizzo email istituzionale del referente'
-              )}
-            />
-          </Grid>
+          <Grid item container spacing={3}>
+            <Grid item xs={8} mb={3}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+                Ruolo
+              </Typography>
 
-          <Grid item xs={8} mb={3}>
-            <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-              Ruolo
-            </Typography>
-
-            <RadioGroup
-              aria-label="user"
-              name="productRole"
-              value={formik.values.productRole}
-              onChange={formik.handleChange}
-            >
-              {productRoles?.map((p, index) => (
-                <Box key={p.productRole}>
-                  <CustomFormControlLabel
-                    value={p.productRole}
-                    control={<Radio />}
-                    label={p.productRole}
-                  />
-                  {index !== productRoles.length - 1 && (
-                    <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
-                  )}
-                </Box>
-              ))}
-            </RadioGroup>
+              <RadioGroup
+                aria-label="user"
+                name="productRole"
+                value={formik.values.productRole}
+                onChange={formik.handleChange}
+              >
+                {productRoles?.map((p, index) => (
+                  <Box key={p.productRole}>
+                    <CustomFormControlLabel
+                      value={p.productRole}
+                      control={<Radio />}
+                      label={p.productRole}
+                    />
+                    {index !== productRoles.length - 1 && (
+                      <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
+                    )}
+                  </Box>
+                ))}
+              </RadioGroup>
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={3} mt={12}>
