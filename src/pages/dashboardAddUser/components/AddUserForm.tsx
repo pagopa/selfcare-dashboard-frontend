@@ -110,6 +110,11 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
           : !emailRegexp.test(values.email)
           ? 'L’indirizzo email non è valido'
           : undefined,
+        confirmEmail: !values.confirmEmail
+          ? requiredError
+          : values.confirmEmail !== values.email
+          ? 'Gli indirizzi email non corrispondono'
+          : undefined,
         productRole: !values.productRole ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
@@ -120,6 +125,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       surname: '',
       taxCode: '',
       email: '',
+      confirmEmail: '',
       productRole: '',
     },
     validate,
@@ -215,6 +221,17 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
                   'email',
                   'Email',
                   'Inserisci l’indirizzo email istituzionale del referente'
+                )}
+              />
+            </Grid>
+          </Grid>
+          <Grid item container spacing={3}>
+            <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps(
+                  'confirmEmail',
+                  'Conferma email',
+                  'Conferma l’indirizzo email istituzionale del referente'
                 )}
               />
             </Grid>
