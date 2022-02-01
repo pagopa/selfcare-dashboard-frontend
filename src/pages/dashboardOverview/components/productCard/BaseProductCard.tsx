@@ -6,7 +6,7 @@ type Props = {
   cardSubTitle?: string;
   buttonLabel: string;
   disableBtn: boolean;
-  logoCard?: string;
+  urlLogo?: string;
   tag?: string;
   btnAction?: () => void;
   heightLogo?: string;
@@ -31,7 +31,7 @@ export default function BaseProductCard({
   cardSubTitle,
   buttonLabel,
   disableBtn,
-  logoCard,
+  urlLogo,
   tag,
   btnAction,
   heightLogo,
@@ -48,7 +48,7 @@ export default function BaseProductCard({
           <Grid container height={heightLogo}>
             <Grid item xs={6} mb={3}>
               <Box sx={{ width: '100%' }}>
-                <img src={`data:image/png;base64,${logoCard}`} />
+                <img src={urlLogo} />
               </Box>
             </Grid>
             {tag && (
