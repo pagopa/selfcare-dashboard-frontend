@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
-import { User } from '@pagopa/selfcare-common-frontend/model/User';
-import { userActions } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
-import { useAppDispatch } from '../../../../redux/hooks';
-import { RootState } from '../../../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { User } from '../../model/User';
+import { userActions, userSelectors } from '../../redux/slices/userSlice';
 
 export const mockedUser: User = {
   name: 'NAME',
@@ -12,14 +11,15 @@ export const mockedUser: User = {
   email: 'a@a.aa',
 };
 
-export const verifyMockExecution = (state: RootState) => {
+export const verifyMockExecution = (state: any) => {
   expect(state.user.logged).toMatchObject(mockedUser);
 };
 
 export default (WrappedComponent: React.ComponentType<any>) => () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
+  const loggedUser = useSelector(userSelectors.selectLoggedUser);
   useEffect(() => {
     dispatch(userActions.setLoggedUser(mockedUser));
   }, []);
-  return <WrappedComponent />;
+  return loggedUser ? <WrappedComponent /> : <></>;
 };
