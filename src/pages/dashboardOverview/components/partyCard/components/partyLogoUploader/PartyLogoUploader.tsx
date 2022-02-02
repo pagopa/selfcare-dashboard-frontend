@@ -33,14 +33,25 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
     setTimeout(() => setLabelLink(getLabelLinkText()), 400);
   }, [urlLogo]);
 
-  const handleOpen = () => {
-    open();
-  };
   const maxLength = 400;
   const minLegth = 300;
 
+  const onFileRejected = (files: Array<FileRejection>) => {
+    addError({
+      id: 'WRONG_FILE_EXTENSION',
+      blocking: false,
+      error: new Error(),
+      techDescription: `Wrong File Extension : ${files[0]}`,
+      displayableTitle: 'Caricamento non riuscito',
+      displayableDescription:
+        'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo',
+      toNotify: false,
+      onRetry: open,
+    });
+  };
+
   const { getRootProps, getInputProps, open } = useDropzone({
-    onDropAccepted: async (files: Array<File>) => {
+    onDropAccepted: (files: Array<File>) => {
       setLoading(true);
       setLabelLink(files[0].name);
 
@@ -60,24 +71,12 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
             displayableTitle: 'Caricamento non riuscito',
             displayableDescription: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
             toNotify: true,
-            onRetry: () => handleOpen(),
+            onRetry: open,
           });
           setLabelLink(getLabelLinkText());
         });
     },
-    onDropRejected: async (files: Array<FileRejection>) => {
-      addError({
-        id: 'WRONG_FILE_EXTENSION',
-        blocking: false,
-        error: new Error(),
-        techDescription: `Wrong File Extension : ${files[0]}`,
-        displayableTitle: 'Caricamento non riuscito',
-        displayableDescription:
-          'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo',
-        toNotify: false,
-        onRetry: () => handleOpen(),
-      });
-    },
+    onDropRejected: onFileRejected,
     // Disable click and keydown behavior
     noClick: true,
     noKeyboard: true,
@@ -85,7 +84,14 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
     getFilesFromEvent: (event: DropEvent): Promise<Array<File | DataTransferItem>> => {
       const files = (event.target as any).files || (event as any).dataTransfer.files;
       const file = files[0];
-      return new Promise((resolve) => {
+      if (!file) {
+        return new Promise((resolve) => resolve([]));
+      }
+      return new Promise((resolve, error) => {
+        if (file.type !== 'image/png') {
+          error();
+          return;
+        }
         const image = new Image();
 
         // eslint-disable-next-line functional/immutable-data
@@ -99,7 +105,10 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
 
         // eslint-disable-next-line functional/immutable-data
         image.src = URL.createObjectURL(file);
-      });
+      }).catch((_reason) => {
+        onFileRejected(files);
+        return [];
+      }) as Promise<Array<File | DataTransferItem>>;
     },
     validator: (file) => {
       if (
