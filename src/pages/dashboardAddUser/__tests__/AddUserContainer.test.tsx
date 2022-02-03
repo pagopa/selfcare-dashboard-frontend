@@ -39,7 +39,7 @@ const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
       </Router>
     </Provider>
   );
-  return history;
+  return { history, store };
 };
 
 test('test with empty fields, so disabled button', () => {
@@ -51,7 +51,7 @@ test('test with empty fields, so disabled button', () => {
 });
 
 test('test with fields that respect rules, so enabled button', async () => {
-  const history = renderApp();
+  const { history, store } = renderApp();
 
   const taxCode = document.querySelector('#taxCode');
   const name = document.querySelector('#name');
@@ -79,4 +79,11 @@ test('test with fields that respect rules, so enabled button', async () => {
 
   await waitFor(() => expect(history.location.pathname).toBe('/dashboard/1/prod-io/roles'));
   await waitFor(() => screen.getByText('Test Completato'));
+  const notifies = store.getState().appState.userNotifies;
+  expect(notifies).toHaveLength(1);
+  expect(notifies[0]).toMatchObject({
+    component: 'Toast',
+    title: 'REFERENTE AGGIUNTO',
+    message: 'Hai aggiunto correttamente NAME SURNAME.',
+  });
 });
