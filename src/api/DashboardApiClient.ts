@@ -1,11 +1,11 @@
 import { storageRead } from '@pagopa/selfcare-common-frontend/utils/storage-utils';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
+import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
 import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { store } from '../redux/store';
 import { PartyUserOnCreation } from '../model/PartyUser';
 import { ENV } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
-import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
