@@ -20,6 +20,7 @@ export type PartyUserOnCreation = {
   surname: string;
   taxCode: string;
   email: string;
+  confirmEmail: string;
   productRole: string;
 };
 

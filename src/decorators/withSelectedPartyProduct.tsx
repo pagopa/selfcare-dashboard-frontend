@@ -13,7 +13,7 @@ type ProductUrlParams = {
 
 export default function withSelectedPartyProduct<T extends { products: Array<Product> }>(
   WrappedComponent: React.ComponentType<T>
-): React.ComponentType<T> {
+): React.ComponentType<Omit<T, 'selectedProduct'>> {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithSelectedPartyProduct = (props: T) => {
@@ -44,5 +44,5 @@ export default function withSelectedPartyProduct<T extends { products: Array<Pro
   // eslint-disable-next-line functional/immutable-data
   ComponentWithSelectedPartyProduct.displayName = `withSelectedPartyProduct(${displayName})`;
 
-  return ComponentWithSelectedPartyProduct;
+  return ComponentWithSelectedPartyProduct as React.ComponentType<Omit<T, 'selectedProduct'>>;
 }
