@@ -156,7 +156,7 @@ export default function UsersSearchTable({
         id="UsersSearchTableBox"
         sx={{
           position: 'relative',
-          width: '100%',
+          width: '100% !important',
           border: 'none',
           px: '16px',
         }}

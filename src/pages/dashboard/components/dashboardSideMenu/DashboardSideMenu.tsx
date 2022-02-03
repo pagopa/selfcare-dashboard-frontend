@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { List, Grid } from '@mui/material';
-import { matchPath } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { History } from 'history';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
@@ -19,11 +18,13 @@ const applicationLinkBehaviour = (
   history: History,
   route: RouteConfig,
   pathVariables?: { [key: string]: string }
-) => ({
-  onClick: () =>
-    history.push(pathVariables ? resolvePathVariables(route.path, pathVariables) : route.path),
-  isSelected: () => matchPath(history.location.pathname, route) !== null,
-});
+) => {
+  const path = pathVariables ? resolvePathVariables(route.path, pathVariables) : route.path;
+  return {
+    onClick: () => history.push(path),
+    isSelected: () => history.location.pathname === path,
+  };
+};
 
 export default function DashboardSideMenu({ products, party }: Props) {
   const history = useHistory();
