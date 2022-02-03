@@ -14,15 +14,14 @@ import { useFormik } from 'formik';
 import { styled } from '@mui/system';
 import { useHistory } from 'react-router';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import { storageWrite } from '@pagopa/selfcare-common-frontend/utils/storage-utils';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
 import { Party } from '../../../model/Party';
 import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
 import {
   LOADING_TASK_SAVE_PARTY_USER,
   LOADING_TASK_FETCH_PRODUCT_ROLES,
-  STORAGE_KEY_NOTIFY_MESSAGE,
 } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
@@ -76,6 +75,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
   const addError = useErrorDispatcher();
+  const addNotify = useUserNotify();
   const history = useHistory();
   const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
 
@@ -133,8 +133,12 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .then(() => {
-          const notifyMessage = `Hai aggiunto correttamente ${values.name} ${values.surname}.`;
-          storageWrite(STORAGE_KEY_NOTIFY_MESSAGE, notifyMessage, 'string');
+          addNotify({
+            component: 'Toast',
+            id: 'SAVE_PARTY_USER',
+            title: 'REFERENTE AGGIUNTO',
+            message: `Hai aggiunto correttamente ${values.name} ${values.surname}.`,
+          });
           history.push(
             resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
               institutionId: party.institutionId,
