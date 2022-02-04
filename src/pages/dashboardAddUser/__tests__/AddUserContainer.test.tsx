@@ -84,6 +84,12 @@ test('test with fields that respect rules, so enabled button', async () => {
   expect(notifies[0]).toMatchObject({
     component: 'Toast',
     title: 'REFERENTE AGGIUNTO',
-    message: 'Hai aggiunto correttamente NAME SURNAME.',
+    message: (
+      <>
+        {'Hai aggiunto correttamente '}
+        <strong>NAME SURNAME</strong>
+        {'.'}
+      </>
+    ),
   });
 });
