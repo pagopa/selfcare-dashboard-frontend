@@ -1,10 +1,10 @@
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
+import { Footer, Header } from '@pagopa/selfcare-common-frontend';
 import React from 'react';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
-import Footer from '../Footer/Footer';
-import Header from '../Header/Header';
+import { ENV } from '../../utils/env';
 import DashboardMenuContainer from './dashboardMenuContainer/DashboardMenuContainer';
 
 type Props = {
@@ -25,7 +25,7 @@ export default function Layout({ children }: Props) {
       <Grid container direction="row" flexGrow={1}>
         {children}
       </Grid>
-      <Footer />
+      <Footer assistanceEmail={ENV.ASSISTANCE.ENABLE ? ENV.ASSISTANCE.EMAIL : undefined} />
     </Box>
   );
 }

@@ -4,7 +4,7 @@ import {
 } from '../../api/generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from '../../api/generated/b4f-dashboard/ProductUserResource';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
-import { mockedUser } from '../../decorators/__mocks__/withLogin';
+import { mockedUser } from '../../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
 import { institutionUserResource2PartyUser, productUserResource2PartyUser } from '../PartyUser';
 
 test('Test institutionUserResource2PartyUser', () => {

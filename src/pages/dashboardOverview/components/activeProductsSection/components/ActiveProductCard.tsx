@@ -1,24 +1,20 @@
 import { Card, Grid, Box, Typography } from '@mui/material';
+import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import BaseProductCard from '../../productCard/BaseProductCard';
-import { formatDateAsLongString } from '../../../../../utils/utils';
 
 type Props = {
   party: Party;
   product: Product;
-  buttonLabel: string;
-  lastServiceActivationDate?: Date;
 };
-export default function ActiveProductCard({
-  party,
-  product,
-  buttonLabel,
-  lastServiceActivationDate,
-}: Props) {
+
+export default function ActiveProductCard({ party, product }: Props) {
   const { invokeProductBo } = useTokenExchange();
   const isDisabled = product.authorized === false;
+  const lastServiceActivationDate = undefined; // actually this info is not available
+
   return (
     <Grid item xs={6}>
       <Card sx={{ height: '100%', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
@@ -27,12 +23,13 @@ export default function ActiveProductCard({
             disableBtn={isDisabled}
             cardTitle={product.title}
             cardSubTitle={
-              product.activationDateTime ?
-              `Attivo dal ${
-                product.activationDateTime && formatDateAsLongString(product.activationDateTime)
-              }` : 'Attivo'
+              product.activationDateTime
+                ? `Attivo dal ${
+                    product.activationDateTime && formatDateAsLongString(product.activationDateTime)
+                  }`
+                : 'Attivo'
             }
-            buttonLabel={buttonLabel}
+            buttonLabel="Gestisci"
             logoCard={product.logo}
             tag={product.tag}
             btnAction={() => invokeProductBo(product, party)}

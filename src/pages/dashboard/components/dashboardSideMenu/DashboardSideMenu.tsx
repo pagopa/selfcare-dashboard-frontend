@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { List, Grid } from '@mui/material';
-import { matchPath } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { History } from 'history';
-import { DASHBOARD_ROUTES, resolvePathVariables, RouteConfig } from '../../../../routes';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { DASHBOARD_ROUTES, RouteConfig } from '../../../../routes';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
 import { useTokenExchange } from '../../../../hooks/useTokenExchange';
@@ -18,11 +18,13 @@ const applicationLinkBehaviour = (
   history: History,
   route: RouteConfig,
   pathVariables?: { [key: string]: string }
-) => ({
-  onClick: () =>
-    history.push(pathVariables ? resolvePathVariables(route.path, pathVariables) : route.path),
-  isSelected: () => matchPath(history.location.pathname, route) !== null,
-});
+) => {
+  const path = pathVariables ? resolvePathVariables(route.path, pathVariables) : route.path;
+  return {
+    onClick: () => history.push(path),
+    isSelected: () => history.location.pathname === path,
+  };
+};
 
 export default function DashboardSideMenu({ products, party }: Props) {
   const history = useHistory();
@@ -59,7 +61,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
   const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(navigationMenu[0]);
   const arrayMenu: Array<MenuItem> = navigationMenu.concat(
     products
-      .filter((p) => p.active)
+      .filter((p) => p.status === 'ACTIVE')
       .map((p) => ({
         groupId: p.id,
         title: p.title,
@@ -116,6 +118,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
             arrayMenu.map((item) => (
               <DashboardSideMenuItem
                 key={item.title}
+                color={!item.active ? '#CCD4DC' : 'primary.main'}
                 item={item}
                 selectedItem={selectedItem}
                 handleClick={handleClick}

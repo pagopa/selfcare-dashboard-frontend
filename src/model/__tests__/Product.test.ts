@@ -1,4 +1,4 @@
-import { ProductsResource } from '../../api/generated/b4f-dashboard/ProductsResource';
+import { ProductsResource, StatusEnum } from '../../api/generated/b4f-dashboard/ProductsResource';
 import { productResource2Product } from '../Product';
 
 test('Test institutionInfo2Party', () => {
@@ -10,7 +10,7 @@ test('Test institutionInfo2Party', () => {
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
     authorized: true,
-    active: true,
+    status: StatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo',
     activatedAt: date,
     urlPublic: 'http://pagopa/public',
@@ -24,7 +24,7 @@ test('Test institutionInfo2Party', () => {
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
     authorized: true,
-    active: true,
+    status: 'ACTIVE',
     urlBO: 'http://pagopa/bo',
     activationDateTime: date,
     urlPublic: 'http://pagopa/public',

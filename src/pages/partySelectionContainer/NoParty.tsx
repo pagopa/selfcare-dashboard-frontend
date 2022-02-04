@@ -1,12 +1,11 @@
 import React from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { URL_FE_LANDING } from '../../utils/constants';
+import { ENV } from '../../utils/env';
 
 export default function NoParty() {
-  const bodyTitle = 'Non risulta nessun Ente associato';
-  const bodyDescription = 'Il tuo profilo non è associato a nessun Ente.';
-  const bodyDescription2 =
+  const bodyTitle = 'Il tuo profilo non è associato a nessun Ente.';
+  const bodyDescription =
     'Per accedere, chiedi al Referente incaricato di aggiungerti al portale Self Care del tuo Ente.';
 
   return (
@@ -36,11 +35,6 @@ export default function NoParty() {
                 {bodyDescription}
               </Typography>
             </Box>
-            <Box>
-              <Typography variant="subtitle2" component="h2">
-                {bodyDescription2}
-              </Typography>
-            </Box>
           </Grid>
         </Grid>
 
@@ -48,7 +42,7 @@ export default function NoParty() {
           <Button
             variant="contained"
             sx={{ width: '190px', height: '40px' }}
-            onClick={() => window.location.assign(URL_FE_LANDING)}
+            onClick={() => window.location.assign(ENV.URL_FE.LANDING)}
           >
             Torna alla Home
           </Button>

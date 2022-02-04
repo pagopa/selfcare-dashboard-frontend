@@ -1,8 +1,7 @@
 import { uniqueId } from 'lodash';
 import { useEffect } from 'react';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { useParties } from '../hooks/useParties';
-import { useAppDispatch } from '../redux/hooks';
-import { AppError, appStateActions } from '../redux/slices/appStateSlice';
 
 export default function withParties<T>(
   WrappedComponent: React.ComponentType<T>
@@ -10,10 +9,9 @@ export default function withParties<T>(
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithParties = (props: T) => {
-    const dispatch = useAppDispatch();
     const { fetchParties } = useParties();
 
-    const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+    const addError = useErrorDispatcher();
 
     const doFetch = (): void => {
       fetchParties().catch((reason) => {

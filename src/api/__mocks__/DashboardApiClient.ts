@@ -5,7 +5,7 @@ import {
   InstitutionUserResource,
   RoleEnum,
 } from '../generated/b4f-dashboard/InstitutionUserResource';
-import { ProductsResource } from '../generated/b4f-dashboard/ProductsResource';
+import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
 
 export const mockedInstitutionResources: Array<InstitutionResource> = [
@@ -36,7 +36,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'App IO description',
     id: '1',
     authorized: true,
-    active: true,
+    status: StatusEnum.ACTIVE,
     urlBO: 'http://appio/bo#<IdentityToken>',
     activatedAt: new Date(2021, 1, 1, 0, 0, 0, 0),
     urlPublic: 'http://appio/public',
@@ -47,7 +47,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     title: 'Piattaforma Notifiche',
     description: 'Piattaforma Notifiche description',
     authorized: false,
-    active: true,
+    status: StatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 2, 0, 0, 0, 0),
     urlPublic: 'http://notifiche/public',
@@ -58,7 +58,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
     authorized: true,
-    active: true,
+    status: StatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 3, 0, 0, 0, 0),
     urlPublic: 'http://pagopa/public',
@@ -69,7 +69,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: '4',
     authorized: true,
-    active: false,
+    status: StatusEnum.PENDING,
     urlPublic: 'http://www.google.it',
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
   },
@@ -79,7 +79,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     title: 'Carta Giovani',
     description: 'Richiedi la convenzione e gestisci i dati e le agevolazioni da offrire.',
     authorized: true,
-    active: true,
+    status: StatusEnum.ACTIVE,
     urlPublic: undefined,
     urlBO: 'http://cgn/bo#token=<IdentityToken>',
   },
@@ -89,7 +89,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     title: 'PDND',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     authorized: true,
-    active: false,
+    status: StatusEnum.INACTIVE,
     urlPublic: undefined,
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
   },
