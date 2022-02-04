@@ -137,7 +137,13 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
             component: 'Toast',
             id: 'SAVE_PARTY_USER',
             title: 'REFERENTE AGGIUNTO',
-            message: `Hai aggiunto correttamente ${values.name} ${values.surname}.`,
+            message: (
+              <>
+                {'Hai aggiunto correttamente '}
+                <strong>{`${values.name} ${values.surname}`}</strong>
+                {'.'}
+              </>
+            ),
           });
           history.push(
             resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
