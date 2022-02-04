@@ -1956,10 +1956,10 @@
     write-yaml-file "^4.1.3"
     yargs "^15.0.1"
 
-"@pagopa/selfcare-common-frontend@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@pagopa/selfcare-common-frontend/-/selfcare-common-frontend-1.2.3.tgz#17a64151a4b20bde41753bb99354f5b007229cdb"
-  integrity sha512-ubyZ5A9EA5BPDTnnAPq7f6ZqTK2KRsVeizTqlIvzIDXoVgTkmmi5duFVrp/IyLKDITZQZqnN4PKF+2CL4ScsNQ==
+"@pagopa/selfcare-common-frontend@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@pagopa/selfcare-common-frontend/-/selfcare-common-frontend-1.3.0.tgz#72a21de34a8df9be1cd0e1fa3cc3392a7242fb68"
+  integrity sha512-DYa/4rSx2uAb7C4HlpO6ektoDrFNCYRCpDI/fdhr2L8mcI8uJO6WOR3tG/p2refwbvkRD+mtdG/AcRtjiD5fFw==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
@@ -1975,6 +1975,7 @@
     "@testing-library/user-event" "^12.8.3"
     "@types/jest" "^26.0.24"
     "@types/lodash" "^4.14.172"
+    "@types/mixpanel-browser" "^2.38.0"
     "@types/node" "^12.20.19"
     "@types/react" "^17.0.18"
     "@types/react-dom" "^17.0.9"
@@ -1987,6 +1988,7 @@
     fp-ts "^2.11.5"
     io-ts "^2.2.16"
     lodash "^4.17.21"
+    mixpanel-browser "^2.43.0"
     node-fetch "^3.0.0"
     react "^17.0.2"
     react-app-polyfill "^3.0.0"
@@ -2406,6 +2408,11 @@
   version "3.0.5"
   resolved "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.5.tgz"
   integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
+
+"@types/mixpanel-browser@^2.38.0":
+  version "2.38.0"
+  resolved "https://registry.yarnpkg.com/@types/mixpanel-browser/-/mixpanel-browser-2.38.0.tgz#b3e28e1ba06c10a9f88510b88f1ac9d1b2adfc42"
+  integrity sha512-TR8rvsILnqXA7oiiGOxuMGXwvDeCoQDonXJB5UR+TYvEAFpiK8ReFj5LhZT+Xhm3NpI9aPoju30jB2ssorSUww==
 
 "@types/node@*":
   version "16.11.11"
@@ -9167,6 +9174,11 @@ mixin-deep@^1.2.0:
   dependencies:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
+
+mixpanel-browser@^2.43.0:
+  version "2.43.0"
+  resolved "https://registry.yarnpkg.com/mixpanel-browser/-/mixpanel-browser-2.43.0.tgz#a4d4f97f5a7ca85411697ef70fa833177e67eb95"
+  integrity sha512-6zOjFXaRRWYo7YdcBwa9Z6nk9zRkkxPd9Qa/KNRcjSJ0OkMv7ka/p8rR+6VqMeY93pia/7X31c/HU5YhqAXnEQ==
 
 mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@^0.5.5, mkdirp@~0.5.1:
   version "0.5.5"
