@@ -4,6 +4,7 @@ import AddUserContainer from '../AddUserContainer';
 import { createStore, store } from '../../../redux/store';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
+import { mockedUserRegistry } from '../../../services/__mocks__/usersService';
 import { Route, Router, Switch } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { verifyMockExecution as verifyLoginMockExecution } from '../../../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
@@ -13,8 +14,8 @@ jest.mock('../../../services/usersService');
 
 const fieldsValue = {
   taxCode: 'AAAAAA22A22A234O',
-  name: 'NAME',
-  surname: 'SURNAME',
+  name: 'franco',
+  surname: 'rossi',
   email: 'NAME@SURNAME.COM',
   confirmEmail: 'NAME@SURNAME.COM',
 };
@@ -29,7 +30,11 @@ const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
       <Router history={history}>
         <Switch>
           <Route path="/:institutionId/:productId" exact={true}>
-            <AddUserContainer party={mockedParties[0]} products={mockedPartyProducts} />
+            <AddUserContainer
+              party={mockedParties[0]}
+              products={mockedPartyProducts}
+              {...mockedUserRegistry}
+            />
           </Route>
           <Route path="/dashboard/1/prod-io/roles" exact={true}>
             Test Completato
@@ -87,9 +92,73 @@ test('test with fields that respect rules, so enabled button', async () => {
     message: (
       <>
         {'Hai aggiunto correttamente '}
-        <strong>NAME SURNAME</strong>
+        <strong>franco rossi</strong>
         {'.'}
       </>
     ),
+  });
+});
+
+test('test with taxCode field that respect rules, so all field are enabled', async () => {
+  renderApp();
+
+  const taxCode = document.querySelector('#taxCode');
+  const name = document.querySelector('#name');
+  const surname = document.querySelector('#surname');
+  const email = document.querySelector('#email');
+  const confirmEmail = document.querySelector('#confirmEmail');
+
+  fireEvent.change(taxCode, { target: { value: fieldsValue.taxCode } });
+  expect(name).toBeEnabled();
+  expect(surname).toBeEnabled();
+  expect(email).toBeEnabled();
+  expect(confirmEmail).toBeEnabled();
+
+  await waitFor(() => {
+    const checkbox = document.querySelector('input[name="productRole"]');
+    expect(checkbox).toBeEnabled();
+  });
+});
+
+test('test with empty taxCode field, so all field are disabled', async () => {
+  renderApp();
+
+  const taxCode = document.querySelector('#taxCode');
+  const name = document.querySelector('#name');
+  const surname = document.querySelector('#surname');
+  const email = document.querySelector('#email');
+  const confirmEmail = document.querySelector('#confirmEmail');
+
+  fireEvent.change(taxCode, { target: { value: '' } });
+  expect(name).toBeDisabled();
+  expect(surname).toBeDisabled();
+  expect(email).toBeDisabled();
+  expect(confirmEmail).toBeDisabled();
+
+  await waitFor(() => {
+    const checkbox = document.querySelector('input[name="productRole"]');
+    expect(checkbox).toBeDisabled();
+  });
+});
+
+test('test with taxCode field that doesnt respect rules, so all field are disabled', async () => {
+  renderApp();
+
+  const taxCode = document.querySelector('#taxCode');
+  const name = document.querySelector('#name');
+  const surname = document.querySelector('#surname');
+  const email = document.querySelector('#email');
+  const confirmEmail = document.querySelector('#confirmEmail');
+
+  fireEvent.change(taxCode, { target: { value: 'AAAAA23' } });
+  await waitFor(() => expect((taxCode as HTMLInputElement).value).toBe('AAAAA23'));
+  expect(name).toBeDisabled();
+  expect(surname).toBeDisabled();
+  expect(email).toBeDisabled();
+  expect(confirmEmail).toBeDisabled();
+
+  await waitFor(() => {
+    const checkbox = document.querySelector('input[name="productRole"]');
+    expect(checkbox).toBeDisabled();
   });
 });

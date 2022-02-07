@@ -22,6 +22,7 @@ export type PartyUserOnCreation = {
   email: string;
   confirmEmail: string;
   productRole: string;
+  certification: boolean;
 };
 
 export const institutionUserResource2PartyUser = (

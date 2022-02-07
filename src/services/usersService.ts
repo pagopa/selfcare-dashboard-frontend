@@ -10,11 +10,13 @@ import {
   productUserResource2PartyUser,
 } from '../model/PartyUser';
 import { ProductRole } from '../model/ProductRole';
+import { UserRegistry } from '../model/UserRegistry';
 import { DashboardApi } from '../api/DashboardApiClient';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
   savePartyUser as savePartyUserMocked,
   mockedProductRoles,
+  mockedUserRegistry,
 } from './__mocks__/usersService';
 
 const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
@@ -94,5 +96,14 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
     return DashboardApi.getProductRoles(product.id).then((roles) =>
       roles.map((r) => ({ productRole: r }))
     );
+  }
+};
+
+export const fetchUserRegistryByFiscalCode = (_taxCode: string): Promise<UserRegistry> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return new Promise((resolve) => resolve(mockedUserRegistry));
+  } else {
+    throw new Error('TODO');
   }
 };

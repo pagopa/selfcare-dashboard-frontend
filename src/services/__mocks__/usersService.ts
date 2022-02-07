@@ -5,6 +5,7 @@ import { Party, UserRole } from '../../model/Party';
 import { PartyUser, PartyUserOnCreation } from '../../model/PartyUser';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
+import { UserRegistry } from '../../model/UserRegistry';
 
 export const mockedUsers: Array<PartyUser> = [
   {
@@ -357,6 +358,14 @@ export const mockedProductRoles = [
   },
 ];
 
+export const mockedUserRegistry: UserRegistry = {
+  taxCode: 'AAAAAA11A11A234S',
+  name: 'franco',
+  surname: 'rossi',
+  email: 'f@r.com',
+  certification: false,
+};
+
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
   _party: Party,
@@ -386,3 +395,6 @@ export const savePartyUser = (
   _product: Product,
   _user: PartyUserOnCreation
 ): Promise<any> => new Promise((resolve) => resolve(200));
+
+export const fetchUserRegistryByFiscalCode = (_taxCode: string): Promise<UserRegistry> =>
+  new Promise((resolve) => resolve(mockedUserRegistry));

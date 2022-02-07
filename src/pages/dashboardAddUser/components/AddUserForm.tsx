@@ -18,10 +18,15 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
 import { Party } from '../../../model/Party';
-import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
+import {
+  fetchProductRoles,
+  fetchUserRegistryByFiscalCode,
+  savePartyUser,
+} from '../../../services/usersService';
 import {
   LOADING_TASK_SAVE_PARTY_USER,
   LOADING_TASK_FETCH_PRODUCT_ROLES,
+  LOADING_TASK_FETCH_TAX_CODE,
 } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
@@ -74,10 +79,12 @@ type Props = {
 export default function AddUserForm({ party, selectedProduct }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
+  const setLoadingFetchTaxCode = useLoading(LOADING_TASK_FETCH_TAX_CODE);
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
   const history = useHistory();
   const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
+  const [validTaxcode, setValidTaxcode] = useState<string>();
 
   useEffect(() => {
     setLoadingFetchRoles(true);
@@ -95,8 +102,42 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       .finally(() => setLoadingFetchRoles(false));
   }, []);
 
-  const validate = (values: Partial<PartyUserOnCreation>) =>
-    Object.fromEntries(
+  useEffect(() => {
+    if (validTaxcode) {
+      fetchTaxCode(validTaxcode);
+    }
+  }, [validTaxcode]);
+
+  const fetchTaxCode = (taxCode: string) => {
+    setLoadingFetchTaxCode(true);
+    fetchUserRegistryByFiscalCode(taxCode)
+      .then((userRegistry) => {
+        void formik.setValues(
+          {
+            ...formik.values,
+            name: userRegistry.name,
+            surname: userRegistry.surname,
+            email: userRegistry.email,
+            confirmEmail: userRegistry.email,
+            certification: userRegistry.certification,
+          },
+          true
+        );
+      })
+      .catch((errors) =>
+        addError({
+          id: 'FETCH_TAX_CODE',
+          blocking: false,
+          error: errors,
+          techDescription: `An error occurred while fetching Tax Code of Product ${taxCode}`,
+          toNotify: true,
+        })
+      )
+      .finally(() => setLoadingFetchTaxCode(false));
+  };
+
+  const validate = (values: Partial<PartyUserOnCreation>) => {
+    const errors = Object.fromEntries(
       Object.entries({
         name: !values.name ? requiredError : undefined,
         surname: !values.surname ? requiredError : undefined,
@@ -118,6 +159,13 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
         productRole: !values.productRole ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
+    if (!errors.taxCode) {
+      setValidTaxcode(values.taxCode);
+    } else {
+      setValidTaxcode(undefined);
+    }
+    return errors;
+  };
 
   const formik = useFormik<PartyUserOnCreation>({
     initialValues: {
@@ -127,6 +175,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       email: '',
       confirmEmail: '',
       productRole: '',
+      certification: false,
     },
     validate,
     onSubmit: (values) => {
@@ -216,11 +265,13 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
             <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
               <CustomTextField
                 {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
+                disabled={formik.values.certification || !validTaxcode}
               />
             </Grid>
             <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
               <CustomTextField
                 {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
+                disabled={formik.values.certification || !validTaxcode}
               />
             </Grid>
           </Grid>
@@ -232,6 +283,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
                   'Email',
                   'Inserisci l’indirizzo email istituzionale del referente'
                 )}
+                disabled={!validTaxcode}
               />
             </Grid>
           </Grid>
@@ -243,6 +295,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
                   'Conferma email',
                   'Conferma l’indirizzo email istituzionale del referente'
                 )}
+                disabled={!validTaxcode}
               />
             </Grid>
           </Grid>
@@ -261,6 +314,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
                 {productRoles?.map((p, index) => (
                   <Box key={p.productRole}>
                     <CustomFormControlLabel
+                      disabled={!validTaxcode}
                       value={p.productRole}
                       control={<Radio />}
                       label={p.productRole}

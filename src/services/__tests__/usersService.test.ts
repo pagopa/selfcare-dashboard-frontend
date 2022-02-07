@@ -144,7 +144,9 @@ test('Test savePartyUser', async () => {
     surname: 'Surname',
     taxCode: 'fiscalCode',
     email: 'email',
+    confirmEmail: 'confirmEmail',
     productRole: 'role',
+    certification: true,
   };
 
   await savePartyUser(mockedParties[0], mockedPartyProducts[0], user);
