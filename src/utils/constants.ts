@@ -4,7 +4,6 @@ export const MOCK_USER = IS_DEVELOP;
 export const LOG_REDUX_ACTIONS = IS_DEVELOP;
 
 export const STORAGE_KEY_TOKEN = 'token';
-export const STORAGE_KEY_NOTIFY_MESSAGE = 'notify_message';
 
 export const LOADING_TASK_SEARCH_PARTIES = 'SEARCH_PARTIES';
 export const LOADING_TASK_SEARCH_PARTY = 'SEARCH_PARTY';
