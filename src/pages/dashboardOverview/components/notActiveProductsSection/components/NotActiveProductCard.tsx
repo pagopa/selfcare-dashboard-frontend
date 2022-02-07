@@ -31,7 +31,7 @@ export default function NotActiveProductCard({ party, product }: Props) {
             cardTitle={product.title}
             cardSubTitle={product.description}
             buttonLabel="Aderisci"
-            logoCard={product.logo}
+            urlLogo={product.logo}
             tag={product.tag}
             btnAction={() => {
               if (product.status === 'PENDING') {

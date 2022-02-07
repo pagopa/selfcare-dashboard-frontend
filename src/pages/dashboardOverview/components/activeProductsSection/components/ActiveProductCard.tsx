@@ -30,7 +30,7 @@ export default function ActiveProductCard({ party, product }: Props) {
                 : 'Attivo'
             }
             buttonLabel="Gestisci"
-            logoCard={product.logo}
+            urlLogo={product.logo}
             tag={product.tag}
             btnAction={() => invokeProductBo(product, party)}
             heightLogo="70px"
