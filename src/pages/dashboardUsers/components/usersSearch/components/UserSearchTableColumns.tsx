@@ -129,7 +129,6 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
 }
 
 function getFullName(params: GridValueGetterParams) {
-  console.log('ROW', params.row);
   return `${params.row.name} ${params.row.surname} ${params.row.status}`;
 }
 
@@ -164,14 +163,18 @@ function showChip(params: GridRenderCellParams) {
       {renderCell(
         params,
         <>
-          <Grid container sx={{width: '100%'}}>
-            <Grid item xs={params.row.status === 'SUSPENDED' ? 7 : 12 } sx={{width: '100%'}}>
-              <Typography variant='h6' >
+          <Grid container sx={{ width: '100%' }}>
+            <Grid item xs={params.row.status === 'SUSPENDED' ? 7 : 12} sx={{ width: '100%' }}>
+              <Typography variant="h6">
                 {params.row.name} {params.row.surname}
               </Typography>
             </Grid>
             {params.row.status === 'SUSPENDED' && (
-              <Grid item xs={5} sx={{display: 'flex',justifyContent: 'flex-end',  alignItems: 'center'}}>
+              <Grid
+                item
+                xs={5}
+                sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+              >
                 <Chip
                   label="Sospeso"
                   sx={{
