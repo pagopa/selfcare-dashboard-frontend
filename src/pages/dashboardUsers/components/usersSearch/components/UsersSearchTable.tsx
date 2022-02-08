@@ -9,6 +9,7 @@ import Toast from '@pagopa/selfcare-common-frontend/components/Toast';
 import CustomPagination from '@pagopa/selfcare-common-frontend/components/CustomPagination';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
 import { Party, UserStatus } from '../../../../../model/Party';
@@ -131,6 +132,11 @@ export default function UsersSearchTable({
       setLoading(true);
       updatePartyUserStatus(user, nextStatus)
         .then((_) => {
+          if(nextStatus === "SUSPENDED"){
+            trackEvent('USER_SUSPEND', { party_id: party.institutionId , product: selectedProduct.id });
+          }else if(nextStatus === "ACTIVE"){
+            trackEvent('USER_RESUME', { party_id: party.institutionId , product: selectedProduct.id });
+          };
           setOpenModal(false);
           // eslint-disable-next-line functional/immutable-data
           user.status = nextStatus;

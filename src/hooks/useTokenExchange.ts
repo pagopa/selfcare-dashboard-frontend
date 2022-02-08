@@ -1,5 +1,6 @@
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { LOADING_TASK_TOKEN_EXCHANGE } from '../utils/constants';
 import { Product } from '../model/Product';
 import { retrieveTokenExchange } from '../services/tokenExchangeService';
@@ -27,7 +28,13 @@ export const useTokenExchange = () => {
 
     setLoading(true);
     retrieveTokenExchange(result, selectedParty, product)
-      .then((t) => window.location.assign(product.urlBO.replace(tokenPlaceholder, t)))
+      .then((t) =>
+        trackEvent(
+          'DASHBOARD_OPEN_PRODUCT',
+          { party_id: selectedParty.institutionId, product: product.id },
+          () => window.location.assign(product.urlBO.replace(tokenPlaceholder, t))
+        )
+      )
       .catch((error) =>
         addError({
           id: `TokenExchangeError-${product.id}`,
