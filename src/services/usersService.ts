@@ -99,7 +99,7 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
   }
 };
 
-export const fetchUserRegistryByFiscalCode = (_taxCode: string): Promise<UserRegistry> => {
+export const fetchUserRegistryByFiscalCode = (_taxCode: string): Promise<UserRegistry | null> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return new Promise((resolve) => resolve(mockedUserRegistry));

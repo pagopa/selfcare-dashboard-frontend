@@ -1,4 +1,9 @@
-import { ErrorBoundary, LoadingOverlay, UserNotifyHandle } from '@pagopa/selfcare-common-frontend';
+import {
+  ErrorBoundary,
+  LoadingOverlay,
+  UserNotifyHandle,
+  UnloadEventHandler,
+} from '@pagopa/selfcare-common-frontend';
 import { Redirect, Route, Switch } from 'react-router';
 import withLogin from '@pagopa/selfcare-common-frontend/decorators/withLogin';
 import Layout from './components/Layout/Layout';
@@ -17,6 +22,8 @@ const App = () => (
     <Layout>
       <LoadingOverlay />
       <UserNotifyHandle />
+      <UnloadEventHandler />
+
       <Switch>
         {buildRoutes(routes)}
 

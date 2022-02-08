@@ -17,6 +17,10 @@ import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
+import {
+  useUnloadEventInterceptor,
+  useUnloadEventOnExit,
+} from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { Party } from '../../../model/Party';
 import {
   fetchProductRoles,
@@ -85,6 +89,8 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
   const history = useHistory();
   const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
   const [validTaxcode, setValidTaxcode] = useState<string>();
+  const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
+  const onExit = useUnloadEventOnExit();
 
   useEffect(() => {
     setLoadingFetchRoles(true);
@@ -115,11 +121,11 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
         void formik.setValues(
           {
             ...formik.values,
-            name: userRegistry.name,
-            surname: userRegistry.surname,
-            email: userRegistry.email,
-            confirmEmail: userRegistry.email,
-            certification: userRegistry.certification,
+            name: userRegistry?.name ?? formik.values.name,
+            surname: userRegistry?.surname ?? formik.values.surname,
+            email: userRegistry?.email ?? formik.values.email,
+            confirmEmail: userRegistry?.email ?? formik.values.email,
+            certification: userRegistry?.certification ?? formik.values.certification,
           },
           true
         );
@@ -136,6 +142,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       .finally(() => setLoadingFetchTaxCode(false));
   };
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const validate = (values: Partial<PartyUserOnCreation>) => {
     const errors = Object.fromEntries(
       Object.entries({
@@ -182,6 +189,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .then(() => {
+          unregisterUnloadEvent();
           addNotify({
             component: 'Toast',
             id: 'SAVE_PARTY_USER',
@@ -213,6 +221,14 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
         .finally(() => setLoadingSaveUser(false));
     },
   });
+
+  useEffect(() => {
+    if (formik.dirty) {
+      registerUnloadEvent();
+    } else {
+      unregisterUnloadEvent();
+    }
+  }, [formik.dirty]);
 
   const baseTextFieldProps = (
     field: keyof PartyUserOnCreation,
@@ -328,17 +344,40 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={3} mt={12}>
-          <p>{formik.isValid} </p>
-          <Button
-            disabled={!formik.dirty || !formik.isValid}
-            sx={{ width: '100%' }}
-            color="primary"
-            variant="contained"
-            type="submit"
-          >
-            Conferma
-          </Button>
+
+        <Grid item container spacing={3}>
+          <Grid item xs={3} mt={8}>
+            <p> </p>
+            <Button
+              sx={{ width: '100%' }}
+              color="primary"
+              variant="contained"
+              onClick={() =>
+                onExit(() =>
+                  history.push(
+                    resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
+                      institutionId: party.institutionId,
+                      productId: selectedProduct.id,
+                    })
+                  )
+                )
+              }
+            >
+              Indietro
+            </Button>
+          </Grid>
+          <Grid item xs={3} mt={8}>
+            <p>{formik.isValid} </p>
+            <Button
+              disabled={!formik.dirty || !formik.isValid}
+              sx={{ width: '100%' }}
+              color="primary"
+              variant="contained"
+              type="submit"
+            >
+              Conferma
+            </Button>
+          </Grid>
         </Grid>
       </form>
     </React.Fragment>
