@@ -31,7 +31,7 @@ export const useTokenExchange = () => {
       .then((t) =>
         trackEvent(
           'DASHBOARD_OPEN_PRODUCT',
-          { party_id: selectedParty.institutionId, product: product.id },
+          { party_id: selectedParty.institutionId, product: product.id, product_role: product.userRole },
           () => window.location.assign(product.urlBO.replace(tokenPlaceholder, t))
         )
       )

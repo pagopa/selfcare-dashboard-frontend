@@ -133,9 +133,9 @@ export default function UsersSearchTable({
       updatePartyUserStatus(user, nextStatus)
         .then((_) => {
           if(nextStatus === "SUSPENDED"){
-            trackEvent('USER_SUSPEND', { party_id: party.institutionId , product: selectedProduct.id });
+            trackEvent('USER_SUSPEND', { party_id: party.institutionId , product: selectedProduct.id, product_role: user.userRole });
           }else if(nextStatus === "ACTIVE"){
-            trackEvent('USER_RESUME', { party_id: party.institutionId , product: selectedProduct.id });
+            trackEvent('USER_RESUME', { party_id: party.institutionId , product: selectedProduct.id, product_role: user.userRole });
           };
           setOpenModal(false);
           // eslint-disable-next-line functional/immutable-data
