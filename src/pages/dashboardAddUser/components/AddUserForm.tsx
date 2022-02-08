@@ -344,7 +344,6 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
             </Grid>
           </Grid>
         </Grid>
-
         <Grid item container spacing={3}>
           <Grid item xs={3} mt={8}>
             <p> </p>
