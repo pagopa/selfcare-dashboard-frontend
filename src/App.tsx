@@ -1,8 +1,8 @@
 import {
   ErrorBoundary,
   LoadingOverlay,
-  UserNotifyHandle,
   UnloadEventHandler,
+  UserNotifyHandle,
 } from '@pagopa/selfcare-common-frontend';
 import { Redirect, Route, Switch } from 'react-router';
 import withLogin from '@pagopa/selfcare-common-frontend/decorators/withLogin';

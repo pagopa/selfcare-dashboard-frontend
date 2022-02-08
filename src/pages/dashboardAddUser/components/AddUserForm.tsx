@@ -21,6 +21,7 @@ import {
   useUnloadEventInterceptor,
   useUnloadEventOnExit,
 } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../../../model/Party';
 import {
   fetchProductRoles,
@@ -190,6 +191,12 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .then(() => {
           unregisterUnloadEvent();
+          // TODO: USER_UPDATE
+          trackEvent('USER_ADD', {
+            party_id: party.institutionId,
+            product: selectedProduct.id,
+            product_role: values.productRole,
+          });
           addNotify({
             component: 'Toast',
             id: 'SAVE_PARTY_USER',
