@@ -17,6 +17,7 @@ import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../../../model/Party';
 import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
 import {
@@ -133,6 +134,8 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .then(() => {
+          // TODO: USER_UPDATE 
+          trackEvent('USER_ADD', { party_id: party.institutionId , product: selectedProduct.id, product_role: values.productRole });
           addNotify({
             component: 'Toast',
             id: 'SAVE_PARTY_USER',

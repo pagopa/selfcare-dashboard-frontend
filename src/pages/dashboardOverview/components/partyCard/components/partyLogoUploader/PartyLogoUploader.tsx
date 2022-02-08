@@ -3,6 +3,8 @@ import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
 import { Box } from '@mui/system';
 import { useState, useEffect } from 'react';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { uniqueId } from 'lodash';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
@@ -54,14 +56,18 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
     onDropAccepted: (files: Array<File>) => {
       setLoading(true);
       setLabelLink(files[0].name);
+      const requestId = uniqueId();
+      trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: institutionId, request_id: requestId});
 
       DashboardApi.uploadLogo(institutionId, files[0])
         .then(() => {
           setUrlLogo(urlLogo);
           setLoading(false);
           setLabelLink('Modifica Logo');
+          trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', { party_id: institutionId, request_id: requestId});
         })
         .catch((reason) => {
+          trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_FAILURE', { party_id: institutionId, request_id: requestId});
           setLoading(false);
           addError({
             id: 'FILE_UPLOAD_ERROR',
@@ -70,7 +76,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
             techDescription: 'An error occurred while uploading new logo',
             displayableTitle: 'Caricamento non riuscito',
             displayableDescription: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
-            toNotify: true,
+            toNotify: false,
             onRetry: open,
           });
           setLabelLink(getLabelLinkText());

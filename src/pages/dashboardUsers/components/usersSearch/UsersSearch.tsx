@@ -10,6 +10,7 @@ import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/use
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Product } from '../../../../model/Product';
 import { PartyUser } from '../../../../model/PartyUser';
 import { DASHBOARD_ROUTES } from '../../../../routes';
@@ -76,6 +77,7 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
   };
 
   useEffect(() => {
+    trackEvent('USER_LIST', { party_id: party.institutionId , product: selectedProductId });
     const newFilter = {
       ...filter, 
       product: selectedProduct
