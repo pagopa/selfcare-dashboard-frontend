@@ -56,7 +56,7 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
       currentUser ?? ({ uid: 'NONE' } as User),
       !!selectedProduct,
       f.product,
-      f.role
+      f.role ? [f.role] : undefined
     )
       .then((r) => {
         setUsers(r.content);
@@ -77,13 +77,13 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
   };
 
   useEffect(() => {
-    trackEvent('USER_LIST', { party_id: party.institutionId , product: selectedProductId });
+    trackEvent('USER_LIST', { party_id: party.institutionId, product: selectedProductId });
     const newFilter = {
-      ...filter, 
-      product: selectedProduct
+      ...filter,
+      product: selectedProduct,
     };
-  setFilter(newFilter);
-  fetchUsers(newFilter, pageRequest);
+    setFilter(newFilter);
+    fetchUsers(newFilter, pageRequest);
   }, [selectedProductId]);
 
   const handleFilterChange = (f: UsersSearchFilterConfig) => {

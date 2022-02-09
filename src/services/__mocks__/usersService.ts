@@ -363,11 +363,17 @@ export const fetchPartyUsers = (
   _currentUser: User,
   _checkPermission: boolean,
   product?: Product,
-  role?: UserRole
+  selcRoles?: Array<UserRole>,
+  _productRoles?: Array<ProductRole> // TODO use me!
 ): Promise<PageResource<PartyUser>> => {
   const content = pageRequest.page === 9 ? mockedUsers.slice(1, 5) : mockedUsers;
   const filteredContent = content.map((u) =>
-    Object.assign({}, u, product ? { products: [product] } : {}, role ? { userRole: role } : {})
+    Object.assign(
+      {},
+      u,
+      product ? { products: [product] } : {},
+      selcRoles && selcRoles.length > 0 ? { userRole: selcRoles[0] } : {}
+    )
   );
   const page = {
     number: pageRequest.page,
