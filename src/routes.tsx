@@ -2,7 +2,7 @@ import { Redirect, useParams } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import withSelectedPartyProduct from './decorators/withSelectedPartyProduct';
 import Dashboard from './pages/dashboard/Dashboard';
-import AddUserContainer from './pages/dashboardAddUser/AddUserContainer';
+import AddUserPage from './pages/dashboardUserEdit/AddUserPage';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import DashboardUsers from './pages/dashboardUsers/DashboardUsers';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
@@ -68,7 +68,7 @@ export const DASHBOARD_ROUTES = {
       ADD_PARTY_PRODUCT_USER: {
         path: `${BASE_ROUTE}/:institutionId/:productId/roles/add`,
         exact: true,
-        component: AddUserContainer,
+        component: AddUserPage,
       },
       ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
     },

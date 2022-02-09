@@ -15,7 +15,7 @@ type Props = {
   selectedProduct: Product;
 };
 
-function AddUserContainer({ party, selectedProduct }: Props) {
+function AddUserPage({ party, selectedProduct }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -58,4 +58,4 @@ function AddUserContainer({ party, selectedProduct }: Props) {
   );
 }
 
-export default withSelectedPartyProduct(AddUserContainer);
+export default withSelectedPartyProduct(AddUserPage);
