@@ -27,6 +27,10 @@
     {
       "name": "token",
       "description": "Token operations"
+    },
+    {
+      "name": "user",
+      "description": "User Controller"
     }
   ],
   "paths": {
@@ -627,6 +631,52 @@
           }
         ]
       }
+    },
+    "/users/external-id": {
+      "post": {
+        "tags": ["user"],
+        "summary": "getUserByExternalId",
+        "description": "Retrieve the user for a given internal id ",
+        "operationId": "getUserByExternalIdUsingPOST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbeddedExternalIdDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResource"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -655,6 +705,15 @@
           "taxCode": {
             "type": "string",
             "description": "Institution's unique identifier (i.e.: IPA code)"
+          }
+        }
+      },
+      "EmbeddedExternalIdDto": {
+        "title": "EmbeddedExternalIdDto",
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "type": "string"
           }
         }
       },
@@ -841,6 +900,34 @@
           "userRole": {
             "type": "string",
             "description": "Logged user's role"
+          }
+        }
+      },
+      "UserResource": {
+        "title": "UserResource",
+        "required": ["certification", "email", "fiscalCode", "name", "surname"],
+        "type": "object",
+        "properties": {
+          "certification": {
+            "type": "boolean",
+            "description": "User's certification source",
+            "example": false
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "fiscalCode": {
+            "type": "string",
+            "description": "${swagger.dashboard.user.model.fiscalCode}"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "surname": {
+            "type": "string",
+            "description": "User's surname"
           }
         }
       }

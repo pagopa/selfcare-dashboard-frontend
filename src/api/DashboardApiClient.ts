@@ -11,6 +11,7 @@ import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
+import { UserResource } from './generated/b4f-dashboard/UserResource';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
@@ -132,6 +133,13 @@ export const DashboardApi = {
   getProductRoles: async (productId: string): Promise<Array<string>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  fetchUserRegistryByFiscalCode: async (taxCode: string): Promise<UserResource | null> => {
+    const result = await apiClient.getUserByExternalIdUsingPOST({
+      body: { externalId: taxCode },
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

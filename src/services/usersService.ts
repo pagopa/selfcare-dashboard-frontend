@@ -10,7 +10,7 @@ import {
   productUserResource2PartyUser,
 } from '../model/PartyUser';
 import { ProductRole } from '../model/ProductRole';
-import { UserRegistry } from '../model/UserRegistry';
+import { UserRegistry, userResource2UserRegistry } from '../model/UserRegistry';
 import { DashboardApi } from '../api/DashboardApiClient';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
@@ -99,11 +99,13 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
   }
 };
 
-export const fetchUserRegistryByFiscalCode = (_taxCode: string): Promise<UserRegistry | null> => {
+export const fetchUserRegistryByFiscalCode = (taxCode: string): Promise<UserRegistry | null> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return new Promise((resolve) => resolve(mockedUserRegistry));
   } else {
-    throw new Error('TODO');
+    return DashboardApi.fetchUserRegistryByFiscalCode(taxCode).then((userResource) =>
+      userResource ? userResource2UserRegistry(userResource) : null
+    );
   }
 };

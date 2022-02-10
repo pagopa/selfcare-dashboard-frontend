@@ -2,6 +2,7 @@ import {
   mockedInstitutionUserResource,
   mockedProductUserResource,
   mockedProductRoles,
+  mockedUserResource,
 } from '../../api/__mocks__/DashboardApiClient';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import {
@@ -9,6 +10,7 @@ import {
   savePartyUser,
   updatePartyUserStatus,
   fetchProductRoles,
+  fetchUserRegistryByFiscalCode,
 } from '../usersService';
 import { mockedParties } from '../__mocks__/partyService';
 import { mockedPartyProducts } from '../__mocks__/productService';
@@ -19,6 +21,8 @@ import {
   PartyUserOnCreation,
   productUserResource2PartyUser,
 } from '../../model/PartyUser';
+import { mockedUserRegistry } from '../__mocks__/usersService';
+import { userResource2UserRegistry } from '../../model/UserRegistry';
 
 jest.mock('../../api/DashboardApiClient');
 
@@ -29,6 +33,7 @@ beforeEach(() => {
   jest.spyOn(DashboardApi, 'suspendPartyRelation');
   jest.spyOn(DashboardApi, 'activatePartyRelation');
   jest.spyOn(DashboardApi, 'getProductRoles');
+  jest.spyOn(DashboardApi, 'fetchUserRegistryByFiscalCode');
 });
 
 describe('Test fetchPartyUsers', () => {
@@ -234,5 +239,13 @@ describe('Test updatePartyUserStatus', () => {
         'Updated allowed only for users retrieved using getPartyProductUsers (no relationshipId):'
       );
     }
+  });
+
+  test('Test fetchUserRegistryByFiscalCode', async () => {
+    const userRegistry = await fetchUserRegistryByFiscalCode('TaxCode');
+
+    expect(userRegistry).toMatchObject(userResource2UserRegistry(mockedUserResource));
+
+    expect(DashboardApi.fetchUserRegistryByFiscalCode).toBeCalledWith('TaxCode');
   });
 });

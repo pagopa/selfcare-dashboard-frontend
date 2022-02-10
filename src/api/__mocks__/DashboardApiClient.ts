@@ -7,6 +7,7 @@ import {
 } from '../generated/b4f-dashboard/InstitutionUserResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
+import { UserResource } from '../generated/b4f-dashboard/UserResource';
 
 export const mockedInstitutionResources: Array<InstitutionResource> = [
   {
@@ -143,6 +144,14 @@ export const mockedProductRoles: Array<string> = [
   'Referente Tecnico',
 ];
 
+export const mockedUserResource: UserResource = {
+  fiscalCode: 'AAAAAA11A11A123K',
+  name: 'Gigi',
+  surname: 'Verdi',
+  email: 'gigi.v@email.com',
+  certification: true,
+};
+
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
@@ -186,4 +195,7 @@ export const DashboardApi = {
 
   getProductRoles: async (_productId: string): Promise<Array<string>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
+
+  fetchUserRegistryByFiscalCode: async (_taxCode: string): Promise<UserResource | null> =>
+    new Promise((resolve) => resolve(mockedUserResource)),
 };
