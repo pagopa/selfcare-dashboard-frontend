@@ -1,3 +1,5 @@
 export type ProductRole = {
-    productRole: string;
-  };
+  selcRole?: string; // TODO this will not be optional
+  productRole: string;
+  displayableProductRole?: string; // TODO this will not be optional
+};
