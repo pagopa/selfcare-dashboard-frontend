@@ -188,7 +188,7 @@ export default function UsersProductTable({
           rows={users}
           getRowId={(r) => r.id}
           columns={columns}
-          rowHeight={rowHeight /* to remove? */}
+          rowHeight={users.length === 0 && loading ? 0 : rowHeight /* to remove? */}
           headerHeight={headerHeight}
           components={{
             Footer: () =>
@@ -199,6 +199,8 @@ export default function UsersProductTable({
               ) : (
                 <></>
               ),
+            NoRowsOverlay: () => <></>,
+            NoResultsOverlay: () => <></>,
             ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
             ColumnSortedDescendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
           }}
@@ -216,7 +218,7 @@ export default function UsersProductTable({
         />
       </Box>
       <Toast
-        open={openToast}
+        open={openToast /* TODO useNotify */}
         title={`REFERENTE ${selectedUserStatus?.toUpperCase()}`}
         message={
           <>
@@ -228,7 +230,7 @@ export default function UsersProductTable({
         onCloseToast={() => setOpenToast(false)}
       />
       <SessionModal
-        open={openModal}
+        open={openModal /* TODO useNotify */}
         title={selectedUser?.status === 'ACTIVE' ? 'Sospendi Referente' : 'Riabilita Referente'}
         message={
           <>

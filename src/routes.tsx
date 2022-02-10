@@ -54,8 +54,19 @@ export const DASHBOARD_ROUTES = {
   PARTY_USERS: {
     path: `${BASE_ROUTE}/:institutionId/roles`,
     exact: false,
-    component: UsersPage,
-    subRoutes: buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
+    subRoutes: {
+      MAIN: {
+        path: `${BASE_ROUTE}/:institutionId/roles`,
+        exact: true,
+        component: UsersPage,
+      },
+      ADD_PARTY_USER: {
+        path: `${BASE_ROUTE}/:institutionId/roles/add`,
+        exact: true,
+        component: AddUserContainer, // TODO redirect to correct form
+      },
+      ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
+    },
   },
   PARTY_PRODUCT_USERS: {
     path: `${BASE_ROUTE}/:institutionId/:productId/roles`,

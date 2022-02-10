@@ -1,11 +1,16 @@
 import { Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Product } from '../../../model/Product';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { Party } from '../../../model/Party';
 import UsersTableProduct from '../components/UsersTableProduct/UsersTableProduct';
+import UsersTableActions from '../components/UsersTableActions/UsersTableActions';
+import { UsersTableFiltersConfig } from '../components/UsersTableActions/UsersTableFilters';
+import { DASHBOARD_ROUTES } from '../../../routes';
+import UserTableNoData from '../components/UserTableNoData';
 
 interface Props {
   party: Party;
@@ -19,11 +24,21 @@ const paths = [
   },
 ];
 
-export default function UsersProductPage({ party, selectedProduct }: Props) {
+const emptyFilters: UsersTableFiltersConfig = {
+  productIds: [],
+  selcRole: [],
+  productRoles: [],
+};
+
+export default function UsersProductPage({ party, products, selectedProduct }: Props) {
+  const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
+  const [fetchStatus, setFetchStatus] = useState({ loading: true, noData: false });
+
   useEffect(
     () => trackEvent('USER_LIST', { party_id: party.institutionId, product: selectedProduct.id }),
     [selectedProduct]
   );
+
   return (
     <Grid
       container
@@ -42,14 +57,38 @@ export default function UsersProductPage({ party, selectedProduct }: Props) {
         />
       </Grid>
       {/* TODO continue building the page */}
-      <Grid item xs={12}>
-        <UsersTableProduct
-          party={party}
-          product={selectedProduct}
-          filterConfiguration={{ productIds: [], selcRole: [], productRoles: [] }}
-          onFetchStatusUpdate={() => {} /* TODO */}
-          onRowClick={() => {} /* TODO */}
-        />
+      <Grid container direction="row" alignItems={'center'}>
+        <Grid item xs={12}>
+          <UsersTableActions
+            disableFilters={fetchStatus.loading}
+            party={party}
+            products={products}
+            selectedProduct={selectedProduct}
+            filters={filters}
+            onFiltersChange={setFilters}
+            addUserUrl={resolvePathVariables(
+              DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.ADD_PARTY_PRODUCT_USER.path,
+              { institutionId: party.institutionId, productId: selectedProduct.id }
+            )}
+          />
+        </Grid>
+        <Grid item xs={12} mt={6}>
+          <UsersTableProduct
+            party={party}
+            product={selectedProduct}
+            filterConfiguration={filters}
+            onFetchStatusUpdate={(isFetching, count) => {
+              setFetchStatus({ loading: isFetching, noData: !count || count === 0 });
+            }}
+            userDetailUrl={resolvePathVariables('' /* TODO */, {
+              institutionId: party.institutionId,
+              productId: selectedProduct.id,
+            })}
+          />
+        </Grid>
+        {!fetchStatus.loading && fetchStatus.noData && (
+          <UserTableNoData removeFilters={() => setFilters(emptyFilters)} />
+        )}
       </Grid>
     </Grid>
   );

@@ -9,8 +9,8 @@ import { Product } from '../../../../model/Product';
 import { useAppSelector } from '../../../../redux/hooks';
 import { fetchPartyUsers } from '../../../../services/usersService';
 import { ENV } from '../../../../utils/env';
-import { UsersTableFilterConfig } from '../UsersTableActions/UsersTableActions';
 import useFakePagination from '../../../../hooks/useFakePagination';
+import { UsersTableFiltersConfig } from '../UsersTableActions/UsersTableFilters';
 import UsersProductTable from './components/UsersProductTable';
 import UserProductFetchError from './components/UserProductFetchError';
 
@@ -18,14 +18,14 @@ type Props = {
   party: Party;
   product: Product;
   onFetchStatusUpdate: (isFetching: boolean, count?: number) => void;
-  onRowClick: (user: PartyUser) => void;
-  filterConfiguration: UsersTableFilterConfig;
+  userDetailUrl: string;
+  filterConfiguration: UsersTableFiltersConfig;
 };
 
 const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfiguration }: Props) => {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
 
-  const [users, setUsers] = useState<Array<PartyUser>>();
+  const [users, setUsers] = useState<Array<PartyUser>>([]);
   const [noMoreData, setNoMoreData] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -54,6 +54,7 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
       setUsers([]);
       setNoMoreData(true);
     } else {
+      setUsers([]);
       setPageRequest({
         filterChanged: true,
         page: {
@@ -71,11 +72,14 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
   }, [pageRequest]);
 
   const fetchUsers = () => {
+    onFetchStatusUpdate(true, 0);
     setLoading(true);
     fakePagedFetch(pageRequest?.page as PageRequest, pageRequest?.filterChanged as boolean)
       .then((r) => {
-        setUsers(pageRequest?.page.page === 0 ? r.content : users?.concat(r.content));
+        const nextUsers = pageRequest?.page.page === 0 ? r.content : users?.concat(r.content);
+        setUsers(nextUsers);
         setNoMoreData(r.content.length < (pageRequest?.page as PageRequest).size);
+        onFetchStatusUpdate(false, nextUsers.length);
       })
       .catch((reason) => {
         handleErrors([
@@ -89,14 +93,17 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
         ]);
         setError(true);
         setUsers([]);
+        onFetchStatusUpdate(false, 1);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   if (error) {
     return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
-    return users ? (
+    return (
       <UsersProductTable
         loading={loading}
         noMoreData={noMoreData}
@@ -121,8 +128,6 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
           })
         }
       />
-    ) : (
-      <></>
     );
   }
 };

@@ -1,5 +1,5 @@
 import { Grid, Link, Typography } from '@mui/material';
-import { ReactComponent as DissatisfiedIcon } from '../../../../../assets/dissatisfied-face.svg';
+import { ReactComponent as DissatisfiedIcon } from '../../../assets/dissatisfied-face.svg';
 
 type Props = {
   removeFilters: () => void;
