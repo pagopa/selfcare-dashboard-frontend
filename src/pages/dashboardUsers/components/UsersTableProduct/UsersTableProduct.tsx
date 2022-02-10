@@ -10,7 +10,9 @@ import { useAppSelector } from '../../../../redux/hooks';
 import { fetchPartyUsers } from '../../../../services/usersService';
 import { ENV } from '../../../../utils/env';
 import { UsersTableFilterConfig } from '../UsersTableActions/UsersTableActions';
+import useFakePagination from '../../../../hooks/useFakePagination';
 import UsersProductTable from './components/UsersProductTable';
+import UserProductFetchError from './components/UserProductFetchError';
 
 type Props = {
   party: Party;
@@ -24,9 +26,22 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
 
   const [users, setUsers] = useState<Array<PartyUser>>();
+  const [noMoreData, setNoMoreData] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [pageRequest, setPageRequest] = useState<PageRequest>();
+  const [pageRequest, setPageRequest] = useState<{ page: PageRequest; filterChanged: boolean }>();
+
+  const fakePagedFetch = useFakePagination(() =>
+    fetchPartyUsers(
+      pageRequest?.page as PageRequest,
+      party,
+      currentUser ?? ({ uid: 'NONE' } as User),
+      canEdit,
+      product,
+      filterConfiguration.selcRole,
+      filterConfiguration.productRoles
+    ).then((data) => data.content)
+  );
 
   const canEdit = product.userRole === 'ADMIN';
 
@@ -37,10 +52,14 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
     ) {
       onFetchStatusUpdate(false, 0);
       setUsers([]);
+      setNoMoreData(true);
     } else {
       setPageRequest({
-        page: 0,
-        size: ENV.PARTY_USERS_PAGE_SIZE,
+        filterChanged: true,
+        page: {
+          page: 0,
+          size: ENV.PARTY_USERS_PAGE_SIZE,
+        },
       });
     }
   }, [filterConfiguration]);
@@ -53,17 +72,10 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
 
   const fetchUsers = () => {
     setLoading(true);
-    fetchPartyUsers(
-      pageRequest as PageRequest,
-      party,
-      currentUser ?? ({ uid: 'NONE' } as User),
-      canEdit,
-      product,
-      filterConfiguration.selcRole,
-      filterConfiguration.productRoles
-    )
+    fakePagedFetch(pageRequest?.page as PageRequest, pageRequest?.filterChanged as boolean)
       .then((r) => {
-        setUsers(pageRequest?.page === 0 ? r.content : users?.concat(r.content));
+        setUsers(pageRequest?.page.page === 0 ? r.content : users?.concat(r.content));
+        setNoMoreData(r.content.length < (pageRequest?.page as PageRequest).size);
       })
       .catch((reason) => {
         handleErrors([
@@ -82,25 +94,31 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
   };
 
   if (error) {
-    return <>TODO Qualcosa è andato storto e tasto riprova rieseguendo il metodo fetch</>;
-  } else if (loading) {
-    return <>loader instead of the table</>;
+    return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
     return users ? (
       <UsersProductTable
+        loading={loading}
+        noMoreData={noMoreData}
         party={party}
         product={product}
         users={users}
         canEdit={canEdit}
         fetchNextPage={() =>
           setPageRequest({
-            page: (pageRequest as PageRequest).page + 1,
-            size: (pageRequest as PageRequest).size,
-            sort: (pageRequest as PageRequest).sort,
+            filterChanged: false,
+            page: {
+              page: (pageRequest?.page as PageRequest).page + 1,
+              size: (pageRequest?.page as PageRequest).size,
+              sort: (pageRequest?.page as PageRequest).sort,
+            },
           })
         }
         onSortRequest={(sort) =>
-          setPageRequest({ page: 0, size: (pageRequest as PageRequest).size, sort })
+          setPageRequest({
+            filterChanged: false,
+            page: { page: 0, size: (pageRequest?.page as PageRequest).size, sort },
+          })
         }
       />
     ) : (

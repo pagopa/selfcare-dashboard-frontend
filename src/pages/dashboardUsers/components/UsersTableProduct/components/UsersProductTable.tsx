@@ -12,12 +12,16 @@ import { PartyUser } from '../../../../../model/PartyUser';
 import { Party, UserStatus } from '../../../../../model/Party';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../../../utils/constants';
 import { updatePartyUserStatus } from '../../../../../services/usersService';
-import { buildColumnDefs } from './UserSearchTableColumns';
+import { buildColumnDefs } from './UserProductTableColumns';
+import UserProductLoading from './UserProductLoading';
+import UserTableLoadMoreData from './UserProductLoadMoreData';
 
 const rowHeight = 81;
 const headerHeight = 56;
 
 interface UsersSearchTableProps {
+  loading: boolean;
+  noMoreData: boolean;
   party: Party;
   users: Array<PartyUser>;
   product: Product;
@@ -88,6 +92,9 @@ const CustomDataGrid = styled(DataGrid)({
 });
 
 export default function UsersProductTable({
+  loading,
+  fetchNextPage,
+  noMoreData,
   party,
   product,
   canEdit,
@@ -100,6 +107,7 @@ export default function UsersProductTable({
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [selectedUser, setSelectedUser] = useState<PartyUser>();
+
   const sortSplitted = sort ? sort.split(',') : undefined;
 
   const handleOpen = (users: PartyUser) => {
@@ -182,9 +190,15 @@ export default function UsersProductTable({
           columns={columns}
           rowHeight={rowHeight /* to remove? */}
           headerHeight={headerHeight}
-          hideFooterSelectedRowCount={true}
           components={{
-            Pagination: () => <>LOAD NEXT PAGE?</>,
+            Footer: () =>
+              loading ? (
+                <UserProductLoading />
+              ) : !noMoreData ? (
+                <UserTableLoadMoreData fetchNextPage={fetchNextPage} />
+              ) : (
+                <></>
+              ),
             ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
             ColumnSortedDescendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
           }}
