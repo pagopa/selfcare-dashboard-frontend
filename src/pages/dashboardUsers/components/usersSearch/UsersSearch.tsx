@@ -77,13 +77,13 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
   };
 
   useEffect(() => {
-    trackEvent('USER_LIST', { party_id: party.institutionId , product: selectedProductId });
+    trackEvent('USER_LIST', { party_id: party.institutionId, product: selectedProductId });
     const newFilter = {
-      ...filter, 
-      product: selectedProduct
+      ...filter,
+      product: selectedProduct,
     };
-  setFilter(newFilter);
-  fetchUsers(newFilter, pageRequest);
+    setFilter(newFilter);
+    fetchUsers(newFilter, pageRequest);
   }, [selectedProductId]);
 
   const handleFilterChange = (f: UsersSearchFilterConfig) => {
@@ -127,6 +127,25 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
             </Grid>
           )}
         </Grid>
+        {!selectedProduct && (
+          <Grid item pl={4}>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              sx={{ py: '10px' }}
+              onClick={() =>
+                history.push(
+                  resolvePathVariables(
+                    DASHBOARD_ROUTES.PARTY_USERS.subRoutes.ADD_PRODUCT_USER.path,
+                    { institutionId: party.institutionId }
+                  )
+                )
+              }
+            >
+              Aggiungi
+            </Button>
+          </Grid>
+        )}
       </Grid>
       <Grid item xs={12} my={8}>
         <Box>

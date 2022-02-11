@@ -15,7 +15,7 @@ type Props = {
   selectedProduct: Product;
 };
 
-function AddUserPage({ party, selectedProduct }: Props) {
+function AddUsersProductPage({ party, selectedProduct, products }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -52,10 +52,10 @@ function AddUserPage({ party, selectedProduct }: Props) {
         />
       </Grid>
       <Grid item xs={12}>
-        <AddUserForm party={party} selectedProduct={selectedProduct} />
+        <AddUserForm party={party} selectedProduct={selectedProduct} products={products} />
       </Grid>
     </Grid>
   );
 }
 
-export default withSelectedPartyProduct(AddUserPage);
+export default withSelectedPartyProduct(AddUsersProductPage);

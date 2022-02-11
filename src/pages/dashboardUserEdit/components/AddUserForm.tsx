@@ -79,9 +79,10 @@ const requiredError = 'Required';
 type Props = {
   party: Party;
   selectedProduct: Product;
+  products: Array<Product>;
 };
 
-export default function AddUserForm({ party, selectedProduct }: Props) {
+export default function AddUserForm({ party, selectedProduct, products }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
   const setLoadingFetchTaxCode = useLoading(LOADING_TASK_FETCH_TAX_CODE);
@@ -90,30 +91,48 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
   const history = useHistory();
   const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
   const [validTaxcode, setValidTaxcode] = useState<string>();
+  const [userProduct, setUserProduct] = useState<Product>();
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
 
+  useEffect(() => setUserProduct(selectedProduct), [selectedProduct]);
+
   useEffect(() => {
-    setLoadingFetchRoles(true);
-    fetchProductRoles(selectedProduct)
-      .then((productRoles) => setProductRoles(productRoles))
-      .catch((reason) =>
-        addError({
-          id: 'FETCH_PRODUCT_ROLES',
-          blocking: false,
-          error: reason,
-          techDescription: `An error occurred while fetching Product Roles of Product ${selectedProduct.id}`,
-          toNotify: true,
-        })
-      )
-      .finally(() => setLoadingFetchRoles(false));
-  }, []);
+    if (userProduct) {
+      setLoadingFetchRoles(true);
+      fetchProductRoles(userProduct)
+        .then((productRoles) => setProductRoles(productRoles))
+        .catch((reason) =>
+          addError({
+            id: 'FETCH_PRODUCT_ROLES',
+            blocking: false,
+            error: reason,
+            techDescription: `An error occurred while fetching Product Roles of Product ${userProduct.id}`,
+            toNotify: true,
+          })
+        )
+        .finally(() => setLoadingFetchRoles(false));
+    }
+  }, [userProduct]);
 
   useEffect(() => {
     if (validTaxcode) {
       fetchTaxCode(validTaxcode);
     }
   }, [validTaxcode]);
+
+  const goBack = () =>
+    history.push(
+      resolvePathVariables(
+        selectedProduct
+          ? DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path
+          : DASHBOARD_ROUTES.PARTY_USERS.path,
+        {
+          institutionId: party.institutionId,
+          productId: userProduct?.id ?? '',
+        }
+      )
+    );
 
   const fetchTaxCode = (taxCode: string) => {
     setLoadingFetchTaxCode(true);
@@ -188,13 +207,13 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
     validate,
     onSubmit: (values) => {
       setLoadingSaveUser(true);
-      savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
+      savePartyUser(party, userProduct as Product, values as PartyUserOnCreation)
         .then(() => {
           unregisterUnloadEvent();
           // TODO: USER_UPDATE
           trackEvent('USER_ADD', {
             party_id: party.institutionId,
-            product: selectedProduct.id,
+            product: userProduct?.id,
             product_role: values.productRole,
           });
           addNotify({
@@ -209,12 +228,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
               </>
             ),
           });
-          history.push(
-            resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
-              institutionId: party.institutionId,
-              productId: selectedProduct.id,
-            })
-          );
+          goBack();
         })
         .catch((reason) =>
           addError({
@@ -322,35 +336,72 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
               />
             </Grid>
           </Grid>
-          <Grid item container spacing={3}>
-            <Grid item xs={8} mb={3}>
-              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-                Ruolo
-              </Typography>
 
-              <RadioGroup
-                aria-label="user"
-                name="productRole"
-                value={formik.values.productRole}
-                onChange={formik.handleChange}
-              >
-                {productRoles?.map((p, index) => (
-                  <Box key={p.productRole}>
-                    <CustomFormControlLabel
-                      disabled={!validTaxcode}
-                      value={p.productRole}
-                      control={<Radio />}
-                      label={p.productRole}
-                    />
-                    {index !== productRoles.length - 1 && (
-                      <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
-                    )}
-                  </Box>
-                ))}
-              </RadioGroup>
+          {!selectedProduct ? (
+            <Grid item container spacing={3}>
+              <Grid item xs={8} mb={3}>
+                <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+                  Prodotto
+                </Typography>
+                <Typography variant="subtitle2" sx={{ color: '#5C6F82' }} pb={3}>
+                  Seleziona il prodotto sul quale vuoi aggiungere il referente
+                </Typography>
+                <RadioGroup aria-label="user" name="products" value={userProduct?.id ?? ''}>
+                  {products?.map((p, index) => (
+                    <Box key={p.id}>
+                      <CustomFormControlLabel
+                        disabled={!validTaxcode}
+                        value={p.id}
+                        control={<Radio />}
+                        onClick={() => setUserProduct(p)}
+                        label={p.title}
+                      />
+                      {index !== products.length - 1 && (
+                        <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
+                      )}
+                    </Box>
+                  ))}
+                </RadioGroup>
+              </Grid>
             </Grid>
-          </Grid>
+          ) : undefined}
+
+          {productRoles && (
+            <Grid item container spacing={3}>
+              <Grid item xs={8} mb={3}>
+                <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+                  Ruolo
+                </Typography>
+                <Typography variant="subtitle2" sx={{ color: '#5C6F82' }} pb={3}>
+                  Seleziona il ruolo che vuoi assegnare al referente relativo al prodotto
+                  selezionato
+                </Typography>
+
+                <RadioGroup
+                  aria-label="user"
+                  name="productRole"
+                  value={formik.values.productRole}
+                  onChange={formik.handleChange}
+                >
+                  {productRoles?.map((p, index) => (
+                    <Box key={p.productRole}>
+                      <CustomFormControlLabel
+                        disabled={!validTaxcode}
+                        value={p.productRole}
+                        control={<Radio />}
+                        label={p.productRole}
+                      />
+                      {index !== productRoles.length - 1 && (
+                        <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
+                      )}
+                    </Box>
+                  ))}
+                </RadioGroup>
+              </Grid>
+            </Grid>
+          )}
         </Grid>
+
         <Grid item container spacing={3}>
           <Grid item xs={3} mt={8}>
             <p> </p>
@@ -358,16 +409,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
               sx={{ width: '100%' }}
               color="primary"
               variant="contained"
-              onClick={() =>
-                onExit(() =>
-                  history.push(
-                    resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
-                      institutionId: party.institutionId,
-                      productId: selectedProduct.id,
-                    })
-                  )
-                )
-              }
+              onClick={() => onExit(goBack)}
             >
               Indietro
             </Button>

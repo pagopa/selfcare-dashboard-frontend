@@ -17,7 +17,7 @@ export default function ProductNavigationBar({ selectedProduct, paths }: Props) 
     <React.Fragment>
       <Breadcrumbs aria-label="breadcrumb">
         <Typography variant="body2" sx={{ fontWeight: 'normal', color: 'text.secondary' }}>
-          {selectedProduct.title}
+          {selectedProduct?.title}
         </Typography>
         {paths.map((p) =>
           p.onClick ? (
