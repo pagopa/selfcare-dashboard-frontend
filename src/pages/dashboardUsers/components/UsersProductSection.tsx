@@ -3,6 +3,7 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { useState } from 'react';
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
+import { ENV } from '../../../utils/env';
 import { UsersTableFiltersConfig } from './UsersTableActions/UsersTableFilters';
 import UsersTableProduct from './UsersTableProduct/UsersTableProduct';
 
@@ -32,6 +33,8 @@ export default function UsersProductSection({
       )}
       <Grid item xs={12}>
         <UsersTableProduct
+          incrementalLoad={true}
+          initialPageSize={ENV.PARTY_USERS_PAGE_SIZE}
           party={party}
           product={product}
           filterConfiguration={filters}

@@ -7,6 +7,8 @@ import Toast from '@pagopa/selfcare-common-frontend/components/Toast';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { CustomPagination } from '@pagopa/selfcare-common-frontend';
+import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
 import { Party, UserStatus } from '../../../../../model/Party';
@@ -20,13 +22,15 @@ const rowHeight = 81;
 const headerHeight = 56;
 
 interface UsersSearchTableProps {
+  incrementalLoad: boolean;
   loading: boolean;
   noMoreData: boolean;
   party: Party;
   users: Array<PartyUser>;
   product: Product;
   canEdit: boolean;
-  fetchNextPage: () => void;
+  fetchPage: (page?: number, size?: number) => void;
+  page: Page;
   sort?: string;
   onSortRequest: (sort: string) => void;
 }
@@ -92,13 +96,15 @@ const CustomDataGrid = styled(DataGrid)({
 });
 
 export default function UsersProductTable({
+  incrementalLoad,
   loading,
-  fetchNextPage,
+  fetchPage,
   noMoreData,
   party,
   product,
   canEdit,
   users,
+  page,
   sort,
   onSortRequest,
 }: UsersSearchTableProps) {
@@ -191,14 +197,26 @@ export default function UsersProductTable({
           rowHeight={users.length === 0 && loading ? 0 : rowHeight /* to remove? */}
           headerHeight={headerHeight}
           components={{
-            Footer: () =>
-              loading ? (
-                <UserProductLoading />
-              ) : !noMoreData ? (
-                <UserTableLoadMoreData fetchNextPage={fetchNextPage} />
-              ) : (
-                <></>
-              ),
+            Footer:
+              loading || incrementalLoad
+                ? () =>
+                    loading ? (
+                      <UserProductLoading />
+                    ) : !noMoreData ? (
+                      <UserTableLoadMoreData fetchNextPage={fetchPage} />
+                    ) : (
+                      <></>
+                    )
+                : undefined,
+            Pagination: incrementalLoad
+              ? undefined
+              : () => (
+                  <CustomPagination
+                    sort={sort}
+                    page={page}
+                    onPageRequest={(nextPage) => fetchPage(nextPage.page, nextPage.size)}
+                  />
+                ),
             NoRowsOverlay: () => <></>,
             NoResultsOverlay: () => <></>,
             ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,

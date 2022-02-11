@@ -3,18 +3,20 @@ import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { handleErrors } from '@pagopa/selfcare-common-frontend/services/errorService';
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { useEffect, useState } from 'react';
+import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { Party } from '../../../../model/Party';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Product } from '../../../../model/Product';
 import { useAppSelector } from '../../../../redux/hooks';
 import { fetchPartyUsers } from '../../../../services/usersService';
-import { ENV } from '../../../../utils/env';
 import useFakePagination from '../../../../hooks/useFakePagination';
 import { UsersTableFiltersConfig } from '../UsersTableActions/UsersTableFilters';
 import UsersProductTable from './components/UsersProductTable';
 import UserProductFetchError from './components/UserProductFetchError';
 
 type Props = {
+  incrementalLoad: boolean;
+  initialPageSize: number;
   party: Party;
   product: Product;
   onFetchStatusUpdate: (isFetching: boolean, count?: number) => void;
@@ -22,10 +24,20 @@ type Props = {
   filterConfiguration: UsersTableFiltersConfig;
 };
 
-const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfiguration }: Props) => {
+const UsersTableProduct = ({
+  incrementalLoad,
+  initialPageSize,
+  party,
+  product,
+  onFetchStatusUpdate,
+  filterConfiguration,
+}: Props) => {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
 
-  const [users, setUsers] = useState<Array<PartyUser>>([]);
+  const [users, setUsers] = useState<PageResource<PartyUser>>({
+    content: [],
+    page: { number: 0, size: 0, totalElements: 0, totalPages: 0 },
+  });
   const [noMoreData, setNoMoreData] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -51,15 +63,20 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
       filterConfiguration.productIds.indexOf(product.id) === -1
     ) {
       onFetchStatusUpdate(false, 0);
-      setUsers([]);
+      setUsers({ content: [], page: { number: 0, size: 0, totalElements: 0, totalPages: 0 } });
       setNoMoreData(true);
     } else {
-      setUsers([]);
+      const requestPage = incrementalLoad ? 0 : pageRequest?.page?.page ?? 0;
+      const requestPageSize = pageRequest?.page?.size ?? initialPageSize;
+      setUsers({
+        content: [],
+        page: { number: requestPage, size: requestPageSize, totalElements: 0, totalPages: 0 },
+      });
       setPageRequest({
         filterChanged: true,
         page: {
-          page: 0,
-          size: ENV.PARTY_USERS_PAGE_SIZE,
+          page: requestPage,
+          size: requestPageSize,
         },
       });
     }
@@ -76,10 +93,13 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
     setLoading(true);
     fakePagedFetch(pageRequest?.page as PageRequest, pageRequest?.filterChanged as boolean)
       .then((r) => {
-        const nextUsers = pageRequest?.page.page === 0 ? r.content : users?.concat(r.content);
+        const nextUsers =
+          pageRequest?.page.page === 0 || !incrementalLoad
+            ? r
+            : { content: users.content.concat(r.content), page: r.page };
         setUsers(nextUsers);
         setNoMoreData(r.content.length < (pageRequest?.page as PageRequest).size);
-        onFetchStatusUpdate(false, nextUsers.length);
+        onFetchStatusUpdate(false, nextUsers.content.length);
       })
       .catch((reason) => {
         handleErrors([
@@ -92,7 +112,7 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
           },
         ]);
         setError(true);
-        setUsers([]);
+        setUsers({ content: [], page: { number: 0, size: 0, totalElements: 0, totalPages: 0 } });
         onFetchStatusUpdate(false, 1);
       })
       .finally(() => {
@@ -106,17 +126,22 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
     return (
       <UsersProductTable
         loading={loading}
+        incrementalLoad={incrementalLoad}
         noMoreData={noMoreData}
         party={party}
         product={product}
-        users={users}
+        users={users.content}
         canEdit={canEdit}
-        fetchNextPage={() =>
+        page={users.page}
+        sort={pageRequest?.page.sort}
+        fetchPage={(page, size) =>
           setPageRequest({
             filterChanged: false,
             page: {
-              page: (pageRequest?.page as PageRequest).page + 1,
-              size: (pageRequest?.page as PageRequest).size,
+              page: incrementalLoad ? (pageRequest?.page as PageRequest).page + 1 : page ?? 0,
+              size: incrementalLoad
+                ? (pageRequest?.page as PageRequest).size
+                : size ?? (pageRequest?.page as PageRequest).size,
               sort: (pageRequest?.page as PageRequest).sort,
             },
           })
@@ -124,7 +149,11 @@ const UsersTableProduct = ({ party, product, onFetchStatusUpdate, filterConfigur
         onSortRequest={(sort) =>
           setPageRequest({
             filterChanged: false,
-            page: { page: 0, size: (pageRequest?.page as PageRequest).size, sort },
+            page: {
+              page: incrementalLoad ? 0 : (pageRequest?.page as PageRequest).page,
+              size: (pageRequest?.page as PageRequest).size,
+              sort,
+            },
           })
         }
       />

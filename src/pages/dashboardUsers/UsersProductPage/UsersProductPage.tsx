@@ -11,6 +11,7 @@ import UsersTableActions from '../components/UsersTableActions/UsersTableActions
 import { UsersTableFiltersConfig } from '../components/UsersTableActions/UsersTableFilters';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import UserTableNoData from '../components/UserTableNoData';
+import { ENV } from '../../../utils/env';
 
 interface Props {
   party: Party;
@@ -74,6 +75,8 @@ export default function UsersProductPage({ party, products, selectedProduct }: P
         </Grid>
         <Grid item xs={12} mt={6}>
           <UsersTableProduct
+            incrementalLoad={false}
+            initialPageSize={ENV.PARTY_PRODUCT_USERS_PAGE_SIZE}
             party={party}
             product={selectedProduct}
             filterConfiguration={filters}
