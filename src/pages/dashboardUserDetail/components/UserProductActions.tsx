@@ -1,9 +1,11 @@
 import { Link, Grid, Typography } from '@mui/material';
+import { Party } from '../../../model/Party';
 
 type Props = {
   showActions: boolean;
+  party: Party;
 };
-export default function UserProductActions({ showActions }:Props) {
+export default function UserProductActions({ showActions, party }:Props) {
   return (
     <>
     {showActions && 
@@ -11,7 +13,7 @@ export default function UserProductActions({ showActions }:Props) {
       <Grid item xs={6}>
         <Link>
           <Typography variant="h3" sx={{ fontSize: '16px', color:'#0073E6' }}>
-            Sospendi
+          {party?.status === 'ACTIVE' ? 'Sospendi' : 'Riabilita'}
           </Typography>
         </Link>
       </Grid>

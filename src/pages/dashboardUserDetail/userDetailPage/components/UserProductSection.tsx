@@ -1,14 +1,15 @@
 import { Button, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { PartyUser } from '../../../../model/PartyUser';
-import { UserRole } from '../../../../model/Party';
+import { Party, UserRole } from '../../../../model/Party';
 import UserProductDetail from './UserProductDetail';
 
 type Props = {
   selcRole: UserRole;
   productInfo: PartyUser;
-}; 
-export default function UserProductSection({productInfo, selcRole}: Props) {
+  party: Party;
+};
+export default function UserProductSection({ productInfo, party }: Props) {
   return (
     <>
       <Grid item xs={10}>
@@ -30,13 +31,13 @@ export default function UserProductSection({productInfo, selcRole}: Props) {
           variant="contained"
           startIcon={<AddIcon />}
           sx={{ py: '10px', width: '120px' }}
-          // onClick={() =>  }
+          // onClick={() =>  } TODO
         >
           Aggiungi
         </Button>
       </Grid>
       <Grid item xs={12}>
-        <UserProductDetail productInfo={productInfo} selcRole={selcRole}/>
+        <UserProductDetail productInfo={productInfo} party={party} />
       </Grid>
     </>
   );
