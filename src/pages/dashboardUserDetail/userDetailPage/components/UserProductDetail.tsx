@@ -9,23 +9,11 @@ import UserProductActions from './../../components/UserProductActions';
 type Props = {
   productInfo: PartyUser;
   party: Party;
+  productRoles: Array<ProductRole>;
 };
 
-export default function UserProductDetail({ productInfo, party }: Props) {
-  // TODO: productRoles= productInfo.roles
+export default function UserProductDetail({ productInfo, party , productRoles }: Props) {
 
-  const productRoles: Array<ProductRole> = [
-    {
-      selcRole: 'ADMIN',
-      productRole: 'Incaricato-Ente-creditore',
-      displayableProductRole: 'Incaricato Ente creditore',
-    },
-    {
-      selcRole: 'ADMIN',
-      productRole: 'Referente-dei-pagamenti',
-      displayableProductRole: 'Referente dei pagamenti',
-    },
-  ];
 
   const showActionOnProduct = productRoles.length === 1;
   return (
@@ -65,7 +53,7 @@ export default function UserProductDetail({ productInfo, party }: Props) {
                 </Grid>
               </Grid>
               <Grid item xs={3} display="flex" alignItems="center">
-                <UserProductActions showActions={showActionOnProduct} party={party} />
+                <UserProductActions showActions={showActionOnProduct} party={party} productRoles={productRoles} />
               </Grid>
             </Grid>
           </Grid>

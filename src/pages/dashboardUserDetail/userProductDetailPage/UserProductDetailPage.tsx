@@ -86,6 +86,19 @@ export default function UserProductDetailPage() {
             Indietro
           </Button>
         </Grid>
+        {productRoles.length === 1 && (
+          <Grid item xs={2}>
+            <Button
+              disableRipple
+              variant="outlined"
+              color="error"
+              sx={{ height: '40px', width: '100%' }}
+              // onClick={()=>}  TODO
+            >
+              Elimina
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );

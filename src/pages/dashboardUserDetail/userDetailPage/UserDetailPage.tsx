@@ -10,11 +10,26 @@ import { PartyUser } from '../../../model/PartyUser';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { mockedParties } from '../../../services/__mocks__/partyService';
+import { ProductRole } from '../../../model/ProductRole';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
 
 const mockedUser: PartyUser = mockedUsers[0];
 const party: Party = mockedParties[0];
+
+// TODO: productRoles= mockedUser.roles
+const productRoles: Array<ProductRole> = [
+  {
+    selcRole: 'ADMIN',
+    productRole: 'Incaricato-Ente-creditore',
+    displayableProductRole: 'Incaricato Ente creditore',
+  },
+  {
+    selcRole: 'ADMIN',
+    productRole: 'Referente-dei-pagamenti',
+    displayableProductRole: 'Referente dei pagamenti',
+  },
+];
 
 export default function UserDetailPage() {
   const history = useHistory();
@@ -67,9 +82,9 @@ export default function UserDetailPage() {
         <Divider />
       </Grid>
       <Grid container item mb={9}>
-        <UserProductSection productInfo={mockedUser} selcRole={mockedUser.userRole} party={party} />
+        <UserProductSection productInfo={mockedUser} selcRole={mockedUser.userRole} party={party} productRoles={productRoles}/>
       </Grid>
-      <Grid container item my={10}>
+      <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
           <Button
             disableRipple
@@ -80,6 +95,17 @@ export default function UserDetailPage() {
             Indietro
           </Button>
         </Grid>
+        {productRoles.length === 1 && <Grid item xs={2}>
+          <Button
+            disableRipple
+            variant="outlined" 
+            color="error"
+            sx={{ height: '40px', width: '100%' }}
+            // onClick={()=>}  TODO
+          >
+            Elimina
+          </Button>
+        </Grid>}
       </Grid>
     </Grid>
   );

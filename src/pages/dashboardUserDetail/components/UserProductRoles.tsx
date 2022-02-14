@@ -65,7 +65,7 @@ export default function UserProductRoles({ productRoles, showActions, party }: P
                 </CustomInfoStyle>
               </Grid>
               <Grid item xs={4}>
-                <UserProductActions showActions={showActions} party={party} />
+                <UserProductActions showActions={showActions} party={party} productRoles={productRoles}/>
               </Grid>
             </Grid>
           </Grid>

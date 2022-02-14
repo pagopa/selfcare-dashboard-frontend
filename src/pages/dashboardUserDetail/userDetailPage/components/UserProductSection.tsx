@@ -2,14 +2,16 @@ import { Button, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Party, UserRole } from '../../../../model/Party';
+import { ProductRole } from '../../../../model/ProductRole';
 import UserProductDetail from './UserProductDetail';
 
 type Props = {
   selcRole: UserRole;
   productInfo: PartyUser;
   party: Party;
+  productRoles: Array<ProductRole>;
 };
-export default function UserProductSection({ productInfo, party }: Props) {
+export default function UserProductSection({ productInfo, party, productRoles}: Props) {
   return (
     <>
       <Grid item xs={10}>
@@ -37,7 +39,7 @@ export default function UserProductSection({ productInfo, party }: Props) {
         </Button>
       </Grid>
       <Grid item xs={12}>
-        <UserProductDetail productInfo={productInfo} party={party} />
+        <UserProductDetail productInfo={productInfo} party={party} productRoles={productRoles} />
       </Grid>
     </>
   );
