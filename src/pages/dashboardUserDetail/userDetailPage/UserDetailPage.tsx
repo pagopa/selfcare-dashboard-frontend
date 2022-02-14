@@ -12,6 +12,7 @@ import { DASHBOARD_ROUTES } from '../../../routes';
 import { ProductRole } from '../../../model/ProductRole';
 import { useAppSelector } from '../../../redux/hooks';
 import { partiesSelectors } from '../../../redux/slices/partiesSlice';
+import withUserDetail from '../../../decorators/withUserDetail';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
 
@@ -110,5 +111,5 @@ const productRoles: Array<ProductRole> = [
       </Grid>
     </Grid>
   );
-};
-export default UserDetailPage;
+}
+export default withUserDetail(UserDetailPage);

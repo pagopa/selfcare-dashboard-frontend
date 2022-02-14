@@ -2,7 +2,6 @@ import { Button, Divider, Grid, Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import UserDetail from '../components/UserDetail';
-import { mockedUsers } from '../../../services/__mocks__/usersService';
 import { PartyUser } from '../../../model/PartyUser';
 import UserProductRoles from '../components/UserProductRoles';
 import { ProductRole } from '../../../model/ProductRole';
@@ -13,15 +12,15 @@ import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import withSelectedPartyProduct from '../../../decorators/withSelectedPartyProduct';
 import { useAppSelector } from '../../../redux/hooks';
 import { partiesSelectors } from '../../../redux/slices/partiesSlice';
-
-const mockedUser: PartyUser = mockedUsers[0];
+import withUserDetail from '../../../decorators/withUserDetail';
 
 type Props={
   selectedProduct:Product;
   products: Array<Product>;
+  partyUser: PartyUser;
 };
 
-function UserProductDetailPage({selectedProduct}:Props) {
+function UserProductDetailPage({selectedProduct, partyUser}:Props) {
   const history = useHistory();
   const party = useAppSelector(partiesSelectors.selectPartySelected) as Party;
 
@@ -74,7 +73,7 @@ function UserProductDetailPage({selectedProduct}:Props) {
       </Grid>
       <Grid container item>
         <Grid item xs={12} mb={9}>
-          <UserDetail userInfo={mockedUser} roleSection={<></>} />
+          <UserDetail userInfo={partyUser} roleSection={<></>} />
         </Grid>
       </Grid>
       <Grid item xs={11} my={6}>
@@ -109,4 +108,4 @@ function UserProductDetailPage({selectedProduct}:Props) {
   );
 };
 
-export default withSelectedPartyProduct(UserProductDetailPage);
+export default withUserDetail(withSelectedPartyProduct(UserProductDetailPage));
