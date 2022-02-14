@@ -5,7 +5,6 @@ import { Party } from '@pagopa/selfcare-common-frontend/model/Party';
 import { useEffect } from 'react';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import UserDetail from '../components/UserDetail';
-import { mockedUsers } from '../../../services/__mocks__/usersService';
 import { PartyUser } from '../../../model/PartyUser';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { DASHBOARD_ROUTES } from '../../../routes';
@@ -16,7 +15,9 @@ import withUserDetail from '../../../decorators/withUserDetail';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
 
-const mockedUser: PartyUser = mockedUsers[0];
+type Props ={
+  partyUser: PartyUser;
+}; 
 
 // TODO: productRoles= mockedUser.roles
 const productRoles: Array<ProductRole> = [
@@ -32,7 +33,7 @@ const productRoles: Array<ProductRole> = [
   },
 ];
 
- function UserDetailPage() {
+ function UserDetailPage({partyUser}:Props) {
   const history = useHistory();
   const party = useAppSelector(partiesSelectors.selectPartySelected);
 
@@ -76,8 +77,8 @@ const productRoles: Array<ProductRole> = [
       <Grid container item>
         <Grid item xs={12} mb={9}>
           <UserDetail
-            userInfo={mockedUser}
-            roleSection={<UserSelcRole selcRole={mockedUser.userRole} />}
+            userInfo={partyUser}
+            roleSection={<UserSelcRole selcRole={partyUser.userRole} />}
           />
         </Grid>
       </Grid>
@@ -85,7 +86,7 @@ const productRoles: Array<ProductRole> = [
         <Divider />
       </Grid>
       <Grid container item mb={9}>
-        <UserProductSection productInfo={mockedUser} selcRole={mockedUser.userRole} party={party} productRoles={productRoles}/>
+        <UserProductSection productInfo={partyUser} selcRole={partyUser.userRole} party={party} productRoles={productRoles}/>
       </Grid>
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
