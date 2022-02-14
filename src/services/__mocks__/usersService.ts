@@ -381,7 +381,9 @@ export const fetchPartyUsers = (
     totalElements: 195,
     totalPages: 10,
   };
-  return new Promise((resolve) => resolve({ content: filteredContent, page }));
+  return new Promise((resolve) =>
+    setTimeout(() => resolve({ content: filteredContent, page }), 100)
+  );
 };
 
 export const fetchProductRoles = (_product: Product): Promise<Array<ProductRole>> =>

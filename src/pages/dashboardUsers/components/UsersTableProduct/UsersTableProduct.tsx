@@ -4,12 +4,12 @@ import { handleErrors } from '@pagopa/selfcare-common-frontend/services/errorSer
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { useEffect, useState } from 'react';
 import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
+import useFakePagination from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
 import { Party } from '../../../../model/Party';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Product } from '../../../../model/Product';
 import { useAppSelector } from '../../../../redux/hooks';
 import { fetchPartyUsers } from '../../../../services/usersService';
-import useFakePagination from '../../../../hooks/useFakePagination';
 import { UsersTableFiltersConfig } from '../UsersTableActions/UsersTableFilters';
 import UsersProductTable from './components/UsersProductTable';
 import UserProductFetchError from './components/UserProductFetchError';
@@ -22,6 +22,7 @@ type Props = {
   onFetchStatusUpdate: (isFetching: boolean, count?: number) => void;
   userDetailUrl: string;
   filterConfiguration: UsersTableFiltersConfig;
+  hideProductWhenLoading: boolean;
 };
 
 const UsersTableProduct = ({
@@ -31,6 +32,7 @@ const UsersTableProduct = ({
   product,
   onFetchStatusUpdate,
   filterConfiguration,
+  hideProductWhenLoading,
 }: Props) => {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
 
@@ -123,7 +125,9 @@ const UsersTableProduct = ({
   if (error) {
     return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
-    return (
+    return loading && hideProductWhenLoading ? (
+      <></>
+    ) : (
       <UsersProductTable
         loading={loading}
         incrementalLoad={incrementalLoad}

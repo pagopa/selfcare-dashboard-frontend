@@ -43,7 +43,6 @@ export default function UsersPage({ party, products }: Props) {
   return (
     <Grid
       container
-      alignItems={'center'}
       px={0}
       mt={10}
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
@@ -55,11 +54,11 @@ export default function UsersPage({ party, products }: Props) {
         />
       </Grid>
       {/* TODO continue building the page */}
-      {/* TODO continue building the page */}
       <Grid container direction="row" alignItems={'center'}>
         <Grid item xs={12}>
           <UsersTableActions
             disableFilters={loading}
+            loading={loading}
             party={party}
             products={products}
             filters={filters}
@@ -73,6 +72,7 @@ export default function UsersPage({ party, products }: Props) {
         {products.map((p) => (
           <Grid key={p.id} item xs={12}>
             <UsersProductSection
+              hideProductWhenLoading={true}
               party={party}
               product={p}
               filters={filters}

@@ -43,7 +43,6 @@ export default function UsersProductPage({ party, products, selectedProduct }: P
   return (
     <Grid
       container
-      alignItems={'center'}
       px={0}
       mt={10}
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
@@ -62,6 +61,7 @@ export default function UsersProductPage({ party, products, selectedProduct }: P
         <Grid item xs={12}>
           <UsersTableActions
             disableFilters={fetchStatus.loading}
+            loading={fetchStatus.loading}
             party={party}
             products={products}
             selectedProduct={selectedProduct}
@@ -75,6 +75,7 @@ export default function UsersProductPage({ party, products, selectedProduct }: P
         </Grid>
         <Grid item xs={12} mt={6}>
           <UsersTableProduct
+            hideProductWhenLoading={true}
             incrementalLoad={false}
             initialPageSize={ENV.PARTY_PRODUCT_USERS_PAGE_SIZE}
             party={party}

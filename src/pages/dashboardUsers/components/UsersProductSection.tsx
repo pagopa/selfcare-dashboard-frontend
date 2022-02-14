@@ -8,6 +8,7 @@ import { UsersTableFiltersConfig } from './UsersTableActions/UsersTableFilters';
 import UsersTableProduct from './UsersTableProduct/UsersTableProduct';
 
 type Props = {
+  hideProductWhenLoading: boolean;
   party: Party;
   product: Product;
   onFetchStatusUpdate: (loading: boolean, noData: boolean) => void;
@@ -17,6 +18,7 @@ type Props = {
 export default function UsersProductSection({
   party,
   product,
+  hideProductWhenLoading,
   onFetchStatusUpdate,
   filters,
 }: Props) {
@@ -24,7 +26,7 @@ export default function UsersProductSection({
 
   return (
     <Grid container direction="row">
-      {fetchStatus.loading || !fetchStatus.noData ? (
+      {(!hideProductWhenLoading && fetchStatus.loading) || !fetchStatus.noData ? (
         <Grid item xs={12} sx={{ mt: 7 }}>
           <Typography variant="h2">{product.title}</Typography>
         </Grid>
@@ -34,6 +36,7 @@ export default function UsersProductSection({
       <Grid item xs={12}>
         <UsersTableProduct
           incrementalLoad={true}
+          hideProductWhenLoading={hideProductWhenLoading}
           initialPageSize={ENV.PARTY_USERS_PAGE_SIZE}
           party={party}
           product={product}
