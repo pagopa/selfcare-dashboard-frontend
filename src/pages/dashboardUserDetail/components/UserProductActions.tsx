@@ -20,8 +20,8 @@ export default function UserProductActions({ showActions, party, productRoles}:P
         </Link>
       </Grid>
       {productRoles.length > 1 && <Grid item xs={6}>
-        <Link>
-          <Typography variant="h3" sx={{ fontSize: '16px', color:'#0073E6' }}>
+        <Link color='error'>
+          <Typography variant="h3" sx={{ fontSize: '16px', color:"#C02927" }}>
             Elimina
           </Typography>
         </Link>

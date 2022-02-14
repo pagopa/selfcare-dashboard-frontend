@@ -41,6 +41,7 @@ export default function UserProductRoles({ productRoles, showActions, party }: P
                       fontWeight: '600',
                       fontSize: '14px',
                       background: '#00C5CA',
+                      border:'none',
                       borderRadius: '16px',
                       width: '76px',
                       height: '24px',
@@ -53,19 +54,28 @@ export default function UserProductRoles({ productRoles, showActions, party }: P
           <Grid item xs={9}>
             <Grid item container>
               <Grid item xs={5}>
-                <CustomInfoStyle variant="body2">
+                <CustomInfoStyle
+                  variant="body2"
+                  sx={{ color: party.status === 'SUSPENDED' ? 'text.secondary' : '#000000' }}
+                >
                   {p.displayableProductRole}
                   <IconButton
                     disableRipple
                     sx={{ padding: '0px', '&:hover': { backgroundColor: 'transparent' } }}
                   >
                     {/* TODO: verify the use */}
-                    <InfoOutlinedIcon sx={{ padding: '6px', color: '#A2ADB8', marginLeft:'8px' }} />
+                    <InfoOutlinedIcon
+                      sx={{ padding: '6px', color: '#A2ADB8', marginLeft: '8px' }}
+                    />
                   </IconButton>
                 </CustomInfoStyle>
               </Grid>
               <Grid item xs={4}>
-                <UserProductActions showActions={showActions} party={party} productRoles={productRoles}/>
+                <UserProductActions
+                  showActions={showActions}
+                  party={party}
+                  productRoles={productRoles}
+                />
               </Grid>
             </Grid>
           </Grid>
