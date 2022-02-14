@@ -99,8 +99,7 @@ export default function UserDetailPage() {
           <Button
             disableRipple
             variant="outlined" 
-            color="error"
-            sx={{ height: '40px', width: '100%' }}
+            sx={{ height: '40px', width: '100%', color:"#C02927", borderColor:'#C02927'}}
             // onClick={()=>}  TODO
           >
             Elimina
