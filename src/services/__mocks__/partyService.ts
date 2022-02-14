@@ -5,7 +5,7 @@ export const mockedParties: Array<Party> = [
     userRole: 'ADMIN',
     description: 'Comune di Bari',
     urlLogo: 'image',
-    status: 'PENDING',
+    status: 'SUSPENDED',
     institutionId: '1',
     digitalAddress: '',
     fiscalCode: 'fiscalCodeBari',

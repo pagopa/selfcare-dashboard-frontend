@@ -386,3 +386,5 @@ export const savePartyUser = (
   _product: Product,
   _user: PartyUserOnCreation
 ): Promise<any> => new Promise((resolve) => resolve(200));
+
+export const fetchPartyUser = (_institutionId:string, _userId: string): Promise<PartyUser | null> => new Promise((resolve) => resolve(mockedUsers[0]));

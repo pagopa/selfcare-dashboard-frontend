@@ -7,6 +7,8 @@ import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import DashboardUsers from './pages/dashboardUsers/DashboardUsers';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
+import UserDetailPage from './pages/dashboardUserDetail/userDetailPage/UserDetailPage';
+import UserProductDetailPage from './pages/dashboardUserDetail/userProductDetailPage/UserProductDetailPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -53,8 +55,19 @@ export const DASHBOARD_ROUTES = {
   PARTY_USERS: {
     path: `${BASE_ROUTE}/:institutionId/roles`,
     exact: false,
-    component: DashboardUsers,
-    subRoutes: buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
+    subRoutes: {
+      MAIN: {
+        path: `${BASE_ROUTE}/:institutionId/roles`,
+        exact: true,
+        component: DashboardUsers,
+      },
+      PARTY_USER_DETAIL: {
+        path: `${BASE_ROUTE}/:institutionId/roles/:userId`,
+        exact: true,
+        component: UserDetailPage,
+      },
+      ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
+    },
   },
   PARTY_PRODUCT_USERS: {
     path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
@@ -69,6 +82,11 @@ export const DASHBOARD_ROUTES = {
         path: `${BASE_ROUTE}/:institutionId/:productId/roles/add`,
         exact: true,
         component: AddUserContainer,
+      },
+      PARTY_PRODUCT_USER_DETAIL: {
+        path: `${BASE_ROUTE}/:institutionId/:productId/roles/:userId`,
+        exact: true,
+        component: UserProductDetailPage,
       },
       ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
     },

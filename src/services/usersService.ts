@@ -15,6 +15,7 @@ import {
   fetchPartyUsers as fetchPartyUsersMocked,
   savePartyUser as savePartyUserMocked,
   mockedProductRoles,
+  mockedUsers,
 } from './__mocks__/usersService';
 
 const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
@@ -48,6 +49,15 @@ export const fetchPartyUsers = (
         toFakePagination(r.map((u) => institutionUserResource2PartyUser(u, currentUser)))
       );
     }
+  }
+};
+
+export const fetchPartyUser = (_institutionId:string, _userId: string): Promise<PartyUser | null>=> {
+   /* istanbul ignore if */
+   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return new Promise((resolve) => resolve(mockedUsers[0]));
+  } else {
+    throw new Error('TODO');
   }
 };
 

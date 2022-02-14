@@ -7,18 +7,23 @@ import { PartyUser } from '../../../model/PartyUser';
 import UserProductRoles from '../components/UserProductRoles';
 import { ProductRole } from '../../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { mockedPartyProducts } from '../../../services/__mocks__/productService';
-import { mockedParties } from '../../../services/__mocks__/partyService';
 import { Product } from '../../../model/Product';
 import { Party } from '../../../model/Party';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
+import withSelectedPartyProduct from '../../../decorators/withSelectedPartyProduct';
+import { useAppSelector } from '../../../redux/hooks';
+import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 
 const mockedUser: PartyUser = mockedUsers[0];
-const selectedProduct: Product = mockedPartyProducts[0];
-const party: Party = mockedParties[0];
 
-export default function UserProductDetailPage() {
+type Props={
+  selectedProduct:Product;
+  products: Array<Product>;
+};
+
+function UserProductDetailPage({selectedProduct}:Props) {
   const history = useHistory();
+  const party = useAppSelector(partiesSelectors.selectPartySelected) as Party;
 
   // TODO: productRoles = party.products.filter((p) => p.id === selectedProduct.id ).roles (PartyUser-> products-> roles)
   const productRoles: Array<ProductRole> = [
@@ -60,6 +65,7 @@ export default function UserProductDetailPage() {
       mt={10}
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
+
       <Grid item xs={12} mb={3}>
         <ProductNavigationBar paths={paths} selectedProduct={selectedProduct} />
       </Grid>
@@ -101,4 +107,6 @@ export default function UserProductDetailPage() {
       </Grid>
     </Grid>
   );
-}
+};
+
+export default withSelectedPartyProduct(UserProductDetailPage);

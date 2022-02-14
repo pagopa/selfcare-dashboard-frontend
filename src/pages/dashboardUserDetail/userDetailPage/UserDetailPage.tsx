@@ -9,13 +9,13 @@ import { mockedUsers } from '../../../services/__mocks__/usersService';
 import { PartyUser } from '../../../model/PartyUser';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { mockedParties } from '../../../services/__mocks__/partyService';
 import { ProductRole } from '../../../model/ProductRole';
+import { useAppSelector } from '../../../redux/hooks';
+import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
 
 const mockedUser: PartyUser = mockedUsers[0];
-const party: Party = mockedParties[0];
 
 // TODO: productRoles= mockedUser.roles
 const productRoles: Array<ProductRole> = [
@@ -31,19 +31,21 @@ const productRoles: Array<ProductRole> = [
   },
 ];
 
-export default function UserDetailPage() {
+ function UserDetailPage() {
   const history = useHistory();
-  
+  const party = useAppSelector(partiesSelectors.selectPartySelected);
+
   useEffect(() => {
-    trackEvent(
+    if(party)
+    {trackEvent(
       'OPEN_USER_DETAIL',
-      { party_id: party.institutionId });
-  }, []);
+      { party_id: party.institutionId });}
+  }, [party]);
 
   const goBack = () =>
   history.push(
     resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
-      institutionId: party.institutionId,
+      institutionId: (party as Party).institutionId,
     })
   );
 
@@ -56,7 +58,7 @@ export default function UserDetailPage() {
       description: 'Dettaglio Referente',
     },
   ];
-  return (
+  return !party ? <></> : (
     <Grid
       container
       alignItems={'center'}
@@ -108,4 +110,5 @@ export default function UserDetailPage() {
       </Grid>
     </Grid>
   );
-}
+};
+export default UserDetailPage;
