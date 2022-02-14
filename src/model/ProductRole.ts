@@ -3,3 +3,5 @@ export type ProductRole = {
   productRole: string;
   displayableProductRole?: string; // TODO this will not be optional
 };
+
+export type ProductsRolesMap = { [productId: string]: Array<ProductRole> };

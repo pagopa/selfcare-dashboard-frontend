@@ -7,7 +7,7 @@ import FilterModal, {
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { UserRole } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
-import { ProductRole } from '../../../../model/ProductRole';
+import { ProductRole, ProductsRolesMap } from '../../../../model/ProductRole';
 
 export type UsersTableFiltersConfig = {
   /** If the roles configuration imply a set of products, this will be considered as filter */
@@ -32,6 +32,7 @@ interface UsersSearchFilterProps {
   disableFilters: boolean;
   filters: UsersTableFiltersConfig;
   onFiltersChange: (f: UsersTableFiltersConfig) => void;
+  productsRolesMap: ProductsRolesMap; // TODO use me to build filter component
 }
 
 export default function UsersTableFilters({

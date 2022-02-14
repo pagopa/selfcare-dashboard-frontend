@@ -5,12 +5,14 @@ import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/use
 import MDSpinner from 'react-md-spinner';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
+import { ProductsRolesMap } from '../../../../model/ProductRole';
 import UsersTableFilters, { UsersTableFiltersConfig } from './UsersTableFilters';
 
 interface UsersSearchProps {
   party: Party;
   selectedProduct?: Product;
   products: Array<Product>;
+  productsRolesMap: ProductsRolesMap;
   addUserUrl: string;
   disableFilters: boolean;
   loading: boolean;
@@ -21,6 +23,7 @@ interface UsersSearchProps {
 export default function UsersTableActions({
   selectedProduct,
   products,
+  productsRolesMap,
   addUserUrl,
   disableFilters,
   loading,
@@ -45,6 +48,7 @@ export default function UsersTableActions({
           filters={filters}
           onFiltersChange={onFiltersChange}
           products={products}
+          productsRolesMap={productsRolesMap}
         />
       </Grid>
       <Grid item pl={4}>

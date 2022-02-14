@@ -10,10 +10,13 @@ import { DASHBOARD_ROUTES } from '../../../routes';
 import UsersProductSection from '../components/UsersProductSection';
 import { UsersTableFiltersConfig } from '../components/UsersTableActions/UsersTableFilters';
 import UserTableNoData from '../components/UserTableNoData';
+import { ProductsRolesMap } from '../../../model/ProductRole';
+import withProductsRolesMap from '../../../decorators/withProductsRolesMap';
 
 interface Props {
   party: Party;
   products: Array<Product>;
+  productsRolesMap: ProductsRolesMap;
 }
 
 const emptyFilters: UsersTableFiltersConfig = {
@@ -22,7 +25,7 @@ const emptyFilters: UsersTableFiltersConfig = {
   productRoles: [],
 };
 
-export default function UsersPage({ party, products }: Props) {
+function UsersPage({ party, products, productsRolesMap }: Props) {
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [noData, setNoData] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -61,6 +64,7 @@ export default function UsersPage({ party, products }: Props) {
             loading={loading}
             party={party}
             products={products}
+            productsRolesMap={productsRolesMap}
             filters={filters}
             onFiltersChange={setFilters}
             addUserUrl={resolvePathVariables(
@@ -90,3 +94,5 @@ export default function UsersPage({ party, products }: Props) {
     </Grid>
   );
 }
+
+export default withProductsRolesMap(UsersPage);

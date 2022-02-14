@@ -3,6 +3,8 @@ import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
 import { useEffect, useState } from 'react';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { Product } from '../../../model/Product';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { Party } from '../../../model/Party';
@@ -12,6 +14,10 @@ import { UsersTableFiltersConfig } from '../components/UsersTableActions/UsersTa
 import { DASHBOARD_ROUTES } from '../../../routes';
 import UserTableNoData from '../components/UserTableNoData';
 import { ENV } from '../../../utils/env';
+import withSelectedPartyProduct from '../../../decorators/withSelectedPartyProduct';
+import { useProductRoles } from '../../../hooks/useProductRoles';
+import { ProductsRolesMap } from '../../../model/ProductRole';
+import { LOADING_TASK_FETCH_PRODUCT_ROLES } from '../../../utils/constants';
 
 interface Props {
   party: Party;
@@ -31,16 +37,38 @@ const emptyFilters: UsersTableFiltersConfig = {
   productRoles: [],
 };
 
-export default function UsersProductPage({ party, products, selectedProduct }: Props) {
+function UsersProductPage({ party, products, selectedProduct }: Props) {
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [fetchStatus, setFetchStatus] = useState({ loading: true, noData: false });
+  const [productsRolesMap, setProductsRolesMap] = useState<ProductsRolesMap>();
+  const fetchSelectedProductRoles = useProductRoles(selectedProduct);
 
-  useEffect(
-    () => trackEvent('USER_LIST', { party_id: party.institutionId, product: selectedProduct.id }),
-    [selectedProduct]
-  );
+  const setLoading_fetchProductRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
+  const addError = useErrorDispatcher();
 
-  return (
+  const doFetchProductRoles = () => {
+    setLoading_fetchProductRoles(true);
+    fetchSelectedProductRoles()
+      .then((roles) => setProductsRolesMap({ [selectedProduct.id]: roles }))
+      .catch((reason) =>
+        addError({
+          id: `FETCH_PRODUCT_ROLES_ERROR_${selectedProduct.id}`,
+          error: reason,
+          blocking: false,
+          toNotify: true,
+          techDescription: `Something gone wrong while fetching roles for product ${selectedProduct.title}`,
+          onRetry: doFetchProductRoles,
+        })
+      )
+      .finally(() => setLoading_fetchProductRoles(false));
+  };
+
+  useEffect(() => {
+    trackEvent('USER_LIST', { party_id: party.institutionId, product: selectedProduct.id });
+    doFetchProductRoles();
+  }, [selectedProduct]);
+
+  return productsRolesMap ? (
     <Grid
       container
       px={0}
@@ -65,6 +93,7 @@ export default function UsersProductPage({ party, products, selectedProduct }: P
             party={party}
             products={products}
             selectedProduct={selectedProduct}
+            productsRolesMap={productsRolesMap}
             filters={filters}
             onFiltersChange={setFilters}
             addUserUrl={resolvePathVariables(
@@ -95,5 +124,9 @@ export default function UsersProductPage({ party, products, selectedProduct }: P
         )}
       </Grid>
     </Grid>
+  ) : (
+    <></>
   );
 }
+
+export default withSelectedPartyProduct(UsersProductPage);

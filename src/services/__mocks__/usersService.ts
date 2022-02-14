@@ -347,13 +347,19 @@ export const mockedUsers: Array<PartyUser> = [
 
 export const mockedProductRoles = [
   {
+    selcRole: 'ADMIN',
     productRole: 'Incaricato Ente Creditore',
+    displayableProductRole: 'Incaricato Ente Creditore',
   },
   {
+    selcRole: 'ADMIN',
     productRole: 'Referente dei Pagamenti',
+    displayableProductRole: 'Referente dei Pagamenti',
   },
   {
+    selcRole: 'LIMITED',
     productRole: 'Referente Tecnico',
+    displayableProductRole: 'Referente Tecnico',
   },
 ];
 
