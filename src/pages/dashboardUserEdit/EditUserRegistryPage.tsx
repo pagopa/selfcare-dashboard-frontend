@@ -12,11 +12,10 @@ import EditUserRegistryForm from './components/EditUserRegistryForm';
 
 type Props = {
   party: Party;
-  selectedProduct: Product;
   user: PartyUser | null;
 };
 
-function EditUserRegistryPage({ party /* ,user TODO */, selectedProduct }: Props) {
+function EditUserRegistryPage({ party /* ,user TODO */ }: Props) {
   const user = mockedUsers[0]; // TODO RemoveMe
   const history = useHistory();
 
@@ -52,7 +51,7 @@ function EditUserRegistryPage({ party /* ,user TODO */, selectedProduct }: Props
       <Grid item xs={12} mb={9}>
         <TitleBox
           title="Modifica Referente"
-          subTitle={`Modifica i dati della persona che hai autorizzato a gestire ${selectedProduct}.`}
+          subTitle={`Modifica i dati della persona che hai autorizzato a gestire ${user.products[0].title}.`}
         />
       </Grid>
       <Grid item xs={12}>

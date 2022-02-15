@@ -11,9 +11,9 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid',
     taxCode: 'AAAAAA11A11A123A',
-    name: 'ELENA',
+    name: 'Elena',
     surname: 'Verdi',
-    email: 'simone.v@comune.milano.it ',
+    email: 'simone.v@comune.milano.it',
     userRole: 'ADMIN',
     status: 'ACTIVE',
     products: [
@@ -442,7 +442,4 @@ export const updatePartyUser = (_party: Party, _user: PartyUserOnEdit): Promise<
   new Promise((resolve) => resolve(200));
 
 export const fetchUserRegistryByFiscalCode = (_taxCode: string): Promise<UserRegistry> =>
-  new Promise((resolve) => resolve(mockedUserRegistry));
-
-export const fetchUserRegistryByUserID = (_uid: string): Promise<UserRegistry> =>
   new Promise((resolve) => resolve(mockedUserRegistry));

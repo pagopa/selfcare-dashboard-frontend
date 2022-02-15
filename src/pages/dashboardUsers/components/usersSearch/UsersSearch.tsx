@@ -147,7 +147,6 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
 
             <Button
               variant="contained"
-              startIcon={<AddIcon />}
               sx={{ py: '10px' }}
               onClick={() =>
                 history.push(

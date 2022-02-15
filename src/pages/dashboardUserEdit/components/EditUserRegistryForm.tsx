@@ -78,7 +78,7 @@ export default function EditUserRegistryForm({ party, user }: Props) {
           : values.confirmEmail !== values.email
           ? 'Gli indirizzi email non corrispondono'
           : undefined,
-      })
+      }).filter(([_key, value]) => value)
     );
 
   const formik = useFormik<PartyUserOnEdit>({
@@ -212,20 +212,18 @@ export default function EditUserRegistryForm({ party, user }: Props) {
 
         <Grid item container spacing={3}>
           <Grid item xs={3} mt={8}>
-            <p> </p>
             <Button
               sx={{ width: '100%' }}
               color="primary"
-              variant="contained"
+              variant="outlined"
               onClick={() => onExit(goBack)}
             >
               Indietro
             </Button>
           </Grid>
           <Grid item xs={3} mt={8}>
-            <p>{formik.isValid} </p>
             <Button
-              disabled={!formik.isValid}
+              disabled={!formik.dirty || !formik.isValid}
               sx={{ width: '100%' }}
               color="primary"
               variant="contained"
