@@ -1,5 +1,6 @@
-import { PageRequest } from '../model/PageRequest';
-import { PageResource } from '../model/PageResource';
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
+import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
+import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { Party, UserRole, UserStatus } from '../model/Party';
 import { Product } from '../model/Product';
 import {
@@ -10,7 +11,6 @@ import {
 } from '../model/PartyUser';
 import { ProductRole } from '../model/ProductRole';
 import { DashboardApi } from '../api/DashboardApiClient';
-import { User } from '../model/User';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
   savePartyUser as savePartyUserMocked,

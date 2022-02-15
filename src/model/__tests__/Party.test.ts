@@ -21,6 +21,6 @@ test('Test institutionResource2Party', () => {
     fiscalCode: 'fiscalCode',
     digitalAddress: 'address',
     category: 'Ente locale',
-    urlLogo: 'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/1/logo.png',
+    urlLogo: 'http://checkout.selfcare/institutions/1/logo.png',
   });
 });

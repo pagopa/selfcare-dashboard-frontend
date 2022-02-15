@@ -12,7 +12,7 @@ import {
 } from '../usersService';
 import { mockedParties } from '../__mocks__/partyService';
 import { mockedPartyProducts } from '../__mocks__/productService';
-import { mockedUser } from '../../decorators/__mocks__/withLogin';
+import { mockedUser } from '../../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
 import {
   institutionUserResource2PartyUser,
   PartyUser,

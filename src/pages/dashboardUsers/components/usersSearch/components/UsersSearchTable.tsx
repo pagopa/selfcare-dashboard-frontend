@@ -2,19 +2,19 @@ import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Box, styled } from '@mui/system';
 import { DataGrid, GridColDef, GridSortDirection, GridSortModel } from '@mui/x-data-grid';
 import React, { useState } from 'react';
-import { Page } from '../../../../../model/Page';
-import { PageRequest } from '../../../../../model/PageRequest';
+import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
+import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionModal';
+import Toast from '@pagopa/selfcare-common-frontend/components/Toast';
+import CustomPagination from '@pagopa/selfcare-common-frontend/components/CustomPagination';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
 import { Party, UserStatus } from '../../../../../model/Party';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../../../utils/constants';
-import SessionModal from '../../../../../components/SessionModal';
-import Toast from '../../../../../components/Toast';
-import CustomPagination from '../../../../../components/CustomPagination';
 import { updatePartyUserStatus } from '../../../../../services/usersService';
-import { useAppDispatch } from '../../../../../redux/hooks';
-import useLoading from '../../../../../hooks/useLoading';
-import { AppError, appStateActions } from '../../../../../redux/slices/appStateSlice';
 import { buildColumnDefs } from './UserSearchTableColumns';
 
 const rowHeight = 81;
@@ -97,10 +97,8 @@ export default function UsersSearchTable({
   sort,
   onPageRequest,
 }: UsersSearchTableProps) {
-  const dispatch = useAppDispatch();
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
-  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
-
+  const addError = useErrorDispatcher();
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [selectedUser, setSelectedUser] = useState<PartyUser>();
@@ -134,6 +132,11 @@ export default function UsersSearchTable({
       setLoading(true);
       updatePartyUserStatus(user, nextStatus)
         .then((_) => {
+          if(nextStatus === "SUSPENDED"){
+            trackEvent('USER_SUSPEND', { party_id: party.institutionId , product: selectedProduct.id, product_role: user.userRole });
+          }else if(nextStatus === "ACTIVE"){
+            trackEvent('USER_RESUME', { party_id: party.institutionId , product: selectedProduct.id, product_role: user.userRole });
+          };
           setOpenModal(false);
           // eslint-disable-next-line functional/immutable-data
           user.status = nextStatus;
@@ -159,7 +162,7 @@ export default function UsersSearchTable({
         id="UsersSearchTableBox"
         sx={{
           position: 'relative',
-          width: '100%',
+          width: '100% !important',
           border: 'none',
           px: '16px',
         }}
@@ -200,19 +203,18 @@ export default function UsersSearchTable({
           }
         />
       </Box>
-      {openToast && (
-        <Toast
-          title={`REFERENTE ${selectedUserStatus?.toUpperCase()}`}
-          message={
-            <>
-              {`Hai ${selectedUserStatus} correttamente `}
-              <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}`}</strong>
-              {'.'}
-            </>
-          }
-          closeToast={() => setOpenToast(false)}
-        />
-      )}
+      <Toast
+        open={openToast}
+        title={`REFERENTE ${selectedUserStatus?.toUpperCase()}`}
+        message={
+          <>
+            {`Hai ${selectedUserStatus} correttamente `}
+            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}`}</strong>
+            {'.'}
+          </>
+        }
+        onCloseToast={() => setOpenToast(false)}
+      />
       <SessionModal
         open={openModal}
         title={selectedUser?.status === 'ACTIVE' ? 'Sospendi Referente' : 'Riabilita Referente'}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@mui/system';
 import { List, ListItemButton, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import CustomAvatar from './../CustomAvatar';
+import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
 // import { withStyles } from '@mui/styles/';
 
 type Props = {
@@ -17,6 +17,8 @@ type Props = {
   titleColor?: string;
   titleSize?: string;
   subTitleSize?: string;
+  showAvatar?: boolean;
+  pxTitleSubTitle?: string;
 };
 
 const CustomList = styled(List)({
@@ -34,8 +36,7 @@ const CustomList = styled(List)({
     },
     '&:hover': {
       backgroundColor: 'transparent !important',
-    }
-
+    },
   },
 });
 
@@ -51,6 +52,8 @@ export default function PartyItem({
   titleColor,
   titleSize,
   subTitleSize,
+  showAvatar = true,
+  pxTitleSubTitle,
 }: Props) {
   return (
     <CustomList
@@ -64,10 +67,12 @@ export default function PartyItem({
         selected={selectedItem}
         onClick={action}
       >
-        <Box pl={1} pr={2}>
-          <CustomAvatar customAlt="" customSrc={image} />
-        </Box>
-        <Grid container>
+        {showAvatar && (
+          <Box pl={1} pr={2}>
+            <CustomAvatar customAlt="" customSrc={image} />
+          </Box>
+        )}
+        <Grid container sx={{ px: pxTitleSubTitle }}>
           <Grid item xs={12}>
             <Typography variant="h1" sx={{ fontSize: titleSize, color: titleColor }}>
               {title}

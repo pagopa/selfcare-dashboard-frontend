@@ -11,8 +11,7 @@ export type Product = {
   tag?: string;
   userRole?: string;
   authorized?: boolean;
-  active: boolean;
-  status?: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
 };
 
 export const productResource2Product = (resource: ProductsResource): Product => ({
@@ -26,5 +25,5 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   tag: undefined,
   userRole: resource.userRole,
   authorized: resource.authorized,
-  active: resource.active,
+  status: resource.status,
 });

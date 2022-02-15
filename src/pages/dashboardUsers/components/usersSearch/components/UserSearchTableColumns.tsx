@@ -1,4 +1,4 @@
-import { Chip, Link, Typography } from '@mui/material';
+import { Chip, Link, Typography, Grid } from '@mui/material';
 import {
   GridColDef,
   GridColumnHeaderParams,
@@ -6,10 +6,10 @@ import {
   GridValueGetterParams,
 } from '@mui/x-data-grid';
 import React, { ReactNode } from 'react';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
 import { UserRole } from '../../../../../model/Party';
-import { roleLabels } from '../../../../../utils/constants';
 
 export function buildColumnDefs(
   isSelectedProduct: boolean,
@@ -23,23 +23,11 @@ export function buildColumnDefs(
         headerName: 'NOME',
         align: 'left',
         headerAlign: 'left',
-        width: 150,
+        width: 284,
         editable: false,
         disableColumnMenu: true,
         valueGetter: getFullName,
         renderHeader: showCustmHeader,
-        renderCell,
-        sortable: false,
-      },
-      {
-        field: 'stato',
-        cellClassName: 'justifyContentBold',
-        headerName: '',
-        align: 'left',
-        width: 134,
-        hideSortIcons: true,
-        disableColumnMenu: true,
-        editable: false,
         renderCell: showChip,
         sortable: false,
       },
@@ -131,6 +119,7 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
           WebkitLineClamp: 3,
           WebkitBoxOrient: 'vertical' as const,
           paddingBottom: '8px',
+          width: '100%',
         }}
       >
         {value}
@@ -140,7 +129,7 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
 }
 
 function getFullName(params: GridValueGetterParams) {
-  return `${params.row.name} ${params.row.surname}`;
+  return `${params.row.name} ${params.row.surname} ${params.row.status}`;
 }
 
 function getProducts(params: GridValueGetterParams) {
@@ -173,19 +162,34 @@ function showChip(params: GridRenderCellParams) {
     <React.Fragment>
       {renderCell(
         params,
-        params.row.status === 'SUSPENDED' && (
-          <Chip
-            label="Sospeso"
-            sx={{
-              fontSize: '16px',
-              fontWeight: '600',
-              color: '#17324D',
-              backgroundColor: '#00C5CA',
-              paddingBottom: '1px',
-              height: '24px',
-            }}
-          />
-        )
+        <>
+          <Grid container sx={{ width: '100%' }}>
+            <Grid item xs={params.row.status === 'SUSPENDED' ? 7 : 12} sx={{ width: '100%' }}>
+              <Typography variant="h6">
+                {params.row.name} {params.row.surname}
+              </Typography>
+            </Grid>
+            {params.row.status === 'SUSPENDED' && (
+              <Grid
+                item
+                xs={5}
+                sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+              >
+                <Chip
+                  label="Sospeso"
+                  sx={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#17324D',
+                    backgroundColor: '#00C5CA',
+                    paddingBottom: '1px',
+                    height: '24px',
+                  }}
+                />
+              </Grid>
+            )}
+          </Grid>
+        </>
       )}
     </React.Fragment>
   );
@@ -206,13 +210,14 @@ function showRefStatus(
               Sospendi
             </Link>
           )
-          : users.row.status === 'SUSPENDED' 
-          ? renderCell(
+        : users.row.status === 'SUSPENDED'
+        ? renderCell(
             users,
             <Link onClick={() => onChangeState(users.row)} sx={{ cursor: 'pointer' }}>
               Riabilita
             </Link>
-          ) : renderCell(users,'')}
+          )
+        : renderCell(users, '')}
     </React.Fragment>
   );
 }

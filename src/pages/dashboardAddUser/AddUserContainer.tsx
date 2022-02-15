@@ -1,10 +1,11 @@
 import { Grid } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Product } from '../../model/Product';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
-import TitleBox from '../../components/TitleBox';
 import withSelectedPartyProduct from '../../decorators/withSelectedPartyProduct';
-import { DASHBOARD_ROUTES, resolvePathVariables } from '../../routes';
+import { DASHBOARD_ROUTES } from '../../routes';
 import { Party } from '../../model/Party';
 import AddUserForm from './components/AddUserForm';
 
