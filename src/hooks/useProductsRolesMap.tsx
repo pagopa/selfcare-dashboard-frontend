@@ -32,5 +32,5 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
         ? state.parties.selectedProductsRolesMap
         : undefined,
     partiesActions.setPartySelectedProductsRolesMap
-  ) as () => Promise<ProductsRolesMap>;
+  );
 };
