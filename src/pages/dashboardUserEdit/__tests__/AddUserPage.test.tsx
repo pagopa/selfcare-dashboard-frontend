@@ -1,6 +1,6 @@
 import { fireEvent, getByText, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import AddUserPage from '../AddUserPage';
+import AddUsersPage from '../AddUsersPage';
 import { createStore, store } from '../../../redux/store';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
@@ -30,10 +30,11 @@ const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
       <Router history={history}>
         <Switch>
           <Route path="/:institutionId/:productId" exact={true}>
-            <AddUserPage
+            <AddUsersPage
               party={mockedParties[0]}
               products={mockedPartyProducts}
               {...mockedUserRegistry}
+              selectedProduct={mockedPartyProducts[0]}
             />
           </Route>
           <Route path="/dashboard/1/prod-io/roles" exact={true}>
