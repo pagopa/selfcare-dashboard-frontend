@@ -20,7 +20,8 @@ export default function UserProductDetail({ productInfo, party , productRoles }:
     <>
       {productInfo.products.map((product, index) => (
         <Box key={product.id}>
-          {index !== productInfo.products.length - 1 && <Grid item xs={11} mb={4}>
+          {index !== productInfo.products.length - 1 && 
+          <Grid item xs={11} mb={4}>
              <Divider />
           </Grid>}
           <Grid item xs={12}>
@@ -57,7 +58,7 @@ export default function UserProductDetail({ productInfo, party , productRoles }:
               </Grid>
             </Grid>
           </Grid>
-          <Grid container xs={10}>
+          <Grid container item xs={10}>
             <Grid item xs={12}>
               <UserProductRoles
                 showActions={!showActionOnProduct}

@@ -22,7 +22,7 @@ const CustomInfoStyle = styled(Typography)({
 });
 export default function UserProductRoles({ productRoles, showActions, party }: Props) {
   return (
-    <Grid container xs={12}>
+    <Grid container item xs={12}>
       {productRoles.map((p) => (
         <Grid container item key={p.productRole}>
           <Grid item xs={3}>
