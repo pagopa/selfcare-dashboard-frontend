@@ -144,6 +144,21 @@ export default function UsersSearch({ party, selectedProduct, products }: UsersS
             >
               Aggiungi
             </Button>
+
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              sx={{ py: '10px' }}
+              onClick={() =>
+                history.push(
+                  resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.EDIT_USER.path, {
+                    institutionId: party.institutionId,
+                  })
+                )
+              }
+            >
+              Modifica
+            </Button>
           </Grid>
         )}
       </Grid>

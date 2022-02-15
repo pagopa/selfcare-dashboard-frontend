@@ -7,6 +7,7 @@ import {
   institutionUserResource2PartyUser,
   PartyUser,
   PartyUserOnCreation,
+  PartyUserOnEdit,
   productUserResource2PartyUser,
 } from '../model/PartyUser';
 import { ProductRole } from '../model/ProductRole';
@@ -15,6 +16,7 @@ import { DashboardApi } from '../api/DashboardApiClient';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
   savePartyUser as savePartyUserMocked,
+  updatePartyUser as updatePartyUserMocked,
   mockedProductRoles,
   mockedUserRegistry,
 } from './__mocks__/usersService';
@@ -66,6 +68,15 @@ export const savePartyUser = (
   }
 };
 
+export const updatePartyUser = (party: Party, user: PartyUserOnEdit): Promise<any> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return updatePartyUserMocked(party, user);
+  } else {
+    throw new Error('Todo');
+  }
+};
+
 export const updatePartyUserStatus = (user: PartyUser, status: UserStatus): Promise<any> => {
   if (user.products.length !== 1) {
     throw new Error(
@@ -107,5 +118,14 @@ export const fetchUserRegistryByFiscalCode = (taxCode: string): Promise<UserRegi
     return DashboardApi.fetchUserRegistryByFiscalCode(taxCode).then((userResource) =>
       userResource ? userResource2UserRegistry(userResource) : null
     );
+  }
+};
+
+export const fetchUserRegistryByUserID = (_uid: string): Promise<UserRegistry | null> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return new Promise((resolve) => resolve(mockedUserRegistry));
+  } else {
+    throw new Error('Error');
   }
 };

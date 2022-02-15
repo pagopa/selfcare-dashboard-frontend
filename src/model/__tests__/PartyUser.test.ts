@@ -21,6 +21,7 @@ test('Test institutionUserResource2PartyUser', () => {
   const partyUser = institutionUserResource2PartyUser(institutionUserResource, mockedUser);
   expect(partyUser).toStrictEqual({
     id: '1',
+    taxCode: 'TODO TAXCODE',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -28,6 +29,7 @@ test('Test institutionUserResource2PartyUser', () => {
     email: 'address',
     products: [{ id: 'productId', title: 'productTitle' }],
     isCurrentUser: false,
+    certification: true,
   });
 
   institutionUserResource.id = mockedUser.uid;
@@ -54,6 +56,7 @@ test('Test productUserResource2PartyUser', () => {
   );
   expect(partyUser).toStrictEqual({
     id: '1',
+    taxCode: 'TODO TAXCODE',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -67,6 +70,7 @@ test('Test productUserResource2PartyUser', () => {
       },
     ],
     isCurrentUser: false,
+    certification: true,
   });
 
   productUserResource.id = mockedUser.uid;

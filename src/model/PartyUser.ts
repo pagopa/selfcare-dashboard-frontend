@@ -6,6 +6,7 @@ import { Product } from './Product';
 
 export type PartyUser = {
   id: string;
+  taxCode: string;
   name: string;
   surname: string;
   email: string;
@@ -13,6 +14,7 @@ export type PartyUser = {
   products: Array<{ id: string; title: string; relationshipId?: string }>;
   status: UserStatus;
   isCurrentUser: boolean;
+  certification: boolean;
 };
 
 export type PartyUserOnCreation = {
@@ -25,11 +27,22 @@ export type PartyUserOnCreation = {
   certification: boolean;
 };
 
+export type PartyUserOnEdit = {
+  id: string;
+  taxCode: string;
+  name: string;
+  surname: string;
+  email: string;
+  confirmEmail: string;
+  certification: boolean;
+};
+
 export const institutionUserResource2PartyUser = (
   resource: InstitutionUserResource,
   currentUser: User
 ): PartyUser => ({
   id: resource.id,
+  taxCode: 'TODO TAXCODE',
   name: resource.name,
   surname: resource.surname,
   email: resource.email,
@@ -37,6 +50,7 @@ export const institutionUserResource2PartyUser = (
   products: ([] as Array<{ id: string; title: string }>).concat(resource.products),
   status: resource.status as UserStatus,
   isCurrentUser: currentUser.uid === resource.id,
+  certification: true, // TODO FIXME
 });
 
 export const productUserResource2PartyUser = (
@@ -45,6 +59,7 @@ export const productUserResource2PartyUser = (
   currentUser: User
 ): PartyUser => ({
   id: resource.id,
+  taxCode: 'TODO TAXCODE',
   name: resource.name,
   surname: resource.surname,
   email: resource.email,
@@ -52,4 +67,5 @@ export const productUserResource2PartyUser = (
   products: [{ id: product.id, title: product.title, relationshipId: resource.relationshipId }],
   status: resource.status as UserStatus,
   isCurrentUser: currentUser.uid === resource.id,
+  certification: true, // TODO FIXME
 });

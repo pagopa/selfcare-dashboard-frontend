@@ -8,6 +8,7 @@ import PartySelectionContainer from './pages/partySelectionContainer/PartySelect
 import { ENV } from './utils/env';
 import AddUsersProductPage from './pages/dashboardUserEdit/AddUsersProductPage';
 import AddUsersPage from './pages/dashboardUserEdit/AddUsersPage';
+import EditUserRegistryPage from './pages/dashboardUserEdit/EditUserRegistryPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -59,6 +60,11 @@ export const DASHBOARD_ROUTES = {
         path: `${BASE_ROUTE}/:institutionId/roles`,
         exact: true,
         component: DashboardUsers,
+      },
+      EDIT_USER: {
+        path: `${BASE_ROUTE}/:institutionId/roles/:userId/edit`,
+        exact: true,
+        component: EditUserRegistryPage,
       },
       ADD_PRODUCT_USER: {
         path: `${BASE_ROUTE}/:institutionId/roles/add`,

@@ -1,6 +1,6 @@
 import { Card, Grid, Box, Typography } from '@mui/material';
 import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
-import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
+import { useTokenExchange } from '../../../../../model/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import BaseProductCard from '../../productCard/BaseProductCard';
