@@ -28,11 +28,9 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
     (state: RootState) =>
       !products ||
       (state.parties.selectedProductsRolesMap &&
-        products.find(
-          (p) => !(state.parties.selectedProductsRolesMap as ProductsRolesMap)[p.id]
-        ) === null)
+        !products.find((p) => !(state.parties.selectedProductsRolesMap as ProductsRolesMap)[p.id]))
         ? state.parties.selectedProductsRolesMap
         : undefined,
     partiesActions.setPartySelectedProductsRolesMap
-  );
+  ) as () => Promise<ProductsRolesMap>;
 };

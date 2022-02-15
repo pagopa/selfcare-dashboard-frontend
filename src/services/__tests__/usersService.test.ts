@@ -39,7 +39,7 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       checkPermission,
       undefined,
-      'ADMIN'
+      ['ADMIN']
     );
 
     expect(partyUsers).toMatchObject({
@@ -72,7 +72,7 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       true,
       mockedPartyProducts[0],
-      'LIMITED'
+      ['LIMITED']
     );
 
     expect(partyProductUsers).toMatchObject({
@@ -105,7 +105,7 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       false,
       mockedPartyProducts[0],
-      'LIMITED'
+      ['LIMITED']
     );
 
     expect(partyProductUsers).toMatchObject({
@@ -144,6 +144,7 @@ test('Test savePartyUser', async () => {
     surname: 'Surname',
     taxCode: 'fiscalCode',
     email: 'email',
+    confirmEmail: 'email',
     productRole: 'role',
   };
 

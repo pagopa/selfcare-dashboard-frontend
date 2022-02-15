@@ -40,14 +40,11 @@ export const partiesSlice = createSlice({
     setPartySelectedProductsRolesMap: (state, action: PayloadAction<ProductsRolesMap>) => {
       state.selectedProductsRolesMap = action.payload;
     },
-    setPartySelectedProductRoles: (
-      state,
-      action: PayloadAction<{ productId: string; roles: Array<ProductRole> }>
-    ) => {
+    addPartySelectedProductRoles: (state, action: PayloadAction<ProductsRolesMap>) => {
       if (!state.selectedProductsRolesMap) {
         state.selectedProductsRolesMap = {};
       }
-      state.selectedProductsRolesMap[action.payload.productId] = action.payload.roles;
+      Object.assign(state.selectedProductsRolesMap, action.payload);
     },
   },
 });

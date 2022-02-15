@@ -16,10 +16,10 @@ const renderApp = (product: Product, injectedStore?: ReturnType<typeof createSto
   const store = injectedStore ? injectedStore : createStore();
   const Component = () => {
     const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
-    const fetchProductRoles = useProductRoles(product);
+    const fetchProductRoles = useProductRoles();
 
     useEffect(() => {
-      fetchProductRoles()
+      fetchProductRoles(product)
         .then((r) => setProductRoles(r))
         .catch((r) => console.error(r));
     }, []);
