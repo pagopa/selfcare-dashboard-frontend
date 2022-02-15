@@ -1,12 +1,15 @@
 import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
 import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party, UserRole, UserStatus } from '../model/Party';
 import { Product } from '../model/Product';
 import {
   institutionUserResource2PartyUser,
   PartyUser,
   PartyUserOnCreation,
+  PartyUserProduct,
+  PartyUserProductRole,
   productUserResource2PartyUser,
 } from '../model/PartyUser';
 import { ProductRole } from '../model/ProductRole';
@@ -14,6 +17,8 @@ import { DashboardApi } from '../api/DashboardApiClient';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
   savePartyUser as savePartyUserMocked,
+  updatePartyUserStatus as updatePartyUserStatusMocked,
+  deletePartyUser as deletePartyUserMocked,
   mockedProductRoles,
 } from './__mocks__/usersService';
 
@@ -55,8 +60,8 @@ export const fetchPartyUsers = (
         selcRoles && selcRoles.length > 0 ? selcRoles[0] : undefined
       ).then(
         (
-          r // TODO fixme
-        ) => toFakePagination(r.map((u) => productUserResource2PartyUser(product, u, currentUser)))
+          r // TODO fixme when API will support pagination
+        ) => toFakePagination(r.map((u) => productUserResource2PartyUser(u, currentUser)))
       );
     } else {
       return DashboardApi.getPartyUsers(
@@ -65,7 +70,7 @@ export const fetchPartyUsers = (
         selcRoles && selcRoles.length > 0 ? selcRoles[0] : undefined
       ).then(
         (
-          r // TODO fixme
+          r // TODO fixme when API will support pagination
         ) => toFakePagination(r.map((u) => institutionUserResource2PartyUser(u, currentUser)))
       );
     }
@@ -85,25 +90,42 @@ export const savePartyUser = (
   }
 };
 
-export const updatePartyUserStatus = (user: PartyUser, status: UserStatus): Promise<any> => {
-  if (user.products.length !== 1) {
-    throw new Error(
-      `Updated allowed only for users having selected only 1 product: ${user.products.length}`
-    );
-  }
-  if (!user.products[0].relationshipId) {
-    throw new Error(
-      `Updated allowed only for users retrieved using getPartyProductUsers (no relationshipId): ${JSON.stringify(
-        user.products[0]
-      )}`
-    );
+export const updatePartyUserStatus = (
+  party: Party,
+  user: PartyUser,
+  product: PartyUserProduct,
+  role: PartyUserProductRole,
+  status: UserStatus
+): Promise<any> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return updatePartyUserStatusMocked(party, user, product, role, status);
   }
   if (status === 'ACTIVE') {
-    return DashboardApi.activatePartyRelation(user.products[0].relationshipId);
+    return DashboardApi.activatePartyRelation(role.relationshipId);
   } else if (status === 'SUSPENDED') {
-    return DashboardApi.suspendPartyRelation(user.products[0].relationshipId);
+    return DashboardApi.suspendPartyRelation(role.relationshipId);
   } else {
     throw new Error(`Not allowed next status: ${status}`);
+  }
+};
+
+export const deletePartyUser = (
+  party: Party,
+  user: PartyUser,
+  product: PartyUserProduct,
+  role: PartyUserProductRole
+): Promise<any> => {
+  trackEvent('USER_DELETE', {
+    party_id: party.institutionId,
+    product: product.id,
+    product_role: role.role,
+  });
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return deletePartyUserMocked(party, user, product, role);
+  } else {
+    return DashboardApi.deletePartyRelation(role.relationshipId);
   }
 };
 
@@ -112,8 +134,9 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return new Promise((resolve) => resolve(mockedProductRoles));
   } else {
-    return DashboardApi.getProductRoles(product.id).then((roles) =>
-      roles.map((r) => ({ productRole: r }))
+    return DashboardApi.getProductRoles(product.id).then(
+      (roles) =>
+        roles.map((r) => ({ productRole: r, selcRole: 'ADMIN', displayableProductRole: r })) // TODO fixme
     );
   }
 };

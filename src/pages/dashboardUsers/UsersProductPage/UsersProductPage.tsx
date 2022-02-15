@@ -92,6 +92,7 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
             initialPageSize={ENV.PARTY_PRODUCT_USERS_PAGE_SIZE}
             party={party}
             product={selectedProduct}
+            productRoles={productsRolesMap[selectedProduct.id]}
             filterConfiguration={filters}
             onFetchStatusUpdate={(isFetching, count) => {
               setFetchStatus({ loading: isFetching, noData: !count || count === 0 });

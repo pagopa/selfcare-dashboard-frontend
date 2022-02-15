@@ -11,6 +11,7 @@ import { Product } from '../../../../model/Product';
 import { useAppSelector } from '../../../../redux/hooks';
 import { fetchPartyUsers } from '../../../../services/usersService';
 import { UsersTableFiltersConfig } from '../UsersTableActions/UsersTableFilters';
+import { ProductRole } from '../../../../model/ProductRole';
 import UsersProductTable from './components/UsersProductTable';
 import UserProductFetchError from './components/UserProductFetchError';
 
@@ -23,6 +24,7 @@ type Props = {
   userDetailUrl: string;
   filterConfiguration: UsersTableFiltersConfig;
   hideProductWhenLoading: boolean;
+  productRoles: Array<ProductRole>;
 };
 
 const UsersTableProduct = ({
@@ -30,6 +32,7 @@ const UsersTableProduct = ({
   initialPageSize,
   party,
   product,
+  productRoles,
   onFetchStatusUpdate,
   filterConfiguration,
   hideProductWhenLoading,
@@ -122,6 +125,15 @@ const UsersTableProduct = ({
       });
   };
 
+  const productRolesMap: { [productRole: string]: ProductRole } = productRoles.reduce(
+    (acc: { [productRole: string]: ProductRole }, r) => {
+      // eslint-disable-next-line functional/immutable-data
+      acc[r.productRole] = r;
+      return acc;
+    },
+    {}
+  );
+
   if (error) {
     return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
@@ -134,6 +146,7 @@ const UsersTableProduct = ({
         noMoreData={noMoreData}
         party={party}
         product={product}
+        productRolesMap={productRolesMap}
         users={users.content}
         canEdit={canEdit}
         page={users.page}

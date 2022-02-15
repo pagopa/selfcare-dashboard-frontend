@@ -1,7 +1,9 @@
+import { UserRole } from './Party';
+
 export type ProductRole = {
-  selcRole?: string; // TODO this will not be optional
+  selcRole: UserRole;
   productRole: string;
-  displayableProductRole?: string; // TODO this will not be optional
+  displayableProductRole: string;
 };
 
 export type ProductsRolesMap = { [productId: string]: Array<ProductRole> };

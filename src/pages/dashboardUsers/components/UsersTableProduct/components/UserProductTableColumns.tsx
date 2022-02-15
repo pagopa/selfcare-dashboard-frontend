@@ -10,10 +10,12 @@ import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
 import { UserRole } from '../../../../../model/Party';
+import { ProductRole } from '../../../../../model/ProductRole';
 
 export function buildColumnDefs(
   isSelectedProduct: boolean,
-  onChangeState: (user: PartyUser) => void
+  onChangeState: (user: PartyUser) => void,
+  _productRolesMap: { [productRole: string]: ProductRole } // TODO use this to print productRole
 ) {
   return (
     [
@@ -53,7 +55,7 @@ export function buildColumnDefs(
         width: !isSelectedProduct ? 233 : 235,
         editable: false,
         disableColumnMenu: true,
-        renderCell: showLabelRef,
+        renderCell: showRole,
         renderHeader: showCustmHeader,
         sortable: false,
       },
@@ -149,7 +151,7 @@ function showCustmHeader(params: GridColumnHeaderParams) {
   );
 }
 
-function showLabelRef(params: GridRenderCellParams<PartyUser>) {
+function showRole(params: GridRenderCellParams<PartyUser>) {
   return (
     <React.Fragment>
       {renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}

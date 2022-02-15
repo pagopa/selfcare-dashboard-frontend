@@ -3,6 +3,7 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { useState } from 'react';
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
+import { ProductsRolesMap } from '../../../model/ProductRole';
 import { ENV } from '../../../utils/env';
 import { UsersTableFiltersConfig } from './UsersTableActions/UsersTableFilters';
 import UsersTableProduct from './UsersTableProduct/UsersTableProduct';
@@ -13,11 +14,13 @@ type Props = {
   product: Product;
   onFetchStatusUpdate: (loading: boolean, noData: boolean) => void;
   filters: UsersTableFiltersConfig;
+  productsRolesMap: ProductsRolesMap;
 };
 
 export default function UsersProductSection({
   party,
   product,
+  productsRolesMap,
   hideProductWhenLoading,
   onFetchStatusUpdate,
   filters,
@@ -40,6 +43,7 @@ export default function UsersProductSection({
           initialPageSize={ENV.PARTY_USERS_PAGE_SIZE}
           party={party}
           product={product}
+          productRoles={productsRolesMap[product.id]}
           filterConfiguration={filters}
           onFetchStatusUpdate={(isFetching, count) => {
             const noData = !count || count === 0;

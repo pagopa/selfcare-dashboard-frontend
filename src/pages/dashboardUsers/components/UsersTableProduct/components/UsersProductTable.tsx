@@ -14,6 +14,7 @@ import { PartyUser } from '../../../../../model/PartyUser';
 import { Party, UserStatus } from '../../../../../model/Party';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../../../utils/constants';
 import { updatePartyUserStatus } from '../../../../../services/usersService';
+import { ProductRole } from '../../../../../model/ProductRole';
 import { buildColumnDefs } from './UserProductTableColumns';
 import UserProductLoading from './UserProductLoading';
 import UserTableLoadMoreData from './UserProductLoadMoreData';
@@ -28,6 +29,7 @@ interface UsersSearchTableProps {
   party: Party;
   users: Array<PartyUser>;
   product: Product;
+  productRolesMap: { [productRole: string]: ProductRole };
   canEdit: boolean;
   fetchPage: (page?: number, size?: number) => void;
   page: Page;
@@ -102,6 +104,7 @@ export default function UsersProductTable({
   noMoreData,
   party,
   product,
+  productRolesMap,
   canEdit,
   users,
   page,
@@ -121,7 +124,7 @@ export default function UsersProductTable({
     setOpenModal(true);
     setSelectedUser(users);
   };
-  const columns: Array<GridColDef> = buildColumnDefs(canEdit, handleOpen);
+  const columns: Array<GridColDef> = buildColumnDefs(canEdit, handleOpen, productRolesMap);
 
   const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
 
@@ -142,7 +145,8 @@ export default function UsersProductTable({
       }
 
       setLoading(true);
-      updatePartyUserStatus(user, nextStatus)
+      console.log(user);
+      updatePartyUserStatus(party, user, user.products[0], user.products[0].roles[0], nextStatus) // TODO fixme, suspend just the first???
         .then((_) => {
           if (nextStatus === 'SUSPENDED') {
             trackEvent('USER_SUSPEND', {

@@ -80,6 +80,7 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
               party={party}
               product={p}
               filters={filters}
+              productsRolesMap={productsRolesMap}
               onFetchStatusUpdate={(loading, noData) => {
                 setProductsFetchStatus((previousState) => ({
                   ...previousState,
