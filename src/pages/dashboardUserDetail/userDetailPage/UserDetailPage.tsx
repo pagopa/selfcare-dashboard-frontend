@@ -17,6 +17,7 @@ import UserProductSection from './components/UserProductSection';
 
 type Props ={
   partyUser: PartyUser;
+  fetchPartyUsers: () => void;
 }; 
 
 // TODO: productRoles= mockedUser.roles
@@ -33,7 +34,7 @@ const productRoles: Array<ProductRole> = [
   },
 ];
 
- function UserDetailPage({partyUser}:Props) {
+ function UserDetailPage({partyUser, fetchPartyUsers}:Props) {
   const history = useHistory();
   const party = useAppSelector(partiesSelectors.selectPartySelected);
 
@@ -50,6 +51,12 @@ const productRoles: Array<ProductRole> = [
       institutionId: (party as Party).institutionId,
     })
   );
+
+  const onDelete = () => {
+    // TODO: add delete fetch
+    fetchPartyUsers(); 
+    goBack(); 
+  };
 
   const paths = [
     {
@@ -86,7 +93,7 @@ const productRoles: Array<ProductRole> = [
         <Divider />
       </Grid>
       <Grid container item mb={9}>
-        <UserProductSection productInfo={partyUser} selcRole={partyUser.userRole} party={party} productRoles={productRoles}/>
+        <UserProductSection productInfo={partyUser} selcRole={partyUser.userRole} party={party} productRoles={productRoles} fetchPartyUsers={fetchPartyUsers}/>
       </Grid>
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
@@ -99,12 +106,13 @@ const productRoles: Array<ProductRole> = [
             Indietro
           </Button>
         </Grid>
+        {/* TODO:  se elimino nel then faccio fetchPartyUsers e il goBack */}
         {productRoles.length === 1 && <Grid item xs={2}>
           <Button
             disableRipple
             variant="outlined" 
             sx={{ height: '40px', width: '100%', color:"#C02927", borderColor:'#C02927'}}
-            // onClick={()=>}  TODO
+            onClick={onDelete}
           >
             Elimina
           </Button>

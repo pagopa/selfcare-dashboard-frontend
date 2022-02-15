@@ -10,9 +10,10 @@ type Props = {
   productInfo: PartyUser;
   party: Party;
   productRoles: Array<ProductRole>;
+  fetchPartyUsers: () => void;
 };
 
-export default function UserProductDetail({ productInfo, party , productRoles }: Props) {
+export default function UserProductDetail({ productInfo, party , productRoles, fetchPartyUsers }: Props) {
 
 
   const showActionOnProduct = productRoles.length === 1;
@@ -54,7 +55,7 @@ export default function UserProductDetail({ productInfo, party , productRoles }:
                 </Grid>
               </Grid>
               <Grid item xs={3} display="flex" alignItems="center">
-                <UserProductActions showActions={showActionOnProduct} party={party} productRoles={productRoles} />
+                <UserProductActions showActions={showActionOnProduct} party={party} productRoles={productRoles} user={productInfo} fetchPartyUsers={fetchPartyUsers} />
               </Grid>
             </Grid>
           </Grid>
@@ -64,6 +65,8 @@ export default function UserProductDetail({ productInfo, party , productRoles }:
                 showActions={!showActionOnProduct}
                 productRoles={productRoles}
                 party={party}
+                user={productInfo}
+                fetchPartyUsers={fetchPartyUsers}
               />
             </Grid>
             {/* TODO: insert UserProductGroups component */}

@@ -10,8 +10,9 @@ type Props = {
   productInfo: PartyUser;
   party: Party;
   productRoles: Array<ProductRole>;
+  fetchPartyUsers: () => void;
 };
-export default function UserProductSection({ productInfo, party, productRoles}: Props) {
+export default function UserProductSection({ productInfo, party, productRoles, fetchPartyUsers}: Props) {
   return (
     <>
       <Grid item xs={10}>
@@ -39,7 +40,7 @@ export default function UserProductSection({ productInfo, party, productRoles}: 
         </Button>
       </Grid>
       <Grid item xs={12}>
-        <UserProductDetail productInfo={productInfo} party={party} productRoles={productRoles} />
+        <UserProductDetail productInfo={productInfo} party={party} productRoles={productRoles} fetchPartyUsers={fetchPartyUsers} />
       </Grid>
     </>
   );

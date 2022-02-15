@@ -18,11 +18,18 @@ type Props={
   selectedProduct:Product;
   products: Array<Product>;
   partyUser: PartyUser;
+  fetchPartyUsers: () => void;
 };
 
-function UserProductDetailPage({selectedProduct, partyUser}:Props) {
+function UserProductDetailPage({selectedProduct, partyUser, fetchPartyUsers}:Props) {
   const history = useHistory();
   const party = useAppSelector(partiesSelectors.selectPartySelected) as Party;
+
+  const onDelete = () => {
+    // TODO: add delete fetch
+    fetchPartyUsers(); 
+    goBack(); 
+  };
 
   // TODO: productRoles = party.products.filter((p) => p.id === selectedProduct.id ).roles (PartyUser-> products-> roles)
   const productRoles: Array<ProductRole> = [
@@ -79,7 +86,7 @@ function UserProductDetailPage({selectedProduct, partyUser}:Props) {
       <Grid item xs={11} my={6}>
         <Divider />
       </Grid>
-      <UserProductRoles productRoles={productRoles} showActions={true} party={party} />
+      <UserProductRoles productRoles={productRoles} showActions={true} party={party} selectedProduct={selectedProduct} user={partyUser} fetchPartyUsers={fetchPartyUsers}/>
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
           <Button
@@ -97,7 +104,7 @@ function UserProductDetailPage({selectedProduct, partyUser}:Props) {
               disableRipple
               variant="outlined"
               sx={{ height: '40px', width: '100%', color:"#C02927", borderColor:'#C02927' }}
-              // onClick={()=>}  TODO
+              onClick={onDelete}
             >
               Elimina
             </Button>

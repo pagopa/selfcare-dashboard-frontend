@@ -12,7 +12,7 @@ type UserUrlParams = {
 
 export default function withUSerDetail<T extends { partyUser: PartyUser }>(
   WrappedComponent: React.ComponentType<T>
-): React.ComponentType<Omit<T, 'partyUser'>> {
+): React.ComponentType<Omit<T, 'partyUser' | 'fetchPartyUser'>> {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithUserDetail = (props: T) => {
@@ -42,11 +42,11 @@ export default function withUSerDetail<T extends { partyUser: PartyUser }>(
       }
     }, [institutionId, userId]);
 
-    return partyUser ? <WrappedComponent {...(props as T)} partyUser={partyUser} /> : <></>;
+    return partyUser ? <WrappedComponent {...(props as T)} partyUser={partyUser} fetchPartyUser={doFetch}/> : <></>;
   };
 
   // eslint-disable-next-line functional/immutable-data
   ComponentWithUserDetail.displayName = `withUserDetail(${displayName})`;
 
-  return ComponentWithUserDetail as React.ComponentType<Omit<T, 'partyUser'>>;
+  return ComponentWithUserDetail as React.ComponentType<Omit<T, 'partyUser' | 'fetchPartyUser'>>;
 }

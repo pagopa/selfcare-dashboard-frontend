@@ -52,9 +52,12 @@ export const fetchPartyUsers = (
   }
 };
 
-export const fetchPartyUser = (_institutionId:string, _userId: string): Promise<PartyUser | null>=> {
-   /* istanbul ignore if */
-   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+export const fetchPartyUser = (
+  _institutionId: string,
+  _userId: string
+): Promise<PartyUser | null> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return new Promise((resolve) => resolve(mockedUsers[0]));
   } else {
     throw new Error('TODO');
@@ -88,8 +91,22 @@ export const updatePartyUserStatus = (user: PartyUser, status: UserStatus): Prom
     );
   }
   if (status === 'ACTIVE') {
+    // TODO: trackEvent('USER_RESUME', { party_id: party.institutionId , product: selectedProduct.id, product_role: user.userRole });
+    /* istanbul ignore if */
+    if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+      // eslint-disable-next-line functional/immutable-data
+      user.status = status;
+      return new Promise<void>((resolve) => resolve());
+    }
     return DashboardApi.activatePartyRelation(user.products[0].relationshipId);
   } else if (status === 'SUSPENDED') {
+    // TODO: trackEvent('USER_SUSPEND', { party_id: party.institutionId , product: selectedProduct.id, product_role: user.userRole });
+    /* istanbul ignore if */
+    if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+      // eslint-disable-next-line functional/immutable-data
+      user.status = status;
+      return new Promise<void>((resolve) => resolve());
+    }
     return DashboardApi.suspendPartyRelation(user.products[0].relationshipId);
   } else {
     throw new Error(`Not allowed next status: ${status}`);

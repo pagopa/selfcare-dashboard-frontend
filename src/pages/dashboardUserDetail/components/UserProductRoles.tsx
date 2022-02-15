@@ -1,14 +1,19 @@
-import { Box, Chip, Grid, IconButton, Typography } from '@mui/material';
+import { Box, Chip, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ProductRole } from '../../../model/ProductRole';
 import { Party } from '../../../model/Party';
+import { PartyUser } from '../../../model/PartyUser';
+import { Product } from '../../../model/Product';
 import UserProductActions from './UserProductActions';
 
 type Props = {
   productRoles: Array<ProductRole>;
   showActions: boolean;
   party: Party;
+  user: PartyUser;
+  selectedProduct?: Product;
+  fetchPartyUsers: () => void;
 };
 
 const CustomLabelStyle = styled(Typography)({
@@ -20,7 +25,14 @@ const CustomInfoStyle = styled(Typography)({
   color: '#000000',
   textTransform: 'capitalize',
 });
-export default function UserProductRoles({ productRoles, showActions, party }: Props) {
+export default function UserProductRoles({
+  productRoles,
+  showActions,
+  party,
+  user,
+  selectedProduct,
+  fetchPartyUsers,
+}: Props) {
   return (
     <Grid container item xs={12}>
       {productRoles.map((p) => (
@@ -33,7 +45,7 @@ export default function UserProductRoles({ productRoles, showActions, party }: P
                 </CustomLabelStyle>
               </Box>
               {party.status === 'SUSPENDED' && showActions && (
-                <Box ml={2} >
+                <Box ml={2}>
                   <Chip
                     label="sospeso"
                     variant="outlined"
@@ -41,7 +53,7 @@ export default function UserProductRoles({ productRoles, showActions, party }: P
                       fontWeight: '600',
                       fontSize: '14px',
                       background: '#00C5CA',
-                      border:'none',
+                      border: 'none',
                       borderRadius: '16px',
                       width: '76px',
                       height: '24px',
@@ -59,15 +71,17 @@ export default function UserProductRoles({ productRoles, showActions, party }: P
                   sx={{ color: party.status === 'SUSPENDED' ? 'text.secondary' : '#000000' }}
                 >
                   {p.displayableProductRole}
-                  <IconButton
-                    disableRipple
-                    sx={{ padding: '0px', '&:hover': { backgroundColor: 'transparent' } }}
-                  >
-                    {/* TODO: verify the use */}
-                    <InfoOutlinedIcon
-                      sx={{ padding: '6px', color: '#A2ADB8', marginLeft: '8px' }}
-                    />
-                  </IconButton>
+                  {/* TODO: title= selectedProduct. */}
+                  <Tooltip title='TODO'>
+                    <IconButton
+                      disableRipple
+                      sx={{ padding: '0px', '&:hover': { backgroundColor: 'transparent' } }}
+                    >
+                      <InfoOutlinedIcon
+                        sx={{ padding: '6px', color: '#A2ADB8', marginLeft: '8px' }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </CustomInfoStyle>
               </Grid>
               <Grid item xs={4}>
@@ -75,6 +89,9 @@ export default function UserProductRoles({ productRoles, showActions, party }: P
                   showActions={showActions}
                   party={party}
                   productRoles={productRoles}
+                  user={user}
+                  selectedProduct={selectedProduct}
+                  fetchPartyUsers={fetchPartyUsers}
                 />
               </Grid>
             </Grid>

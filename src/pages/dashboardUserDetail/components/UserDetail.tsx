@@ -78,27 +78,6 @@ export default function UserDetail({ roleSection, userInfo }: Props) {
             <Grid container item alignContent="center">
               {roleSection}
             </Grid>
-
-            <Grid container item alignContent="center">
-              <Grid item xs={3}>
-                <CustomLabelStyle variant="h6" className="labelStyle">
-                  DATA CREAZIONE
-                </CustomLabelStyle>
-              </Grid>
-              <Grid item xs={9}>
-                <CustomInfoStyle variant="body2">TODO</CustomInfoStyle>
-              </Grid>
-            </Grid>
-            <Grid container item alignContent="center">
-              <Grid item xs={3}>
-                <CustomLabelStyle variant="h6" className="labelStyle">
-                  ULTIMA MODIFICA
-                </CustomLabelStyle>
-              </Grid>
-              <Grid item xs={9}>
-                <CustomInfoStyle variant="body2">TODO</CustomInfoStyle>
-              </Grid>
-            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={2}>
