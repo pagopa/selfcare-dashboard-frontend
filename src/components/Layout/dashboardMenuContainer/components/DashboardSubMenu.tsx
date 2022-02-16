@@ -36,7 +36,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
   const setParties = (parties: Array<Party>) => dispatch(partiesActions.setPartiesList(parties));
   const [parties2Show, setParties2Show] = useState<Array<Party>>();
   const addError = useErrorDispatcher();
-  const { fetchParties } = useParties();
+  const fetchParties = useParties();
 
   const onExit = useUnloadEventOnExit();
 
