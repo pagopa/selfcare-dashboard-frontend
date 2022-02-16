@@ -10,7 +10,7 @@ type UserUrlParams = {
   userId: string;
 };
 
-export default function withUSerDetail<T extends { partyUser: PartyUser }>(
+export default function withUserDetail<T extends { partyUser: PartyUser }>(
   WrappedComponent: React.ComponentType<T>
 ): React.ComponentType<Omit<T, 'partyUser' | 'fetchPartyUser'>> {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';

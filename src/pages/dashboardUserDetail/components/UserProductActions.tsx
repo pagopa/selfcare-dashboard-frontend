@@ -1,12 +1,10 @@
 import { Link, Grid, Typography } from '@mui/material';
-import { SessionModal } from '@pagopa/selfcare-common-frontend';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
-import { useState } from 'react';
 import { Party, UserStatus } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
-import { Product } from '../../../model/Product';
+// import { Product } from '../../../model/Product';
 import { ProductRole } from '../../../model/ProductRole';
 import { updatePartyUserStatus } from '../../../services/usersService';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
@@ -16,19 +14,20 @@ type Props = {
   party: Party;
   productRoles: Array<ProductRole>;
   user: PartyUser;
-  selectedProduct?: Product;
-  fetchPartyUsers: () => void;
+  fetchPartyUser: () => void;
+  role: ProductRole;
+  product: any;
 };
 export default function UserProductActions({
   showActions,
   party,
   productRoles,
   user,
-  fetchPartyUsers,
+  role,
+  product,
+  fetchPartyUser,
 }: Props) {
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
-  const [openModal, setOpenModal] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
 
@@ -36,17 +35,38 @@ export default function UserProductActions({
     setLoading(true);
     // deletePartyUser(user)
     // .then((_) => {
-    setOpenDeleteModal(false);
-    fetchPartyUsers();
+      fetchPartyUser();
     // })
     // .catch
     // TODO: add delete fetch
   };
 
+  
   const handleOpenDelete = () => {
-    setOpenDeleteModal(true);
+    addNotify({
+      component: 'SessionModal',
+      id: 'Notify_Example',
+      title: 'Elimina Ruolo',
+      message: (
+        <>
+          {'Stai per eliminare il ruolo'}
+          <strong> {role.title} </strong>
+          {'di '}
+          <strong> {product.title} </strong>
+          {' assegnato a '}
+          <strong style={{ textTransform: 'capitalize' }}>
+            {party && `${user.name.toLocaleLowerCase()} ${user.surname}`}
+          </strong>
+          {'.'}
+          <br />
+          {'Vuoi continuare?'}
+        </>
+      ),
+      confirmLabel: "Conferma",
+      closeLabel: "Annulla",
+      onConfirm: onDelete
+    });
   };
-
   const confirmChangeStatus = () => {
     const nextStatus: UserStatus | undefined =
       user.status === 'ACTIVE' ? 'SUSPENDED' : user.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
@@ -61,12 +81,10 @@ export default function UserProductActions({
 
       return;
     }
-
     setLoading(true);
     updatePartyUserStatus(user, nextStatus)
       .then((_) => {
-        setOpenModal(false);
-        fetchPartyUsers();
+        fetchPartyUser();
       })
       .catch((reason) =>
         addError({
@@ -103,7 +121,7 @@ export default function UserProductActions({
 
   return (
     <>
-      {showActions && (
+      {showActions && !user.isCurrentUser && (
         <Grid container item>
           <Grid item xs={6}>
             <Link onClick={handleOpen}>
@@ -116,8 +134,7 @@ export default function UserProductActions({
               </Typography>
             </Link>
           </Grid>
-          {/* TODO: nel then faccio il fetchPartyUsers */}
-          {productRoles.length > 1 && (
+          {productRoles.length > 1 &&  (
             <Grid item xs={6}>
               <Link color="error" onClick={handleOpenDelete}>
                 <Typography variant="h3" sx={{ fontSize: '16px', color: '#C02927' }}>

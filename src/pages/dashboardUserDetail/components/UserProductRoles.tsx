@@ -4,7 +4,6 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ProductRole } from '../../../model/ProductRole';
 import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
-import { Product } from '../../../model/Product';
 import UserProductActions from './UserProductActions';
 
 type Props = {
@@ -12,8 +11,8 @@ type Props = {
   showActions: boolean;
   party: Party;
   user: PartyUser;
-  selectedProduct?: Product;
-  fetchPartyUsers: () => void;
+  fetchPartyUser: () => void;
+  userProduct: any;
 };
 
 const CustomLabelStyle = styled(Typography)({
@@ -30,8 +29,8 @@ export default function UserProductRoles({
   showActions,
   party,
   user,
-  selectedProduct,
-  fetchPartyUsers,
+  fetchPartyUser,
+  userProduct
 }: Props) {
   return (
     <Grid container item xs={12}>
@@ -70,7 +69,7 @@ export default function UserProductRoles({
                   variant="body2"
                   sx={{ color: party.status === 'SUSPENDED' ? 'text.secondary' : '#000000' }}
                 >
-                  {p.displayableProductRole}
+                  {p.title}
                   {/* TODO: title= selectedProduct. */}
                   <Tooltip title='TODO'>
                     <IconButton
@@ -87,12 +86,13 @@ export default function UserProductRoles({
               <Grid item xs={4}>
                 <UserProductActions
                   showActions={showActions}
-                  party={party}
+                  party={party} 
                   productRoles={productRoles}
                   user={user}
-                  selectedProduct={selectedProduct}
-                  fetchPartyUsers={fetchPartyUsers}
-                />
+                  fetchPartyUser={fetchPartyUser}
+                  role={p}   
+                  product={userProduct}             
+                  />
               </Grid>
             </Grid>
           </Grid>

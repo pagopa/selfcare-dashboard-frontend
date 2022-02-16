@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, Typography, Divider } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Party, UserRole } from '../../../../model/Party';
@@ -7,12 +7,17 @@ import UserProductDetail from './UserProductDetail';
 
 type Props = {
   selcRole: UserRole;
-  productInfo: PartyUser;
+  partyUser: PartyUser;
   party: Party;
   productRoles: Array<ProductRole>;
-  fetchPartyUsers: () => void;
+  fetchPartyUser: () => void;
 };
-export default function UserProductSection({ productInfo, party, productRoles, fetchPartyUsers}: Props) {
+export default function UserProductSection({
+  partyUser,
+  party,
+  productRoles,
+  fetchPartyUser,
+}: Props) {
   return (
     <>
       <Grid item xs={10}>
@@ -29,19 +34,34 @@ export default function UserProductSection({ productInfo, party, productRoles, f
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={2}>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          sx={{ py: '10px', width: '120px' }}
-          // onClick={() =>  } TODO
-        >
-          Aggiungi
-        </Button>
-      </Grid>
-      <Grid item xs={12}>
-        <UserProductDetail productInfo={productInfo} party={party} productRoles={productRoles} fetchPartyUsers={fetchPartyUsers} />
-      </Grid>
+      {!partyUser.isCurrentUser && (
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            sx={{ py: '10px', width: '120px' }}
+            // onClick={() =>  } TODO
+          >
+            Aggiungi
+          </Button>
+        </Grid>
+      )}
+      {partyUser.products.map((userProduct, index) => (
+        <Grid item xs={12} key={userProduct.id}>
+          <UserProductDetail
+            partyUser={partyUser}
+            party={party}
+            productRoles={productRoles}
+            fetchPartyUser={fetchPartyUser}
+            userProduct={userProduct}
+          />
+          {index !== partyUser.products.length - 1 && (
+            <Grid item xs={11} mb={4}>
+              <Divider />
+            </Grid>
+          )}
+        </Grid>
+      ))}
     </>
   );
 }
