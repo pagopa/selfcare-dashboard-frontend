@@ -8,7 +8,7 @@ import { Product } from '../model/Product';
 import ROUTES from '../routes';
 import { useProductRoles } from '../hooks/useProductRoles';
 import { LOADING_TASK_FETCH_PRODUCT_ROLES } from '../utils/constants';
-import { ProductRole } from '../model/ProductRole';
+import { ProductRolesLists } from '../model/ProductRole';
 
 type ProductUrlParams = {
   institutionId: string;
@@ -52,7 +52,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
 
     const setLoading_fetchProductRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
 
-    const doFetchProductRoles = (onRetry?: () => void): Promise<Array<ProductRole>> => {
+    const doFetchProductRoles = (onRetry?: () => void): Promise<ProductRolesLists> => {
       setLoading_fetchProductRoles(true);
       return fetchSelectedProductRoles(selectedPartyProduct as Product)
         .catch((reason) => {
@@ -64,7 +64,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
             techDescription: `Something gone wrong while fetching roles for product ${selectedPartyProduct?.title}`,
             onRetry,
           });
-          return [];
+          return { list: [], groupBySelcRole: { ADMIN: [], LIMITED: [] }, groupByProductRole: {} };
         })
         .finally(() => setLoading_fetchProductRoles(false));
     };

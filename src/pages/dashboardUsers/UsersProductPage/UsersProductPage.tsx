@@ -13,12 +13,12 @@ import { DASHBOARD_ROUTES } from '../../../routes';
 import UserTableNoData from '../components/UserTableNoData';
 import { ENV } from '../../../utils/env';
 import withSelectedPartyProduct from '../../../decorators/withSelectedPartyProduct';
-import { ProductRole, ProductsRolesMap } from '../../../model/ProductRole';
+import { ProductRolesLists, ProductsRolesMap } from '../../../model/ProductRole';
 
 interface Props {
   party: Party;
   selectedProduct: Product;
-  fetchSelectedProductRoles: (onRetry: () => void) => Promise<Array<ProductRole>>;
+  fetchSelectedProductRoles: (onRetry: () => void) => Promise<ProductRolesLists>;
   products: Array<Product>;
 }
 
@@ -92,7 +92,7 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
             initialPageSize={ENV.PARTY_PRODUCT_USERS_PAGE_SIZE}
             party={party}
             product={selectedProduct}
-            productRoles={productsRolesMap[selectedProduct.id]}
+            productRolesLists={productsRolesMap[selectedProduct.id]}
             filterConfiguration={filters}
             onFetchStatusUpdate={(isFetching, count) => {
               setFetchStatus({ loading: isFetching, noData: !count || count === 0 });

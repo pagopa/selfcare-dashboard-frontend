@@ -10,12 +10,12 @@ import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
 import { UserRole } from '../../../../../model/Party';
-import { ProductRole } from '../../../../../model/ProductRole';
+import { ProductRolesLists } from '../../../../../model/ProductRole';
 
 export function buildColumnDefs(
   isSelectedProduct: boolean,
   onChangeState: (user: PartyUser) => void,
-  _productRolesMap: { [productRole: string]: ProductRole } // TODO use this to print productRole
+  _productRolesLists: ProductRolesLists // TODO use this to print productRole
 ) {
   return (
     [

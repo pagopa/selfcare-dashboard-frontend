@@ -14,7 +14,7 @@ import { PartyUser } from '../../../../../model/PartyUser';
 import { Party, UserStatus } from '../../../../../model/Party';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../../../utils/constants';
 import { updatePartyUserStatus } from '../../../../../services/usersService';
-import { ProductRole } from '../../../../../model/ProductRole';
+import { ProductRolesLists } from '../../../../../model/ProductRole';
 import { buildColumnDefs } from './UserProductTableColumns';
 import UserProductLoading from './UserProductLoading';
 import UserTableLoadMoreData from './UserProductLoadMoreData';
@@ -29,7 +29,7 @@ interface UsersSearchTableProps {
   party: Party;
   users: Array<PartyUser>;
   product: Product;
-  productRolesMap: { [productRole: string]: ProductRole };
+  productRolesLists: ProductRolesLists;
   canEdit: boolean;
   fetchPage: (page?: number, size?: number) => void;
   page: Page;
@@ -104,7 +104,7 @@ export default function UsersProductTable({
   noMoreData,
   party,
   product,
-  productRolesMap,
+  productRolesLists,
   canEdit,
   users,
   page,
@@ -124,7 +124,7 @@ export default function UsersProductTable({
     setOpenModal(true);
     setSelectedUser(users);
   };
-  const columns: Array<GridColDef> = buildColumnDefs(canEdit, handleOpen, productRolesMap);
+  const columns: Array<GridColDef> = buildColumnDefs(canEdit, handleOpen, productRolesLists);
 
   const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
 

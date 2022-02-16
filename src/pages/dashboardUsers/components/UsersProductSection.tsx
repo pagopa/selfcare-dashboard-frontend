@@ -43,7 +43,7 @@ export default function UsersProductSection({
           initialPageSize={ENV.PARTY_USERS_PAGE_SIZE}
           party={party}
           product={product}
-          productRoles={productsRolesMap[product.id]}
+          productRolesLists={productsRolesMap[product.id]}
           filterConfiguration={filters}
           onFetchStatusUpdate={(isFetching, count) => {
             const noData = !count || count === 0;

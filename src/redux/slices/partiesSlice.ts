@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
-import { ProductRole, ProductsRolesMap } from '../../model/ProductRole';
+import { ProductRolesLists, ProductsRolesMap } from '../../model/ProductRole';
 
 interface PartiesState {
   list?: Array<Party>;
@@ -64,7 +64,7 @@ export const partiesSelectors = {
   selectPartySelectedProductRoles: (
     state: RootState,
     productId: string
-  ): Array<ProductRole> | undefined =>
+  ): ProductRolesLists | undefined =>
     state.parties.selectedProductsRolesMap
       ? state.parties.selectedProductsRolesMap[productId]
       : undefined,
