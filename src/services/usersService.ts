@@ -137,6 +137,7 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
     return DashboardApi.getProductRoles(product.id).then(
       (roles) =>
         roles.map((r) => ({
+          productId: product.id,
           productRole: r,
           selcRole: 'ADMIN',
           title: r,

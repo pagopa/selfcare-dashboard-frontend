@@ -1,102 +1,85 @@
-import { Chip, Link, Typography, Grid } from '@mui/material';
+import { Chip, Typography, Grid, Tooltip } from '@mui/material';
 import {
   GridColDef,
   GridColumnHeaderParams,
   GridRenderCellParams,
   GridValueGetterParams,
 } from '@mui/x-data-grid';
-import React, { ReactNode } from 'react';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import { Product } from '../../../../../model/Product';
+import React, { CSSProperties, ReactNode } from 'react';
+import { InfoOutlined } from '@mui/icons-material';
 import { PartyUser } from '../../../../../model/PartyUser';
-import { UserRole } from '../../../../../model/Party';
 import { ProductRolesLists } from '../../../../../model/ProductRole';
+import { Party } from '../../../../../model/Party';
+import UserProductRowActions from './UserProductRowActions';
 
 export function buildColumnDefs(
-  isSelectedProduct: boolean,
+  canEdit: boolean,
+  party: Party,
   onChangeState: (user: PartyUser) => void,
-  _productRolesLists: ProductRolesLists // TODO use this to print productRole
+  productRolesLists: ProductRolesLists
 ) {
-  return (
-    [
-      {
-        field: 'fullName',
-        cellClassName: 'justifyContentBold',
-        headerName: 'NOME',
-        align: 'left',
-        headerAlign: 'left',
-        width: 284,
-        editable: false,
-        disableColumnMenu: true,
-        valueGetter: getFullName,
-        renderHeader: showCustmHeader,
-        renderCell: showChip,
-        sortable: false,
-      },
-      {
-        field: 'email',
-        cellClassName: 'justifyContentNormal',
-        headerName: 'EMAIL',
-        align: 'left',
-        headerAlign: 'left',
-        width: !isSelectedProduct ? 250 : 300,
-        editable: false,
-        disableColumnMenu: true,
-        renderHeader: showCustmHeader,
-        renderCell,
-        sortable: false,
-      },
-      {
-        field: 'userRole',
-        cellClassName: 'justifyContentBold',
-        headerName: 'RUOLO',
-        align: 'left',
-        headerAlign: 'left',
-        width: !isSelectedProduct ? 233 : 235,
-        editable: false,
-        disableColumnMenu: true,
-        renderCell: showRole,
-        renderHeader: showCustmHeader,
-        sortable: false,
-      },
-    ] as Array<GridColDef>
-  ).concat(
-    !isSelectedProduct
-      ? [
-          {
-            field: 'products',
-            cellClassName: 'justifyContentNormal',
-            headerName: 'PRODOTTI',
-            align: 'left',
-            width: 186,
-            hideSortIcons: false,
-            disableColumnMenu: true,
-            valueGetter: getProducts,
-            editable: false,
-            renderCell,
-            renderHeader: showCustmHeader,
-            sortable: false,
-          },
-        ]
-      : [
-          {
-            field: 'azione',
-            cellClassName: 'justifyContentNormalRight',
-            headerName: '',
-            align: 'right',
-            width: 134,
-            hideSortIcons: true,
-            disableColumnMenu: true,
-            editable: false,
-            renderCell: (p) => showRefStatus(p, onChangeState),
-            sortable: false,
-          },
-        ]
-  );
+  return [
+    {
+      field: 'fullName',
+      cellClassName: 'justifyContentBold',
+      headerName: 'NOME',
+      align: 'left',
+      headerAlign: 'left',
+      width: 300,
+      editable: false,
+      disableColumnMenu: true,
+      valueGetter: getFullName,
+      renderHeader: showCustmHeader,
+      renderCell: showName,
+      sortable: false,
+    },
+    {
+      field: 'email',
+      cellClassName: 'justifyContentNormal',
+      headerName: 'EMAIL',
+      align: 'left',
+      headerAlign: 'left',
+      width: 300,
+      editable: false,
+      disableColumnMenu: true,
+      renderHeader: showCustmHeader,
+      renderCell,
+      sortable: false,
+    },
+    {
+      field: 'userRole',
+      cellClassName: 'justifyContentBold',
+      headerName: 'RUOLI',
+      align: 'left',
+      headerAlign: 'left',
+      width: 300,
+      editable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => showRoles(params, productRolesLists),
+      renderHeader: showCustmHeader,
+      sortable: false,
+    },
+    {
+      field: 'azioni',
+      cellClassName: 'justifyContentNormalRight',
+      headerName: '',
+      align: 'right',
+      width: 53,
+      hideSortIcons: true,
+      disableColumnMenu: true,
+      editable: false,
+      renderCell: (p) => (canEdit ? showActions(party, p, onChangeState) : renderCell(p, '')),
+      sortable: false,
+    },
+  ] as Array<GridColDef>;
 }
 
-function renderCell(params: GridRenderCellParams, value: ReactNode = params.value) {
-  const bgColor = params.row.status === 'SUSPENDED' ? '#E6E9F2' : 'white';
+function renderCell(
+  params: GridRenderCellParams,
+  value: ReactNode = params.value,
+  overrideStyle: CSSProperties = {}
+) {
+  const bgColor = params.row.status === 'SUSPENDED' ? '#EEEEEE' : 'white';
   return (
     <div
       style={{
@@ -110,6 +93,7 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
         marginTop: '16px',
         // marginBottom:'16px',
         borderBottom: '1px solid #CCD4DC',
+        ...overrideStyle,
       }}
     >
       <div
@@ -122,6 +106,7 @@ function renderCell(params: GridRenderCellParams, value: ReactNode = params.valu
           WebkitBoxOrient: 'vertical' as const,
           paddingBottom: '8px',
           width: '100%',
+          color: params.row.status === 'SUSPENDED' ? '#9E9E9E' : undefined,
         }}
       >
         {value}
@@ -134,16 +119,12 @@ function getFullName(params: GridValueGetterParams) {
   return `${params.row.name} ${params.row.surname} ${params.row.status}`;
 }
 
-function getProducts(params: GridValueGetterParams) {
-  return params.row.products.map((p: Product) => p.title).join(',');
-}
-
 function showCustmHeader(params: GridColumnHeaderParams) {
   return (
     <React.Fragment>
       <Typography
         color="text.secondary"
-        sx={{ fontSize: '14px', fontWeight: '700', outline: 'none' }}
+        sx={{ fontSize: '14px', fontWeight: '700', outline: 'none', paddingLeft: 1 }}
       >
         {params.colDef.headerName}
       </Typography>
@@ -151,27 +132,45 @@ function showCustmHeader(params: GridColumnHeaderParams) {
   );
 }
 
-function showRole(params: GridRenderCellParams<PartyUser>) {
+function showRoles(params: GridRenderCellParams<PartyUser>, productRolesLists: ProductRolesLists) {
+  const isUserSuspended = params.row.status === 'SUSPENDED';
   return (
     <React.Fragment>
-      {renderCell(params, roleLabels[params.row.userRole as UserRole].shortLabel)}
+      {renderCell(
+        params,
+        <Grid container direction="column">
+          {(params.row as PartyUser).products[0].roles.map((r) => (
+            <Grid item key={r.relationshipId}>
+              <Typography
+                color={isUserSuspended || r.status === 'SUSPENDED' ? '#9E9E9E' : undefined}
+                sx={{ fontSize: '14px', fontWeight: '700', outline: 'none' }}
+              >
+                {productRolesLists.groupByProductRole[r.role]
+                  ? productRolesLists.groupByProductRole[r.role].title
+                  : r.role}
+              </Typography>
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </React.Fragment>
   );
 }
 
-function showChip(params: GridRenderCellParams) {
+function showName(params: GridRenderCellParams) {
+  const isUserSuspended = params.row.status === 'SUSPENDED';
   return (
     <React.Fragment>
       {renderCell(
         params,
         <>
           <Grid container sx={{ width: '100%' }}>
-            <Grid item xs={params.row.status === 'SUSPENDED' ? 7 : 12} sx={{ width: '100%' }}>
-              <Typography variant="h6">
+            <Grid item xs={isUserSuspended ? 7 : 12} sx={{ width: '100%' }}>
+              <Typography variant="h6" color={isUserSuspended ? '#9E9E9E' : undefined}>
                 {params.row.name} {params.row.surname}
               </Typography>
             </Grid>
-            {params.row.status === 'SUSPENDED' && (
+            {isUserSuspended && (
               <Grid
                 item
                 xs={5}
@@ -197,29 +196,33 @@ function showChip(params: GridRenderCellParams) {
   );
 }
 
-function showRefStatus(
+function showActions(
+  party: Party,
   users: GridRenderCellParams<PartyUser>,
   onChangeState: (user: PartyUser) => void
 ) {
+  const row = users.row as PartyUser;
   return (
     <React.Fragment>
-      {users.row.isCurrentUser
+      {row.isCurrentUser
         ? renderCell(users, '')
-        : users.row.status === 'ACTIVE'
+        : row.products[0].roles.length > 1
         ? renderCell(
             users,
-            <Link onClick={() => onChangeState(users.row)} sx={{ cursor: 'pointer' }}>
-              Sospendi
-            </Link>
+            <Tooltip title="Le azioni sono disponibili nel dettaglio del referente">
+              <InfoOutlined sx={{ color: '#5C6F82' }} />
+            </Tooltip>,
+            { paddingLeft: 0, paddingRight: 0, textAlign: 'center' }
           )
-        : users.row.status === 'SUSPENDED'
-        ? renderCell(
+        : renderCell(
             users,
-            <Link onClick={() => onChangeState(users.row)} sx={{ cursor: 'pointer' }}>
-              Riabilita
-            </Link>
-          )
-        : renderCell(users, '')}
+            <UserProductRowActions
+              party={party}
+              partyUser={row}
+              partyUserProduct={row.products[0]}
+              onChangeState={onChangeState}
+            />
+          )}
     </React.Fragment>
   );
 }

@@ -124,7 +124,7 @@ export default function UsersProductTable({
     setOpenModal(true);
     setSelectedUser(users);
   };
-  const columns: Array<GridColDef> = buildColumnDefs(canEdit, handleOpen, productRolesLists);
+  const columns: Array<GridColDef> = buildColumnDefs(canEdit, party, handleOpen, productRolesLists);
 
   const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
 

@@ -2,6 +2,7 @@ import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { UserRole } from './Party';
 
 export type ProductRole = {
+  productId: string;
   selcRole: UserRole;
   productRole: string;
   title: string;

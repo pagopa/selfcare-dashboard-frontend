@@ -553,18 +553,21 @@ export const mockedUsers: Array<PartyUser> = [
 
 export const mockedProductRoles: Array<ProductRole> = [
   {
+    productId: 'PRODID',
     selcRole: 'ADMIN',
     productRole: 'incaricato-ente-creditore',
     title: 'Incaricato Ente Creditore',
     description: 'Descrizione ruolo Incaricato Ente Creditore',
   },
   {
+    productId: 'PRODID',
     selcRole: 'LIMITED',
     productRole: 'referente-tecnico',
     title: 'Referente Tecnico',
     description: 'Descrizione ruolo Referente Tecnico',
   },
   {
+    productId: 'PRODID',
     selcRole: 'LIMITED',
     productRole: 'operatore-sicurezza',
     title: 'Operatore sicurezza',
@@ -593,21 +596,14 @@ export const fetchPartyUsers = (
                 title: product.title,
                 id: product.id,
                 roles:
-                  productRoles && productRoles.length > 1
-                    ? productRoles.map((r) => ({
-                        relationshipId: 'rel21',
-                        role: r,
-                        selcRole: selcRoles ? selcRoles[0] : 'ADMIN',
-                        status: 'ACTIVE',
+                  productRoles && productRoles.length > 0
+                    ? productRoles.map((r, i) => ({
+                        relationshipId: `rel_${i}`,
+                        role: r.productRole,
+                        selcRole: selcRoles ? selcRoles[0] : r.selcRole,
+                        status: u.products[0].roles[0].status,
                       }))
-                    : [
-                        {
-                          relationshipId: 'rel21',
-                          role: 'incaricato-ente-creditore',
-                          selcRole: 'ADMIN',
-                          status: 'ACTIVE',
-                        },
-                      ],
+                    : u.products[0].roles,
               },
             ],
           }
