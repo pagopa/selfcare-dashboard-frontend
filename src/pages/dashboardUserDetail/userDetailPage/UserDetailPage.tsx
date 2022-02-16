@@ -2,7 +2,7 @@ import { Button, Divider, Grid, Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Party } from '@pagopa/selfcare-common-frontend/model/Party';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
@@ -10,51 +10,31 @@ import UserDetail from '../components/UserDetail';
 import { PartyUser } from '../../../model/PartyUser';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { ProductRole } from '../../../model/ProductRole';
+import { transcodeProductRole2Title } from '../../../model/ProductRole';
 import { useAppSelector } from '../../../redux/hooks';
 import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import withUserDetail from '../../../decorators/withUserDetail';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
+import withProductsRolesMap, { withProductsRolesMapProps } from '../../../decorators/withProductsRolesMap';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
 
-type Props = {
+type Props = withProductsRolesMapProps & {
   partyUser: PartyUser;
   fetchPartyUser: () => void;
 };
 
-// TODO: productRoles= PartyUser.products.roles
-const productRoles: Array<ProductRole> = [
-  {
-    selcRole: 'ADMIN',
-    productRole: 'Incaricato-Ente-creditore',
-    title: 'Incaricato Ente creditore',
-  },
-  {
-    selcRole: 'ADMIN',
-    productRole: 'Referente-dei-pagamenti',
-    title: 'Referente dei pagamenti',
-  },
-];
-
-function UserDetailPage({ partyUser, fetchPartyUser }: Props) {
+function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap }: Props) {
   const history = useHistory();
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   // const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
 
-  const [product, setProduct] = useState<any>();
-  const [role, setRole] = useState<ProductRole>();
-
   useEffect(() => {
     if(party) {
       trackEvent('OPEN_USER_DETAIL', { party_id: party.institutionId });
     }
-    const userProduct = partyUser.products.find((product) => product);
-    setProduct(userProduct);
-    const userRole =  productRoles.find((p) => p);
-    setRole(userRole);
   }, [party]);
 
   const goBack = () =>
@@ -72,10 +52,11 @@ function UserDetailPage({ partyUser, fetchPartyUser }: Props) {
     goBack();
     // })
     // .catch
-    // TODO: add delete fetch
+    // TODO: add delete fetch -> delete dentro userService
   };
 
   const handleOpenDelete = () => {
+    const product = partyUser.products[0];
     addNotify({
       component: 'SessionModal',
       id: 'Notify_Example',
@@ -83,9 +64,9 @@ function UserDetailPage({ partyUser, fetchPartyUser }: Props) {
       message: (
         <>
           {'Stai per eliminare il ruolo '}
-          <strong>{role?.title}</strong>
+          <strong>{transcodeProductRole2Title(product.roles[0].role,productsRolesMap[product.id] )}</strong>
           {' di '}
-          <strong>{product?.title} </strong>
+          <strong>{product.title} </strong>
           {' assegnato a '}
           <strong style={{ textTransform: 'capitalize' }}>
             {party && `${partyUser.name.toLocaleLowerCase()} ${partyUser.surname}`}
@@ -140,10 +121,9 @@ function UserDetailPage({ partyUser, fetchPartyUser }: Props) {
       <Grid container item mb={9}>
         <UserProductSection
           partyUser={partyUser}
-          selcRole={partyUser.userRole}
           party={party}
-          productRoles={productRoles}
           fetchPartyUser={fetchPartyUser}
+          productsRolesMap={productsRolesMap}
         />
       </Grid>
       <Grid container item my={10} spacing={2}>
@@ -157,7 +137,7 @@ function UserDetailPage({ partyUser, fetchPartyUser }: Props) {
             Indietro
           </Button>
         </Grid>
-        {productRoles.length === 1 && !partyUser.isCurrentUser && (
+        {partyUser.products.length === 1 && partyUser.products[0].roles.length ===1 && !partyUser.isCurrentUser && (
           <Grid item xs={2}>
             <Button
               disableRipple
@@ -173,4 +153,4 @@ function UserDetailPage({ partyUser, fetchPartyUser }: Props) {
     </Grid>
   );
 }
-export default withUserDetail(UserDetailPage);
+export default withProductsRolesMap(withUserDetail(UserDetailPage));

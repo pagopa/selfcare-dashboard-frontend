@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { uniqueId } from 'lodash';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { PartyUser } from '../model/PartyUser';
 import { useUserDetail } from '../hooks/useUserDetail';
+import { DASHBOARD_ROUTES } from '../routes';
 
 type UserUrlParams = {
   institutionId: string;
   userId: string;
+  productId?: string;
 };
 
 export default function withUserDetail<T extends { partyUser: PartyUser }>(
@@ -16,14 +20,37 @@ export default function withUserDetail<T extends { partyUser: PartyUser }>(
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithUserDetail = (props: T) => {
-    const { institutionId, userId } = useParams<UserUrlParams>();
+    const { institutionId, userId, productId } = useParams<UserUrlParams>();
     const fetchUserDetail = useUserDetail();
     const [partyUser, setPartyUser] = useState<PartyUser | null>();
     const addError = useErrorDispatcher();
+    const history = useHistory();
 
     const doFetch = () => {
       fetchUserDetail(institutionId, userId)
-        .then((user) => setPartyUser(user))
+        .then((user) => {
+          if (user === null) {
+            const goBackUrl = productId
+              ? resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
+                  institutionId,
+                  productId,
+                })
+              : resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
+                institutionId,
+              });
+
+              addError({
+                  id: 'INVALID_PARTY_USER_ID_' + userId + '__' + institutionId,
+                  blocking: false,
+                  techDescription: `Selected an invalid user Id ${userId} and/or institution id ${institutionId}`,
+                  toNotify: false,
+                  error: new Error('INVALID_PARTY_USER_ID_INSTITUTION_ID'),
+                  onClose: () => history.push(goBackUrl),
+                  displayableDescription:"Impossibile trovare l'utente selezionato"
+                });
+          }
+          setPartyUser(user);
+        })
         .catch((reason) => {
           addError({
             id: uniqueId(`${ComponentWithUserDetail.displayName}-`),
@@ -42,7 +69,11 @@ export default function withUserDetail<T extends { partyUser: PartyUser }>(
       }
     }, [institutionId, userId]);
 
-    return partyUser ? <WrappedComponent {...(props as T)} partyUser={partyUser} fetchPartyUser={doFetch}/> : <></>;
+    return partyUser ? (
+      <WrappedComponent {...(props as T)} partyUser={partyUser} fetchPartyUser={doFetch} />
+    ) : (
+      <></>
+    );
   };
 
   // eslint-disable-next-line functional/immutable-data

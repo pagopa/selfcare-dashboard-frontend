@@ -1,18 +1,18 @@
 import { Box, Chip, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { ProductRole } from '../../../model/ProductRole';
+import { ProductRolesLists, transcodeProductRole2Description, transcodeProductRole2Title } from '../../../model/ProductRole';
 import { Party } from '../../../model/Party';
-import { PartyUser } from '../../../model/PartyUser';
+import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
 import UserProductActions from './UserProductActions';
 
 type Props = {
-  productRoles: Array<ProductRole>;
   showActions: boolean;
   party: Party;
   user: PartyUser;
   fetchPartyUser: () => void;
-  userProduct: any;
+  product: PartyUserProduct;
+  productRolesList: ProductRolesLists;
 };
 
 const CustomLabelStyle = styled(Typography)({
@@ -25,17 +25,17 @@ const CustomInfoStyle = styled(Typography)({
   textTransform: 'capitalize',
 });
 export default function UserProductRoles({
-  productRoles,
   showActions,
   party,
   user,
   fetchPartyUser,
-  userProduct
+  product,
+  productRolesList
 }: Props) {
   return (
     <Grid container item xs={12}>
-      {productRoles.map((p) => (
-        <Grid container item key={p.productRole}>
+      {product.roles.map((p) => (
+        <Grid container item key={p.relationshipId}>
           <Grid item xs={3}>
             <Grid container item>
               <Box>
@@ -69,9 +69,8 @@ export default function UserProductRoles({
                   variant="body2"
                   sx={{ color: party.status === 'SUSPENDED' ? 'text.secondary' : '#000000' }}
                 >
-                  {p.title}
-                  {/* TODO: title= selectedProduct. */}
-                  <Tooltip title='TODO'>
+                  {transcodeProductRole2Title(p.role, productRolesList)}
+                  <Tooltip title={transcodeProductRole2Description(p.role, productRolesList)}>
                     <IconButton
                       disableRipple
                       sx={{ padding: '0px', '&:hover': { backgroundColor: 'transparent' } }}
@@ -87,11 +86,11 @@ export default function UserProductRoles({
                 <UserProductActions
                   showActions={showActions}
                   party={party} 
-                  productRoles={productRoles}
                   user={user}
                   fetchPartyUser={fetchPartyUser}
                   role={p}   
-                  product={userProduct}             
+                  product={product}    
+                  productRolesList={productRolesList}         
                   />
               </Grid>
             </Grid>

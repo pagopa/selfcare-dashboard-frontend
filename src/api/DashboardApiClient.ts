@@ -129,6 +129,13 @@ export const DashboardApi = {
     return extractResponse(result, 204, onRedirectToLogin);
   },
 
+  deletePartyRelation: async (relationshipId: string): Promise<void> => {
+    const result = await apiClient.deleteRelationshipByIdUsingDELETE({
+      relationshipId,
+    });
+    return extractResponse(result, 204, onRedirectToLogin);
+  },
+
   getProductRoles: async (productId: string): Promise<Array<string>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,

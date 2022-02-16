@@ -3,29 +3,28 @@ import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorD
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
 import { Party, UserStatus } from '../../../model/Party';
-import { PartyUser } from '../../../model/PartyUser';
-// import { Product } from '../../../model/Product';
-import { ProductRole } from '../../../model/ProductRole';
+import { PartyUser, PartyUserProductRole, PartyUserProduct } from '../../../model/PartyUser';
+import { ProductRolesLists, transcodeProductRole2Title } from '../../../model/ProductRole';
 import { updatePartyUserStatus } from '../../../services/usersService';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
 
 type Props = {
   showActions: boolean;
   party: Party;
-  productRoles: Array<ProductRole>;
   user: PartyUser;
   fetchPartyUser: () => void;
-  role: ProductRole;
-  product: any;
+  role: PartyUserProductRole;
+  product: PartyUserProduct;
+  productRolesList: ProductRolesLists;
 };
 export default function UserProductActions({
   showActions,
   party,
-  productRoles,
   user,
   role,
   product,
   fetchPartyUser,
+  productRolesList
 }: Props) {
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   const addError = useErrorDispatcher();
@@ -50,7 +49,7 @@ export default function UserProductActions({
       message: (
         <>
           {'Stai per eliminare il ruolo'}
-          <strong> {role.title} </strong>
+          <strong> {transcodeProductRole2Title(role.role, productRolesList)} </strong>
           {'di '}
           <strong> {product.title} </strong>
           {' assegnato a '}
@@ -82,7 +81,7 @@ export default function UserProductActions({
       return;
     }
     setLoading(true);
-    updatePartyUserStatus(user, nextStatus)
+    updatePartyUserStatus(party,user,product,role,nextStatus)
       .then((_) => {
         fetchPartyUser();
       })
@@ -134,7 +133,7 @@ export default function UserProductActions({
               </Typography>
             </Link>
           </Grid>
-          {productRoles.length > 1 &&  (
+          {product.roles.length > 1 &&  (
             <Grid item xs={6}>
               <Link color="error" onClick={handleOpenDelete}>
                 <Typography variant="h3" sx={{ fontSize: '16px', color: '#C02927' }}>

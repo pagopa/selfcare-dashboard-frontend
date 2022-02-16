@@ -1,28 +1,27 @@
 import { Grid, Typography, Chip } from '@mui/material';
 import { Box } from '@mui/system';
 import { Party } from '../../../../model/Party';
-import { PartyUser } from '../../../../model/PartyUser';
+import { PartyUser, PartyUserProduct } from '../../../../model/PartyUser';
 import UserProductRoles from '../../components/UserProductRoles';
-import { ProductRole } from '../../../../model/ProductRole';
+import { ProductRolesLists } from '../../../../model/ProductRole';
 import UserProductActions from './../../components/UserProductActions';
 
 type Props = {
   partyUser: PartyUser;
   party: Party;
-  productRoles: Array<ProductRole>;
   fetchPartyUser: () => void;
-  // product: any; // TODO
-  userProduct: any;
+  product: PartyUserProduct;
+  productRolesList: ProductRolesLists;
 };
 
 export default function UserProductDetail({
   partyUser,
   party,
-  productRoles,
   fetchPartyUser,
-  userProduct
+  product,
+  productRolesList
 }: Props) {
-  const showActionOnProduct = productRoles.length === 1;
+  const showActionOnProduct = product.roles.length === 1;
   return (
     <>
       <Grid item xs={12}>
@@ -31,7 +30,7 @@ export default function UserProductDetail({
             <Grid container item>
               <Box>
                 <Typography variant="h6" sx={{ fontSize: '18px' }}>
-                  {userProduct.title}
+                  {product.title}
                 </Typography>
               </Box>
               <Box ml={2}>
@@ -58,11 +57,11 @@ export default function UserProductDetail({
             <UserProductActions
               showActions={showActionOnProduct}
               party={party}
-              productRoles={productRoles}
-              role={productRoles[0]}
+              role={product.roles[0]}
               user={partyUser}
               fetchPartyUser={fetchPartyUser}
-              product={userProduct}
+              product={product}
+              productRolesList={productRolesList}
             />
           </Grid>
         </Grid>
@@ -71,11 +70,11 @@ export default function UserProductDetail({
         <Grid item xs={12}>
           <UserProductRoles
             showActions={!showActionOnProduct}
-            productRoles={productRoles}
             party={party}
             user={partyUser}
             fetchPartyUser={fetchPartyUser}
-            userProduct={userProduct}
+            product={product}
+            productRolesList={productRolesList}
           />
         </Grid>
         {/* TODO: insert UserProductGroups component */}

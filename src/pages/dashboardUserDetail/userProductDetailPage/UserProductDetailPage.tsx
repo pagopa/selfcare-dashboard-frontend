@@ -5,11 +5,10 @@ import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
 import { useEffect, useState } from 'react';
 import UserDetail from '../components/UserDetail';
-import { PartyUser } from '../../../model/PartyUser';
+import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
 import UserProductRoles from '../components/UserProductRoles';
-import { ProductRole } from '../../../model/ProductRole';
+import { transcodeProductRole2Title } from '../../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { Product } from '../../../model/Product';
 import { Party } from '../../../model/Party';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import withSelectedPartyProduct from '../../../decorators/withSelectedPartyProduct';
@@ -17,45 +16,28 @@ import { useAppSelector } from '../../../redux/hooks';
 import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import withUserDetail from '../../../decorators/withUserDetail';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
+import withSelectedPartyProductAndRoles, { withSelectedPartyProductAndRolesProps } from '../../../decorators/withSelectedPartyProductAndRoles';
 
-type Props = {
-  selectedProduct: Product;
-  products: Array<Product>;
+type Props = withSelectedPartyProductAndRolesProps & {
   partyUser: PartyUser;
   fetchPartyUser: () => void;
 };
 
-function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, products }: Props) {
+function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, productRolesList }: Props) {
   const history = useHistory();
   const party = useAppSelector(partiesSelectors.selectPartySelected) as Party;
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   // const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
 
-  const [product, setProduct] = useState<Product>();
-  const [role, setRole] = useState<ProductRole>();
+  const [product, setProduct] = useState<PartyUserProduct>();
 
   useEffect(() => {
-    const product = products.find((product) => product.id === selectedProduct.id);
+    const product = partyUser.products.find((product) => product.id === selectedProduct.id);
     setProduct(product);
-    const userRole =  productRoles.find((p) => p);
-    setRole(userRole);
   },[]);
 
-  // TODO: productRoles = party.products.filter((p) => p.id === selectedProduct.id ).roles (PartyUser-> products-> roles)
-  const productRoles: Array<ProductRole> = [
-    {
-      selcRole: 'ADMIN',
-      productRole: 'Incaricato-Ente-creditore',
-      title: 'Incaricato Ente creditore',
-    },
-    {
-      selcRole: 'ADMIN',
-      productRole: 'Referente-dei-pagamenti',
-      title: 'Referente dei pagamenti',
-    },
-  ];
-
+  // TODO: add delete fetch
   const onDelete = () => {
     setLoading(true);
     // deletePartyUser(user)
@@ -64,7 +46,6 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
     goBack();
     // })
     // .catch
-    // TODO: add delete fetch
   };
 
   const handleOpenDelete = () => {
@@ -75,9 +56,9 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
       message: (
         <>
           {'Stai per eliminare il ruolo '}
-          <strong>{role?.title}</strong>
+          <strong>{transcodeProductRole2Title((product as PartyUserProduct).roles[0].role, productRolesList )}</strong>
           {' di '}
-          <strong>{product?.title} </strong>
+          <strong>{(product as PartyUserProduct).title} </strong>
           {' assegnato a '}
           <strong style={{ textTransform: 'capitalize' }}>
             {party && `${partyUser.name.toLocaleLowerCase()} ${partyUser.surname}`}
@@ -111,7 +92,7 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
     },
   ];
 
-  return (
+  return product ? (
     <Grid
       container
       alignItems={'center'}
@@ -134,12 +115,12 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
         <Divider />
       </Grid>
       <UserProductRoles
-        productRoles={productRoles}
         showActions={true}
         party={party}
         user={partyUser}
         fetchPartyUser={fetchPartyUser}
-        userProduct={'ciao'}
+        product={product}
+        productRolesList={productRolesList}
       />
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
@@ -152,9 +133,8 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
             Indietro
           </Button>
         </Grid>
-        {productRoles.length === 1 && !partyUser.isCurrentUser && (
+        {product.roles.length === 1 && !partyUser.isCurrentUser && (
           <Grid item xs={2}>
-            {/* TODO:  add delete fetch */}
             <Button
               disableRipple
               variant="outlined"
@@ -167,7 +147,7 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
         )}
       </Grid>
     </Grid>
-  );
+  ):<></>;
 }
 
-export default withUserDetail(withSelectedPartyProduct(UserProductDetailPage));
+export default withUserDetail(withSelectedPartyProduct(withSelectedPartyProductAndRoles(UserProductDetailPage)));
