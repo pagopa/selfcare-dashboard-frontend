@@ -97,7 +97,7 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
             onFetchStatusUpdate={(isFetching, count) => {
               setFetchStatus({ loading: isFetching, noData: !count || count === 0 });
             }}
-            userDetailUrl={resolvePathVariables('' /* TODO */, {
+            userDetailUrl={resolvePathVariables('' /* TODO resolve with product detail url */, {
               institutionId: party.institutionId,
               productId: selectedProduct.id,
             })}

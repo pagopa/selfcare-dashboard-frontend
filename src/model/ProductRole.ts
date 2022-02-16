@@ -4,7 +4,8 @@ import { UserRole } from './Party';
 export type ProductRole = {
   selcRole: UserRole;
   productRole: string;
-  displayableProductRole: string;
+  title: string;
+  description: string;
 };
 
 export type ProductRolesLists = {

@@ -32,7 +32,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
 
 export const mockedProductResources: Array<ProductsResource> = [
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-io/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-io/logo.png',
     title: 'App IO',
     description: 'App IO description',
     id: '1',
@@ -43,7 +43,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlPublic: 'http://appio/public',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png',
     id: '2',
     title: 'Piattaforma Notifiche',
     description: 'Piattaforma Notifiche description',
@@ -54,7 +54,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlPublic: 'http://notifiche/public',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
     id: '3',
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
@@ -65,7 +65,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlPublic: 'http://pagopa/public',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.png',
     title: 'Check-IBAN',
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: '4',
@@ -75,7 +75,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png',
     id: '5',
     title: 'Carta Giovani',
     description: 'Richiedi la convenzione e gestisci i dati e le agevolazioni da offrire.',
@@ -85,7 +85,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://cgn/bo#token=<IdentityToken>',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.png',
     id: '6',
     title: 'PDND',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',

@@ -50,7 +50,7 @@ export default function UsersProductSection({
             setFetchStatus({ loading: isFetching, noData });
             onFetchStatusUpdate(isFetching, noData);
           }}
-          userDetailUrl={resolvePathVariables('' /* TODO */, {
+          userDetailUrl={resolvePathVariables('' /* TODO resolve with generic detail url */, {
             institutionId: party.institutionId,
           })}
         />

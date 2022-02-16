@@ -136,7 +136,12 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
   } else {
     return DashboardApi.getProductRoles(product.id).then(
       (roles) =>
-        roles.map((r) => ({ productRole: r, selcRole: 'ADMIN', displayableProductRole: r })) // TODO fixme
+        roles.map((r) => ({
+          productRole: r,
+          selcRole: 'ADMIN',
+          title: r,
+          description: `TODO Descrizione ruolo ${r}`,
+        })) // TODO fixme
     );
   }
 };

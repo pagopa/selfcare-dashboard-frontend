@@ -5,17 +5,20 @@ test('Test productRoles2ProductRolesList', () => {
     {
       selcRole: 'ADMIN',
       productRole: 'incaricato-ente-creditore',
-      displayableProductRole: 'Incaricato Ente Creditore',
+      title: 'Incaricato Ente Creditore',
+      description: 'Descrizione ruolo Incaricato Ente Creditore',
     },
     {
       selcRole: 'LIMITED',
       productRole: 'referente-tecnico',
-      displayableProductRole: 'Referente Tecnico',
+      title: 'Referente Tecnico',
+      description: 'Descrizione ruolo Referente Tecnico',
     },
     {
       selcRole: 'LIMITED',
       productRole: 'operatore-sicurezza',
-      displayableProductRole: 'Operatore sicurezza',
+      title: 'Operatore sicurezza',
+      description: 'Descrizione ruolo Operatore sicurezza',
     },
   ];
 
@@ -27,19 +30,22 @@ test('Test productRoles2ProductRolesList', () => {
         {
           selcRole: 'ADMIN',
           productRole: 'incaricato-ente-creditore',
-          displayableProductRole: 'Incaricato Ente Creditore',
+          title: 'Incaricato Ente Creditore',
+          description: 'Descrizione ruolo Incaricato Ente Creditore',
         },
       ],
       LIMITED: [
         {
           selcRole: 'LIMITED',
           productRole: 'referente-tecnico',
-          displayableProductRole: 'Referente Tecnico',
+          title: 'Referente Tecnico',
+          description: 'Descrizione ruolo Referente Tecnico',
         },
         {
           selcRole: 'LIMITED',
           productRole: 'operatore-sicurezza',
-          displayableProductRole: 'Operatore sicurezza',
+          title: 'Operatore sicurezza',
+          description: 'Descrizione ruolo Operatore sicurezza',
         },
       ],
     },
@@ -47,17 +53,20 @@ test('Test productRoles2ProductRolesList', () => {
       'incaricato-ente-creditore': {
         selcRole: 'ADMIN',
         productRole: 'incaricato-ente-creditore',
-        displayableProductRole: 'Incaricato Ente Creditore',
+        title: 'Incaricato Ente Creditore',
+        description: 'Descrizione ruolo Incaricato Ente Creditore',
       },
       'referente-tecnico': {
         selcRole: 'LIMITED',
         productRole: 'referente-tecnico',
-        displayableProductRole: 'Referente Tecnico',
+        title: 'Referente Tecnico',
+        description: 'Descrizione ruolo Referente Tecnico',
       },
       'operatore-sicurezza': {
         selcRole: 'LIMITED',
         productRole: 'operatore-sicurezza',
-        displayableProductRole: 'Operatore sicurezza',
+        title: 'Operatore sicurezza',
+        description: 'Descrizione ruolo Operatore sicurezza',
       },
     },
   });

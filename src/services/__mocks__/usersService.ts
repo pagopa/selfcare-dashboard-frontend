@@ -555,17 +555,20 @@ export const mockedProductRoles: Array<ProductRole> = [
   {
     selcRole: 'ADMIN',
     productRole: 'incaricato-ente-creditore',
-    displayableProductRole: 'Incaricato Ente Creditore',
+    title: 'Incaricato Ente Creditore',
+    description: 'Descrizione ruolo Incaricato Ente Creditore',
   },
   {
     selcRole: 'LIMITED',
     productRole: 'referente-tecnico',
-    displayableProductRole: 'Referente Tecnico',
+    title: 'Referente Tecnico',
+    description: 'Descrizione ruolo Referente Tecnico',
   },
   {
     selcRole: 'LIMITED',
     productRole: 'operatore-sicurezza',
-    displayableProductRole: 'Operatore sicurezza',
+    title: 'Operatore sicurezza',
+    description: 'Descrizione ruolo Operatore sicurezza',
   },
 ];
 
