@@ -7,6 +7,7 @@ import { uniqueId } from 'lodash';
 import styled from '@emotion/styled';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import ROUTES from '../../../../routes';
@@ -36,6 +37,8 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
   const [parties2Show, setParties2Show] = useState<Array<Party>>();
   const addError = useErrorDispatcher();
   const fetchParties = useParties();
+
+  const onExit = useUnloadEventOnExit();
 
   const doFetch = (): void => {
     fetchParties()
@@ -122,10 +125,12 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                       onPartySelectionChange={(selectedParty: Party | null) => {
                         if (selectedParty) {
                           handleClose();
-                          history.push(
-                            resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                              institutionId: selectedParty.institutionId,
-                            })
+                          onExit(() =>
+                            history.push(
+                              resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
+                                institutionId: selectedParty.institutionId,
+                              })
+                            )
                           );
                         }
                       }}
