@@ -99,11 +99,13 @@ export const mockedProductResources: Array<ProductsResource> = [
 export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   {
     id: '1',
+    fiscalCode: 'TAXCODE_1',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
+    certification: true,
     products: [
       {
         id: 'productId',
@@ -121,11 +123,13 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   },
   {
     id: '2',
+    fiscalCode: 'TAXCODE_2',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address',
+    certification: true,
     products: [
       {
         id: 'productId2',
@@ -146,7 +150,7 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
 export const mockedProductUserResource: Array<ProductUserResource> = [
   {
     id: '1',
-    // fiscalCode: "TAXCODE_1", TODO
+    fiscalCode: 'TAXCODE_1',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -168,7 +172,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
   },
   {
     id: '2',
-    // fiscalCode: "TAXCODE_1", TODO
+    fiscalCode: 'TAXCODE_1',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
