@@ -31,7 +31,9 @@ export default function UsersProductSection({
     <Grid container direction="row">
       {(!hideProductWhenLoading && fetchStatus.loading) || !fetchStatus.noData ? (
         <Grid item xs={12} sx={{ mt: 7 }}>
-          <Typography variant="h2">{product.title}</Typography>
+          <Typography variant="h2" id={product.id}>
+            {product.title}
+          </Typography>
         </Grid>
       ) : (
         <></>

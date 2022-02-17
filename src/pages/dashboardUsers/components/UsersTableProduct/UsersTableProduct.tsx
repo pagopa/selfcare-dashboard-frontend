@@ -142,9 +142,9 @@ const UsersTableProduct = ({
         canEdit={canEdit}
         page={users.page}
         sort={pageRequest?.page.sort}
-        fetchPage={(page, size) =>
+        fetchPage={(page, size, refetch = false) =>
           setPageRequest({
-            filterChanged: false,
+            filterChanged: refetch,
             page: {
               page: incrementalLoad ? (pageRequest?.page as PageRequest).page + 1 : page ?? 0,
               size: incrementalLoad

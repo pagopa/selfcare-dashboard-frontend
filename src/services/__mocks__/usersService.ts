@@ -656,13 +656,13 @@ export const deletePartyUser = (
   if (product.roles.length === 1) {
     // eslint-disable-next-line functional/immutable-data
     mockedUsers.splice(
-      mockedUsers.findIndex((u) => u === user),
+      mockedUsers.findIndex((u) => u.id === user.id),
       1
     );
   } else {
     // eslint-disable-next-line functional/immutable-data
     product.roles.splice(
-      product.roles.findIndex((r) => r === role),
+      product.roles.findIndex((r) => r.relationshipId === role.relationshipId),
       1
     );
   }

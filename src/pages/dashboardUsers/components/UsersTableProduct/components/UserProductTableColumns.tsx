@@ -15,7 +15,7 @@ import UserProductRowActions from './UserProductRowActions';
 export function buildColumnDefs(
   canEdit: boolean,
   party: Party,
-  onChangeState: (user: PartyUser) => void,
+  onDelete: (user: PartyUser) => void,
   productRolesLists: ProductRolesLists
 ) {
   return [
@@ -68,7 +68,7 @@ export function buildColumnDefs(
       hideSortIcons: true,
       disableColumnMenu: true,
       editable: false,
-      renderCell: (p) => (canEdit ? showActions(party, p, onChangeState) : renderCell(p, '')),
+      renderCell: (p) => (canEdit ? showActions(party, p, onDelete) : renderCell(p, '')),
       sortable: false,
     },
   ] as Array<GridColDef>;
@@ -199,7 +199,7 @@ function showName(params: GridRenderCellParams) {
 function showActions(
   party: Party,
   users: GridRenderCellParams<PartyUser>,
-  onChangeState: (user: PartyUser) => void
+  onDelete: (user: PartyUser) => void
 ) {
   const row = users.row as PartyUser;
   return (
@@ -220,8 +220,9 @@ function showActions(
               party={party}
               partyUser={row}
               partyUserProduct={row.products[0]}
-              onChangeState={onChangeState}
-            />
+              onDelete={onDelete}
+            />,
+            { paddingLeft: 0, paddingRight: 0, textAlign: 'center' }
           )}
     </React.Fragment>
   );

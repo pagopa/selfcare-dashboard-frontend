@@ -102,8 +102,18 @@ export const updatePartyUserStatus = (
     return updatePartyUserStatusMocked(party, user, product, role, status);
   }
   if (status === 'ACTIVE') {
+    trackEvent('USER_RESUME', {
+      party_id: party.institutionId,
+      product: product.id,
+      product_role: user.userRole,
+    });
     return DashboardApi.activatePartyRelation(role.relationshipId);
   } else if (status === 'SUSPENDED') {
+    trackEvent('USER_SUSPEND', {
+      party_id: party.institutionId,
+      product: product.id,
+      product_role: user.userRole,
+    });
     return DashboardApi.suspendPartyRelation(role.relationshipId);
   } else {
     throw new Error(`Not allowed next status: ${status}`);
