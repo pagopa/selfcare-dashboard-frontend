@@ -145,7 +145,6 @@ export default function UsersProductTable({
       }
 
       setLoading(true);
-      console.log(user);
       updatePartyUserStatus(party, user, user.products[0], user.products[0].roles[0], nextStatus) // TODO fixme, suspend just the first???
         .then((_) => {
           if (nextStatus === 'SUSPENDED') {
