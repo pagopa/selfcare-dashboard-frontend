@@ -11,28 +11,30 @@ import { PartyUser } from '../../../model/PartyUser';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { transcodeProductRole2Title } from '../../../model/ProductRole';
-import { useAppSelector } from '../../../redux/hooks';
-import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import withUserDetail from '../../../decorators/withUserDetail';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
-import withProductsRolesMap, { withProductsRolesMapProps } from '../../../decorators/withProductsRolesMap';
+import withProductsRolesMap, {
+  withProductsRolesMapProps,
+} from '../../../decorators/withProductsRolesMap';
+import { Product } from '../../../model/Product';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
 
 type Props = withProductsRolesMapProps & {
   partyUser: PartyUser;
   fetchPartyUser: () => void;
+  products: Array<Product>;
+  party: Party;
 };
 
-function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap }: Props) {
+function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products, party }: Props) {
   const history = useHistory();
-  const party = useAppSelector(partiesSelectors.selectPartySelected);
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   // const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
 
   useEffect(() => {
-    if(party) {
+    if (party) {
       trackEvent('OPEN_USER_DETAIL', { party_id: party.institutionId });
     }
   }, [party]);
@@ -49,6 +51,7 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap }: Props) 
     // deletePartyUser(user)
     // .then((_) => {
     // fetchPartyUsers();
+    // TODO: add Toast
     goBack();
     // })
     // .catch
@@ -64,7 +67,9 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap }: Props) 
       message: (
         <>
           {'Stai per eliminare il ruolo '}
-          <strong>{transcodeProductRole2Title(product.roles[0].role,productsRolesMap[product.id] )}</strong>
+          <strong>
+            {transcodeProductRole2Title(product.roles[0].role, productsRolesMap[product.id])}
+          </strong>
           {' di '}
           <strong>{product.title} </strong>
           {' assegnato a '}
@@ -102,7 +107,7 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap }: Props) 
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={3}>
-        <ProductNavigationBar  paths={paths} />
+        <ProductNavigationBar paths={paths} />
       </Grid>
       <Grid item xs={12} mb={7}>
         <Typography variant="h1">Dettaglio Referente</Typography>
@@ -124,6 +129,7 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap }: Props) 
           party={party}
           fetchPartyUser={fetchPartyUser}
           productsRolesMap={productsRolesMap}
+          products={products}
         />
       </Grid>
       <Grid container item my={10} spacing={2}>
@@ -132,23 +138,32 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap }: Props) 
             disableRipple
             variant="outlined"
             sx={{ height: '40px', width: '100%' }}
-            onClick={goBack} 
+            onClick={goBack}
           >
             Indietro
           </Button>
         </Grid>
-        {partyUser.products.length === 1 && partyUser.products[0].roles.length ===1 && !partyUser.isCurrentUser && (
-          <Grid item xs={2}>
-            <Button
-              disableRipple
-              variant="outlined"
-              sx={{ height: '40px', width: '100%', color: '#C02927', borderColor: '#C02927', '&:hover':{borderColor:'#C02927', backgroundColor:'transparent' }}}
-              onClick={handleOpenDelete}
-            >
-              Elimina
-            </Button>
-          </Grid>
-        )}
+        {partyUser.products.length === 1 &&
+          partyUser.products[0].roles.length === 1 &&
+          !partyUser.isCurrentUser &&
+          products.find((p) => p.id === partyUser.products[0].id)?.userRole === 'ADMIN' && (
+            <Grid item xs={2}>
+              <Button
+                disableRipple
+                variant="outlined"
+                sx={{
+                  height: '40px',
+                  width: '100%',
+                  color: '#C02927',
+                  borderColor: '#C02927',
+                  '&:hover': { borderColor: '#C02927', backgroundColor: 'transparent' },
+                }}
+                onClick={handleOpenDelete}
+              >
+                Elimina
+              </Button>
+            </Grid>
+          )}
       </Grid>
     </Grid>
   );

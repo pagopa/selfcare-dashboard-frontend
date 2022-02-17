@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { ProductRolesLists } from '../model/ProductRole';
 
 export type withSelectedPartyProductAndRolesProps = {
+  party: Party;
   products: Array<Product>;
   selectedProduct: Product;
   fetchSelectedProductRoles: (onRetry: () => void) => Promise<ProductRolesLists>;
@@ -26,7 +28,9 @@ export default function withSelectedPartyProductAndRoles<
     };
 
     useEffect(() => {
-      if(props.selectedProduct){doFetchProductRoles();}
+      if (props.selectedProduct) {
+        doFetchProductRoles();
+      }
     }, [props.selectedProduct]);
 
     return productRolesList ? (

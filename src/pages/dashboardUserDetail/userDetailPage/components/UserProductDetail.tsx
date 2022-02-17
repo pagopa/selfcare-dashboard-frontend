@@ -1,6 +1,7 @@
 import { Grid, Typography, Chip } from '@mui/material';
 import { Box } from '@mui/system';
 import { Party } from '../../../../model/Party';
+import { Product } from '../../../../model/Product';
 import { PartyUser, PartyUserProduct } from '../../../../model/PartyUser';
 import UserProductRoles from '../../components/UserProductRoles';
 import { ProductRolesLists } from '../../../../model/ProductRole';
@@ -10,18 +11,23 @@ type Props = {
   partyUser: PartyUser;
   party: Party;
   fetchPartyUser: () => void;
-  product: PartyUserProduct;
+  userProduct: PartyUserProduct;
   productRolesList: ProductRolesLists;
+  canEdit: boolean;
+  product: Product;
 };
 
 export default function UserProductDetail({
   partyUser,
   party,
   fetchPartyUser,
+  userProduct,
+  productRolesList,
+  canEdit,
   product,
-  productRolesList
 }: Props) {
-  const showActionOnProduct = product.roles.length === 1;
+  const showActionOnProduct = userProduct.roles.length === 1;
+
   return (
     <>
       <Grid item xs={12}>
@@ -34,22 +40,23 @@ export default function UserProductDetail({
                 </Typography>
               </Box>
               <Box ml={2}>
-                {party.status === 'SUSPENDED' && showActionOnProduct && (
-                  <Chip
-                    label="sospeso"
-                    variant="outlined"
-                    sx={{
-                      fontWeight: '600',
-                      fontSize: '14px',
-                      background: '#00C5CA',
-                      borderRadius: '16px',
-                      width: '76px',
-                      height: '24px',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  />
-                )}
+                {userProduct.roles.find((p) => p.status === 'SUSPENDED') &&
+                  !partyUser.products.find((p) => p.roles.find((r) => r.status === 'ACTIVE')) && (
+                    <Chip
+                      label="sospeso"
+                      variant="outlined"
+                      sx={{
+                        fontWeight: '600',
+                        fontSize: '14px',
+                        background: '#00C5CA',
+                        borderRadius: '16px',
+                        width: '76px',
+                        height: '24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    />
+                  )}
               </Box>
             </Grid>
           </Grid>
@@ -57,11 +64,12 @@ export default function UserProductDetail({
             <UserProductActions
               showActions={showActionOnProduct}
               party={party}
-              role={product.roles[0]}
+              role={userProduct.roles[0]}
               user={partyUser}
               fetchPartyUser={fetchPartyUser}
-              product={product}
+              product={userProduct}
               productRolesList={productRolesList}
+              canEdit={canEdit}
             />
           </Grid>
         </Grid>
@@ -73,8 +81,9 @@ export default function UserProductDetail({
             party={party}
             user={partyUser}
             fetchPartyUser={fetchPartyUser}
-            product={product}
+            product={userProduct}
             productRolesList={productRolesList}
+            canEdit={canEdit}
           />
         </Grid>
         {/* TODO: insert UserProductGroups component */}

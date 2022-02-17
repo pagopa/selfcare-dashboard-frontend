@@ -7,6 +7,12 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { PartyUser } from '../model/PartyUser';
 import { useUserDetail } from '../hooks/useUserDetail';
 import { DASHBOARD_ROUTES } from '../routes';
+import { Party } from '../model/Party';
+
+export type withUserDetailProps = {
+  partyUser: PartyUser;
+  party: Party;
+};
 
 type UserUrlParams = {
   institutionId: string;
@@ -14,7 +20,7 @@ type UserUrlParams = {
   productId?: string;
 };
 
-export default function withUserDetail<T extends { partyUser: PartyUser }>(
+export default function withUserDetail<T extends withUserDetailProps>(
   WrappedComponent: React.ComponentType<T>
 ): React.ComponentType<Omit<T, 'partyUser' | 'fetchPartyUser'>> {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -36,18 +42,18 @@ export default function withUserDetail<T extends { partyUser: PartyUser }>(
                   productId,
                 })
               : resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
-                institutionId,
-              });
-
-              addError({
-                  id: 'INVALID_PARTY_USER_ID_' + userId + '__' + institutionId,
-                  blocking: false,
-                  techDescription: `Selected an invalid user Id ${userId} and/or institution id ${institutionId}`,
-                  toNotify: false,
-                  error: new Error('INVALID_PARTY_USER_ID_INSTITUTION_ID'),
-                  onClose: () => history.push(goBackUrl),
-                  displayableDescription:"Impossibile trovare l'utente selezionato"
+                  institutionId,
                 });
+
+            addError({
+              id: 'INVALID_PARTY_USER_ID_' + userId + '__' + institutionId,
+              blocking: false,
+              techDescription: `Selected an invalid user Id ${userId} and/or institution id ${institutionId}`,
+              toNotify: false,
+              error: new Error('INVALID_PARTY_USER_ID_INSTITUTION_ID'),
+              onClose: () => history.push(goBackUrl),
+              displayableDescription: "Impossibile trovare l'utente selezionato",
+            });
           }
           setPartyUser(user);
         })
@@ -64,7 +70,9 @@ export default function withUserDetail<T extends { partyUser: PartyUser }>(
     };
 
     useEffect(() => {
-      if (institutionId && userId) {
+      if (props.party.userRole !== 'ADMIN') {
+        history.push(resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, { institutionId }));
+      } else if (institutionId && userId) {
         doFetch();
       }
     }, [institutionId, userId]);

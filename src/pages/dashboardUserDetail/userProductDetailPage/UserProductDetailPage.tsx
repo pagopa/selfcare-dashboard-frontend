@@ -16,14 +16,21 @@ import { useAppSelector } from '../../../redux/hooks';
 import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import withUserDetail from '../../../decorators/withUserDetail';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
-import withSelectedPartyProductAndRoles, { withSelectedPartyProductAndRolesProps } from '../../../decorators/withSelectedPartyProductAndRoles';
+import withSelectedPartyProductAndRoles, {
+  withSelectedPartyProductAndRolesProps,
+} from '../../../decorators/withSelectedPartyProductAndRoles';
 
 type Props = withSelectedPartyProductAndRolesProps & {
   partyUser: PartyUser;
   fetchPartyUser: () => void;
 };
 
-function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, productRolesList }: Props) {
+function UserProductDetailPage({
+  selectedProduct,
+  partyUser,
+  fetchPartyUser,
+  productRolesList,
+}: Props) {
   const history = useHistory();
   const party = useAppSelector(partiesSelectors.selectPartySelected) as Party;
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
@@ -31,11 +38,12 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
   const addNotify = useUserNotify();
 
   const [product, setProduct] = useState<PartyUserProduct>();
+  const canEdit = selectedProduct.userRole === 'ADMIN';
 
   useEffect(() => {
     const product = partyUser.products.find((product) => product.id === selectedProduct.id);
     setProduct(product);
-  },[]);
+  }, []);
 
   // TODO: add delete fetch
   const onDelete = () => {
@@ -43,6 +51,7 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
     // deletePartyUser(user)
     // .then((_) => {
     // fetchPartyUsers();
+    // TODO: add Toast
     goBack();
     // })
     // .catch
@@ -56,7 +65,12 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
       message: (
         <>
           {'Stai per eliminare il ruolo '}
-          <strong>{transcodeProductRole2Title((product as PartyUserProduct).roles[0].role, productRolesList )}</strong>
+          <strong>
+            {transcodeProductRole2Title(
+              (product as PartyUserProduct).roles[0].role,
+              productRolesList
+            )}
+          </strong>
           {' di '}
           <strong>{(product as PartyUserProduct).title} </strong>
           {' assegnato a '}
@@ -121,6 +135,7 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
         fetchPartyUser={fetchPartyUser}
         product={product}
         productRolesList={productRolesList}
+        canEdit={canEdit}
       />
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
@@ -133,12 +148,18 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
             Indietro
           </Button>
         </Grid>
-        {product.roles.length === 1 && !partyUser.isCurrentUser && (
+        {product.roles.length === 1 && !partyUser.isCurrentUser && canEdit && (
           <Grid item xs={2}>
             <Button
               disableRipple
               variant="outlined"
-              sx={{ height: '40px', width: '100%', color: '#C02927', borderColor: '#C02927', '&:hover':{borderColor:'#C02927', backgroundColor:'transparent'} }}
+              sx={{
+                height: '40px',
+                width: '100%',
+                color: '#C02927',
+                borderColor: '#C02927',
+                '&:hover': { borderColor: '#C02927', backgroundColor: 'transparent' },
+              }}
               onClick={handleOpenDelete}
             >
               Elimina
@@ -147,7 +168,11 @@ function UserProductDetailPage({ selectedProduct, partyUser, fetchPartyUser, pro
         )}
       </Grid>
     </Grid>
-  ):<></>;
+  ) : (
+    <></>
+  );
 }
 
-export default withUserDetail(withSelectedPartyProduct(withSelectedPartyProductAndRoles(UserProductDetailPage)));
+export default withUserDetail(
+  withSelectedPartyProduct(withSelectedPartyProductAndRoles(UserProductDetailPage))
+);

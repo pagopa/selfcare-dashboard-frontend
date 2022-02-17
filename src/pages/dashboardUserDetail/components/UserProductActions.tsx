@@ -16,6 +16,7 @@ type Props = {
   role: PartyUserProductRole;
   product: PartyUserProduct;
   productRolesList: ProductRolesLists;
+  canEdit: boolean;
 };
 export default function UserProductActions({
   showActions,
@@ -24,7 +25,8 @@ export default function UserProductActions({
   role,
   product,
   fetchPartyUser,
-  productRolesList
+  productRolesList,
+  canEdit,
 }: Props) {
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   const addError = useErrorDispatcher();
@@ -34,13 +36,13 @@ export default function UserProductActions({
     setLoading(true);
     // deletePartyUser(user)
     // .then((_) => {
-      fetchPartyUser();
+    fetchPartyUser();
+    // TODO: add Toast
     // })
     // .catch
     // TODO: add delete fetch
   };
 
-  
   const handleOpenDelete = () => {
     addNotify({
       component: 'SessionModal',
@@ -61,9 +63,9 @@ export default function UserProductActions({
           {'Vuoi continuare?'}
         </>
       ),
-      confirmLabel: "Conferma",
-      closeLabel: "Annulla",
-      onConfirm: onDelete
+      confirmLabel: 'Conferma',
+      closeLabel: 'Annulla',
+      onConfirm: onDelete,
     });
   };
   const confirmChangeStatus = () => {
@@ -81,7 +83,7 @@ export default function UserProductActions({
       return;
     }
     setLoading(true);
-    updatePartyUserStatus(party,user,product,role,nextStatus)
+    updatePartyUserStatus(party, user, product, role, nextStatus)
       .then((_) => {
         fetchPartyUser();
       })
@@ -100,10 +102,16 @@ export default function UserProductActions({
     addNotify({
       component: 'SessionModal',
       id: 'Notify_Example',
-      title: party?.status === 'ACTIVE' ? 'Sospendi Referente' : 'Riabilita Referente',
+      title: role.status === 'ACTIVE' ? 'Sospendi Ruolo' : 'Riabilita Ruolo',
       message: (
         <>
-          {party?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '}
+          {role.status === 'ACTIVE'
+            ? 'Stai per sospendere il ruolo'
+            : 'Stai per riabilitare il ruolo'}
+          <strong> {transcodeProductRole2Title(role.role, productRolesList)} </strong>
+          {'di '}
+          <strong> {product.title} </strong>
+          {' assegnato a '}
           <strong style={{ textTransform: 'capitalize' }}>
             {party && `${user.name.toLocaleLowerCase()} ${user.surname}`}
           </strong>
@@ -112,30 +120,30 @@ export default function UserProductActions({
           {'Vuoi continuare?'}
         </>
       ),
-      confirmLabel: "Conferma",
-      closeLabel: "Annulla",
-      onConfirm: confirmChangeStatus
+      confirmLabel: 'Conferma',
+      closeLabel: 'Annulla',
+      onConfirm: confirmChangeStatus,
     });
   };
 
   return (
     <>
-      {showActions && !user.isCurrentUser && (
+      {showActions && !user.isCurrentUser && canEdit && (
         <Grid container item>
           <Grid item xs={6}>
-            <Link onClick={handleOpen}>
+            <Link onClick={handleOpen} component="button">
               <Typography variant="h3" sx={{ fontSize: '16px', color: '#0073E6' }}>
-                {party?.status === 'SUSPENDED'
+                {role.status === 'SUSPENDED'
                   ? 'Riabilita'
-                  : party?.status === 'ACTIVE'
+                  : role.status === 'ACTIVE'
                   ? 'Sospendi'
                   : ''}
               </Typography>
             </Link>
           </Grid>
-          {product.roles.length > 1 &&  (
+          {product.roles.length > 1 && !user.isCurrentUser && (
             <Grid item xs={6}>
-              <Link color="error" onClick={handleOpenDelete}>
+              <Link color="error" onClick={handleOpenDelete} component="button">
                 <Typography variant="h3" sx={{ fontSize: '16px', color: '#C02927' }}>
                   Elimina
                 </Typography>
@@ -144,7 +152,6 @@ export default function UserProductActions({
           )}
         </Grid>
       )}
-
     </>
   );
 }

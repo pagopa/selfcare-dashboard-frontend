@@ -1,8 +1,10 @@
 import { Button, Grid, Typography, Divider } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+// import { useState } from 'react';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Party } from '../../../../model/Party';
 import { ProductsRolesMap } from '../../../../model/ProductRole';
+import { Product } from '../../../../model/Product';
 import UserProductDetail from './UserProductDetail';
 
 type Props = {
@@ -10,13 +12,16 @@ type Props = {
   party: Party;
   fetchPartyUser: () => void;
   productsRolesMap: ProductsRolesMap;
+  products: Array<Product>;
 };
 export default function UserProductSection({
   partyUser,
   party,
   fetchPartyUser,
-  productsRolesMap
+  productsRolesMap,
+  products
 }: Props) {
+  
   return (
     <>
       <Grid item xs={10}>
@@ -45,14 +50,18 @@ export default function UserProductSection({
           </Button>
         </Grid>
       )}
-      {partyUser.products.map((product, index) => (
-        <Grid item xs={12} key={product.id}>
+      {partyUser.products.map((userProduct, index) => {
+        const product = products.find((p) => p.id === userProduct.id) as Product; // admin role will always see all products
+        return (
+        <Grid item xs={12} key={userProduct.id}>
           <UserProductDetail
             partyUser={partyUser}
             party={party}
             fetchPartyUser={fetchPartyUser}
+            userProduct={userProduct}
+            productRolesList={productsRolesMap[userProduct.id]}
+            canEdit={product?.userRole === 'ADMIN'}
             product={product}
-            productRolesList={productsRolesMap[product.id]}
           />
           {index !== partyUser.products.length - 1 && (
             <Grid item xs={11} mb={4}>
@@ -60,7 +69,7 @@ export default function UserProductSection({
             </Grid>
           )}
         </Grid>
-      ))}
+      );})}
     </>
   );
 }

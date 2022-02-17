@@ -6,13 +6,13 @@ export default function UserBreadcrumb() {
     <React.Fragment>
       <Breadcrumbs aria-label="breadcrumb">
         <Link
+          component="button"
           // onClick={() => undefined}
           variant="body2"
           sx={{
             fontWeight: '700',
             color: '#5C6F82 !important',
             textDecoration: 'none !important',
-            cursor: 'pointer',
           }}
         >
           <Typography

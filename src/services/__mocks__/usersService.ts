@@ -156,7 +156,7 @@ export const mockedUsers: Array<PartyUser> = [
     surname: 'Bianchi',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
-    status: 'ACTIVE',
+    status: 'SUSPENDED',
     products: [
       {
         title: 'App IO',
@@ -166,7 +166,7 @@ export const mockedUsers: Array<PartyUser> = [
             relationshipId: 'rel6',
             role: 'referente-tecnico',
             selcRole: 'LIMITED',
-            status: 'ACTIVE',
+            status: 'SUSPENDED',
           },
         ],
       },
@@ -184,8 +184,8 @@ export const mockedUsers: Array<PartyUser> = [
     status: 'ACTIVE',
     products: [
       {
-        title: 'App IO',
-        id: 'prod-io',
+        title: 'Piattaforma Notifiche',
+        id: 'prod-pn',
         roles: [
           {
             relationshipId: 'rel7',
@@ -213,10 +213,16 @@ export const mockedUsers: Array<PartyUser> = [
         id: 'prod-io',
         roles: [
           {
-            relationshipId: 'rel8',
+            relationshipId: 'rel4',
             role: 'referente-tecnico',
             selcRole: 'LIMITED',
-            status: 'SUSPENDED',
+            status: 'ACTIVE',
+          },
+          {
+            relationshipId: 'rel4_2',
+            role: 'operatore-sicurezza',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
           },
         ],
       },
@@ -636,12 +642,14 @@ export const fetchPartyUser = (
   userId: string
 ): Promise<PartyUser | null> => {
   const mockedUser = mockedUsers.find((u) => u.id === userId) ?? null;
-  return new Promise((resolve) => resolve(mockedUser ? Object.assign({}, mockedUser) : null));
+  return new Promise((resolve) =>
+    resolve(mockedUser ? JSON.parse(JSON.stringify(mockedUser)) : null)
+  );
 };
 
 export const updatePartyUserStatus = (
   _party: Party,
-  _user: PartyUser,
+  user: PartyUser,
   _product: PartyUserProduct,
   role: PartyUserProductRole,
   status: UserStatus
@@ -649,6 +657,22 @@ export const updatePartyUserStatus = (
   if (status === 'ACTIVE' || status === 'SUSPENDED') {
     // eslint-disable-next-line functional/immutable-data
     role.status = status;
+    if (user.status !== status) {
+      if (status === 'ACTIVE') {
+        // eslint-disable-next-line functional/immutable-data
+        user.status = 'ACTIVE';
+      } else if (!user.products.find((p) => p.roles.find((r) => r.status === 'ACTIVE'))) {
+        // eslint-disable-next-line functional/immutable-data
+        user.status = 'SUSPENDED';
+      }
+    }
+    // eslint-disable-next-line functional/immutable-data
+    mockedUsers.splice(
+      mockedUsers.findIndex((u) => u.id === user.id),
+      1,
+      user
+    );
+
     return new Promise<void>((resolve) => resolve());
   } else {
     throw new Error(`Not allowed next status: ${status}`);

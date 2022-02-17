@@ -1,7 +1,11 @@
 import { Box, Chip, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { ProductRolesLists, transcodeProductRole2Description, transcodeProductRole2Title } from '../../../model/ProductRole';
+import {
+  ProductRolesLists,
+  transcodeProductRole2Description,
+  transcodeProductRole2Title,
+} from '../../../model/ProductRole';
 import { Party } from '../../../model/Party';
 import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
 import UserProductActions from './UserProductActions';
@@ -13,6 +17,7 @@ type Props = {
   fetchPartyUser: () => void;
   product: PartyUserProduct;
   productRolesList: ProductRolesLists;
+  canEdit: boolean;
 };
 
 const CustomLabelStyle = styled(Typography)({
@@ -30,7 +35,8 @@ export default function UserProductRoles({
   user,
   fetchPartyUser,
   product,
-  productRolesList
+  productRolesList,
+  canEdit,
 }: Props) {
   return (
     <Grid container item xs={12}>
@@ -43,23 +49,25 @@ export default function UserProductRoles({
                   RUOLO
                 </CustomLabelStyle>
               </Box>
-              {party.status === 'SUSPENDED' && showActions && (
-                <Box ml={2}>
-                  <Chip
-                    label="sospeso"
-                    variant="outlined"
-                    sx={{
-                      fontWeight: '600',
-                      fontSize: '14px',
-                      background: '#00C5CA',
-                      border: 'none',
-                      borderRadius: '16px',
-                      width: '76px',
-                      height: '24px',
-                    }}
-                  />
-                </Box>
-              )}
+              {p.status === 'SUSPENDED' &&
+                showActions &&
+                user.products.find((p) => p.roles.find((r) => r.status === 'ACTIVE')) && (
+                  <Box ml={2}>
+                    <Chip
+                      label="sospeso"
+                      variant="outlined"
+                      sx={{
+                        fontWeight: '600',
+                        fontSize: '14px',
+                        background: '#00C5CA',
+                        border: 'none',
+                        borderRadius: '16px',
+                        width: '76px',
+                        height: '24px',
+                      }}
+                    />
+                  </Box>
+                )}
             </Grid>
           </Grid>
           <Grid item xs={9}>
@@ -67,7 +75,7 @@ export default function UserProductRoles({
               <Grid item xs={5}>
                 <CustomInfoStyle
                   variant="body2"
-                  sx={{ color: party.status === 'SUSPENDED' ? 'text.secondary' : '#000000' }}
+                  sx={{ color: p.status === 'SUSPENDED' ? '#A2ADB8' : '#000000' }}
                 >
                   {transcodeProductRole2Title(p.role, productRolesList)}
                   <Tooltip title={transcodeProductRole2Description(p.role, productRolesList)}>
@@ -85,13 +93,14 @@ export default function UserProductRoles({
               <Grid item xs={4}>
                 <UserProductActions
                   showActions={showActions}
-                  party={party} 
+                  party={party}
                   user={user}
                   fetchPartyUser={fetchPartyUser}
-                  role={p}   
-                  product={product}    
-                  productRolesList={productRolesList}         
-                  />
+                  role={p}
+                  product={product}
+                  productRolesList={productRolesList}
+                  canEdit={canEdit}
+                />
               </Grid>
             </Grid>
           </Grid>
