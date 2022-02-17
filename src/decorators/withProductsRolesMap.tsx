@@ -8,6 +8,6 @@ type withProductsRolesMapProps = {
 
 export default function withProductsRolesMap<T extends withProductsRolesMapProps>(
   WrappedComponent: React.ComponentType<T>
-): React.ComponentType<Omit<T, 'productsRolesMap'>> {
+): React.ComponentType<Omit<T, 'productsRolesMap' | 'reload'>> {
   return withRetrievedValue('productsRolesMap', useProductsRolesMap, WrappedComponent);
 }
