@@ -23,21 +23,17 @@ import {
   useUnloadEventOnExit,
 } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { Party, UserRole } from '../../../model/Party';
-import {
-  fetchProductRoles,
-  fetchUserRegistryByFiscalCode,
-  savePartyUser,
-} from '../../../services/usersService';
+import { Party } from '../../../model/Party';
+import { fetchUserRegistryByFiscalCode, savePartyUser } from '../../../services/usersService';
 import {
   LOADING_TASK_SAVE_PARTY_USER,
-  LOADING_TASK_FETCH_PRODUCT_ROLES,
   LOADING_TASK_FETCH_TAX_CODE,
 } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
-import { ProductRole } from '../../../model/ProductRole';
+import { ProductRole, ProductRolesLists, ProductsRolesMap } from '../../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../../routes';
+
 const CustomTextField = styled(TextField)({
   '.MuiInputLabel-asterisk': {
     display: 'none',
@@ -81,49 +77,34 @@ type Props = {
   party: Party;
   selectedProduct: Product;
   products: Array<Product>;
+  productsRolesMap: ProductsRolesMap;
 };
 
-export default function AddUserForm({ party, selectedProduct, products }: Props) {
+export default function AddUserForm({ party, selectedProduct, products, productsRolesMap }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
-  const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
   const setLoadingFetchTaxCode = useLoading(LOADING_TASK_FETCH_TAX_CODE);
+
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
+
   const history = useHistory();
-  const [productRoles, setProductRoles] = useState<{
-    [selcRole in UserRole]: Array<ProductRole>;
-  }>();
+
   const [validTaxcode, setValidTaxcode] = useState<string>();
   const [userProduct, setUserProduct] = useState<Product>();
+  const [productRoles, setProductRoles] = useState<ProductRolesLists>();
+
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
-
-  useEffect(() => setUserProduct(selectedProduct), [selectedProduct]);
-  useEffect(() => setProductRoles(productRoles), [productRoles]);
-
-  useEffect(() => {
-    if (userProduct) {
-      setLoadingFetchRoles(true);
-      fetchProductRoles(userProduct)
-        .then((productRoles) => setProductRoles(productRoles))
-        .catch((reason) =>
-          addError({
-            id: 'FETCH_PRODUCT_ROLES',
-            blocking: false,
-            error: reason,
-            techDescription: `An error occurred while fetching Product Roles of Product ${userProduct.id}`,
-            toNotify: true,
-          })
-        )
-        .finally(() => setLoadingFetchRoles(false));
-    }
-  }, [userProduct]);
 
   useEffect(() => {
     if (validTaxcode) {
       fetchTaxCode(validTaxcode);
     }
   }, [validTaxcode]);
+
+  useEffect(() => {
+    setUserProduct(selectedProduct);
+  }, [selectedProduct]);
 
   const goBack = () =>
     history.push(
@@ -187,7 +168,7 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
           : values.confirmEmail !== values.email
           ? 'Gli indirizzi email non corrispondono'
           : undefined,
-        productRole: !values.productRole ? requiredError : undefined,
+        productRoles: values.productRoles?.length === 0 ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
     if (!errors.taxCode) {
@@ -198,6 +179,43 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
     return errors;
   };
 
+  const save = (values: PartyUserOnCreation) => {
+    setLoadingSaveUser(true);
+    savePartyUser(party, userProduct as Product, values)
+      .then(() => {
+        unregisterUnloadEvent();
+        // TODO: USER_UPDATE
+        trackEvent('USER_ADD', {
+          party_id: party.institutionId,
+          product: userProduct?.id,
+          product_role: values.productRoles,
+        });
+        addNotify({
+          component: 'Toast',
+          id: 'SAVE_PARTY_USER',
+          title: 'REFERENTE AGGIUNTO',
+          message: (
+            <>
+              {'Hai aggiunto correttamente '}
+              <strong>{`${values.name} ${values.surname}`}</strong>
+              {'.'}
+            </>
+          ),
+        });
+        goBack();
+      })
+      .catch((reason) =>
+        addError({
+          id: 'SAVE_PARTY_USER',
+          blocking: false,
+          error: reason,
+          techDescription: `An error occurred while saving party user ${party.institutionId}`,
+          toNotify: true,
+        })
+      )
+      .finally(() => setLoadingSaveUser(false));
+  };
+
   const formik = useFormik<PartyUserOnCreation>({
     initialValues: {
       name: '',
@@ -205,76 +223,43 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
       taxCode: '',
       email: '',
       confirmEmail: '',
-      productRole: '',
+      productRoles: [],
       certification: false,
     },
     validate,
     onSubmit: (values) => {
-      setLoadingSaveUser(true);
-      savePartyUser(party, userProduct as Product, values as PartyUserOnCreation)
-        .then(() => {
-          unregisterUnloadEvent();
-          // TODO: USER_UPDATE
-          trackEvent('USER_ADD', {
-            party_id: party.institutionId,
-            product: userProduct?.id,
-            product_role: values.productRole,
-          });
-
-          if (values.productRole.length >= 2) {
-            // TODO
-            addNotify({
-              component: 'SessionModal',
-              id: 'MULTI_ROLE_USER',
-              title: '',
-              message: (
+      if (values.productRoles.length >= 2) {
+        addNotify({
+          component: 'SessionModal',
+          id: 'MULTI_ROLE_USER',
+          title: '',
+          message: (
+            <>
+              {'Stai per assegnare a '}
+              <strong>{`${values.name} ${values.surname} `}</strong>
+              {`i ruoli `}
+              <strong>{`${values.productRoles
+                .map((r) => productRoles?.groupByProductRole[r].title)
+                .join(',')}`}</strong>
+              {' sul prodotto '}
+              <strong>{`${userProduct?.title}.`}</strong>
+              {
                 <>
-                  {'Stai per assegnare a '}
-                  <strong>{`${values.name} ${values.surname} `}</strong>
-                  {`i ruoli `}
-                  <strong>{`${values.productRole}`}</strong>
-                  {' e '}
-                  <strong>{`${values.productRole}`}</strong>
-                  {' sul prodotto '}
-                  <strong>{`${selectedProduct.title}.`}</strong>
-                  {
-                    <>
-                      <br></br>
-                      <br></br>
-                    </>
-                  }
-                  {' Confermi di voler continuare?'}
-                  {<br></br>}
+                  <br></br>
+                  <br></br>
                 </>
-              ),
-              confirmLabel: 'Conferma',
-              closeLabel: 'Annulla',
-            });
-          }
-          addNotify({
-            component: 'Toast',
-            id: 'SAVE_PARTY_USER',
-            title: 'REFERENTE AGGIUNTO',
-            message: (
-              <>
-                {'Hai aggiunto correttamente '}
-                <strong>{`${values.name} ${values.surname}`}</strong>
-                {'.'}
-              </>
-            ),
-          });
-          goBack();
-        })
-        .catch((reason) =>
-          addError({
-            id: 'SAVE_PARTY_USER',
-            blocking: false,
-            error: reason,
-            techDescription: `An error occurred while saving party user ${party.institutionId}`,
-            toNotify: true,
-          })
-        )
-        .finally(() => setLoadingSaveUser(false));
+              }
+              {' Confermi di voler continuare?'}
+              {<br></br>}
+            </>
+          ),
+          onConfirm: () => save(values),
+          confirmLabel: 'Conferma',
+          closeLabel: 'Annulla',
+        });
+      } else {
+        save(values);
+      }
     },
   });
 
@@ -285,6 +270,33 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
       unregisterUnloadEvent();
     }
   }, [formik.dirty]);
+
+  useEffect(() => {
+    if (userProduct) {
+      setProductRoles(productsRolesMap[userProduct.id]);
+      void formik.setFieldValue('productRoles', [], true);
+    }
+  }, [userProduct]);
+
+  const addRole = (r: ProductRole) => {
+    // eslint-disable-next-line functional/no-let
+    let nextProductRoles;
+    if (userProduct?.allowMultipleRole && formik.values.productRoles.length > 0) {
+      if (productRoles?.groupByProductRole[formik.values.productRoles[0]].selcRole !== r.selcRole) {
+        nextProductRoles = [r.productRole];
+      } else {
+        const productRoleIndex = formik.values.productRoles.findIndex((p) => p === r.productRole);
+        if (productRoleIndex === -1) {
+          nextProductRoles = formik.values.productRoles.concat([r.productRole]);
+        } else {
+          nextProductRoles = formik.values.productRoles.filter((_p, i) => i !== productRoleIndex);
+        }
+      }
+    } else {
+      nextProductRoles = [r.productRole];
+    }
+    void formik.setFieldValue('productRoles', nextProductRoles, true);
+  };
 
   const baseTextFieldProps = (
     field: keyof PartyUserOnCreation,
@@ -388,7 +400,7 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
                         disabled={!validTaxcode}
                         value={p.id}
                         control={<Radio />}
-                        onClick={() => setUserProduct(p)}
+                        onClick={validTaxcode ? () => setUserProduct(p) : undefined}
                         label={p.title}
                       />
                       {index !== products.length - 1 && (
@@ -412,78 +424,30 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
                   selezionato
                 </Typography>
 
-                <RadioGroup
-                  aria-label="user"
-                  name="productRole"
-                  value={formik.values.productRole}
-                  onChange={formik.handleChange}
-                >
-                  {productRoles.ADMIN.map((p, index) => (
-                    <Box key={p.selcRole}>
-                      {productRoles.ADMIN.length > 1 ? (
-                        <CustomFormControlLabel
-                          disabled={!validTaxcode || !productRoles.ADMIN} // TODO NOT DISABLED WHEN SELECTED OTHER CATEGORY
-                          value={p.productRole}
-                          control={
-                            <Checkbox
-                              aria-label="user"
-                              name="productRole"
-                              value={formik.values.productRole}
-                              disabled={!validTaxcode || !productRoles.ADMIN}
-                              onChange={formik.handleChange}
-                            />
-                          }
-                          label={p.displayableProductRole}
-                          onClick={() => setProductRoles(productRoles)}
-                        />
-                      ) : (
-                        <CustomFormControlLabel
-                          disabled={!validTaxcode || !productRoles.ADMIN}
-                          value={p.productRole}
-                          control={<Radio />}
-                          label={p.displayableProductRole}
-                          onClick={() => setProductRoles(productRoles)}
-                        />
-                      )}
-                      {index !== productRoles.ADMIN.length - 1 && (
+                {Object.values(productRoles.groupBySelcRole).map((roles, selcRoleIndex) =>
+                  roles.map((p, index) => (
+                    <Box key={p.productRole}>
+                      <CustomFormControlLabel
+                        checked={formik.values.productRoles.indexOf(p.productRole) > -1}
+                        disabled={!validTaxcode}
+                        value={p.productRole}
+                        control={
+                          roles.length > 1 && userProduct?.allowMultipleRole ? (
+                            <Checkbox />
+                          ) : (
+                            <Radio />
+                          )
+                        }
+                        label={p.title} // TODO Add Description
+                        onClick={validTaxcode ? () => addRole(p) : undefined}
+                      />
+                      {(index !== roles.length - 1 ||
+                        selcRoleIndex !== Object.keys(productRoles.groupBySelcRole).length - 1) && (
                         <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
                       )}
                     </Box>
-                  ))}
-
-                  {productRoles.LIMITED.map((p, index) => (
-                    <Box key={p.selcRole}>
-                      {productRoles.LIMITED.length > 1 ? (
-                        <CustomFormControlLabel
-                          disabled={!validTaxcode || !productRoles.LIMITED}
-                          value={p.productRole}
-                          control={
-                            <Checkbox
-                              aria-label="user"
-                              name="productRole"
-                              disabled={!validTaxcode || !productRoles.LIMITED}
-                              value={formik.values.productRole}
-                              onChange={formik.handleChange}
-                            />
-                          }
-                          label={p.displayableProductRole}
-                          onClick={() => setProductRoles(productRoles)}
-                        />
-                      ) : (
-                        <CustomFormControlLabel
-                          disabled={!validTaxcode || !productRoles.LIMITED}
-                          value={p.productRole}
-                          control={<Radio />}
-                          label={p.displayableProductRole}
-                          onClick={() => setProductRoles(productRoles)}
-                        />
-                      )}
-                      {index !== productRoles.LIMITED.length - 1 && (
-                        <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
-                      )}
-                    </Box>
-                  ))}
-                </RadioGroup>
+                  ))
+                )}
               </Grid>
             </Grid>
           )}
@@ -495,7 +459,7 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
             <Button
               sx={{ width: '100%' }}
               color="primary"
-              variant="contained"
+              variant="outlined"
               onClick={() => onExit(goBack)}
             >
               Indietro

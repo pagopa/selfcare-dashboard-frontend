@@ -7,6 +7,8 @@ import ProductNavigationBar from '../../components/ProductNavigationBar';
 import withSelectedPartyProduct from '../../decorators/withSelectedPartyProduct';
 import { DASHBOARD_ROUTES } from '../../routes';
 import { Party } from '../../model/Party';
+import { productRoles2ProductRolesList } from '../../model/ProductRole';
+import { mockedProductRoles } from '../../services/__mocks__/usersService';
 import AddUserForm from './components/AddUserForm';
 
 type Props = {
@@ -17,6 +19,10 @@ type Props = {
 
 function AddUsersProductPage({ party, selectedProduct, products }: Props) {
   const history = useHistory();
+  // TODO READ THIS INFORMATION USING DECORATOR
+  const productsRolesMapMock = {
+    [selectedProduct.id]: productRoles2ProductRolesList(mockedProductRoles),
+  };
 
   const paths = [
     {
@@ -52,7 +58,12 @@ function AddUsersProductPage({ party, selectedProduct, products }: Props) {
         />
       </Grid>
       <Grid item xs={12}>
-        <AddUserForm party={party} selectedProduct={selectedProduct} products={products} />
+        <AddUserForm
+          party={party}
+          selectedProduct={selectedProduct}
+          products={products}
+          productsRolesMap={productsRolesMapMock}
+        />
       </Grid>
     </Grid>
   );

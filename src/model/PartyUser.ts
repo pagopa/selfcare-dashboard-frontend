@@ -36,7 +36,7 @@ export type PartyUserOnCreation = {
   taxCode: string;
   email: string;
   confirmEmail: string;
-  productRole: string;
+  productRoles: Array<string>;
   certification: boolean;
 };
 

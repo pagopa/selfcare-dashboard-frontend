@@ -151,7 +151,7 @@ test('Test savePartyUser', async () => {
     taxCode: 'fiscalCode',
     email: 'email',
     confirmEmail: 'email',
-    productRole: 'role',
+    productRoles: ['role'],
     certification: true,
   };
 
