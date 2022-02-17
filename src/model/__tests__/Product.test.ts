@@ -5,7 +5,7 @@ test('Test institutionInfo2Party', () => {
   const date = new Date();
 
   const productResource: ProductsResource = {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
     id: '3',
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
@@ -19,7 +19,7 @@ test('Test institutionInfo2Party', () => {
 
   const product = productResource2Product(productResource);
   expect(product).toStrictEqual({
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
     id: '3',
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
@@ -30,5 +30,6 @@ test('Test institutionInfo2Party', () => {
     urlPublic: 'http://pagopa/public',
     tag: undefined,
     userRole: 'LIMITED',
+    allowMultipleRole: false, // TODO
   });
 });

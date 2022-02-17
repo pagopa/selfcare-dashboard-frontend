@@ -5,6 +5,7 @@ import {
   InstitutionUserResource,
   RoleEnum,
 } from '../generated/b4f-dashboard/InstitutionUserResource';
+import { SelcRoleEnum } from '../generated/b4f-dashboard/ProductRoleInfoResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
 import { UserResource } from '../generated/b4f-dashboard/UserResource';
@@ -32,7 +33,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
 
 export const mockedProductResources: Array<ProductsResource> = [
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-io/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-io/logo.png',
     title: 'App IO',
     description: 'App IO description',
     id: '1',
@@ -43,7 +44,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlPublic: 'http://appio/public',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png',
     id: '2',
     title: 'Piattaforma Notifiche',
     description: 'Piattaforma Notifiche description',
@@ -54,7 +55,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlPublic: 'http://notifiche/public',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
     id: '3',
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
@@ -65,7 +66,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlPublic: 'http://pagopa/public',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.png',
     title: 'Check-IBAN',
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: '4',
@@ -75,7 +76,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png',
     id: '5',
     title: 'Carta Giovani',
     description: 'Richiedi la convenzione e gestisci i dati e le agevolazioni da offrire.',
@@ -85,7 +86,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://cgn/bo#token=<IdentityToken>',
   },
   {
-    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.png', // TODO check if correct value
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.png',
     id: '6',
     title: 'PDND',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
@@ -104,7 +105,20 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
-    products: [{ id: 'productId', title: 'productTitle' }],
+    products: [
+      {
+        id: 'productId',
+        title: 'productTitle',
+        roleInfos: [
+          {
+            relationshipId: 'relId',
+            role: 'incaricato-ente-creditore',
+            selcRole: SelcRoleEnum.ADMIN,
+            status: 'ACTIVE',
+          },
+        ],
+      },
+    ],
   },
   {
     id: '2',
@@ -113,28 +127,67 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address',
-    products: [{ id: 'productId2', title: 'productTitle2' }],
+    products: [
+      {
+        id: 'productId2',
+        title: 'productTitle2',
+        roleInfos: [
+          {
+            relationshipId: 'relId',
+            role: 'incaricato-ente-creditore',
+            selcRole: SelcRoleEnum.ADMIN,
+            status: 'ACTIVE',
+          },
+        ],
+      },
+    ],
   },
 ];
 
 export const mockedProductUserResource: Array<ProductUserResource> = [
   {
     id: '1',
+    // fiscalCode: "TAXCODE_1", TODO
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
-    relationshipId: 'relationshipId',
+    product: {
+      id: 'prod-io',
+      title: 'App IO',
+      roleInfos: [
+        {
+          relationshipId: 'relationshipId',
+          role: 'incaricato-ente-creditore',
+          selcRole: SelcRoleEnum.ADMIN,
+          status: 'ACTIVE',
+        },
+      ],
+    },
+    certification: true,
   },
   {
     id: '2',
+    // fiscalCode: "TAXCODE_1", TODO
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address2',
-    relationshipId: 'relationshipId2',
+    product: {
+      id: 'prod-io',
+      title: 'App IO',
+      roleInfos: [
+        {
+          relationshipId: 'relationshipId2',
+          role: 'incaricato-ente-creditore',
+          selcRole: SelcRoleEnum.ADMIN,
+          status: 'ACTIVE',
+        },
+      ],
+    },
+    certification: true,
   },
 ];
 
@@ -198,4 +251,7 @@ export const DashboardApi = {
 
   fetchUserRegistryByFiscalCode: async (_taxCode: string): Promise<UserResource | null> =>
     new Promise((resolve) => resolve(mockedUserResource)),
+
+  deletePartyRelation: async (_relationshipId: string): Promise<void> =>
+    new Promise<void>((resolve) => resolve()),
 };

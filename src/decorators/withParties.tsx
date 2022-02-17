@@ -1,40 +1,13 @@
-import { uniqueId } from 'lodash';
-import { useEffect } from 'react';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import withRetrievedValue from '@pagopa/selfcare-common-frontend/decorators/withRetrievedValue';
 import { useParties } from '../hooks/useParties';
+import { Party } from '../model/Party';
 
-export default function withParties<T>(
+type WithPartiesProps = {
+  parties: Array<Party>;
+};
+
+export default function withParties<T extends WithPartiesProps>(
   WrappedComponent: React.ComponentType<T>
-): React.ComponentType<T> {
-  const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-
-  const ComponentWithParties = (props: T) => {
-    const { fetchParties } = useParties();
-
-    const addError = useErrorDispatcher();
-
-    const doFetch = (): void => {
-      fetchParties().catch((reason) => {
-        addError({
-          id: uniqueId(`${ComponentWithParties.displayName}-`),
-          blocking: false,
-          error: reason,
-          techDescription: `An error occurred while fetching parties in component ${ComponentWithParties.displayName}`,
-          onRetry: doFetch,
-          toNotify: true,
-        });
-      });
-    };
-
-    useEffect(() => {
-      doFetch();
-    }, []);
-
-    return <WrappedComponent {...(props as T)} />;
-  };
-
-  // eslint-disable-next-line functional/immutable-data
-  ComponentWithParties.displayName = `withParties(${displayName})`;
-
-  return ComponentWithParties;
+): React.ComponentType<Omit<T, 'parties'>> {
+  return withRetrievedValue('parties', useParties, WrappedComponent);
 }

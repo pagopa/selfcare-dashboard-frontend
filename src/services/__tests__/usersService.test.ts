@@ -11,6 +11,7 @@ import {
   updatePartyUserStatus,
   fetchProductRoles,
   fetchUserRegistryByFiscalCode,
+  deletePartyUser,
 } from '../usersService';
 import { mockedParties } from '../__mocks__/partyService';
 import { mockedPartyProducts } from '../__mocks__/productService';
@@ -23,6 +24,7 @@ import {
 } from '../../model/PartyUser';
 import { mockedUserRegistry } from '../__mocks__/usersService';
 import { userResource2UserRegistry } from '../../model/UserRegistry';
+import { mockedUsers } from '../__mocks__/usersService';
 
 jest.mock('../../api/DashboardApiClient');
 
@@ -34,6 +36,7 @@ beforeEach(() => {
   jest.spyOn(DashboardApi, 'activatePartyRelation');
   jest.spyOn(DashboardApi, 'getProductRoles');
   jest.spyOn(DashboardApi, 'fetchUserRegistryByFiscalCode');
+  jest.spyOn(DashboardApi, 'deletePartyRelation');
 });
 
 describe('Test fetchPartyUsers', () => {
@@ -44,7 +47,7 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       checkPermission,
       undefined,
-      'ADMIN'
+      ['ADMIN']
     );
 
     expect(partyUsers).toMatchObject({
@@ -77,7 +80,7 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       true,
       mockedPartyProducts[0],
-      'LIMITED'
+      ['LIMITED']
     );
 
     expect(partyProductUsers).toMatchObject({
@@ -87,9 +90,7 @@ describe('Test fetchPartyUsers', () => {
         totalElements: mockedProductUserResource.length,
         totalPages: 1,
       },
-      content: mockedProductUserResource.map((r) =>
-        productUserResource2PartyUser(mockedPartyProducts[0], r, mockedUser)
-      ),
+      content: mockedProductUserResource.map((r) => productUserResource2PartyUser(r, mockedUser)),
     });
 
     expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
@@ -110,7 +111,7 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       false,
       mockedPartyProducts[0],
-      'LIMITED'
+      ['LIMITED']
     );
 
     expect(partyProductUsers).toMatchObject({
@@ -149,7 +150,7 @@ test('Test savePartyUser', async () => {
     surname: 'Surname',
     taxCode: 'fiscalCode',
     email: 'email',
-    confirmEmail: 'confirmEmail',
+    confirmEmail: 'email',
     productRole: 'role',
     certification: true,
   };
@@ -167,78 +168,51 @@ describe('Test updatePartyUserStatus', () => {
   test('Test updatePartyUserStatus', async () => {
     const partyUser: PartyUser = {
       id: 'id',
-      name: 'Name',
-      surname: 'Surname',
-      email: 'email',
-      userRole: 'ADMIN',
-      products: [{ id: 'productId', title: 'productTitle', relationshipId: 'relationshipId' }],
-      status: 'ACTIVE',
-      isCurrentUser: false,
-    };
-
-    await updatePartyUserStatus(partyUser, 'SUSPENDED');
-
-    expect(DashboardApi.suspendPartyRelation).toBeCalledWith('relationshipId');
-    expect(DashboardApi.activatePartyRelation).toBeCalledTimes(0);
-
-    await updatePartyUserStatus(partyUser, 'ACTIVE');
-
-    expect(DashboardApi.suspendPartyRelation).toBeCalledTimes(1);
-    expect(DashboardApi.activatePartyRelation).toBeCalledWith('relationshipId');
-  });
-
-  test('Test not 1 product', async () => {
-    const partyUser: PartyUser = {
-      id: 'id',
+      taxCode: 'taxCode',
       name: 'Name',
       surname: 'Surname',
       email: 'email',
       userRole: 'ADMIN',
       products: [
-        { id: 'productId', title: 'productTitle', relationshipId: 'relationshipId' },
-        { id: 'productId2', title: 'productTitle2', relationshipId: 'relationshipId2' },
+        {
+          id: 'productId',
+          title: 'productTitle',
+          roles: [
+            {
+              relationshipId: 'relationshipId',
+              role: 'productRole',
+              selcRole: 'ADMIN',
+              status: 'ACTIVE',
+            },
+          ],
+        },
       ],
       status: 'ACTIVE',
       isCurrentUser: false,
+      certification: true,
     };
 
-    try {
-      await updatePartyUserStatus(partyUser, 'SUSPENDED');
-      fail('exception expected');
-    } catch (e) {
-      expect(e.message).toBe('Updated allowed only for users having selected only 1 product: 2');
-    }
+    await updatePartyUserStatus(
+      mockedParties[0],
+      partyUser,
+      partyUser.products[0],
+      partyUser.products[0].roles[0],
+      'SUSPENDED'
+    );
 
-    partyUser.products = [];
+    expect(DashboardApi.suspendPartyRelation).toBeCalledWith('relationshipId');
+    expect(DashboardApi.activatePartyRelation).toBeCalledTimes(0);
 
-    try {
-      await updatePartyUserStatus(partyUser, 'SUSPENDED');
-      fail('exception expected');
-    } catch (e) {
-      expect(e.message).toBe('Updated allowed only for users having selected only 1 product: 0');
-    }
-  });
+    await updatePartyUserStatus(
+      mockedParties[0],
+      partyUser,
+      partyUser.products[0],
+      partyUser.products[0].roles[0],
+      'ACTIVE'
+    );
 
-  test('Test no relationshipId', async () => {
-    const partyUser: PartyUser = {
-      id: 'id',
-      name: 'Name',
-      surname: 'Surname',
-      email: 'email',
-      userRole: 'ADMIN',
-      products: [{ id: 'productId', title: 'productTitle' }],
-      status: 'ACTIVE',
-      isCurrentUser: false,
-    };
-
-    try {
-      await updatePartyUserStatus(partyUser, 'SUSPENDED');
-      fail('exception expected');
-    } catch (e) {
-      expect((e.message as string).substring(0, 88)).toBe(
-        'Updated allowed only for users retrieved using getPartyProductUsers (no relationshipId):'
-      );
-    }
+    expect(DashboardApi.suspendPartyRelation).toBeCalledTimes(1);
+    expect(DashboardApi.activatePartyRelation).toBeCalledWith('relationshipId');
   });
 
   test('Test fetchUserRegistryByFiscalCode', async () => {
@@ -248,4 +222,17 @@ describe('Test updatePartyUserStatus', () => {
 
     expect(DashboardApi.fetchUserRegistryByFiscalCode).toBeCalledWith('TaxCode');
   });
+});
+
+test('Test deletePartyUser', async () => {
+  await deletePartyUser(
+    mockedParties[0],
+    mockedUsers[0],
+    mockedUsers[0].products[0],
+    mockedUsers[0].products[0].roles[0]
+  );
+
+  expect(DashboardApi.deletePartyRelation).toBeCalledWith(
+    mockedUsers[0].products[0].roles[0].relationshipId
+  );
 });

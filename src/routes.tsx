@@ -1,13 +1,13 @@
 import { Redirect, useParams } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import withSelectedPartyProduct from './decorators/withSelectedPartyProduct';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
-import DashboardUsers from './pages/dashboardUsers/DashboardUsers';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
 import AddUsersProductPage from './pages/dashboardUserEdit/AddUsersProductPage';
 import AddUsersPage from './pages/dashboardUserEdit/AddUsersPage';
+import UsersPage from './pages/dashboardUsers/UsersPage/UsersPage';
+import UsersProductPage from './pages/dashboardUsers/UsersProductPage/UsersProductPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -58,9 +58,9 @@ export const DASHBOARD_ROUTES = {
       MAIN: {
         path: `${BASE_ROUTE}/:institutionId/roles`,
         exact: true,
-        component: DashboardUsers,
+        component: UsersPage,
       },
-      ADD_PRODUCT_USER: {
+      ADD_PARTY_USER: {
         path: `${BASE_ROUTE}/:institutionId/roles/add`,
         exact: true,
         component: AddUsersPage,
@@ -75,12 +75,12 @@ export const DASHBOARD_ROUTES = {
       MAIN: {
         path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
         exact: true,
-        component: withSelectedPartyProduct(DashboardUsers),
+        component: UsersProductPage,
       },
       ADD_PARTY_PRODUCT_USER: {
         path: `${BASE_ROUTE}/:institutionId/:productId/roles/add`,
         exact: true,
-        component: withSelectedPartyProduct(AddUsersProductPage),
+        component: AddUsersProductPage,
       },
       ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
     },

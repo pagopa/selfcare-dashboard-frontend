@@ -2,31 +2,39 @@ import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Box, styled } from '@mui/system';
 import { DataGrid, GridColDef, GridSortDirection, GridSortModel } from '@mui/x-data-grid';
 import React, { useState } from 'react';
-import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
-import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
 import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionModal';
 import Toast from '@pagopa/selfcare-common-frontend/components/Toast';
-import CustomPagination from '@pagopa/selfcare-common-frontend/components/CustomPagination';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { CustomPagination } from '@pagopa/selfcare-common-frontend';
+import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
 import { Party, UserStatus } from '../../../../../model/Party';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../../../utils/constants';
 import { updatePartyUserStatus } from '../../../../../services/usersService';
-import { buildColumnDefs } from './UserSearchTableColumns';
+import { ProductRolesLists } from '../../../../../model/ProductRole';
+import { buildColumnDefs } from './UserProductTableColumns';
+import UserProductLoading from './UserProductLoading';
+import UserTableLoadMoreData from './UserProductLoadMoreData';
 
 const rowHeight = 81;
 const headerHeight = 56;
 
 interface UsersSearchTableProps {
+  incrementalLoad: boolean;
+  loading: boolean;
+  noMoreData: boolean;
   party: Party;
   users: Array<PartyUser>;
-  selectedProduct?: Product;
+  product: Product;
+  productRolesLists: ProductRolesLists;
+  canEdit: boolean;
+  fetchPage: (page?: number, size?: number) => void;
   page: Page;
   sort?: string;
-  onPageRequest: (p: PageRequest) => void;
+  onSortRequest: (sort: string) => void;
 }
 
 const CustomDataGrid = styled(DataGrid)({
@@ -89,19 +97,26 @@ const CustomDataGrid = styled(DataGrid)({
   },
 });
 
-export default function UsersSearchTable({
+export default function UsersProductTable({
+  incrementalLoad,
+  loading,
+  fetchPage,
+  noMoreData,
   party,
-  selectedProduct,
+  product,
+  productRolesLists,
+  canEdit,
   users,
   page,
   sort,
-  onPageRequest,
+  onSortRequest,
 }: UsersSearchTableProps) {
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   const addError = useErrorDispatcher();
   const [openModal, setOpenModal] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [selectedUser, setSelectedUser] = useState<PartyUser>();
+
   const sortSplitted = sort ? sort.split(',') : undefined;
 
   const handleOpen = (users: PartyUser) => {
@@ -109,12 +124,12 @@ export default function UsersSearchTable({
     setOpenModal(true);
     setSelectedUser(users);
   };
-  const columns: Array<GridColDef> = buildColumnDefs(!!selectedProduct, handleOpen);
+  const columns: Array<GridColDef> = buildColumnDefs(canEdit, party, handleOpen, productRolesLists);
 
   const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
 
   const confirmChangeStatus = (user?: PartyUser) => {
-    if (user && selectedProduct) {
+    if (user && canEdit) {
       const nextStatus: UserStatus | undefined =
         user.status === 'ACTIVE' ? 'SUSPENDED' : user.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
       if (!nextStatus) {
@@ -130,13 +145,22 @@ export default function UsersSearchTable({
       }
 
       setLoading(true);
-      updatePartyUserStatus(user, nextStatus)
+      console.log(user);
+      updatePartyUserStatus(party, user, user.products[0], user.products[0].roles[0], nextStatus) // TODO fixme, suspend just the first???
         .then((_) => {
-          if(nextStatus === "SUSPENDED"){
-            trackEvent('USER_SUSPEND', { party_id: party.institutionId , product: selectedProduct.id, product_role: user.userRole });
-          }else if(nextStatus === "ACTIVE"){
-            trackEvent('USER_RESUME', { party_id: party.institutionId , product: selectedProduct.id, product_role: user.userRole });
-          };
+          if (nextStatus === 'SUSPENDED') {
+            trackEvent('USER_SUSPEND', {
+              party_id: party.institutionId,
+              product: product.id,
+              product_role: user.userRole,
+            });
+          } else if (nextStatus === 'ACTIVE') {
+            trackEvent('USER_RESUME', {
+              party_id: party.institutionId,
+              product: product.id,
+              product_role: user.userRole,
+            });
+          }
           setOpenModal(false);
           // eslint-disable-next-line functional/immutable-data
           user.status = nextStatus;
@@ -174,15 +198,31 @@ export default function UsersSearchTable({
           rows={users}
           getRowId={(r) => r.id}
           columns={columns}
-          pageSize={page.size}
-          rowsPerPageOptions={[20]}
-          rowHeight={rowHeight}
+          rowHeight={users.length === 0 && loading ? 0 : rowHeight /* to remove? */}
           headerHeight={headerHeight}
-          hideFooterSelectedRowCount={true}
           components={{
-            Pagination: () => (
-              <CustomPagination sort={sort} page={page} onPageRequest={onPageRequest} />
-            ),
+            Footer:
+              loading || incrementalLoad
+                ? () =>
+                    loading ? (
+                      <UserProductLoading />
+                    ) : !noMoreData ? (
+                      <UserTableLoadMoreData fetchNextPage={fetchPage} />
+                    ) : (
+                      <></>
+                    )
+                : undefined,
+            Pagination: incrementalLoad
+              ? undefined
+              : () => (
+                  <CustomPagination
+                    sort={sort}
+                    page={page}
+                    onPageRequest={(nextPage) => fetchPage(nextPage.page, nextPage.size)}
+                  />
+                ),
+            NoRowsOverlay: () => <></>,
+            NoResultsOverlay: () => <></>,
             ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
             ColumnSortedDescendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
           }}
@@ -190,11 +230,7 @@ export default function UsersSearchTable({
           filterMode="server"
           sortingMode="server"
           onSortModelChange={(model: GridSortModel) =>
-            onPageRequest({
-              page: page.number,
-              size: page.size,
-              sort: model.length > 0 ? model.map((m) => `${m.field},${m.sort}`)[0] : undefined,
-            })
+            onSortRequest(model.map((m) => `${m.field},${m.sort}`)[0])
           }
           sortModel={
             sortSplitted
@@ -204,7 +240,7 @@ export default function UsersSearchTable({
         />
       </Box>
       <Toast
-        open={openToast}
+        open={openToast /* TODO useNotify */}
         title={`REFERENTE ${selectedUserStatus?.toUpperCase()}`}
         message={
           <>
@@ -216,7 +252,7 @@ export default function UsersSearchTable({
         onCloseToast={() => setOpenToast(false)}
       />
       <SessionModal
-        open={openModal}
+        open={openModal /* TODO useNotify */}
         title={selectedUser?.status === 'ACTIVE' ? 'Sospendi Referente' : 'Riabilita Referente'}
         message={
           <>

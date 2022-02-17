@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
+import { ProductRolesLists, ProductsRolesMap } from '../../model/ProductRole';
 
 interface PartiesState {
   list?: Array<Party>;
   selected?: Party;
   selectedPartyLogoUrl?: string;
   selectedProducts?: Array<Product>;
+  selectedProductsRolesMap?: ProductsRolesMap;
 }
 
 const initialState: PartiesState = {};
@@ -35,6 +37,15 @@ export const partiesSlice = createSlice({
     setPartySelectedProducts: (state, action: PayloadAction<Array<Product> | undefined>) => {
       state.selectedProducts = action.payload;
     },
+    setPartySelectedProductsRolesMap: (state, action: PayloadAction<ProductsRolesMap>) => {
+      state.selectedProductsRolesMap = action.payload;
+    },
+    addPartySelectedProductRoles: (state, action: PayloadAction<ProductsRolesMap>) => {
+      if (!state.selectedProductsRolesMap) {
+        state.selectedProductsRolesMap = {};
+      }
+      Object.assign(state.selectedProductsRolesMap, action.payload);
+    },
   },
 });
 
@@ -48,4 +59,13 @@ export const partiesSelectors = {
     state.parties.selectedPartyLogoUrl,
   selectPartySelectedProducts: (state: RootState): Array<Product> | undefined =>
     state.parties.selectedProducts,
+  selectPartySelectedProductsRolesMap: (state: RootState): ProductsRolesMap =>
+    state.parties.selectedProductsRolesMap ?? {},
+  selectPartySelectedProductRoles: (
+    state: RootState,
+    productId: string
+  ): ProductRolesLists | undefined =>
+    state.parties.selectedProductsRolesMap
+      ? state.parties.selectedProductsRolesMap[productId]
+      : undefined,
 };
