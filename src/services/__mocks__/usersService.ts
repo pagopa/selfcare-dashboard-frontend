@@ -346,17 +346,35 @@ export const mockedUsers: Array<PartyUser> = [
   },
 ];
 
-export const mockedProductRoles = [
-  {
-    productRole: 'Incaricato Ente Creditore',
-  },
-  {
-    productRole: 'Referente dei Pagamenti',
-  },
-  {
-    productRole: 'Referente Tecnico',
-  },
-];
+export const mockedProductRoles: { [selcRole in UserRole]: Array<ProductRole> } = {
+  ADMIN: [
+    {
+      selcRole: 'ADMIN',
+
+      productRole: 'incaricato-ente-creditore',
+
+      displayableProductRole: 'Incaricato Ente Creditore',
+    },
+  ],
+
+  LIMITED: [
+    {
+      selcRole: 'LIMITED',
+
+      productRole: 'referente-tecnico',
+
+      displayableProductRole: 'Referente Tecnico',
+    },
+
+    {
+      selcRole: 'LIMITED',
+
+      productRole: 'operatore-sicurezza',
+
+      displayableProductRole: 'Operatore sicurezza',
+    },
+  ],
+};
 
 export const mockedUserRegistry: UserRegistry = {
   taxCode: 'AAAAAA11A11A234S',
@@ -387,8 +405,11 @@ export const fetchPartyUsers = (
   return new Promise((resolve) => resolve({ content: filteredContent, page }));
 };
 
-export const fetchProductRoles = (_product: Product): Promise<Array<ProductRole>> =>
-  new Promise((resolve) => resolve(mockedProductRoles));
+export const fetchProductRoles = (
+  _product: Product
+): Promise<{
+  [selcRole in UserRole]: Array<ProductRole>;
+}> => new Promise((resolve) => resolve(mockedProductRoles));
 
 export const savePartyUser = (
   _party: Party,

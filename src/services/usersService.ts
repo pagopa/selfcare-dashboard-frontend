@@ -88,16 +88,23 @@ export const updatePartyUserStatus = (user: PartyUser, status: UserStatus): Prom
   }
 };
 
-export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
+export const fetchProductRoles = (
+  _product: Product
+): Promise<{
+  [selcRole in UserRole]: Array<ProductRole>;
+}> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return new Promise((resolve) => resolve(mockedProductRoles));
   } else {
-    return DashboardApi.getProductRoles(product.id).then((roles) =>
-      roles.map((r) => ({ productRole: r }))
-    );
+    throw new Error('Error');
   }
 };
+/*
+ return DashboardApi.getProductRoles(product.id).then((roles) =>
+      roles.map((r) => ({ productRole: r }))
+    );
+*/
 
 export const fetchUserRegistryByFiscalCode = (taxCode: string): Promise<UserRegistry | null> => {
   /* istanbul ignore if */

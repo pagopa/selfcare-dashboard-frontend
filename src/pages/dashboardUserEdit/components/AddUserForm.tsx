@@ -9,6 +9,7 @@ import {
   Button,
   Typography,
   Box,
+  Checkbox,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { styled } from '@mui/system';
@@ -22,7 +23,7 @@ import {
   useUnloadEventOnExit,
 } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { Party } from '../../../model/Party';
+import { Party, UserRole } from '../../../model/Party';
 import {
   fetchProductRoles,
   fetchUserRegistryByFiscalCode,
@@ -89,13 +90,16 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
   const history = useHistory();
-  const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
+  const [productRoles, setProductRoles] = useState<{
+    [selcRole in UserRole]: Array<ProductRole>;
+  }>();
   const [validTaxcode, setValidTaxcode] = useState<string>();
   const [userProduct, setUserProduct] = useState<Product>();
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
 
   useEffect(() => setUserProduct(selectedProduct), [selectedProduct]);
+  useEffect(() => setProductRoles(productRoles), [productRoles]);
 
   useEffect(() => {
     if (userProduct) {
@@ -216,6 +220,37 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
             product: userProduct?.id,
             product_role: values.productRole,
           });
+
+          if (values.productRole.length >= 2) {
+            // TODO
+            addNotify({
+              component: 'SessionModal',
+              id: 'MULTI_ROLE_USER',
+              title: '',
+              message: (
+                <>
+                  {'Stai per assegnare a '}
+                  <strong>{`${values.name} ${values.surname} `}</strong>
+                  {`i ruoli `}
+                  <strong>{`${values.productRole}`}</strong>
+                  {' e '}
+                  <strong>{`${values.productRole}`}</strong>
+                  {' sul prodotto '}
+                  <strong>{`${selectedProduct.title}.`}</strong>
+                  {
+                    <>
+                      <br></br>
+                      <br></br>
+                    </>
+                  }
+                  {' Confermi di voler continuare?'}
+                  {<br></br>}
+                </>
+              ),
+              confirmLabel: 'Conferma',
+              closeLabel: 'Annulla',
+            });
+          }
           addNotify({
             component: 'Toast',
             id: 'SAVE_PARTY_USER',
@@ -383,15 +418,67 @@ export default function AddUserForm({ party, selectedProduct, products }: Props)
                   value={formik.values.productRole}
                   onChange={formik.handleChange}
                 >
-                  {productRoles?.map((p, index) => (
-                    <Box key={p.productRole}>
-                      <CustomFormControlLabel
-                        disabled={!validTaxcode}
-                        value={p.productRole}
-                        control={<Radio />}
-                        label={p.productRole}
-                      />
-                      {index !== productRoles.length - 1 && (
+                  {productRoles.ADMIN.map((p, index) => (
+                    <Box key={p.selcRole}>
+                      {productRoles.ADMIN.length > 1 ? (
+                        <CustomFormControlLabel
+                          disabled={!validTaxcode || !productRoles.ADMIN} // TODO NOT DISABLED WHEN SELECTED OTHER CATEGORY
+                          value={p.productRole}
+                          control={
+                            <Checkbox
+                              aria-label="user"
+                              name="productRole"
+                              value={formik.values.productRole}
+                              disabled={!validTaxcode || !productRoles.ADMIN}
+                              onChange={formik.handleChange}
+                            />
+                          }
+                          label={p.displayableProductRole}
+                          onClick={() => setProductRoles(productRoles)}
+                        />
+                      ) : (
+                        <CustomFormControlLabel
+                          disabled={!validTaxcode || !productRoles.ADMIN}
+                          value={p.productRole}
+                          control={<Radio />}
+                          label={p.displayableProductRole}
+                          onClick={() => setProductRoles(productRoles)}
+                        />
+                      )}
+                      {index !== productRoles.ADMIN.length - 1 && (
+                        <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
+                      )}
+                    </Box>
+                  ))}
+
+                  {productRoles.LIMITED.map((p, index) => (
+                    <Box key={p.selcRole}>
+                      {productRoles.LIMITED.length > 1 ? (
+                        <CustomFormControlLabel
+                          disabled={!validTaxcode || !productRoles.LIMITED}
+                          value={p.productRole}
+                          control={
+                            <Checkbox
+                              aria-label="user"
+                              name="productRole"
+                              disabled={!validTaxcode || !productRoles.LIMITED}
+                              value={formik.values.productRole}
+                              onChange={formik.handleChange}
+                            />
+                          }
+                          label={p.displayableProductRole}
+                          onClick={() => setProductRoles(productRoles)}
+                        />
+                      ) : (
+                        <CustomFormControlLabel
+                          disabled={!validTaxcode || !productRoles.LIMITED}
+                          value={p.productRole}
+                          control={<Radio />}
+                          label={p.displayableProductRole}
+                          onClick={() => setProductRoles(productRoles)}
+                        />
+                      )}
+                      {index !== productRoles.LIMITED.length - 1 && (
                         <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
                       )}
                     </Box>
