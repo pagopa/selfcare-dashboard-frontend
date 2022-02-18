@@ -46,11 +46,11 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
   return (
     <Grid
       container
-      px={0}
+      px={2}
       mt={10}
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
-      <Grid item xs={12} mb={9} px={'16px'}>
+      <Grid item xs={12} mb={9}>
         <TitleBox
           title="Referenti"
           subTitle="Visualizza e gestisci i referenti abilitati alla gestione dei prodotti del tuo Ente."

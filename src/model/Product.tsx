@@ -12,7 +12,6 @@ export type Product = {
   userRole?: string;
   authorized?: boolean;
   status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
-  allowMultipleRole: boolean;
 };
 
 export const productResource2Product = (resource: ProductsResource): Product => ({
@@ -27,5 +26,4 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   userRole: resource.userRole,
   authorized: resource.authorized,
   status: resource.status,
-  allowMultipleRole: false, // TODO
 });

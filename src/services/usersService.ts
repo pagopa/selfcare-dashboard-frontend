@@ -19,7 +19,7 @@ import {
   savePartyUser as savePartyUserMocked,
   updatePartyUserStatus as updatePartyUserStatusMocked,
   deletePartyUser as deletePartyUserMocked,
-  mockedProductRoles,
+  fetchProductRoles as fetchProductRolesMocked,
 } from './__mocks__/usersService';
 
 const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
@@ -142,17 +142,22 @@ export const deletePartyUser = (
 export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
-    return new Promise((resolve) => resolve(mockedProductRoles));
+    return fetchProductRolesMocked(product);
   } else {
-    return DashboardApi.getProductRoles(product.id).then(
-      (roles) =>
-        roles.map((r) => ({
-          productId: product.id,
-          productRole: r,
-          selcRole: 'ADMIN',
-          title: r,
-          description: `TODO Descrizione ruolo ${r}`,
-        })) // TODO fixme
+    return DashboardApi.getProductRoles(product.id).then((roles) =>
+      roles
+        .map((pr) =>
+          pr.productRoles.map((r) => ({
+            productId: product.id,
+            partyRole: pr.partyRole,
+            selcRole: pr.selcRole,
+            multiroleAllowed: pr.multiroleAllowed,
+            productRole: r.code,
+            title: r.label,
+            description: r.description,
+          }))
+        )
+        .flatMap((x) => x)
     );
   }
 };

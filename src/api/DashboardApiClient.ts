@@ -11,6 +11,8 @@ import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
+import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
+import { CreateUserDto } from './generated/b4f-dashboard/CreateUserDto';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
@@ -110,7 +112,7 @@ export const DashboardApi = {
     const result = await apiClient.createInstitutionProductUserUsingPOST({
       institutionId,
       productId,
-      body: user,
+      body: user as unknown as CreateUserDto, // TODO fixme when merging with addUserForm task
     });
     return extractResponse(result, 201, onRedirectToLogin);
   },
@@ -136,7 +138,7 @@ export const DashboardApi = {
     return extractResponse(result, 204, onRedirectToLogin);
   },
 
-  getProductRoles: async (productId: string): Promise<Array<string>> => {
+  getProductRoles: async (productId: string): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
     });
