@@ -94,7 +94,7 @@ const UsersTableProduct = ({
   }, [pageRequest]);
 
   const fetchUsers = () => {
-    onFetchStatusUpdate(true, 0);
+    onFetchStatusUpdate(true, users.content.length);
     setLoading(true);
     fakePagedFetch(pageRequest?.page as PageRequest, pageRequest?.filterChanged as boolean)
       .then((r) => {
@@ -139,7 +139,7 @@ const UsersTableProduct = ({
   if (error) {
     return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
-    return loading && hideProductWhenLoading ? (
+    return loading && hideProductWhenLoading && users.content.length === 0 ? (
       <></>
     ) : (
       <UsersProductTable
