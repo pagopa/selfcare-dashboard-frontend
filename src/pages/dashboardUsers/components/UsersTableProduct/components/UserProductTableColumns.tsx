@@ -25,7 +25,7 @@ export function buildColumnDefs(
       headerName: 'NOME',
       align: 'left',
       headerAlign: 'left',
-      width: 300,
+      width: 275,
       editable: false,
       disableColumnMenu: true,
       valueGetter: getFullName,
@@ -39,7 +39,7 @@ export function buildColumnDefs(
       headerName: 'EMAIL',
       align: 'left',
       headerAlign: 'left',
-      width: 300,
+      width: 293,
       editable: false,
       disableColumnMenu: true,
       renderHeader: showCustmHeader,
@@ -52,11 +52,23 @@ export function buildColumnDefs(
       headerName: 'RUOLI',
       align: 'left',
       headerAlign: 'left',
-      width: 300,
+      width: 250,
       editable: false,
       disableColumnMenu: true,
       renderCell: (params) => showRoles(params, productRolesLists),
       renderHeader: showCustmHeader,
+      sortable: false,
+    },
+    {
+      field: 'status',
+      cellClassName: 'justifyContentNormalRight',
+      headerName: '',
+      align: 'center',
+      width: 82,
+      hideSortIcons: true,
+      disableColumnMenu: true,
+      editable: false,
+      renderCell: showStatus,
       sortable: false,
     },
     {
@@ -107,6 +119,7 @@ function renderCell(
           paddingBottom: '8px',
           width: '100%',
           color: params.row.status === 'SUSPENDED' ? '#9E9E9E' : undefined,
+          fontSize: '14px',
         }}
       >
         {value}
@@ -129,6 +142,51 @@ function showCustmHeader(params: GridColumnHeaderParams) {
         {params.colDef.headerName}
       </Typography>
     </React.Fragment>
+  );
+}
+
+function showName(params: GridRenderCellParams, canShowChip: boolean) {
+  const showChip = canShowChip && params.row.status === 'SUSPENDED';
+  return (
+    <React.Fragment>
+      {renderCell(
+        params,
+        <>
+          <Grid container sx={{ width: '100%' }}>
+            <Grid item xs={showChip ? 7 : 12} sx={{ width: '100%' }}>
+              <Typography variant="h6" color={showChip ? '#9E9E9E' : undefined}>
+                {params.row.name} {params.row.surname} {params.row.isCurrentUser ? '(tu)' : ''}
+              </Typography>
+            </Grid>
+            {showChip && (
+              <Grid
+                item
+                xs={5}
+                sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+              >
+                <TableChip text="Sospeso" />
+              </Grid>
+            )}
+          </Grid>
+        </>
+      )}
+    </React.Fragment>
+  );
+}
+
+function TableChip({ text }: { text: string }) {
+  return (
+    <Chip
+      label={text}
+      sx={{
+        fontSize: '16px',
+        fontWeight: '600',
+        color: '#17324D',
+        backgroundColor: '#00C5CA',
+        paddingBottom: '1px',
+        height: '24px',
+      }}
+    />
   );
 }
 
@@ -157,43 +215,13 @@ function showRoles(params: GridRenderCellParams<PartyUser>, productRolesLists: P
   );
 }
 
-function showName(params: GridRenderCellParams) {
-  const isUserSuspended = params.row.status === 'SUSPENDED';
-  return (
-    <React.Fragment>
-      {renderCell(
-        params,
-        <>
-          <Grid container sx={{ width: '100%' }}>
-            <Grid item xs={isUserSuspended ? 7 : 12} sx={{ width: '100%' }}>
-              <Typography variant="h6" color={isUserSuspended ? '#9E9E9E' : undefined}>
-                {params.row.name} {params.row.surname}
-              </Typography>
-            </Grid>
-            {isUserSuspended && (
-              <Grid
-                item
-                xs={5}
-                sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
-              >
-                <Chip
-                  label="Sospeso"
-                  sx={{
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    color: '#17324D',
-                    backgroundColor: '#00C5CA',
-                    paddingBottom: '1px',
-                    height: '24px',
-                  }}
-                />
-              </Grid>
-            )}
-          </Grid>
-        </>
-      )}
-    </React.Fragment>
-  );
+function showStatus(params: GridRenderCellParams) {
+  const showChip = params.row.status === 'SUSPENDED';
+  return renderCell(params, <>{showChip && <TableChip text="Sospeso" />}</>, {
+    paddingLeft: 0,
+    paddingRight: 0,
+    textAlign: 'center',
+  });
 }
 
 function showActions(
@@ -202,28 +230,20 @@ function showActions(
   onDelete: (user: PartyUser) => void
 ) {
   const row = users.row as PartyUser;
-  return (
-    <React.Fragment>
-      {row.isCurrentUser
-        ? renderCell(users, '')
-        : row.products[0].roles.length > 1
-        ? renderCell(
-            users,
-            <Tooltip title="Le azioni sono disponibili nel dettaglio del referente">
-              <InfoOutlined sx={{ color: '#5C6F82' }} />
-            </Tooltip>,
-            { paddingLeft: 0, paddingRight: 0, textAlign: 'center' }
-          )
-        : renderCell(
-            users,
-            <UserProductRowActions
-              party={party}
-              partyUser={row}
-              partyUserProduct={row.products[0]}
-              onDelete={onDelete}
-            />,
-            { paddingLeft: 0, paddingRight: 0, textAlign: 'center' }
-          )}
-    </React.Fragment>
+  return renderCell(
+    users,
+    row.isCurrentUser || row.products[0].roles.length > 1 ? (
+      <Tooltip title="Le azioni sono disponibili nel dettaglio del referente">
+        <InfoOutlined sx={{ color: '#5C6F82', paddingTop: 1, boxSizing: 'unset' }} />
+      </Tooltip>
+    ) : (
+      <UserProductRowActions
+        party={party}
+        partyUser={row}
+        partyUserProduct={row.products[0]}
+        onDelete={onDelete}
+      />
+    ),
+    { paddingLeft: 0, paddingRight: 0, textAlign: 'center' }
   );
 }
