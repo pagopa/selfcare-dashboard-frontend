@@ -15,6 +15,7 @@ import UserProductRowActions from './UserProductRowActions';
 export function buildColumnDefs(
   canEdit: boolean,
   party: Party,
+  onRowClick: (partyUser: PartyUser) => void,
   onDelete: (user: PartyUser) => void,
   productRolesLists: ProductRolesLists
 ) {
@@ -30,7 +31,7 @@ export function buildColumnDefs(
       disableColumnMenu: true,
       valueGetter: getFullName,
       renderHeader: showCustmHeader,
-      renderCell: showName,
+      renderCell: (params) => showName(params, false, onRowClick),
       sortable: false,
     },
     {
@@ -43,7 +44,7 @@ export function buildColumnDefs(
       editable: false,
       disableColumnMenu: true,
       renderHeader: showCustmHeader,
-      renderCell,
+      renderCell: (params) => renderCell(params, undefined, onRowClick),
       sortable: false,
     },
     {
@@ -55,7 +56,7 @@ export function buildColumnDefs(
       width: 250,
       editable: false,
       disableColumnMenu: true,
-      renderCell: (params) => showRoles(params, productRolesLists),
+      renderCell: (params) => showRoles(params, productRolesLists, onRowClick),
       renderHeader: showCustmHeader,
       sortable: false,
     },
@@ -68,7 +69,7 @@ export function buildColumnDefs(
       hideSortIcons: true,
       disableColumnMenu: true,
       editable: false,
-      renderCell: showStatus,
+      renderCell: (params) => showStatus(params, onRowClick),
       sortable: false,
     },
     {
@@ -80,7 +81,8 @@ export function buildColumnDefs(
       hideSortIcons: true,
       disableColumnMenu: true,
       editable: false,
-      renderCell: (p) => (canEdit ? showActions(party, p, onDelete) : renderCell(p, '')),
+      renderCell: (p) =>
+        canEdit ? showActions(party, p, onDelete) : renderCell(p, '', onRowClick),
       sortable: false,
     },
   ] as Array<GridColDef>;
@@ -89,13 +91,13 @@ export function buildColumnDefs(
 function renderCell(
   params: GridRenderCellParams,
   value: ReactNode = params.value,
+  onRowClick?: (partyUser: PartyUser) => void,
   overrideStyle: CSSProperties = {}
 ) {
-  const bgColor = params.row.status === 'SUSPENDED' ? '#EEEEEE' : 'white';
   return (
     <div
       style={{
-        backgroundColor: bgColor,
+        backgroundColor: 'white',
         width: '100%',
         height: '100%',
         paddingRight: '24px',
@@ -105,11 +107,12 @@ function renderCell(
         marginTop: '16px',
         // marginBottom:'16px',
         borderBottom: '1px solid #CCD4DC',
+        cursor: 'pointer',
         ...overrideStyle,
       }}
+      onClick={onRowClick ? () => onRowClick(params.row) : undefined}
     >
       <div
-        title={value?.toString()}
         style={{
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -145,8 +148,13 @@ function showCustmHeader(params: GridColumnHeaderParams) {
   );
 }
 
-function showName(params: GridRenderCellParams, canShowChip: boolean) {
-  const showChip = canShowChip && params.row.status === 'SUSPENDED';
+function showName(
+  params: GridRenderCellParams,
+  canShowChip: boolean,
+  onRowClick: (partyUser: PartyUser) => void
+) {
+  const isSuspended = params.row.status === 'SUSPENDED';
+  const showChip = canShowChip && isSuspended;
   return (
     <React.Fragment>
       {renderCell(
@@ -154,7 +162,7 @@ function showName(params: GridRenderCellParams, canShowChip: boolean) {
         <>
           <Grid container sx={{ width: '100%' }}>
             <Grid item xs={showChip ? 7 : 12} sx={{ width: '100%' }}>
-              <Typography variant="h6" color={showChip ? '#9E9E9E' : undefined}>
+              <Typography variant="h6" color={isSuspended ? '#9E9E9E' : undefined}>
                 {params.row.name} {params.row.surname} {params.row.isCurrentUser ? '(tu)' : ''}
               </Typography>
             </Grid>
@@ -168,7 +176,8 @@ function showName(params: GridRenderCellParams, canShowChip: boolean) {
               </Grid>
             )}
           </Grid>
-        </>
+        </>,
+        onRowClick
       )}
     </React.Fragment>
   );
@@ -182,7 +191,7 @@ function TableChip({ text }: { text: string }) {
         fontSize: '16px',
         fontWeight: '600',
         color: '#17324D',
-        backgroundColor: '#00C5CA',
+        backgroundColor: '#E0E0E0',
         paddingBottom: '1px',
         height: '24px',
       }}
@@ -190,7 +199,11 @@ function TableChip({ text }: { text: string }) {
   );
 }
 
-function showRoles(params: GridRenderCellParams<PartyUser>, productRolesLists: ProductRolesLists) {
+function showRoles(
+  params: GridRenderCellParams<PartyUser>,
+  productRolesLists: ProductRolesLists,
+  onRowClick: (partyUser: PartyUser) => void
+) {
   const isUserSuspended = params.row.status === 'SUSPENDED';
   return (
     <React.Fragment>
@@ -209,15 +222,16 @@ function showRoles(params: GridRenderCellParams<PartyUser>, productRolesLists: P
               </Typography>
             </Grid>
           ))}
-        </Grid>
+        </Grid>,
+        onRowClick
       )}
     </React.Fragment>
   );
 }
 
-function showStatus(params: GridRenderCellParams) {
+function showStatus(params: GridRenderCellParams, onRowClick: (partyUser: PartyUser) => void) {
   const showChip = params.row.status === 'SUSPENDED';
-  return renderCell(params, <>{showChip && <TableChip text="Sospeso" />}</>, {
+  return renderCell(params, <>{showChip && <TableChip text="Sospeso" />}</>, onRowClick, {
     paddingLeft: 0,
     paddingRight: 0,
     textAlign: 'center',
@@ -244,6 +258,7 @@ function showActions(
         onDelete={onDelete}
       />
     ),
+    undefined,
     { paddingLeft: 0, paddingRight: 0, textAlign: 'center' }
   );
 }

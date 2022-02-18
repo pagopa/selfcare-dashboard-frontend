@@ -28,12 +28,13 @@ interface UsersSearchTableProps {
   page: Page;
   sort?: string;
   onSortRequest: (sort: string) => void;
+  onRowClick: (partyUser: PartyUser) => void;
   onDelete: (partyUser: PartyUser) => void;
 }
 
 const CustomDataGrid = styled(DataGrid)({
   border: 'none !important',
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus':
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus-within':
     { outline: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell': {
     whiteSpace: 'normal !important',
@@ -103,11 +104,18 @@ export default function UsersProductTable({
   page,
   sort,
   onSortRequest,
+  onRowClick,
   onDelete,
 }: UsersSearchTableProps) {
   const sortSplitted = sort ? sort.split(',') : undefined;
 
-  const columns: Array<GridColDef> = buildColumnDefs(canEdit, party, onDelete, productRolesLists);
+  const columns: Array<GridColDef> = buildColumnDefs(
+    canEdit,
+    party,
+    onRowClick,
+    onDelete,
+    productRolesLists
+  );
 
   return (
     <React.Fragment>

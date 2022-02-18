@@ -5,6 +5,8 @@ import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/use
 import { useEffect, useState } from 'react';
 import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import useFakePagination from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
+import { useHistory } from 'react-router-dom';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Party } from '../../../../model/Party';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Product } from '../../../../model/Product';
@@ -36,8 +38,11 @@ const UsersTableProduct = ({
   onFetchStatusUpdate,
   filterConfiguration,
   hideProductWhenLoading,
+  userDetailUrl,
 }: Props) => {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
+
+  const history = useHistory();
 
   const [users, setUsers] = useState<PageResource<PartyUser>>({
     content: [],
@@ -174,6 +179,9 @@ const UsersTableProduct = ({
               sort,
             },
           })
+        }
+        onRowClick={(partyUser) =>
+          history.push(resolvePathVariables(userDetailUrl, { userId: partyUser.id }))
         }
         onDelete={onDelete}
       />

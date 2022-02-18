@@ -168,21 +168,10 @@ export default function UserProductRowActions({
 
   return (
     <div>
-      <IconButton
-        aria-label="more"
-        id="long-button"
-        aria-controls={open ? 'long-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
+      <IconButton onClick={handleClick}>
         <MoreVertIcon color="primary" />
       </IconButton>
       <Menu
-        id="long-menu"
-        MenuListProps={{
-          'aria-labelledby': 'long-button',
-        }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
