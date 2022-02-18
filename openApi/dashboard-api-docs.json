@@ -276,9 +276,9 @@
             }
           },
           {
-            "name": "productRole",
+            "name": "productRoles",
             "in": "query",
-            "description": "User's role in product",
+            "description": "User's roles in product",
             "required": false,
             "style": "form",
             "explode": true,
@@ -413,9 +413,9 @@
             }
           },
           {
-            "name": "productRole",
+            "name": "productRoles",
             "in": "query",
-            "description": "User's role in product",
+            "description": "User's roles in product",
             "required": false,
             "style": "form",
             "explode": true,
@@ -434,6 +434,62 @@
                   "items": {
                     "$ref": "#/components/schemas/InstitutionUserResource"
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
+    },
+    "/institutions/{institutionId}/users/{userId}": {
+      "get": {
+        "tags": ["institutions"],
+        "summary": "getInstitutionUser",
+        "description": "${swagger.dashboard.institutions.api.getInstitutionUser}",
+        "operationId": "getInstitutionUserUsingGET",
+        "parameters": [
+          {
+            "name": "institutionId",
+            "in": "path",
+            "description": "Institution's unique identifier (i.e.: IPA code)",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User's unique identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstitutionUserResource"
                 }
               }
             }
@@ -508,7 +564,7 @@
       "delete": {
         "tags": ["relationships"],
         "summary": "deleteRelationshipById",
-        "description": "{swagger.dashboard.institutions.api.deleteUser}",
+        "description": "Delete the relationship",
         "operationId": "deleteRelationshipByIdUsingDELETE",
         "parameters": [
           {
@@ -746,23 +802,23 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "Institution's unique identifier (i.e.: IPA code)"
+            "description": "User's email"
           },
           "name": {
             "type": "string",
-            "description": "Institution's unique identifier (i.e.: IPA code)"
+            "description": "User's name"
           },
           "productRole": {
             "type": "string",
-            "description": "Institution's unique identifier (i.e.: IPA code)"
+            "description": "User's role in product"
           },
           "surname": {
             "type": "string",
-            "description": "Institution's unique identifier (i.e.: IPA code)"
+            "description": "User's surname"
           },
           "taxCode": {
             "type": "string",
-            "description": "Institution's unique identifier (i.e.: IPA code)"
+            "description": "User's fiscal code"
           }
         }
       },
@@ -823,12 +879,31 @@
       },
       "InstitutionUserResource": {
         "title": "InstitutionUserResource",
-        "required": ["email", "id", "name", "products", "role", "status", "surname"],
+        "required": [
+          "certification",
+          "email",
+          "fiscalCode",
+          "id",
+          "name",
+          "products",
+          "role",
+          "status",
+          "surname"
+        ],
         "type": "object",
         "properties": {
+          "certification": {
+            "type": "boolean",
+            "description": "User provided with certification",
+            "example": false
+          },
           "email": {
             "type": "string",
             "description": "User's email"
+          },
+          "fiscalCode": {
+            "type": "string",
+            "description": "User's fiscal code"
           },
           "id": {
             "type": "string",
@@ -911,6 +986,7 @@
         "required": [
           "certification",
           "email",
+          "fiscalCode",
           "id",
           "name",
           "product",
@@ -928,6 +1004,10 @@
           "email": {
             "type": "string",
             "description": "User's email"
+          },
+          "fiscalCode": {
+            "type": "string",
+            "description": "User's fiscal code"
           },
           "id": {
             "type": "string",

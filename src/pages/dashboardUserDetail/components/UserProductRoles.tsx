@@ -59,7 +59,7 @@ export default function UserProductRoles({
                       sx={{
                         fontWeight: '600',
                         fontSize: '14px',
-                        background: '#00C5CA',
+                        background: '#E0E0E0',
                         border: 'none',
                         borderRadius: '16px',
                         width: '76px',

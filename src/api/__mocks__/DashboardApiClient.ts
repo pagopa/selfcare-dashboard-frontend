@@ -118,6 +118,8 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
         ],
       },
     ],
+    certification: false,
+    fiscalCode: '',
   },
   {
     id: '2',
@@ -140,6 +142,8 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
         ],
       },
     ],
+    certification: false,
+    fiscalCode: '',
   },
 ];
 
@@ -165,6 +169,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
       ],
     },
     certification: true,
+    fiscalCode: '',
   },
   {
     id: '2',
@@ -187,6 +192,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
       ],
     },
     certification: true,
+    fiscalCode: '',
   },
 ];
 

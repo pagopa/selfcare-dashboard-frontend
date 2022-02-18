@@ -48,7 +48,7 @@ export default function UserProductDetail({
                       sx={{
                         fontWeight: '600',
                         fontSize: '14px',
-                        background: '#00C5CA',
+                        background: '#E0E0E0',
                         borderRadius: '16px',
                         width: '76px',
                         height: '24px',

@@ -4,21 +4,20 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
 import { useEffect, useState } from 'react';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import UserDetail from '../components/UserDetail';
 import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
 import UserProductRoles from '../components/UserProductRoles';
 import { transcodeProductRole2Title } from '../../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { Party } from '../../../model/Party';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import withSelectedPartyProduct from '../../../decorators/withSelectedPartyProduct';
-import { useAppSelector } from '../../../redux/hooks';
-import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import withUserDetail from '../../../decorators/withUserDetail';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
 import withSelectedPartyProductAndRoles, {
   withSelectedPartyProductAndRolesProps,
 } from '../../../decorators/withSelectedPartyProductAndRoles';
+import { deletePartyUser } from './../../../services/usersService';
 
 type Props = withSelectedPartyProductAndRolesProps & {
   partyUser: PartyUser;
@@ -30,11 +29,11 @@ function UserProductDetailPage({
   partyUser,
   fetchPartyUser,
   productRolesList,
+  party,
 }: Props) {
   const history = useHistory();
-  const party = useAppSelector(partiesSelectors.selectPartySelected) as Party;
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
-  // const addError = useErrorDispatcher();
+  const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
 
   const [product, setProduct] = useState<PartyUserProduct>();
@@ -43,18 +42,39 @@ function UserProductDetailPage({
   useEffect(() => {
     const product = partyUser.products.find((product) => product.id === selectedProduct.id);
     setProduct(product);
+    if (!product) {
+      history.push(
+        resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
+          institutionId: party.institutionId,
+          productId: selectedProduct.id,
+        })
+      );
+    }
   }, []);
 
-  // TODO: add delete fetch
   const onDelete = () => {
     setLoading(true);
-    // deletePartyUser(user)
-    // .then((_) => {
-    // fetchPartyUsers();
-    // TODO: add Toast
-    goBack();
-    // })
-    // .catch
+    deletePartyUser(
+      party,
+      partyUser,
+      product as PartyUserProduct,
+      (product as PartyUserProduct).roles[0]
+    )
+      .then((_) => {
+        goBack();
+      })
+      .catch((reason) =>
+        addError({
+          id: `DELETE_PARTY_USER_ERROR-${partyUser.id}`,
+          blocking: false,
+          error: reason,
+          techDescription: `Something gone wrong while deleting role ${
+            (product as PartyUserProduct).roles[0].relationshipId
+          } for product ${(product as PartyUserProduct).title}`,
+          toNotify: true,
+        })
+      )
+      .finally(() => setLoading(false));
   };
 
   const handleOpenDelete = () => {
@@ -121,11 +141,11 @@ function UserProductDetailPage({
         <Typography variant="h1">Dettaglio Referente</Typography>
       </Grid>
       <Grid container item>
-        <Grid item xs={12} mb={9}>
+        <Grid item xs={12}>
           <UserDetail userInfo={partyUser} roleSection={<></>} />
         </Grid>
       </Grid>
-      <Grid item xs={11} my={6}>
+      <Grid item xs={11} my={5}>
         <Divider />
       </Grid>
       <UserProductRoles

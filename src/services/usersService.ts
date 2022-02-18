@@ -80,13 +80,20 @@ export const fetchPartyUsers = (
 
 export const fetchPartyUser = (
   institutionId: string,
-  userId: string
+  userId: string,
+  currentUser: User
 ): Promise<PartyUser | null> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
-    return fetchPartyUserMocked(institutionId, userId);
+    return fetchPartyUserMocked(institutionId, userId, currentUser);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.getPartyUser(institutionId, userId).then((u) => {
+      if (u) {
+        return institutionUserResource2PartyUser(u, currentUser);
+      } else {
+        return null;
+      }
+    });
   }
 };
 

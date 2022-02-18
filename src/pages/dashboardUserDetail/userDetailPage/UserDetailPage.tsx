@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import UserDetail from '../components/UserDetail';
 import { PartyUser } from '../../../model/PartyUser';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
@@ -19,6 +20,7 @@ import withProductsRolesMap, {
 import { Product } from '../../../model/Product';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
+import { deletePartyUser } from './../../../services/usersService';
 
 type Props = withProductsRolesMapProps & {
   partyUser: PartyUser;
@@ -30,8 +32,9 @@ type Props = withProductsRolesMapProps & {
 function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products, party }: Props) {
   const history = useHistory();
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
-  // const addError = useErrorDispatcher();
+  const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
+  const product = partyUser.products[0];
 
   useEffect(() => {
     if (party) {
@@ -48,18 +51,23 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products,
 
   const onDelete = () => {
     setLoading(true);
-    // deletePartyUser(user)
-    // .then((_) => {
-    // fetchPartyUsers();
-    // TODO: add Toast
-    goBack();
-    // })
-    // .catch
-    // TODO: add delete fetch -> delete dentro userService
+    deletePartyUser(party, partyUser, product, product.roles[0])
+      .then((_) => {
+        goBack();
+      })
+      .catch((reason) =>
+        addError({
+          id: `DELETE_PARTY_USER_ERROR-${partyUser.id}`,
+          blocking: false,
+          error: reason,
+          techDescription: `Something gone wrong while deleting role ${product.roles[0].relationshipId} for product ${product.title}`,
+          toNotify: true,
+        })
+      )
+      .finally(() => setLoading(false));
   };
 
   const handleOpenDelete = () => {
-    const product = partyUser.products[0];
     addNotify({
       component: 'SessionModal',
       id: 'Notify_Example',
@@ -102,7 +110,7 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products,
     <Grid
       container
       alignItems={'center'}
-      px={0}
+      px={2}
       mt={10}
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
@@ -168,4 +176,4 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products,
     </Grid>
   );
 }
-export default withProductsRolesMap(withUserDetail(UserDetailPage));
+export default withUserDetail(withProductsRolesMap(UserDetailPage));

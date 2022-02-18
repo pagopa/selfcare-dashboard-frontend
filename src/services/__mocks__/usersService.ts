@@ -206,20 +206,20 @@ export const mockedUsers: Array<PartyUser> = [
     surname: 'Bianchi',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
-    status: 'SUSPENDED',
+    status: 'ACTIVE',
     products: [
       {
         title: 'App IO',
         id: 'prod-io',
         roles: [
           {
-            relationshipId: 'rel4',
+            relationshipId: 'rel8',
             role: 'referente-tecnico',
             selcRole: 'LIMITED',
             status: 'ACTIVE',
           },
           {
-            relationshipId: 'rel4_2',
+            relationshipId: 'rel8_2',
             role: 'operatore-sicurezza',
             selcRole: 'LIMITED',
             status: 'ACTIVE',
@@ -246,6 +246,12 @@ export const mockedUsers: Array<PartyUser> = [
           {
             relationshipId: 'rel9',
             role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
+          },
+          {
+            relationshipId: 'rel9_2',
+            role: 'operatore-sicurezza',
             selcRole: 'LIMITED',
             status: 'ACTIVE',
           },
@@ -639,7 +645,8 @@ export const savePartyUser = (
 
 export const fetchPartyUser = (
   _institutionId: string,
-  userId: string
+  userId: string,
+  _currentUser: User
 ): Promise<PartyUser | null> => {
   const mockedUser = mockedUsers.find((u) => u.id === userId) ?? null;
   return new Promise((resolve) =>
@@ -685,18 +692,34 @@ export const deletePartyUser = (
   product: PartyUserProduct,
   role: PartyUserProductRole
 ): Promise<any> => {
-  if (product.roles.length === 1) {
+  if (user.products.length === 1 && product.roles.length === 1) {
     // eslint-disable-next-line functional/immutable-data
     mockedUsers.splice(
-      mockedUsers.findIndex((u) => u === user),
+      mockedUsers.findIndex((u) => u.id === user.id),
       1
     );
   } else {
     // eslint-disable-next-line functional/immutable-data
     product.roles.splice(
-      product.roles.findIndex((r) => r === role),
+      product.roles.findIndex((r) => r.relationshipId === role.relationshipId),
       1
     );
+    const mockedUser = mockedUsers.find((u) => u.id === user.id);
+    const mockedProductIndex = mockedUser?.products.findIndex((p) => p.id === product.id) ?? -1;
+    if (mockedProductIndex > -1) {
+      const mockedProduct = mockedUser?.products[mockedProductIndex];
+      if (mockedProduct?.roles.length === 1) {
+        // eslint-disable-next-line functional/immutable-data
+        mockedUser?.products.splice(mockedProductIndex, 1);
+      } else {
+        const mockedRoleIndex =
+          mockedProduct?.roles.findIndex((r) => r.relationshipId === role.relationshipId) ?? -1;
+        if (mockedRoleIndex > -1) {
+          // eslint-disable-next-line functional/immutable-data
+          mockedProduct?.roles.splice(mockedRoleIndex, 1);
+        }
+      }
+    }
   }
   return new Promise<void>((resolve) => resolve());
 };

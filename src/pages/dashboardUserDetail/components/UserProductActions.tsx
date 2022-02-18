@@ -7,6 +7,7 @@ import { PartyUser, PartyUserProductRole, PartyUserProduct } from '../../../mode
 import { ProductRolesLists, transcodeProductRole2Title } from '../../../model/ProductRole';
 import { updatePartyUserStatus } from '../../../services/usersService';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
+import { deletePartyUser } from './../../../services/usersService';
 
 type Props = {
   showActions: boolean;
@@ -34,13 +35,34 @@ export default function UserProductActions({
 
   const onDelete = () => {
     setLoading(true);
-    // deletePartyUser(user)
-    // .then((_) => {
-    fetchPartyUser();
-    // TODO: add Toast
-    // })
-    // .catch
-    // TODO: add delete fetch
+    deletePartyUser(party, user, product, role)
+      .then((_) => {
+        fetchPartyUser();
+        // addNotify({
+        //   component: 'Toast',
+        //   id: 'DELETE_PARTY_USER',
+        //   title: 'RUOLO ELIMINATO',
+        //   message: (
+        //     <>
+        //       {'Hai eliminato correttamente il ruolo '}
+        //       {transcodeProductRole2Title(role.role, productRolesList)}
+        //       {' assegnato a '}
+        //       <strong>{`${user.name} ${user.surname}`}</strong>
+        //       {'.'}
+        //     </>
+        //   ),
+        // });
+      })
+      .catch((error) =>
+        addError({
+          id: `DELETE_PARTY_USER_ERROR-${user.id}`,
+          blocking: false,
+          error,
+          techDescription: `Something gone wrong while deleting role for product ${product.title}`,
+          toNotify: true,
+        })
+      )
+      .finally(() => setLoading(false));
   };
 
   const handleOpenDelete = () => {
@@ -56,7 +78,7 @@ export default function UserProductActions({
           <strong> {product.title} </strong>
           {' assegnato a '}
           <strong style={{ textTransform: 'capitalize' }}>
-            {party && `${user.name.toLocaleLowerCase()} ${user.surname}`}
+            {party && `${user.name} ${user.surname}`}
           </strong>
           {'.'}
           <br />
@@ -70,7 +92,7 @@ export default function UserProductActions({
   };
   const confirmChangeStatus = () => {
     const nextStatus: UserStatus | undefined =
-      user.status === 'ACTIVE' ? 'SUSPENDED' : user.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
+      role.status === 'ACTIVE' ? 'SUSPENDED' : role.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
     if (!nextStatus) {
       addError({
         id: 'INVALID_STATUS_TRANSITION',

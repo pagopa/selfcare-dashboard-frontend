@@ -8,6 +8,6 @@ type WithPartiesProps = {
 
 export default function withParties<T extends WithPartiesProps>(
   WrappedComponent: React.ComponentType<T>
-): React.ComponentType<Omit<T, 'parties'>> {
+): React.ComponentType<Omit<T, 'parties' | 'reload'>> {
   return withRetrievedValue('parties', useParties, WrappedComponent);
 }

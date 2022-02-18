@@ -19,9 +19,8 @@ export default function UserProductSection({
   party,
   fetchPartyUser,
   productsRolesMap,
-  products
+  products,
 }: Props) {
-  
   return (
     <>
       <Grid item xs={10}>
@@ -38,38 +37,43 @@ export default function UserProductSection({
           </Grid>
         </Grid>
       </Grid>
-      {!partyUser.isCurrentUser && (
-        <Grid item xs={2}>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            sx={{ py: '10px', width: '120px' }}
-            // onClick={() =>  } TODO
-          >
-            Aggiungi
-          </Button>
-        </Grid>
-      )}
+
+      {!partyUser.isCurrentUser &&
+        products
+          .filter((p) => p.userRole === 'ADMIN')
+          .find((p) => !partyUser.products.find((pu) => pu.id === p.id)) && (
+          <Grid item xs={2}>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              sx={{ py: '10px', width: '120px' }}
+              // onClick={() =>  } TODO
+            >
+              Aggiungi
+            </Button>
+          </Grid>
+        )}
       {partyUser.products.map((userProduct, index) => {
         const product = products.find((p) => p.id === userProduct.id) as Product; // admin role will always see all products
         return (
-        <Grid item xs={12} key={userProduct.id}>
-          <UserProductDetail
-            partyUser={partyUser}
-            party={party}
-            fetchPartyUser={fetchPartyUser}
-            userProduct={userProduct}
-            productRolesList={productsRolesMap[userProduct.id]}
-            canEdit={product?.userRole === 'ADMIN'}
-            product={product}
-          />
-          {index !== partyUser.products.length - 1 && (
-            <Grid item xs={11} mb={4}>
-              <Divider />
-            </Grid>
-          )}
-        </Grid>
-      );})}
+          <Grid item xs={12} key={userProduct.id}>
+            <UserProductDetail
+              partyUser={partyUser}
+              party={party}
+              fetchPartyUser={fetchPartyUser}
+              userProduct={userProduct}
+              productRolesList={productsRolesMap[userProduct.id]}
+              canEdit={product?.userRole === 'ADMIN'}
+              product={product}
+            />
+            {index !== partyUser.products.length - 1 && (
+              <Grid item xs={11} mb={4}>
+                <Divider />
+              </Grid>
+            )}
+          </Grid>
+        );
+      })}
     </>
   );
 }
