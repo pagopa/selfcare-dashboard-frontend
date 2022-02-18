@@ -14,10 +14,9 @@ import AddUserForm from './components/AddUserForm';
 type Props = {
   party: Party;
   products: Array<Product>;
-  selectedProduct: Product;
 } & withProductsRolesMapProps;
 
-function AddUsersPage({ party, products, selectedProduct, productsRolesMap }: Props) {
+function AddUsersPage({ party, products, productsRolesMap }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -44,7 +43,7 @@ function AddUsersPage({ party, products, selectedProduct, productsRolesMap }: Pr
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={3}>
-        <ProductNavigationBar paths={paths} selectedProduct={selectedProduct} />
+        <ProductNavigationBar paths={paths} />
       </Grid>
       <Grid item xs={12} mb={9}>
         <TitleBox
@@ -53,12 +52,7 @@ function AddUsersPage({ party, products, selectedProduct, productsRolesMap }: Pr
         />
       </Grid>
       <Grid item xs={12}>
-        <AddUserForm
-          party={party}
-          products={products}
-          selectedProduct={selectedProduct}
-          productsRolesMap={productsRolesMap}
-        />
+        <AddUserForm party={party} products={products} productsRolesMap={productsRolesMap} />
       </Grid>
     </Grid>
   );

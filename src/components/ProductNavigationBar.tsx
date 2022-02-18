@@ -8,7 +8,7 @@ export type ProductNavigationPath = {
 };
 
 type Props = {
-  selectedProduct: Product;
+  selectedProduct?: Product;
   paths: Array<ProductNavigationPath>;
 };
 

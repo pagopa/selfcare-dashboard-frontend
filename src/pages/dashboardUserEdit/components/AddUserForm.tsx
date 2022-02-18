@@ -75,7 +75,7 @@ const requiredError = 'Required';
 
 type Props = {
   party: Party;
-  selectedProduct: Product;
+  selectedProduct?: Product;
   products: Array<Product>;
   productsRolesMap: ProductsRolesMap;
 };
@@ -202,6 +202,7 @@ export default function AddUserForm({ party, selectedProduct, products, products
             </>
           ),
         });
+
         goBack();
       })
       .catch((reason) =>
@@ -232,7 +233,7 @@ export default function AddUserForm({ party, selectedProduct, products, products
         addNotify({
           component: 'SessionModal',
           id: 'MULTI_ROLE_USER',
-          title: '',
+          title: 'Assegna ruolo',
           message: (
             <>
               {'Stai per assegnare a '}
@@ -438,9 +439,16 @@ export default function AddUserForm({ party, selectedProduct, products, products
                             <Radio />
                           )
                         }
-                        label={p.title} // TODO Add Description
+                        label={p.title}
                         onClick={validTaxcode ? () => addRole(p) : undefined}
                       />
+                      <Typography
+                        variant="subtitle2"
+                        sx={{ color: '#5C6F82', marginLeft: 4.3 }}
+                        pb={3}
+                      >
+                        {p.description}
+                      </Typography>
                       {(index !== roles.length - 1 ||
                         selcRoleIndex !== Object.keys(productRoles.groupBySelcRole).length - 1) && (
                         <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />

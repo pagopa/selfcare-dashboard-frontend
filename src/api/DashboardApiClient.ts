@@ -12,7 +12,6 @@ import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUs
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 import { UserResource } from './generated/b4f-dashboard/UserResource';
-import { CreateUserDto } from './generated/b4f-dashboard/CreateUserDto';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
@@ -112,7 +111,7 @@ export const DashboardApi = {
     const result = await apiClient.createInstitutionProductUserUsingPOST({
       institutionId,
       productId,
-      body: user as unknown as CreateUserDto, // TODO FixMe when the API accepts ProductRoles
+      body: user,
     });
     return extractResponse(result, 201, onRedirectToLogin);
   },
