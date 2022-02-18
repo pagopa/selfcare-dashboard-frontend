@@ -54,9 +54,9 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
   return productsRolesMap ? (
     <Grid
       container
-      px={0}
+      px={2}
       mt={10}
-      sx={{ width: '985px', backgroundColor: 'transparent !important' }}
+      sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={3} px={'16px'}>
         <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
