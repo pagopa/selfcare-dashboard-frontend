@@ -125,6 +125,17 @@ const UsersTableProduct = ({
       });
   };
 
+  const onDelete = (partyUser: PartyUser) => {
+    if (incrementalLoad) {
+      setUsers({ ...users, content: users.content.filter((u) => u.id !== partyUser.id) });
+    } else {
+      setPageRequest({
+        filterChanged: true,
+        page: pageRequest?.page as PageRequest,
+      });
+    }
+  };
+
   if (error) {
     return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
@@ -164,6 +175,7 @@ const UsersTableProduct = ({
             },
           })
         }
+        onDelete={onDelete}
       />
     );
   }

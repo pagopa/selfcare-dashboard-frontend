@@ -28,6 +28,7 @@ interface UsersSearchTableProps {
   page: Page;
   sort?: string;
   onSortRequest: (sort: string) => void;
+  onDelete: (partyUser: PartyUser) => void;
 }
 
 const CustomDataGrid = styled(DataGrid)({
@@ -102,20 +103,9 @@ export default function UsersProductTable({
   page,
   sort,
   onSortRequest,
+  onDelete,
 }: UsersSearchTableProps) {
   const sortSplitted = sort ? sort.split(',') : undefined;
-
-  const onDelete = (partyUser: PartyUser) => {
-    if (incrementalLoad) {
-      const index = users.findIndex((u) => u.id === partyUser.id);
-      if (index > -1) {
-        // eslint-disable-next-line functional/immutable-data
-        users.splice(index, 1);
-      }
-    } else {
-      fetchPage(page.number, page.size, true);
-    }
-  };
 
   const columns: Array<GridColDef> = buildColumnDefs(canEdit, party, onDelete, productRolesLists);
 
@@ -139,6 +129,7 @@ export default function UsersProductTable({
           columns={columns}
           rowHeight={users.length === 0 && loading ? 0 : rowHeight}
           headerHeight={headerHeight}
+          hideFooterSelectedRowCount={true}
           components={{
             Footer:
               loading || incrementalLoad
