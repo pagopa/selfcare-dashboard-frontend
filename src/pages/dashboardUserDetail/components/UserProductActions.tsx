@@ -38,20 +38,20 @@ export default function UserProductActions({
     deletePartyUser(party, user, product, role)
       .then((_) => {
         fetchPartyUser();
-        // addNotify({
-        //   component: 'Toast',
-        //   id: 'DELETE_PARTY_USER',
-        //   title: 'RUOLO ELIMINATO',
-        //   message: (
-        //     <>
-        //       {'Hai eliminato correttamente il ruolo '}
-        //       {transcodeProductRole2Title(role.role, productRolesList)}
-        //       {' assegnato a '}
-        //       <strong>{`${user.name} ${user.surname}`}</strong>
-        //       {'.'}
-        //     </>
-        //   ),
-        // });
+        addNotify({
+          component: 'Toast',
+          id: 'DELETE_PARTY_USER',
+          title: 'RUOLO ELIMINATO',
+          message: (
+            <>
+              {'Hai eliminato correttamente il ruolo '}
+              {transcodeProductRole2Title(role.role, productRolesList)}
+              {' assegnato a '}
+              <strong>{`${user.name} ${user.surname}`}</strong>
+              {'.'}
+            </>
+          ),
+        });
       })
       .catch((error) =>
         addError({

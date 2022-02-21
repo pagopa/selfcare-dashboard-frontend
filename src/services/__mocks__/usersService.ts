@@ -280,6 +280,12 @@ export const mockedUsers: Array<PartyUser> = [
             selcRole: 'LIMITED',
             status: 'ACTIVE',
           },
+          {
+            relationshipId: 'rel10_2',
+            role: 'operatore-sicurezza',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
+          },
         ],
       },
     ],
