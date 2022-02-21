@@ -63,6 +63,7 @@ const CustomTextField = styled(TextField)({
 });
 
 const CustomFormControlLabel = styled(FormControlLabel)({
+  disabled: false,
   '.MuiRadio-root': {
     color: '#0073E6',
   },
@@ -78,9 +79,18 @@ type Props = {
   selectedProduct?: Product;
   products: Array<Product>;
   productsRolesMap: ProductsRolesMap;
+  canEditRegistryData: boolean;
+  initialFormData: PartyUserOnCreation;
 };
 
-export default function AddUserForm({ party, selectedProduct, products, productsRolesMap }: Props) {
+export default function AddUserForm({
+  party,
+  selectedProduct,
+  products,
+  productsRolesMap,
+  canEditRegistryData,
+  initialFormData,
+}: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchTaxCode = useLoading(LOADING_TASK_FETCH_TAX_CODE);
 
@@ -97,10 +107,16 @@ export default function AddUserForm({ party, selectedProduct, products, products
   const onExit = useUnloadEventOnExit();
 
   useEffect(() => {
-    if (validTaxcode) {
+    if (validTaxcode && validTaxcode !== initialFormData.taxCode) {
       fetchTaxCode(validTaxcode);
     }
   }, [validTaxcode]);
+
+  useEffect(() => {
+    if (initialFormData.taxCode) {
+      setValidTaxcode(initialFormData.taxCode);
+    }
+  }, [initialFormData]);
 
   useEffect(() => {
     setUserProduct(selectedProduct);
@@ -218,15 +234,7 @@ export default function AddUserForm({ party, selectedProduct, products, products
   };
 
   const formik = useFormik<PartyUserOnCreation>({
-    initialValues: {
-      name: '',
-      surname: '',
-      taxCode: '',
-      email: '',
-      confirmEmail: '',
-      productRoles: [],
-      certification: false,
-    },
+    initialValues: initialFormData,
     validate,
     onSubmit: (values) => {
       if (values.productRoles.length >= 2) {
@@ -335,55 +343,63 @@ export default function AddUserForm({ party, selectedProduct, products, products
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
         <Grid container direction="column">
-          <Grid item container spacing={3}>
-            <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
-              <CustomTextField
-                {...baseTextFieldProps(
-                  'taxCode',
-                  'Codice Fiscale',
-                  'Inserisci il Codice Fiscale del referente'
-                )}
-              />
-            </Grid>
-          </Grid>
-          <Grid item container spacing={3}>
-            <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-              <CustomTextField
-                {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
-                disabled={formik.values.certification || !validTaxcode}
-              />
-            </Grid>
-            <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-              <CustomTextField
-                {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
-                disabled={formik.values.certification || !validTaxcode}
-              />
-            </Grid>
-          </Grid>
-          <Grid item container spacing={3}>
-            <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
-              <CustomTextField
-                {...baseTextFieldProps(
-                  'email',
-                  'Email',
-                  'Inserisci l’indirizzo email istituzionale del referente'
-                )}
-                disabled={!validTaxcode}
-              />
-            </Grid>
-          </Grid>
-          <Grid item container spacing={3}>
-            <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
-              <CustomTextField
-                {...baseTextFieldProps(
-                  'confirmEmail',
-                  'Conferma email',
-                  'Conferma l’indirizzo email istituzionale del referente'
-                )}
-                disabled={!validTaxcode}
-              />
-            </Grid>
-          </Grid>
+          {canEditRegistryData ? (
+            <>
+              <Grid item container spacing={3}>
+                <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
+                  <CustomTextField
+                    {...baseTextFieldProps(
+                      'taxCode',
+                      'Codice Fiscale',
+                      'Inserisci il Codice Fiscale del referente'
+                    )}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item container spacing={3}>
+                <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
+                  <CustomTextField
+                    {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
+                    disabled={formik.values.certification || !validTaxcode}
+                  />
+                </Grid>
+                <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
+                  <CustomTextField
+                    {...baseTextFieldProps(
+                      'surname',
+                      'Cognome',
+                      'Inserisci il cognome del referente'
+                    )}
+                    disabled={formik.values.certification || !validTaxcode}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item container spacing={3}>
+                <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
+                  <CustomTextField
+                    {...baseTextFieldProps(
+                      'email',
+                      'Email',
+                      'Inserisci l’indirizzo email istituzionale del referente'
+                    )}
+                    disabled={!validTaxcode}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item container spacing={3}>
+                <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
+                  <CustomTextField
+                    {...baseTextFieldProps(
+                      'confirmEmail',
+                      'Conferma email',
+                      'Conferma l’indirizzo email istituzionale del referente'
+                    )}
+                    disabled={!validTaxcode}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          ) : undefined}
 
           {!selectedProduct ? (
             <Grid item container spacing={3}>
@@ -395,20 +411,25 @@ export default function AddUserForm({ party, selectedProduct, products, products
                   Seleziona il prodotto sul quale vuoi aggiungere il referente
                 </Typography>
                 <RadioGroup aria-label="user" name="products" value={userProduct?.id ?? ''}>
-                  {products?.map((p, index) => (
-                    <Box key={p.id}>
-                      <CustomFormControlLabel
-                        disabled={!validTaxcode}
-                        value={p.id}
-                        control={<Radio />}
-                        onClick={validTaxcode ? () => setUserProduct(p) : undefined}
-                        label={p.title}
-                      />
-                      {index !== products.length - 1 && (
-                        <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
-                      )}
-                    </Box>
-                  ))}
+                  {products?.map(
+                    (
+                      p,
+                      index // TODO Ruolo Admin
+                    ) => (
+                      <Box key={p.id}>
+                        <CustomFormControlLabel
+                          disabled={!validTaxcode}
+                          value={p.id}
+                          control={<Radio />}
+                          onClick={validTaxcode ? () => setUserProduct(p) : undefined}
+                          label={p.title}
+                        />
+                        {index !== products.length - 1 && (
+                          <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
+                        )}
+                      </Box>
+                    )
+                  )}
                 </RadioGroup>
               </Grid>
             </Grid>
@@ -429,6 +450,7 @@ export default function AddUserForm({ party, selectedProduct, products, products
                   roles.map((p, index) => (
                     <Box key={p.productRole}>
                       <CustomFormControlLabel
+                        sx={{ marginTop: 0 }}
                         checked={formik.values.productRoles.indexOf(p.productRole) > -1}
                         disabled={!validTaxcode}
                         value={p.productRole}
@@ -439,16 +461,24 @@ export default function AddUserForm({ party, selectedProduct, products, products
                             <Radio />
                           )
                         }
-                        label={p.title}
+                        label={
+                          <>
+                            <Typography> {p.title} </Typography>
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
+                                fontWeight: 400,
+                                fontSize: '12px',
+                                color: '#5C6F82',
+                              }}
+                            >
+                              {p.description}
+                            </Typography>
+                          </>
+                        }
                         onClick={validTaxcode ? () => addRole(p) : undefined}
                       />
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ color: '#5C6F82', marginLeft: 4.3 }}
-                        pb={3}
-                      >
-                        {p.description}
-                      </Typography>
+
                       {(index !== roles.length - 1 ||
                         selcRoleIndex !== Object.keys(productRoles.groupBySelcRole).length - 1) && (
                         <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />

@@ -3,17 +3,19 @@ import { Provider } from 'react-redux';
 import { createStore, store } from '../../../redux/store';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
-import { mockedUserRegistry } from '../../../services/__mocks__/usersService';
 import { Route, Router, Switch } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { verifyMockExecution as verifyLoginMockExecution } from '../../../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
+import {
+  mockedUser,
+  verifyMockExecution as verifyLoginMockExecution,
+} from '../../../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
 import AddUsersProductPage from '../AddUsersProductPage';
 
 jest.mock('@pagopa/selfcare-common-frontend/decorators/withLogin');
 jest.mock('../../../services/usersService');
 
 const fieldsValue = {
-  taxCode: 'AAAAAA22A22A234O',
+  taxCode: 'AAAAAA11A11A234S',
   name: 'franco',
   surname: 'rossi',
   email: 'NAME@SURNAME.COM',
@@ -30,7 +32,11 @@ const renderApp = async (injectedStore?: ReturnType<typeof createStore>) => {
       <Router history={history}>
         <Switch>
           <Route path="/:institutionId/:productId" exact={true}>
-            <AddUsersProductPage party={mockedParties[0]} products={mockedPartyProducts} />
+            <AddUsersProductPage
+              party={mockedParties[0]}
+              products={mockedPartyProducts}
+              initialValues={mockedUser[0]}
+            />
           </Route>
           <Route path="/dashboard/1/prod-io/roles" exact={true}>
             Test Completato
@@ -67,14 +73,17 @@ test('test with fields that respect rules, so enabled button', async () => {
   fireEvent.change(email, { target: { value: fieldsValue.email } });
   fireEvent.change(confirmEmail, { target: { value: fieldsValue.confirmEmail } });
 
-  const checkbox = screen.getByText('Incaricato Ente Creditore');
-  fireEvent.click(checkbox);
+  await waitFor(() => {
+    const checkbox = screen.getByText('Incaricato Ente Creditore');
+    expect(checkbox).toBeEnabled();
+    fireEvent.click(checkbox);
+  });
 
-  const button = screen.getByRole('button', { name: 'Conferma' });
-  await waitFor(() => expect(button).toBeEnabled());
-
-  screen.getByText('Conferma');
-  fireEvent.click(button);
+  await waitFor(() => {
+    const button = screen.getByRole('button', { name: 'Conferma' });
+    expect(button).toBeEnabled();
+    fireEvent.click(button);
+  });
 
   await waitFor(() => expect(history.location.pathname).toBe('/dashboard/1/prod-io/roles'));
   await waitFor(() => screen.getByText('Test Completato'));

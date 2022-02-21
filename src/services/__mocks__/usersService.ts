@@ -15,10 +15,10 @@ import { UserRegistry } from '../../model/UserRegistry';
 export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid',
-    taxCode: 'TAXCODE_uid',
-    name: 'ELENA',
+    taxCode: 'AAAAAA11A11A123K',
+    name: 'Elena',
     surname: 'Verdi',
-    email: 'simone.v@comune.milano.it ',
+    email: 'simone.v@comune.milano.it',
     userRole: 'ADMIN',
     status: 'ACTIVE',
     products: [
@@ -43,7 +43,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_0',
     name: 'loggedName',
     surname: 'loggedSurname',
-    email: 'loggedName.b@email.it ',
+    email: 'loggedName.b@email.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -68,7 +68,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid3',
     name: 'Simone',
     surname: 'Bianchi Verdi Verdi Verdi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -93,7 +93,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid4',
     name: 'Simone',
     surname: 'Simonetti',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -124,7 +124,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid5',
     name: 'Simone',
     surname: 'Franceschini Alberti',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -155,7 +155,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid6',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -180,7 +180,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid7',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -205,7 +205,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid8',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -230,7 +230,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid9',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -255,7 +255,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid10',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -280,7 +280,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid11',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -305,7 +305,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid12',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -330,7 +330,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid13',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -355,7 +355,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid14',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -380,7 +380,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid15',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -405,7 +405,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid16',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -430,7 +430,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid17',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -455,7 +455,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid18',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -480,7 +480,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid19',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -505,7 +505,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid20',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -530,7 +530,7 @@ export const mockedUsers: Array<PartyUser> = [
     taxCode: 'TAXCODE_uid21',
     name: 'Simone',
     surname: 'Bianchi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [

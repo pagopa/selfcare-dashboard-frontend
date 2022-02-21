@@ -8,6 +8,7 @@ import AddUsersProductPage from './pages/dashboardUserEdit/AddUsersProductPage';
 import AddUsersPage from './pages/dashboardUserEdit/AddUsersPage';
 import UsersPage from './pages/dashboardUsers/UsersPage/UsersPage';
 import UsersProductPage from './pages/dashboardUsers/UsersProductPage/UsersProductPage';
+import AddProductToUserPage from './pages/dashboardUserEdit/AddProductToUserPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -64,6 +65,11 @@ export const DASHBOARD_ROUTES = {
         path: `${BASE_ROUTE}/:institutionId/roles/add`,
         exact: true,
         component: AddUsersPage,
+      },
+      ADD_PRODUCT: {
+        path: `${BASE_ROUTE}/:institutionId/roles/:id/add-product`,
+        exact: true,
+        component: AddProductToUserPage,
       },
       ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
     },

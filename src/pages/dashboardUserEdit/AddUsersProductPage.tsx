@@ -9,15 +9,17 @@ import { DASHBOARD_ROUTES } from '../../routes';
 import { Party } from '../../model/Party';
 import { productRoles2ProductRolesList } from '../../model/ProductRole';
 import { mockedProductRoles } from '../../services/__mocks__/usersService';
+import { PartyUserOnCreation } from '../../model/PartyUser';
 import AddUserForm from './components/AddUserForm';
 
 type Props = {
   party: Party;
   products: Array<Product>;
   selectedProduct: Product;
+  initialValues: PartyUserOnCreation;
 };
 
-function AddUsersProductPage({ party, selectedProduct, products }: Props) {
+function AddUsersProductPage({ party, selectedProduct, products, initialValues }: Props) {
   const history = useHistory();
   // TODO READ THIS INFORMATION USING DECORATOR
   const productsRolesMapMock = {
@@ -63,6 +65,8 @@ function AddUsersProductPage({ party, selectedProduct, products }: Props) {
           selectedProduct={selectedProduct}
           products={products}
           productsRolesMap={productsRolesMapMock}
+          canEditRegistryData={true}
+          initialFormData={initialValues}
         />
       </Grid>
     </Grid>
