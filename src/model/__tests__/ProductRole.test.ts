@@ -56,6 +56,61 @@ test('Test productRoles2ProductRolesList', () => {
         },
       ],
     },
+    groupByPartyRole: {
+      DELEGATE: [
+        {
+          description: 'Descrizione referente-amministrativo',
+          multiroleAllowed: false,
+          partyRole: 'DELEGATE',
+          productId: 'PRODID',
+          productRole: 'referente-amministrativo',
+          selcRole: 'ADMIN',
+          title: 'Referente Amministrativo',
+        },
+      ],
+      MANAGER: [
+        {
+          description: 'Descrizione referente-legale',
+          multiroleAllowed: false,
+          partyRole: 'MANAGER',
+          productId: 'PRODID',
+          productRole: 'referente-legale',
+          selcRole: 'ADMIN',
+          title: 'Referente Legale',
+        },
+      ],
+      OPERATOR: [
+        {
+          description: 'Descrizione referente-dei-pagamenti',
+          multiroleAllowed: true,
+          partyRole: 'OPERATOR',
+          productId: 'PRODID',
+          productRole: 'referente-dei-pagamenti',
+          selcRole: 'LIMITED',
+          title: 'Referente dei Pagamenti',
+        },
+        {
+          description: 'Descrizione referente-tecnico',
+          multiroleAllowed: true,
+          partyRole: 'OPERATOR',
+          productId: 'PRODID',
+          productRole: 'referente-tecnico',
+          selcRole: 'LIMITED',
+          title: 'Referente Tecnico',
+        },
+      ],
+      SUB_DELEGATE: [
+        {
+          description: 'Descrizione incaricato-ente-creditore',
+          multiroleAllowed: false,
+          partyRole: 'SUB_DELEGATE',
+          productId: 'PRODID',
+          productRole: 'incaricato-ente-creditore',
+          selcRole: 'ADMIN',
+          title: 'Incaricato Ente Creditore',
+        },
+      ],
+    },
     groupByProductRole: {
       'referente-legale': {
         productId: 'PRODID',
