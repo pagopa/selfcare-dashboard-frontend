@@ -5,6 +5,8 @@ import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/use
 import { useEffect, useState } from 'react';
 import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import useFakePagination from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
+import { useHistory } from 'react-router-dom';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Party } from '../../../../model/Party';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Product } from '../../../../model/Product';
@@ -36,8 +38,11 @@ const UsersTableProduct = ({
   onFetchStatusUpdate,
   filterConfiguration,
   hideProductWhenLoading,
+  userDetailUrl,
 }: Props) => {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
+
+  const history = useHistory();
 
   const [users, setUsers] = useState<PageResource<PartyUser>>({
     content: [],
@@ -94,7 +99,7 @@ const UsersTableProduct = ({
   }, [pageRequest]);
 
   const fetchUsers = () => {
-    onFetchStatusUpdate(true, 0);
+    onFetchStatusUpdate(true, users.content.length);
     setLoading(true);
     fakePagedFetch(pageRequest?.page as PageRequest, pageRequest?.filterChanged as boolean)
       .then((r) => {
@@ -125,10 +130,21 @@ const UsersTableProduct = ({
       });
   };
 
+  const onDelete = (partyUser: PartyUser) => {
+    if (incrementalLoad) {
+      setUsers({ ...users, content: users.content.filter((u) => u.id !== partyUser.id) });
+    } else {
+      setPageRequest({
+        filterChanged: true,
+        page: pageRequest?.page as PageRequest,
+      });
+    }
+  };
+
   if (error) {
     return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
-    return loading && hideProductWhenLoading ? (
+    return loading && hideProductWhenLoading && users.content.length === 0 ? (
       <></>
     ) : (
       <UsersProductTable
@@ -142,9 +158,9 @@ const UsersTableProduct = ({
         canEdit={canEdit}
         page={users.page}
         sort={pageRequest?.page.sort}
-        fetchPage={(page, size) =>
+        fetchPage={(page, size, refetch = false) =>
           setPageRequest({
-            filterChanged: false,
+            filterChanged: refetch,
             page: {
               page: incrementalLoad ? (pageRequest?.page as PageRequest).page + 1 : page ?? 0,
               size: incrementalLoad
@@ -164,6 +180,10 @@ const UsersTableProduct = ({
             },
           })
         }
+        onRowClick={(partyUser) =>
+          history.push(resolvePathVariables(userDetailUrl, { userId: partyUser.id }))
+        }
+        onDelete={onDelete}
       />
     );
   }

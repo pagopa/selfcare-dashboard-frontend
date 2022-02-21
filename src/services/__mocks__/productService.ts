@@ -12,7 +12,6 @@ export const mockedPartyProducts: Array<Product> = [
     activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'https://io.italia.it/ ',
     urlBO: 'https://io.selfcare.pagopa.it/path/acs?token=<IdentityToken>',
-    allowMultipleRole: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png',
@@ -24,7 +23,6 @@ export const mockedPartyProducts: Array<Product> = [
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
-    allowMultipleRole: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
@@ -37,7 +35,6 @@ export const mockedPartyProducts: Array<Product> = [
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
     activationDateTime: new Date(2021, 1, 3),
     urlPublic: 'http://pagopa/public',
-    allowMultipleRole: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.png',
@@ -48,7 +45,6 @@ export const mockedPartyProducts: Array<Product> = [
     status: 'PENDING',
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
     urlPublic: 'http://www.google.it',
-    allowMultipleRole: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png',
@@ -59,7 +55,6 @@ export const mockedPartyProducts: Array<Product> = [
     authorized: false,
     status: 'INACTIVE',
     urlPublic: undefined,
-    allowMultipleRole: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.png',
@@ -70,7 +65,6 @@ export const mockedPartyProducts: Array<Product> = [
     authorized: false,
     status: 'INACTIVE',
     urlPublic: undefined,
-    allowMultipleRole: true,
   },
 ];
 

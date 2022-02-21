@@ -8,7 +8,7 @@ import { Product } from '../model/Product';
 import ROUTES from '../routes';
 import { useProductRoles } from '../hooks/useProductRoles';
 import { LOADING_TASK_FETCH_PRODUCT_ROLES } from '../utils/constants';
-import { ProductRolesLists } from '../model/ProductRole';
+import { buildEmptyProductRolesLists, ProductRolesLists } from '../model/ProductRole';
 
 type ProductUrlParams = {
   institutionId: string;
@@ -64,7 +64,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
             techDescription: `Something gone wrong while fetching roles for product ${selectedPartyProduct?.title}`,
             onRetry,
           });
-          return { list: [], groupBySelcRole: { ADMIN: [], LIMITED: [] }, groupByProductRole: {} };
+          return buildEmptyProductRolesLists();
         })
         .finally(() => setLoading_fetchProductRoles(false));
     };

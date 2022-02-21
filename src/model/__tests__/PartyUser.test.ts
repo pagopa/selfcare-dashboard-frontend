@@ -11,13 +11,13 @@ import { institutionUserResource2PartyUser, productUserResource2PartyUser } from
 test('Test institutionUserResource2PartyUser', () => {
   const institutionUserResource: InstitutionUserResource = {
     id: '1',
-    // fiscalCode: "fiscalCode" TODO
+    fiscalCode: 'fiscalCode',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
-    // certification: true, TODO
+    certification: true,
     products: [
       {
         id: 'productId',
@@ -37,13 +37,13 @@ test('Test institutionUserResource2PartyUser', () => {
   const partyUser = institutionUserResource2PartyUser(institutionUserResource, mockedUser);
   expect(partyUser).toStrictEqual({
     id: '1',
-    taxCode: 'TODO',
+    taxCode: 'fiscalCode',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
     userRole: 'LIMITED',
     email: 'address',
-    certification: false, // TODO
+    certification: true,
     products: [
       {
         id: 'productId',
@@ -70,7 +70,7 @@ test('Test institutionUserResource2PartyUser', () => {
 test('Test productUserResource2PartyUser', () => {
   const productUserResource: ProductUserResource = {
     id: '1',
-    // fiscalCode: "fiscalCode", TODO
+    fiscalCode: 'fiscalCode',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -94,7 +94,7 @@ test('Test productUserResource2PartyUser', () => {
   const partyUser = productUserResource2PartyUser(productUserResource, mockedUser);
   expect(partyUser).toStrictEqual({
     id: '1',
-    taxCode: 'TODO',
+    taxCode: 'fiscalCode',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',

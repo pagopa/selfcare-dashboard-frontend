@@ -19,8 +19,8 @@ import {
   savePartyUser as savePartyUserMocked,
   updatePartyUserStatus as updatePartyUserStatusMocked,
   deletePartyUser as deletePartyUserMocked,
+  fetchProductRoles as fetchProductRolesMocked,
   fetchPartyUser as fetchPartyUserMocked,
-  mockedProductRoles,
 } from './__mocks__/usersService';
 
 const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
@@ -122,8 +122,18 @@ export const updatePartyUserStatus = (
     return updatePartyUserStatusMocked(party, user, product, role, status);
   }
   if (status === 'ACTIVE') {
+    trackEvent('USER_RESUME', {
+      party_id: party.institutionId,
+      product: product.id,
+      product_role: user.userRole,
+    });
     return DashboardApi.activatePartyRelation(role.relationshipId);
   } else if (status === 'SUSPENDED') {
+    trackEvent('USER_SUSPEND', {
+      party_id: party.institutionId,
+      product: product.id,
+      product_role: user.userRole,
+    });
     return DashboardApi.suspendPartyRelation(role.relationshipId);
   } else {
     throw new Error(`Not allowed next status: ${status}`);
@@ -152,17 +162,22 @@ export const deletePartyUser = (
 export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
-    return new Promise((resolve) => resolve(mockedProductRoles));
+    return fetchProductRolesMocked(product);
   } else {
-    return DashboardApi.getProductRoles(product.id).then(
-      (roles) =>
-        roles.map((r) => ({
-          productId: product.id,
-          productRole: r,
-          selcRole: 'ADMIN',
-          title: r,
-          description: `TODO Descrizione ruolo ${r}`,
-        })) // TODO fixme
+    return DashboardApi.getProductRoles(product.id).then((roles) =>
+      roles
+        .map((pr) =>
+          pr.productRoles.map((r) => ({
+            productId: product.id,
+            partyRole: pr.partyRole,
+            selcRole: pr.selcRole,
+            multiroleAllowed: pr.multiroleAllowed,
+            productRole: r.code,
+            title: r.label,
+            description: r.description,
+          }))
+        )
+        .flatMap((x) => x)
     );
   }
 };

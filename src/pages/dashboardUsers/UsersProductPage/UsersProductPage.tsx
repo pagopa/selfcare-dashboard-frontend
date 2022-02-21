@@ -40,9 +40,9 @@ function UsersProductPage({ party, products, selectedProduct, productRolesList }
   return productRolesList ? (
     <Grid
       container
-      px={0}
+      px={2}
       mt={10}
-      sx={{ width: '985px', backgroundColor: 'transparent !important' }}
+      sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={3} px={'16px'}>
         <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
@@ -53,7 +53,6 @@ function UsersProductPage({ party, products, selectedProduct, productRolesList }
           subTitle={`Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione del prodotto ${selectedProduct.title}.`}
         />
       </Grid>
-      {/* TODO continue building the page */}
       <Grid container direction="row" alignItems={'center'}>
         <Grid item xs={12}>
           <UsersTableActions
@@ -83,10 +82,13 @@ function UsersProductPage({ party, products, selectedProduct, productRolesList }
             onFetchStatusUpdate={(isFetching, count) => {
               setFetchStatus({ loading: isFetching, noData: !count || count === 0 });
             }}
-            userDetailUrl={resolvePathVariables('' /* TODO resolve with product detail url */, {
-              institutionId: party.institutionId,
-              productId: selectedProduct.id,
-            })}
+            userDetailUrl={resolvePathVariables(
+              DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.PARTY_PRODUCT_USER_DETAIL.path,
+              {
+                institutionId: party.institutionId,
+                productId: selectedProduct.id,
+              }
+            )}
           />
         </Grid>
         {!fetchStatus.loading && fetchStatus.noData && (

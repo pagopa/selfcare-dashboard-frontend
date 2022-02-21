@@ -142,7 +142,7 @@ function UserProductDetailPage({
       </Grid>
       <Grid container item>
         <Grid item xs={12}>
-          <UserDetail userInfo={partyUser} roleSection={<></>} />
+          <UserDetail party={party} userInfo={partyUser} roleSection={<></>} />
         </Grid>
       </Grid>
       <Grid item xs={11} my={5}>

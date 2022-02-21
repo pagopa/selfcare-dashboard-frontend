@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
+import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
 
 const CustomLabelStyle = styled(Typography)({
@@ -12,11 +13,12 @@ const CustomInfoStyle = styled(Typography)({
   textTransform: 'capitalize',
 });
 type Props = {
+  party: Party;
   roleSection: React.ReactNode;
   userInfo: PartyUser;
 };
 
-export default function UserDetail({ roleSection, userInfo }: Props) {
+export default function UserDetail({ roleSection, userInfo, party }: Props) {
   return (
     <>
       <Grid container>
@@ -51,7 +53,7 @@ export default function UserDetail({ roleSection, userInfo }: Props) {
                 </CustomLabelStyle>
               </Grid>
               <Grid item xs={9}>
-                <CustomInfoStyle variant="body2">TODO</CustomInfoStyle>
+                <CustomInfoStyle variant="body2">{userInfo.taxCode}</CustomInfoStyle>
               </Grid>
             </Grid>
             <Grid container item alignContent="center">
@@ -71,7 +73,7 @@ export default function UserDetail({ roleSection, userInfo }: Props) {
                 </CustomLabelStyle>
               </Grid>
               <Grid item xs={9}>
-                <CustomInfoStyle variant="body2">TEST</CustomInfoStyle>
+                <CustomInfoStyle variant="body2">{party.description}</CustomInfoStyle>
               </Grid>
             </Grid>
 

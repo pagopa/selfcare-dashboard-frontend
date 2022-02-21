@@ -134,7 +134,35 @@ describe('Test fetchPartyUsers', () => {
 test('Test fetchProductRoles', async () => {
   const productRoles = await fetchProductRoles(mockedPartyProducts[0]);
 
-  expect(productRoles.map((r) => r.productRole)).toMatchObject(mockedProductRoles);
+  expect(productRoles).toStrictEqual([
+    {
+      productId: mockedPartyProducts[0].id,
+      partyRole: 'SUB_DELEGATE',
+      selcRole: 'ADMIN',
+      multiroleAllowed: false,
+      productRole: 'incaricato-ente-creditore',
+      title: 'Incaricato Ente Creditore',
+      description: 'Descrizione incaricato-ente-creditore',
+    },
+    {
+      productId: mockedPartyProducts[0].id,
+      partyRole: 'OPERATOR',
+      selcRole: 'LIMITED',
+      multiroleAllowed: true,
+      productRole: 'referente-dei-pagamenti',
+      title: 'Referente dei Pagamenti',
+      description: 'Descrizione referente-dei-pagamenti',
+    },
+    {
+      productId: mockedPartyProducts[0].id,
+      partyRole: 'OPERATOR',
+      selcRole: 'LIMITED',
+      multiroleAllowed: true,
+      productRole: 'referente-tecnico',
+      title: 'Referente Tecnico',
+      description: 'Descrizione referente-tecnico',
+    },
+  ]);
 
   expect(DashboardApi.getProductRoles).toBeCalledWith(mockedPartyProducts[0].id);
 });

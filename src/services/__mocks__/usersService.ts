@@ -65,8 +65,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid3',
     taxCode: 'TAXCODE_uid3',
-    name: 'Simone',
-    surname: 'Bianchi Verdi Verdi Verdi',
+    name: 'Simone3',
+    surname: 'Bianchi3 Verdi Verdi Verdi',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
@@ -152,8 +152,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid6',
     taxCode: 'TAXCODE_uid6',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone6',
+    surname: 'Bianchi6',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
@@ -177,8 +177,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid7',
     taxCode: 'TAXCODE_uid7',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone7',
+    surname: 'Bianchi7',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -202,8 +202,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid8',
     taxCode: 'TAXCODE_uid8',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone8',
+    surname: 'Bianchi8',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -233,8 +233,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid9',
     taxCode: 'TAXCODE_uid9',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone9',
+    surname: 'Bianchi9',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -264,8 +264,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid10',
     taxCode: 'TAXCODE_uid10',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone10',
+    surname: 'Bianchi10',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -295,8 +295,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid11',
     taxCode: 'TAXCODE_uid11',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone11',
+    surname: 'Bianchi11',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
@@ -320,8 +320,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid12',
     taxCode: 'TAXCODE_uid12',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone12',
+    surname: 'Bianchi12',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
@@ -345,8 +345,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid13',
     taxCode: 'TAXCODE_uid13',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone13',
+    surname: 'Bianchi13',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
@@ -370,8 +370,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid14',
     taxCode: 'TAXCODE_uid14',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone14',
+    surname: 'Bianchi14',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
@@ -395,8 +395,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid15',
     taxCode: 'TAXCODE_uid15',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone15',
+    surname: 'Bianchi15',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
@@ -420,8 +420,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid16',
     taxCode: 'TAXCODE_uid16',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone16',
+    surname: 'Bianchi16',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -445,8 +445,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid17',
     taxCode: 'TAXCODE_uid17',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone17',
+    surname: 'Bianchi17',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
@@ -470,8 +470,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid18',
     taxCode: 'TAXCODE_uid18',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone18',
+    surname: 'Bianchi18',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -495,8 +495,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid19',
     taxCode: 'TAXCODE_uid19',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone19',
+    surname: 'Bianchi19',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -520,8 +520,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid20',
     taxCode: 'TAXCODE_uid20',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone20',
+    surname: 'Bianchi20',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -545,8 +545,8 @@ export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid21',
     taxCode: 'TAXCODE_uid21',
-    name: 'Simone',
-    surname: 'Bianchi',
+    name: 'Simone21',
+    surname: 'Bianchi21',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
     status: 'ACTIVE',
@@ -572,24 +572,48 @@ export const mockedUsers: Array<PartyUser> = [
 export const mockedProductRoles: Array<ProductRole> = [
   {
     productId: 'PRODID',
+    partyRole: 'MANAGER',
     selcRole: 'ADMIN',
+    multiroleAllowed: false,
+    productRole: 'referente-legale',
+    title: 'Referente Legale',
+    description: 'Descrizione referente-legale',
+  },
+  {
+    productId: 'PRODID',
+    partyRole: 'DELEGATE',
+    selcRole: 'ADMIN',
+    multiroleAllowed: false,
+    productRole: 'referente-amministrativo',
+    title: 'Referente Amministrativo',
+    description: 'Descrizione referente-amministrativo',
+  },
+  {
+    productId: 'PRODID',
+    partyRole: 'SUB_DELEGATE',
+    selcRole: 'ADMIN',
+    multiroleAllowed: false,
     productRole: 'incaricato-ente-creditore',
     title: 'Incaricato Ente Creditore',
-    description: 'Descrizione ruolo Incaricato Ente Creditore',
+    description: 'Descrizione incaricato-ente-creditore',
   },
   {
     productId: 'PRODID',
+    partyRole: 'OPERATOR',
     selcRole: 'LIMITED',
+    multiroleAllowed: true,
+    productRole: 'referente-dei-pagamenti',
+    title: 'Referente dei Pagamenti',
+    description: 'Descrizione referente-dei-pagamenti',
+  },
+  {
+    productId: 'PRODID',
+    partyRole: 'OPERATOR',
+    selcRole: 'LIMITED',
+    multiroleAllowed: true,
     productRole: 'referente-tecnico',
     title: 'Referente Tecnico',
-    description: 'Descrizione ruolo Referente Tecnico',
-  },
-  {
-    productId: 'PRODID',
-    selcRole: 'LIMITED',
-    productRole: 'operatore-sicurezza',
-    title: 'Operatore sicurezza',
-    description: 'Descrizione ruolo Operatore sicurezza',
+    description: 'Descrizione referente-tecnico',
   },
 ];
 
@@ -640,8 +664,17 @@ export const fetchPartyUsers = (
   );
 };
 
-export const fetchProductRoles = (_product: Product): Promise<Array<ProductRole>> =>
-  new Promise((resolve) => resolve(mockedProductRoles));
+export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
+  const out = mockedProductRoles.map((r) =>
+    Object.assign(
+      {},
+      r,
+      { productId: product.id },
+      { multiroleAllowed: product.id === 'prod-interop' && r.partyRole === 'OPERATOR' }
+    )
+  );
+  return new Promise((resolve) => resolve(out));
+};
 
 export const savePartyUser = (
   _party: Party,
