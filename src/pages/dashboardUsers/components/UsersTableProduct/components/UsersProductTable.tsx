@@ -98,6 +98,7 @@ export default function UsersProductTable({
   fetchPage,
   noMoreData,
   party,
+  product,
   productRolesLists,
   canEdit,
   users,
@@ -112,6 +113,7 @@ export default function UsersProductTable({
   const columns: Array<GridColDef> = buildColumnDefs(
     canEdit,
     party,
+    product,
     onRowClick,
     onDelete,
     productRolesLists

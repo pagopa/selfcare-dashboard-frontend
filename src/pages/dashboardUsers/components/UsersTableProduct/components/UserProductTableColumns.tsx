@@ -7,14 +7,16 @@ import {
 } from '@mui/x-data-grid';
 import React, { CSSProperties, ReactNode } from 'react';
 import { InfoOutlined } from '@mui/icons-material';
-import { PartyUser } from '../../../../../model/PartyUser';
+import { PartyUser, PartyUserProduct } from '../../../../../model/PartyUser';
 import { ProductRolesLists } from '../../../../../model/ProductRole';
 import { Party } from '../../../../../model/Party';
+import { Product } from '../../../../../model/Product';
 import UserProductRowActions from './UserProductRowActions';
 
 export function buildColumnDefs(
   canEdit: boolean,
   party: Party,
+  product: Product,
   onRowClick: (partyUser: PartyUser) => void,
   onDelete: (user: PartyUser) => void,
   productRolesLists: ProductRolesLists
@@ -31,7 +33,7 @@ export function buildColumnDefs(
       disableColumnMenu: true,
       valueGetter: getFullName,
       renderHeader: showCustmHeader,
-      renderCell: (params) => showName(params, false, onRowClick),
+      renderCell: (params) => showName(params, product, false, onRowClick),
       sortable: false,
     },
     {
@@ -56,7 +58,7 @@ export function buildColumnDefs(
       width: 250,
       editable: false,
       disableColumnMenu: true,
-      renderCell: (params) => showRoles(params, productRolesLists, onRowClick),
+      renderCell: (params) => showRoles(params, product, productRolesLists, onRowClick),
       renderHeader: showCustmHeader,
       sortable: false,
     },
@@ -69,7 +71,7 @@ export function buildColumnDefs(
       hideSortIcons: true,
       disableColumnMenu: true,
       editable: false,
-      renderCell: (params) => showStatus(params, onRowClick),
+      renderCell: (params) => showStatus(params, product, onRowClick),
       sortable: false,
     },
     {
@@ -82,7 +84,7 @@ export function buildColumnDefs(
       disableColumnMenu: true,
       editable: false,
       renderCell: (p) =>
-        canEdit ? showActions(party, p, onDelete) : renderCell(p, '', onRowClick),
+        canEdit ? showActions(party, product, p, onDelete) : renderCell(p, '', onRowClick),
       sortable: false,
     },
   ] as Array<GridColDef>;
@@ -131,6 +133,13 @@ function renderCell(
   );
 }
 
+function isUserSuspended(user: PartyUser, product: Product): boolean {
+  return (
+    user.status === 'SUSPENDED' ||
+    !user.products.find((p) => p.id === product.id)?.roles?.find((r) => r.status !== 'SUSPENDED')
+  );
+}
+
 function getFullName(params: GridValueGetterParams) {
   return `${params.row.name} ${params.row.surname} ${params.row.status}`;
 }
@@ -150,10 +159,11 @@ function showCustmHeader(params: GridColumnHeaderParams) {
 
 function showName(
   params: GridRenderCellParams,
+  product: Product,
   canShowChip: boolean,
   onRowClick: (partyUser: PartyUser) => void
 ) {
-  const isSuspended = params.row.status === 'SUSPENDED';
+  const isSuspended = isUserSuspended(params.row as PartyUser, product);
   const showChip = canShowChip && isSuspended;
   return (
     <React.Fragment>
@@ -201,27 +211,34 @@ function TableChip({ text }: { text: string }) {
 
 function showRoles(
   params: GridRenderCellParams<PartyUser>,
+  product: Product,
   productRolesLists: ProductRolesLists,
   onRowClick: (partyUser: PartyUser) => void
 ) {
-  const isUserSuspended = params.row.status === 'SUSPENDED';
+  const isSuspended = isUserSuspended(params.row as PartyUser, product);
   return (
     <React.Fragment>
       {renderCell(
         params,
         <Grid container direction="column">
-          {(params.row as PartyUser).products[0].roles.map((r) => (
-            <Grid item key={r.relationshipId}>
-              <Typography
-                color={isUserSuspended || r.status === 'SUSPENDED' ? '#9E9E9E' : undefined}
-                sx={{ fontSize: '14px', fontWeight: '700', outline: 'none' }}
-              >
-                {productRolesLists.groupByProductRole[r.role]
-                  ? productRolesLists.groupByProductRole[r.role].title
-                  : r.role}
-              </Typography>
-            </Grid>
-          ))}
+          {(params.row as PartyUser).products
+            .find((p) => p.id === product.id)
+            ?.roles?.map(
+              (
+                r // load just the actual product
+              ) => (
+                <Grid item key={r.relationshipId}>
+                  <Typography
+                    color={isSuspended || r.status === 'SUSPENDED' ? '#9E9E9E' : undefined}
+                    sx={{ fontSize: '14px', fontWeight: '700', outline: 'none' }}
+                  >
+                    {productRolesLists.groupByProductRole[r.role]
+                      ? productRolesLists.groupByProductRole[r.role].title
+                      : r.role}
+                  </Typography>
+                </Grid>
+              )
+            )}
         </Grid>,
         onRowClick
       )}
@@ -229,8 +246,12 @@ function showRoles(
   );
 }
 
-function showStatus(params: GridRenderCellParams, onRowClick: (partyUser: PartyUser) => void) {
-  const showChip = params.row.status === 'SUSPENDED';
+function showStatus(
+  params: GridRenderCellParams,
+  product: Product,
+  onRowClick: (partyUser: PartyUser) => void
+) {
+  const showChip = isUserSuspended(params.row as PartyUser, product);
   return renderCell(params, <>{showChip && <TableChip text="Sospeso" />}</>, onRowClick, {
     paddingLeft: 0,
     paddingRight: 0,
@@ -240,13 +261,15 @@ function showStatus(params: GridRenderCellParams, onRowClick: (partyUser: PartyU
 
 function showActions(
   party: Party,
+  product: Product,
   users: GridRenderCellParams<PartyUser>,
   onDelete: (user: PartyUser) => void
 ) {
   const row = users.row as PartyUser;
+  const userProduct = row.products.find((p) => p.id === product.id) as PartyUserProduct;
   return renderCell(
     users,
-    row.isCurrentUser || row.products[0].roles.length > 1 ? (
+    (row.isCurrentUser || userProduct?.roles?.length) ?? 2 > 1 ? (
       <Tooltip title="Le azioni sono disponibili nel dettaglio del referente">
         <InfoOutlined sx={{ color: '#5C6F82', paddingTop: 1, boxSizing: 'unset' }} />
       </Tooltip>
@@ -254,7 +277,7 @@ function showActions(
       <UserProductRowActions
         party={party}
         partyUser={row}
-        partyUserProduct={row.products[0]}
+        partyUserProduct={userProduct}
         onDelete={onDelete}
       />
     ),
