@@ -3,9 +3,7 @@ import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
 import { useEffect, useState } from 'react';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { Product } from '../../../model/Product';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
-import { Party } from '../../../model/Party';
 import UsersTableProduct from '../components/UsersTableProduct/UsersTableProduct';
 import UsersTableActions from '../components/UsersTableActions/UsersTableActions';
 import { UsersTableFiltersConfig } from '../components/UsersTableActions/UsersTableFilters';
@@ -13,14 +11,11 @@ import { DASHBOARD_ROUTES } from '../../../routes';
 import UserTableNoData from '../components/UserTableNoData';
 import { ENV } from '../../../utils/env';
 import withSelectedPartyProduct from '../../../decorators/withSelectedPartyProduct';
-import { ProductRolesLists, ProductsRolesMap } from '../../../model/ProductRole';
+import withSelectedPartyProductAndRoles, {
+  withSelectedPartyProductAndRolesProps,
+} from '../../../decorators/withSelectedPartyProductAndRoles';
 
-interface Props {
-  party: Party;
-  selectedProduct: Product;
-  fetchSelectedProductRoles: (onRetry: () => void) => Promise<ProductRolesLists>;
-  products: Array<Product>;
-}
+type Props = withSelectedPartyProductAndRolesProps;
 
 const paths = [
   {
@@ -34,29 +29,20 @@ const emptyFilters: UsersTableFiltersConfig = {
   productRoles: [],
 };
 
-function UsersProductPage({ party, products, selectedProduct, fetchSelectedProductRoles }: Props) {
+function UsersProductPage({ party, products, selectedProduct, productRolesList }: Props) {
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [fetchStatus, setFetchStatus] = useState({ loading: true, noData: false });
-  const [productsRolesMap, setProductsRolesMap] = useState<ProductsRolesMap>();
-
-  const doFetchProductRoles = () => {
-    // void is allowed here because the catch is handled inside the fetchSelectedProductRoles function provided by withSelectedPartyProduct
-    void fetchSelectedProductRoles(doFetchProductRoles).then((roles) =>
-      setProductsRolesMap({ [selectedProduct.id]: roles })
-    );
-  };
 
   useEffect(() => {
     trackEvent('USER_LIST', { party_id: party.institutionId, product: selectedProduct.id });
-    doFetchProductRoles();
   }, [selectedProduct]);
 
-  return productsRolesMap ? (
+  return productRolesList ? (
     <Grid
       container
-      px={0}
+      px={2}
       mt={10}
-      sx={{ width: '985px', backgroundColor: 'transparent !important' }}
+      sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={3} px={'16px'}>
         <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
@@ -67,7 +53,6 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
           subTitle={`Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione del prodotto ${selectedProduct.title}.`}
         />
       </Grid>
-      {/* TODO continue building the page */}
       <Grid container direction="row" alignItems={'center'}>
         <Grid item xs={12}>
           <UsersTableActions
@@ -76,7 +61,7 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
             party={party}
             products={products}
             selectedProduct={selectedProduct}
-            productsRolesMap={productsRolesMap}
+            productsRolesMap={{ [selectedProduct.id]: productRolesList }}
             filters={filters}
             onFiltersChange={setFilters}
             addUserUrl={resolvePathVariables(
@@ -92,15 +77,18 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
             initialPageSize={ENV.PARTY_PRODUCT_USERS_PAGE_SIZE}
             party={party}
             product={selectedProduct}
-            productRolesLists={productsRolesMap[selectedProduct.id]}
+            productRolesLists={productRolesList}
             filterConfiguration={filters}
             onFetchStatusUpdate={(isFetching, count) => {
               setFetchStatus({ loading: isFetching, noData: !count || count === 0 });
             }}
-            userDetailUrl={resolvePathVariables('' /* TODO resolve with product detail url */, {
-              institutionId: party.institutionId,
-              productId: selectedProduct.id,
-            })}
+            userDetailUrl={resolvePathVariables(
+              DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.PARTY_PRODUCT_USER_DETAIL.path,
+              {
+                institutionId: party.institutionId,
+                productId: selectedProduct.id,
+              }
+            )}
           />
         </Grid>
         {!fetchStatus.loading && fetchStatus.noData && (
@@ -113,4 +101,4 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
   );
 }
 
-export default withSelectedPartyProduct(UsersProductPage);
+export default withSelectedPartyProduct(withSelectedPartyProductAndRoles(UsersProductPage));

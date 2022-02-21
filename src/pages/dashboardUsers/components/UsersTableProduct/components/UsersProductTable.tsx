@@ -1,19 +1,12 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Box, styled } from '@mui/system';
 import { DataGrid, GridColDef, GridSortDirection, GridSortModel } from '@mui/x-data-grid';
-import React, { useState } from 'react';
-import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionModal';
-import Toast from '@pagopa/selfcare-common-frontend/components/Toast';
-import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import React from 'react';
 import { CustomPagination } from '@pagopa/selfcare-common-frontend';
 import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
-import { Party, UserStatus } from '../../../../../model/Party';
-import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../../../utils/constants';
-import { updatePartyUserStatus } from '../../../../../services/usersService';
+import { Party } from '../../../../../model/Party';
 import { ProductRolesLists } from '../../../../../model/ProductRole';
 import { buildColumnDefs } from './UserProductTableColumns';
 import UserProductLoading from './UserProductLoading';
@@ -31,15 +24,17 @@ interface UsersSearchTableProps {
   product: Product;
   productRolesLists: ProductRolesLists;
   canEdit: boolean;
-  fetchPage: (page?: number, size?: number) => void;
+  fetchPage: (page?: number, size?: number, refetch?: boolean) => void;
   page: Page;
   sort?: string;
   onSortRequest: (sort: string) => void;
+  onRowClick: (partyUser: PartyUser) => void;
+  onDelete: (partyUser: PartyUser) => void;
 }
 
 const CustomDataGrid = styled(DataGrid)({
   border: 'none !important',
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus':
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within, &.MuiDataGrid-root .MuiDataGrid-cell:focus-within':
     { outline: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell': {
     whiteSpace: 'normal !important',
@@ -110,75 +105,19 @@ export default function UsersProductTable({
   page,
   sort,
   onSortRequest,
+  onRowClick,
+  onDelete,
 }: UsersSearchTableProps) {
-  const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
-  const addError = useErrorDispatcher();
-  const [openModal, setOpenModal] = useState(false);
-  const [openToast, setOpenToast] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<PartyUser>();
-
   const sortSplitted = sort ? sort.split(',') : undefined;
 
-  const handleOpen = (users: PartyUser) => {
-    setOpenToast(false);
-    setOpenModal(true);
-    setSelectedUser(users);
-  };
-  const columns: Array<GridColDef> = buildColumnDefs(canEdit, party, handleOpen, productRolesLists);
-
-  const selectedUserStatus = selectedUser?.status === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
-
-  const confirmChangeStatus = (user?: PartyUser) => {
-    if (user && canEdit) {
-      const nextStatus: UserStatus | undefined =
-        user.status === 'ACTIVE' ? 'SUSPENDED' : user.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
-      if (!nextStatus) {
-        addError({
-          id: 'INVALID_STATUS_TRANSITION',
-          blocking: false,
-          error: new Error('INVALID_STATUS_TRANSITION'),
-          techDescription: `Invalid status transition while updating party (${party.institutionId}) user (${user.id}): ${user.status}`,
-          toNotify: true,
-        });
-
-        return;
-      }
-
-      setLoading(true);
-      console.log(user);
-      updatePartyUserStatus(party, user, user.products[0], user.products[0].roles[0], nextStatus) // TODO fixme, suspend just the first???
-        .then((_) => {
-          if (nextStatus === 'SUSPENDED') {
-            trackEvent('USER_SUSPEND', {
-              party_id: party.institutionId,
-              product: product.id,
-              product_role: user.userRole,
-            });
-          } else if (nextStatus === 'ACTIVE') {
-            trackEvent('USER_RESUME', {
-              party_id: party.institutionId,
-              product: product.id,
-              product_role: user.userRole,
-            });
-          }
-          setOpenModal(false);
-          // eslint-disable-next-line functional/immutable-data
-          user.status = nextStatus;
-
-          setOpenToast(true);
-        })
-        .catch((reason) =>
-          addError({
-            id: 'UPDATE_PARTY_USER_STATUS',
-            blocking: false,
-            error: reason,
-            techDescription: `An error occurred while updating party (${party.institutionId}) user (${user.id}): ${user.status} -> ${nextStatus}`,
-            toNotify: true,
-          })
-        )
-        .finally(() => setLoading(false));
-    }
-  };
+  const columns: Array<GridColDef> = buildColumnDefs(
+    canEdit,
+    party,
+    product,
+    onRowClick,
+    onDelete,
+    productRolesLists
+  );
 
   return (
     <React.Fragment>
@@ -198,8 +137,9 @@ export default function UsersProductTable({
           rows={users}
           getRowId={(r) => r.id}
           columns={columns}
-          rowHeight={users.length === 0 && loading ? 0 : rowHeight /* to remove? */}
+          rowHeight={users.length === 0 && loading ? 0 : rowHeight}
           headerHeight={headerHeight}
+          hideFooterSelectedRowCount={true}
           components={{
             Footer:
               loading || incrementalLoad
@@ -239,36 +179,6 @@ export default function UsersProductTable({
           }
         />
       </Box>
-      <Toast
-        open={openToast /* TODO useNotify */}
-        title={`REFERENTE ${selectedUserStatus?.toUpperCase()}`}
-        message={
-          <>
-            {`Hai ${selectedUserStatus} correttamente `}
-            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}`}</strong>
-            {'.'}
-          </>
-        }
-        onCloseToast={() => setOpenToast(false)}
-      />
-      <SessionModal
-        open={openModal /* TODO useNotify */}
-        title={selectedUser?.status === 'ACTIVE' ? 'Sospendi Referente' : 'Riabilita Referente'}
-        message={
-          <>
-            {selectedUser?.status === 'ACTIVE' ? 'Stai per sospendere ' : 'Stai per riabilitare '}
-            <strong>{selectedUser && `${selectedUser.name} ${selectedUser.surname}`}</strong>
-            {'.'}
-            <br />
-            {'Vuoi continuare?'}
-          </>
-        }
-        onConfirm={() => confirmChangeStatus(selectedUser)}
-        handleClose={() => setOpenModal(false)}
-        onConfirmLabel="Conferma"
-        onCloseLabel="Annulla"
-        height="100%"
-      />
     </React.Fragment>
   );
 }

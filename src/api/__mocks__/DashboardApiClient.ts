@@ -6,6 +6,10 @@ import {
   RoleEnum,
 } from '../generated/b4f-dashboard/InstitutionUserResource';
 import { SelcRoleEnum } from '../generated/b4f-dashboard/ProductRoleInfoResource';
+import {
+  PartyRoleEnum,
+  ProductRoleMappingsResource,
+} from '../generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
 import { UserResource } from '../generated/b4f-dashboard/UserResource';
@@ -130,7 +134,7 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address',
-    certification: false,
+    certification: true,
     products: [
       {
         id: 'productId2',
@@ -195,10 +199,36 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
   },
 ];
 
-export const mockedProductRoles: Array<string> = [
-  'Incaricato Ente Creditore',
-  'Referente dei Pagamenti',
-  'Referente Tecnico',
+export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
+  {
+    partyRole: PartyRoleEnum.SUB_DELEGATE,
+    selcRole: SelcRoleEnum.ADMIN,
+    multiroleAllowed: false,
+    productRoles: [
+      {
+        code: 'incaricato-ente-creditore',
+        description: 'Descrizione incaricato-ente-creditore',
+        label: 'Incaricato Ente Creditore',
+      },
+    ],
+  },
+  {
+    partyRole: PartyRoleEnum.OPERATOR,
+    selcRole: SelcRoleEnum.LIMITED,
+    multiroleAllowed: true,
+    productRoles: [
+      {
+        code: 'referente-dei-pagamenti',
+        description: 'Descrizione referente-dei-pagamenti',
+        label: 'Referente dei Pagamenti',
+      },
+      {
+        code: 'referente-tecnico',
+        description: 'Descrizione referente-tecnico',
+        label: 'Referente Tecnico',
+      },
+    ],
+  },
 ];
 
 export const mockedUserResource: UserResource = {
@@ -250,7 +280,7 @@ export const DashboardApi = {
   activatePartyRelation: async (_relationshipId: string): Promise<void> =>
     new Promise((resolve) => resolve()),
 
-  getProductRoles: async (_productId: string): Promise<Array<string>> =>
+  getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
 
   fetchUserRegistryByFiscalCode: async (_taxCode: string): Promise<UserResource | null> =>

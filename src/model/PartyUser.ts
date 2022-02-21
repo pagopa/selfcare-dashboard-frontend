@@ -45,7 +45,7 @@ export const institutionUserResource2PartyUser = (
   currentUser: User
 ): PartyUser => ({
   id: resource.id,
-  taxCode: 'TODO', // resource.fiscalCode,
+  taxCode: resource.fiscalCode,
   name: resource.name,
   surname: resource.surname,
   email: resource.email,
@@ -55,7 +55,7 @@ export const institutionUserResource2PartyUser = (
   ),
   status: resource.status as UserStatus,
   isCurrentUser: currentUser.uid === resource.id,
-  certification: false, // TODO resource.certification
+  certification: resource.certification,
 });
 
 export const productInfoResource2PartyUserProduct = (
@@ -76,7 +76,7 @@ export const productUserResource2PartyUser = (
   currentUser: User
 ): PartyUser => ({
   id: resource.id,
-  taxCode: 'TODO', // resource.fiscalCode,
+  taxCode: resource.fiscalCode,
   name: resource.name,
   surname: resource.surname,
   email: resource.email,

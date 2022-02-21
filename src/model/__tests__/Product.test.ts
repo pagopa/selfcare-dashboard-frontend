@@ -30,6 +30,5 @@ test('Test institutionInfo2Party', () => {
     urlPublic: 'http://pagopa/public',
     tag: undefined,
     userRole: 'LIMITED',
-    allowMultipleRole: false, // TODO
   });
 });
