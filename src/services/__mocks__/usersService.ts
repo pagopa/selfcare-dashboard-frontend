@@ -23,7 +23,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel1',
@@ -48,7 +48,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel2',
@@ -73,7 +73,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel3',
@@ -98,7 +98,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel4',
@@ -129,7 +129,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel4',
@@ -156,17 +156,17 @@ export const mockedUsers: Array<PartyUser> = [
     surname: 'Bianchi',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
-    status: 'ACTIVE',
+    status: 'SUSPENDED',
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel6',
             role: 'referente-tecnico',
             selcRole: 'LIMITED',
-            status: 'ACTIVE',
+            status: 'SUSPENDED',
           },
         ],
       },
@@ -184,8 +184,8 @@ export const mockedUsers: Array<PartyUser> = [
     status: 'ACTIVE',
     products: [
       {
-        title: 'App IO',
-        id: '1',
+        title: 'Piattaforma Notifiche',
+        id: 'prod-pn',
         roles: [
           {
             relationshipId: 'rel7',
@@ -206,17 +206,23 @@ export const mockedUsers: Array<PartyUser> = [
     surname: 'Bianchi',
     email: 'giuseppe.b@comune.milano.it ',
     userRole: 'LIMITED',
-    status: 'SUSPENDED',
+    status: 'ACTIVE',
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel8',
             role: 'referente-tecnico',
             selcRole: 'LIMITED',
-            status: 'SUSPENDED',
+            status: 'ACTIVE',
+          },
+          {
+            relationshipId: 'rel8_2',
+            role: 'operatore-sicurezza',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
           },
         ],
       },
@@ -235,11 +241,17 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel9',
             role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
+          },
+          {
+            relationshipId: 'rel9_2',
+            role: 'operatore-sicurezza',
             selcRole: 'LIMITED',
             status: 'ACTIVE',
           },
@@ -260,11 +272,17 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel10',
             role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
+          },
+          {
+            relationshipId: 'rel10_2',
+            role: 'operatore-sicurezza',
             selcRole: 'LIMITED',
             status: 'ACTIVE',
           },
@@ -285,7 +303,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel11',
@@ -310,7 +328,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel12',
@@ -335,7 +353,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel13',
@@ -360,7 +378,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel14',
@@ -385,7 +403,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel15',
@@ -410,7 +428,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel16',
@@ -435,7 +453,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel17',
@@ -460,7 +478,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel18',
@@ -485,7 +503,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel19',
@@ -510,7 +528,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel20',
@@ -535,7 +553,7 @@ export const mockedUsers: Array<PartyUser> = [
     products: [
       {
         title: 'App IO',
-        id: '1',
+        id: 'prod-io',
         roles: [
           {
             relationshipId: 'rel21',
@@ -631,9 +649,20 @@ export const savePartyUser = (
   _user: PartyUserOnCreation
 ): Promise<any> => new Promise((resolve) => resolve(200));
 
+export const fetchPartyUser = (
+  _institutionId: string,
+  userId: string,
+  _currentUser: User
+): Promise<PartyUser | null> => {
+  const mockedUser = mockedUsers.find((u) => u.id === userId) ?? null;
+  return new Promise((resolve) =>
+    resolve(mockedUser ? JSON.parse(JSON.stringify(mockedUser)) : null)
+  );
+};
+
 export const updatePartyUserStatus = (
   _party: Party,
-  _user: PartyUser,
+  user: PartyUser,
   _product: PartyUserProduct,
   role: PartyUserProductRole,
   status: UserStatus
@@ -641,6 +670,22 @@ export const updatePartyUserStatus = (
   if (status === 'ACTIVE' || status === 'SUSPENDED') {
     // eslint-disable-next-line functional/immutable-data
     role.status = status;
+    if (user.status !== status) {
+      if (status === 'ACTIVE') {
+        // eslint-disable-next-line functional/immutable-data
+        user.status = 'ACTIVE';
+      } else if (!user.products.find((p) => p.roles.find((r) => r.status === 'ACTIVE'))) {
+        // eslint-disable-next-line functional/immutable-data
+        user.status = 'SUSPENDED';
+      }
+    }
+    // eslint-disable-next-line functional/immutable-data
+    mockedUsers.splice(
+      mockedUsers.findIndex((u) => u.id === user.id),
+      1,
+      user
+    );
+
     return new Promise<void>((resolve) => resolve());
   } else {
     throw new Error(`Not allowed next status: ${status}`);
@@ -653,18 +698,34 @@ export const deletePartyUser = (
   product: PartyUserProduct,
   role: PartyUserProductRole
 ): Promise<any> => {
-  if (product.roles.length === 1) {
+  if (user.products.length === 1 && product.roles.length === 1) {
     // eslint-disable-next-line functional/immutable-data
     mockedUsers.splice(
-      mockedUsers.findIndex((u) => u === user),
+      mockedUsers.findIndex((u) => u.id === user.id),
       1
     );
   } else {
     // eslint-disable-next-line functional/immutable-data
     product.roles.splice(
-      product.roles.findIndex((r) => r === role),
+      product.roles.findIndex((r) => r.relationshipId === role.relationshipId),
       1
     );
+    const mockedUser = mockedUsers.find((u) => u.id === user.id);
+    const mockedProductIndex = mockedUser?.products.findIndex((p) => p.id === product.id) ?? -1;
+    if (mockedProductIndex > -1) {
+      const mockedProduct = mockedUser?.products[mockedProductIndex];
+      if (mockedProduct?.roles.length === 1) {
+        // eslint-disable-next-line functional/immutable-data
+        mockedUser?.products.splice(mockedProductIndex, 1);
+      } else {
+        const mockedRoleIndex =
+          mockedProduct?.roles.findIndex((r) => r.relationshipId === role.relationshipId) ?? -1;
+        if (mockedRoleIndex > -1) {
+          // eslint-disable-next-line functional/immutable-data
+          mockedProduct?.roles.splice(mockedRoleIndex, 1);
+        }
+      }
+    }
   }
   return new Promise<void>((resolve) => resolve());
 };

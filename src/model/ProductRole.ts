@@ -45,3 +45,13 @@ const productRolesGroupByProductRole = (
     acc[r.productRole] = r;
     return acc;
   }, {});
+
+export const transcodeProductRole2Title = (productRole: string, productRolesList: ProductRolesLists) =>
+  productRolesList.groupByProductRole[productRole]
+    ? productRolesList.groupByProductRole[productRole].title
+    : productRole;
+
+export const transcodeProductRole2Description = (productRole: string, productRolesList: ProductRolesLists) =>
+  productRolesList.groupByProductRole[productRole]
+    ? productRolesList.groupByProductRole[productRole].description
+    : productRole;

@@ -2,12 +2,12 @@ import withRetrievedValue from '@pagopa/selfcare-common-frontend/decorators/with
 import { useProductsRolesMap } from '../hooks/useProductsRolesMap';
 import { ProductsRolesMap } from '../model/ProductRole';
 
-type withProductsRolesMapProps = {
+export type withProductsRolesMapProps = {
   productsRolesMap: ProductsRolesMap;
 };
 
 export default function withProductsRolesMap<T extends withProductsRolesMapProps>(
   WrappedComponent: React.ComponentType<T>
-): React.ComponentType<Omit<T, 'productsRolesMap'>> {
+): React.ComponentType<Omit<T, 'productsRolesMap' | 'reload'>> {
   return withRetrievedValue('productsRolesMap', useProductsRolesMap, WrappedComponent);
 }
