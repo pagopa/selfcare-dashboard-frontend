@@ -8,6 +8,7 @@ import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { UserRole } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
 import { ProductRole, ProductsRolesMap } from '../../../../model/ProductRole';
+import UsersTableRolesFilter from './UsersTableRolesFilter';
 
 export type UsersTableFiltersConfig = {
   /** If the roles configuration imply a set of products, this will be considered as filter */
@@ -17,7 +18,112 @@ export type UsersTableFiltersConfig = {
   /** The product roles selected as filter */
   productRoles: Array<ProductRole>;
 };
-
+const selcRoleGroup: { [selcRole in UserRole]: { [title: string]: Array<ProductRole> } } = {
+  ADMIN: {
+    'Referente Amministrativo': [
+      {
+        productId: 'prod-io',
+        partyRole: 'MANAGER',
+        selcRole: 'ADMIN',
+        multiroleAllowed: false,
+        productRole: 'referente-legale',
+        title: 'Referente Amministrativo',
+        description: 'Descrizione referente-legale',
+      },
+      {
+        productId: 'prod-io',
+        partyRole: 'DELEGATE',
+        selcRole: 'ADMIN',
+        multiroleAllowed: false,
+        productRole: 'referente-amministrativo',
+        title: 'Referente Amministrativo',
+        description: 'Descrizione referente-amministrativo',
+      },
+      {
+        productId: 'prod-io',
+        partyRole: 'SUB_DELEGATE',
+        selcRole: 'ADMIN',
+        multiroleAllowed: false,
+        productRole: 'incaricato-ente-creditore',
+        title: 'Referente Amministrativo',
+        description: 'Descrizione incaricato-ente-creditore',
+      },
+      {
+        productId: 'prod-pn',
+        partyRole: 'MANAGER',
+        selcRole: 'ADMIN',
+        multiroleAllowed: false,
+        productRole: 'referente-legale',
+        title: 'Referente Amministrativo',
+        description: 'Descrizione referente-legale',
+      },
+      {
+        productId: 'prod-pn',
+        partyRole: 'DELEGATE',
+        selcRole: 'ADMIN',
+        multiroleAllowed: false,
+        productRole: 'referente-amministrativo',
+        title: 'Referente Amministrativo',
+        description: 'Descrizione referente-amministrativo',
+      },
+      {
+        productId: 'prod-pn',
+        partyRole: 'SUB_DELEGATE',
+        selcRole: 'ADMIN',
+        multiroleAllowed: false,
+        productRole: 'incaricato-ente-creditore',
+        title: 'Referente Amministrativo',
+        description: 'Descrizione incaricato-ente-creditore',
+      },
+    ],
+  },
+  LIMITED: {
+    'Referente dei Pagamenti': [
+      {
+        productId: 'prod-io',
+        partyRole: 'OPERATOR',
+        selcRole: 'LIMITED',
+        multiroleAllowed: true,
+        productRole: 'referente-dei-pagamenti',
+        title: 'Referente dei Pagamenti',
+        description: 'Descrizione referente-dei-pagamenti',
+      },
+    ],
+    'Referente Tecnico': [
+      {
+        productId: 'prod-pn',
+        partyRole: 'OPERATOR',
+        selcRole: 'LIMITED',
+        multiroleAllowed: true,
+        productRole: 'referente-tecnico',
+        title: 'Referente Tecnico',
+        description: 'Descrizione referente-tecnico',
+      },
+    ],
+    'Operatore Api': [
+      {
+        productId: 'prod-pn',
+        partyRole: 'OPERATOR',
+        selcRole: 'LIMITED',
+        multiroleAllowed: true,
+        productRole: 'operatore-api',
+        title: 'Operatore Api',
+        description: 'Descrizione operatore-api',
+      },
+    ],
+    'Operatore Sicurezza': [
+      {
+        productId: 'prod-pn',
+        partyRole: 'OPERATOR',
+        selcRole: 'LIMITED',
+        multiroleAllowed: true,
+        productRole: 'operatore-sicurezza',
+        title: 'Operatore Sicurezza',
+        description: 'Descrizione operatore-sicurezza',
+      },
+    ],
+  },
+};
 const chipSelectedStyle = { backgroundColor: '#8B98A6', color: '#FFFFFF', width: '100%' };
 const chipStyle = {
   backgroundColor: '#FCFDFF',
@@ -91,6 +197,8 @@ export default function UsersTableFilters({
         title={titleModal}
         height="100%"
       />
+
+      <UsersTableRolesFilter selcRoleGroup={selcRoleGroup} productRoles={filters.productRoles} />
     </Grid>
   );
 }
