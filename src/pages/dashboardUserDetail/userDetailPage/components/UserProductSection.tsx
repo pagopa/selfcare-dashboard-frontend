@@ -1,9 +1,12 @@
 import { Button, Grid, Typography, Divider } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { useHistory } from 'react-router-dom';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Party } from '../../../../model/Party';
 import { ProductsRolesMap } from '../../../../model/ProductRole';
 import { Product } from '../../../../model/Product';
+import { DASHBOARD_ROUTES } from '../../../../routes';
 import UserProductDetail from './UserProductDetail';
 
 type Props = {
@@ -20,6 +23,7 @@ export default function UserProductSection({
   productsRolesMap,
   products,
 }: Props) {
+  const history = useHistory();
   return (
     <>
       <Grid item xs={10}>
@@ -46,7 +50,14 @@ export default function UserProductSection({
               variant="contained"
               startIcon={<AddIcon />}
               sx={{ py: '10px', width: '120px' }}
-              // onClick={() =>  } TODO
+              onClick={() =>
+                history.push(
+                  resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.ADD_PRODUCT.path, {
+                    institutionId: party.institutionId,
+                    userId: partyUser.id,
+                  })
+                )
+              }
             >
               Aggiungi
             </Button>

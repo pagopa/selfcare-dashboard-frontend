@@ -7,23 +7,22 @@ import ProductNavigationBar from '../../components/ProductNavigationBar';
 import withSelectedPartyProduct from '../../decorators/withSelectedPartyProduct';
 import { DASHBOARD_ROUTES } from '../../routes';
 import { Party } from '../../model/Party';
-import { productRoles2ProductRolesList } from '../../model/ProductRole';
-import { mockedProductRoles } from '../../services/__mocks__/usersService';
-import { PartyUserOnCreation } from '../../model/PartyUser';
+import withSelectedPartyProductAndRoles, {
+  withSelectedPartyProductAndRolesProps,
+} from '../../decorators/withSelectedPartyProductAndRoles';
 import AddUserForm from './components/AddUserForm';
 
 type Props = {
   party: Party;
   products: Array<Product>;
   selectedProduct: Product;
-  initialValues: PartyUserOnCreation;
-};
+} & withSelectedPartyProductAndRolesProps;
 
-function AddUsersProductPage({ party, selectedProduct, products, initialValues }: Props) {
+function AddUsersProductPage({ party, selectedProduct, products, productRolesList }: Props) {
   const history = useHistory();
-  // TODO READ THIS INFORMATION USING DECORATOR
-  const productsRolesMapMock = {
-    [selectedProduct.id]: productRoles2ProductRolesList(mockedProductRoles),
+
+  const productsRolesMap = {
+    [selectedProduct.id]: productRolesList,
   };
 
   const paths = [
@@ -64,13 +63,21 @@ function AddUsersProductPage({ party, selectedProduct, products, initialValues }
           party={party}
           selectedProduct={selectedProduct}
           products={products}
-          productsRolesMap={productsRolesMapMock}
+          productsRolesMap={productsRolesMap}
           canEditRegistryData={true}
-          initialFormData={initialValues}
+          initialFormData={{
+            taxCode: '',
+            name: '',
+            surname: '',
+            email: '',
+            confirmEmail: '',
+            certification: false,
+            productRoles: [],
+          }}
         />
       </Grid>
     </Grid>
   );
 }
 
-export default withSelectedPartyProduct(AddUsersProductPage);
+export default withSelectedPartyProduct(withSelectedPartyProductAndRoles(AddUsersProductPage));

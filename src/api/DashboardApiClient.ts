@@ -13,7 +13,6 @@ import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResour
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 import { UserResource } from './generated/b4f-dashboard/UserResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
-import { CreateUserDto } from './generated/b4f-dashboard/CreateUserDto';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
@@ -121,7 +120,7 @@ export const DashboardApi = {
     const result = await apiClient.createInstitutionProductUserUsingPOST({
       institutionId,
       productId,
-      body: user as unknown as CreateUserDto, // TODO fixme when merging with addUserForm task
+      body: user,
     });
     return extractResponse(result, 201, onRedirectToLogin);
   },

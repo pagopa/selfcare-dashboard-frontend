@@ -201,7 +201,7 @@ export default function AddUserForm({
       .then(() => {
         unregisterUnloadEvent();
         // TODO: USER_UPDATE
-        trackEvent('USER_ADD', {
+        trackEvent(initialFormData.taxCode ? 'USER_UPDATE' : 'USER_ADD', {
           party_id: party.institutionId,
           product: userProduct?.id,
           product_role: values.productRoles,
@@ -290,7 +290,7 @@ export default function AddUserForm({
   const addRole = (r: ProductRole) => {
     // eslint-disable-next-line functional/no-let
     let nextProductRoles;
-    if (userProduct?.allowMultipleRole && formik.values.productRoles.length > 0) {
+    if (r.multiroleAllowed && formik.values.productRoles.length > 0) {
       if (productRoles?.groupByProductRole[formik.values.productRoles[0]].selcRole !== r.selcRole) {
         nextProductRoles = [r.productRole];
       } else {
@@ -411,11 +411,9 @@ export default function AddUserForm({
                   Seleziona il prodotto sul quale vuoi aggiungere il referente
                 </Typography>
                 <RadioGroup aria-label="user" name="products" value={userProduct?.id ?? ''}>
-                  {products?.map(
-                    (
-                      p,
-                      index // TODO Ruolo Admin
-                    ) => (
+                  {products
+                    ?.filter((p) => p.userRole === 'ADMIN')
+                    .map((p, index) => (
                       <Box key={p.id}>
                         <CustomFormControlLabel
                           disabled={!validTaxcode}
@@ -428,8 +426,7 @@ export default function AddUserForm({
                           <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
                         )}
                       </Box>
-                    )
-                  )}
+                    ))}
                 </RadioGroup>
               </Grid>
             </Grid>
@@ -447,44 +444,43 @@ export default function AddUserForm({
                 </Typography>
 
                 {Object.values(productRoles.groupBySelcRole).map((roles, selcRoleIndex) =>
-                  roles.map((p, index) => (
-                    <Box key={p.productRole}>
-                      <CustomFormControlLabel
-                        sx={{ marginTop: 0 }}
-                        checked={formik.values.productRoles.indexOf(p.productRole) > -1}
-                        disabled={!validTaxcode}
-                        value={p.productRole}
-                        control={
-                          roles.length > 1 && userProduct?.allowMultipleRole ? (
-                            <Checkbox />
-                          ) : (
-                            <Radio />
-                          )
-                        }
-                        label={
-                          <>
-                            <Typography> {p.title} </Typography>
-                            <Typography
-                              variant="subtitle2"
-                              sx={{
-                                fontWeight: 400,
-                                fontSize: '12px',
-                                color: '#5C6F82',
-                              }}
-                            >
-                              {p.description}
-                            </Typography>
-                          </>
-                        }
-                        onClick={validTaxcode ? () => addRole(p) : undefined}
-                      />
+                  roles
+                    .filter((r) => r.partyRole === 'OPERATOR' || r.partyRole === 'SUB_DELEGATE')
+                    .map((p, index) => (
+                      <Box key={p.productRole}>
+                        <CustomFormControlLabel
+                          sx={{ marginTop: 0 }}
+                          checked={formik.values.productRoles.indexOf(p.productRole) > -1}
+                          disabled={!validTaxcode}
+                          value={p.productRole}
+                          control={
+                            roles.length > 1 && p.multiroleAllowed ? <Checkbox /> : <Radio />
+                          }
+                          label={
+                            <>
+                              <Typography> {p.title} </Typography>
+                              <Typography
+                                variant="subtitle2"
+                                sx={{
+                                  fontWeight: 400,
+                                  fontSize: '12px',
+                                  color: '#5C6F82',
+                                }}
+                              >
+                                {p.description}
+                              </Typography>
+                            </>
+                          }
+                          onClick={validTaxcode ? () => addRole(p) : undefined}
+                        />
 
-                      {(index !== roles.length - 1 ||
-                        selcRoleIndex !== Object.keys(productRoles.groupBySelcRole).length - 1) && (
-                        <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
-                      )}
-                    </Box>
-                  ))
+                        {(index !== roles.length - 1 ||
+                          selcRoleIndex !==
+                            Object.keys(productRoles.groupBySelcRole).length - 1) && (
+                          <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
+                        )}
+                      </Box>
+                    ))
                 )}
               </Grid>
             </Grid>

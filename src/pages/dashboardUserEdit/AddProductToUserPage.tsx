@@ -6,11 +6,11 @@ import ProductNavigationBar from '../../components/ProductNavigationBar';
 import withProductsRolesMap, {
   withProductsRolesMapProps,
 } from '../../decorators/withProductsRolesMap';
+import withUserDetail, { withUserDetailProps } from '../../decorators/withUserDetail';
 import { Party } from '../../model/Party';
 import { PartyUserOnCreation } from '../../model/PartyUser';
 import { Product } from '../../model/Product';
 import { DASHBOARD_ROUTES } from '../../routes';
-import { mockedUsers } from '../../services/__mocks__/usersService';
 import AddUserForm from './components/AddUserForm';
 
 const CustomLabelStyle = styled(Typography)({
@@ -26,11 +26,10 @@ const CustomInfoStyle = styled(Typography)({
 type Props = {
   party: Party;
   products: Array<Product>;
-} & withProductsRolesMapProps;
+} & withProductsRolesMapProps &
+  withUserDetailProps;
 
-const userInfo = mockedUsers[0]; // TODO RemoveMe
-
-function AddProductToUserPage({ party, products, productsRolesMap }: Props) {
+function AddProductToUserPage({ party, products, productsRolesMap, partyUser }: Props) {
   const history = useHistory();
   const paths = [
     {
@@ -43,7 +42,7 @@ function AddProductToUserPage({ party, products, productsRolesMap }: Props) {
         ),
     },
     {
-      description: userInfo.name + ' ' + userInfo.surname,
+      description: partyUser.name + ' ' + partyUser.surname,
     },
     {
       description: 'Aggiungi Prodotto',
@@ -77,9 +76,9 @@ function AddProductToUserPage({ party, products, productsRolesMap }: Props) {
                     NOME
                   </CustomLabelStyle>
                 </Grid>
-                <Grid item xs={9} className="userInfoStyle">
+                <Grid item xs={9} className="partyUserStyle">
                   <CustomInfoStyle variant="body2">
-                    {userInfo.name.toLocaleLowerCase()}
+                    {partyUser.name.toLocaleLowerCase()}
                   </CustomInfoStyle>
                 </Grid>
               </Grid>
@@ -90,7 +89,7 @@ function AddProductToUserPage({ party, products, productsRolesMap }: Props) {
                   </CustomLabelStyle>
                 </Grid>
                 <Grid item xs={9}>
-                  <CustomInfoStyle variant="body2">{userInfo.surname}</CustomInfoStyle>
+                  <CustomInfoStyle variant="body2">{partyUser.surname}</CustomInfoStyle>
                 </Grid>
               </Grid>
               <Grid container item alignContent="center">
@@ -100,7 +99,7 @@ function AddProductToUserPage({ party, products, productsRolesMap }: Props) {
                   </CustomLabelStyle>
                 </Grid>
                 <Grid item xs={9}>
-                  <CustomInfoStyle variant="body2">{userInfo.taxCode}</CustomInfoStyle>
+                  <CustomInfoStyle variant="body2">{partyUser.taxCode}</CustomInfoStyle>
                 </Grid>
               </Grid>
             </Grid>
@@ -111,18 +110,18 @@ function AddProductToUserPage({ party, products, productsRolesMap }: Props) {
       <Grid item xs={12} mb={9}>
         <AddUserForm
           party={party}
-          products={products} // TODO Products che non ha
+          products={products} // TODO Products che non ha utente attuale
           productsRolesMap={productsRolesMap}
           initialFormData={
             {
-              taxCode: userInfo.taxCode,
-              name: userInfo.name,
-              surname: userInfo.surname,
-              email: userInfo.email,
-              confirmEmail: userInfo.email,
-              id: userInfo.id,
+              taxCode: partyUser.taxCode,
+              name: partyUser.name,
+              surname: partyUser.surname,
+              email: partyUser.email,
+              confirmEmail: partyUser.email,
+              id: partyUser.id,
               productRoles: [],
-              certification: userInfo.certification,
+              certification: partyUser.certification,
             } as PartyUserOnCreation
           }
           canEditRegistryData={false}
@@ -132,4 +131,4 @@ function AddProductToUserPage({ party, products, productsRolesMap }: Props) {
   );
 }
 
-export default withProductsRolesMap(AddProductToUserPage);
+export default withUserDetail(withProductsRolesMap(AddProductToUserPage));

@@ -69,7 +69,7 @@ export const DASHBOARD_ROUTES = {
         component: AddUsersPage,
       },
       ADD_PRODUCT: {
-        path: `${BASE_ROUTE}/:institutionId/roles/:id/add-product`,
+        path: `${BASE_ROUTE}/:institutionId/roles/:userId/add-product`,
         exact: true,
         component: AddProductToUserPage,
       },

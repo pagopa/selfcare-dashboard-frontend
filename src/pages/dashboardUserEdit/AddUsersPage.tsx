@@ -9,16 +9,14 @@ import { Party } from '../../model/Party';
 import withProductsRolesMap, {
   withProductsRolesMapProps,
 } from '../../decorators/withProductsRolesMap';
-import { PartyUserOnCreation } from '../../model/PartyUser';
 import AddUserForm from './components/AddUserForm';
 
 type Props = {
   party: Party;
   products: Array<Product>;
-  initialValues: PartyUserOnCreation;
 } & withProductsRolesMapProps;
 
-function AddUsersPage({ party, products, productsRolesMap, initialValues }: Props) {
+function AddUsersPage({ party, products, productsRolesMap }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -58,7 +56,15 @@ function AddUsersPage({ party, products, productsRolesMap, initialValues }: Prop
           party={party}
           products={products}
           productsRolesMap={productsRolesMap}
-          initialFormData={initialValues}
+          initialFormData={{
+            taxCode: '',
+            name: '',
+            surname: '',
+            email: '',
+            confirmEmail: '',
+            certification: false,
+            productRoles: [],
+          }}
           canEditRegistryData={true}
         />
       </Grid>

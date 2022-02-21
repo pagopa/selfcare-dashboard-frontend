@@ -81,7 +81,7 @@ test('test with fields that respect rules, so enabled button', async () => {
 
   await waitFor(() => {
     const button = screen.getByRole('button', { name: 'Conferma' });
-    expect(button).toBeEnabled();
+    expect(button).toBeEnabled(); // TODO FixMe
     fireEvent.click(button);
   });
 

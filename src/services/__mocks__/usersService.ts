@@ -40,7 +40,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: '0',
-    taxCode: 'TAXCODE_0',
+    taxCode: 'AAAAAA11A11A124A',
     name: 'loggedName',
     surname: 'loggedSurname',
     email: 'loggedName.b@email.it',
@@ -65,7 +65,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid3',
-    taxCode: 'TAXCODE_uid3',
+    taxCode: 'TAXCOD03A00A123P',
     name: 'Simone3',
     surname: 'Bianchi3 Verdi Verdi Verdi',
     email: 'giuseppe.b@comune.milano.it',
@@ -90,7 +90,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid4',
-    taxCode: 'TAXCODE_uid4',
+    taxCode: 'TAXCOD04A00A123P',
     name: 'Simone',
     surname: 'Simonetti',
     email: 'giuseppe.b@comune.milano.it',
@@ -121,7 +121,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid5',
-    taxCode: 'TAXCODE_uid5',
+    taxCode: 'TAXCOD05A00A123P',
     name: 'Simone',
     surname: 'Franceschini Alberti',
     email: 'giuseppe.b@comune.milano.it',
@@ -152,7 +152,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid6',
-    taxCode: 'TAXCODE_uid6',
+    taxCode: 'TAXCOD06A00A123P',
     name: 'Simone6',
     surname: 'Bianchi6',
     email: 'giuseppe.b@comune.milano.it',
@@ -177,7 +177,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid7',
-    taxCode: 'TAXCODE_uid7',
+    taxCode: 'TAXCOD07A00A123P',
     name: 'Simone7',
     surname: 'Bianchi7',
     email: 'giuseppe.b@comune.milano.it',
@@ -202,7 +202,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid8',
-    taxCode: 'TAXCODE_uid8',
+    taxCode: 'TAXCOD08A00A123P',
     name: 'Simone8',
     surname: 'Bianchi8',
     email: 'giuseppe.b@comune.milano.it',
@@ -233,7 +233,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid9',
-    taxCode: 'TAXCODE_uid9',
+    taxCode: 'TAXCOD09A00A123P',
     name: 'Simone9',
     surname: 'Bianchi9',
     email: 'giuseppe.b@comune.milano.it',
@@ -264,7 +264,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid10',
-    taxCode: 'TAXCODE_uid10',
+    taxCode: 'TAXCOD10A00A123P',
     name: 'Simone10',
     surname: 'Bianchi10',
     email: 'giuseppe.b@comune.milano.it',
@@ -295,7 +295,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid11',
-    taxCode: 'TAXCODE_uid11',
+    taxCode: 'TAXCOD11A00A123P',
     name: 'Simone11',
     surname: 'Bianchi11',
     email: 'giuseppe.b@comune.milano.it',
@@ -320,7 +320,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid12',
-    taxCode: 'TAXCODE_uid12',
+    taxCode: 'TAXCOD12A00A123P',
     name: 'Simone12',
     surname: 'Bianchi12',
     email: 'giuseppe.b@comune.milano.it',
@@ -345,7 +345,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid13',
-    taxCode: 'TAXCODE_uid13',
+    taxCode: 'TAXCOD13A00A123P',
     name: 'Simone13',
     surname: 'Bianchi13',
     email: 'giuseppe.b@comune.milano.it',
@@ -370,7 +370,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid14',
-    taxCode: 'TAXCODE_uid14',
+    taxCode: 'TAXCOD14A00A123P',
     name: 'Simone14',
     surname: 'Bianchi14',
     email: 'giuseppe.b@comune.milano.it',
@@ -395,7 +395,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid15',
-    taxCode: 'TAXCODE_uid15',
+    taxCode: 'TAXCOD15A00A123P',
     name: 'Simone15',
     surname: 'Bianchi15',
     email: 'giuseppe.b@comune.milano.it',
@@ -420,7 +420,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid16',
-    taxCode: 'TAXCODE_uid16',
+    taxCode: 'TAXCOD16A00A123P',
     name: 'Simone16',
     surname: 'Bianchi16',
     email: 'giuseppe.b@comune.milano.it',
@@ -445,7 +445,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid17',
-    taxCode: 'TAXCODE_uid17',
+    taxCode: 'TAXCOD17A00A123P',
     name: 'Simone17',
     surname: 'Bianchi17',
     email: 'giuseppe.b@comune.milano.it',
@@ -470,7 +470,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid18',
-    taxCode: 'TAXCODE_uid18',
+    taxCode: 'TAXCOD18A00A123P',
     name: 'Simone18',
     surname: 'Bianchi18',
     email: 'giuseppe.b@comune.milano.it',
@@ -495,7 +495,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid19',
-    taxCode: 'TAXCODE_uid19',
+    taxCode: 'TAXCOD19A00A123P',
     name: 'Simone19',
     surname: 'Bianchi19',
     email: 'giuseppe.b@comune.milano.it',
@@ -520,7 +520,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid20',
-    taxCode: 'TAXCODE_uid20',
+    taxCode: 'TAXCOD20A00A123P',
     name: 'Simone20',
     surname: 'Bianchi20',
     email: 'giuseppe.b@comune.milano.it',
@@ -545,7 +545,7 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid21',
-    taxCode: 'TAXCODE_uid21',
+    taxCode: 'TAXCOD21A00A123P',
     name: 'Simone21',
     surname: 'Bianchi21',
     email: 'giuseppe.b@comune.milano.it',
