@@ -269,7 +269,7 @@ function showActions(
   const userProduct = row.products.find((p) => p.id === product.id) as PartyUserProduct;
   return renderCell(
     users,
-    (row.isCurrentUser || userProduct?.roles?.length) ?? 2 > 1 ? (
+    row.isCurrentUser || (userProduct?.roles?.length ?? 2) > 1 ? (
       <Tooltip title="Le azioni sono disponibili nel dettaglio del referente">
         <InfoOutlined sx={{ color: '#5C6F82', paddingTop: 1, boxSizing: 'unset' }} />
       </Tooltip>

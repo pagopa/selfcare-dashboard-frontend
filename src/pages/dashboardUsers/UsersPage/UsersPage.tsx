@@ -1,8 +1,10 @@
-import { Grid } from '@mui/material';
+import { Grid, Tab, Tabs } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { HashLink } from 'react-router-hash-link';
+import useScrollSpy from 'react-use-scrollspy';
 import { Product } from '../../../model/Product';
 import { Party } from '../../../model/Party';
 import UsersTableActions from '../components/UsersTableActions/UsersTableActions';
@@ -43,6 +45,19 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
 
   useEffect(() => trackEvent('USER_LIST', { party_id: party.institutionId }), []);
 
+  const prodSectionRefs = useMemo(
+    () => products.map((_) => React.createRef<HTMLDivElement>()),
+    [products]
+  );
+
+  const activeSection = useScrollSpy({ sectionElementRefs: prodSectionRefs, offsetPx: -80 });
+
+  const scrollWithOffset = (el: HTMLElement) => {
+    const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
+    const yOffset = -80;
+    window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
+  };
+
   return (
     <Grid
       container
@@ -56,8 +71,35 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
           subTitle="Visualizza e gestisci i referenti abilitati alla gestione dei prodotti del tuo Ente."
         />
       </Grid>
-      {/* TODO continue building the page */}
-      <Grid container direction="row" alignItems={'center'}>
+
+      <Grid
+        item
+        xs={12}
+        sx={{
+          borderBottom: 1,
+          borderBottomWidth: '2px',
+          borderColor: 'divider',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          backgroundColor: '#F5F6F7',
+        }}
+      >
+        <Tabs variant="scrollable" scrollButtons="auto" value={activeSection}>
+          {products.map((p, i) => (
+            <Tab
+              key={p.id}
+              label={p.title}
+              component={HashLink}
+              to={`#${p.id}`}
+              value={i}
+              scroll={scrollWithOffset}
+            />
+          ))}
+        </Tabs>
+      </Grid>
+
+      <Grid container direction="row" alignItems={'center'} mt={5}>
         <Grid item xs={12}>
           <UsersTableActions
             disableFilters={loading}
@@ -73,8 +115,8 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
             )}
           />
         </Grid>
-        {products.map((p) => (
-          <Grid key={p.id} item xs={12}>
+        {products.map((p, i) => (
+          <Grid key={p.id} item xs={12} ref={prodSectionRefs[i]}>
             <UsersProductSection
               hideProductWhenLoading={true}
               party={party}

@@ -67,7 +67,6 @@ function UsersProductPage({ party, products, selectedProduct, fetchSelectedProdu
           subTitle={`Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione del prodotto ${selectedProduct.title}.`}
         />
       </Grid>
-      {/* TODO continue building the page */}
       <Grid container direction="row" alignItems={'center'}>
         <Grid item xs={12}>
           <UsersTableActions
