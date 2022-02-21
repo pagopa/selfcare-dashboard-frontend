@@ -123,6 +123,7 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products,
       <Grid container item>
         <Grid item xs={12} mb={9}>
           <UserDetail
+            party={party}
             userInfo={partyUser}
             roleSection={<UserSelcRole selcRole={partyUser.userRole} />}
           />

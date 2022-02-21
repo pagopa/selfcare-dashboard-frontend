@@ -82,10 +82,13 @@ function UsersProductPage({ party, products, selectedProduct, productRolesList }
             onFetchStatusUpdate={(isFetching, count) => {
               setFetchStatus({ loading: isFetching, noData: !count || count === 0 });
             }}
-            userDetailUrl={resolvePathVariables('' /* TODO resolve with product detail url */, {
-              institutionId: party.institutionId,
-              productId: selectedProduct.id,
-            })}
+            userDetailUrl={resolvePathVariables(
+              DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.PARTY_PRODUCT_USER_DETAIL.path,
+              {
+                institutionId: party.institutionId,
+                productId: selectedProduct.id,
+              }
+            )}
           />
         </Grid>
         {!fetchStatus.loading && fetchStatus.noData && (

@@ -53,7 +53,3 @@ test('Test routing', async () => {
   // history.push('/dashboard/13/prId/roles/798');
   // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/prId/roles'));
 });
-
-test('Test SideMenu navigation', async () => {
-  //TODO
-});

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 import { ProductsRolesMap } from '../../../model/ProductRole';
+import { DASHBOARD_ROUTES } from '../../../routes';
 import { ENV } from '../../../utils/env';
 import { UsersTableFiltersConfig } from './UsersTableActions/UsersTableFilters';
 import UsersTableProduct from './UsersTableProduct/UsersTableProduct';
@@ -52,9 +53,12 @@ export default function UsersProductSection({
             setFetchStatus({ loading: isFetching, noData });
             onFetchStatusUpdate(isFetching, noData);
           }}
-          userDetailUrl={resolvePathVariables('' /* TODO resolve with generic detail url */, {
-            institutionId: party.institutionId,
-          })}
+          userDetailUrl={resolvePathVariables(
+            DASHBOARD_ROUTES.PARTY_USERS.subRoutes.PARTY_USER_DETAIL.path,
+            {
+              institutionId: party.institutionId,
+            }
+          )}
         />
       </Grid>
     </Grid>
