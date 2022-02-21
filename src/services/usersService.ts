@@ -20,6 +20,7 @@ import {
   updatePartyUserStatus as updatePartyUserStatusMocked,
   deletePartyUser as deletePartyUserMocked,
   fetchProductRoles as fetchProductRolesMocked,
+  fetchPartyUser as fetchPartyUserMocked,
 } from './__mocks__/usersService';
 
 const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
@@ -74,6 +75,25 @@ export const fetchPartyUsers = (
         ) => toFakePagination(r.map((u) => institutionUserResource2PartyUser(u, currentUser)))
       );
     }
+  }
+};
+
+export const fetchPartyUser = (
+  institutionId: string,
+  userId: string,
+  currentUser: User
+): Promise<PartyUser | null> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return fetchPartyUserMocked(institutionId, userId, currentUser);
+  } else {
+    return DashboardApi.getPartyUser(institutionId, userId).then((u) => {
+      if (u) {
+        return institutionUserResource2PartyUser(u, currentUser);
+      } else {
+        return null;
+      }
+    });
   }
 };
 

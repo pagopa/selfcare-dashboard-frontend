@@ -2,7 +2,7 @@ import withRetrievedValue from '@pagopa/selfcare-common-frontend/decorators/with
 import { useProductsRolesMap } from '../hooks/useProductsRolesMap';
 import { ProductsRolesMap } from '../model/ProductRole';
 
-type withProductsRolesMapProps = {
+export type withProductsRolesMapProps = {
   productsRolesMap: ProductsRolesMap;
 };
 
