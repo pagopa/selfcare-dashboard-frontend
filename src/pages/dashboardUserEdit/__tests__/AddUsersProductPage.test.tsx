@@ -5,10 +5,7 @@ import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { Route, Router, Switch } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import {
-  mockedUser,
-  verifyMockExecution as verifyLoginMockExecution,
-} from '../../../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
+import { verifyMockExecution as verifyLoginMockExecution } from '../../../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
 import AddUsersProductPage from '../AddUsersProductPage';
 
 jest.mock('@pagopa/selfcare-common-frontend/decorators/withLogin');
@@ -32,11 +29,7 @@ const renderApp = async (injectedStore?: ReturnType<typeof createStore>) => {
       <Router history={history}>
         <Switch>
           <Route path="/:institutionId/:productId" exact={true}>
-            <AddUsersProductPage
-              party={mockedParties[0]}
-              products={mockedPartyProducts}
-              initialValues={mockedUser[0]}
-            />
+            <AddUsersProductPage party={mockedParties[0]} products={mockedPartyProducts} />
           </Route>
           <Route path="/dashboard/1/prod-io/roles" exact={true}>
             Test Completato
@@ -73,17 +66,12 @@ test('test with fields that respect rules, so enabled button', async () => {
   fireEvent.change(email, { target: { value: fieldsValue.email } });
   fireEvent.change(confirmEmail, { target: { value: fieldsValue.confirmEmail } });
 
-  await waitFor(() => {
-    const checkbox = screen.getByText('Incaricato Ente Creditore');
-    expect(checkbox).toBeEnabled();
-    fireEvent.click(checkbox);
-  });
+  const checkbox = document.querySelector('input[value="incaricato-ente-creditore"]');
+  expect(checkbox).toBeEnabled();
+  fireEvent.click(checkbox);
 
-  await waitFor(() => {
-    const button = screen.getByRole('button', { name: 'Conferma' });
-    expect(button).toBeEnabled(); // TODO FixMe
-    fireEvent.click(button);
-  });
+  await waitFor(() => expect(screen.getByText('Conferma')).toBeEnabled()); // TODO FixMe
+  // await waitFor(() => fireEvent.click(button));
 
   await waitFor(() => expect(history.location.pathname).toBe('/dashboard/1/prod-io/roles'));
   await waitFor(() => screen.getByText('Test Completato'));

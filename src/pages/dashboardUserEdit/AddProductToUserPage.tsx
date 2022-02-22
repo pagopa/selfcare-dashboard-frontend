@@ -107,26 +107,28 @@ function AddProductToUserPage({ party, products, productsRolesMap, partyUser }: 
         </Grid>
       </Grid>
 
-      <Grid item xs={12} mb={9}>
-        <AddUserForm
-          party={party}
-          products={products} // TODO Products che non ha utente attuale
-          productsRolesMap={productsRolesMap}
-          initialFormData={
-            {
-              taxCode: partyUser.taxCode,
-              name: partyUser.name,
-              surname: partyUser.surname,
-              email: partyUser.email,
-              confirmEmail: partyUser.email,
-              id: partyUser.id,
-              productRoles: [],
-              certification: partyUser.certification,
-            } as PartyUserOnCreation
-          }
-          canEditRegistryData={false}
-        />
-      </Grid>
+      {partyUser.products.map((userProduct) => (
+        <Grid item xs={12} mb={9} key={userProduct.id}>
+          <AddUserForm
+            party={party}
+            products={products.filter((p) => p.id !== userProduct.id)}
+            productsRolesMap={productsRolesMap}
+            initialFormData={
+              {
+                taxCode: partyUser.taxCode,
+                name: partyUser.name,
+                surname: partyUser.surname,
+                email: partyUser.email,
+                confirmEmail: partyUser.email,
+                id: partyUser.id,
+                productRoles: [],
+                certification: partyUser.certification,
+              } as PartyUserOnCreation
+            }
+            canEditRegistryData={false}
+          />
+        </Grid>
+      ))}
     </Grid>
   );
 }
