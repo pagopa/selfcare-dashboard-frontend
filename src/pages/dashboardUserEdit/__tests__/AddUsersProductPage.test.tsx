@@ -61,6 +61,9 @@ test('test with fields that respect rules, so enabled button', async () => {
   const confirmEmail = document.querySelector('#confirmEmail');
 
   fireEvent.change(taxCode, { target: { value: fieldsValue.taxCode } });
+
+  await waitFor(() => expect(name).toBeEnabled());
+
   fireEvent.change(name, { target: { value: fieldsValue.name } });
   fireEvent.change(surname, { target: { value: fieldsValue.surname } });
   fireEvent.change(email, { target: { value: fieldsValue.email } });
@@ -70,8 +73,9 @@ test('test with fields that respect rules, so enabled button', async () => {
   expect(checkbox).toBeEnabled();
   fireEvent.click(checkbox);
 
-  await waitFor(() => expect(screen.getByText('Conferma')).toBeEnabled()); // TODO FixMe
-  // await waitFor(() => fireEvent.click(button));
+  const button = screen.getByText('Conferma');
+  await waitFor(() => expect(button).toBeEnabled());
+  await waitFor(() => fireEvent.click(button));
 
   await waitFor(() => expect(history.location.pathname).toBe('/dashboard/1/prod-io/roles'));
   await waitFor(() => screen.getByText('Test Completato'));
