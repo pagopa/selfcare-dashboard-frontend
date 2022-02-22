@@ -2,6 +2,7 @@ import {
   mockedInstitutionUserResource,
   mockedProductUserResource,
   mockedProductRoles,
+  mockedUserResource,
 } from '../../api/__mocks__/DashboardApiClient';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import {
@@ -9,6 +10,7 @@ import {
   savePartyUser,
   updatePartyUserStatus,
   fetchProductRoles,
+  fetchUserRegistryByFiscalCode,
   deletePartyUser,
 } from '../usersService';
 import { mockedParties } from '../__mocks__/partyService';
@@ -20,6 +22,8 @@ import {
   PartyUserOnCreation,
   productUserResource2PartyUser,
 } from '../../model/PartyUser';
+import { mockedUserRegistry } from '../__mocks__/usersService';
+import { userResource2UserRegistry } from '../../model/UserRegistry';
 import { mockedUsers } from '../__mocks__/usersService';
 
 jest.mock('../../api/DashboardApiClient');
@@ -31,6 +35,7 @@ beforeEach(() => {
   jest.spyOn(DashboardApi, 'suspendPartyRelation');
   jest.spyOn(DashboardApi, 'activatePartyRelation');
   jest.spyOn(DashboardApi, 'getProductRoles');
+  jest.spyOn(DashboardApi, 'fetchUserRegistryByFiscalCode');
   jest.spyOn(DashboardApi, 'deletePartyRelation');
 });
 
@@ -174,7 +179,8 @@ test('Test savePartyUser', async () => {
     taxCode: 'fiscalCode',
     email: 'email',
     confirmEmail: 'email',
-    productRole: 'role',
+    productRoles: ['role'],
+    certification: true,
   };
 
   await savePartyUser(mockedParties[0], mockedPartyProducts[0], user);
@@ -235,6 +241,14 @@ describe('Test updatePartyUserStatus', () => {
 
     expect(DashboardApi.suspendPartyRelation).toBeCalledTimes(1);
     expect(DashboardApi.activatePartyRelation).toBeCalledWith('relationshipId');
+  });
+
+  test('Test fetchUserRegistryByFiscalCode', async () => {
+    const userRegistry = await fetchUserRegistryByFiscalCode('TaxCode');
+
+    expect(userRegistry).toMatchObject(userResource2UserRegistry(mockedUserResource));
+
+    expect(DashboardApi.fetchUserRegistryByFiscalCode).toBeCalledWith('TaxCode');
   });
 });
 

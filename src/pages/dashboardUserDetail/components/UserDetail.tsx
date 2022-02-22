@@ -1,5 +1,7 @@
 import { Button, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { useHistory } from 'react-router-dom';
 import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
 
@@ -19,6 +21,7 @@ type Props = {
 };
 
 export default function UserDetail({ roleSection, userInfo, party }: Props) {
+  const history = useHistory();
   return (
     <>
       <Grid container>
@@ -88,7 +91,14 @@ export default function UserDetail({ roleSection, userInfo, party }: Props) {
             disabled={userInfo.status === 'ACTIVE'}
             variant="contained"
             sx={{ height: '40px', width: '120px' }}
-            // onClick={() =>  } TODO
+            onClick={() =>
+              history.push(
+                resolvePathVariables('TODO', {
+                  institutionId: party.institutionId,
+                  userId: userInfo.id,
+                })
+              )
+            }
           >
             Modifica
           </Button>
