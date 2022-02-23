@@ -20,7 +20,7 @@ const renderApp = (product: Product, injectedStore?: ReturnType<typeof createSto
 
     useEffect(() => {
       fetchProductRoles(product)
-        .then((r) => setProductRoles(r))
+        .then((r) => setProductRoles(r.list))
         .catch((r) => console.error(r));
     }, []);
 
