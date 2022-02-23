@@ -1,7 +1,6 @@
-import { storageRead } from '@pagopa/selfcare-common-frontend/utils/storage-utils';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
-import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { store } from '../redux/store';
 import { PartyUserOnCreation } from '../model/PartyUser';
 import { ENV } from '../utils/env';
@@ -16,7 +15,7 @@ import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRo
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
-    const token = storageRead(STORAGE_KEY_TOKEN, 'string');
+    const token = storageTokenOps.read();
     return wrappedOperation({
       ...params,
       bearerAuth: `Bearer ${token}`,
