@@ -200,7 +200,6 @@ export default function AddUserForm({
     savePartyUser(party, userProduct as Product, values)
       .then(() => {
         unregisterUnloadEvent();
-        // TODO: USER_UPDATE
         trackEvent(initialFormData.taxCode ? 'USER_UPDATE' : 'USER_ADD', {
           party_id: party.institutionId,
           product: userProduct?.id,
