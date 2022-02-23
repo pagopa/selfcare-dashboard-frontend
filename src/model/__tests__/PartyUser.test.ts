@@ -59,7 +59,6 @@ test('Test institutionUserResource2PartyUser', () => {
       },
     ],
     isCurrentUser: false,
-    certification: true,
   });
 
   institutionUserResource.id = mockedUser.uid;
@@ -117,7 +116,6 @@ test('Test productUserResource2PartyUser', () => {
       },
     ],
     isCurrentUser: false,
-    certification: true,
   });
 
   productUserResource.id = mockedUser.uid;

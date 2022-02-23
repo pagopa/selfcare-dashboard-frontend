@@ -69,7 +69,6 @@ export const DASHBOARD_ROUTES = {
         exact: true,
         component: EditUserRegistryPage,
       },
-      ADD_PRODUCT_USER: {
       ADD_PARTY_USER: {
         path: `${BASE_ROUTE}/:institutionId/roles/add`,
         exact: true,

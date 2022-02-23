@@ -19,6 +19,7 @@ import { DashboardApi } from '../api/DashboardApiClient';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
   savePartyUser as savePartyUserMocked,
+  updatePartyUser as updatePartyUserMocked,
   updatePartyUserStatus as updatePartyUserStatusMocked,
   deletePartyUser as deletePartyUserMocked,
   fetchProductRoles as fetchProductRolesMocked,
@@ -202,14 +203,5 @@ export const fetchUserRegistryByFiscalCode = (taxCode: string): Promise<UserRegi
     return DashboardApi.fetchUserRegistryByFiscalCode(taxCode).then((userResource) =>
       userResource ? userResource2UserRegistry(userResource) : null
     );
-  }
-};
-
-export const fetchUserRegistryByUserID = (_uid: string): Promise<UserRegistry | null> => {
-  /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
-    return new Promise((resolve) => resolve(mockedUserRegistry));
-  } else {
-    throw new Error('Error');
   }
 };
