@@ -88,7 +88,10 @@ test('Test', async () => {
   renderWithProductsRolesMapDecorated(store);
   await waitFor(() => screen.getByText('RENDERED using withProductsRolesMap'));
 
-  await checkProductsRolesMapLength(mockedPartyProducts.length, store);
+  await checkProductsRolesMapLength(
+    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
+    store
+  );
 
   renderApp(mockedPartyProducts[2], store);
   await waitFor(() =>
@@ -104,9 +107,14 @@ test('Test', async () => {
     ).toBe(3)
   );
 
-  await checkProductsRolesMapLength(mockedPartyProducts.length, store);
+  await checkProductsRolesMapLength(
+    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
+    store
+  );
 
-  expect(fetchProductRolesSpy).toBeCalledTimes(mockedPartyProducts.length);
+  expect(fetchProductRolesSpy).toBeCalledTimes(
+    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length
+  );
 });
 
 const checkProductsRolesMapLength = async (

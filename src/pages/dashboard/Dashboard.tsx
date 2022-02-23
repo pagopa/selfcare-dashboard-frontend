@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Route, Switch } from 'react-router';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import { Party } from '../../model/Party';
-import { Product } from '../../model/Product';
+import { buildProductsMap, Product, ProductsMap } from '../../model/Product';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES, RoutesObject } from '../../routes';
@@ -13,12 +13,22 @@ const buildRoutes = (
   party: Party,
   products: Array<Product>,
   activeProducts: Array<Product>,
+  productsMap: ProductsMap,
   rs: RoutesObject
 ) =>
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
     <Route path={path} exact={exact} key={i}>
-      {Component && <Component party={party} products={products} activeProducts={activeProducts} />}
-      {subRoutes && <Switch>{buildRoutes(party, products, activeProducts, subRoutes)}</Switch>}
+      {Component && (
+        <Component
+          party={party}
+          products={products}
+          activeProducts={activeProducts}
+          productsMap={productsMap}
+        />
+      )}
+      {subRoutes && (
+        <Switch>{buildRoutes(party, products, activeProducts, productsMap, subRoutes)}</Switch>
+      )}
     </Route>
   ));
 
@@ -26,8 +36,11 @@ const Dashboard = () => {
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
 
-  const activeProducts =
+  const activeProducts: Array<Product> =
     useMemo(() => products?.filter((p) => p.status === 'ACTIVE'), [products]) ?? [];
+
+  const productsMap: ProductsMap =
+    useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
 
   return party && products ? (
     <Grid container item pl={{ xs: 4, md: 5, lg: 10 }} xs={12}>
@@ -44,7 +57,9 @@ const Dashboard = () => {
         justifyContent="center"
         pb={16}
       >
-        <Switch>{buildRoutes(party, products, activeProducts, DASHBOARD_ROUTES)}</Switch>
+        <Switch>
+          {buildRoutes(party, products, activeProducts, productsMap, DASHBOARD_ROUTES)}
+        </Switch>
       </Grid>
     </Grid>
   ) : (

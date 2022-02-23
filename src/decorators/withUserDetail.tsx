@@ -8,10 +8,12 @@ import { PartyUser } from '../model/PartyUser';
 import { useUserDetail } from '../hooks/useUserDetail';
 import { DASHBOARD_ROUTES } from '../routes';
 import { Party } from '../model/Party';
+import { ProductsMap } from '../model/Product';
 
 export type withUserDetailProps = {
   partyUser: PartyUser;
   party: Party;
+  productsMap: ProductsMap;
 };
 
 type UserUrlParams = {
@@ -33,7 +35,7 @@ export default function withUserDetail<T extends withUserDetailProps>(
     const history = useHistory();
 
     const doFetch = () => {
-      fetchUserDetail(institutionId, userId)
+      fetchUserDetail(institutionId, userId, props.productsMap)
         .then((user) => {
           if (user === null) {
             const goBackUrl = productId

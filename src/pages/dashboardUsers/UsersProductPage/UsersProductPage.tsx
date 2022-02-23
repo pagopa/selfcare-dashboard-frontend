@@ -29,7 +29,13 @@ const emptyFilters: UsersTableFiltersConfig = {
   productRoles: [],
 };
 
-function UsersProductPage({ party, products, selectedProduct, productRolesList }: Props) {
+function UsersProductPage({
+  party,
+  activeProducts,
+  productsMap,
+  selectedProduct,
+  productRolesList,
+}: Props) {
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [fetchStatus, setFetchStatus] = useState({ loading: true, noData: false });
 
@@ -60,7 +66,7 @@ function UsersProductPage({ party, products, selectedProduct, productRolesList }
               disableFilters={fetchStatus.loading}
               loading={fetchStatus.loading}
               party={party}
-              products={products}
+              products={activeProducts}
               selectedProduct={selectedProduct}
               productsRolesMap={{ [selectedProduct.id]: productRolesList }}
               filters={filters}
@@ -78,6 +84,7 @@ function UsersProductPage({ party, products, selectedProduct, productRolesList }
               initialPageSize={ENV.PARTY_PRODUCT_USERS_PAGE_SIZE}
               party={party}
               product={selectedProduct}
+              productsMap={productsMap}
               productRolesLists={productRolesList}
               filterConfiguration={filters}
               onFetchStatusUpdate={(isFetching, count) => {

@@ -5,7 +5,7 @@ import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsS
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { HashLink } from 'react-router-hash-link';
 import useScrollSpy from 'react-use-scrollspy';
-import { Product } from '../../../model/Product';
+import { Product, ProductsMap } from '../../../model/Product';
 import { Party } from '../../../model/Party';
 import UsersTableActions from '../components/UsersTableActions/UsersTableActions';
 import { DASHBOARD_ROUTES } from '../../../routes';
@@ -18,6 +18,7 @@ import withProductsRolesMap from '../../../decorators/withProductsRolesMap';
 interface Props {
   party: Party;
   activeProducts: Array<Product>;
+  productsMap: ProductsMap;
   productsRolesMap: ProductsRolesMap;
 }
 
@@ -27,7 +28,7 @@ const emptyFilters: UsersTableFiltersConfig = {
   productRoles: [],
 };
 
-function UsersPage({ party, activeProducts, productsRolesMap }: Props) {
+function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Props) {
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [noData, setNoData] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -123,6 +124,7 @@ function UsersPage({ party, activeProducts, productsRolesMap }: Props) {
                 hideProductWhenLoading={true}
                 party={party}
                 product={p}
+                productsMap={productsMap}
                 filters={filters}
                 productsRolesMap={productsRolesMap}
                 onFetchStatusUpdate={(loading, noData) => {

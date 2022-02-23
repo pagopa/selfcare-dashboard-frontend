@@ -17,7 +17,7 @@ import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants'
 import withProductsRolesMap, {
   withProductsRolesMapProps,
 } from '../../../decorators/withProductsRolesMap';
-import { Product } from '../../../model/Product';
+import { Product, ProductsMap } from '../../../model/Product';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
 import { deletePartyUser } from './../../../services/usersService';
@@ -27,6 +27,7 @@ type Props = withProductsRolesMapProps & {
   fetchPartyUser: () => void;
   activeProducts: Array<Product>;
   party: Party;
+  productsMap: ProductsMap;
 };
 
 function UserDetailPage({

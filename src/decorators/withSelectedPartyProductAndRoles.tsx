@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Party } from '../model/Party';
-import { Product } from '../model/Product';
+import { Product, ProductsMap } from '../model/Product';
 import { ProductRolesLists } from '../model/ProductRole';
 
 export type withSelectedPartyProductAndRolesProps = {
   party: Party;
   products: Array<Product>;
+  productsMap: ProductsMap;
+  activeProducts: Array<Product>;
   selectedProduct: Product;
   fetchSelectedProductRoles: (onRetry: () => void) => Promise<ProductRolesLists>;
   productRolesList: ProductRolesLists;

@@ -25,6 +25,7 @@ import {
 import { mockedUserRegistry } from '../__mocks__/usersService';
 import { userResource2UserRegistry } from '../../model/UserRegistry';
 import { mockedUsers } from '../__mocks__/usersService';
+import { buildProductsMap } from '../../model/Product';
 
 jest.mock('../../api/DashboardApiClient');
 
@@ -44,6 +45,7 @@ describe('Test fetchPartyUsers', () => {
     const partyUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
       mockedParties[0],
+      buildProductsMap(mockedPartyProducts),
       mockedUser,
       checkPermission,
       undefined,
@@ -58,7 +60,7 @@ describe('Test fetchPartyUsers', () => {
         totalPages: 1,
       },
       content: mockedInstitutionUserResource.map((u) =>
-        institutionUserResource2PartyUser(u, mockedUser)
+        institutionUserResource2PartyUser(u, {}, mockedUser)
       ),
     });
 
@@ -77,6 +79,7 @@ describe('Test fetchPartyUsers', () => {
     const partyProductUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
       mockedParties[0],
+      buildProductsMap(mockedPartyProducts),
       mockedUser,
       true,
       mockedPartyProducts[0],
@@ -90,7 +93,9 @@ describe('Test fetchPartyUsers', () => {
         totalElements: mockedProductUserResource.length,
         totalPages: 1,
       },
-      content: mockedProductUserResource.map((r) => productUserResource2PartyUser(r, mockedUser)),
+      content: mockedProductUserResource.map((r) =>
+        productUserResource2PartyUser(r, mockedPartyProducts[0], mockedUser)
+      ),
     });
 
     expect(DashboardApi.getPartyUsers).toBeCalledTimes(1);
@@ -108,6 +113,7 @@ describe('Test fetchPartyUsers', () => {
     const partyProductUsers = await fetchPartyUsers(
       { page: 0, size: 20 },
       mockedParties[0],
+      buildProductsMap(mockedPartyProducts),
       mockedUser,
       false,
       mockedPartyProducts[0],
@@ -122,7 +128,7 @@ describe('Test fetchPartyUsers', () => {
         totalPages: 1,
       },
       content: mockedInstitutionUserResource.map((u) =>
-        institutionUserResource2PartyUser(u, mockedUser)
+        institutionUserResource2PartyUser(u, {}, mockedUser)
       ),
     });
 

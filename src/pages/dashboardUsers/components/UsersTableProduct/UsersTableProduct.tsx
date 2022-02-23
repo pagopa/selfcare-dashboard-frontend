@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Party } from '../../../../model/Party';
 import { PartyUser } from '../../../../model/PartyUser';
-import { Product } from '../../../../model/Product';
+import { Product, ProductsMap } from '../../../../model/Product';
 import { useAppSelector } from '../../../../redux/hooks';
 import { fetchPartyUsers } from '../../../../services/usersService';
 import { UsersTableFiltersConfig } from '../UsersTableActions/UsersTableFilters';
@@ -22,6 +22,7 @@ type Props = {
   initialPageSize: number;
   party: Party;
   product: Product;
+  productsMap: ProductsMap;
   onFetchStatusUpdate: (isFetching: boolean, count?: number) => void;
   userDetailUrl: string;
   filterConfiguration: UsersTableFiltersConfig;
@@ -34,6 +35,7 @@ const UsersTableProduct = ({
   initialPageSize,
   party,
   product,
+  productsMap,
   productRolesLists,
   onFetchStatusUpdate,
   filterConfiguration,
@@ -57,6 +59,7 @@ const UsersTableProduct = ({
     fetchPartyUsers(
       { page: 0, size: 2000 }, // pageRequest?.page as PageRequest, TODO actually pagination is not supported
       party,
+      productsMap,
       currentUser ?? ({ uid: 'NONE' } as User),
       canEdit,
       product,
