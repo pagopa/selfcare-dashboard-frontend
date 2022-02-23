@@ -5,6 +5,7 @@ import { Party, UserRole, UserStatus } from '../../model/Party';
 import {
   PartyUser,
   PartyUserOnCreation,
+  PartyUserOnEdit,
   PartyUserProduct,
   PartyUserProductRole,
 } from '../../model/PartyUser';
@@ -623,7 +624,7 @@ export const mockedUserRegistry: UserRegistry = {
   name: 'franco',
   surname: 'rossi',
   email: 'f@r.com',
-  certification: false,
+  certification: true,
 };
 
 export const fetchPartyUsers = (
@@ -690,6 +691,9 @@ export const savePartyUser = (
   _product: Product,
   _user: PartyUserOnCreation
 ): Promise<any> => new Promise((resolve) => resolve(200));
+
+export const updatePartyUser = (_party: Party, _user: PartyUserOnEdit): Promise<any> =>
+  new Promise((resolve) => resolve(200));
 
 export const fetchUserRegistryByFiscalCode = (_taxCode: string): Promise<UserRegistry> =>
   new Promise((resolve) => resolve(mockedUserRegistry));

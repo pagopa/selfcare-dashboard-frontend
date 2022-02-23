@@ -8,6 +8,7 @@ import {
   institutionUserResource2PartyUser,
   PartyUser,
   PartyUserOnCreation,
+  PartyUserOnEdit,
   PartyUserProduct,
   PartyUserProductRole,
   productUserResource2PartyUser,
@@ -18,6 +19,7 @@ import { DashboardApi } from '../api/DashboardApiClient';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
   savePartyUser as savePartyUserMocked,
+  updatePartyUser as updatePartyUserMocked,
   updatePartyUserStatus as updatePartyUserStatusMocked,
   deletePartyUser as deletePartyUserMocked,
   fetchProductRoles as fetchProductRolesMocked,
@@ -109,6 +111,15 @@ export const savePartyUser = (
     return savePartyUserMocked(party, product, user);
   } else {
     return DashboardApi.savePartyUser(party.institutionId, product.id, user);
+  }
+};
+
+export const updatePartyUser = (party: Party, user: PartyUserOnEdit): Promise<any> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return updatePartyUserMocked(party, user);
+  } else {
+    throw new Error('Todo');
   }
 };
 

@@ -40,6 +40,16 @@ export type PartyUserOnCreation = {
   certification: boolean;
 };
 
+export type PartyUserOnEdit = {
+  id: string;
+  taxCode: string;
+  name: string;
+  surname: string;
+  email: string;
+  confirmEmail: string;
+  certification: boolean;
+};
+
 export const institutionUserResource2PartyUser = (
   resource: InstitutionUserResource,
   currentUser: User

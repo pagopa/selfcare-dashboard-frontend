@@ -10,6 +10,7 @@ import { PartyUser, PartyUserProduct } from '../../../../../model/PartyUser';
 import { Party, UserStatus } from '../../../../../model/Party';
 import { LOADING_TASK_ACTION_ON_PARTY_USER } from '../../../../../utils/constants';
 import { deletePartyUser, updatePartyUserStatus } from '../../../../../services/usersService';
+import { DASHBOARD_ROUTES } from '../../../../../routes';
 
 type Props = {
   party: Party;
@@ -159,7 +160,7 @@ export default function UserProductRowActions({
   const handleModify = () => {
     handleClose();
     history.push(
-      resolvePathVariables('' /* TODO use route to modify user registry */, {
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.EDIT_USER.path, {
         institutionId: party.institutionId,
         userId: partyUser.id,
       })
