@@ -44,10 +44,10 @@ function UsersProductPage({ party, products, selectedProduct, productRolesList }
       mt={10}
       sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
     >
-      <Grid item xs={12} mb={3} px={'16px'}>
+      <Grid item xs={12} mb={3} px={2}>
         <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
       </Grid>
-      <Grid item xs={12} mb={9} px={'16px'}>
+      <Grid item xs={12} mb={9} px={2}>
         <TitleBox
           title="Referenti"
           subTitle={`Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione del prodotto ${selectedProduct.title}.`}

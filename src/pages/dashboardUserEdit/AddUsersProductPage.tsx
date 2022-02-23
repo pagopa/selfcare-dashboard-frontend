@@ -14,11 +14,11 @@ import AddUserForm from './components/AddUserForm';
 
 type Props = {
   party: Party;
-  products: Array<Product>;
+  activeProducts: Array<Product>;
   selectedProduct: Product;
 } & withSelectedPartyProductAndRolesProps;
 
-function AddUsersProductPage({ party, selectedProduct, products, productRolesList }: Props) {
+function AddUsersProductPage({ party, selectedProduct, activeProducts, productRolesList }: Props) {
   const history = useHistory();
 
   const productsRolesMap = {
@@ -62,7 +62,7 @@ function AddUsersProductPage({ party, selectedProduct, products, productRolesLis
         <AddUserForm
           party={party}
           selectedProduct={selectedProduct}
-          products={products}
+          products={activeProducts}
           productsRolesMap={productsRolesMap}
           canEditRegistryData={true}
           initialFormData={{

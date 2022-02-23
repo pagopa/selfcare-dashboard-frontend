@@ -10,9 +10,9 @@ import {
   Typography,
   Box,
   Checkbox,
+  styled,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import { styled } from '@mui/system';
 import { useHistory } from 'react-router';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';

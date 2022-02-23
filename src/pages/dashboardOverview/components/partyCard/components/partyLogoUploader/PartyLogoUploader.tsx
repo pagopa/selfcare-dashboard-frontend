@@ -1,6 +1,5 @@
-import { Grid } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
-import { Box } from '@mui/system';
 import { useState, useEffect } from 'react';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
@@ -57,17 +56,23 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
       setLoading(true);
       setLabelLink(files[0].name);
       const requestId = uniqueId();
-      trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: institutionId, request_id: requestId});
+      trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: institutionId, request_id: requestId });
 
       DashboardApi.uploadLogo(institutionId, files[0])
         .then(() => {
           setUrlLogo(urlLogo);
           setLoading(false);
           setLabelLink('Modifica Logo');
-          trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', { party_id: institutionId, request_id: requestId});
+          trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', {
+            party_id: institutionId,
+            request_id: requestId,
+          });
         })
         .catch((reason) => {
-          trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_FAILURE', { party_id: institutionId, request_id: requestId});
+          trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_FAILURE', {
+            party_id: institutionId,
+            request_id: requestId,
+          });
           setLoading(false);
           addError({
             id: 'FILE_UPLOAD_ERROR',

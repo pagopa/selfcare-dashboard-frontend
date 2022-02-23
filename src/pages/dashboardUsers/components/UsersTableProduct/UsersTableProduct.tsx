@@ -144,7 +144,8 @@ const UsersTableProduct = ({
   if (error) {
     return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
-    return loading && hideProductWhenLoading && users.content.length === 0 ? (
+    return (loading && hideProductWhenLoading && users.content.length === 0) ||
+      (!loading && users.content.length === 0) ? (
       <></>
     ) : (
       <UsersProductTable

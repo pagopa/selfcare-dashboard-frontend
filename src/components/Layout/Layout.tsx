@@ -1,5 +1,4 @@
-import { Grid } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Box } from '@mui/material';
 import { Footer, Header } from '@pagopa/selfcare-common-frontend';
 import {
   useUnloadEventLogout,

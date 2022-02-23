@@ -11,6 +11,7 @@ export default function UserTableNoData({ removeFilters }: Props) {
       container
       direction="row"
       sx={{
+        mt: 7,
         padding: 2,
         backgroundColor: 'white',
       }}

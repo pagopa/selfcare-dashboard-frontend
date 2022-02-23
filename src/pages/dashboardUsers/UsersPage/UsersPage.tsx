@@ -17,7 +17,7 @@ import withProductsRolesMap from '../../../decorators/withProductsRolesMap';
 
 interface Props {
   party: Party;
-  products: Array<Product>;
+  activeProducts: Array<Product>;
   productsRolesMap: ProductsRolesMap;
 }
 
@@ -27,27 +27,29 @@ const emptyFilters: UsersTableFiltersConfig = {
   productRoles: [],
 };
 
-function UsersPage({ party, products, productsRolesMap }: Props) {
+function UsersPage({ party, activeProducts, productsRolesMap }: Props) {
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [noData, setNoData] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const [productsFetchStatus, setProductsFetchStatus] = useState<
     Record<string, { loading: boolean; noData: boolean }>
-  >(() => Object.fromEntries(products.map((p) => [[p.id], { loading: true, noData: false }])));
+  >(() =>
+    Object.fromEntries(activeProducts.map((p) => [[p.id], { loading: true, noData: false }]))
+  );
 
   useEffect(() => {
     if (productsFetchStatus) {
       setLoading(!!Object.values(productsFetchStatus).find((p) => p.loading));
-      setNoData(!!Object.values(productsFetchStatus).find((p) => p.noData));
+      setNoData(!Object.values(productsFetchStatus).find((p) => !p.noData));
     }
   }, [productsFetchStatus]);
 
   useEffect(() => trackEvent('USER_LIST', { party_id: party.institutionId }), []);
 
   const prodSectionRefs = useMemo(
-    () => products.map((_) => React.createRef<HTMLDivElement>()),
-    [products]
+    () => activeProducts.map((_) => React.createRef<HTMLDivElement>()),
+    [activeProducts]
   );
 
   const activeSection = useScrollSpy({ sectionElementRefs: prodSectionRefs, offsetPx: -80 });
@@ -63,7 +65,7 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
       container
       px={2}
       mt={10}
-      sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
+      sx={{ width: '1017px', backgroundColor: 'transparent !important', flexGrow: 0 }}
     >
       <Grid item xs={12} mb={9}>
         <TitleBox
@@ -86,7 +88,7 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
         }}
       >
         <Tabs variant="scrollable" scrollButtons="auto" value={activeSection}>
-          {products.map((p, i) => (
+          {activeProducts.map((p, i) => (
             <Tab
               key={p.id}
               label={p.title}
@@ -105,7 +107,7 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
             disableFilters={loading}
             loading={loading}
             party={party}
-            products={products}
+            products={activeProducts}
             productsRolesMap={productsRolesMap}
             filters={filters}
             onFiltersChange={setFilters}
@@ -115,7 +117,7 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
             )}
           />
         </Grid>
-        {products.map((p, i) => (
+        {activeProducts.map((p, i) => (
           <Grid key={p.id} item xs={12} ref={prodSectionRefs[i]}>
             <UsersProductSection
               hideProductWhenLoading={true}

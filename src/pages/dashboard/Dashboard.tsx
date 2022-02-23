@@ -1,4 +1,5 @@
 import { Grid, Box } from '@mui/material';
+import { useMemo } from 'react';
 import { Route, Switch } from 'react-router';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import { Party } from '../../model/Party';
@@ -8,11 +9,16 @@ import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES, RoutesObject } from '../../routes';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
-const buildRoutes = (party: Party, products: Array<Product>, rs: RoutesObject) =>
+const buildRoutes = (
+  party: Party,
+  products: Array<Product>,
+  activeProducts: Array<Product>,
+  rs: RoutesObject
+) =>
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
     <Route path={path} exact={exact} key={i}>
-      {Component && <Component party={party} products={products} />}
-      {subRoutes && <Switch>{buildRoutes(party, products, subRoutes)}</Switch>}
+      {Component && <Component party={party} products={products} activeProducts={activeProducts} />}
+      {subRoutes && <Switch>{buildRoutes(party, products, activeProducts, subRoutes)}</Switch>}
     </Route>
   ));
 
@@ -20,8 +26,11 @@ const Dashboard = () => {
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
 
+  const activeProducts =
+    useMemo(() => products?.filter((p) => p.status === 'ACTIVE'), [products]) ?? [];
+
   return party && products ? (
-    <Grid container item  pl={{xs:4,md:5,lg:10}} xs={12}>
+    <Grid container item pl={{ xs: 4, md: 5, lg: 10 }} xs={12}>
       <Grid item xs={2}>
         <Box sx={{ backgroundColor: 'background.default' }}>
           <DashboardSideMenu products={products} party={party} />
@@ -35,7 +44,7 @@ const Dashboard = () => {
         justifyContent="center"
         pb={16}
       >
-        <Switch>{buildRoutes(party, products, DASHBOARD_ROUTES)}</Switch>
+        <Switch>{buildRoutes(party, products, activeProducts, DASHBOARD_ROUTES)}</Switch>
       </Grid>
     </Grid>
   ) : (

@@ -13,10 +13,10 @@ import AddUserForm from './components/AddUserForm';
 
 type Props = {
   party: Party;
-  products: Array<Product>;
+  activeProducts: Array<Product>;
 } & withProductsRolesMapProps;
 
-function AddUsersPage({ party, products, productsRolesMap }: Props) {
+function AddUsersPage({ party, activeProducts, productsRolesMap }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -54,7 +54,7 @@ function AddUsersPage({ party, products, productsRolesMap }: Props) {
       <Grid item xs={12}>
         <AddUserForm
           party={party}
-          products={products}
+          products={activeProducts}
           productsRolesMap={productsRolesMap}
           initialFormData={{
             taxCode: '',

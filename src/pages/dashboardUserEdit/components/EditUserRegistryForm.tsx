@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { Grid, TextField, Button } from '@mui/material';
+import { Grid, TextField, Button, styled } from '@mui/material';
 import { useFormik } from 'formik';
-import { styled } from '@mui/system';
 import { useHistory } from 'react-router';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';

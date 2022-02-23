@@ -1,5 +1,4 @@
-import { Button, Grid, Typography } from '@mui/material';
-import { styled } from '@mui/system';
+import { Button, Grid, Typography, styled } from '@mui/material';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useHistory } from 'react-router-dom';
 import { Party } from '../../../model/Party';
