@@ -12,6 +12,7 @@ import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUs
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 import { UserResource } from './generated/b4f-dashboard/UserResource';
+import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
@@ -90,6 +91,14 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
+  getPartyUser: async (
+    institutionId: string,
+    userId: string
+  ): Promise<InstitutionUserResource | null> => {
+    const result = await apiClient.getInstitutionUserUsingGET({ institutionId, userId });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
   getPartyProductUsers: async (
     institutionId: string,
     productId: string,
@@ -130,7 +139,14 @@ export const DashboardApi = {
     return extractResponse(result, 204, onRedirectToLogin);
   },
 
-  getProductRoles: async (productId: string): Promise<Array<string>> => {
+  deletePartyRelation: async (relationshipId: string): Promise<void> => {
+    const result = await apiClient.deleteRelationshipByIdUsingDELETE({
+      relationshipId,
+    });
+    return extractResponse(result, 204, onRedirectToLogin);
+  },
+
+  getProductRoles: async (productId: string): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
     });

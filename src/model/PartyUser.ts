@@ -1,8 +1,8 @@
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { InstitutionUserResource } from '../api/generated/b4f-dashboard/InstitutionUserResource';
+import { ProductInfoResource } from '../api/generated/b4f-dashboard/ProductInfoResource';
 import { ProductUserResource } from '../api/generated/b4f-dashboard/ProductUserResource';
 import { UserRole, UserStatus } from './Party';
-import { Product } from './Product';
 
 export type PartyUser = {
   id: string;
@@ -11,10 +11,23 @@ export type PartyUser = {
   surname: string;
   email: string;
   userRole: UserRole;
-  products: Array<{ id: string; title: string; relationshipId?: string }>;
+  products: Array<PartyUserProduct>;
   status: UserStatus;
   isCurrentUser: boolean;
   certification: boolean;
+};
+
+export type PartyUserProduct = {
+  id: string;
+  title: string;
+  roles: Array<PartyUserProductRole>;
+};
+
+export type PartyUserProductRole = {
+  relationshipId: string;
+  role: string;
+  selcRole: UserRole;
+  status: UserStatus;
 };
 
 export type PartyUserOnCreation = {
@@ -23,7 +36,7 @@ export type PartyUserOnCreation = {
   taxCode: string;
   email: string;
   confirmEmail: string;
-  productRole: string;
+  productRoles: Array<string>;
   certification: boolean;
 };
 
@@ -42,30 +55,44 @@ export const institutionUserResource2PartyUser = (
   currentUser: User
 ): PartyUser => ({
   id: resource.id,
-  taxCode: 'TODO TAXCODE',
+  taxCode: resource.fiscalCode,
   name: resource.name,
   surname: resource.surname,
   email: resource.email,
   userRole: resource.role,
-  products: ([] as Array<{ id: string; title: string }>).concat(resource.products),
+  products: ([] as Array<PartyUserProduct>).concat(
+    resource.products.map(productInfoResource2PartyUserProduct)
+  ),
   status: resource.status as UserStatus,
   isCurrentUser: currentUser.uid === resource.id,
-  certification: true, // TODO FIXME
+  certification: resource.certification,
+});
+
+export const productInfoResource2PartyUserProduct = (
+  productInfo: ProductInfoResource
+): PartyUserProduct => ({
+  id: productInfo.id,
+  title: productInfo.title,
+  roles: productInfo.roleInfos.map((r) => ({
+    relationshipId: r.relationshipId,
+    role: r.role,
+    selcRole: r.selcRole as UserRole,
+    status: r.status as UserStatus,
+  })),
 });
 
 export const productUserResource2PartyUser = (
-  product: Product,
   resource: ProductUserResource,
   currentUser: User
 ): PartyUser => ({
   id: resource.id,
-  taxCode: 'TODO TAXCODE',
+  taxCode: resource.fiscalCode,
   name: resource.name,
   surname: resource.surname,
   email: resource.email,
   userRole: resource.role,
-  products: [{ id: product.id, title: product.title, relationshipId: resource.relationshipId }],
+  products: [productInfoResource2PartyUserProduct(resource.product)],
   status: resource.status as UserStatus,
   isCurrentUser: currentUser.uid === resource.id,
-  certification: true, // TODO FIXME
+  certification: resource.certification,
 });

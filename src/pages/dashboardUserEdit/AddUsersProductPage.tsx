@@ -7,16 +7,23 @@ import ProductNavigationBar from '../../components/ProductNavigationBar';
 import withSelectedPartyProduct from '../../decorators/withSelectedPartyProduct';
 import { DASHBOARD_ROUTES } from '../../routes';
 import { Party } from '../../model/Party';
+import withSelectedPartyProductAndRoles, {
+  withSelectedPartyProductAndRolesProps,
+} from '../../decorators/withSelectedPartyProductAndRoles';
 import AddUserForm from './components/AddUserForm';
 
 type Props = {
   party: Party;
   products: Array<Product>;
   selectedProduct: Product;
-};
+} & withSelectedPartyProductAndRolesProps;
 
-function AddUsersProductPage({ party, selectedProduct, products }: Props) {
+function AddUsersProductPage({ party, selectedProduct, products, productRolesList }: Props) {
   const history = useHistory();
+
+  const productsRolesMap = {
+    [selectedProduct.id]: productRolesList,
+  };
 
   const paths = [
     {
@@ -52,10 +59,25 @@ function AddUsersProductPage({ party, selectedProduct, products }: Props) {
         />
       </Grid>
       <Grid item xs={12}>
-        <AddUserForm party={party} selectedProduct={selectedProduct} products={products} />
+        <AddUserForm
+          party={party}
+          selectedProduct={selectedProduct}
+          products={products}
+          productsRolesMap={productsRolesMap}
+          canEditRegistryData={true}
+          initialFormData={{
+            taxCode: '',
+            name: '',
+            surname: '',
+            email: '',
+            confirmEmail: '',
+            certification: false,
+            productRoles: [],
+          }}
+        />
       </Grid>
     </Grid>
   );
 }
 
-export default withSelectedPartyProduct(AddUsersProductPage);
+export default withSelectedPartyProduct(withSelectedPartyProductAndRoles(AddUsersProductPage));

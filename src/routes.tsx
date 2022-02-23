@@ -1,14 +1,17 @@
 import { Redirect, useParams } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import withSelectedPartyProduct from './decorators/withSelectedPartyProduct';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
-import DashboardUsers from './pages/dashboardUsers/DashboardUsers';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
 import AddUsersProductPage from './pages/dashboardUserEdit/AddUsersProductPage';
 import AddUsersPage from './pages/dashboardUserEdit/AddUsersPage';
 import EditUserRegistryPage from './pages/dashboardUserEdit/EditUserRegistryPage';
+import UserDetailPage from './pages/dashboardUserDetail/userDetailPage/UserDetailPage';
+import UserProductDetailPage from './pages/dashboardUserDetail/userProductDetailPage/UserProductDetailPage';
+import UsersPage from './pages/dashboardUsers/UsersPage/UsersPage';
+import UsersProductPage from './pages/dashboardUsers/UsersProductPage/UsersProductPage';
+import AddProductToUserPage from './pages/dashboardUserEdit/AddProductToUserPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -59,7 +62,7 @@ export const DASHBOARD_ROUTES = {
       MAIN: {
         path: `${BASE_ROUTE}/:institutionId/roles`,
         exact: true,
-        component: DashboardUsers,
+        component: UsersPage,
       },
       EDIT_USER: {
         path: `${BASE_ROUTE}/:institutionId/roles/:userId/edit`,
@@ -67,9 +70,20 @@ export const DASHBOARD_ROUTES = {
         component: EditUserRegistryPage,
       },
       ADD_PRODUCT_USER: {
+      ADD_PARTY_USER: {
         path: `${BASE_ROUTE}/:institutionId/roles/add`,
         exact: true,
         component: AddUsersPage,
+      },
+      ADD_PRODUCT: {
+        path: `${BASE_ROUTE}/:institutionId/roles/:userId/add-product`,
+        exact: true,
+        component: AddProductToUserPage,
+      },
+      PARTY_USER_DETAIL: {
+        path: `${BASE_ROUTE}/:institutionId/roles/:userId`,
+        exact: true,
+        component: UserDetailPage,
       },
       ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
     },
@@ -81,12 +95,17 @@ export const DASHBOARD_ROUTES = {
       MAIN: {
         path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
         exact: true,
-        component: withSelectedPartyProduct(DashboardUsers),
+        component: UsersProductPage,
       },
       ADD_PARTY_PRODUCT_USER: {
         path: `${BASE_ROUTE}/:institutionId/:productId/roles/add`,
         exact: true,
-        component: withSelectedPartyProduct(AddUsersProductPage),
+        component: AddUsersProductPage,
+      },
+      PARTY_PRODUCT_USER_DETAIL: {
+        path: `${BASE_ROUTE}/:institutionId/:productId/roles/:userId`,
+        exact: true,
+        component: UserProductDetailPage,
       },
       ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
     },
