@@ -7,7 +7,7 @@ import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/use
 import { DASHBOARD_ROUTES, RouteConfig } from '../../../../routes';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
-import { useTokenExchange } from '../../../../model/useTokenExchange';
+import { useTokenExchange } from '../../../../hooks/useTokenExchange';
 import DashboardSideMenuItem, { MenuItem } from './DashboardSideMenuItem';
 
 type Props = {
