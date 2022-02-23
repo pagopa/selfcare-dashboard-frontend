@@ -55,7 +55,7 @@ const UsersTableProduct = ({
 
   const fakePagedFetch = useFakePagination(() =>
     fetchPartyUsers(
-      pageRequest?.page as PageRequest,
+      { page: 0, size: 2000 }, // pageRequest?.page as PageRequest, TODO actually pagination is not supported
       party,
       currentUser ?? ({ uid: 'NONE' } as User),
       canEdit,

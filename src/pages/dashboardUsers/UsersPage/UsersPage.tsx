@@ -65,7 +65,7 @@ function UsersPage({ party, activeProducts, productsRolesMap }: Props) {
       container
       px={2}
       mt={10}
-      sx={{ width: '1017px', backgroundColor: 'transparent !important', flexGrow: 0 }}
+      sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={9}>
         <TitleBox
@@ -100,41 +100,42 @@ function UsersPage({ party, activeProducts, productsRolesMap }: Props) {
           ))}
         </Tabs>
       </Grid>
-
-      <Grid container direction="row" alignItems={'center'} mt={5}>
-        <Grid item xs={12}>
-          <UsersTableActions
-            disableFilters={loading}
-            loading={loading}
-            party={party}
-            products={activeProducts}
-            productsRolesMap={productsRolesMap}
-            filters={filters}
-            onFiltersChange={setFilters}
-            addUserUrl={resolvePathVariables(
-              DASHBOARD_ROUTES.PARTY_USERS.subRoutes.ADD_PARTY_USER.path,
-              { institutionId: party.institutionId }
-            )}
-          />
-        </Grid>
-        {activeProducts.map((p, i) => (
-          <Grid key={p.id} item xs={12} ref={prodSectionRefs[i]}>
-            <UsersProductSection
-              hideProductWhenLoading={true}
+      <Grid item xs={12} sx={{ height: '100%' }}>
+        <Grid container direction="row" alignItems={'center'} mt={5}>
+          <Grid item xs={12}>
+            <UsersTableActions
+              disableFilters={loading}
+              loading={loading}
               party={party}
-              product={p}
-              filters={filters}
+              products={activeProducts}
               productsRolesMap={productsRolesMap}
-              onFetchStatusUpdate={(loading, noData) => {
-                setProductsFetchStatus((previousState) => ({
-                  ...previousState,
-                  [p.id]: { loading, noData },
-                }));
-              }}
+              filters={filters}
+              onFiltersChange={setFilters}
+              addUserUrl={resolvePathVariables(
+                DASHBOARD_ROUTES.PARTY_USERS.subRoutes.ADD_PARTY_USER.path,
+                { institutionId: party.institutionId }
+              )}
             />
           </Grid>
-        ))}
-        {!loading && noData && <UserTableNoData removeFilters={() => setFilters(emptyFilters)} />}
+          {activeProducts.map((p, i) => (
+            <Grid key={p.id} item xs={12} ref={prodSectionRefs[i]}>
+              <UsersProductSection
+                hideProductWhenLoading={true}
+                party={party}
+                product={p}
+                filters={filters}
+                productsRolesMap={productsRolesMap}
+                onFetchStatusUpdate={(loading, noData) => {
+                  setProductsFetchStatus((previousState) => ({
+                    ...previousState,
+                    [p.id]: { loading, noData },
+                  }));
+                }}
+              />
+            </Grid>
+          ))}
+          {!loading && noData && <UserTableNoData removeFilters={() => setFilters(emptyFilters)} />}
+        </Grid>
       </Grid>
     </Grid>
   );

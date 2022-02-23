@@ -24,7 +24,7 @@ export const mockedUsers: Array<PartyUser> = [
     name: 'Elena',
     surname: 'Verdi',
     email: 'simone.v@comune.milano.it',
-    userRole: 'LIMITED',
+    userRole: 'ADMIN',
     status: 'ACTIVE',
     products: [
       {
@@ -34,7 +34,7 @@ export const mockedUsers: Array<PartyUser> = [
           {
             relationshipId: 'rel1',
             role: 'incaricato-ente-creditore',
-            selcRole: 'LIMITED',
+            selcRole: 'ADMIN',
             status: 'ACTIVE',
           },
         ],
@@ -49,12 +49,36 @@ export const mockedUsers: Array<PartyUser> = [
     name: 'loggedName',
     surname: 'loggedSurname',
     email: 'loggedName.b@email.it',
-    userRole: 'LIMITED',
+    userRole: 'ADMIN',
     status: 'ACTIVE',
     products: [
       {
         title: 'App IO',
         id: 'prod-io',
+        roles: [
+          {
+            relationshipId: 'rel2',
+            role: 'incaricato-ente-creditore',
+            selcRole: 'ADMIN',
+            status: 'ACTIVE',
+          },
+        ],
+      },
+      {
+        title: 'Piattaforma Notifiche',
+        id: 'prod-pn',
+        roles: [
+          {
+            relationshipId: 'rel2',
+            role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
+          },
+        ],
+      },
+      {
+        title: 'App IO',
+        id: 'prod-pagopa',
         roles: [
           {
             relationshipId: 'rel2',
@@ -573,6 +597,31 @@ export const mockedUsers: Array<PartyUser> = [
     isCurrentUser: false,
     certification: true,
   },
+  {
+    id: 'uid22',
+    taxCode: 'TAXCOD22A00A123P',
+    name: 'Simone22',
+    surname: 'Bianchi22',
+    email: 'giuseppe.b@comune.milano.it',
+    userRole: 'LIMITED',
+    status: 'ACTIVE',
+    products: [
+      {
+        title: 'App IO',
+        id: 'prod-io',
+        roles: [
+          {
+            relationshipId: 'rel22',
+            role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
+          },
+        ],
+      },
+    ],
+    isCurrentUser: false,
+    certification: true,
+  },
 ];
 
 export const mockedProductRoles: Array<ProductRole> = [
@@ -669,7 +718,7 @@ export const fetchPartyUsers = (
     applySort(filteredContent, pageRequest.sort);
   }
   return new Promise((resolve) =>
-    setTimeout(() => resolve(extractPageRequest(filteredContent, pageRequest)), 10000)
+    setTimeout(() => resolve(extractPageRequest(filteredContent, pageRequest)), 100)
   );
 };
 
