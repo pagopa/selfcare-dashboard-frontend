@@ -2,20 +2,21 @@ import { Grid } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { Product } from '../../model/Product';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
-import withSelectedPartyProduct from '../../decorators/withSelectedPartyProduct';
 import { DASHBOARD_ROUTES } from '../../routes';
 import { Party } from '../../model/Party';
-import AddUserForm from './components/AddUserForm';
+import { PartyUser } from '../../model/PartyUser';
+import { Product } from '../../model/Product';
+import { mockedUsers } from '../../services/__mocks__/usersService';
+import EditUserRegistryForm from './components/EditUserRegistryForm';
 
 type Props = {
   party: Party;
-  products: Array<Product>;
-  selectedProduct: Product;
+  user: PartyUser | null;
 };
 
-function AddUserContainer({ party, selectedProduct }: Props) {
+function EditUserRegistryPage({ party /* ,user TODO */ }: Props) {
+  const user = mockedUsers[0]; // TODO RemoveMe
   const history = useHistory();
 
   const paths = [
@@ -23,14 +24,13 @@ function AddUserContainer({ party, selectedProduct }: Props) {
       description: 'Referenti',
       onClick: () =>
         history.push(
-          resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.MAIN.path, {
+          resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
             institutionId: party.institutionId,
-            productId: selectedProduct.id,
           })
         ),
     },
     {
-      description: 'Aggiungi un Referente',
+      description: 'Modifica Referente',
     },
   ];
 
@@ -43,19 +43,26 @@ function AddUserContainer({ party, selectedProduct }: Props) {
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={3}>
-        <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
+        <ProductNavigationBar
+          paths={paths}
+          selectedProduct={null as unknown as Product /* TODO RemoveMe */}
+        />
       </Grid>
       <Grid item xs={12} mb={9}>
         <TitleBox
-          title="Aggiungi un Referente"
-          subTitle={`Inserisci i dati della persona che vuoi autorizzare a gestire ${selectedProduct.title}`}
+          title="Modifica Referente"
+          subTitle={`Modifica i dati della persona che hai autorizzato a gestire ${user.products[0].title}.`}
         />
       </Grid>
       <Grid item xs={12}>
-        <AddUserForm party={party} selectedProduct={selectedProduct} />
+        {user ? (
+          <EditUserRegistryForm party={party} user={user} />
+        ) : (
+          "Impossibile individuare l'utente desiderato"
+        )}
       </Grid>
     </Grid>
   );
 }
 
-export default withSelectedPartyProduct(AddUserContainer);
+export default EditUserRegistryPage;

@@ -1,23 +1,29 @@
 import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
 import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import {
+  applySort,
+  extractPageRequest,
+} from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
 import { Party, UserRole, UserStatus } from '../../model/Party';
 import {
   PartyUser,
   PartyUserOnCreation,
+  PartyUserOnEdit,
   PartyUserProduct,
   PartyUserProductRole,
 } from '../../model/PartyUser';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
+import { UserRegistry } from '../../model/UserRegistry';
 
 export const mockedUsers: Array<PartyUser> = [
   {
     id: 'uid',
-    taxCode: 'TAXCODE_uid',
-    name: 'ELENA',
+    taxCode: 'AAAAAA11A11A123K',
+    name: 'Elena',
     surname: 'Verdi',
-    email: 'simone.v@comune.milano.it ',
+    email: 'simone.v@comune.milano.it',
     userRole: 'ADMIN',
     status: 'ACTIVE',
     products: [
@@ -39,16 +45,40 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: '0',
-    taxCode: 'TAXCODE_0',
+    taxCode: 'AAAAAA11A11A124A',
     name: 'loggedName',
     surname: 'loggedSurname',
-    email: 'loggedName.b@email.it ',
-    userRole: 'LIMITED',
+    email: 'loggedName.b@email.it',
+    userRole: 'ADMIN',
     status: 'ACTIVE',
     products: [
       {
         title: 'App IO',
         id: 'prod-io',
+        roles: [
+          {
+            relationshipId: 'rel2',
+            role: 'incaricato-ente-creditore',
+            selcRole: 'ADMIN',
+            status: 'ACTIVE',
+          },
+        ],
+      },
+      {
+        title: 'Piattaforma Notifiche',
+        id: 'prod-pn',
+        roles: [
+          {
+            relationshipId: 'rel2',
+            role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
+          },
+        ],
+      },
+      {
+        title: 'App IO',
+        id: 'prod-pagopa',
         roles: [
           {
             relationshipId: 'rel2',
@@ -64,10 +94,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid3',
-    taxCode: 'TAXCODE_uid3',
+    taxCode: 'TAXCOD03A00A123P',
     name: 'Simone3',
     surname: 'Bianchi3 Verdi Verdi Verdi',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -89,10 +119,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid4',
-    taxCode: 'TAXCODE_uid4',
+    taxCode: 'TAXCOD04A00A123P',
     name: 'Simone',
     surname: 'Simonetti',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -120,10 +150,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid5',
-    taxCode: 'TAXCODE_uid5',
+    taxCode: 'TAXCOD05A00A123P',
     name: 'Simone',
     surname: 'Franceschini Alberti',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -151,10 +181,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid6',
-    taxCode: 'TAXCODE_uid6',
+    taxCode: 'TAXCOD06A00A123P',
     name: 'Simone6',
     surname: 'Bianchi6',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -176,10 +206,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid7',
-    taxCode: 'TAXCODE_uid7',
+    taxCode: 'TAXCOD07A00A123P',
     name: 'Simone7',
     surname: 'Bianchi7',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -201,10 +231,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid8',
-    taxCode: 'TAXCODE_uid8',
+    taxCode: 'TAXCOD08A00A123P',
     name: 'Simone8',
     surname: 'Bianchi8',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -232,10 +262,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid9',
-    taxCode: 'TAXCODE_uid9',
+    taxCode: 'TAXCOD09A00A123P',
     name: 'Simone9',
     surname: 'Bianchi9',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -263,10 +293,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid10',
-    taxCode: 'TAXCODE_uid10',
+    taxCode: 'TAXCOD10A00A123P',
     name: 'Simone10',
     surname: 'Bianchi10',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -294,10 +324,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid11',
-    taxCode: 'TAXCODE_uid11',
+    taxCode: 'TAXCOD11A00A123P',
     name: 'Simone11',
     surname: 'Bianchi11',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -319,10 +349,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid12',
-    taxCode: 'TAXCODE_uid12',
+    taxCode: 'TAXCOD12A00A123P',
     name: 'Simone12',
     surname: 'Bianchi12',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -344,10 +374,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid13',
-    taxCode: 'TAXCODE_uid13',
+    taxCode: 'TAXCOD13A00A123P',
     name: 'Simone13',
     surname: 'Bianchi13',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -369,10 +399,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid14',
-    taxCode: 'TAXCODE_uid14',
+    taxCode: 'TAXCOD14A00A123P',
     name: 'Simone14',
     surname: 'Bianchi14',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -394,10 +424,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid15',
-    taxCode: 'TAXCODE_uid15',
+    taxCode: 'TAXCOD15A00A123P',
     name: 'Simone15',
     surname: 'Bianchi15',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -419,10 +449,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid16',
-    taxCode: 'TAXCODE_uid16',
+    taxCode: 'TAXCOD16A00A123P',
     name: 'Simone16',
     surname: 'Bianchi16',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -444,10 +474,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid17',
-    taxCode: 'TAXCODE_uid17',
+    taxCode: 'TAXCOD17A00A123P',
     name: 'Simone17',
     surname: 'Bianchi17',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'SUSPENDED',
     products: [
@@ -469,10 +499,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid18',
-    taxCode: 'TAXCODE_uid18',
+    taxCode: 'TAXCOD18A00A123P',
     name: 'Simone18',
     surname: 'Bianchi18',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -494,10 +524,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid19',
-    taxCode: 'TAXCODE_uid19',
+    taxCode: 'TAXCOD19A00A123P',
     name: 'Simone19',
     surname: 'Bianchi19',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -519,10 +549,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid20',
-    taxCode: 'TAXCODE_uid20',
+    taxCode: 'TAXCOD20A00A123P',
     name: 'Simone20',
     surname: 'Bianchi20',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -544,10 +574,10 @@ export const mockedUsers: Array<PartyUser> = [
   },
   {
     id: 'uid21',
-    taxCode: 'TAXCODE_uid21',
+    taxCode: 'TAXCOD21A00A123P',
     name: 'Simone21',
     surname: 'Bianchi21',
-    email: 'giuseppe.b@comune.milano.it ',
+    email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
     status: 'ACTIVE',
     products: [
@@ -557,6 +587,31 @@ export const mockedUsers: Array<PartyUser> = [
         roles: [
           {
             relationshipId: 'rel21',
+            role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'ACTIVE',
+          },
+        ],
+      },
+    ],
+    isCurrentUser: false,
+    certification: true,
+  },
+  {
+    id: 'uid22',
+    taxCode: 'TAXCOD22A00A123P',
+    name: 'Simone22',
+    surname: 'Bianchi22',
+    email: 'giuseppe.b@comune.milano.it',
+    userRole: 'LIMITED',
+    status: 'ACTIVE',
+    products: [
+      {
+        title: 'App IO',
+        id: 'prod-io',
+        roles: [
+          {
+            relationshipId: 'rel22',
             role: 'referente-tecnico',
             selcRole: 'LIMITED',
             status: 'ACTIVE',
@@ -617,6 +672,14 @@ export const mockedProductRoles: Array<ProductRole> = [
   },
 ];
 
+export const mockedUserRegistry: UserRegistry = {
+  taxCode: 'AAAAAA11A11A234S',
+  name: 'franco',
+  surname: 'rossi',
+  email: 'f@r.com',
+  certification: true,
+};
+
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
   _party: Party,
@@ -626,41 +689,36 @@ export const fetchPartyUsers = (
   selcRoles?: Array<UserRole>,
   productRoles?: Array<ProductRole>
 ): Promise<PageResource<PartyUser>> => {
-  const content = pageRequest.page === 9 ? mockedUsers.slice(1, 5) : mockedUsers;
-  const filteredContent = content.map((u) =>
-    Object.assign(
-      {},
-      u,
-      product
-        ? {
-            products: [
-              {
-                title: product.title,
-                id: product.id,
-                roles:
-                  productRoles && productRoles.length > 0
-                    ? productRoles.map((r, i) => ({
-                        relationshipId: `rel_${i}`,
-                        role: r.productRole,
-                        selcRole: selcRoles ? selcRoles[0] : r.selcRole,
-                        status: u.products[0].roles[0].status,
-                      }))
-                    : u.products[0].roles,
-              },
-            ],
-          }
-        : {},
-      selcRoles && selcRoles.length > 0 ? { userRole: selcRoles[0] } : {}
-    )
-  );
-  const page = {
-    number: pageRequest.page,
-    size: pageRequest.size,
-    totalElements: 195,
-    totalPages: 10,
-  };
+  const filteredContent = mockedUsers
+    .filter((u) => {
+      if (
+        selcRoles &&
+        selcRoles.length > 0 &&
+        !u.products.find((p) => p.roles.find((r) => selcRoles.indexOf(r.selcRole) > -1))
+      ) {
+        return false;
+      }
+      if (
+        productRoles &&
+        productRoles.length > 0 &&
+        !u.products.find((p) =>
+          p.roles.find((r) => productRoles.map((r) => r.productRole).indexOf(r.role) > -1)
+        )
+      ) {
+        return false;
+      }
+      if (product && !u.products.find((p) => p.id === product.id)) {
+        return false;
+      }
+      return u;
+    })
+    .map((u) => JSON.parse(JSON.stringify(u)));
+
+  if (pageRequest.sort) {
+    applySort(filteredContent, pageRequest.sort);
+  }
   return new Promise((resolve) =>
-    setTimeout(() => resolve({ content: filteredContent, page }), 100)
+    setTimeout(() => resolve(extractPageRequest(filteredContent, pageRequest)), 100)
   );
 };
 
@@ -681,6 +739,12 @@ export const savePartyUser = (
   _product: Product,
   _user: PartyUserOnCreation
 ): Promise<any> => new Promise((resolve) => resolve(200));
+
+export const updatePartyUser = (_party: Party, _user: PartyUserOnEdit): Promise<any> =>
+  new Promise((resolve) => resolve(200));
+
+export const fetchUserRegistryByFiscalCode = (_taxCode: string): Promise<UserRegistry> =>
+  new Promise((resolve) => resolve(mockedUserRegistry));
 
 export const fetchPartyUser = (
   _institutionId: string,

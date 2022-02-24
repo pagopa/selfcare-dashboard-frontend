@@ -1,14 +1,17 @@
 import { Redirect, useParams } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import Dashboard from './pages/dashboard/Dashboard';
-import AddUserContainer from './pages/dashboardAddUser/AddUserContainer';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
+import AddUsersProductPage from './pages/dashboardUserEdit/AddUsersProductPage';
+import AddUsersPage from './pages/dashboardUserEdit/AddUsersPage';
+import EditUserRegistryPage from './pages/dashboardUserEdit/EditUserRegistryPage';
 import UserDetailPage from './pages/dashboardUserDetail/userDetailPage/UserDetailPage';
 import UserProductDetailPage from './pages/dashboardUserDetail/userProductDetailPage/UserProductDetailPage';
 import UsersPage from './pages/dashboardUsers/UsersPage/UsersPage';
 import UsersProductPage from './pages/dashboardUsers/UsersProductPage/UsersProductPage';
+import AddProductToUserPage from './pages/dashboardUserEdit/AddProductToUserPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -53,47 +56,57 @@ export const DASHBOARD_ROUTES = {
     component: DashboardOverview,
   },
   PARTY_USERS: {
-    path: `${BASE_ROUTE}/:institutionId/roles`,
+    path: `${BASE_ROUTE}/:institutionId/users`,
     exact: false,
     subRoutes: {
       MAIN: {
-        path: `${BASE_ROUTE}/:institutionId/roles`,
+        path: `${BASE_ROUTE}/:institutionId/users`,
         exact: true,
         component: UsersPage,
       },
-      ADD_PARTY_USER: {
-        path: `${BASE_ROUTE}/:institutionId/roles/add`,
+      EDIT_USER: {
+        path: `${BASE_ROUTE}/:institutionId/users/:userId/edit`,
         exact: true,
-        component: AddUserContainer, // TODO redirect to correct form
+        component: EditUserRegistryPage,
+      },
+      ADD_PARTY_USER: {
+        path: `${BASE_ROUTE}/:institutionId/users/add`,
+        exact: true,
+        component: AddUsersPage,
+      },
+      ADD_PRODUCT: {
+        path: `${BASE_ROUTE}/:institutionId/users/:userId/add-product`,
+        exact: true,
+        component: AddProductToUserPage,
       },
       PARTY_USER_DETAIL: {
-        path: `${BASE_ROUTE}/:institutionId/roles/:userId`,
+        path: `${BASE_ROUTE}/:institutionId/users/:userId`,
         exact: true,
         component: UserDetailPage,
       },
-      ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
+      ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/users`),
     },
   },
   PARTY_PRODUCT_USERS: {
-    path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
+    path: `${BASE_ROUTE}/:institutionId/:productId/users`,
     exact: false,
     subRoutes: {
       MAIN: {
-        path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
+        path: `${BASE_ROUTE}/:institutionId/:productId/users`,
         exact: true,
         component: UsersProductPage,
       },
       ADD_PARTY_PRODUCT_USER: {
-        path: `${BASE_ROUTE}/:institutionId/:productId/roles/add`,
+        path: `${BASE_ROUTE}/:institutionId/:productId/users/add`,
         exact: true,
-        component: AddUserContainer,
+        component: AddUsersProductPage,
       },
       PARTY_PRODUCT_USER_DETAIL: {
-        path: `${BASE_ROUTE}/:institutionId/:productId/roles/:userId`,
+        path: `${BASE_ROUTE}/:institutionId/:productId/users/:userId`,
         exact: true,
         component: UserProductDetailPage,
       },
-      ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
+      ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/users`),
     },
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId`),

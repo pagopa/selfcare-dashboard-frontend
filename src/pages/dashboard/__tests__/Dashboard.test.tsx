@@ -41,15 +41,15 @@ test('Test routing', async () => {
   history.push('/dashboard/13/2');
   await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13'));
 
-  history.push('/dashboard/13/roles');
-  expect(history.location.pathname).toBe('/dashboard/13/roles');
+  history.push('/dashboard/13/users');
+  expect(history.location.pathname).toBe('/dashboard/13/users');
 
-  // history.push('/dashboard/13/roles/asd');
-  // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/roles'));
+  // history.push('/dashboard/13/users/asd');
+  // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/users'));
 
-  history.push('/dashboard/13/prId/roles');
-  expect(history.location.pathname).toBe('/dashboard/13/prId/roles');
+  history.push('/dashboard/13/prId/users');
+  expect(history.location.pathname).toBe('/dashboard/13/prId/users');
 
-  // history.push('/dashboard/13/prId/roles/798');
-  // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/prId/roles'));
+  // history.push('/dashboard/13/prId/users/798');
+  // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/prId/users'));
 });

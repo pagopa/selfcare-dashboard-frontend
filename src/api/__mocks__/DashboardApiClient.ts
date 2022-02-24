@@ -12,6 +12,7 @@ import {
 } from '../generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
+import { UserResource } from '../generated/b4f-dashboard/UserResource';
 
 export const mockedInstitutionResources: Array<InstitutionResource> = [
   {
@@ -103,7 +104,7 @@ export const mockedProductResources: Array<ProductsResource> = [
 export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   {
     id: '1',
-    fiscalCode: 'TAXCODE_1',
+    fiscalCode: 'AAAAAA11A11A123K',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -127,7 +128,7 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   },
   {
     id: '2',
-    fiscalCode: 'TAXCODE_2',
+    fiscalCode: 'AAAAAA11A11A124K',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
@@ -154,7 +155,7 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
 export const mockedProductUserResource: Array<ProductUserResource> = [
   {
     id: '1',
-    fiscalCode: 'TAXCODE_1',
+    fiscalCode: 'AAAAAA11A11A123K',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -176,7 +177,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
   },
   {
     id: '2',
-    fiscalCode: 'TAXCODE_1',
+    fiscalCode: 'BBAABB11A11A123K',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
@@ -230,6 +231,14 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
   },
 ];
 
+export const mockedUserResource: UserResource = {
+  fiscalCode: 'AAAAAA11A11A123K',
+  name: 'Gigi',
+  surname: 'Verdi',
+  email: 'gigi.v@email.com',
+  certification: true,
+};
+
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
@@ -273,6 +282,9 @@ export const DashboardApi = {
 
   getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
+
+  fetchUserRegistryByFiscalCode: async (_taxCode: string): Promise<UserResource | null> =>
+    new Promise((resolve) => resolve(mockedUserResource)),
 
   deletePartyRelation: async (_relationshipId: string): Promise<void> =>
     new Promise<void>((resolve) => resolve()),

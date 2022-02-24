@@ -29,7 +29,13 @@ const emptyFilters: UsersTableFiltersConfig = {
   productRoles: [],
 };
 
-function UsersProductPage({ party, products, selectedProduct, productRolesList }: Props) {
+function UsersProductPage({
+  party,
+  activeProducts,
+  productsMap,
+  selectedProduct,
+  productRolesList,
+}: Props) {
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [fetchStatus, setFetchStatus] = useState({ loading: true, noData: false });
 
@@ -44,56 +50,59 @@ function UsersProductPage({ party, products, selectedProduct, productRolesList }
       mt={10}
       sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
     >
-      <Grid item xs={12} mb={3} px={'16px'}>
+      <Grid item xs={12} mb={3} px={2}>
         <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
       </Grid>
-      <Grid item xs={12} mb={9} px={'16px'}>
+      <Grid item xs={12} mb={9} px={2}>
         <TitleBox
           title="Referenti"
           subTitle={`Gestisci i Referenti Amministrativi e Operativi abilitati alla gestione del prodotto ${selectedProduct.title}.`}
         />
       </Grid>
-      <Grid container direction="row" alignItems={'center'}>
-        <Grid item xs={12}>
-          <UsersTableActions
-            disableFilters={fetchStatus.loading}
-            loading={fetchStatus.loading}
-            party={party}
-            products={products}
-            selectedProduct={selectedProduct}
-            productsRolesMap={{ [selectedProduct.id]: productRolesList }}
-            filters={filters}
-            onFiltersChange={setFilters}
-            addUserUrl={resolvePathVariables(
-              DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.ADD_PARTY_PRODUCT_USER.path,
-              { institutionId: party.institutionId, productId: selectedProduct.id }
-            )}
-          />
+      <Grid item xs={12} sx={{ height: '100%' }}>
+        <Grid container direction="row" alignItems={'center'}>
+          <Grid item xs={12}>
+            <UsersTableActions
+              disableFilters={fetchStatus.loading}
+              loading={fetchStatus.loading}
+              party={party}
+              products={activeProducts}
+              selectedProduct={selectedProduct}
+              productsRolesMap={{ [selectedProduct.id]: productRolesList }}
+              filters={filters}
+              onFiltersChange={setFilters}
+              addUserUrl={resolvePathVariables(
+                DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.ADD_PARTY_PRODUCT_USER.path,
+                { institutionId: party.institutionId, productId: selectedProduct.id }
+              )}
+            />
+          </Grid>
+          <Grid item xs={12} mt={6}>
+            <UsersTableProduct
+              hideProductWhenLoading={true}
+              incrementalLoad={false}
+              initialPageSize={ENV.PARTY_PRODUCT_USERS_PAGE_SIZE}
+              party={party}
+              product={selectedProduct}
+              productsMap={productsMap}
+              productRolesLists={productRolesList}
+              filterConfiguration={filters}
+              onFetchStatusUpdate={(isFetching, count) => {
+                setFetchStatus({ loading: isFetching, noData: !count || count === 0 });
+              }}
+              userDetailUrl={resolvePathVariables(
+                DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.PARTY_PRODUCT_USER_DETAIL.path,
+                {
+                  institutionId: party.institutionId,
+                  productId: selectedProduct.id,
+                }
+              )}
+            />
+          </Grid>
+          {!fetchStatus.loading && fetchStatus.noData && (
+            <UserTableNoData removeFilters={() => setFilters(emptyFilters)} />
+          )}
         </Grid>
-        <Grid item xs={12} mt={6}>
-          <UsersTableProduct
-            hideProductWhenLoading={true}
-            incrementalLoad={false}
-            initialPageSize={ENV.PARTY_PRODUCT_USERS_PAGE_SIZE}
-            party={party}
-            product={selectedProduct}
-            productRolesLists={productRolesList}
-            filterConfiguration={filters}
-            onFetchStatusUpdate={(isFetching, count) => {
-              setFetchStatus({ loading: isFetching, noData: !count || count === 0 });
-            }}
-            userDetailUrl={resolvePathVariables(
-              DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.PARTY_PRODUCT_USER_DETAIL.path,
-              {
-                institutionId: party.institutionId,
-                productId: selectedProduct.id,
-              }
-            )}
-          />
-        </Grid>
-        {!fetchStatus.loading && fetchStatus.noData && (
-          <UserTableNoData removeFilters={() => setFilters(emptyFilters)} />
-        )}
       </Grid>
     </Grid>
   ) : (

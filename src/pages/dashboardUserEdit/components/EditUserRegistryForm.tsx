@@ -1,33 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import {
-  FormControlLabel,
-  Grid,
-  RadioGroup,
-  TextField,
-  Divider,
-  Radio,
-  Button,
-  Typography,
-  Box,
-} from '@mui/material';
+import React, { useEffect } from 'react';
+import { Grid, TextField, Button, styled } from '@mui/material';
 import { useFormik } from 'formik';
-import { styled } from '@mui/system';
 import { useHistory } from 'react-router';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
+import {
+  useUnloadEventInterceptor,
+  useUnloadEventOnExit,
+} from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../../../model/Party';
-import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
-import {
-  LOADING_TASK_SAVE_PARTY_USER,
-  LOADING_TASK_FETCH_PRODUCT_ROLES,
-} from '../../../utils/constants';
-import { Product } from '../../../model/Product';
-import { PartyUserOnCreation } from '../../../model/PartyUser';
-import { ProductRole } from '../../../model/ProductRole';
-import { DASHBOARD_ROUTES } from '../../../routes';
+import { LOADING_TASK_SAVE_PARTY_USER } from '../../../utils/constants';
+import { updatePartyUser } from '../../../services/usersService';
+import { PartyUser, PartyUserOnEdit } from '../../../model/PartyUser';
+
 const CustomTextField = styled(TextField)({
   '.MuiInputLabel-asterisk': {
     display: 'none',
@@ -56,56 +43,30 @@ const CustomTextField = styled(TextField)({
   },
 });
 
-const CustomFormControlLabel = styled(FormControlLabel)({
-  '.MuiRadio-root': {
-    color: '#0073E6',
-  },
-});
-const taxCodeRegexp = new RegExp(
-  '^[A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1}$'
-);
 const emailRegexp = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 const requiredError = 'Required';
 
 type Props = {
   party: Party;
-  selectedProduct: Product;
+  user: PartyUser;
 };
 
-export default function AddUserForm({ party, selectedProduct }: Props) {
+export default function EditUserRegistryForm({ party, user }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
-  const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
   const history = useHistory();
-  const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
 
-  useEffect(() => {
-    setLoadingFetchRoles(true);
-    fetchProductRoles(selectedProduct)
-      .then((productRoles) => setProductRoles(productRoles))
-      .catch((reason) =>
-        addError({
-          id: 'FETCH_PRODUCT_ROLES',
-          blocking: false,
-          error: reason,
-          techDescription: `An error occurred while fetching Product Roles of Product ${selectedProduct.id}`,
-          toNotify: true,
-        })
-      )
-      .finally(() => setLoadingFetchRoles(false));
-  }, []);
+  const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
+  const onExit = useUnloadEventOnExit();
 
-  const validate = (values: Partial<PartyUserOnCreation>) =>
+  const goBack = () => history.goBack();
+
+  const validate = (values: Partial<PartyUserOnEdit>) =>
     Object.fromEntries(
       Object.entries({
         name: !values.name ? requiredError : undefined,
         surname: !values.surname ? requiredError : undefined,
-        taxCode: !values.taxCode
-          ? requiredError
-          : !taxCodeRegexp.test(values.taxCode)
-          ? 'Il Codice Fiscale inserito non è valido '
-          : undefined,
         email: !values.email
           ? requiredError
           : !emailRegexp.test(values.email)
@@ -116,51 +77,41 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
           : values.confirmEmail !== values.email
           ? 'Gli indirizzi email non corrispondono'
           : undefined,
-        productRole: !values.productRole ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
 
-  const formik = useFormik<PartyUserOnCreation>({
-    initialValues: {
-      name: '',
-      surname: '',
-      taxCode: '',
-      email: '',
-      confirmEmail: '',
-      productRole: '',
-    },
+  const formik = useFormik<PartyUserOnEdit>({
+    initialValues: { ...user, confirmEmail: user.email },
     validate,
     onSubmit: (values) => {
       setLoadingSaveUser(true);
-      savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
+      updatePartyUser(party, values)
         .then(() => {
-          // TODO: USER_UPDATE 
-          trackEvent('USER_ADD', { party_id: party.institutionId , product: selectedProduct.id, product_role: values.productRole });
+          unregisterUnloadEvent();
+          trackEvent('USER_UPDATE', {
+            party_id: party.institutionId,
+            user: user.id,
+          });
           addNotify({
             component: 'Toast',
-            id: 'SAVE_PARTY_USER',
-            title: 'REFERENTE AGGIUNTO',
+            id: 'EDIT_PARTY_USER',
+            title: 'REFERENTE MODIFICATO',
             message: (
               <>
-                {'Hai aggiunto correttamente '}
+                {'Hai modificato correttamente i dati di '}
                 <strong>{`${values.name} ${values.surname}`}</strong>
                 {'.'}
               </>
             ),
           });
-          history.push(
-            resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
-              institutionId: party.institutionId,
-              productId: selectedProduct.id,
-            })
-          );
+          goBack();
         })
         .catch((reason) =>
           addError({
-            id: 'SAVE_PARTY_USER',
+            id: 'EDIT_PARTY_USER_ERROR',
             blocking: false,
             error: reason,
-            techDescription: `An error occurred while saving party user ${party.institutionId}`,
+            techDescription: `An error occurred while editing party user ${user.id} of institution ${party.institutionId}`,
             toNotify: true,
           })
         )
@@ -168,11 +119,15 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
     },
   });
 
-  const baseTextFieldProps = (
-    field: keyof PartyUserOnCreation,
-    label: string,
-    placeholder: string
-  ) => {
+  useEffect(() => {
+    if (formik.dirty) {
+      registerUnloadEvent();
+    } else {
+      unregisterUnloadEvent();
+    }
+  }, [formik.dirty]);
+
+  const baseTextFieldProps = (field: keyof PartyUserOnEdit, label: string, placeholder: string) => {
     const isError = !!formik.errors[field] && formik.errors[field] !== requiredError;
 
     return {
@@ -212,6 +167,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
                   'Codice Fiscale',
                   'Inserisci il Codice Fiscale del referente'
                 )}
+                disabled={true}
               />
             </Grid>
           </Grid>
@@ -219,11 +175,13 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
             <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
               <CustomTextField
                 {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
+                disabled={formik.values.certification}
               />
             </Grid>
             <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
               <CustomTextField
                 {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
+                disabled={formik.values.certification}
               />
             </Grid>
           </Grid>
@@ -249,45 +207,30 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
               />
             </Grid>
           </Grid>
-          <Grid item container spacing={3}>
-            <Grid item xs={8} mb={3}>
-              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-                Ruolo
-              </Typography>
-
-              <RadioGroup
-                aria-label="user"
-                name="productRole"
-                value={formik.values.productRole}
-                onChange={formik.handleChange}
-              >
-                {productRoles?.map((p, index) => (
-                  <Box key={p.productRole}>
-                    <CustomFormControlLabel
-                      value={p.productRole}
-                      control={<Radio />}
-                      label={p.productRole}
-                    />
-                    {index !== productRoles.length - 1 && (
-                      <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
-                    )}
-                  </Box>
-                ))}
-              </RadioGroup>
-            </Grid>
-          </Grid>
         </Grid>
-        <Grid item xs={3} mt={12}>
-          <p>{formik.isValid} </p>
-          <Button
-            disabled={!formik.dirty || !formik.isValid}
-            sx={{ width: '100%' }}
-            color="primary"
-            variant="contained"
-            type="submit"
-          >
-            Conferma
-          </Button>
+
+        <Grid item container spacing={3}>
+          <Grid item xs={3} mt={8}>
+            <Button
+              sx={{ width: '100%' }}
+              color="primary"
+              variant="outlined"
+              onClick={() => onExit(goBack)}
+            >
+              Indietro
+            </Button>
+          </Grid>
+          <Grid item xs={3} mt={8}>
+            <Button
+              disabled={!formik.dirty || !formik.isValid}
+              sx={{ width: '100%' }}
+              color="primary"
+              variant="contained"
+              type="submit"
+            >
+              Conferma
+            </Button>
+          </Grid>
         </Grid>
       </form>
     </React.Fragment>

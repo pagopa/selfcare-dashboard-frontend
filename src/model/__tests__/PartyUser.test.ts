@@ -34,7 +34,7 @@ test('Test institutionUserResource2PartyUser', () => {
     ],
   };
 
-  const partyUser = institutionUserResource2PartyUser(institutionUserResource, mockedUser);
+  const partyUser = institutionUserResource2PartyUser(institutionUserResource, {}, mockedUser);
   expect(partyUser).toStrictEqual({
     id: '1',
     taxCode: 'fiscalCode',
@@ -63,7 +63,7 @@ test('Test institutionUserResource2PartyUser', () => {
 
   institutionUserResource.id = mockedUser.uid;
   expect(
-    institutionUserResource2PartyUser(institutionUserResource, mockedUser).isCurrentUser
+    institutionUserResource2PartyUser(institutionUserResource, {}, mockedUser).isCurrentUser
   ).toBeTruthy();
 });
 
@@ -91,7 +91,11 @@ test('Test productUserResource2PartyUser', () => {
     },
   };
 
-  const partyUser = productUserResource2PartyUser(productUserResource, mockedUser);
+  const partyUser = productUserResource2PartyUser(
+    productUserResource,
+    mockedPartyProducts[0],
+    mockedUser
+  );
   expect(partyUser).toStrictEqual({
     id: '1',
     taxCode: 'fiscalCode',
@@ -119,5 +123,8 @@ test('Test productUserResource2PartyUser', () => {
   });
 
   productUserResource.id = mockedUser.uid;
-  expect(productUserResource2PartyUser(productUserResource, mockedUser).isCurrentUser).toBeTruthy();
+  expect(
+    productUserResource2PartyUser(productUserResource, mockedPartyProducts[0], mockedUser)
+      .isCurrentUser
+  ).toBeTruthy();
 });

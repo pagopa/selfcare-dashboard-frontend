@@ -1,7 +1,6 @@
-import { storageRead } from '@pagopa/selfcare-common-frontend/utils/storage-utils';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
-import { STORAGE_KEY_TOKEN } from '../utils/constants';
 import { store } from '../redux/store';
 import { PartyUserOnCreation } from '../model/PartyUser';
 import { ENV } from '../utils/env';
@@ -11,12 +10,12 @@ import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
+import { UserResource } from './generated/b4f-dashboard/UserResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
-import { CreateUserDto } from './generated/b4f-dashboard/CreateUserDto';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
-    const token = storageRead(STORAGE_KEY_TOKEN, 'string');
+    const token = storageTokenOps.read();
     return wrappedOperation({
       ...params,
       bearerAuth: `Bearer ${token}`,
@@ -120,7 +119,7 @@ export const DashboardApi = {
     const result = await apiClient.createInstitutionProductUserUsingPOST({
       institutionId,
       productId,
-      body: user as unknown as CreateUserDto, // TODO fixme when merging with addUserForm task
+      body: user,
     });
     return extractResponse(result, 201, onRedirectToLogin);
   },
@@ -149,6 +148,13 @@ export const DashboardApi = {
   getProductRoles: async (productId: string): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  fetchUserRegistryByFiscalCode: async (taxCode: string): Promise<UserResource | null> => {
+    const result = await apiClient.getUserByExternalIdUsingPOST({
+      body: { externalId: taxCode },
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
