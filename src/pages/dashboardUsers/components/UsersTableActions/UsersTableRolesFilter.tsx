@@ -1,9 +1,10 @@
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import React, { useEffect } from 'react';
-import { Box, Button, FormControl, Select, Grid } from '@mui/material';
+import { Box, Button, FormControl, Select, Grid, Typography } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { styled } from '@mui/system';
+import { isEqual } from 'lodash';
 import { ProductRole, productRolesGroupBySelcRole } from '../../../../model/ProductRole';
 import { UserRole } from '../../../../model/Party';
 import { UsersTableFiltersConfig } from './UsersTableFilters';
@@ -20,6 +21,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       marginLeft: '12px',
+      width: '300px',
     },
   },
 };
@@ -41,14 +43,27 @@ const productRolesGroupByTitle = (roles: Array<ProductRole>): ProductRolesGroupB
   }, {} as ProductRolesGroupByTitle);
 
 const emptySelcRoleGroup = { ADMIN: {}, LIMITED: {} };
-
+const labels = {
+  ADMIN: {
+    title: 'Amministratore',
+    description: 'tutti i ruoli abilitati alla gestione dei prodotti e di Self Care',
+  },
+  LIMITED: {
+    title: 'Operatore',
+    description: 'tutti i ruoli ruoli autorizzati a operare sui prodotti',
+  },
+};
 export default function UsersTableRolesFilter({
   productRolesSelected,
   productRolesList,
   onFiltersChange,
   filters,
 }: Props) {
-  const productList = (productRoles: Array<ProductRole>) =>
+  const productList = (
+    productRoles: Array<ProductRole>
+  ): {
+    [selcRole in UserRole]: ProductRolesGroupByTitle;
+  } =>
     Object.fromEntries(
       Object.entries(productRolesGroupBySelcRole(productRoles)).map(([selcRole, roles]) => [
         selcRole,
@@ -79,21 +94,6 @@ export default function UsersTableRolesFilter({
     }
   }, [productRolesSelected]);
 
-  const checked = () => {
-    // eslint-disable-next-line functional/no-let
-    let check = false;
-    selcGroups.forEach((group) => {
-      if (
-        productRoleCheckedBySelcRole[group] &&
-        Object.keys(productRoleCheckedBySelcRole[group]) &&
-        Object.keys(productRoleCheckedBySelcRole[group]).length > 0
-      ) {
-        check = true;
-      }
-    });
-    return check;
-  };
-
   const children = (
     selcRole: UserRole,
     selcGroup: ProductRolesGroupByTitle,
@@ -105,9 +105,20 @@ export default function UsersTableRolesFilter({
         return (
           <FormControlLabel
             key={title}
-            label={title}
+            label={
+              <Typography
+                variant="body2"
+                sx={{ color: 'black', fontSize: '14px' }}
+              >{`${title}`}</Typography>
+            }
             control={
               <Checkbox
+                sx={{
+                  color: '#5C6F82',
+                  '&.Mui-checked': {
+                    color: '#0073E6',
+                  },
+                }}
                 checked={isSelected}
                 onChange={() => {
                   const nextSelcGroupSelected = isSelected
@@ -127,6 +138,19 @@ export default function UsersTableRolesFilter({
       })}
     </Box>
   );
+
+  const isSelcGroupTotallySelected = (selcRole: UserRole) => {
+    const selcGroupSelected = productRoleCheckedBySelcRole[selcRole];
+    const selcGroup = selcRoleGroup[selcRole];
+    return Object.keys(selcGroupSelected).length === Object.keys(selcGroup).length;
+  };
+
+  const selcGroupTotallySelected: { [userRole in UserRole]: boolean } = Object.fromEntries(
+    (Object.keys(selcRoleGroup) as Array<UserRole>).map((s: UserRole) => [
+      s,
+      isSelcGroupTotallySelected(s),
+    ])
+  ) as { [userRole in UserRole]: boolean };
 
   return (
     <Box>
@@ -161,8 +185,10 @@ export default function UsersTableRolesFilter({
             )
           }
           inputProps={{ onClick: () => setOpen(!open) }}
-          value={Object.values(productRoleCheckedBySelcRole).flatMap((titles) =>
-            Object.keys(titles)
+          value={selcGroups.flatMap((s) =>
+            selcGroupTotallySelected[s]
+              ? [labels[s].title]
+              : Object.keys(productRoleCheckedBySelcRole[s])
           )}
           renderValue={(selected: any) => {
             if (selected.length === 0) {
@@ -178,13 +204,29 @@ export default function UsersTableRolesFilter({
             {selcGroups.map((selcRole) => {
               const selcGroupSelected = productRoleCheckedBySelcRole[selcRole];
               const selcGroup = selcRoleGroup[selcRole];
-              const isSelected =
-                Object.keys(selcGroupSelected).length === Object.keys(selcGroup).length;
+              const isSelected = selcGroupTotallySelected[selcRole];
 
               return [
                 <FormControlLabel
+                  sx={{ pb: '30px', height: '70px', mt: '7px' }}
                   key={selcRole}
-                  label={selcRole}
+                  label={
+                    <Grid container sx={{ height: '100%', marginTop: '35px' }}>
+                      <Grid item>
+                        <Typography
+                          pb={1}
+                          variant="body2"
+                          sx={{ color: 'black', fontStyle: 'italic' }}
+                        >{`${labels[selcRole].title}`}</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: '#475A6D', fontSize: '12px' }}
+                        >{`${labels[selcRole].description}`}</Typography>
+                      </Grid>
+                    </Grid>
+                  }
                   control={
                     <Checkbox
                       checked={isSelected}
@@ -205,7 +247,7 @@ export default function UsersTableRolesFilter({
             <Grid container spacing={1} display="flex" justifyContent="center" py={3}>
               <Grid item xs={12}>
                 <Button
-                  disabled={!checked() && productRolesSelected !== nextProductRolesFilter}
+                  disabled={isEqual(productRolesSelected, nextProductRolesFilter)}
                   sx={{ width: '100%', height: '32px' }}
                   color="primary"
                   variant="contained"
@@ -224,7 +266,7 @@ export default function UsersTableRolesFilter({
               </Grid>
               <Grid item xs={12}>
                 <Button
-                  disabled={!checked()}
+                  disabled={nextProductRolesFilter.length === 0}
                   sx={{ width: '100%', height: '32px' }}
                   color="primary"
                   variant="outlined"
