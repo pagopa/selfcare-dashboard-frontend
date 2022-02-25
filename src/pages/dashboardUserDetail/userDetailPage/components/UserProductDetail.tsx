@@ -80,7 +80,8 @@ export default function UserProductDetail({
             party={party}
             user={partyUser}
             fetchPartyUser={fetchPartyUser}
-            product={userProduct}
+            userProduct={userProduct}
+            product={product}
             productRolesList={productRolesList}
             canEdit={canEdit}
           />

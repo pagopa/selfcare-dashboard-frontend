@@ -36,13 +36,13 @@ function UserProductDetailPage({
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
 
-  const [product, setProduct] = useState<PartyUserProduct>();
+  const [userProduct, setUserProduct] = useState<PartyUserProduct>();
   const canEdit = selectedProduct.userRole === 'ADMIN';
 
   useEffect(() => {
-    const product = partyUser.products.find((product) => product.id === selectedProduct.id);
-    setProduct(product);
-    if (!product) {
+    const userProduct = partyUser.products.find((product) => product.id === selectedProduct.id);
+    setUserProduct(userProduct);
+    if (!userProduct) {
       history.push(
         resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
           institutionId: party.institutionId,
@@ -57,8 +57,8 @@ function UserProductDetailPage({
     deletePartyUser(
       party,
       partyUser,
-      product as PartyUserProduct,
-      (product as PartyUserProduct).roles[0]
+      userProduct as PartyUserProduct,
+      (userProduct as PartyUserProduct).roles[0]
     )
       .then((_) => {
         goBack();
@@ -69,8 +69,8 @@ function UserProductDetailPage({
           blocking: false,
           error: reason,
           techDescription: `Something gone wrong while deleting role ${
-            (product as PartyUserProduct).roles[0].relationshipId
-          } for product ${(product as PartyUserProduct).title}`,
+            (userProduct as PartyUserProduct).roles[0].relationshipId
+          } for product ${(userProduct as PartyUserProduct).title}`,
           toNotify: true,
         })
       )
@@ -87,12 +87,12 @@ function UserProductDetailPage({
           {'Stai per eliminare il ruolo '}
           <strong>
             {transcodeProductRole2Title(
-              (product as PartyUserProduct).roles[0].role,
+              (userProduct as PartyUserProduct).roles[0].role,
               productRolesList
             )}
           </strong>
           {' di '}
-          <strong>{(product as PartyUserProduct).title} </strong>
+          <strong>{(userProduct as PartyUserProduct).title} </strong>
           {' assegnato a '}
           <strong style={{ textTransform: 'capitalize' }}>
             {party && `${partyUser.name.toLocaleLowerCase()} ${partyUser.surname}`}
@@ -126,7 +126,7 @@ function UserProductDetailPage({
     },
   ];
 
-  return product ? (
+  return userProduct ? (
     <Grid
       container
       alignItems={'center'}
@@ -153,7 +153,8 @@ function UserProductDetailPage({
         party={party}
         user={partyUser}
         fetchPartyUser={fetchPartyUser}
-        product={product}
+        userProduct={userProduct}
+        product={selectedProduct}
         productRolesList={productRolesList}
         canEdit={canEdit}
       />
@@ -168,7 +169,7 @@ function UserProductDetailPage({
             Indietro
           </Button>
         </Grid>
-        {product.roles.length === 1 && !partyUser.isCurrentUser && canEdit && (
+        {userProduct.roles.length === 1 && !partyUser.isCurrentUser && canEdit && (
           <Grid item xs={2}>
             <Button
               disableRipple
