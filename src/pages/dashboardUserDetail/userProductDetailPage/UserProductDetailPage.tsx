@@ -130,7 +130,7 @@ function UserProductDetailPage({
     <Grid
       container
       alignItems={'center'}
-      px={0}
+      px={2}
       mt={10}
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
