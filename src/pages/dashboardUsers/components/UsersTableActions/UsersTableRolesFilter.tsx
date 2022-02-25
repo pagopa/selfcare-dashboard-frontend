@@ -31,6 +31,7 @@ type Props = {
   filterSelcRole: Array<UserRole>;
   filters: UsersTableFiltersConfig;
   onFiltersChange: (f: UsersTableFiltersConfig) => void;
+  disableFilters: boolean;
 };
 
 type ProductRolesGroupByTitle = { [title: string]: Array<ProductRole> };
@@ -58,6 +59,7 @@ export default function UsersTableRolesFilter({
   productRolesList,
   onFiltersChange,
   filters,
+  disableFilters,
 }: Props) {
   const productList = (
     productRoles: Array<ProductRole>
@@ -72,7 +74,6 @@ export default function UsersTableRolesFilter({
     ) as {
       [selcRole in UserRole]: ProductRolesGroupByTitle;
     };
-
   const selcRoleGroup = productList(productRolesList);
   const productFiltered = productList(productRolesSelected);
   const selcGroups = Object.keys(selcRoleGroup) as Array<UserRole>;
@@ -179,7 +180,11 @@ export default function UsersTableRolesFilter({
                 color="primary"
                 sx={{ transform: 'rotate(0deg)', cursor: 'pointer' }}
                 onClick={() => {
-                  setOpen(true);
+                  if (disableFilters) {
+                    setOpen(false);
+                  } else {
+                    setOpen(true);
+                  }
                 }}
               />
             )

@@ -25,6 +25,7 @@ export default function UsersTableFilters({
   filters,
   onFiltersChange,
   productsRolesMap,
+  disableFilters,
 }: UsersSearchFilterProps) {
   const productRolesList: Array<ProductRole> = Object.values(productsRolesMap).flatMap(
     (p) => p.list
@@ -33,6 +34,7 @@ export default function UsersTableFilters({
   return (
     <Grid container direction="row" alignItems={'center'} columnSpacing={2}>
       <UsersTableRolesFilter
+        disableFilters={disableFilters}
         productRolesSelected={filters.productRoles}
         productRolesList={productRolesList}
         filterSelcRole={filters.selcRole}
