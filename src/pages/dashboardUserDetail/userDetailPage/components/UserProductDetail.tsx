@@ -39,24 +39,22 @@ export default function UserProductDetail({
                 </Typography>
               </Box>
               <Box ml={2}>
-                {userProduct.roles.find((p) => p.status === 'SUSPENDED') &&
-                  showActionOnProduct &&
-                  partyUser.products.find((p) => p.roles.find((r) => r.status === 'SUSPENDED')) && (
-                    <Chip
-                      label="sospeso"
-                      variant="outlined"
-                      sx={{
-                        fontWeight: '600',
-                        fontSize: '14px',
-                        background: '#E0E0E0',
-                        borderRadius: '16px',
-                        width: '76px',
-                        height: '24px',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    />
-                  )}
+                {!userProduct.roles.find((p) => p.status !== 'SUSPENDED') && (
+                  <Chip
+                    label="sospeso"
+                    variant="outlined"
+                    sx={{
+                      fontWeight: '600',
+                      fontSize: '14px',
+                      background: '#E0E0E0',
+                      borderRadius: '16px',
+                      width: '76px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  />
+                )}
               </Box>
             </Grid>
           </Grid>
