@@ -25,11 +25,11 @@ const CustomInfoStyle = styled(Typography)({
 
 type Props = {
   party: Party;
-  products: Array<Product>;
+  activeProducts: Array<Product>;
 } & withProductsRolesMapProps &
   withUserDetailProps;
 
-function AddProductToUserPage({ party, products, productsRolesMap, partyUser }: Props) {
+function AddProductToUserPage({ party, activeProducts, productsRolesMap, partyUser }: Props) {
   const history = useHistory();
   const paths = [
     {
@@ -111,7 +111,7 @@ function AddProductToUserPage({ party, products, productsRolesMap, partyUser }: 
         <Grid item xs={12} mb={9} key={userProduct.id}>
           <AddUserForm
             party={party}
-            products={products.filter((p) => p.id !== userProduct.id)}
+            products={activeProducts.filter((p) => p.id !== userProduct.id)}
             productsRolesMap={productsRolesMap}
             initialFormData={
               {

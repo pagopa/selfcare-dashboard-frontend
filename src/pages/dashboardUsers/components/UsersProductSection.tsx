@@ -2,7 +2,7 @@ import { Grid, Typography } from '@mui/material';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useState } from 'react';
 import { Party } from '../../../model/Party';
-import { Product } from '../../../model/Product';
+import { Product, ProductsMap } from '../../../model/Product';
 import { ProductsRolesMap } from '../../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { ENV } from '../../../utils/env';
@@ -13,6 +13,7 @@ type Props = {
   hideProductWhenLoading: boolean;
   party: Party;
   product: Product;
+  productsMap: ProductsMap;
   onFetchStatusUpdate: (loading: boolean, noData: boolean) => void;
   filters: UsersTableFiltersConfig;
   productsRolesMap: ProductsRolesMap;
@@ -21,6 +22,7 @@ type Props = {
 export default function UsersProductSection({
   party,
   product,
+  productsMap,
   productsRolesMap,
   hideProductWhenLoading,
   onFetchStatusUpdate,
@@ -46,6 +48,7 @@ export default function UsersProductSection({
           initialPageSize={ENV.PARTY_USERS_PAGE_SIZE}
           party={party}
           product={product}
+          productsMap={productsMap}
           productRolesLists={productsRolesMap[product.id]}
           filterConfiguration={filters}
           onFetchStatusUpdate={(isFetching, count) => {

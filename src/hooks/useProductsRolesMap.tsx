@@ -1,4 +1,5 @@
 import useReduxCachedValue from '@pagopa/selfcare-common-frontend/hooks/useReduxCachedValue';
+import { useMemo } from 'react';
 import {
   ProductRolesLists,
   productRoles2ProductRolesList,
@@ -13,12 +14,14 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
 
+  const activeProducts = useMemo(() => products?.filter((p) => p.status === 'ACTIVE'), [products]);
+
   const fetchProductRolesNotYetCached = async (): Promise<ProductsRolesMap> => {
-    if (!products) {
+    if (!activeProducts) {
       return new Promise((resolve) => resolve(productsRolesMap));
     }
 
-    const promises: Array<Promise<[string, ProductRolesLists]>> = products
+    const promises: Array<Promise<[string, ProductRolesLists]>> = activeProducts
       .filter((p) => !productsRolesMap[p.id])
       .map((p) =>
         fetchProductRoles(p).then((roles) => [p.id, productRoles2ProductRolesList(roles)])
@@ -32,9 +35,11 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
     'PRODUCTS_ROLES',
     fetchProductRolesNotYetCached,
     (state: RootState) =>
-      !products ||
+      !activeProducts ||
       (state.parties.selectedProductsRolesMap &&
-        !products.find((p) => !(state.parties.selectedProductsRolesMap as ProductsRolesMap)[p.id]))
+        !activeProducts.find(
+          (p) => !(state.parties.selectedProductsRolesMap as ProductsRolesMap)[p.id]
+        ))
         ? state.parties.selectedProductsRolesMap
         : undefined,
     partiesActions.setPartySelectedProductsRolesMap

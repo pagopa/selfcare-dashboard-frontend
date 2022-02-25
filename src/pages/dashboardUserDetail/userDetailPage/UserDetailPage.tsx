@@ -17,7 +17,7 @@ import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants'
 import withProductsRolesMap, {
   withProductsRolesMapProps,
 } from '../../../decorators/withProductsRolesMap';
-import { Product } from '../../../model/Product';
+import { Product, ProductsMap } from '../../../model/Product';
 import UserSelcRole from './components/UserSelcRole';
 import UserProductSection from './components/UserProductSection';
 import { deletePartyUser } from './../../../services/usersService';
@@ -25,11 +25,18 @@ import { deletePartyUser } from './../../../services/usersService';
 type Props = withProductsRolesMapProps & {
   partyUser: PartyUser;
   fetchPartyUser: () => void;
-  products: Array<Product>;
+  activeProducts: Array<Product>;
   party: Party;
+  productsMap: ProductsMap;
 };
 
-function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products, party }: Props) {
+function UserDetailPage({
+  partyUser,
+  fetchPartyUser,
+  productsRolesMap,
+  activeProducts,
+  party,
+}: Props) {
   const history = useHistory();
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   const addError = useErrorDispatcher();
@@ -138,7 +145,7 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products,
           party={party}
           fetchPartyUser={fetchPartyUser}
           productsRolesMap={productsRolesMap}
-          products={products}
+          products={activeProducts}
         />
       </Grid>
       <Grid container item my={10} spacing={2}>
@@ -155,7 +162,7 @@ function UserDetailPage({ partyUser, fetchPartyUser, productsRolesMap, products,
         {partyUser.products.length === 1 &&
           partyUser.products[0].roles.length === 1 &&
           !partyUser.isCurrentUser &&
-          products.find((p) => p.id === partyUser.products[0].id)?.userRole === 'ADMIN' && (
+          activeProducts.find((p) => p.id === partyUser.products[0].id)?.userRole === 'ADMIN' && (
             <Grid item xs={2}>
               <Button
                 disableRipple

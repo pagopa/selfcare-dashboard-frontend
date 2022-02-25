@@ -3,11 +3,12 @@ import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResourc
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party, UserRole, UserStatus } from '../model/Party';
-import { Product } from '../model/Product';
+import { Product, ProductsMap } from '../model/Product';
 import {
   institutionUserResource2PartyUser,
   PartyUser,
   PartyUserOnCreation,
+  PartyUserOnEdit,
   PartyUserProduct,
   PartyUserProductRole,
   productUserResource2PartyUser,
@@ -18,6 +19,7 @@ import { DashboardApi } from '../api/DashboardApiClient';
 import {
   fetchPartyUsers as fetchPartyUsersMocked,
   savePartyUser as savePartyUserMocked,
+  updatePartyUser as updatePartyUserMocked,
   updatePartyUserStatus as updatePartyUserStatusMocked,
   deletePartyUser as deletePartyUserMocked,
   fetchProductRoles as fetchProductRolesMocked,
@@ -38,6 +40,7 @@ const toFakePagination = <T>(content: Array<T>): PageResource<T> => ({
 export const fetchPartyUsers = (
   pageRequest: PageRequest,
   party: Party,
+  productsMap: ProductsMap,
   currentUser: User,
   checkPermission: boolean,
   product?: Product,
@@ -64,7 +67,7 @@ export const fetchPartyUsers = (
       ).then(
         (
           r // TODO fixme when API will support pagination
-        ) => toFakePagination(r.map((u) => productUserResource2PartyUser(u, currentUser)))
+        ) => toFakePagination(r.map((u) => productUserResource2PartyUser(u, product, currentUser)))
       );
     } else {
       return DashboardApi.getPartyUsers(
@@ -74,7 +77,10 @@ export const fetchPartyUsers = (
       ).then(
         (
           r // TODO fixme when API will support pagination
-        ) => toFakePagination(r.map((u) => institutionUserResource2PartyUser(u, currentUser)))
+        ) =>
+          toFakePagination(
+            r.map((u) => institutionUserResource2PartyUser(u, productsMap, currentUser))
+          )
       );
     }
   }
@@ -83,7 +89,8 @@ export const fetchPartyUsers = (
 export const fetchPartyUser = (
   institutionId: string,
   userId: string,
-  currentUser: User
+  currentUser: User,
+  productsMap: ProductsMap
 ): Promise<PartyUser | null> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
@@ -91,7 +98,7 @@ export const fetchPartyUser = (
   } else {
     return DashboardApi.getPartyUser(institutionId, userId).then((u) => {
       if (u) {
-        return institutionUserResource2PartyUser(u, currentUser);
+        return institutionUserResource2PartyUser(u, productsMap, currentUser);
       } else {
         return null;
       }
@@ -109,6 +116,15 @@ export const savePartyUser = (
     return savePartyUserMocked(party, product, user);
   } else {
     return DashboardApi.savePartyUser(party.institutionId, product.id, user);
+  }
+};
+
+export const updatePartyUser = (party: Party, user: PartyUserOnEdit): Promise<any> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
+    return updatePartyUserMocked(party, user);
+  } else {
+    throw new Error('Todo');
   }
 };
 

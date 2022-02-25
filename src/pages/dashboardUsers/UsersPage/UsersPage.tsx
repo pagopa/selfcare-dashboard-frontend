@@ -5,7 +5,7 @@ import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsS
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { HashLink } from 'react-router-hash-link';
 import useScrollSpy from 'react-use-scrollspy';
-import { Product } from '../../../model/Product';
+import { Product, ProductsMap } from '../../../model/Product';
 import { Party } from '../../../model/Party';
 import UsersTableActions from '../components/UsersTableActions/UsersTableActions';
 import { DASHBOARD_ROUTES } from '../../../routes';
@@ -17,7 +17,8 @@ import withProductsRolesMap from '../../../decorators/withProductsRolesMap';
 
 interface Props {
   party: Party;
-  products: Array<Product>;
+  activeProducts: Array<Product>;
+  productsMap: ProductsMap;
   productsRolesMap: ProductsRolesMap;
 }
 
@@ -27,27 +28,29 @@ const emptyFilters: UsersTableFiltersConfig = {
   productRoles: [],
 };
 
-function UsersPage({ party, products, productsRolesMap }: Props) {
+function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Props) {
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [noData, setNoData] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const [productsFetchStatus, setProductsFetchStatus] = useState<
     Record<string, { loading: boolean; noData: boolean }>
-  >(() => Object.fromEntries(products.map((p) => [[p.id], { loading: true, noData: false }])));
+  >(() =>
+    Object.fromEntries(activeProducts.map((p) => [[p.id], { loading: true, noData: false }]))
+  );
 
   useEffect(() => {
     if (productsFetchStatus) {
       setLoading(!!Object.values(productsFetchStatus).find((p) => p.loading));
-      setNoData(!!Object.values(productsFetchStatus).find((p) => p.noData));
+      setNoData(!Object.values(productsFetchStatus).find((p) => !p.noData));
     }
   }, [productsFetchStatus]);
 
   useEffect(() => trackEvent('USER_LIST', { party_id: party.institutionId }), []);
 
   const prodSectionRefs = useMemo(
-    () => products.map((_) => React.createRef<HTMLDivElement>()),
-    [products]
+    () => activeProducts.map((_) => React.createRef<HTMLDivElement>()),
+    [activeProducts]
   );
 
   const activeSection = useScrollSpy({ sectionElementRefs: prodSectionRefs, offsetPx: -80 });
@@ -86,7 +89,7 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
         }}
       >
         <Tabs variant="scrollable" scrollButtons="auto" value={activeSection}>
-          {products.map((p, i) => (
+          {activeProducts.map((p, i) => (
             <Tab
               key={p.id}
               label={p.title}
@@ -98,41 +101,43 @@ function UsersPage({ party, products, productsRolesMap }: Props) {
           ))}
         </Tabs>
       </Grid>
-
-      <Grid container direction="row" alignItems={'center'} mt={5}>
-        <Grid item xs={12}>
-          <UsersTableActions
-            disableFilters={loading}
-            loading={loading}
-            party={party}
-            products={products}
-            productsRolesMap={productsRolesMap}
-            filters={filters}
-            onFiltersChange={setFilters}
-            addUserUrl={resolvePathVariables(
-              DASHBOARD_ROUTES.PARTY_USERS.subRoutes.ADD_PARTY_USER.path,
-              { institutionId: party.institutionId }
-            )}
-          />
-        </Grid>
-        {products.map((p, i) => (
-          <Grid key={p.id} item xs={12} ref={prodSectionRefs[i]}>
-            <UsersProductSection
-              hideProductWhenLoading={true}
+      <Grid item xs={12} sx={{ height: '100%' }}>
+        <Grid container direction="row" alignItems={'center'} mt={5}>
+          <Grid item xs={12}>
+            <UsersTableActions
+              disableFilters={loading}
+              loading={loading}
               party={party}
-              product={p}
-              filters={filters}
+              products={activeProducts}
               productsRolesMap={productsRolesMap}
-              onFetchStatusUpdate={(loading, noData) => {
-                setProductsFetchStatus((previousState) => ({
-                  ...previousState,
-                  [p.id]: { loading, noData },
-                }));
-              }}
+              filters={filters}
+              onFiltersChange={setFilters}
+              addUserUrl={resolvePathVariables(
+                DASHBOARD_ROUTES.PARTY_USERS.subRoutes.ADD_PARTY_USER.path,
+                { institutionId: party.institutionId }
+              )}
             />
           </Grid>
-        ))}
-        {!loading && noData && <UserTableNoData removeFilters={() => setFilters(emptyFilters)} />}
+          {activeProducts.map((p, i) => (
+            <Grid key={p.id} item xs={12} ref={prodSectionRefs[i]}>
+              <UsersProductSection
+                hideProductWhenLoading={true}
+                party={party}
+                product={p}
+                productsMap={productsMap}
+                filters={filters}
+                productsRolesMap={productsRolesMap}
+                onFetchStatusUpdate={(loading, noData) => {
+                  setProductsFetchStatus((previousState) => ({
+                    ...previousState,
+                    [p.id]: { loading, noData },
+                  }));
+                }}
+              />
+            </Grid>
+          ))}
+          {!loading && noData && <UserTableNoData removeFilters={() => setFilters(emptyFilters)} />}
+        </Grid>
       </Grid>
     </Grid>
   );

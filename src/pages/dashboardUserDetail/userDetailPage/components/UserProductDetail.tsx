@@ -1,5 +1,4 @@
-import { Grid, Typography, Chip } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Typography, Chip, Box } from '@mui/material';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
 import { PartyUser, PartyUserProduct } from '../../../../model/PartyUser';

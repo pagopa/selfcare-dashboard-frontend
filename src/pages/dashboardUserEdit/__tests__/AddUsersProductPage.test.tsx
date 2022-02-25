@@ -31,7 +31,7 @@ const renderApp = async (injectedStore?: ReturnType<typeof createStore>) => {
           <Route path="/:institutionId/:productId" exact={true}>
             <AddUsersProductPage party={mockedParties[0]} products={mockedPartyProducts} />
           </Route>
-          <Route path="/dashboard/1/prod-io/roles" exact={true}>
+          <Route path="/dashboard/1/prod-io/users" exact={true}>
             Test Completato
           </Route>
           <Route path="*"> {history.location.pathname}</Route>
@@ -77,7 +77,7 @@ test('test with fields that respect rules, so enabled button', async () => {
   await waitFor(() => expect(button).toBeEnabled());
   await waitFor(() => fireEvent.click(button));
 
-  await waitFor(() => expect(history.location.pathname).toBe('/dashboard/1/prod-io/roles'));
+  await waitFor(() => expect(history.location.pathname).toBe('/dashboard/1/prod-io/users'));
   await waitFor(() => screen.getByText('Test Completato'));
   const notifies = store.getState().appState.userNotifies;
   expect(notifies).toHaveLength(1);

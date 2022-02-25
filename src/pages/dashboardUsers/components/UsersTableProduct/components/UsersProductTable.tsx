@@ -1,5 +1,5 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
-import { Box, styled } from '@mui/system';
+import { Box, styled } from '@mui/material';
 import { DataGrid, GridColDef, GridSortDirection, GridSortModel } from '@mui/x-data-grid';
 import React from 'react';
 import { CustomPagination } from '@pagopa/selfcare-common-frontend';

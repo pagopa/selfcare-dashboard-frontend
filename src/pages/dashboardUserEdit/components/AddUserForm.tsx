@@ -10,9 +10,9 @@ import {
   Typography,
   Box,
   Checkbox,
+  styled,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import { styled } from '@mui/system';
 import { useHistory } from 'react-router';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
@@ -200,7 +200,6 @@ export default function AddUserForm({
     savePartyUser(party, userProduct as Product, values)
       .then(() => {
         unregisterUnloadEvent();
-        // TODO: USER_UPDATE
         trackEvent(initialFormData.taxCode ? 'USER_UPDATE' : 'USER_ADD', {
           party_id: party.institutionId,
           product: userProduct?.id,
@@ -489,7 +488,6 @@ export default function AddUserForm({
 
         <Grid item container spacing={3}>
           <Grid item xs={3} mt={8}>
-            <p> </p>
             <Button
               sx={{ width: '100%' }}
               color="primary"
@@ -500,7 +498,6 @@ export default function AddUserForm({
             </Button>
           </Grid>
           <Grid item xs={3} mt={8}>
-            <p>{formik.isValid} </p>
             <Button
               disabled={!formik.dirty || !formik.isValid}
               sx={{ width: '100%' }}

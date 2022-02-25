@@ -31,7 +31,11 @@ test('Test', async () => {
   await waitFor(() => screen.getByText('RENDERED'));
   await checkProductsRolesMapLength(0, store);
 
-  store.dispatch(partiesActions.setPartySelectedProducts(mockedPartyProducts.slice(0, 1)));
+  store.dispatch(
+    partiesActions.setPartySelectedProducts(
+      mockedPartyProducts.filter((p) => p.status === 'ACTIVE').slice(0, 1)
+    )
+  );
   renderApp(store);
   await waitFor(() => expect(screen.getAllByText('RENDERED').length).toBe(2));
   await checkProductsRolesMapLength(1, store);
@@ -39,9 +43,14 @@ test('Test', async () => {
   store.dispatch(partiesActions.setPartySelectedProducts(mockedPartyProducts));
   renderApp(store);
   await waitFor(() => expect(screen.getAllByText('RENDERED').length).toBe(2));
-  await checkProductsRolesMapLength(mockedPartyProducts.length, store);
+  await checkProductsRolesMapLength(
+    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
+    store
+  );
 
-  expect(fetchProductRolesSpy).toBeCalledTimes(mockedPartyProducts.length);
+  expect(fetchProductRolesSpy).toBeCalledTimes(
+    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length
+  );
 });
 
 const checkProductsRolesMapLength = async (

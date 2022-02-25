@@ -1,9 +1,9 @@
-import { Button, Grid, Typography } from '@mui/material';
-import { styled } from '@mui/system';
+import { Button, Grid, Typography, styled } from '@mui/material';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useHistory } from 'react-router-dom';
 import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
+import { DASHBOARD_ROUTES } from '../../../routes';
 
 const CustomLabelStyle = styled(Typography)({
   fontSize: '14px',
@@ -93,7 +93,7 @@ export default function UserDetail({ roleSection, userInfo, party }: Props) {
             sx={{ height: '40px', width: '120px' }}
             onClick={() =>
               history.push(
-                resolvePathVariables('TODO', {
+                resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.EDIT_USER.path, {
                   institutionId: party.institutionId,
                   userId: userInfo.id,
                 })

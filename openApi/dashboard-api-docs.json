@@ -941,7 +941,7 @@
       },
       "ProductInfoResource": {
         "title": "ProductInfoResource",
-        "required": ["id", "roleInfos", "title"],
+        "required": ["id", "roleInfos"],
         "type": "object",
         "properties": {
           "id": {
