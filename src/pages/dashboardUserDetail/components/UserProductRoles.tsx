@@ -7,6 +7,7 @@ import {
 } from '../../../model/ProductRole';
 import { Party } from '../../../model/Party';
 import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
+import { Product } from '../../../model/Product';
 import UserProductActions from './UserProductActions';
 import UserProductAddRoles from './UserProductAddRoles';
 

@@ -18,6 +18,8 @@ type Props = {
   product: Product;
   productRolesList: ProductRolesLists;
 };
+
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default function UserProductAddRoles({
   party,
   user,
@@ -92,14 +94,15 @@ export default function UserProductAddRoles({
           {' sul prodotto '}
           <strong> {`${product.title}:`} </strong>
 
-          {productRolesList.groupBySelcRole[userProduct.roles[0].selcRole].map((p) => (
-            <>
-              <Box key={p.selcRole}>
+          {productRolesList.groupBySelcRole[userProduct.roles[0].selcRole].map((p) => {
+            const isSelected = (selectedRoles?.indexOf(p.productRole) ?? -1) > -1;
+            const isDisabled = false; // Todo
+            return (
+              <Box key={p.productRole}>
                 <FormControlLabel
-                  key={p.selcRole}
                   sx={{ marginTop: 0 }}
-                  // checked={role.role.indexOf(p.selcRole) > -1}
-                  // disabled = {user.userRole}
+                  checked={isSelected}
+                  disabled={isDisabled}
                   value={p.selcRole}
                   control={<Checkbox />}
                   label={
@@ -117,11 +120,20 @@ export default function UserProductAddRoles({
                       </Typography>
                     </>
                   }
-                  onClick={() => setselectedRoles(p)}
+                  onClick={
+                    isDisabled
+                      ? undefined
+                      : () =>
+                          setSelectedRoles(
+                            isSelected
+                              ? selectedRoles?.filter((s) => s !== p.productRole)
+                              : selectedRoles?.concat([p.productRole])
+                          )
+                  }
                 />
               </Box>
-            </>
-          ))}
+            );
+          })}
         </>
       ),
       confirmLabel: 'Conferma',
