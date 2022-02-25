@@ -9,13 +9,15 @@ import {
 import { Party } from '../../../model/Party';
 import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
 import UserProductActions from './UserProductActions';
+import UserProductAddRoles from './UserProductAddRoles';
 
 type Props = {
   showActions: boolean;
   party: Party;
   user: PartyUser;
   fetchPartyUser: () => void;
-  product: PartyUserProduct;
+  userProduct: PartyUserProduct;
+  product: Product;
   productRolesList: ProductRolesLists;
   canEdit: boolean;
 };
@@ -34,13 +36,14 @@ export default function UserProductRoles({
   party,
   user,
   fetchPartyUser,
+  userProduct,
   product,
   productRolesList,
   canEdit,
 }: Props) {
   return (
     <Grid container item xs={12}>
-      {product.roles.map((p) => (
+      {userProduct.roles.map((p) => (
         <Grid container item key={p.relationshipId}>
           <Grid item xs={3}>
             <Grid container item>
@@ -70,6 +73,7 @@ export default function UserProductRoles({
                 )}
             </Grid>
           </Grid>
+
           <Grid item xs={9}>
             <Grid item container>
               <Grid item xs={5}>
@@ -97,7 +101,7 @@ export default function UserProductRoles({
                   user={user}
                   fetchPartyUser={fetchPartyUser}
                   role={p}
-                  product={product}
+                  product={userProduct}
                   productRolesList={productRolesList}
                   canEdit={canEdit}
                 />
@@ -106,6 +110,19 @@ export default function UserProductRoles({
           </Grid>
         </Grid>
       ))}
+      <Grid container>
+        <Grid item xs={3} />
+        <Grid item xs={9}>
+          <UserProductAddRoles
+            party={party}
+            user={user}
+            userProduct={userProduct}
+            product={product}
+            fetchPartyUser={fetchPartyUser}
+            productRolesList={productRolesList}
+          />
+        </Grid>
+      </Grid>
     </Grid>
   );
 }

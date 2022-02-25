@@ -272,8 +272,8 @@ export const mockedUsers: Array<PartyUser> = [
     status: 'ACTIVE',
     products: [
       {
-        title: 'App IO',
-        id: 'prod-io',
+        title: 'PDND',
+        id: 'prod-interop',
         roles: [
           {
             relationshipId: 'rel10',
@@ -300,17 +300,17 @@ export const mockedUsers: Array<PartyUser> = [
     surname: 'Bianchi11',
     email: 'giuseppe.b@comune.milano.it',
     userRole: 'LIMITED',
-    status: 'SUSPENDED',
+    status: 'ACTIVE',
     products: [
       {
-        title: 'App IO',
-        id: 'prod-io',
+        title: 'PDND',
+        id: 'prod-interop',
         roles: [
           {
             relationshipId: 'rel11',
             role: 'referente-tecnico',
             selcRole: 'LIMITED',
-            status: 'SUSPENDED',
+            status: 'ACTIVE',
           },
         ],
       },
