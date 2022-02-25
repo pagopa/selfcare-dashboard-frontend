@@ -40,7 +40,8 @@ export default function UserProductDetail({
               </Box>
               <Box ml={2}>
                 {userProduct.roles.find((p) => p.status === 'SUSPENDED') &&
-                  !partyUser.products.find((p) => p.roles.find((r) => r.status === 'ACTIVE')) && (
+                  showActionOnProduct &&
+                  partyUser.products.find((p) => p.roles.find((r) => r.status === 'SUSPENDED')) && (
                     <Chip
                       label="sospeso"
                       variant="outlined"
