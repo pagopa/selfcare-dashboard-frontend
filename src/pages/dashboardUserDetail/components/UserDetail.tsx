@@ -1,9 +1,6 @@
 import { Button, Grid, Typography, styled } from '@mui/material';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useHistory } from 'react-router-dom';
 import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
-import { DASHBOARD_ROUTES } from '../../../routes';
 
 const CustomLabelStyle = styled(Typography)({
   fontSize: '14px',
@@ -18,10 +15,10 @@ type Props = {
   party: Party;
   roleSection: React.ReactNode;
   userInfo: PartyUser;
+  goEdit: () => void;
 };
 
-export default function UserDetail({ roleSection, userInfo, party }: Props) {
-  const history = useHistory();
+export default function UserDetail({ roleSection, userInfo, party, goEdit }: Props) {
   return (
     <>
       <Grid container>
@@ -91,14 +88,7 @@ export default function UserDetail({ roleSection, userInfo, party }: Props) {
             disabled={userInfo.status === 'SUSPENDED'}
             variant="contained"
             sx={{ height: '40px', width: '120px' }}
-            onClick={() =>
-              history.push(
-                resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.EDIT_USER.path, {
-                  institutionId: party.institutionId,
-                  userId: userInfo.id,
-                })
-              )
-            }
+            onClick={goEdit}
           >
             Modifica
           </Button>
