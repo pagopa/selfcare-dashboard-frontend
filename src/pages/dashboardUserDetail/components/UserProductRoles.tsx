@@ -54,7 +54,7 @@ export default function UserProductRoles({
               </Box>
               {p.status === 'SUSPENDED' &&
                 showActions &&
-                user.products.find((p) => p.roles.find((r) => r.status === 'ACTIVE')) && (
+                userProduct.roles.find((r) => r.status !== 'SUSPENDED') && (
                   <Box ml={2}>
                     <Chip
                       label="sospeso"
