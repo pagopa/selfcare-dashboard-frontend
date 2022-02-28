@@ -116,7 +116,7 @@ function UserDetailPage({
       onClick: goBack,
     },
     {
-      description: 'Dettaglio Referente',
+      description: partyUser.name + ' ' + partyUser.surname,
     },
   ];
   const isProductDetailPage = false;
