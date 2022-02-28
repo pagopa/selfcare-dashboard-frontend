@@ -109,6 +109,18 @@ export default function AddUserForm({
   useEffect(() => {
     if (validTaxcode && validTaxcode !== initialFormData.taxCode) {
       fetchTaxCode(validTaxcode);
+    } else if (!validTaxcode && formik.values.certification === true) {
+      void formik.setValues(
+        {
+          ...formik.values,
+          name: formik.initialValues.name,
+          surname: formik.initialValues.surname,
+          email: formik.initialValues.email,
+          confirmEmail: '',
+          certification: formik.initialValues.certification,
+        },
+        true
+      );
     }
   }, [validTaxcode]);
 
@@ -145,7 +157,7 @@ export default function AddUserForm({
             name: userRegistry?.name ?? formik.values.name,
             surname: userRegistry?.surname ?? formik.values.surname,
             email: userRegistry?.email ?? formik.values.email,
-            confirmEmail: userRegistry?.email ?? formik.values.email,
+            confirmEmail: '',
             certification: userRegistry?.certification ?? formik.values.certification,
           },
           true
@@ -378,7 +390,7 @@ export default function AddUserForm({
                   <CustomTextField
                     {...baseTextFieldProps(
                       'email',
-                      'Email',
+                      'Email istituzionale',
                       'Inserisci l’indirizzo email istituzionale del referente'
                     )}
                     disabled={!validTaxcode}
