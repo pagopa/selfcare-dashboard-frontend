@@ -120,6 +120,7 @@ function UserDetailPage({
       description: partyUser.name + ' ' + partyUser.surname,
     },
   ];
+  const isProductDetailPage = false;
   return !party ? (
     <></>
   ) : (
@@ -152,6 +153,7 @@ function UserDetailPage({
       </Grid>
       <Grid container item mb={9}>
         <UserProductSection
+          isProductDetailPage={isProductDetailPage}
           partyUser={partyUser}
           party={party}
           fetchPartyUser={fetchPartyUser}

@@ -20,6 +20,7 @@ type Props = {
   product: Product;
   productRolesList: ProductRolesLists;
   canEdit: boolean;
+  isProductDetailPage: boolean;
 };
 
 const CustomLabelStyle = styled(Typography)({
@@ -40,6 +41,7 @@ export default function UserProductRoles({
   product,
   productRolesList,
   canEdit,
+  isProductDetailPage,
 }: Props) {
   return (
     <Grid container item xs={12}>
@@ -53,8 +55,8 @@ export default function UserProductRoles({
                 </CustomLabelStyle>
               </Box>
               {p.status === 'SUSPENDED' &&
-                showActions &&
-                userProduct.roles.find((r) => r.status !== 'SUSPENDED') && (
+                (isProductDetailPage ||
+                  userProduct.roles.find((r) => r.status !== 'SUSPENDED')) && (
                   <Box ml={2}>
                     <Chip
                       label="sospeso"
@@ -110,19 +112,21 @@ export default function UserProductRoles({
           </Grid>
         </Grid>
       ))}
-      <Grid container>
-        <Grid item xs={3} />
-        <Grid item xs={9}>
-          <UserProductAddRoles
-            party={party}
-            user={user}
-            userProduct={userProduct}
-            product={product}
-            fetchPartyUser={fetchPartyUser}
-            productRolesList={productRolesList}
-          />
+      {canEdit && (
+        <Grid container>
+          <Grid item xs={3} />
+          <Grid item xs={9}>
+            <UserProductAddRoles
+              party={party}
+              user={user}
+              userProduct={userProduct}
+              product={product}
+              fetchPartyUser={fetchPartyUser}
+              productRolesList={productRolesList}
+            />
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </Grid>
   );
 }

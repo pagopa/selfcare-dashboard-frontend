@@ -1,4 +1,5 @@
 import { Box, Checkbox, FormControlLabel, Link, Typography } from '@mui/material';
+import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionModal';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
@@ -32,13 +33,15 @@ export default function UserProductAddRoles({
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
 
-  const [selectedRoles, setSelectedRoles] = useState<Array<string>>();
+  const [selectedRoles, setSelectedRoles] = useState<Array<string>>([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setSelectedRoles(userProduct.roles.map((r) => r.role));
   }, [userProduct.roles]);
 
   const onAddMultiRole = () => {
+    setOpen(false);
     setLoading(true);
     savePartyUser(party, product, {
       ...user,
@@ -60,7 +63,6 @@ export default function UserProductAddRoles({
               {` ${newRolesTitles?.join(',')} `}
               {' per il referente '}
               <strong>{`${user.name} ${user.surname}`}</strong>
-              {'.'}
             </>
           ),
         });
@@ -80,76 +82,83 @@ export default function UserProductAddRoles({
       .finally(() => setLoading(false));
   };
 
-  const handleAddMultiRoles = () => {
-    addNotify({
-      component: 'SessionModal',
-      id: 'ADD_MULTI_ROLES',
-      title: 'Assegna ruolo',
-      message: (
-        <>
-          {'Assegna a '}
-          <strong> {`${user.name} ${user.surname}`} </strong>
-          {'un altro ruolo '}
-          <strong> {`${user.userRole}`} </strong>
-          {' sul prodotto '}
-          <strong> {`${product.title}:`} </strong>
-
-          {productRolesList.groupBySelcRole[userProduct.roles[0].selcRole].map((p) => {
-            const isSelected = (selectedRoles?.indexOf(p.productRole) ?? -1) > -1;
-            const isDisabled = false; // Todo
-            return (
-              <Box key={p.productRole}>
-                <FormControlLabel
-                  sx={{ marginTop: 0 }}
-                  checked={isSelected}
-                  disabled={isDisabled}
-                  value={p.selcRole}
-                  control={<Checkbox />}
-                  label={
-                    <>
-                      <Typography> {p.title} </Typography>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{
-                          fontWeight: 400,
-                          fontSize: '12px',
-                          color: '#5C6F82',
-                        }}
-                      >
-                        {p.description}
-                      </Typography>
-                    </>
-                  }
-                  onClick={
-                    isDisabled
-                      ? undefined
-                      : () =>
-                          setSelectedRoles(
-                            isSelected
-                              ? selectedRoles?.filter((s) => s !== p.productRole)
-                              : selectedRoles?.concat([p.productRole])
-                          )
-                  }
-                />
-              </Box>
-            );
-          })}
-        </>
-      ),
-      confirmLabel: 'Conferma',
-      closeLabel: 'Annulla',
-      onConfirm: onAddMultiRole,
-    });
-  };
-
   const selcRoleProductRoleList = productRolesList.groupBySelcRole[userProduct.roles[0].selcRole];
   return userProduct.roles.length < selcRoleProductRoleList.length &&
     selcRoleProductRoleList[0].multiroleAllowed ? (
-    <Link onClick={handleAddMultiRoles} component="button">
-      <Typography variant="h3" sx={{ fontSize: '16px', color: '#0073E6' }}>
-        + Assegna ruolo
-      </Typography>
-    </Link>
+    <>
+      <Link
+        onClick={() => {
+          setOpen(true);
+        }}
+        component="button"
+      >
+        <Typography variant="h3" sx={{ fontSize: '16px', color: '#0073E6' }}>
+          + Assegna ruolo
+        </Typography>
+      </Link>
+      <SessionModal
+        open={open}
+        title="Assegna ruolo"
+        message={
+          <>
+            {'Assegna a '}
+            <strong> {`${user.name} ${user.surname}`} </strong>
+            {'un altro ruolo '}
+            <strong> {`${user.userRole}`} </strong>
+            {' sul prodotto '}
+            <strong> {`${product.title}:`} </strong>
+
+            {Object.values(productRolesList.groupBySelcRole[userProduct.roles[0].selcRole]).map(
+              (p) => {
+                const isSelected = (selectedRoles?.indexOf(p.productRole) ?? -1) > -1;
+                const isDisabled = (userProduct.roles[0].role?.indexOf(p.productRole) ?? -1) > -1;
+                return (
+                  <Box key={p.productRole}>
+                    <FormControlLabel
+                      sx={{ marginTop: 2, marginBottom: 2 }}
+                      checked={isSelected}
+                      disabled={isDisabled}
+                      value={p.productRole}
+                      control={<Checkbox />}
+                      label={
+                        <>
+                          <Typography> {p.title} </Typography>
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '12px',
+                              color: '#5C6F82',
+                            }}
+                          >
+                            {p.description}
+                          </Typography>
+                        </>
+                      }
+                      onChange={
+                        isDisabled
+                          ? undefined
+                          : () =>
+                              setSelectedRoles(
+                                isSelected
+                                  ? selectedRoles?.filter((s) => s !== p.productRole)
+                                  : selectedRoles?.concat([p.productRole])
+                              )
+                      }
+                    />
+                  </Box>
+                );
+              }
+            )}
+          </>
+        }
+        onConfirm={onAddMultiRole}
+        onConfirmEnabled={selectedRoles.length > userProduct.roles.length}
+        handleClose={() => setOpen(false)}
+        onConfirmLabel="Conferma"
+        onCloseLabel="Annulla"
+      />
+    </>
   ) : (
     <> </>
   );
