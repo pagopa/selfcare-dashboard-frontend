@@ -49,6 +49,14 @@ function UserDetailPage({
     }
   }, [party]);
 
+  const goEdit = () =>
+    history.push(
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.EDIT_USER.path, {
+        institutionId: party.institutionId,
+        userId: partyUser.id,
+      })
+    );
+
   const goBack = () =>
     history.push(
       resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
@@ -111,6 +119,7 @@ function UserDetailPage({
       description: 'Dettaglio Referente',
     },
   ];
+  const isProductDetailPage = false;
   return !party ? (
     <></>
   ) : (
@@ -133,6 +142,7 @@ function UserDetailPage({
             party={party}
             userInfo={partyUser}
             roleSection={<UserSelcRole selcRole={partyUser.userRole} />}
+            goEdit={goEdit}
           />
         </Grid>
       </Grid>
@@ -141,6 +151,7 @@ function UserDetailPage({
       </Grid>
       <Grid container item mb={9}>
         <UserProductSection
+          isProductDetailPage={isProductDetailPage}
           partyUser={partyUser}
           party={party}
           fetchPartyUser={fetchPartyUser}

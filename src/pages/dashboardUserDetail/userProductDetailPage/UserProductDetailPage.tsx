@@ -108,6 +108,18 @@ function UserProductDetailPage({
     });
   };
 
+  const goEdit = () =>
+    history.push(
+      resolvePathVariables(
+        DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.EDIT_PARTY_PRODUCT_USER.path,
+        {
+          institutionId: party.institutionId,
+          userId: partyUser.id,
+          productId: selectedProduct.id,
+        }
+      )
+    );
+
   const goBack = () =>
     history.push(
       resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.MAIN.path, {
@@ -125,12 +137,13 @@ function UserProductDetailPage({
       description: 'Dettaglio Referente',
     },
   ];
+  const isProductDetailPage = true;
 
   return userProduct ? (
     <Grid
       container
       alignItems={'center'}
-      px={0}
+      px={2}
       mt={10}
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
@@ -142,7 +155,7 @@ function UserProductDetailPage({
       </Grid>
       <Grid container item>
         <Grid item xs={12}>
-          <UserDetail party={party} userInfo={partyUser} roleSection={<></>} />
+          <UserDetail party={party} userInfo={partyUser} roleSection={<></>} goEdit={goEdit} />
         </Grid>
       </Grid>
       <Grid item xs={11} my={5}>
@@ -157,6 +170,7 @@ function UserProductDetailPage({
         product={selectedProduct}
         productRolesList={productRolesList}
         canEdit={canEdit}
+        isProductDetailPage={isProductDetailPage}
       />
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>

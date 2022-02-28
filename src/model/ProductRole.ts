@@ -39,7 +39,7 @@ export const productRoles2ProductRolesList = (roles: Array<ProductRole>): Produc
   groupByProductRole: productRolesGroupByProductRole(roles),
 });
 
-const productRolesGroupBySelcRole = (
+export const productRolesGroupBySelcRole = (
   roles: Array<ProductRole>
 ): { [selcRole in UserRole]: Array<ProductRole> } =>
   roles.reduce((acc, r) => {
@@ -66,12 +66,18 @@ const productRolesGroupByProductRole = (
     return acc;
   }, {});
 
-export const transcodeProductRole2Title = (productRole: string, productRolesList: ProductRolesLists) =>
+export const transcodeProductRole2Title = (
+  productRole: string,
+  productRolesList: ProductRolesLists
+) =>
   productRolesList.groupByProductRole[productRole]
     ? productRolesList.groupByProductRole[productRole].title
     : productRole;
 
-export const transcodeProductRole2Description = (productRole: string, productRolesList: ProductRolesLists) =>
+export const transcodeProductRole2Description = (
+  productRole: string,
+  productRolesList: ProductRolesLists
+) =>
   productRolesList.groupByProductRole[productRole]
     ? productRolesList.groupByProductRole[productRole].description
     : productRole;
