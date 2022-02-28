@@ -494,7 +494,7 @@ export default function AddUserForm({
               sx={{ width: '100%' }}
               color="primary"
               variant="outlined"
-              onClick={() => onExit(goBack ? goBack : goBackAdd)}
+              onClick={() => onExit(goBackInner)}
             >
               Indietro
             </Button>
