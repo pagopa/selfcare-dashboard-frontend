@@ -124,18 +124,20 @@ export default function AddUserForm({
     setUserProduct(selectedProduct);
   }, [selectedProduct]);
 
-  const goBackInner= goBack ?? () =>
-    history.push(
-      resolvePathVariables(
-        selectedProduct
-          ? DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path
-          : DASHBOARD_ROUTES.PARTY_USERS.path,
-        {
-          institutionId: party.institutionId,
-          productId: userProduct?.id ?? '',
-        }
-      )
-    );
+  const goBackInner =
+    goBack ??
+    (() =>
+      history.push(
+        resolvePathVariables(
+          selectedProduct
+            ? DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path
+            : DASHBOARD_ROUTES.PARTY_USERS.path,
+          {
+            institutionId: party.institutionId,
+            productId: userProduct?.id ?? '',
+          }
+        )
+      ));
 
   const fetchTaxCode = (taxCode: string) => {
     setLoadingFetchTaxCode(true);
