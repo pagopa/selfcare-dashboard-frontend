@@ -36,6 +36,7 @@ function UserDetailPage({
   productsRolesMap,
   activeProducts,
   party,
+  productsMap,
 }: Props) {
   const history = useHistory();
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
@@ -143,6 +144,7 @@ function UserDetailPage({
             userInfo={partyUser}
             roleSection={<UserSelcRole selcRole={partyUser.userRole} />}
             goEdit={goEdit}
+            productsMap={productsMap}
           />
         </Grid>
       </Grid>

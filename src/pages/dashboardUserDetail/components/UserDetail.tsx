@@ -1,6 +1,7 @@
 import { Button, Grid, Typography, styled } from '@mui/material';
 import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
+import { ProductsMap } from '../../../model/Product';
 
 const CustomLabelStyle = styled(Typography)({
   fontSize: '14px',
@@ -16,9 +17,10 @@ type Props = {
   roleSection: React.ReactNode;
   userInfo: PartyUser;
   goEdit: () => void;
+  productsMap: ProductsMap;
 };
 
-export default function UserDetail({ roleSection, userInfo, party, goEdit }: Props) {
+export default function UserDetail({ roleSection, userInfo, party, goEdit, productsMap }: Props) {
   return (
     <>
       <Grid container>
@@ -82,17 +84,19 @@ export default function UserDetail({ roleSection, userInfo, party, goEdit }: Pro
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <Button
-            disableRipple
-            disabled={userInfo.status === 'SUSPENDED'}
-            variant="contained"
-            sx={{ height: '40px', width: '120px' }}
-            onClick={goEdit}
-          >
-            Modifica
-          </Button>
-        </Grid>
+        {userInfo.products.find((p) => productsMap[p.id]?.userRole === 'ADMIN') && (
+          <Grid item xs={2}>
+            <Button
+              disableRipple
+              disabled={userInfo.status === 'SUSPENDED'}
+              variant="contained"
+              sx={{ height: '40px', width: '120px' }}
+              onClick={goEdit}
+            >
+              Modifica
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </>
   );
