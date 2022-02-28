@@ -17,11 +17,13 @@ import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants'
 import withSelectedPartyProductAndRoles, {
   withSelectedPartyProductAndRolesProps,
 } from '../../../decorators/withSelectedPartyProductAndRoles';
+import { ProductsMap } from '../../../model/Product';
 import { deletePartyUser } from './../../../services/usersService';
 
 type Props = withSelectedPartyProductAndRolesProps & {
   partyUser: PartyUser;
   fetchPartyUser: () => void;
+  productsMap: ProductsMap;
 };
 
 function UserProductDetailPage({
@@ -30,6 +32,7 @@ function UserProductDetailPage({
   fetchPartyUser,
   productRolesList,
   party,
+  productsMap,
 }: Props) {
   const history = useHistory();
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
@@ -154,7 +157,13 @@ function UserProductDetailPage({
       </Grid>
       <Grid container item>
         <Grid item xs={12}>
-          <UserDetail party={party} userInfo={partyUser} roleSection={<></>} goEdit={goEdit} />
+          <UserDetail
+            productsMap={productsMap}
+            party={party}
+            userInfo={partyUser}
+            roleSection={<></>}
+            goEdit={goEdit}
+          />
         </Grid>
       </Grid>
       <Grid item xs={11} my={5}>
