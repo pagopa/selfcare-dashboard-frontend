@@ -87,7 +87,13 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
         <CustomIconButton onClick={handleClick} sx={{ height: '100%' }} disableRipple={true}>
           {open ? <ExpandLess sx={{ color: 'white' }} /> : <ExpandMore sx={{ color: 'white' }} />}
         </CustomIconButton>
-        <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
+        <Popper
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          placement="bottom-end"
+          style={{ zIndex: 200 }}
+        >
           <ClickAwayListener onClickAway={handleClose}>
             <Paper
               sx={{
