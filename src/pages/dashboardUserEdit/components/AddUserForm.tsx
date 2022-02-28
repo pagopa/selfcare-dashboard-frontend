@@ -220,7 +220,7 @@ export default function AddUserForm({
           ),
         });
 
-        goBackAdd();
+        goBackInner();
       })
       .catch((reason) =>
         addError({
