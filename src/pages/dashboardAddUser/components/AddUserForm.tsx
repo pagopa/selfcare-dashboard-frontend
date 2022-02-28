@@ -13,22 +13,25 @@ import {
 import { useFormik } from 'formik';
 import { styled } from '@mui/system';
 import { useHistory } from 'react-router';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../../../model/Party';
 import { fetchProductRoles, savePartyUser } from '../../../services/usersService';
-import useLoading from '../../../hooks/useLoading';
-import { AppError, appStateActions } from '../../../redux/slices/appStateSlice';
-import { useAppDispatch } from '../../../redux/hooks';
 import {
   LOADING_TASK_SAVE_PARTY_USER,
   LOADING_TASK_FETCH_PRODUCT_ROLES,
-  STORAGE_KEY_NOTIFY_MESSAGE,
 } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { PartyUserOnCreation } from '../../../model/PartyUser';
 import { ProductRole } from '../../../model/ProductRole';
-import { storageWrite } from '../../../utils/storage-utils';
-import { DASHBOARD_ROUTES, resolvePathVariables } from '../../../routes';
+import { DASHBOARD_ROUTES } from '../../../routes';
 const CustomTextField = styled(TextField)({
+  '.MuiInputLabel-asterisk': {
+    display: 'none',
+  },
   '.MuiInput-root': {
     '&:after': {
       borderBottom: '2px solid #5C6F82',
@@ -70,10 +73,10 @@ type Props = {
 };
 
 export default function AddUserForm({ party, selectedProduct }: Props) {
-  const dispatch = useAppDispatch();
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchRoles = useLoading(LOADING_TASK_FETCH_PRODUCT_ROLES);
-  const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+  const addError = useErrorDispatcher();
+  const addNotify = useUserNotify();
   const history = useHistory();
   const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
 
@@ -108,6 +111,11 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
           : !emailRegexp.test(values.email)
           ? 'L’indirizzo email non è valido'
           : undefined,
+        confirmEmail: !values.confirmEmail
+          ? requiredError
+          : values.confirmEmail !== values.email
+          ? 'Gli indirizzi email non corrispondono'
+          : undefined,
         productRole: !values.productRole ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
@@ -118,6 +126,7 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       surname: '',
       taxCode: '',
       email: '',
+      confirmEmail: '',
       productRole: '',
     },
     validate,
@@ -125,8 +134,20 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
       setLoadingSaveUser(true);
       savePartyUser(party, selectedProduct, values as PartyUserOnCreation)
         .then(() => {
-          const notifyMessage = `Hai aggiunto correttamente ${values.name} ${values.surname}.`;
-          storageWrite(STORAGE_KEY_NOTIFY_MESSAGE, notifyMessage, 'string');
+          // TODO: USER_UPDATE 
+          trackEvent('USER_ADD', { party_id: party.institutionId , product: selectedProduct.id, product_role: values.productRole });
+          addNotify({
+            component: 'Toast',
+            id: 'SAVE_PARTY_USER',
+            title: 'REFERENTE AGGIUNTO',
+            message: (
+              <>
+                {'Hai aggiunto correttamente '}
+                <strong>{`${values.name} ${values.surname}`}</strong>
+                {'.'}
+              </>
+            ),
+          });
           history.push(
             resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
               institutionId: party.institutionId,
@@ -182,60 +203,78 @@ export default function AddUserForm({ party, selectedProduct }: Props) {
   return (
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-            <CustomTextField
-              {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
-            />
+        <Grid container direction="column">
+          <Grid item container spacing={3}>
+            <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps(
+                  'taxCode',
+                  'Codice Fiscale',
+                  'Inserisci il Codice Fiscale del referente'
+                )}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-            <CustomTextField
-              {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
-            />
+          <Grid item container spacing={3}>
+            <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps('name', 'Nome', 'Inserisci il nome del referente')}
+              />
+            </Grid>
+            <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps('surname', 'Cognome', 'Inserisci il cognome del referente')}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
-            <CustomTextField
-              {...baseTextFieldProps(
-                'taxCode',
-                'Codice Fiscale',
-                'Inserisci il Codice Fiscale del referente'
-              )}
-            />
+          <Grid item container spacing={3}>
+            <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps(
+                  'email',
+                  'Email',
+                  'Inserisci l’indirizzo email istituzionale del referente'
+                )}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
-            <CustomTextField
-              {...baseTextFieldProps(
-                'email',
-                'Email',
-                'Inserisci l’indirizzo email istituzionale del referente'
-              )}
-            />
+          <Grid item container spacing={3}>
+            <Grid item xs={8} mb={4} sx={{ height: '75px' }}>
+              <CustomTextField
+                {...baseTextFieldProps(
+                  'confirmEmail',
+                  'Conferma email',
+                  'Conferma l’indirizzo email istituzionale del referente'
+                )}
+              />
+            </Grid>
           </Grid>
+          <Grid item container spacing={3}>
+            <Grid item xs={8} mb={3}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+                Ruolo
+              </Typography>
 
-          <Grid item xs={8} mb={3}>
-            <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-              Ruolo *
-            </Typography>
-
-            <RadioGroup
-              aria-label="user"
-              name="productRole"
-              value={formik.values.productRole}
-              onChange={formik.handleChange}
-            >
-              {productRoles?.map((p, index) => (
-                <Box key={p.productRole}>
-                  <CustomFormControlLabel
-                    value={p.productRole}
-                    control={<Radio />}
-                    label={p.productRole}
-                  />
-                  {index !== productRoles.length - 1 && (
-                    <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
-                  )}
-                </Box>
-              ))}
-            </RadioGroup>
+              <RadioGroup
+                aria-label="user"
+                name="productRole"
+                value={formik.values.productRole}
+                onChange={formik.handleChange}
+              >
+                {productRoles?.map((p, index) => (
+                  <Box key={p.productRole}>
+                    <CustomFormControlLabel
+                      value={p.productRole}
+                      control={<Radio />}
+                      label={p.productRole}
+                    />
+                    {index !== productRoles.length - 1 && (
+                      <Divider sx={{ borderColor: '#CFDCE6', my: '8px' }} />
+                    )}
+                  </Box>
+                ))}
+              </RadioGroup>
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={3} mt={12}>

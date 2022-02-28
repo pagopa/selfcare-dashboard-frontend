@@ -1,4 +1,4 @@
-import useLoading from '../hooks/useLoading';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';

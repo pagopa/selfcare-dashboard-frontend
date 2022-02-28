@@ -14,6 +14,8 @@ type Props = {
   image: string | undefined;
   chip: string;
   action?: React.Dispatch<React.MouseEvent<HTMLDivElement, MouseEvent>>;
+  showAvatar?: boolean;
+  pxTitleSubTitle?:string;
 };
 export default function PartyItemContainer({
   isDisabled,
@@ -25,10 +27,13 @@ export default function PartyItemContainer({
   image,
   chip,
   action,
+  showAvatar,
+  pxTitleSubTitle,
 }: Props) {
   return (
     <Grid
       container
+      my={1}
       direction={'row'}
       role="PartyItemContainer"
       data-testid={`PartyItemContainer: ${title}`}
@@ -37,6 +42,7 @@ export default function PartyItemContainer({
       <Grid item xs={isDisabled ? 8 : 12}>
         <Box>
           <PartyItem
+            pxTitleSubTitle={pxTitleSubTitle}
             bgColor="transparent"
             borderList={borderList}
             disabled={isDisabled}
@@ -48,6 +54,7 @@ export default function PartyItemContainer({
             subTitleSize="14px"
             image={image}
             action={action}
+            showAvatar={showAvatar}
           />
         </Box>
       </Grid>

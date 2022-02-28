@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
+import { appStateReducer } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
+import { userReducer } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
-import { appStateReducer } from './slices/appStateSlice';
 import { partiesReducer } from './slices/partiesSlice';
-import { userReducer } from './slices/userSlice';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined];
 
