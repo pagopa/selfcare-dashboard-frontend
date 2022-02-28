@@ -15,6 +15,7 @@ type Props = {
   fetchPartyUser: () => void;
   productsRolesMap: ProductsRolesMap;
   products: Array<Product>;
+  isProductDetailPage: boolean;
 };
 export default function UserProductSection({
   partyUser,
@@ -22,6 +23,7 @@ export default function UserProductSection({
   fetchPartyUser,
   productsRolesMap,
   products,
+  isProductDetailPage,
 }: Props) {
   const history = useHistory();
   return (
@@ -75,6 +77,7 @@ export default function UserProductSection({
               productRolesList={productsRolesMap[userProduct.id]}
               canEdit={product?.userRole === 'ADMIN'}
               product={product}
+              isProductDetailPage={isProductDetailPage}
             />
             {index !== partyUser.products.length - 1 && (
               <Grid item xs={11} my={4}>

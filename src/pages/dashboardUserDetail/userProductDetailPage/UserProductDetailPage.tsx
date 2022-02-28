@@ -137,6 +137,7 @@ function UserProductDetailPage({
       description: 'Dettaglio Referente',
     },
   ];
+  const isProductDetailPage = true;
 
   return userProduct ? (
     <Grid
@@ -169,6 +170,7 @@ function UserProductDetailPage({
         product={selectedProduct}
         productRolesList={productRolesList}
         canEdit={canEdit}
+        isProductDetailPage={isProductDetailPage}
       />
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
