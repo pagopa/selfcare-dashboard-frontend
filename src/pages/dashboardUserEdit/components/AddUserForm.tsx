@@ -124,7 +124,7 @@ export default function AddUserForm({
     setUserProduct(selectedProduct);
   }, [selectedProduct]);
 
-  const goBackAdd = () =>
+  const goBackInner= goBack ?? () =>
     history.push(
       resolvePathVariables(
         selectedProduct
