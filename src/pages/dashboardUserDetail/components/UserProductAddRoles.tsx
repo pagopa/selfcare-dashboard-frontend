@@ -1,4 +1,5 @@
 import { Box, Checkbox, FormControlLabel, Link, Typography } from '@mui/material';
+import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionModal';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
@@ -33,6 +34,7 @@ export default function UserProductAddRoles({
   const addNotify = useUserNotify();
 
   const [selectedRoles, setSelectedRoles] = useState<Array<string>>();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setSelectedRoles(userProduct.roles.map((r) => r.role));
@@ -41,7 +43,7 @@ export default function UserProductAddRoles({
   const addUserRole = (p: ProductRole) => {
     // eslint-disable-next-line functional/no-let
     let nextProductRoles;
-    if (!p.multiroleAllowed && userProduct.roles.length > 0) {
+    if (p.multiroleAllowed && userProduct.roles.length > 0) {
       if (productRolesList?.groupByProductRole[userProduct.roles[0].role].selcRole !== p.selcRole) {
         nextProductRoles = [p.productRole];
       } else {
@@ -99,12 +101,11 @@ export default function UserProductAddRoles({
       .finally(() => setLoading(false));
   };
 
-  const handleAddMultiRoles = () => {
-    addNotify({
-      component: 'SessionModal',
-      id: 'ADD_MULTI_ROLES',
-      title: 'Assegna ruolo',
-      message: (
+  const handleAddMultiRoles = () => (
+    <SessionModal
+      open={open}
+      title="Assegna ruolo"
+      message={
         <>
           {'Assegna a '}
           <strong> {`${user.name} ${user.surname}`} </strong>
@@ -157,24 +158,23 @@ export default function UserProductAddRoles({
             }
           )}
         </>
-      ),
+      }
+      onConfirm={() => onAddMultiRole}
+      handleClose={() => setOpen(false)}
+      onConfirmLabel="Conferma"
+      onCloseLabel="Annulla"
+    />
+  );
 
-      confirmLabel: 'Conferma',
-      closeLabel: 'Annulla',
-      onConfirm: onAddMultiRole,
-    });
-  };
-
-  return (
-    /*
   const selcRoleProductRoleList = productRolesList.groupBySelcRole[userProduct.roles[0].selcRole];
   return userProduct.roles.length < selcRoleProductRoleList.length &&
-    selcRoleProductRoleList[0].multiroleAllowed ? ( */
-
+    selcRoleProductRoleList[0].multiroleAllowed ? (
     <Link onClick={handleAddMultiRoles} component="button">
       <Typography variant="h3" sx={{ fontSize: '16px', color: '#0073E6' }}>
         + Assegna ruolo
       </Typography>
     </Link>
+  ) : (
+    <> </>
   );
 }

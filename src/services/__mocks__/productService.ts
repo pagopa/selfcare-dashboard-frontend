@@ -62,8 +62,9 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'PDND',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
-    authorized: false,
-    status: 'INACTIVE',
+    authorized: true,
+    userRole: 'ADMIN',
+    status: 'ACTIVE',
     urlPublic: undefined,
   },
 ];
