@@ -14,6 +14,7 @@ type Props = {
   productRolesList: ProductRolesLists;
   canEdit: boolean;
   product: Product;
+  isProductDetailPage: boolean;
 };
 
 export default function UserProductDetail({
@@ -24,13 +25,14 @@ export default function UserProductDetail({
   productRolesList,
   canEdit,
   product,
+  isProductDetailPage,
 }: Props) {
   const showActionOnProduct = userProduct.roles.length === 1;
 
   return (
     <>
       <Grid item xs={12}>
-        <Grid container mt={5} mb={3}>
+        <Grid container mb={2}>
           <Grid item xs={7}>
             <Grid container item>
               <Box>
@@ -48,6 +50,7 @@ export default function UserProductDetail({
                       fontSize: '14px',
                       background: '#E0E0E0',
                       borderRadius: '16px',
+                      border: 'none',
                       width: '76px',
                       height: '24px',
                       display: 'flex',
@@ -83,6 +86,7 @@ export default function UserProductDetail({
             product={product}
             productRolesList={productRolesList}
             canEdit={canEdit}
+            isProductDetailPage={isProductDetailPage}
           />
         </Grid>
         {/* TODO: insert UserProductGroups component */}
