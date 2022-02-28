@@ -77,7 +77,7 @@ export default function UserProductSection({
               product={product}
             />
             {index !== partyUser.products.length - 1 && (
-              <Grid item xs={11} mb={4}>
+              <Grid item xs={11} my={4}>
                 <Divider />
               </Grid>
             )}

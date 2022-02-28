@@ -30,7 +30,7 @@ export default function UserProductDetail({
   return (
     <>
       <Grid item xs={12}>
-        <Grid container mt={5} mb={3}>
+        <Grid container mb={2}>
           <Grid item xs={7}>
             <Grid container item>
               <Box>
