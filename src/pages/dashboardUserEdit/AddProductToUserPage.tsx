@@ -30,6 +30,13 @@ type Props = {
   withUserDetailProps;
 
 function AddProductToUserPage({ party, activeProducts, productsRolesMap, partyUser }: Props) {
+  const goBack = () =>
+    history.push(
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.PARTY_USER_DETAIL.path, {
+        institutionId: party.institutionId,
+        userId: partyUser.id,
+      })
+    );
   const history = useHistory();
   const paths = [
     {
@@ -43,6 +50,7 @@ function AddProductToUserPage({ party, activeProducts, productsRolesMap, partyUs
     },
     {
       description: partyUser.name + ' ' + partyUser.surname,
+      onClick: goBack,
     },
     {
       description: 'Aggiungi Prodotto',
@@ -110,6 +118,7 @@ function AddProductToUserPage({ party, activeProducts, productsRolesMap, partyUs
       {partyUser.products.map((userProduct) => (
         <Grid item xs={12} mb={9} key={userProduct.id}>
           <AddUserForm
+            goBack={goBack}
             party={party}
             products={activeProducts.filter((p) => p.id !== userProduct.id)}
             productsRolesMap={productsRolesMap}

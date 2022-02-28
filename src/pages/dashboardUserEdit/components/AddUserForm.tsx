@@ -81,6 +81,7 @@ type Props = {
   productsRolesMap: ProductsRolesMap;
   canEditRegistryData: boolean;
   initialFormData: PartyUserOnCreation;
+  goBack?: () => void;
 };
 
 export default function AddUserForm({
@@ -90,6 +91,7 @@ export default function AddUserForm({
   productsRolesMap,
   canEditRegistryData,
   initialFormData,
+  goBack,
 }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchTaxCode = useLoading(LOADING_TASK_FETCH_TAX_CODE);
@@ -122,7 +124,7 @@ export default function AddUserForm({
     setUserProduct(selectedProduct);
   }, [selectedProduct]);
 
-  const goBack = () =>
+  const goBackAdd = () =>
     history.push(
       resolvePathVariables(
         selectedProduct
@@ -218,7 +220,7 @@ export default function AddUserForm({
           ),
         });
 
-        goBack();
+        goBackAdd();
       })
       .catch((reason) =>
         addError({
@@ -492,7 +494,7 @@ export default function AddUserForm({
               sx={{ width: '100%' }}
               color="primary"
               variant="outlined"
-              onClick={() => onExit(goBack)}
+              onClick={() => onExit(goBack ? goBack : goBackAdd)}
             >
               Indietro
             </Button>
