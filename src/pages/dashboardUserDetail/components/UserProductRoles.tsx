@@ -112,19 +112,21 @@ export default function UserProductRoles({
           </Grid>
         </Grid>
       ))}
-      <Grid container>
-        <Grid item xs={3} />
-        <Grid item xs={9}>
-          <UserProductAddRoles
-            party={party}
-            user={user}
-            userProduct={userProduct}
-            product={product}
-            fetchPartyUser={fetchPartyUser}
-            productRolesList={productRolesList}
-          />
+      {canEdit && (
+        <Grid container>
+          <Grid item xs={3} />
+          <Grid item xs={9}>
+            <UserProductAddRoles
+              party={party}
+              user={user}
+              userProduct={userProduct}
+              product={product}
+              fetchPartyUser={fetchPartyUser}
+              productRolesList={productRolesList}
+            />
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </Grid>
   );
 }
