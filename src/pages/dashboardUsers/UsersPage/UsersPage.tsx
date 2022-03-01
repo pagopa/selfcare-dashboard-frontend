@@ -88,7 +88,7 @@ function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Pro
           backgroundColor: '#F5F6F7',
         }}
       >
-        <Tabs variant="scrollable" scrollButtons="auto" value={activeSection}>
+        <Tabs variant="fullWidth" scrollButtons="auto" value={activeSection}>
           {activeProducts.map((p, i) => (
             <Tab
               key={p.id}
