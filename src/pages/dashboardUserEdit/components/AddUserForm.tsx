@@ -108,7 +108,7 @@ export default function AddUserForm({
 
   useEffect(() => {
     if (validTaxcode && validTaxcode !== initialFormData.taxCode) {
-      fetchTaxCode(validTaxcode);
+      fetchTaxCode(validTaxcode, party.institutionId);
     } else if (!validTaxcode && formik.values.certification === true) {
       void formik.setValues(
         {
@@ -147,9 +147,9 @@ export default function AddUserForm({
       )
     );
 
-  const fetchTaxCode = (taxCode: string) => {
+  const fetchTaxCode = (taxCode: string, institutionId: string) => {
     setLoadingFetchTaxCode(true);
-    fetchUserRegistryByFiscalCode(taxCode)
+    fetchUserRegistryByFiscalCode(taxCode, institutionId)
       .then((userRegistry) => {
         void formik.setValues(
           {

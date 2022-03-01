@@ -152,9 +152,12 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  fetchUserRegistryByFiscalCode: async (taxCode: string): Promise<UserResource | null> => {
+  fetchUserRegistryByFiscalCode: async (
+    taxCode: string,
+    institutionId: string
+  ): Promise<UserResource | null> => {
     const result = await apiClient.getUserByExternalIdUsingPOST({
-      body: { externalId: taxCode },
+      body: { externalId: taxCode && institutionId },
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
