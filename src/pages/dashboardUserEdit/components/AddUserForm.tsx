@@ -81,6 +81,7 @@ type Props = {
   productsRolesMap: ProductsRolesMap;
   canEditRegistryData: boolean;
   initialFormData: PartyUserOnCreation;
+  goBack?: () => void;
 };
 
 export default function AddUserForm({
@@ -90,6 +91,7 @@ export default function AddUserForm({
   productsRolesMap,
   canEditRegistryData,
   initialFormData,
+  goBack,
 }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const setLoadingFetchTaxCode = useLoading(LOADING_TASK_FETCH_TAX_CODE);
@@ -134,18 +136,20 @@ export default function AddUserForm({
     setUserProduct(selectedProduct);
   }, [selectedProduct]);
 
-  const goBack = () =>
-    history.push(
-      resolvePathVariables(
-        selectedProduct
-          ? DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path
-          : DASHBOARD_ROUTES.PARTY_USERS.path,
-        {
-          institutionId: party.institutionId,
-          productId: userProduct?.id ?? '',
-        }
-      )
-    );
+  const goBackInner =
+    goBack ??
+    (() =>
+      history.push(
+        resolvePathVariables(
+          selectedProduct
+            ? DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path
+            : DASHBOARD_ROUTES.PARTY_USERS.path,
+          {
+            institutionId: party.institutionId,
+            productId: userProduct?.id ?? '',
+          }
+        )
+      ));
 
   const fetchTaxCode = (taxCode: string, institutionId: string) => {
     setLoadingFetchTaxCode(true);
@@ -230,7 +234,7 @@ export default function AddUserForm({
           ),
         });
 
-        goBack();
+        goBackInner();
       })
       .catch((reason) =>
         addError({
@@ -504,7 +508,7 @@ export default function AddUserForm({
               sx={{ width: '100%' }}
               color="primary"
               variant="outlined"
-              onClick={() => onExit(goBack)}
+              onClick={() => onExit(goBackInner)}
             >
               Indietro
             </Button>

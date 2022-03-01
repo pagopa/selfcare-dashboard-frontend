@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Grid, TextField, Button, styled } from '@mui/material';
 import { useFormik } from 'formik';
-import { useHistory } from 'react-router';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
@@ -49,18 +48,16 @@ const requiredError = 'Required';
 type Props = {
   party: Party;
   user: PartyUser;
+  goBack: () => void;
 };
 
-export default function EditUserRegistryForm({ party, user }: Props) {
+export default function EditUserRegistryForm({ party, user, goBack }: Props) {
   const setLoadingSaveUser = useLoading(LOADING_TASK_SAVE_PARTY_USER);
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
-  const history = useHistory();
 
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
-
-  const goBack = () => history.goBack();
 
   const validate = (values: Partial<PartyUserOnEdit>) =>
     Object.fromEntries(
@@ -190,7 +187,7 @@ export default function EditUserRegistryForm({ party, user }: Props) {
               <CustomTextField
                 {...baseTextFieldProps(
                   'email',
-                  'Email',
+                  'Email istituzionale',
                   'Inserisci l’indirizzo email istituzionale del referente'
                 )}
               />

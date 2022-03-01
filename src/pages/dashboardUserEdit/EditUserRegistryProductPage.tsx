@@ -4,28 +4,38 @@ import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import { DASHBOARD_ROUTES } from '../../routes';
+import { Product } from '../../model/Product';
 import withUserDetail, { withUserDetailProps } from '../../decorators/withUserDetail';
+import withSelectedPartyProduct from '../../decorators/withSelectedPartyProduct';
 import EditUserRegistryForm from './components/EditUserRegistryForm';
 
-type Props = withUserDetailProps;
+type Props = withUserDetailProps & {
+  selectedProduct: Product;
+  products: Array<Product>;
+};
 
-function EditUserRegistryPage({ party, partyUser }: Props) {
+function EditUserRegistryProductPage({ party, partyUser, selectedProduct }: Props) {
   const history = useHistory();
 
   const goBack = () =>
     history.push(
-      resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.PARTY_USER_DETAIL.path, {
-        institutionId: party.institutionId,
-        userId: partyUser.id,
-      })
+      resolvePathVariables(
+        DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.PARTY_PRODUCT_USER_DETAIL.path,
+        {
+          institutionId: party.institutionId,
+          productId: selectedProduct.id,
+          userId: partyUser.id,
+        }
+      )
     );
   const paths = [
     {
       description: 'Referenti',
       onClick: () =>
         history.push(
-          resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
+          resolvePathVariables(DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, {
             institutionId: party.institutionId,
+            productId: selectedProduct.id,
           })
         ),
     },
@@ -47,7 +57,7 @@ function EditUserRegistryPage({ party, partyUser }: Props) {
       sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={3}>
-        <ProductNavigationBar paths={paths} />
+        <ProductNavigationBar paths={paths} selectedProduct={selectedProduct} />
       </Grid>
       <Grid item xs={12} mb={9}>
         <TitleBox
@@ -66,4 +76,4 @@ function EditUserRegistryPage({ party, partyUser }: Props) {
   );
 }
 
-export default withUserDetail(EditUserRegistryPage);
+export default withUserDetail(withSelectedPartyProduct(EditUserRegistryProductPage));

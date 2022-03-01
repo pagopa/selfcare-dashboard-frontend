@@ -36,6 +36,7 @@ function UserDetailPage({
   productsRolesMap,
   activeProducts,
   party,
+  productsMap,
 }: Props) {
   const history = useHistory();
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
@@ -48,6 +49,14 @@ function UserDetailPage({
       trackEvent('OPEN_USER_DETAIL', { party_id: party.institutionId });
     }
   }, [party]);
+
+  const goEdit = () =>
+    history.push(
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.EDIT_USER.path, {
+        institutionId: party.institutionId,
+        userId: partyUser.id,
+      })
+    );
 
   const goBack = () =>
     history.push(
@@ -108,9 +117,10 @@ function UserDetailPage({
       onClick: goBack,
     },
     {
-      description: 'Dettaglio Referente',
+      description: partyUser.name + ' ' + partyUser.surname,
     },
   ];
+  const isProductDetailPage = false;
   return !party ? (
     <></>
   ) : (
@@ -133,6 +143,8 @@ function UserDetailPage({
             party={party}
             userInfo={partyUser}
             roleSection={<UserSelcRole selcRole={partyUser.userRole} />}
+            goEdit={goEdit}
+            productsMap={productsMap}
           />
         </Grid>
       </Grid>
@@ -141,6 +153,7 @@ function UserDetailPage({
       </Grid>
       <Grid container item mb={9}>
         <UserProductSection
+          isProductDetailPage={isProductDetailPage}
           partyUser={partyUser}
           party={party}
           fetchPartyUser={fetchPartyUser}

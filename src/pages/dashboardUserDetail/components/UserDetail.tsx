@@ -1,9 +1,7 @@
 import { Button, Grid, Typography, styled } from '@mui/material';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useHistory } from 'react-router-dom';
 import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
-import { DASHBOARD_ROUTES } from '../../../routes';
+import { ProductsMap } from '../../../model/Product';
 
 const CustomLabelStyle = styled(Typography)({
   fontSize: '14px',
@@ -18,10 +16,11 @@ type Props = {
   party: Party;
   roleSection: React.ReactNode;
   userInfo: PartyUser;
+  goEdit: () => void;
+  productsMap: ProductsMap;
 };
 
-export default function UserDetail({ roleSection, userInfo, party }: Props) {
-  const history = useHistory();
+export default function UserDetail({ roleSection, userInfo, party, goEdit, productsMap }: Props) {
   return (
     <>
       <Grid container>
@@ -85,24 +84,19 @@ export default function UserDetail({ roleSection, userInfo, party }: Props) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <Button
-            disableRipple
-            disabled={userInfo.status === 'ACTIVE'}
-            variant="contained"
-            sx={{ height: '40px', width: '120px' }}
-            onClick={() =>
-              history.push(
-                resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.EDIT_USER.path, {
-                  institutionId: party.institutionId,
-                  userId: userInfo.id,
-                })
-              )
-            }
-          >
-            Modifica
-          </Button>
-        </Grid>
+        {userInfo.products.find((p) => productsMap[p.id]?.userRole === 'ADMIN') && (
+          <Grid item xs={2}>
+            <Button
+              disableRipple
+              disabled={userInfo.status === 'SUSPENDED'}
+              variant="contained"
+              sx={{ height: '40px', width: '120px' }}
+              onClick={goEdit}
+            >
+              Modifica
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </>
   );
