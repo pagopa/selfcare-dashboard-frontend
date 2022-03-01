@@ -78,7 +78,7 @@ export default function EditUserRegistryForm({ party, user, goBack }: Props) {
     );
 
   const formik = useFormik<PartyUserOnEdit>({
-    initialValues: { ...user, confirmEmail: user.email, fiscalCode: user.taxCode },
+    initialValues: { ...user, confirmEmail: user.email },
     validate,
     onSubmit: (values) => {
       setLoadingSaveUser(true);
@@ -160,7 +160,7 @@ export default function EditUserRegistryForm({ party, user, goBack }: Props) {
             <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
               <CustomTextField
                 {...baseTextFieldProps(
-                  'fiscalCode',
+                  'taxCode',
                   'Codice Fiscale',
                   'Inserisci il Codice Fiscale del referente'
                 )}

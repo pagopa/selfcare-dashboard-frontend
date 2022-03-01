@@ -128,7 +128,7 @@ export const DashboardApi = {
     const result = await apiClient.updateUserUsingPUT({
       institutionId,
       id: user.id,
-      body: user,
+      body: { email: user.email, fiscalCode: user.taxCode, name: user.name, surname: user.surname },
     });
     return extractResponse(result, 201, onRedirectToLogin);
   },
