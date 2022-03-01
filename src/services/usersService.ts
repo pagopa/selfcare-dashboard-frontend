@@ -124,7 +124,7 @@ export const updatePartyUser = (party: Party, user: PartyUserOnEdit): Promise<an
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return updatePartyUserMocked(party, user);
   } else {
-    throw new Error('Todo');
+    return DashboardApi.updatePartyUser(party.institutionId, user);
   }
 };
 

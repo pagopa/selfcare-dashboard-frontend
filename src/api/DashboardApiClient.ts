@@ -2,7 +2,7 @@ import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage'
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
 import { store } from '../redux/store';
-import { PartyUserOnCreation } from '../model/PartyUser';
+import { PartyUserOnCreation, PartyUserOnEdit } from '../model/PartyUser';
 import { ENV } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
@@ -124,6 +124,15 @@ export const DashboardApi = {
     return extractResponse(result, 201, onRedirectToLogin);
   },
 
+  updatePartyUser: async (institutionId: string, user: PartyUserOnEdit): Promise<void> => {
+    const result = await apiClient.updateUserUsingPUT({
+      institutionId,
+      id: user.id,
+      body: user,
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
+  },
+
   suspendPartyRelation: async (relationshipId: string): Promise<void> => {
     const result = await apiClient.suspendRelationshipUsingPOST({
       relationshipId,
@@ -157,7 +166,8 @@ export const DashboardApi = {
     institutionId: string
   ): Promise<UserResource | null> => {
     const result = await apiClient.getUserByExternalIdUsingPOST({
-      body: { externalId: taxCode && institutionId },
+      institutionId,
+      body: { externalId: taxCode },
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

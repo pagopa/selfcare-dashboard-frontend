@@ -43,7 +43,7 @@ export type PartyUserOnCreation = {
 
 export type PartyUserOnEdit = {
   id: string;
-  taxCode: string;
+  fiscalCode: string;
   name: string;
   surname: string;
   email: string;
