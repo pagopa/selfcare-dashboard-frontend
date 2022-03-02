@@ -9,7 +9,7 @@ import React, { CSSProperties, ReactNode } from 'react';
 import { InfoOutlined } from '@mui/icons-material';
 import { PartyUser, PartyUserProduct } from '../../../../../model/PartyUser';
 import { ProductRolesLists } from '../../../../../model/ProductRole';
-import { Party } from '../../../../../model/Party';
+import { Party, UserStatus } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import UserProductRowActions from './UserProductRowActions';
 
@@ -19,6 +19,7 @@ export function buildColumnDefs(
   product: Product,
   onRowClick: (partyUser: PartyUser) => void,
   onDelete: (user: PartyUser) => void,
+  onStatusUpdate: (user: PartyUser, nextStatus: UserStatus) => void,
   productRolesLists: ProductRolesLists
 ) {
   return [
@@ -84,7 +85,9 @@ export function buildColumnDefs(
       disableColumnMenu: true,
       editable: false,
       renderCell: (p) =>
-        canEdit ? showActions(party, product, p, onDelete) : renderCell(p, '', onRowClick),
+        canEdit
+          ? showActions(party, product, p, onDelete, onStatusUpdate)
+          : renderCell(p, '', onRowClick),
       sortable: false,
     },
   ] as Array<GridColDef>;
@@ -263,7 +266,8 @@ function showActions(
   party: Party,
   product: Product,
   users: GridRenderCellParams<PartyUser>,
-  onDelete: (user: PartyUser) => void
+  onDelete: (user: PartyUser) => void,
+  onStatusUpdate: (user: PartyUser, nextStatus: UserStatus) => void
 ) {
   const row = users.row as PartyUser;
   const userProduct = row.products.find((p) => p.id === product.id) as PartyUserProduct;
@@ -279,6 +283,7 @@ function showActions(
         partyUser={row}
         partyUserProduct={userProduct}
         onDelete={onDelete}
+        onStatusUpdate={onStatusUpdate}
       />
     ),
     undefined,

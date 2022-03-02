@@ -7,7 +7,7 @@ import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResourc
 import useFakePagination from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
 import { useHistory } from 'react-router-dom';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { Party } from '../../../../model/Party';
+import { Party, UserStatus } from '../../../../model/Party';
 import { PartyUser } from '../../../../model/PartyUser';
 import { Product, ProductsMap } from '../../../../model/Product';
 import { useAppSelector } from '../../../../redux/hooks';
@@ -144,6 +144,12 @@ const UsersTableProduct = ({
     }
   };
 
+  const onStatusUpdate = (partyUser: PartyUser, nextStatus: UserStatus) => {
+    // eslint-disable-next-line functional/immutable-data
+    partyUser.status = nextStatus;
+    setUsers({ ...users });
+  };
+
   if (error) {
     return <UserProductFetchError onRetry={fetchUsers} />;
   } else {
@@ -188,6 +194,7 @@ const UsersTableProduct = ({
           history.push(resolvePathVariables(userDetailUrl, { userId: partyUser.id }))
         }
         onDelete={onDelete}
+        onStatusUpdate={onStatusUpdate}
       />
     );
   }
