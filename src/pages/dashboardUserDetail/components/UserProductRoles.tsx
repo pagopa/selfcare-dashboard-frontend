@@ -96,7 +96,7 @@ export default function UserProductRoles({
                   </Tooltip>
                 </CustomInfoStyle>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={4} ml={4}>
                 <UserProductActions
                   showActions={showActions}
                   party={party}
@@ -106,6 +106,7 @@ export default function UserProductRoles({
                   product={userProduct}
                   productRolesList={productRolesList}
                   canEdit={canEdit}
+                  isProductDetailPage={isProductDetailPage}
                 />
               </Grid>
             </Grid>

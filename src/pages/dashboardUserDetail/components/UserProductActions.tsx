@@ -18,6 +18,7 @@ type Props = {
   product: PartyUserProduct;
   productRolesList: ProductRolesLists;
   canEdit: boolean;
+  isProductDetailPage: boolean;
 };
 export default function UserProductActions({
   showActions,
@@ -28,6 +29,7 @@ export default function UserProductActions({
   fetchPartyUser,
   productRolesList,
   canEdit,
+  isProductDetailPage,
 }: Props) {
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   const addError = useErrorDispatcher();
@@ -177,15 +179,16 @@ export default function UserProductActions({
               </Typography>
             </Link>
           </Grid>
-          {(product.roles.length > 1 || user.products.length > 1) && !user.isCurrentUser && (
-            <Grid item xs={6}>
-              <Link color="error" onClick={handleOpenDelete} component="button">
-                <Typography variant="h3" sx={{ fontSize: '16px', color: '#C02927' }}>
-                  Elimina
-                </Typography>
-              </Link>
-            </Grid>
-          )}
+          {(product.roles.length > 1 || (!isProductDetailPage && user.products.length > 1)) &&
+            !user.isCurrentUser && (
+              <Grid item xs={6}>
+                <Link color="error" onClick={handleOpenDelete} component="button">
+                  <Typography variant="h3" sx={{ fontSize: '16px', color: '#C02927' }}>
+                    Elimina
+                  </Typography>
+                </Link>
+              </Grid>
+            )}
         </Grid>
       )}
     </>
