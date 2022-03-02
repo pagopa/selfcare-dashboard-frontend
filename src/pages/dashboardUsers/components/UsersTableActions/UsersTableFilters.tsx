@@ -19,6 +19,7 @@ interface UsersSearchFilterProps {
   filters: UsersTableFiltersConfig;
   onFiltersChange: (f: UsersTableFiltersConfig) => void;
   productsRolesMap: ProductsRolesMap;
+  showSelcRoleGrouped: boolean;
 }
 
 export default function UsersTableFilters({
@@ -26,6 +27,7 @@ export default function UsersTableFilters({
   onFiltersChange,
   productsRolesMap,
   disableFilters,
+  showSelcRoleGrouped,
 }: UsersSearchFilterProps) {
   const productRolesList: Array<ProductRole> = Object.values(productsRolesMap).flatMap(
     (p) => p.list
@@ -40,6 +42,7 @@ export default function UsersTableFilters({
         filterSelcRole={filters.selcRole}
         onFiltersChange={onFiltersChange}
         filters={filters}
+        showSelcRoleGrouped={showSelcRoleGrouped}
       />
     </Grid>
   );

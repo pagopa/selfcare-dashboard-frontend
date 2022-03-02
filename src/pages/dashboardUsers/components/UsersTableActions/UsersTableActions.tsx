@@ -18,6 +18,7 @@ interface UsersSearchProps {
   loading: boolean;
   filters: UsersTableFiltersConfig;
   onFiltersChange: (filter: UsersTableFiltersConfig) => void;
+  showSelcRoleGrouped: boolean;
 }
 
 export default function UsersTableActions({
@@ -29,6 +30,7 @@ export default function UsersTableActions({
   loading,
   filters,
   onFiltersChange,
+  showSelcRoleGrouped,
 }: UsersSearchProps) {
   const theme = useTheme();
   const history = useHistory();
@@ -49,6 +51,7 @@ export default function UsersTableActions({
           onFiltersChange={onFiltersChange}
           products={products}
           productsRolesMap={productsRolesMap}
+          showSelcRoleGrouped={showSelcRoleGrouped}
         />
       </Grid>
       <Grid item pl={4}>

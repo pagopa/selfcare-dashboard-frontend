@@ -93,6 +93,8 @@ export default function UserProductActions({
   const confirmChangeStatus = () => {
     const nextStatus: UserStatus | undefined =
       role.status === 'ACTIVE' ? 'SUSPENDED' : role.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
+    const selectedUserStatus = nextStatus === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
+
     if (!nextStatus) {
       addError({
         id: 'INVALID_STATUS_TRANSITION',
@@ -108,6 +110,18 @@ export default function UserProductActions({
     updatePartyUserStatus(party, user, product, role, nextStatus)
       .then((_) => {
         fetchPartyUser();
+        addNotify({
+          id: 'ACTION_ON_PARTY_USER_COMPLETED',
+          title: `REFERENTE ${selectedUserStatus.toUpperCase()}`,
+          message: (
+            <>
+              {`Hai ${selectedUserStatus} correttamente `}
+              <strong>{`${user.name} ${user.surname}`}</strong>
+              {'.'}
+            </>
+          ),
+          component: 'Toast',
+        });
       })
       .catch((reason) =>
         addError({
@@ -163,7 +177,7 @@ export default function UserProductActions({
               </Typography>
             </Link>
           </Grid>
-          {product.roles.length > 1 && !user.isCurrentUser && (
+          {(product.roles.length > 1 || user.products.length > 1) && !user.isCurrentUser && (
             <Grid item xs={6}>
               <Link color="error" onClick={handleOpenDelete} component="button">
                 <Typography variant="h3" sx={{ fontSize: '16px', color: '#C02927' }}>

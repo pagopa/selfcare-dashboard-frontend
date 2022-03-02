@@ -10,8 +10,13 @@ const CustomLabelStyle = styled(Typography)({
 
 const CustomInfoStyle = styled(Typography)({
   color: '#000000',
+});
+
+const CustomStyleCapitolized = styled(Typography)({
+  color: '#000000',
   textTransform: 'capitalize',
 });
+
 type Props = {
   party: Party;
   roleSection: React.ReactNode;
@@ -33,9 +38,9 @@ export default function UserDetail({ roleSection, userInfo, party, goEdit, produ
                 </CustomLabelStyle>
               </Grid>
               <Grid item xs={9} className="userInfoStyle">
-                <CustomInfoStyle variant="body2">
+                <CustomStyleCapitolized variant="body2">
                   {userInfo.name.toLocaleLowerCase()}
-                </CustomInfoStyle>
+                </CustomStyleCapitolized>
               </Grid>
             </Grid>
             <Grid container item alignContent="center">
@@ -45,7 +50,9 @@ export default function UserDetail({ roleSection, userInfo, party, goEdit, produ
                 </CustomLabelStyle>
               </Grid>
               <Grid item xs={9}>
-                <CustomInfoStyle variant="body2">{userInfo.surname}</CustomInfoStyle>
+                <CustomStyleCapitolized variant="body2">
+                  {userInfo.surname.toLocaleLowerCase()}
+                </CustomStyleCapitolized>
               </Grid>
             </Grid>
             <Grid container item alignContent="center">

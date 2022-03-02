@@ -36,6 +36,8 @@ function UsersProductPage({
   selectedProduct,
   productRolesList,
 }: Props) {
+  const showSelcRoleGrouped = false;
+
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [fetchStatus, setFetchStatus] = useState({ loading: true, noData: false });
 
@@ -75,6 +77,7 @@ function UsersProductPage({
                 DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.subRoutes.ADD_PARTY_PRODUCT_USER.path,
                 { institutionId: party.institutionId, productId: selectedProduct.id }
               )}
+              showSelcRoleGrouped={showSelcRoleGrouped}
             />
           </Grid>
           <Grid item xs={12} mt={6}>
