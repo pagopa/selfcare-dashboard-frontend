@@ -124,7 +124,7 @@ export const updatePartyUser = (party: Party, user: PartyUserOnEdit): Promise<an
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return updatePartyUserMocked(party, user);
   } else {
-    throw new Error('Todo');
+    return DashboardApi.updatePartyUser(party.institutionId, user);
   }
 };
 
@@ -200,12 +200,15 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
   }
 };
 
-export const fetchUserRegistryByFiscalCode = (taxCode: string): Promise<UserRegistry | null> => {
+export const fetchUserRegistryByFiscalCode = (
+  taxCode: string,
+  institutionId: string
+): Promise<UserRegistry | null> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
     return new Promise((resolve) => resolve(mockedUserRegistry));
   } else {
-    return DashboardApi.fetchUserRegistryByFiscalCode(taxCode).then((userResource) =>
+    return DashboardApi.fetchUserRegistryByFiscalCode(taxCode, institutionId).then((userResource) =>
       userResource ? userResource2UserRegistry(userResource) : null
     );
   }
