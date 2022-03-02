@@ -18,6 +18,7 @@ import { ProductRole } from '../../model/ProductRole';
 import { UserRegistry } from '../../model/UserRegistry';
 
 export const mockedUsers: Array<PartyUser> = [
+  // use case ACTIVE on 1 product/role
   {
     id: 'uid',
     taxCode: 'AAAAAA11A11A123K',
@@ -43,6 +44,8 @@ export const mockedUsers: Array<PartyUser> = [
     isCurrentUser: false,
     certification: true,
   },
+
+  // logged user
   {
     id: '0',
     taxCode: 'AAAAAA11A11A124A',
@@ -92,6 +95,8 @@ export const mockedUsers: Array<PartyUser> = [
     isCurrentUser: true,
     certification: true,
   },
+
+  // use case SUSPENDED having just 1 product/role
   {
     id: 'uid3',
     taxCode: 'TAXCOD03A00A123P',
@@ -117,6 +122,8 @@ export const mockedUsers: Array<PartyUser> = [
     isCurrentUser: false,
     certification: true,
   },
+
+  // use case ACTIVE having 1 product and 2 roles (ACTIVE and SUSPENDED)
   {
     id: 'uid4',
     taxCode: 'TAXCOD04A00A123P',
@@ -127,8 +134,8 @@ export const mockedUsers: Array<PartyUser> = [
     status: 'ACTIVE',
     products: [
       {
-        title: 'App IO',
-        id: 'prod-io',
+        title: 'PDND',
+        id: 'prod-interop',
         roles: [
           {
             relationshipId: 'rel4',
@@ -148,6 +155,8 @@ export const mockedUsers: Array<PartyUser> = [
     isCurrentUser: false,
     certification: true,
   },
+
+  // use case SUSPENDED having 1 product and 2 roles
   {
     id: 'uid5',
     taxCode: 'TAXCOD05A00A123P',
@@ -158,8 +167,8 @@ export const mockedUsers: Array<PartyUser> = [
     status: 'SUSPENDED',
     products: [
       {
-        title: 'App IO',
-        id: 'prod-io',
+        title: 'PDND',
+        id: 'prod-interop',
         roles: [
           {
             relationshipId: 'rel4',
@@ -179,6 +188,8 @@ export const mockedUsers: Array<PartyUser> = [
     isCurrentUser: false,
     certification: true,
   },
+
+  // use case SUSPENDED on 2 product, in 1 of them not logged user is not ADMIN
   {
     id: 'uid6',
     taxCode: 'TAXCOD06A00A123P',
@@ -200,10 +211,24 @@ export const mockedUsers: Array<PartyUser> = [
           },
         ],
       },
+      {
+        title: 'Piattaforma Notifiche',
+        id: 'prod-pn',
+        roles: [
+          {
+            relationshipId: 'rel6',
+            role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'SUSPENDED',
+          },
+        ],
+      },
     ],
     isCurrentUser: false,
     certification: true,
   },
+
+  // use case ACTIVE on 1 product/role in which logged user is not ADMIN
   {
     id: 'uid7',
     taxCode: 'TAXCOD07A00A123P',
@@ -229,6 +254,8 @@ export const mockedUsers: Array<PartyUser> = [
     isCurrentUser: false,
     certification: true,
   },
+
+  // use case ACTIVE on 1 product having 2 roles
   {
     id: 'uid8',
     taxCode: 'TAXCOD08A00A123P',
@@ -239,8 +266,8 @@ export const mockedUsers: Array<PartyUser> = [
     status: 'ACTIVE',
     products: [
       {
-        title: 'App IO',
-        id: 'prod-io',
+        title: 'PDND',
+        id: 'prod-interop',
         roles: [
           {
             relationshipId: 'rel8',
@@ -260,6 +287,7 @@ export const mockedUsers: Array<PartyUser> = [
     isCurrentUser: false,
     certification: true,
   },
+  // use case ACTIVE on 2 product, both logged user is ADMIN: 1 product with 1 role, the other with 2 roles
   {
     id: 'uid9',
     taxCode: 'TAXCOD09A00A123P',
@@ -272,6 +300,18 @@ export const mockedUsers: Array<PartyUser> = [
       {
         title: 'App IO',
         id: 'prod-io',
+        roles: [
+          {
+            relationshipId: 'rel6',
+            role: 'referente-tecnico',
+            selcRole: 'LIMITED',
+            status: 'SUSPENDED',
+          },
+        ],
+      },
+      {
+        title: 'PDND',
+        id: 'prod-interop',
         roles: [
           {
             relationshipId: 'rel9',

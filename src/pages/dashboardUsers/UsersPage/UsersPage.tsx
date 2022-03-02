@@ -29,6 +29,8 @@ const emptyFilters: UsersTableFiltersConfig = {
 };
 
 function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Props) {
+  const showSelcRoleGrouped = true;
+
   const [filters, setFilters] = useState<UsersTableFiltersConfig>(emptyFilters);
   const [noData, setNoData] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -116,6 +118,7 @@ function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Pro
                 DASHBOARD_ROUTES.PARTY_USERS.subRoutes.ADD_PARTY_USER.path,
                 { institutionId: party.institutionId }
               )}
+              showSelcRoleGrouped={showSelcRoleGrouped}
             />
           </Grid>
           {activeProducts.map((p, i) => (

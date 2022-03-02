@@ -33,7 +33,7 @@ export default function UserProductDetail({
     <>
       <Grid item xs={12}>
         <Grid container mb={2}>
-          <Grid item xs={7}>
+          <Grid item xs={6}>
             <Grid container item>
               <Box>
                 <Typography variant="h6" sx={{ fontSize: '18px' }}>
@@ -71,6 +71,7 @@ export default function UserProductDetail({
               product={userProduct}
               productRolesList={productRolesList}
               canEdit={canEdit}
+              isProductDetailPage={isProductDetailPage}
             />
           </Grid>
         </Grid>
