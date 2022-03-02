@@ -32,6 +32,10 @@ export const ENV = {
   },
 
   PARTY_USERS_PAGE_SIZE: env.get('REACT_APP_PARTY_USERS_PAGE_SIZE').required().asInt(),
+  PARTY_PRODUCT_USERS_PAGE_SIZE: env
+    .get('REACT_APP_PARTY_PRODUCT_USERS_PAGE_SIZE')
+    .required()
+    .asInt(),
 
   ANALYTCS: {
     ENABLE: env.get('REACT_APP_ANALYTICS_ENABLE').default('false').asBool(),

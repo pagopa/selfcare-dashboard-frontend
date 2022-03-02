@@ -8,6 +8,7 @@ import styled from '@emotion/styled';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import ROUTES from '../../../../routes';
@@ -36,7 +37,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
   const setParties = (parties: Array<Party>) => dispatch(partiesActions.setPartiesList(parties));
   const [parties2Show, setParties2Show] = useState<Array<Party>>();
   const addError = useErrorDispatcher();
-  const { fetchParties } = useParties();
+  const fetchParties = useParties();
 
   const onExit = useUnloadEventOnExit();
 
@@ -87,7 +88,13 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
         <CustomIconButton onClick={handleClick} sx={{ height: '100%' }} disableRipple={true}>
           {open ? <ExpandLess sx={{ color: 'white' }} /> : <ExpandMore sx={{ color: 'white' }} />}
         </CustomIconButton>
-        <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
+        <Popper
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          placement="bottom-end"
+          style={{ zIndex: 200 }}
+        >
           <ClickAwayListener onClickAway={handleClose}>
             <Paper
               sx={{
@@ -125,6 +132,9 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                       onPartySelectionChange={(selectedParty: Party | null) => {
                         if (selectedParty) {
                           handleClose();
+                          trackEvent('DASHBOARD_PARTY_SELECTION', {
+                            party_id: selectedParty.institutionId,
+                          });
                           onExit(() =>
                             history.push(
                               resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {

@@ -1,7 +1,6 @@
-import { Grid, Link, Typography } from '@mui/material';
+import { Grid, Link, Typography, Box } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import { InfoOutlined } from '@mui/icons-material';
-import { Box } from '@mui/system';
 import { Party } from '../../../../../model/Party';
 
 type Props = {

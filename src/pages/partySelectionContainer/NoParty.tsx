@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid, Button, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Button, Typography, Box } from '@mui/material';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { ENV } from '../../utils/env';
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/system';
-import { List, ListItemButton, Typography, Grid } from '@mui/material';
+import { List, ListItemButton, Typography, Grid, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
 // import { withStyles } from '@mui/styles/';

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/system';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Party } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
@@ -74,53 +73,63 @@ export default function PartySelectionSearch({
 
   return (
     <React.Fragment>
-    {parties.length >= 1 && <Grid container item direction="column">
-     {(partyTitle || parties.length > 3 ) && <Grid item my={2} className='pippo'>
-        {parties.length > 3 ? 
-          (<Box>
-            <PartySelectionSearchInput
-              label={label}
-              iconMarginRight={iconMarginRight}
-              disableUnderline={disableUnderline}
-              placeholder ="Cerca"
-              onChange={(e) => onFilterChange(e.target.value)}
-              input={input}
-              clearField={() => onFilterChange('')}
-              iconColor={iconColor}
-            />
-          </Box>)
-        : parties.length >= 1 && (<Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}> {partyTitle}</Typography>) 
-        }
-      </Grid>}
+      {parties.length >= 1 && (
+        <Grid container item direction="column">
+          {(partyTitle || parties.length > 3) && (
+            <Grid item my={2} className="pippo">
+              {parties.length > 3 ? (
+                <Box>
+                  <PartySelectionSearchInput
+                    label={label}
+                    iconMarginRight={iconMarginRight}
+                    disableUnderline={disableUnderline}
+                    placeholder="Cerca"
+                    onChange={(e) => onFilterChange(e.target.value)}
+                    input={input}
+                    clearField={() => onFilterChange('')}
+                    iconColor={iconColor}
+                  />
+                </Box>
+              ) : (
+                parties.length >= 1 && (
+                  <Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}>
+                    {' '}
+                    {partyTitle}
+                  </Typography>
+                )
+              )}
+            </Grid>
+          )}
 
-      <Grid item>
-        <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
-          {filteredParties &&
-            filteredParties.map((party) => {
-              const isDisabled = party.status === 'PENDING';
-              return (
-                <PartyItemContainer
-                  pxTitleSubTitle={pxTitleSubTitle}
-                  showAvatar={showAvatar}
-                  isDisabled={isDisabled}
-                  disabled={isDisabled}
-                  key={party.institutionId}
-                  borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
-                  selectedItem={selectedParty === party}
-                  title={party.description}
-                  subTitle={roleLabels[party.userRole].longLabel}
-                  titleColor={isDisabled ? '' : '#0073E6'}
-                  image={party.urlLogo}
-                  chip={party.status === 'PENDING' ? 'Da completare' : ''}
-                  action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                    handleListItemClick(event, party)
-                  }
-                />
-              );
-            })}
-        </CustomBox>
-      </Grid>
-    </Grid>} </React.Fragment>
+          <Grid item>
+            <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
+              {filteredParties &&
+                filteredParties.map((party) => {
+                  const isDisabled = party.status === 'PENDING';
+                  return (
+                    <PartyItemContainer
+                      pxTitleSubTitle={pxTitleSubTitle}
+                      showAvatar={showAvatar}
+                      isDisabled={isDisabled}
+                      disabled={isDisabled}
+                      key={party.institutionId}
+                      borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
+                      selectedItem={selectedParty === party}
+                      title={party.description}
+                      subTitle={roleLabels[party.userRole].longLabel}
+                      titleColor={isDisabled ? '' : '#0073E6'}
+                      image={party.urlLogo}
+                      chip={party.status === 'PENDING' ? 'Da completare' : ''}
+                      action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                        handleListItemClick(event, party)
+                      }
+                    />
+                  );
+                })}
+            </CustomBox>
+          </Grid>
+        </Grid>
+      )}{' '}
+    </React.Fragment>
   );
-  
 }
