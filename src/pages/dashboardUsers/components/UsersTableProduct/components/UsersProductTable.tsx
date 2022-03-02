@@ -6,7 +6,7 @@ import { CustomPagination } from '@pagopa/selfcare-common-frontend';
 import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
 import { Product } from '../../../../../model/Product';
 import { PartyUser } from '../../../../../model/PartyUser';
-import { Party } from '../../../../../model/Party';
+import { Party, UserStatus } from '../../../../../model/Party';
 import { ProductRolesLists } from '../../../../../model/ProductRole';
 import { buildColumnDefs } from './UserProductTableColumns';
 import UserProductLoading from './UserProductLoading';
@@ -30,6 +30,7 @@ interface UsersSearchTableProps {
   onSortRequest: (sort: string) => void;
   onRowClick: (partyUser: PartyUser) => void;
   onDelete: (partyUser: PartyUser) => void;
+  onStatusUpdate: (partyUser: PartyUser, nextStatus: UserStatus) => void;
 }
 
 const CustomDataGrid = styled(DataGrid)({
@@ -107,6 +108,7 @@ export default function UsersProductTable({
   onSortRequest,
   onRowClick,
   onDelete,
+  onStatusUpdate,
 }: UsersSearchTableProps) {
   const sortSplitted = sort ? sort.split(',') : undefined;
 
@@ -116,6 +118,7 @@ export default function UsersProductTable({
     product,
     onRowClick,
     onDelete,
+    onStatusUpdate,
     productRolesLists
   );
 

@@ -17,6 +17,7 @@ type Props = {
   partyUser: PartyUser;
   partyUserProduct: PartyUserProduct;
   onDelete: (partyUser: PartyUser) => void;
+  onStatusUpdate: (partyUser: PartyUser, nextStatus: UserStatus) => void;
 };
 
 const ITEM_HEIGHT = 48;
@@ -26,6 +27,7 @@ export default function UserProductRowActions({
   partyUser,
   partyUserProduct,
   onDelete,
+  onStatusUpdate,
 }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const history = useHistory();
@@ -70,6 +72,8 @@ export default function UserProductRowActions({
     setLoading(true);
     action()
       .then((_) => {
+        onComplete();
+
         addNotify({
           id: 'ACTION_ON_PARTY_USER_COMPLETED',
           title,
@@ -82,8 +86,6 @@ export default function UserProductRowActions({
           ),
           component: 'Toast',
         });
-
-        onComplete();
       })
       .catch((reason) =>
         addError({
@@ -138,8 +140,7 @@ export default function UserProductRowActions({
         ),
       `REFERENTE ${selectedUserStatus.toUpperCase()}`,
       `Hai ${selectedUserStatus} correttamente `,
-      // eslint-disable-next-line functional/immutable-data
-      () => (partyUser.status = nextStatus)
+      () => onStatusUpdate(partyUser, nextStatus)
     );
   };
 
