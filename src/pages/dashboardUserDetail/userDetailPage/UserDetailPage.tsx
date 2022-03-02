@@ -61,7 +61,7 @@ function UserDetailPage({
   const goBack = () =>
     history.push(
       resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
-        institutionId: (party as Party).institutionId,
+        institutionId: party.institutionId,
       })
     );
 

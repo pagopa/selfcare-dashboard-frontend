@@ -71,7 +71,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
 
     return selectedPartyProduct ? (
       <WrappedComponent
-        {...(props as T)}
+        {...props}
         selectedProduct={selectedPartyProduct}
         fetchSelectedProductRoles={doFetchProductRoles}
       />

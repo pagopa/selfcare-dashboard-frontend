@@ -36,7 +36,7 @@ export default function withSelectedPartyProductAndRoles<
     }, [props.selectedProduct]);
 
     return productRolesList ? (
-      <WrappedComponent {...(props as T)} productRolesList={productRolesList} />
+      <WrappedComponent {...props} productRolesList={productRolesList} />
     ) : (
       <></>
     );

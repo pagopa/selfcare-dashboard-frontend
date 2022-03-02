@@ -80,7 +80,7 @@ export default function withUserDetail<T extends withUserDetailProps>(
     }, [institutionId, userId]);
 
     return partyUser ? (
-      <WrappedComponent {...(props as T)} partyUser={partyUser} fetchPartyUser={doFetch} />
+      <WrappedComponent {...props} partyUser={partyUser} fetchPartyUser={doFetch} />
     ) : (
       <></>
     );
