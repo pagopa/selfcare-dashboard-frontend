@@ -53,7 +53,7 @@ function UserProductDetailPage({
         })
       );
     }
-  }, []);
+  }, [partyUser]);
 
   const onDelete = () => {
     setLoading(true);
