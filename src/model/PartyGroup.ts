@@ -1,3 +1,4 @@
+import { string } from 'fp-ts';
 import { PartyUser } from './PartyUser';
 
 export type PartyGroupStatus = 'ACTIVE' | 'SUSPENDED';
@@ -20,4 +21,21 @@ export type PartyGroupExt = PartyGroup & {
   members: Array<PartyUser>;
   createdBy: PartyUser;
   modifiedBy: PartyUser;
+};
+
+export type PartyGroupOnCreation = {
+  institutionId: string;
+  productId: string;
+  name: string;
+  description: string;
+  members: Array<PartyUser>;
+};
+
+export type PartyGroupOnEdit = {
+  id: string;
+  institutionId: string;
+  productId: string;
+  name: string;
+  description: string;
+  members: Array<PartyUser>;
 };
