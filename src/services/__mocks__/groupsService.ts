@@ -36,7 +36,7 @@ export const mockedGroups: Array<PartyGroup> = [
     id: 'groupId2',
     name: 'Gruppo2',
     description:
-      'groupId2: use case ACTIVE group having 1 user on product in which loggedUser is ADMIN',
+      'groupId2: use case ACTIVE group having 1 user on product in which loggedUser is LIMITED',
     institutionId: 'onboarded',
     productId: 'prod-pn',
     status: 'ACTIVE',
@@ -50,7 +50,7 @@ export const mockedGroups: Array<PartyGroup> = [
     id: 'groupId3',
     name: 'Gruppo3',
     description:
-      'groupId3: use case SUSPENDED group having 2 users on product in which loggedUser is not ADMIN',
+      'groupId3: use case SUSPENDED group having 2 users on product in which loggedUser is ADMIN',
     institutionId: 'onboarded',
     productId: 'prod-io',
     status: 'SUSPENDED',
@@ -64,7 +64,7 @@ export const mockedGroups: Array<PartyGroup> = [
     id: 'groupId4',
     name: 'Gruppo4',
     description:
-      'groupId4: use case SUSPENDED group having 2 user on product in which loggedUser is not ADMIN',
+      'groupId4: use case SUSPENDED group having 2 user on product in which loggedUser is LIMITED',
     institutionId: 'onboarded',
     productId: 'prod-pn',
     status: 'SUSPENDED',
@@ -104,11 +104,36 @@ export const fetchPartyGroups = (
 export const savePartyGroup = (
   _party: Party,
   _product: Product,
-  _group: PartyGroupOnCreation
-): Promise<any> => new Promise((resolve) => resolve(200));
+  group: PartyGroupOnCreation
+): Promise<any> => {
+  const clone: PartyGroup = {
+    ...group,
+    id: `${Date.now()}`,
+    status: 'ACTIVE',
+    membersIds: group.members.map((m) => m.id),
+    createdAt: new Date(),
+    createdByUserId: '0',
+    modifiedAt: new Date(),
+    modifiedByUserId: '0',
+  };
+  // eslint-disable-next-line functional/immutable-data
+  mockedGroups.push(clone);
+  return new Promise((resolve) => resolve(200));
+};
 
-export const updatePartyGroup = (_party: Party, _group: PartyGroupOnEdit): Promise<any> =>
-  new Promise((resolve) => resolve(200));
+export const updatePartyGroup = (_party: Party, group: PartyGroupOnEdit): Promise<any> => {
+  const updatingGroupIndex = mockedGroups.findIndex((u) => u.id === group.id);
+  const clone: PartyGroup = {
+    ...mockedGroups[updatingGroupIndex],
+    ...group,
+    membersIds: group.members.map((m) => m.id),
+    modifiedAt: new Date(),
+    modifiedByUserId: '0',
+  };
+  // eslint-disable-next-line functional/immutable-data
+  mockedGroups.splice(updatingGroupIndex, 1, clone);
+  return new Promise((resolve) => resolve(200));
+};
 
 export const fetchPartyGroup = (
   _institutionId: string,
@@ -134,13 +159,12 @@ export const updatePartyGroupStatus = (
   status: PartyGroupStatus
 ): Promise<any> => {
   if (status === 'ACTIVE' || status === 'SUSPENDED') {
-    // eslint-disable-next-line functional/immutable-data
-    group.status = status;
+    const clone = { ...group, status };
     // eslint-disable-next-line functional/immutable-data
     mockedGroups.splice(
       mockedGroups.findIndex((u) => u.id === group.id),
       1,
-      group
+      clone
     );
 
     return new Promise<void>((resolve) => resolve());
