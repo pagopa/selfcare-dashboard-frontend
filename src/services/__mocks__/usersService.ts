@@ -235,7 +235,7 @@ export const mockedUsers: Array<PartyUser> = [
     name: 'Simone7',
     surname: 'Bianchi7',
     email: 'giuseppe.b@comune.milano.it',
-    userRole: 'LIMITED',
+    userRole: 'ADMIN',
     status: 'ACTIVE',
     products: [
       {
@@ -245,7 +245,7 @@ export const mockedUsers: Array<PartyUser> = [
           {
             relationshipId: 'rel7',
             role: 'referente-tecnico',
-            selcRole: 'LIMITED',
+            selcRole: 'ADMIN',
             status: 'ACTIVE',
           },
         ],

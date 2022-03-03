@@ -76,7 +76,7 @@ export default function UserProductDetail({
           </Grid>
         </Grid>
       </Grid>
-      <Grid container item xs={10}>
+      <Grid container>
         <Grid item xs={12}>
           <UserProductRoles
             showActions={!showActionOnProduct}

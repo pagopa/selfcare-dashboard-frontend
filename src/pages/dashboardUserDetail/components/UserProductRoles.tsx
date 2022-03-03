@@ -78,7 +78,7 @@ export default function UserProductRoles({
 
           <Grid item xs={9}>
             <Grid item container>
-              <Grid item xs={5}>
+              <Grid item xs={4}>
                 <CustomInfoStyle
                   variant="body2"
                   sx={{ color: p.status === 'SUSPENDED' ? '#A2ADB8' : '#000000' }}
@@ -96,7 +96,7 @@ export default function UserProductRoles({
                   </Tooltip>
                 </CustomInfoStyle>
               </Grid>
-              <Grid item xs={4} ml={4}>
+              <Grid item xs={4}>
                 <UserProductActions
                   showActions={showActions}
                   party={party}
