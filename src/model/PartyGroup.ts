@@ -1,4 +1,3 @@
-import { string } from 'fp-ts';
 import { PartyUser } from './PartyUser';
 
 export type PartyGroupStatus = 'ACTIVE' | 'SUSPENDED';
