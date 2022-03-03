@@ -1,36 +1,23 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Box, styled } from '@mui/material';
-import { DataGrid, GridColDef, GridSortDirection, GridSortModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React from 'react';
-import { CustomPagination } from '@pagopa/selfcare-common-frontend';
-import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
 import { Product } from '../../../../../model/Product';
-import { PartyUser } from '../../../../../model/PartyUser';
-import { Party, UserStatus } from '../../../../../model/Party';
-import { ProductRolesLists } from '../../../../../model/ProductRole';
-import { buildColumnDefs } from './UserProductTableColumns';
-import UserProductLoading from './UserProductLoading';
-import UserTableLoadMoreData from './UserProductLoadMoreData';
+import { Party } from '../../../../../model/Party';
+import { PartyGroup, PartyGroupStatus } from '../../../../../model/PartyGroup';
+import { buildColumnDefs } from './GroupProductTableColumns';
 
 const rowHeight = 81;
 const headerHeight = 56;
 
-interface UsersTableProps {
-  incrementalLoad: boolean;
-  loading: boolean;
-  noMoreData: boolean;
+interface GroupsTableProps {
   party: Party;
-  users: Array<PartyUser>;
+  groups: Array<PartyGroup>;
   product: Product;
-  productRolesLists: ProductRolesLists;
   canEdit: boolean;
-  fetchPage: (page?: number, size?: number, refetch?: boolean) => void;
-  page: Page;
-  sort?: string;
-  onSortRequest: (sort: string) => void;
-  onRowClick: (partyUser: PartyUser) => void;
-  onDelete: (partyUser: PartyUser) => void;
-  onStatusUpdate: (partyUser: PartyUser, nextStatus: UserStatus) => void;
+  onRowClick: (partyGroup: PartyGroup) => void;
+  onDelete: (partyGroup: PartyGroup) => void;
+  onStatusUpdate: (partyGroup: PartyGroup, nextStatus: PartyGroupStatus) => void;
 }
 
 const CustomDataGrid = styled(DataGrid)({
@@ -93,39 +80,28 @@ const CustomDataGrid = styled(DataGrid)({
   },
 });
 
-export default function UsersProductTable({
-  incrementalLoad,
-  loading,
-  fetchPage,
-  noMoreData,
+export default function GroupsProductTable({
   party,
   product,
-  productRolesLists,
   canEdit,
-  users,
-  page,
-  sort,
-  onSortRequest,
+  groups,
   onRowClick,
   onDelete,
   onStatusUpdate,
-}: UsersTableProps) {
-  const sortSplitted = sort ? sort.split(',') : undefined;
-
+}: GroupsTableProps) {
   const columns: Array<GridColDef> = buildColumnDefs(
     canEdit,
     party,
     product,
     onRowClick,
     onDelete,
-    onStatusUpdate,
-    productRolesLists
+    onStatusUpdate
   );
 
   return (
     <React.Fragment>
       <Box
-        id="UsersSearchTableBox"
+        id="GroupsSearchTableBox"
         sx={{
           position: 'relative',
           width: '100% !important',
@@ -137,49 +113,21 @@ export default function UsersProductTable({
         <CustomDataGrid
           className="CustomDataGrid"
           autoHeight={true}
-          rows={users}
+          rows={groups}
           getRowId={(r) => r.id}
           columns={columns}
-          rowHeight={users.length === 0 && loading ? 0 : rowHeight}
+          rowHeight={rowHeight}
           headerHeight={headerHeight}
           hideFooterSelectedRowCount={true}
+          hideFooter={true}
+          hideFooterPagination={true}
           components={{
-            Footer:
-              loading || incrementalLoad
-                ? () =>
-                    loading ? (
-                      <UserProductLoading />
-                    ) : !noMoreData ? (
-                      <UserTableLoadMoreData fetchNextPage={fetchPage} />
-                    ) : (
-                      <></>
-                    )
-                : undefined,
-            Pagination: incrementalLoad
-              ? undefined
-              : () => (
-                  <CustomPagination
-                    sort={sort}
-                    page={page}
-                    onPageRequest={(nextPage) => fetchPage(nextPage.page, nextPage.size)}
-                  />
-                ),
-            NoRowsOverlay: () => <></>,
-            NoResultsOverlay: () => <></>,
             ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
             ColumnSortedDescendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
           }}
           paginationMode="server"
           filterMode="server"
           sortingMode="server"
-          onSortModelChange={(model: GridSortModel) =>
-            onSortRequest(model.map((m) => `${m.field},${m.sort}`)[0])
-          }
-          sortModel={
-            sortSplitted
-              ? [{ field: sortSplitted[0], sort: sortSplitted[1] as GridSortDirection }]
-              : undefined
-          }
         />
       </Box>
     </React.Fragment>

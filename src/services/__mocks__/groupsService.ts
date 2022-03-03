@@ -1,10 +1,4 @@
-import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
-import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
-import {
-  applySort,
-  extractPageRequest,
-} from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
 import { Party } from '../../model/Party';
 import { PartyUser } from '../../model/PartyUser';
 import { Product, ProductsMap } from '../../model/Product';
@@ -77,28 +71,23 @@ export const mockedGroups: Array<PartyGroup> = [
 ];
 
 export const fetchPartyGroups = (
-  pageRequest: PageRequest,
   _party: Party,
   _productsMap: ProductsMap,
   _currentUser: User,
-  _checkPermission: boolean,
-  product?: Product
-): Promise<PageResource<PartyGroup>> => {
+  products: Array<Product>
+): Promise<Array<PartyGroup>> => {
+  const productIdsDesired = products.map((p) => p.id);
+
   const filteredContent = mockedGroups
     .filter((u) => {
-      if (product) {
-        return u.productId === product.id;
+      if (productIdsDesired.length > 0) {
+        return productIdsDesired.indexOf(u.productId) > -1;
       }
       return u;
     })
     .map((u) => JSON.parse(JSON.stringify(u)));
 
-  if (pageRequest.sort) {
-    applySort(filteredContent, pageRequest.sort);
-  }
-  return new Promise((resolve) =>
-    setTimeout(() => resolve(extractPageRequest(filteredContent, pageRequest)), 100)
-  );
+  return new Promise((resolve) => setTimeout(() => resolve(filteredContent), 100));
 };
 
 export const savePartyGroup = (

@@ -48,7 +48,7 @@ function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Pro
     }
   }, [productsFetchStatus]);
 
-  useEffect(() => trackEvent('USER_LIST', { party_id: party.institutionId }), []);
+  useEffect(() => trackEvent('USER_LIST', { party_id: party.institutionId }), [party]);
 
   const prodSectionRefs = useMemo(
     () => activeProducts.map((_) => React.createRef<HTMLDivElement>()),
