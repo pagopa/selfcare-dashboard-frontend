@@ -13,6 +13,7 @@ import UsersPage from './pages/dashboardUsers/UsersPage/UsersPage';
 import UsersProductPage from './pages/dashboardUsers/UsersProductPage/UsersProductPage';
 import AddProductToUserPage from './pages/dashboardUserEdit/AddProductToUserPage';
 import EditUserRegistrypRoductPage from './pages/dashboardUserEdit/EditUserRegistryProductPage';
+import GroupDetailPage from './pages/dashboardGroupDetail/GroupDetailPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -84,6 +85,11 @@ export const DASHBOARD_ROUTES = {
         path: `${BASE_ROUTE}/:institutionId/users/:userId`,
         exact: true,
         component: UserDetailPage,
+      },
+      PARTY_GROUP_DETAIL: {
+        path: `${BASE_ROUTE}/:institutionId/users/:groupId/detail`,
+        exact: true,
+        component: GroupDetailPage,
       },
       ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/users`),
     },
