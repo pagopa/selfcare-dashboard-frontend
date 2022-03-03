@@ -72,7 +72,7 @@ type Props = {
   goBack?: () => void;
 };
 
-export default function AddGroupForm({ products, party, initialFormData, goBack }: Props) {
+export default function AddGroupForm({ products, initialFormData, goBack }: Props) {
   const setLoadingSaveGroup = useLoading(LOADING_TASK_SAVE_GROUP);
 
   const addError = useErrorDispatcher();
@@ -108,7 +108,7 @@ export default function AddGroupForm({ products, party, initialFormData, goBack 
           DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, // TODO
           {
             institutionId: '',
-            productId: '',
+            groupId: '',
           }
         )
       ));
