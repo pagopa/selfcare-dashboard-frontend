@@ -26,11 +26,11 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Party } from '../../../model/Party';
-import { PartyGroupOnCreation } from '../../../model/PartyGroup';
+import { PartyGroup, PartyGroupOnCreation } from '../../../model/PartyGroup';
 import { Product } from '../../../model/Product';
 import { ProductsRolesMap } from '../../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { savePartyUser } from '../../../services/usersService';
+import { savePartyGroup } from '../../../services/groupsService';
 import { LOADING_TASK_SAVE_GROUP } from '../../../utils/constants';
 
 const CustomTextField = styled(TextField)({
@@ -67,12 +67,19 @@ type Props = {
   products: Array<Product>;
   party: Party;
   productsRolesMap: ProductsRolesMap;
+  PartyGroupExt: PartyGroup;
   initialFormData: PartyGroupOnCreation;
   canEdit: boolean;
   goBack?: () => void;
 };
 
-export default function AddGroupForm({ products, initialFormData, goBack }: Props) {
+export default function AddGroupForm({
+  products,
+  party,
+  initialFormData,
+  PartyGroupExt,
+  goBack,
+}: Props) {
   const setLoadingSaveGroup = useLoading(LOADING_TASK_SAVE_GROUP);
 
   const addError = useErrorDispatcher();
@@ -104,13 +111,10 @@ export default function AddGroupForm({ products, initialFormData, goBack }: Prop
     goBack ??
     (() =>
       history.push(
-        resolvePathVariables(
-          DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, // TODO
-          {
-            institutionId: '',
-            groupId: '',
-          }
-        )
+        resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUP.path, {
+          institutionId: PartyGroupExt.institutionId,
+          groupId: PartyGroupExt.id,
+        })
       ));
 
   const validate = (values: Partial<PartyGroupOnCreation>) => {
@@ -125,18 +129,15 @@ export default function AddGroupForm({ products, initialFormData, goBack }: Prop
   };
 
   const save = (values: PartyGroupOnCreation) => {
-    // TODO
     setLoadingSaveGroup(true);
-    savePartyUser(values) // saveGroupUser(....., ...., values) // TODO
+    savePartyGroup(party, products[0] as Product, values) // TODO PRODUCTS
       .then(() => {
         unregisterUnloadEvent();
-        /*
-        trackEvent('GROUP_CREATE', {               // TODO TRACK EVENT
-          // TODO
-          party_id = party.institutionId,
-          product_id = .id,
+        trackEvent('GROUP_CREATE', {
+          // TODO TRACK EVENT
+          party_id: PartyGroupExt.institutionId,
+          group_id: PartyGroupExt.id, // TODO GROUP ID
         });
-        */
         addNotify({
           component: 'Toast',
           id: 'SAVE_GROUP',
@@ -169,7 +170,6 @@ export default function AddGroupForm({ products, initialFormData, goBack }: Prop
   };
 
   const formik = useFormik<PartyGroupOnCreation>({
-    // TODO
     initialValues: initialFormData,
     validate,
     onSubmit: (values) => {
@@ -186,7 +186,7 @@ export default function AddGroupForm({ products, initialFormData, goBack }: Prop
   }, [formik.dirty]);
 
   const baseTextFieldProps = (
-    field: keyof PartyGroupOnCreation, // TODO
+    field: keyof PartyGroupOnCreation,
     label: string,
     placeholder: string
   ) => {

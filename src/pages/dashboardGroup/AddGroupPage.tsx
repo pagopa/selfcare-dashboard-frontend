@@ -4,6 +4,7 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { useHistory } from 'react-router-dom';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import { Party } from '../../model/Party';
+import { PartyGroupExt } from '../../model/PartyGroup';
 import { Product } from '../../model/Product';
 import { ProductsRolesMap } from '../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../routes';
@@ -13,9 +14,10 @@ type Props = {
   party: Party;
   activeProducts: Array<Product>;
   productsRolesMap: ProductsRolesMap;
+  PartyGroupExt: PartyGroupExt;
 };
 
-function AddGroupPage({ party, activeProducts, productsRolesMap }: Props) {
+function AddGroupPage({ party, activeProducts, productsRolesMap, PartyGroupExt }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -23,14 +25,10 @@ function AddGroupPage({ party, activeProducts, productsRolesMap }: Props) {
       description: 'Gruppi',
       onClick: () =>
         history.push(
-          // TODO
-          resolvePathVariables(
-            DASHBOARD_ROUTES.PARTY_PRODUCT_USERS.path, // TODO Pagina gruppi
-            {
-              institutionId: '',
-              productId: '',
-            }
-          )
+          resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUP.path, {
+            institutionId: PartyGroupExt.institutionId,
+            groupId: PartyGroupExt.id,
+          })
         ),
     },
     {
@@ -56,10 +54,11 @@ function AddGroupPage({ party, activeProducts, productsRolesMap }: Props) {
         />
       </Grid>
       <Grid item xs={12}>
-        <AddGroupForm // TODO
+        <AddGroupForm
           party={party}
           products={activeProducts}
           productsRolesMap={productsRolesMap}
+          PartyGroupExt={PartyGroupExt}
           initialFormData={{
             name: '',
             description: '',
