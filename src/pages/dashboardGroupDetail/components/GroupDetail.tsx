@@ -27,8 +27,7 @@ export default function GroupDetail({ group, productsMap }: Props) {
         </Grid>
         <Grid item xs={9} className="userInfoStyle">
           <Typography variant="body2" className="CustomInfoStyle">
-            {' '}
-            {group.name}{' '}
+            {group.name}
           </Typography>
         </Grid>
       </Grid>
@@ -40,8 +39,7 @@ export default function GroupDetail({ group, productsMap }: Props) {
         </Grid>
         <Grid item xs={3} className="userInfoStyle">
           <Typography variant="body2" className="CustomInfoStyle">
-            {' '}
-            {group.description}{' '}
+            {group.description}
           </Typography>
         </Grid>
       </Grid>
@@ -53,8 +51,7 @@ export default function GroupDetail({ group, productsMap }: Props) {
         </Grid>
         <Grid item xs={9} className="userInfoStyle">
           <Typography variant="body2" className="CustomInfoStyle">
-            {' '}
-            {productsMap[group.productId].title}{' '}
+            {productsMap[group.productId].title}
           </Typography>
         </Grid>
       </Grid>
@@ -76,8 +73,7 @@ export default function GroupDetail({ group, productsMap }: Props) {
         </Grid>
         <Grid item xs={9} className="userInfoStyle">
           <Typography variant="body2" className="CustomInfoStyle">
-            {' '}
-            {formatDate(group.createdAt)}{' '}
+            {formatDate(group.createdAt)}
           </Typography>
         </Grid>
         <Grid item xs={3}>
@@ -99,8 +95,7 @@ export default function GroupDetail({ group, productsMap }: Props) {
         </Grid>
         <Grid item xs={9} className="userInfoStyle">
           <Typography variant="body2" className="CustomInfoStyle">
-            {' '}
-            {formatDate(group.modifiedAt)}{' '}
+            {formatDate(group.modifiedAt)}
           </Typography>
         </Grid>
         <Grid item xs={3}>

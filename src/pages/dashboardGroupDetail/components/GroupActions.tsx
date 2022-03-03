@@ -1,32 +1,38 @@
 import { Button, Grid } from '@mui/material';
+import { PartyGroupExt } from '../../../model/PartyGroup';
 
-export default function GroupActions() {
+type Props = {
+  goEdit: () => void;
+  goToDuplicate: () => void;
+  onDelete: () => void;
+  partyGroup: PartyGroupExt;
+  handleOpen: () => void;
+};
+export default function GroupActions({
+  goEdit,
+  goToDuplicate,
+  onDelete,
+  partyGroup,
+  handleOpen,
+}: Props) {
   return (
     <Grid container spacing={4}>
       <Grid item xs={3}>
-        <Button
-          variant="contained"
-          sx={{ height: '40px', width: '100%' }}
-          // onClick={() => window.location.assign(ENV.URL_FE.LOGOUT)} TODO: add path to EditGroupPage
-        >
+        <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={goEdit}>
           Modifica
         </Button>
       </Grid>
       <Grid item xs={3}>
-        <Button
-          variant="contained"
-          sx={{ height: '40px', width: '100%' }}
-          //   onClick={() => window.location.assign(ENV.URL_FE.LOGOUT)}
-        >
-          Sospendi
+        <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={handleOpen}>
+          {partyGroup.status === 'SUSPENDED'
+            ? 'Riabilita'
+            : partyGroup.status === 'ACTIVE'
+            ? 'Sospendi'
+            : ''}
         </Button>
       </Grid>
       <Grid item xs={3}>
-        <Button
-          variant="contained"
-          sx={{ height: '40px', width: '100%' }}
-          //   onClick={() => window.location.assign(ENV.URL_FE.LOGOUT)}
-        >
+        <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={goToDuplicate}>
           Duplica
         </Button>
       </Grid>
@@ -35,7 +41,7 @@ export default function GroupActions() {
           variant="outlined"
           color="error"
           sx={{ height: '40px', width: '100%' }}
-          // onClick={() => window.location.assign(ENV.URL_FE.LOGOUT)} TODO: add path to DuplicateGroupPage
+          onClick={onDelete}
         >
           Elimina
         </Button>
