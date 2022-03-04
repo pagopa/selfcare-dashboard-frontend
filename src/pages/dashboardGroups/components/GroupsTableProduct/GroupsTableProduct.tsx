@@ -9,11 +9,21 @@ type Props = {
   party: Party;
   product: Product;
   groups: Array<PartyGroup>;
+  sort?: string;
+  onSortRequest: (sort: string) => void;
   onDelete: (partyGroup: PartyGroup) => void;
   onStatusUpdate: (partyGroup: PartyGroup, nextStatus: PartyGroupStatus) => void;
 };
 
-const GroupsTableProduct = ({ party, product, groups, onDelete, onStatusUpdate }: Props) => {
+const GroupsTableProduct = ({
+  party,
+  product,
+  groups,
+  onDelete,
+  onStatusUpdate,
+  sort,
+  onSortRequest,
+}: Props) => {
   const history = useHistory();
 
   const canEdit = product.userRole === 'ADMIN';
@@ -29,6 +39,8 @@ const GroupsTableProduct = ({ party, product, groups, onDelete, onStatusUpdate }
           resolvePathVariables('' /* TODO use Group details url */, { groupId: partyGroup.id })
         )
       }
+      sort={sort}
+      onSortRequest={onSortRequest}
       onDelete={onDelete}
       onStatusUpdate={onStatusUpdate}
     />

@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import { applySort } from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
 import { useEffect, useState } from 'react';
 import { Party } from '../../../model/Party';
 import { PartyGroup, PartyGroupStatus } from '../../../model/PartyGroup';
@@ -14,8 +15,13 @@ type Props = {
 
 export default function GroupsProductSection({ party, product, groups, onCompleteDelete }: Props) {
   const [innerGroupsList, setInnerGroupsList] = useState<Array<PartyGroup>>([]);
+  const [sort, setSort] = useState('name,asc');
 
-  useEffect(() => setInnerGroupsList(groups), [groups]);
+  useEffect(() => {
+    const clonedList = groups.slice();
+    applySort(clonedList, sort);
+    setInnerGroupsList(clonedList);
+  }, [groups, sort]);
 
   const onDelete = (partyGroup: PartyGroup) => {
     setInnerGroupsList(innerGroupsList.filter((u) => u.id !== partyGroup.id));
@@ -43,6 +49,8 @@ export default function GroupsProductSection({ party, product, groups, onComplet
           party={party}
           product={product}
           groups={innerGroupsList}
+          sort={sort}
+          onSortRequest={setSort}
           onDelete={onDelete}
           onStatusUpdate={onStatusUpdate}
         />

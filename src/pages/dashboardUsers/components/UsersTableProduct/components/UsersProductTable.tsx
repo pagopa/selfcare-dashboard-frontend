@@ -110,7 +110,7 @@ export default function UsersProductTable({
   onDelete,
   onStatusUpdate,
 }: UsersTableProps) {
-  const sortSplitted = sort ? sort.split(',') : undefined;
+  const sortSplitted = sort && sort !== '' ? sort.split(',') : undefined;
 
   const columns: Array<GridColDef> = buildColumnDefs(
     canEdit,
@@ -172,12 +172,12 @@ export default function UsersProductTable({
           filterMode="server"
           sortingMode="server"
           onSortModelChange={(model: GridSortModel) =>
-            onSortRequest(model.map((m) => `${m.field},${m.sort}`)[0])
+            onSortRequest(model.map((m) => `${m.field},${m.sort}`)[0] ?? '')
           }
           sortModel={
             sortSplitted
               ? [{ field: sortSplitted[0], sort: sortSplitted[1] as GridSortDirection }]
-              : undefined
+              : []
           }
         />
       </Box>

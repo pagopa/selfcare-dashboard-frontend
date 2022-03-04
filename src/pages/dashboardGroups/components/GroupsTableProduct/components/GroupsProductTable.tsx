@@ -1,7 +1,7 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Box, styled } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import React from 'react';
+import { DataGrid, GridColDef, GridSortDirection, GridSortModel } from '@mui/x-data-grid';
+import React, { useMemo } from 'react';
 import { Product } from '../../../../../model/Product';
 import { Party } from '../../../../../model/Party';
 import { PartyGroup, PartyGroupStatus } from '../../../../../model/PartyGroup';
@@ -15,6 +15,8 @@ interface GroupsTableProps {
   groups: Array<PartyGroup>;
   product: Product;
   canEdit: boolean;
+  sort?: string;
+  onSortRequest: (sort: string) => void;
   onRowClick: (partyGroup: PartyGroup) => void;
   onDelete: (partyGroup: PartyGroup) => void;
   onStatusUpdate: (partyGroup: PartyGroup, nextStatus: PartyGroupStatus) => void;
@@ -85,17 +87,17 @@ export default function GroupsProductTable({
   product,
   canEdit,
   groups,
+  sort,
+  onSortRequest,
   onRowClick,
   onDelete,
   onStatusUpdate,
 }: GroupsTableProps) {
-  const columns: Array<GridColDef> = buildColumnDefs(
-    canEdit,
-    party,
-    product,
-    onRowClick,
-    onDelete,
-    onStatusUpdate
+  const sortSplitted = sort && sort !== '' ? sort.split(',') : undefined;
+
+  const columns: Array<GridColDef> = useMemo(
+    () => buildColumnDefs(canEdit, party, product, onRowClick, onDelete, onStatusUpdate),
+    [party, product]
   );
 
   return (
@@ -121,12 +123,20 @@ export default function GroupsProductTable({
           hideFooter={true}
           hideFooterPagination={true}
           components={{
-            ColumnSortedAscendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
-            ColumnSortedDescendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
+            ColumnSortedAscendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
+            ColumnSortedDescendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
           }}
           paginationMode="server"
           filterMode="server"
           sortingMode="server"
+          onSortModelChange={(model: GridSortModel) =>
+            onSortRequest(model.map((m) => `${m.field},${m.sort}`)[0] ?? '')
+          }
+          sortModel={
+            sortSplitted
+              ? [{ field: sortSplitted[0], sort: sortSplitted[1] as GridSortDirection }]
+              : []
+          }
         />
       </Box>
     </React.Fragment>
