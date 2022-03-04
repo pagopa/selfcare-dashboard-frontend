@@ -71,7 +71,7 @@ export const mockedGroups: Array<PartyGroup> = [
 ];
 
 export const fetchPartyGroups = (
-  _party: Party,
+  party: Party,
   _productsMap: ProductsMap,
   _currentUser: User,
   products: Array<Product>
@@ -80,6 +80,9 @@ export const fetchPartyGroups = (
 
   const filteredContent = mockedGroups
     .filter((u) => {
+      if (u.institutionId !== party.institutionId) {
+        return false;
+      }
       if (productIdsDesired.length > 0) {
         return productIdsDesired.indexOf(u.productId) > -1;
       }

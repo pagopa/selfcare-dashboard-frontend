@@ -15,7 +15,7 @@ export default function AddGroupButton({ party }: AddGroupButtonProps) {
   return (
     <Button
       variant="contained"
-      startIcon={<AddIcon />}
+      startIcon={<AddIcon sx={{ stroke: 'white', strokeWidth: '1px' }} />}
       sx={{ py: '10px' }}
       onClick={() =>
         onExit(() =>

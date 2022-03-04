@@ -126,7 +126,7 @@ export default function GroupProductRowActions({
 
     askConfirm(
       nextStatus === 'SUSPENDED' ? 'Sospendi Gruppo' : 'Riattiva Gruppo',
-      nextStatus === 'SUSPENDED' ? 'Stai per congelare' : 'Stai per riattivare',
+      nextStatus === 'SUSPENDED' ? 'Stai per congelare' : 'Stai per riattivare', // TODO or "sospendere" ?
       () => updateStatus(nextStatus)
     );
   };
@@ -176,7 +176,7 @@ export default function GroupProductRowActions({
   };
 
   return (
-    <div>
+    <div style={{ textAlign: 'right' }}>
       <IconButton onClick={handleClick}>
         <MoreVertIcon color="primary" />
       </IconButton>

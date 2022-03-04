@@ -130,7 +130,6 @@ export default function UsersProductTable({
           position: 'relative',
           width: '100% !important',
           border: 'none',
-          px: '16px',
         }}
         justifyContent="start"
       >

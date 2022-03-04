@@ -1,6 +1,8 @@
 import { Chip, Typography, Grid } from '@mui/material';
 import { GridColDef, GridColumnHeaderParams, GridRenderCellParams } from '@mui/x-data-grid';
 import React, { CSSProperties, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { PartyGroup, PartyGroupStatus } from '../../../../../model/PartyGroup';
@@ -21,7 +23,7 @@ export function buildColumnDefs(
       headerName: 'NOME',
       align: 'left',
       headerAlign: 'left',
-      width: 275, // TODO fix column sizes
+      width: 175, // TODO fix column sizes
       editable: false,
       disableColumnMenu: true,
       renderHeader: showCustmHeader,
@@ -47,7 +49,7 @@ export function buildColumnDefs(
       headerName: 'PRODOTTO',
       align: 'left',
       headerAlign: 'left',
-      width: 250,
+      width: 200,
       editable: false,
       disableColumnMenu: true,
       valueGetter: () => product.title,
@@ -58,13 +60,26 @@ export function buildColumnDefs(
     {
       field: 'referenti',
       cellClassName: 'justifyContentNormalRight',
-      headerName: '',
+      headerName: 'REFERENTI',
       align: 'center',
-      width: 82,
+      width: 110,
       hideSortIcons: true,
       disableColumnMenu: true,
       editable: false,
       valueGetter: (params) => (params.row as PartyGroup).membersIds.length,
+      renderCell: (params) => renderCell(params, undefined, onRowClick),
+      renderHeader: showCustmHeader,
+      sortable: false,
+    },
+    {
+      field: 'status',
+      cellClassName: 'justifyContentNormalRight',
+      headerName: '',
+      align: 'center',
+      width: 75,
+      hideSortIcons: true,
+      disableColumnMenu: true,
+      editable: false,
       renderCell: (params) => showStatus(params, onRowClick),
       sortable: false,
     },
@@ -73,14 +88,26 @@ export function buildColumnDefs(
       cellClassName: 'justifyContentNormalRight',
       headerName: '',
       align: 'right',
-      width: 53,
+      width: 100,
       hideSortIcons: true,
       disableColumnMenu: true,
       editable: false,
       renderCell: (p) =>
         canEdit
           ? showActions(party, product, p, onDelete, onStatusUpdate)
-          : renderCell(p, '', onRowClick), // TODO show Duplica button
+          : renderCell(
+              p,
+              <Typography variant="h6">
+                <Link
+                  to={resolvePathVariables('' /* TODO duplica page */, {
+                    institutionId: party.institutionId,
+                    groupId: (p.row as PartyGroup).id,
+                  })}
+                >
+                  Duplica
+                </Link>
+              </Typography>
+            ),
       sortable: false,
     },
   ] as Array<GridColDef>;
@@ -106,6 +133,7 @@ function renderCell(
         // marginBottom:'16px',
         borderBottom: '1px solid #CCD4DC',
         cursor: 'pointer',
+        WebkitBoxOrient: 'vertical' as const,
         ...overrideStyle,
       }}
       onClick={onRowClick ? () => onRowClick(params.row) : undefined}
@@ -115,7 +143,7 @@ function renderCell(
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           display: '-webkit-box',
-          WebkitLineClamp: 3,
+          WebkitLineClamp: 2,
           WebkitBoxOrient: 'vertical' as const,
           paddingBottom: '8px',
           width: '100%',
@@ -186,7 +214,7 @@ function TableChip({ text }: { text: string }) {
     <Chip
       label={text}
       sx={{
-        fontSize: '16px',
+        fontSize: '14px',
         fontWeight: '600',
         color: '#17324D',
         backgroundColor: '#E0E0E0',

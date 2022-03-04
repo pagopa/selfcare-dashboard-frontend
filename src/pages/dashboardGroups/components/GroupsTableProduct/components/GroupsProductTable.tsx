@@ -106,7 +106,6 @@ export default function GroupsProductTable({
           position: 'relative',
           width: '100% !important',
           border: 'none',
-          px: '16px',
         }}
         justifyContent="start"
       >

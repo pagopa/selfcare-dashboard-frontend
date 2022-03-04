@@ -101,9 +101,9 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
       container
       px={2}
       mt={10}
-      sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
+      sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
-      <Grid item xs={12} mb={9}>
+      <Grid item xs={12}>
         <Grid container direction="row" justifyContent="space-between" columns={9}>
           <Grid item xs={6}>
             <TitleBox
@@ -124,10 +124,11 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
         </Grid>
       </Grid>
 
-      {productsHavingGroupCount > 1 && ( // TODO handle spacing layout
+      {productsHavingGroupCount > 1 && (
         <Grid
           item
           xs={12}
+          mt={5}
           sx={{
             borderBottom: 1,
             borderBottomWidth: '2px',
@@ -153,7 +154,7 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
         </Grid>
       )}
       <Grid item xs={12} sx={{ height: '100%' }}>
-        <Grid container direction="row" alignItems={'center'} mt={5}>
+        <Grid container direction="row" alignItems={'center'}>
           {Object.values(groupsByProduct).map(([product, groups], i) => (
             <Grid key={product.id} item xs={12} ref={prodSectionRefs[i]}>
               <GroupsProductSection
