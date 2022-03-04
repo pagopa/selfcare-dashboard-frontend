@@ -11,9 +11,17 @@ export type Product = {
   tag?: string;
   userRole?: string;
   authorized?: boolean;
-  active: boolean;
-  status?: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
 };
+
+export type ProductsMap = { [id: string]: Product };
+
+export const buildProductsMap = (products: Array<Product>): ProductsMap =>
+  products.reduce((acc, p) => {
+    // eslint-disable-next-line functional/immutable-data
+    acc[p.id] = p;
+    return acc;
+  }, {} as ProductsMap);
 
 export const productResource2Product = (resource: ProductsResource): Product => ({
   activationDateTime: resource.activatedAt,
@@ -26,5 +34,5 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   tag: undefined,
   userRole: resource.userRole,
   authorized: resource.authorized,
-  active: resource.active,
+  status: resource.status,
 });

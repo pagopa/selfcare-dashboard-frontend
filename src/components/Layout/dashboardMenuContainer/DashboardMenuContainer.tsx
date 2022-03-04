@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material';
-import { roleLabels } from '../../../utils/constants';
+import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useAppSelector } from '../../../redux/hooks';
 import { partiesSelectors } from '../../../redux/slices/partiesSlice';
-import { userSelectors } from '../../../redux/slices/userSlice';
 import LogoSubMenu from './components/LogoSubMenu';
 import DashboardSubMenu from './components/DashboardSubMenu';
 
@@ -11,7 +11,7 @@ const DashboardMenuContainer = () => {
   const user = useAppSelector(userSelectors.selectLoggedUser);
 
   return selectedParty ? (
-    <Grid container item direction="row" xs={6} alignContent="center" justifyContent="end">
+    <Grid container item direction="row" xs={6} alignContent="center" justifyContent="flex-end">
       <Grid item xs={5}>
         <LogoSubMenu
           title={selectedParty.description}

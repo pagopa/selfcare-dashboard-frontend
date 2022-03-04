@@ -1,22 +1,21 @@
-import { storageRead } from '../utils/storage-utils';
-import { STORAGE_KEY_TOKEN } from '../utils/constants';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
+import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
+import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
 import { store } from '../redux/store';
-import { appStateActions } from '../redux/slices/appStateSlice';
-import { PartyUserOnCreation } from '../model/PartyUser';
+import { PartyUserOnCreation, PartyUserOnEdit } from '../model/PartyUser';
+import { ENV } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
-import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
-
-const dashboardBaseUrl = process.env.REACT_APP_URL_API_DASHBOARD;
-const dashboardTimeoutMs = process.env.REACT_APP_API_DASHBOARD_TIMEOUT_MS;
+import { UserResource } from './generated/b4f-dashboard/UserResource';
+import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
-    const token = storageRead(STORAGE_KEY_TOKEN, 'string');
+    const token = storageTokenOps.read();
     return wrappedOperation({
       ...params,
       bearerAuth: `Bearer ${token}`,
@@ -24,9 +23,9 @@ const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   };
 
 const apiClient = createClient({
-  baseUrl: dashboardBaseUrl,
+  baseUrl: ENV.URL_API.API_DASHBOARD,
   basePath: '',
-  fetchApi: buildFetchApi(dashboardTimeoutMs),
+  fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.DASHBOARD),
   withDefaults: withBearerAndInstitutionId,
 });
 
@@ -91,6 +90,14 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
+  getPartyUser: async (
+    institutionId: string,
+    userId: string
+  ): Promise<InstitutionUserResource | null> => {
+    const result = await apiClient.getInstitutionUserUsingGET({ institutionId, userId });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
   getPartyProductUsers: async (
     institutionId: string,
     productId: string,
@@ -117,6 +124,15 @@ export const DashboardApi = {
     return extractResponse(result, 201, onRedirectToLogin);
   },
 
+  updatePartyUser: async (institutionId: string, user: PartyUserOnEdit): Promise<void> => {
+    const result = await apiClient.updateUserUsingPUT({
+      institutionId,
+      id: user.id,
+      body: { email: user.email, fiscalCode: user.taxCode, name: user.name, surname: user.surname },
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
+  },
+
   suspendPartyRelation: async (relationshipId: string): Promise<void> => {
     const result = await apiClient.suspendRelationshipUsingPOST({
       relationshipId,
@@ -131,9 +147,27 @@ export const DashboardApi = {
     return extractResponse(result, 204, onRedirectToLogin);
   },
 
-  getProductRoles: async (productId: string): Promise<Array<string>> => {
+  deletePartyRelation: async (relationshipId: string): Promise<void> => {
+    const result = await apiClient.deleteRelationshipByIdUsingDELETE({
+      relationshipId,
+    });
+    return extractResponse(result, 204, onRedirectToLogin);
+  },
+
+  getProductRoles: async (productId: string): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  fetchUserRegistryByFiscalCode: async (
+    taxCode: string,
+    institutionId: string
+  ): Promise<UserResource | null> => {
+    const result = await apiClient.getUserByExternalIdUsingPOST({
+      institutionId,
+      body: { externalId: taxCode },
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
