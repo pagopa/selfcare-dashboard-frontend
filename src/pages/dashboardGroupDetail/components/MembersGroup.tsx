@@ -110,7 +110,7 @@ export default function MembersGroup({
               disableRipple
               onClick={handleClick}
             >
-              <MoreVertIcon color="primary" />
+              <MoreVertIcon sx={{ color: isSuspended ? '#a2adb8' : 'primary' }} />
             </IconButton>
           </Grid>
           {index !== partyGroup.members.length - 1 && (
