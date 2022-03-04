@@ -201,7 +201,7 @@ function TableChip({ text }: { text: string }) {
     <Chip
       label={text}
       sx={{
-        fontSize: '16px',
+        fontSize: '14px',
         fontWeight: '600',
         color: '#17324D',
         backgroundColor: '#E0E0E0',
