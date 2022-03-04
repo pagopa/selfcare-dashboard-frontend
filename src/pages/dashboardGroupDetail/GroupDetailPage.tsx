@@ -35,9 +35,8 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
   }, [partyGroup]);
 
   const goBack = () =>
-    // TODO: redirect to Group Table Page
     history.push(
-      resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.MAIN.path, {
         institutionId: partyGroup.institutionId,
       })
     );

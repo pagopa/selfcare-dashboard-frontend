@@ -29,8 +29,6 @@ export default function MembersGroup({
   groupStatusClass,
   isSuspended,
 }: Props) {
-  // console.log('partyGroup', partyGroup);
-
   const ITEM_HEIGHT = 48;
   const roleLabelsGroup = {
     ADMIN: {
