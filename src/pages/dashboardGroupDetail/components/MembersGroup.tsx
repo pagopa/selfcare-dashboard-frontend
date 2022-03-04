@@ -18,9 +18,17 @@ type Props = {
   fetchPartyGroup: () => void;
   product: Product;
   party: Party;
+  isSuspended: boolean;
 };
 
-export default function MembersGroup({ partyGroup, fetchPartyGroup, product, party }: Props) {
+export default function MembersGroup({
+  partyGroup,
+  fetchPartyGroup,
+  product,
+  party,
+  groupStatusClass,
+  isSuspended,
+}: Props) {
   // console.log('partyGroup', partyGroup);
 
   const ITEM_HEIGHT = 48;
@@ -57,7 +65,12 @@ export default function MembersGroup({ partyGroup, fetchPartyGroup, product, par
         <Grid key={member.id} item container>
           <Grid item xs={3}>
             <Link
-              sx={{ textDecoration: 'none', fontWeight: 600, cursor: 'pointer' }}
+              sx={{
+                textDecoration: 'none',
+                fontWeight: 600,
+                cursor: 'pointer',
+                color: isSuspended ? '#a2adb8' : '#0073E6',
+              }}
               onClick={() =>
                 history.push(
                   resolvePathVariables(
@@ -78,12 +91,18 @@ export default function MembersGroup({ partyGroup, fetchPartyGroup, product, par
             </Link>
           </Grid>
           <Grid item xs={4}>
-            <Typography className="ShowDots" width="100%" title={member.email}>
+            <Typography
+              className={`${groupStatusClass} ShowDots`}
+              width="100%"
+              title={member.email}
+            >
               {member.email}
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography>{roleLabelsGroup[member.userRole].title}</Typography>
+            <Typography className={groupStatusClass}>
+              {roleLabelsGroup[member.userRole].title}
+            </Typography>
           </Grid>
           <Grid item xs={1} display="flex" justifyContent="flex-end">
             <IconButton

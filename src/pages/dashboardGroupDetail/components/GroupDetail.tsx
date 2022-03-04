@@ -81,6 +81,7 @@ export default function GroupDetail({
             fetchPartyGroup={fetchPartyGroup}
             party={party}
             product={product}
+            isSuspended={isSuspended}
           />
         </Grid>
       </Grid>
