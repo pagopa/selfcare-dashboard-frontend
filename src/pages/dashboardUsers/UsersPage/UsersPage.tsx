@@ -70,39 +70,43 @@ function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Pro
       mt={10}
       sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
     >
-      <Grid item xs={12} mb={9}>
+      <Grid item xs={12}>
         <TitleBox
           title="Referenti"
           subTitle="Visualizza e gestisci i referenti abilitati alla gestione dei prodotti del tuo Ente."
         />
       </Grid>
 
-      <Grid
-        item
-        xs={12}
-        sx={{
-          borderBottom: 1,
-          borderBottomWidth: '2px',
-          borderColor: 'divider',
-          position: 'sticky',
-          top: 0,
-          zIndex: 100,
-          backgroundColor: '#F5F6F7',
-        }}
-      >
-        <Tabs variant="fullWidth" scrollButtons="auto" value={activeSection}>
-          {activeProducts.map((p, i) => (
-            <Tab
-              key={p.id}
-              label={p.title}
-              component={HashLink}
-              to={`#${p.id}`}
-              value={i}
-              scroll={scrollWithOffset}
-            />
-          ))}
-        </Tabs>
-      </Grid>
+      {activeProducts.length > 1 && (
+        <Grid
+          item
+          xs={12}
+          mt={9}
+          sx={{
+            borderBottom: 1,
+            borderBottomWidth: '2px',
+            borderColor: 'divider',
+            position: 'sticky',
+            top: 0,
+            zIndex: 100,
+            backgroundColor: '#F5F6F7',
+          }}
+        >
+          <Tabs variant="fullWidth" scrollButtons="auto" value={activeSection}>
+            {activeProducts.map((p, i) => (
+              <Tab
+                key={p.id}
+                label={p.title}
+                component={HashLink}
+                to={`#${p.id}`}
+                value={i}
+                scroll={scrollWithOffset}
+              />
+            ))}
+          </Tabs>
+        </Grid>
+      )}
+
       <Grid item xs={12} sx={{ height: '100%' }}>
         <Grid container direction="row" alignItems={'center'} mt={5}>
           <Grid item xs={12}>
