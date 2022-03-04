@@ -28,7 +28,7 @@ export function buildColumnDefs(
       disableColumnMenu: true,
       renderHeader: showCustmHeader,
       renderCell: (params) => showName(params, false, onRowClick),
-      sortable: false,
+      sortable: true,
     },
     {
       field: 'description',
