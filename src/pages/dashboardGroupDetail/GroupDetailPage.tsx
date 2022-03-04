@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Chip, Link, Box } from '@mui/material';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
@@ -26,6 +26,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
   const addError = useErrorDispatcher();
   const product = productsMap[partyGroup.productId];
   const addNotify = useUserNotify();
+  const isSuspended = partyGroup.status === 'SUSPENDED';
 
   useEffect(() => {
     if (partyGroup) {
@@ -34,11 +35,13 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
   }, [partyGroup]);
 
   const goBack = () =>
+    // TODO: redirect to Group Table Page
     history.push(
       resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
         institutionId: party.institutionId,
       })
     );
+
   const goEdit = () =>
     // TODO: redirect to Group Edit Page
     history.push(
@@ -47,6 +50,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
         groupId: partyGroup.id,
       })
     );
+
   const goToDuplicate = () =>
     // TODO: redirect to Group Duplicate Page
     history.push(
@@ -55,6 +59,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
         groupId: partyGroup.id,
       })
     );
+
   const onDelete = () => {
     setLoading(true);
     deletePartyGroup(party, product, partyGroup)
@@ -93,7 +98,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
       return;
     }
     setLoading(true);
-    updatePartyGroupStatus(party, product, partyGroup, partyGroup.status)
+    updatePartyGroupStatus(party, product, partyGroup, nextGroupStatus)
       .then((_) => {
         fetchPartyGroup();
         addNotify({
@@ -132,7 +137,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
             ? 'Stai per sospendere il gruppo'
             : 'Stai per riabilitare il gruppo'}
           <strong> {partyGroup.name} </strong>
-          {'sul prodotto '}
+          {'di'}
           <strong> {productsMap[partyGroup.productId].title} </strong>
           {'.'}
           <br />
@@ -147,7 +152,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
 
   const paths = [
     {
-      description: 'Referenti',
+      description: 'Gruppi',
       onClick: goBack,
     },
     {
@@ -166,11 +171,47 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
       <Grid item xs={12} mb={3}>
         <ProductNavigationBar paths={paths} />
       </Grid>
-      <Grid item xs={12} mb={3}>
-        <Typography variant="h1">Dettaglio Referente</Typography>
+      <Grid container item mb={3}>
+        <Grid item xs={6}>
+          <Box display="flex">
+            <Box>
+              <Typography variant="h1">Dettaglio Referente</Typography>
+            </Box>
+            <Box>
+              {isSuspended && (
+                <Chip
+                  label="sospeso"
+                  variant="outlined"
+                  sx={{
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    background: '#E0E0E0',
+                    border: 'none',
+                    borderRadius: '16px',
+                    width: '76px',
+                    height: '24px',
+                    marginTop: '23px',
+                    marginLeft: '20px',
+                  }}
+                />
+              )}
+            </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={6} display="flex" alignItems="center" justifyContent="flex-end">
+          <Link
+            sx={{
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+            onClick={goBack}
+          >
+            Indietro
+          </Link>
+        </Grid>
       </Grid>
       <Grid item xs={12} mb={3}>
-        <GroupDetail group={partyGroup} productsMap={productsMap} />
+        <GroupDetail group={partyGroup} productsMap={productsMap} isSuspended={isSuspended} />
       </Grid>
       <Grid item xs={10} mb={3} mt={15}>
         <GroupActions
@@ -179,6 +220,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
           onDelete={onDelete}
           partyGroup={partyGroup}
           handleOpen={handleOpen}
+          isSuspended={isSuspended}
         />
       </Grid>
     </Grid>

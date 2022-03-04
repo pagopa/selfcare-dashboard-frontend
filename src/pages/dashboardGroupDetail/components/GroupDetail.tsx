@@ -6,8 +6,10 @@ import GroupUsers from './GroupUsers';
 type Props = {
   group: PartyGroupExt;
   productsMap: ProductsMap;
+  isSuspended: boolean;
 };
-export default function GroupDetail({ group, productsMap }: Props) {
+
+export default function GroupDetail({ group, productsMap, isSuspended }: Props) {
   function formatDate(data: any) {
     const datePart = data.match(/\d+/g);
     const year = datePart[0];
@@ -16,7 +18,7 @@ export default function GroupDetail({ group, productsMap }: Props) {
 
     return `${day}/${month}/${year}`;
   }
-
+  const groupStatusClass = isSuspended ? 'CustomDisabledLabel' : 'CustomInfoStyle';
   return (
     <Grid container spacing={2}>
       <Grid container item alignContent="center">
@@ -25,8 +27,8 @@ export default function GroupDetail({ group, productsMap }: Props) {
             NOME
           </Typography>
         </Grid>
-        <Grid item xs={9} className="userInfoStyle">
-          <Typography variant="body2" className="CustomInfoStyle">
+        <Grid item xs={9}>
+          <Typography variant="body2" className={groupStatusClass}>
             {group.name}
           </Typography>
         </Grid>
@@ -37,8 +39,8 @@ export default function GroupDetail({ group, productsMap }: Props) {
             DESCRIZIONE
           </Typography>
         </Grid>
-        <Grid item xs={3} className="userInfoStyle">
-          <Typography variant="body2" className="CustomInfoStyle">
+        <Grid item xs={3}>
+          <Typography variant="body2" className={groupStatusClass}>
             {group.description}
           </Typography>
         </Grid>
@@ -49,8 +51,8 @@ export default function GroupDetail({ group, productsMap }: Props) {
             PRODOTTO
           </Typography>
         </Grid>
-        <Grid item xs={9} className="userInfoStyle">
-          <Typography variant="body2" className="CustomInfoStyle">
+        <Grid item xs={9}>
+          <Typography variant="body2" className={groupStatusClass}>
             {productsMap[group.productId].title}
           </Typography>
         </Grid>
@@ -61,8 +63,8 @@ export default function GroupDetail({ group, productsMap }: Props) {
             REFERENTI
           </Typography>
         </Grid>
-        <Grid item xs={12} className="userInfoStyle">
-          <GroupUsers />
+        <Grid item xs={12}>
+          <GroupUsers groupStatusClass={groupStatusClass} />
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
@@ -71,8 +73,8 @@ export default function GroupDetail({ group, productsMap }: Props) {
             DATA CREAZIONE
           </Typography>
         </Grid>
-        <Grid item xs={9} className="userInfoStyle">
-          <Typography variant="body2" className="CustomInfoStyle">
+        <Grid item xs={9}>
+          <Typography variant="body2" className={groupStatusClass}>
             {formatDate(group.createdAt)}
           </Typography>
         </Grid>
@@ -81,8 +83,8 @@ export default function GroupDetail({ group, productsMap }: Props) {
             DA
           </Typography>
         </Grid>
-        <Grid item xs={9} className="userInfoStyle">
-          <Typography variant="body2" className="CustomInfoStyle">
+        <Grid item xs={9}>
+          <Typography variant="body2" className={groupStatusClass}>
             {`${group.createdBy.name} ${group.createdBy.surname}`}
           </Typography>
         </Grid>
@@ -93,8 +95,8 @@ export default function GroupDetail({ group, productsMap }: Props) {
             DATA ULTIMA MODIFICA
           </Typography>
         </Grid>
-        <Grid item xs={9} className="userInfoStyle">
-          <Typography variant="body2" className="CustomInfoStyle">
+        <Grid item xs={9}>
+          <Typography variant="body2" className={groupStatusClass}>
             {formatDate(group.modifiedAt)}
           </Typography>
         </Grid>
@@ -103,10 +105,10 @@ export default function GroupDetail({ group, productsMap }: Props) {
             DA
           </Typography>
         </Grid>
-        <Grid item xs={9} className="userInfoStyle">
+        <Grid item xs={9}>
           <Typography
             variant="body2"
-            className="CustomInfoStyle"
+            className={groupStatusClass}
           >{`${group.modifiedBy.name} ${group.modifiedBy.surname}`}</Typography>
         </Grid>
       </Grid>

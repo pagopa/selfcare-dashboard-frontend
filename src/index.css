@@ -6,3 +6,7 @@
 .CustomInfoStyle {
   color: #000000 !important;
 }
+
+.CustomDisabledLabel {
+  color: #a2adb8 !important;
+}

@@ -1,3 +1,9 @@
-export default function GroupUsers() {
-  return <div>GroupUsers</div>;
+import { Typography } from '@mui/material';
+
+type Props = {
+  groupStatusClass: string;
+};
+
+export default function GroupUsers({ groupStatusClass }: Props) {
+  return <Typography className={groupStatusClass}> TEST</Typography>;
 }

@@ -7,6 +7,7 @@ type Props = {
   onDelete: () => void;
   partyGroup: PartyGroupExt;
   handleOpen: () => void;
+  isSuspended: boolean;
 };
 export default function GroupActions({
   goEdit,
@@ -14,28 +15,37 @@ export default function GroupActions({
   onDelete,
   partyGroup,
   handleOpen,
+  isSuspended,
 }: Props) {
   return (
     <Grid container spacing={4}>
-      <Grid item xs={3}>
-        <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={goEdit}>
-          Modifica
-        </Button>
-      </Grid>
+      {!isSuspended && (
+        <Grid item xs={3}>
+          <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={goEdit}>
+            Modifica
+          </Button>
+        </Grid>
+      )}
       <Grid item xs={3}>
         <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={handleOpen}>
           {partyGroup.status === 'SUSPENDED'
-            ? 'Riabilita'
+            ? 'Riattiva'
             : partyGroup.status === 'ACTIVE'
             ? 'Sospendi'
             : ''}
         </Button>
       </Grid>
-      <Grid item xs={3}>
-        <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={goToDuplicate}>
-          Duplica
-        </Button>
-      </Grid>
+      {!isSuspended && (
+        <Grid item xs={3}>
+          <Button
+            variant="contained"
+            sx={{ height: '40px', width: '100%' }}
+            onClick={goToDuplicate}
+          >
+            Duplica
+          </Button>
+        </Grid>
+      )}
       <Grid item xs={3}>
         <Button
           variant="outlined"
