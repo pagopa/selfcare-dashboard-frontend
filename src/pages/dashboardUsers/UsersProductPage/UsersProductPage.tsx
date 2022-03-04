@@ -50,7 +50,7 @@ function UsersProductPage({
       container
       px={2}
       mt={10}
-      sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
+      sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={3} px={2}>
         <ProductNavigationBar selectedProduct={selectedProduct} paths={paths} />
