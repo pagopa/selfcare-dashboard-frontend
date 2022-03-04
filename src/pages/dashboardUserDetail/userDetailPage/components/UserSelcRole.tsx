@@ -11,18 +11,18 @@ export default function UserSelcRole({ selcRole }: Props) {
   return (
     <>
       <Grid item xs={3}>
-        <Typography variant="h6" sx={{ fontSize: '14px', color: 'text.secondary' }}>
+        <Typography variant="h6" className="CustomLabelStyle">
           RUOLO SU SELF CARE
         </Typography>
       </Grid>
       <Grid item xs={6}>
         <Grid item container spacing={1}>
-          <Grid item >
+          <Grid item>
             <Typography variant="body2" sx={{ textTransform: 'capitalize' }}>
               {selcRole.toLocaleLowerCase()}
             </Typography>
           </Grid>
-          <Grid item display='flex' alignItems='center'>
+          <Grid item display="flex" alignItems="center">
             <Typography variant="body2" sx={{ fontSize: '12px', color: 'text.secondary' }}>
               {roleLabel.description} - {roleLabel.longLabel}
             </Typography>

@@ -1,0 +1,12 @@
+.CustomLabelStyle {
+  font-size: 14px !important;
+  color: #5c6f82 !important;
+}
+
+.CustomInfoStyle {
+  color: #000000 !important;
+}
+
+.CustomDisabledLabel {
+  color: #a2adb8 !important;
+}
