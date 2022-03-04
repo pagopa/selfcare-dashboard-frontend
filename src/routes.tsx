@@ -14,7 +14,7 @@ import UsersProductPage from './pages/dashboardUsers/UsersProductPage/UsersProdu
 import AddProductToUserPage from './pages/dashboardUserEdit/AddProductToUserPage';
 import EditUserRegistrypRoductPage from './pages/dashboardUserEdit/EditUserRegistryProductPage';
 import GroupsPage from './pages/dashboardGroups/GroupsPage';
-import GroupDetailPage from './pages/dashboardGroupDetail/GroupDetailPage';
+import GroupsDetailPage from './pages/dashboardGroupDetail/GroupDetailPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -129,7 +129,7 @@ export const DASHBOARD_ROUTES = {
       PARTY_GROUP_DETAIL: {
         path: `${BASE_ROUTE}/:institutionId/groups/:groupId`,
         exact: true,
-        component: GroupDetailPage,
+        component: GroupsDetailPage,
       },
     },
   },

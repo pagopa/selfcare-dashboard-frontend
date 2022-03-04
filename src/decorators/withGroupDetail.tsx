@@ -52,7 +52,7 @@ export default function withGroupDetail<T extends withGroupDetailProps>(
               toNotify: false,
               error: new Error('INVALID_PARTY_GROUP_ID_INSTITUTION_ID'),
               onClose: () => history.push(goBackUrl),
-              displayableDescription: "Impossibile trovare l'utente selezionato",
+              displayableDescription: 'Impossibile trovare il gruppo selezionato',
             });
           }
           setPartyGroup(group);
