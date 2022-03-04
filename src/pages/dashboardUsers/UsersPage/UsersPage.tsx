@@ -48,7 +48,7 @@ function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Pro
     }
   }, [productsFetchStatus]);
 
-  useEffect(() => trackEvent('USER_LIST', { party_id: party.institutionId }), []);
+  useEffect(() => trackEvent('USER_LIST', { party_id: party.institutionId }), [party]);
 
   const prodSectionRefs = useMemo(
     () => activeProducts.map((_) => React.createRef<HTMLDivElement>()),
@@ -68,7 +68,7 @@ function UsersPage({ party, activeProducts, productsMap, productsRolesMap }: Pro
       container
       px={2}
       mt={10}
-      sx={{ width: '1017px', backgroundColor: 'transparent !important' }}
+      sx={{ width: '985px', backgroundColor: 'transparent !important' }}
     >
       <Grid item xs={12} mb={9}>
         <TitleBox
