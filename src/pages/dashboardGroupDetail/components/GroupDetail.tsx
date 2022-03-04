@@ -1,15 +1,26 @@
 import { Grid, Typography } from '@mui/material';
+import { Party } from '../../../model/Party';
 import { PartyGroupExt } from '../../../model/PartyGroup';
-import { ProductsMap } from '../../../model/Product';
-import GroupUsers from './GroupUsers';
+import { Product, ProductsMap } from '../../../model/Product';
+import MembersGroup from './MembersGroup';
 
 type Props = {
-  group: PartyGroupExt;
+  partyGroup: PartyGroupExt;
   productsMap: ProductsMap;
   isSuspended: boolean;
+  fetchPartyGroup: () => void;
+  product: Product;
+  party: Party;
 };
 
-export default function GroupDetail({ group, productsMap, isSuspended }: Props) {
+export default function GroupDetail({
+  partyGroup,
+  productsMap,
+  isSuspended,
+  fetchPartyGroup,
+  product,
+  party,
+}: Props) {
   function formatDate(data: any) {
     const datePart = data.match(/\d+/g);
     const year = datePart[0];
@@ -29,7 +40,7 @@ export default function GroupDetail({ group, productsMap, isSuspended }: Props) 
         </Grid>
         <Grid item xs={9}>
           <Typography variant="body2" className={groupStatusClass}>
-            {group.name}
+            {partyGroup.name}
           </Typography>
         </Grid>
       </Grid>
@@ -41,7 +52,7 @@ export default function GroupDetail({ group, productsMap, isSuspended }: Props) 
         </Grid>
         <Grid item xs={3}>
           <Typography variant="body2" className={groupStatusClass}>
-            {group.description}
+            {partyGroup.description}
           </Typography>
         </Grid>
       </Grid>
@@ -53,7 +64,7 @@ export default function GroupDetail({ group, productsMap, isSuspended }: Props) 
         </Grid>
         <Grid item xs={9}>
           <Typography variant="body2" className={groupStatusClass}>
-            {productsMap[group.productId].title}
+            {productsMap[partyGroup.productId].title}
           </Typography>
         </Grid>
       </Grid>
@@ -64,7 +75,13 @@ export default function GroupDetail({ group, productsMap, isSuspended }: Props) 
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <GroupUsers groupStatusClass={groupStatusClass} />
+          <MembersGroup
+            partyGroup={partyGroup}
+            groupStatusClass={groupStatusClass}
+            fetchPartyGroup={fetchPartyGroup}
+            party={party}
+            product={product}
+          />
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
@@ -75,7 +92,7 @@ export default function GroupDetail({ group, productsMap, isSuspended }: Props) 
         </Grid>
         <Grid item xs={9}>
           <Typography variant="body2" className={groupStatusClass}>
-            {formatDate(group.createdAt)}
+            {formatDate(partyGroup.createdAt)}
           </Typography>
         </Grid>
         <Grid item xs={3}>
@@ -85,7 +102,7 @@ export default function GroupDetail({ group, productsMap, isSuspended }: Props) 
         </Grid>
         <Grid item xs={9}>
           <Typography variant="body2" className={groupStatusClass}>
-            {`${group.createdBy.name} ${group.createdBy.surname}`}
+            {`${partyGroup.createdBy.name} ${partyGroup.createdBy.surname}`}
           </Typography>
         </Grid>
       </Grid>
@@ -97,7 +114,7 @@ export default function GroupDetail({ group, productsMap, isSuspended }: Props) 
         </Grid>
         <Grid item xs={9}>
           <Typography variant="body2" className={groupStatusClass}>
-            {formatDate(group.modifiedAt)}
+            {formatDate(partyGroup.modifiedAt)}
           </Typography>
         </Grid>
         <Grid item xs={3}>
@@ -109,7 +126,7 @@ export default function GroupDetail({ group, productsMap, isSuspended }: Props) 
           <Typography
             variant="body2"
             className={groupStatusClass}
-          >{`${group.modifiedBy.name} ${group.modifiedBy.surname}`}</Typography>
+          >{`${partyGroup.modifiedBy.name} ${partyGroup.modifiedBy.surname}`}</Typography>
         </Grid>
       </Grid>
     </Grid>

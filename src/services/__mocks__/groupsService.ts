@@ -185,3 +185,18 @@ export const deletePartyGroup = (
   );
   return new Promise<void>((resolve) => resolve());
 };
+
+export const deleteGroupRelation = (
+  _party: Party,
+  _product: Product,
+  group: PartyGroupExt,
+  _userId: string
+): Promise<any> => {
+  const selectedGroup = mockedGroups.find((g) => g.id === group.id);
+  // eslint-disable-next-line functional/immutable-data
+  selectedGroup?.membersIds.splice(
+    selectedGroup?.membersIds.findIndex((x) => x),
+    1
+  );
+  return new Promise<void>((resolve) => resolve());
+};

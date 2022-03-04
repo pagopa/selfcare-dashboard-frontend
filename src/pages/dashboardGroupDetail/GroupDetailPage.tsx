@@ -38,7 +38,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
     // TODO: redirect to Group Table Page
     history.push(
       resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
-        institutionId: party.institutionId,
+        institutionId: partyGroup.institutionId,
       })
     );
 
@@ -46,7 +46,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
     // TODO: redirect to Group Edit Page
     history.push(
       resolvePathVariables('TODO: redirect to Group Edit Page', {
-        institutionId: party.institutionId,
+        institutionId: partyGroup.institutionId,
         groupId: partyGroup.id,
       })
     );
@@ -55,7 +55,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
     // TODO: redirect to Group Duplicate Page
     history.push(
       resolvePathVariables('TODO: redirect to Group Duplicate Page', {
-        institutionId: party.institutionId,
+        institutionId: partyGroup.institutionId,
         groupId: partyGroup.id,
       })
     );
@@ -159,7 +159,6 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
       description: `${partyGroup.name}`,
     },
   ];
-  console.log('group', partyGroup);
   return (
     <Grid
       container
@@ -210,18 +209,27 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
           </Link>
         </Grid>
       </Grid>
-      <Grid item xs={12} mb={3}>
-        <GroupDetail group={partyGroup} productsMap={productsMap} isSuspended={isSuspended} />
-      </Grid>
-      <Grid item xs={10} mb={3} mt={15}>
-        <GroupActions
-          goEdit={goEdit}
-          goToDuplicate={goToDuplicate}
-          onDelete={onDelete}
-          partyGroup={partyGroup}
-          handleOpen={handleOpen}
-          isSuspended={isSuspended}
-        />
+      <Grid container item xs={10}>
+        <Grid item mb={3} width="100%">
+          <GroupDetail
+            partyGroup={partyGroup}
+            productsMap={productsMap}
+            isSuspended={isSuspended}
+            fetchPartyGroup={fetchPartyGroup}
+            product={product}
+            party={party}
+          />
+        </Grid>
+        <Grid item mb={3} mt={15} width="100%">
+          <GroupActions
+            goEdit={goEdit}
+            goToDuplicate={goToDuplicate}
+            onDelete={onDelete}
+            partyGroup={partyGroup}
+            handleOpen={handleOpen}
+            isSuspended={isSuspended}
+          />
+        </Grid>
       </Grid>
     </Grid>
   );
