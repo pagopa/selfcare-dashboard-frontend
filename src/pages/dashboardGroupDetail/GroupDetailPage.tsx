@@ -57,6 +57,26 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
       })
     );
 
+  const handleOpenDelete = () => {
+    addNotify({
+      component: 'SessionModal',
+      id: 'Notify_Example',
+      title: 'Elimina gruppo',
+      message: (
+        <>
+          {'Stai per eliminare il gruppo '}
+          <strong>{`${partyGroup.name}`}</strong>
+          {'.'}
+          <br />
+          {'Vuoi continuare?'}
+        </>
+      ),
+      confirmLabel: 'Conferma',
+      closeLabel: 'Annulla',
+      onConfirm: onDelete,
+    });
+  };
+
   const onDelete = () => {
     setLoading(true);
     deletePartyGroup(party, product, partyGroup)
@@ -233,7 +253,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
           <GroupActions
             goEdit={goEdit}
             goToDuplicate={goToDuplicate}
-            onDelete={onDelete}
+            onDelete={handleOpenDelete}
             partyGroup={partyGroup}
             handleOpen={handleOpen}
             isSuspended={isSuspended}
