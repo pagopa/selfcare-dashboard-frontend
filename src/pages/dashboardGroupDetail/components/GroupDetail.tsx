@@ -33,19 +33,19 @@ export default function GroupDetail({
   return (
     <Grid container spacing={2}>
       <Grid container item alignContent="center">
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Typography className="CustomLabelStyle" variant="h6">
             NOME
           </Typography>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Typography variant="body2" className={groupStatusClass}>
             {partyGroup.name}
           </Typography>
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
             DESCRIZIONE
           </Typography>
@@ -57,12 +57,12 @@ export default function GroupDetail({
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
             PRODOTTO
           </Typography>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Typography variant="body2" className={groupStatusClass}>
             {productsMap[partyGroup.productId].title}
           </Typography>
@@ -86,44 +86,44 @@ export default function GroupDetail({
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
             DATA CREAZIONE
           </Typography>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Typography variant="body2" className={groupStatusClass}>
             {formatDate(partyGroup.createdAt)}
           </Typography>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
             DA
           </Typography>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Typography variant="body2" className={groupStatusClass}>
             {`${partyGroup.createdBy.name} ${partyGroup.createdBy.surname}`}
           </Typography>
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
             DATA ULTIMA MODIFICA
           </Typography>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Typography variant="body2" className={groupStatusClass}>
             {formatDate(partyGroup.modifiedAt)}
           </Typography>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
             DA
           </Typography>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Typography
             variant="body2"
             className={groupStatusClass}

@@ -61,7 +61,7 @@ export default function MembersGroup({
     <Grid container py={2}>
       {partyGroup.members.map((member, index) => (
         <Grid key={member.id} item container>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Link
               sx={{
                 textDecoration: 'none',
@@ -82,10 +82,26 @@ export default function MembersGroup({
                 )
               }
             >
-              <Box display="flex">
-                <Box mr={1}>{member.name}</Box>
-                <Box>{member.surname}</Box>
-              </Box>
+              <Grid container>
+                <Grid item xs={5} mr={1}>
+                  <Typography
+                    className="ShowDots"
+                    sx={{ color: '#0073E6', fontWeight: 600, width: '100%' }}
+                    title={member.name}
+                  >
+                    {member.name}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6} mr={1}>
+                  <Typography
+                    sx={{ color: '#0073E6', fontWeight: 600, width: '100%' }}
+                    className="ShowDots"
+                    title={member.surname}
+                  >
+                    {member.surname}
+                  </Typography>
+                </Grid>
+              </Grid>
             </Link>
           </Grid>
           <Grid item xs={4}>
@@ -97,7 +113,7 @@ export default function MembersGroup({
               {member.email}
             </Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Typography className={groupStatusClass}>
               {roleLabelsGroup[member.userRole].title}
             </Typography>
