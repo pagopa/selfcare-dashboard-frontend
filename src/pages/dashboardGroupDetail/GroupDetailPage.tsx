@@ -65,7 +65,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
       message: (
         <>
           {'Stai per eliminare il gruppo '}
-          <strong>{`${partyGroup.name}`}</strong>
+          <strong>{partyGroup.name}</strong>
           {'.'}
           <br />
           {'Vuoi continuare?'}
@@ -89,7 +89,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
           message: (
             <>
               {'Hai eliminato correttamente il gruppo '}
-              {partyGroup.name}
+              <strong>{partyGroup.name}</strong>
               {'.'}
             </>
           ),
