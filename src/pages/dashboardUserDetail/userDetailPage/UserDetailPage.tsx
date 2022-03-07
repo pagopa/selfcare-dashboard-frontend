@@ -98,7 +98,7 @@ function UserDetailPage({
     addNotify({
       component: 'SessionModal',
       id: 'Notify_Example',
-      title: 'Elimina Ruolo',
+      title: 'Elimina Referente',
       message: (
         <>
           {'Stai per eliminare il referente '}
