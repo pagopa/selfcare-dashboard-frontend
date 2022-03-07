@@ -10,6 +10,7 @@ import { DASHBOARD_ROUTES } from '../../../routes';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { Party } from '../../../model/Party';
+import { ProductRolesLists, transcodeProductRole2Title } from '../../../model/ProductRole';
 import { deleteGroupRelation } from './../../../services/groupsService';
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
   product: Product;
   party: Party;
   isSuspended: boolean;
+  productRolesLists: ProductRolesLists;
 };
 
 export default function MembersGroup({
@@ -28,16 +30,9 @@ export default function MembersGroup({
   party,
   groupStatusClass,
   isSuspended,
+  productRolesLists,
 }: Props) {
   const ITEM_HEIGHT = 48;
-  const roleLabelsGroup = {
-    ADMIN: {
-      title: 'Ref. Amministrativo',
-    },
-    LIMITED: {
-      title: 'Ref. Operativo',
-    },
-  };
 
   const history = useHistory();
   const addError = useErrorDispatcher();
@@ -114,9 +109,21 @@ export default function MembersGroup({
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography className={groupStatusClass}>
-              {roleLabelsGroup[member.userRole].title}
-            </Typography>
+            {member?.products
+              .find((p) => p.id === product.id)
+              ?.roles?.map((r, index) => (
+                <Box key={index}>
+                  <Typography
+                    color={
+                      r.status === 'SUSPENDED' || partyGroup.status === 'SUSPENDED'
+                        ? '#9E9E9E'
+                        : undefined
+                    }
+                  >
+                    {transcodeProductRole2Title(r.role, productRolesLists)}
+                  </Typography>
+                </Box>
+              ))}
           </Grid>
           <Grid item xs={1} display="flex" justifyContent="flex-end">
             <IconButton
@@ -168,18 +175,22 @@ export default function MembersGroup({
                 Dissocia dal gruppo
               </MenuItem>
             </Box>
-            <Box width="170px" margin="4px auto">
-              <Divider />
-            </Box>
-            <Box width="100%" display="flex" justifyContent="center">
-              <MenuItem onClick={handleChangeMemberState}>
-                {member.status === 'ACTIVE'
-                  ? 'Sospendi Referente'
-                  : member.status === 'SUSPENDED'
-                  ? 'Riabilita Referente'
-                  : ''}
-              </MenuItem>
-            </Box>
+            {member?.products.find((p) => p.id === product.id)?.roles.length === 1 && (
+              <Box key={index}>
+                <Box width="170px" margin="4px auto">
+                  <Divider />
+                </Box>
+                <Box width="100%" display="flex" justifyContent="center">
+                  <MenuItem onClick={handleChangeMemberState}>
+                    {member.status === 'ACTIVE'
+                      ? 'Sospendi Referente'
+                      : member.status === 'SUSPENDED'
+                      ? 'Riabilita Referente'
+                      : ''}
+                  </MenuItem>
+                </Box>
+              </Box>
+            )}
           </Menu>
         </Grid>
       ))}

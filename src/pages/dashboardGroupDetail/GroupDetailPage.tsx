@@ -11,16 +11,26 @@ import withGroupDetail, { withGroupDetailProps } from '../../decorators/withGrou
 import { DASHBOARD_ROUTES } from '../../routes';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../utils/constants';
 import { PartyGroupStatus } from '../../model/PartyGroup';
+import withProductsRolesMap, {
+  withProductsRolesMapProps,
+} from '../../decorators/withProductsRolesMap';
 import GroupActions from './components/GroupActions';
 import GroupDetail from './components/GroupDetail';
 import { deletePartyGroup } from './../../services/__mocks__/groupsService';
 import { updatePartyGroupStatus } from './../../services/groupsService';
 
-type Props = withGroupDetailProps & {
-  fetchPartyGroup: () => void;
-};
+type Props = withGroupDetailProps &
+  withProductsRolesMapProps & {
+    fetchPartyGroup: () => void;
+  };
 
-function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Props) {
+function GroupDetailPage({
+  partyGroup,
+  party,
+  productsMap,
+  fetchPartyGroup,
+  productsRolesMap,
+}: Props) {
   const history = useHistory();
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   const addError = useErrorDispatcher();
@@ -247,6 +257,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
             fetchPartyGroup={fetchPartyGroup}
             product={product}
             party={party}
+            productRolesLists={productsRolesMap[product.id]}
           />
         </Grid>
         <Grid item mb={3} mt={15} width="100%">
@@ -264,4 +275,4 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
   );
 }
 
-export default withGroupDetail(GroupDetailPage);
+export default withGroupDetail(withProductsRolesMap(GroupDetailPage));

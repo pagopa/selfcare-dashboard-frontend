@@ -2,6 +2,7 @@ import { Grid, Typography } from '@mui/material';
 import { Party } from '../../../model/Party';
 import { PartyGroupExt } from '../../../model/PartyGroup';
 import { Product, ProductsMap } from '../../../model/Product';
+import { ProductRolesLists } from '../../../model/ProductRole';
 import MembersGroup from './MembersGroup';
 
 type Props = {
@@ -11,15 +12,17 @@ type Props = {
   fetchPartyGroup: () => void;
   product: Product;
   party: Party;
+  productRolesLists: ProductRolesLists;
 };
 
-export default function GroupDetail({
+function GroupDetail({
   partyGroup,
   productsMap,
   isSuspended,
   fetchPartyGroup,
   product,
   party,
+  productRolesLists,
 }: Props) {
   function formatDate(data: any) {
     const datePart = data.match(/\d+/g);
@@ -82,6 +85,7 @@ export default function GroupDetail({
             party={party}
             product={product}
             isSuspended={isSuspended}
+            productRolesLists={productRolesLists}
           />
         </Grid>
       </Grid>
@@ -133,3 +137,4 @@ export default function GroupDetail({
     </Grid>
   );
 }
+export default GroupDetail;
