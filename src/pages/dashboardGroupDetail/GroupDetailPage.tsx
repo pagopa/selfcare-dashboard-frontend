@@ -42,20 +42,18 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
     );
 
   const goEdit = () =>
-    // TODO: redirect to Group Edit Page
     history.push(
-      resolvePathVariables('TODO: redirect to Group Edit Page', {
+      resolvePathVariables('' /* TODO: redirect to Group Edit Page */, {
         institutionId: partyGroup.institutionId,
         groupId: partyGroup.id,
       })
     );
 
   const goToDuplicate = () =>
-    // TODO: redirect to Group Duplicate Page
     history.push(
-      resolvePathVariables('TODO: redirect to Group Duplicate Page', {
+      resolvePathVariables('' /* TODO: redirect to Group Duplicate Page */, {
         institutionId: partyGroup.institutionId,
-        groupId: partyGroup.id,
+        // groupId: partyGroup.id,
       })
     );
 
@@ -64,6 +62,18 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
     deletePartyGroup(party, product, partyGroup)
       .then((_) => {
         goBack();
+        addNotify({
+          component: 'Toast',
+          id: 'DELETE_PARTY_USER',
+          title: 'GRUPPO ELIMINATO',
+          message: (
+            <>
+              {'Hai eliminato correttamente il gruppo '}
+              {partyGroup.name}
+              {'.'}
+            </>
+          ),
+        });
       })
       .catch((reason) =>
         addError({

@@ -40,8 +40,7 @@ export default function withGroupDetail<T extends withGroupDetailProps>(
       fetchUserDetail(institutionId, groupId, props.productsMap)
         .then((group) => {
           if (group === null) {
-            // TODO: insert table group path
-            const goBackUrl = resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
+            const goBackUrl = resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.path, {
               institutionId,
             });
 
