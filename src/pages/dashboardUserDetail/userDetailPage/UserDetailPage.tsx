@@ -11,7 +11,6 @@ import UserDetail from '../components/UserDetail';
 import { PartyUser } from '../../../model/PartyUser';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { transcodeProductRole2Title } from '../../../model/ProductRole';
 import withUserDetail from '../../../decorators/withUserDetail';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
 import withProductsRolesMap, {
@@ -70,6 +69,18 @@ function UserDetailPage({
     deletePartyUser(party, partyUser, product, product.roles[0])
       .then((_) => {
         goBack();
+        addNotify({
+          component: 'Toast',
+          id: 'DELETE_PARTY_USER',
+          title: 'REFERENTE ELIMINATO',
+          message: (
+            <>
+              {'Hai eliminato correttamente il referente '}
+              <strong>{`${partyUser.name} ${partyUser.surname}`}</strong>
+              {'.'}
+            </>
+          ),
+        });
       })
       .catch((reason) =>
         addError({
@@ -90,13 +101,7 @@ function UserDetailPage({
       title: 'Elimina Ruolo',
       message: (
         <>
-          {'Stai per eliminare il ruolo '}
-          <strong>
-            {transcodeProductRole2Title(product.roles[0].role, productsRolesMap[product.id])}
-          </strong>
-          {' di '}
-          <strong>{product.title} </strong>
-          {' assegnato a '}
+          {'Stai per eliminare il referente '}
           <strong style={{ textTransform: 'capitalize' }}>
             {party && `${partyUser.name.toLocaleLowerCase()} ${partyUser.surname}`}
           </strong>
