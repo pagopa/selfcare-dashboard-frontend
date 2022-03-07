@@ -1,3 +1,5 @@
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
+import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../model/Party';
@@ -21,13 +23,13 @@ import {
 
 export const fetchPartyGroups = (
   party: Party,
-  productsMap: ProductsMap,
+  product: Product,
   currentUser: User,
-  products: Array<Product>
-): Promise<Array<PartyGroup>> => {
+  pageRequest: PageRequest
+): Promise<PageResource<PartyGroup>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
-    return fetchPartyGroupsMocked(party, productsMap, currentUser, products);
+    return fetchPartyGroupsMocked(party, product, currentUser, pageRequest);
   } else {
     throw new Error('TODO');
   }
