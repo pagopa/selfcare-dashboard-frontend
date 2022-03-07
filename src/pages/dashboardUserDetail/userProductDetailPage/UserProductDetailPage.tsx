@@ -18,6 +18,7 @@ import withSelectedPartyProductAndRoles, {
   withSelectedPartyProductAndRolesProps,
 } from '../../../decorators/withSelectedPartyProductAndRoles';
 import { ProductsMap } from '../../../model/Product';
+import UserProductGroups from '../components/UserProductGroups';
 import { deletePartyUser } from './../../../services/usersService';
 
 type Props = withSelectedPartyProductAndRolesProps & {
@@ -181,6 +182,9 @@ function UserProductDetailPage({
         canEdit={canEdit}
         isProductDetailPage={isProductDetailPage}
       />
+      <Grid container item xs={12}>
+        <UserProductGroups />
+      </Grid>
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
           <Button

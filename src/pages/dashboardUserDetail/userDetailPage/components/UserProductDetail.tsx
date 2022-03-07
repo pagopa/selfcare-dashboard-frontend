@@ -5,6 +5,7 @@ import { PartyUser, PartyUserProduct } from '../../../../model/PartyUser';
 import UserProductRoles from '../../components/UserProductRoles';
 import { ProductRolesLists } from '../../../../model/ProductRole';
 import UserProductActions from './../../components/UserProductActions';
+import UserProductGroups from './../../components/UserProductGroups';
 
 type Props = {
   partyUser: PartyUser;
@@ -90,10 +91,9 @@ export default function UserProductDetail({
             isProductDetailPage={isProductDetailPage}
           />
         </Grid>
-        {/* TODO: insert UserProductGroups component */}
-        {/* <Grid container item>
-              <UserProductGroups />
-            </Grid> */}
+        <Grid container item xs={12}>
+          <UserProductGroups />
+        </Grid>
       </Grid>
     </>
   );
