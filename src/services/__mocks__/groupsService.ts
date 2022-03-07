@@ -1,4 +1,10 @@
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
+import {
+  applySort,
+  extractPageRequest,
+} from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
 import { Party } from '../../model/Party';
 import { PartyUser } from '../../model/PartyUser';
 import { Product, ProductsMap } from '../../model/Product';
@@ -68,29 +74,148 @@ export const mockedGroups: Array<PartyGroup> = [
     modifiedAt: new Date('2022-03-01'),
     modifiedByUserId: 'uid7',
   },
+
+  {
+    id: 'groupId5',
+    name: 'Gruppo5',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId6',
+    name: 'Gruppo6',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId7',
+    name: 'Gruppo7',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId8',
+    name: 'Gruppo8',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId9',
+    name: 'Gruppo9',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId10',
+    name: 'Gruppo10',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId11',
+    name: 'Gruppo11',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId12',
+    name: 'Gruppo12',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId13',
+    name: 'Gruppo13',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
 ];
 
 export const fetchPartyGroups = (
   party: Party,
-  _productsMap: ProductsMap,
+  product: Product,
   _currentUser: User,
-  products: Array<Product>
-): Promise<Array<PartyGroup>> => {
-  const productIdsDesired = products.map((p) => p.id);
-
+  pageRequest: PageRequest
+): Promise<PageResource<PartyGroup>> => {
   const filteredContent = mockedGroups
+    .slice()
     .filter((u) => {
       if (u.institutionId !== party.institutionId) {
         return false;
       }
-      if (productIdsDesired.length > 0) {
-        return productIdsDesired.indexOf(u.productId) > -1;
-      }
-      return u;
+      return product.id.indexOf(u.productId) > -1;
     })
     .map((u) => JSON.parse(JSON.stringify(u)));
 
-  return new Promise((resolve) => setTimeout(() => resolve(filteredContent), 100));
+  if (pageRequest.sort) {
+    applySort(filteredContent, pageRequest.sort);
+  }
+  return new Promise((resolve) =>
+    setTimeout(() => resolve(extractPageRequest(filteredContent, pageRequest)), 100)
+  );
 };
 
 export const savePartyGroup = (

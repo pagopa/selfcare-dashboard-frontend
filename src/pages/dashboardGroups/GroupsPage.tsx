@@ -5,15 +5,10 @@ import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsS
 import { HashLink } from 'react-router-hash-link';
 import useScrollSpy from 'react-use-scrollspy';
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
-import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { Product, ProductsMap } from '../../model/Product';
 import { Party } from '../../model/Party';
 import { useAppSelector } from '../../redux/hooks';
-import { PartyGroup } from '../../model/PartyGroup';
-import { fetchPartyGroups } from '../../services/groupsService';
-import { LOADING_TASK_FETCH_PARTY_GROUPS } from '../../utils/constants';
 import AddGroupButton from './components/AddGroupButton';
 import NoGroups from './components/NoGroups';
 import GroupsProductSection from './components/GroupsProductSection';
@@ -23,8 +18,6 @@ interface Props {
   activeProducts: Array<Product>;
   productsMap: ProductsMap;
 }
-
-type ProductId2GroupMap = { [productId: string]: [Product, Array<PartyGroup>] };
 
 function GroupsPage({ party, activeProducts, productsMap }: Props) {
   useEffect(() => trackEvent('GROUP_LIST', { party_id: party.institutionId }), [party]);
@@ -42,61 +35,31 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
     window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
   };
 
-  const currentUser = useAppSelector(userSelectors.selectLoggedUser);
+  const currentUser = useAppSelector(userSelectors.selectLoggedUser) as User;
 
-  const [groupsByProduct, setGroupsByProduct] = useState<ProductId2GroupMap>();
+  const [productsFetchStatus, setProductsFetchStatus] = useState<
+    Record<string, { loading: boolean; noData: boolean }>
+  >(() =>
+    Object.fromEntries(activeProducts.map((p) => [[p.id], { loading: true, noData: false }]))
+  );
 
-  const setLoading = useLoading(LOADING_TASK_FETCH_PARTY_GROUPS);
-  const addError = useErrorDispatcher();
+  const productHavingGroups = useMemo(
+    () =>
+      Object.entries(productsFetchStatus)
+        .filter(([_productId, { noData }]) => !noData)
+        .map(([productId]) => productsMap[productId]),
+    [productsFetchStatus]
+  );
 
-  const fetchGroups = () => {
-    setLoading(true);
-    fetchPartyGroups(party, productsMap, currentUser ?? ({ uid: 'NONE' } as User), activeProducts)
-      .then((data) => {
-        setGroupsByProduct(
-          data.reduce((acc, g) => {
-            if (!acc[g.productId]) {
-              // eslint-disable-next-line functional/immutable-data
-              acc[g.productId] = [productsMap[g.productId], []];
-            }
-            // eslint-disable-next-line functional/immutable-data
-            acc[g.productId][1].push(g);
-            return acc;
-          }, {} as ProductId2GroupMap)
-        );
-      })
-      .catch((reason) =>
-        addError({
-          id: 'FETCH_PARTY_GROUPS_ERROR',
-          blocking: false,
-          error: reason,
-          techDescription: `An error occurred while fetching party groups ${party.institutionId}`,
-          toNotify: true,
-        })
-      )
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    if (party && activeProducts && activeProducts.length > 0) {
-      fetchGroups();
-    }
-  }, [party, activeProducts]);
-
-  const onProductGroupsTotallyDeleted = (product: Product) => {
-    setGroupsByProduct(
-      Object.fromEntries(
-        Object.entries(groupsByProduct as ProductId2GroupMap).filter(([_, [p]]) => p !== product)
-      ) as ProductId2GroupMap
-    );
-  };
-
-  const productsHavingGroupCount = groupsByProduct ? Object.keys(groupsByProduct).length : -1;
+  const isLoading: boolean = useMemo(
+    () => !!Object.entries(productsFetchStatus).find(([_productId, { loading }]) => loading),
+    [productsFetchStatus]
+  );
 
   const titleVariant = 'h1';
   const mbTitle = 2;
 
-  return groupsByProduct ? (
+  return (
     <Grid
       container
       px={2}
@@ -113,7 +76,7 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
               subTitle="Consulta e crea dei gruppi (es. uno per ogni Dipartimento o Ufficio) in modo da gestire meglio il lavoro del tuo Ente."
             />
           </Grid>
-          {productsHavingGroupCount > 0 && (
+          {productHavingGroups.length > 0 && (
             <Grid item xs={1}>
               <Typography variant={titleVariant} mb={mbTitle}>
                 &nbsp;
@@ -124,7 +87,7 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
         </Grid>
       </Grid>
 
-      {productsHavingGroupCount > 1 && (
+      {productHavingGroups.length > 1 && (
         <Grid
           item
           xs={12}
@@ -140,7 +103,7 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
           }}
         >
           <Tabs variant="fullWidth" scrollButtons="auto" value={activeSection}>
-            {Object.values(groupsByProduct).map(([p], i) => (
+            {productHavingGroups.map((p, i) => (
               <Tab
                 key={p.id}
                 label={p.title}
@@ -155,22 +118,25 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
       )}
       <Grid item xs={12} sx={{ height: '100%' }}>
         <Grid container direction="row" alignItems={'center'}>
-          {Object.values(groupsByProduct).map(([product, groups], i) => (
+          {activeProducts.map((product, i) => (
             <Grid key={product.id} item xs={12} ref={prodSectionRefs[i]}>
               <GroupsProductSection
+                currentUser={currentUser}
                 party={party}
                 product={product}
-                groups={groups}
-                onCompleteDelete={onProductGroupsTotallyDeleted}
+                onFetchStatusUpdate={(loading, noData) => {
+                  setProductsFetchStatus((previousState) => ({
+                    ...previousState,
+                    [product.id]: { loading, noData },
+                  }));
+                }}
               />
             </Grid>
           ))}
-          {productsHavingGroupCount === 0 && <NoGroups party={party} />}
+          {!isLoading && productHavingGroups.length === 0 && <NoGroups party={party} />}
         </Grid>
       </Grid>
     </Grid>
-  ) : (
-    <></>
   );
 }
 
