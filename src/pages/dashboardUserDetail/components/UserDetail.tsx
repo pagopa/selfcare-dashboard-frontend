@@ -3,14 +3,14 @@ import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
 import { ProductsMap } from '../../../model/Product';
 
-const CustomLabelStyle = styled(Typography)({
-  fontSize: '14px',
-  color: '#5C6F82',
-});
+// const CustomLabelStyle = styled(Typography)({
+//   fontSize: '14px',
+//   color: '#5C6F82',
+// });
 
-const CustomInfoStyle = styled(Typography)({
-  color: '#000000',
-});
+// const CustomInfoStyle = styled(Typography)({
+//   color: '#000000',
+// });
 
 const CustomStyleCapitolized = styled(Typography)({
   color: '#000000',
@@ -33,9 +33,9 @@ export default function UserDetail({ roleSection, userInfo, party, goEdit, produ
           <Grid container spacing={2}>
             <Grid container item alignContent="center">
               <Grid item xs={3}>
-                <CustomLabelStyle variant="h6" className="labelStyle">
+                <Typography variant="h6" className="CustomLabelStyle">
                   NOME
-                </CustomLabelStyle>
+                </Typography>
               </Grid>
               <Grid item xs={9} className="userInfoStyle">
                 <CustomStyleCapitolized variant="body2">
@@ -45,9 +45,9 @@ export default function UserDetail({ roleSection, userInfo, party, goEdit, produ
             </Grid>
             <Grid container item alignContent="center">
               <Grid item xs={3}>
-                <CustomLabelStyle variant="h6" className="labelStyle">
+                <Typography variant="h6" className="CustomLabelStyle">
                   COGNOME
-                </CustomLabelStyle>
+                </Typography>
               </Grid>
               <Grid item xs={9}>
                 <CustomStyleCapitolized variant="body2">
@@ -57,32 +57,38 @@ export default function UserDetail({ roleSection, userInfo, party, goEdit, produ
             </Grid>
             <Grid container item alignContent="center">
               <Grid item xs={3}>
-                <CustomLabelStyle variant="h6" className="labelStyle">
+                <Typography variant="h6" className="CustomLabelStyle">
                   CODICE FISCALE
-                </CustomLabelStyle>
+                </Typography>
               </Grid>
               <Grid item xs={9}>
-                <CustomInfoStyle variant="body2">{userInfo.taxCode}</CustomInfoStyle>
+                <Typography variant="body2" className="CustomInfoStyle">
+                  {userInfo.taxCode}
+                </Typography>
               </Grid>
             </Grid>
             <Grid container item alignContent="center">
               <Grid item xs={3}>
-                <CustomLabelStyle variant="h6" className="labelStyle">
+                <Typography variant="h6" className="CustomLabelStyle">
                   EMAIL ISTITUZIONALE
-                </CustomLabelStyle>
+                </Typography>
               </Grid>
               <Grid item xs={9}>
-                <CustomInfoStyle variant="body2">{userInfo.email}</CustomInfoStyle>
+                <Typography variant="body2" className="CustomInfoStyle">
+                  {userInfo.email}
+                </Typography>
               </Grid>
             </Grid>
             <Grid container item alignContent="center">
               <Grid item xs={3}>
-                <CustomLabelStyle variant="h6" className="labelStyle">
+                <Typography variant="h6" className="CustomLabelStyle">
                   ENTE
-                </CustomLabelStyle>
+                </Typography>
               </Grid>
               <Grid item xs={9}>
-                <CustomInfoStyle variant="body2">{party.description}</CustomInfoStyle>
+                <Typography variant="body2" className="CustomInfoStyle">
+                  {party.description}
+                </Typography>
               </Grid>
             </Grid>
 

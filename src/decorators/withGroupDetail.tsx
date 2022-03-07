@@ -40,8 +40,7 @@ export default function withGroupDetail<T extends withGroupDetailProps>(
       fetchUserDetail(institutionId, groupId, props.productsMap)
         .then((group) => {
           if (group === null) {
-            // TODO: insert table group path
-            const goBackUrl = resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.path, {
+            const goBackUrl = resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.path, {
               institutionId,
             });
 
@@ -52,7 +51,7 @@ export default function withGroupDetail<T extends withGroupDetailProps>(
               toNotify: false,
               error: new Error('INVALID_PARTY_GROUP_ID_INSTITUTION_ID'),
               onClose: () => history.push(goBackUrl),
-              displayableDescription: "Impossibile trovare il gruppo selezionato",
+              displayableDescription: 'Impossibile trovare il gruppo selezionato',
             });
           }
           setPartyGroup(group);

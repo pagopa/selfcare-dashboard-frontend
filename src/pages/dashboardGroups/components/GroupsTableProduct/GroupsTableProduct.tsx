@@ -9,6 +9,7 @@ import { fetchPartyGroups } from '../../../../services/groupsService';
 import { PartyGroup, PartyGroupStatus } from '../../../../model/PartyGroup';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
+import { DASHBOARD_ROUTES } from '../../../../routes';
 import GroupsProductTable from './components/GroupsProductTable';
 import GroupsProductFetchError from './components/GroupsProductFetchError';
 
@@ -119,7 +120,9 @@ const GroupsTableProduct = ({
         canEdit={canEdit}
         onRowClick={(partyGroup) =>
           history.push(
-            resolvePathVariables('' /* TODO use Group details url */, { groupId: partyGroup.id })
+            resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_DETAIL.path, {
+              groupId: partyGroup.id,
+            })
           )
         }
         page={groups.page}

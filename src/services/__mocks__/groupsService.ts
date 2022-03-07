@@ -54,9 +54,9 @@ export const mockedGroups: Array<PartyGroup> = [
     institutionId: 'onboarded',
     productId: 'prod-io',
     status: 'SUSPENDED',
-    membersIds: ['uid', 'loggedUser'],
+    membersIds: ['uid', '0'],
     createdAt: new Date('2022-02-01'),
-    createdByUserId: 'loggedUser',
+    createdByUserId: '0',
     modifiedAt: new Date('2022-02-08 16:00'),
     modifiedByUserId: 'uid',
   },
@@ -300,5 +300,17 @@ export const deletePartyGroup = (
     mockedGroups.findIndex((u) => u.id === group.id),
     1
   );
+  return new Promise<void>((resolve) => resolve());
+};
+
+export const deleteGroupRelation = (
+  _party: Party,
+  _product: Product,
+  group: PartyGroupExt,
+  userId: string
+): Promise<any> => {
+  const selectedGroup = mockedGroups.find((g) => g.id === group.id);
+  // eslint-disable-next-line functional/immutable-data
+  selectedGroup?.membersIds.splice(selectedGroup?.membersIds.indexOf(userId), 1);
   return new Promise<void>((resolve) => resolve());
 };
