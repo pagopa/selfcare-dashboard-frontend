@@ -1,18 +1,16 @@
 import {
+  Box,
   Button,
   Checkbox,
-  FormControl,
+  Chip,
   Grid,
-  InputLabel,
-  ListItemText,
   MenuItem,
-  OutlinedInput,
   Select,
-  SelectChangeEvent,
   styled,
   TextField,
   Typography,
 } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import {
@@ -25,13 +23,17 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { Party } from '../../../model/Party';
-import { PartyGroup, PartyGroupOnCreation } from '../../../model/PartyGroup';
-import { Product } from '../../../model/Product';
-import { ProductsRolesMap } from '../../../model/ProductRole';
+import { PartyGroupExt, PartyGroupOnCreation } from '../../../model/PartyGroup';
+import { PartyUser } from '../../../model/PartyUser';
+import { Product, ProductsMap } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { savePartyGroup } from '../../../services/groupsService';
-import { LOADING_TASK_SAVE_GROUP } from '../../../utils/constants';
+import { LOADING_TASK_FETCH_USER_PRODUCT, LOADING_TASK_SAVE_GROUP } from '../../../utils/constants';
+import { fetchPartyUsers } from '../../../services/usersService';
+import { useAppSelector } from '../../../redux/hooks';
 
 const CustomTextField = styled(TextField)({
   '.MuiInputLabel-asterisk': {
@@ -66,8 +68,8 @@ const requiredError = 'Required';
 type Props = {
   products: Array<Product>;
   party: Party;
-  productsRolesMap: ProductsRolesMap;
-  PartyGroupExt: PartyGroup;
+  productsMap: ProductsMap;
+  PartyGroupExt: PartyGroupExt;
   initialFormData: PartyGroupOnCreation;
   canEdit: boolean;
   goBack?: () => void;
@@ -77,35 +79,31 @@ export default function AddGroupForm({
   products,
   party,
   initialFormData,
+  productsMap,
   PartyGroupExt,
   goBack,
 }: Props) {
+  const currentUser = useAppSelector(userSelectors.selectLoggedUser);
+
   const setLoadingSaveGroup = useLoading(LOADING_TASK_SAVE_GROUP);
+  const setLoadingFetchUserProduct = useLoading(LOADING_TASK_FETCH_USER_PRODUCT);
 
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
 
   const history = useHistory();
 
-  const [product, setProduct] = useState<Array<string>>([]);
-  const [references, setReferences] = useState<Array<string>>([]);
+  const [productSelected, setProductSelected] = useState<Product>();
+  const [productUsers, setProductUsers] = useState<Array<PartyUser>>([]);
 
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
 
-  const handleProduct = (event: SelectChangeEvent<typeof product>) => {
-    const {
-      target: { value },
-    } = event;
-    setProduct(typeof value === 'string' ? value.split(',') : value);
-  };
-
-  const handleReferences = (event: SelectChangeEvent<typeof references>) => {
-    const {
-      target: { value },
-    } = event;
-    setReferences(typeof value === 'string' ? value.split(',') : value);
-  };
+  useEffect(() => {
+    if (productSelected) {
+      fetchProductUsers(productSelected);
+    }
+  }, [productSelected]);
 
   const goBackInner =
     goBack ??
@@ -122,7 +120,7 @@ export default function AddGroupForm({
       Object.entries({
         groupName: !values.name ? requiredError : undefined,
         description: !values.description ? requiredError : undefined,
-        product: values.productId ? requiredError : undefined,
+        product: !values.productId ? requiredError : undefined,
         references: values.members?.length === 0 ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
@@ -130,13 +128,12 @@ export default function AddGroupForm({
 
   const save = (values: PartyGroupOnCreation) => {
     setLoadingSaveGroup(true);
-    savePartyGroup(party, products[0] as Product, values) // TODO PRODUCTS
+    savePartyGroup(party, productSelected as Product, values)
       .then(() => {
         unregisterUnloadEvent();
         trackEvent('GROUP_CREATE', {
-          // TODO TRACK EVENT
           party_id: PartyGroupExt.institutionId,
-          group_id: PartyGroupExt.id, // TODO GROUP ID
+          group_id: PartyGroupExt.id,
         });
         addNotify({
           component: 'Toast',
@@ -145,9 +142,9 @@ export default function AddGroupForm({
           message: (
             <>
               {'Hai creato correttamente il gruppo '}
-              <strong>{`[NOME GRUPPO]`}</strong>
+              <strong>{`${values.name}`}</strong>
               {' per il prodotto '}
-              <strong>{`[NOME PRODOTTO].`}</strong>
+              <strong>{`${productSelected?.title}`}</strong>
             </>
           ),
         });
@@ -161,7 +158,7 @@ export default function AddGroupForm({
           blocking: false,
           displayableTitle: 'ERRORE DURANTE LA CREAZIONE',
           displayableDescription: "C'è stato un errore durante la creazione del gruppo. Riprova.",
-          techDescription: `An error occurred while creation of group ${'gruppo'}`,
+          techDescription: `An error occurred while creation of group ${values.name}`,
           error: reason,
           toNotify: true,
         })
@@ -211,9 +208,35 @@ export default function AddGroupForm({
           color: '#5C6F82',
           textAlign: 'start' as const,
           paddingLeft: '16px',
+          maxLength: 200,
         },
       },
     };
+  };
+
+  const fetchProductUsers = (productSelected: Product) => {
+    setLoadingFetchUserProduct(true);
+    fetchPartyUsers(
+      { page: 0, size: 2000 },
+      party,
+      productsMap,
+      currentUser ?? ({ uid: 'NONE' } as User),
+      true,
+      productSelected,
+      [],
+      []
+    )
+      .then((productUsersPage) => setProductUsers(productUsersPage.content))
+      .catch((reason) =>
+        addError({
+          id: 'FETCH_PRODUCT_USERS',
+          blocking: false,
+          error: reason,
+          techDescription: `An error occurred while fetching product users ${party.institutionId} of product ${productSelected.id}`,
+          toNotify: true,
+        })
+      )
+      .finally(() => setLoadingFetchUserProduct(false));
   };
 
   return (
@@ -221,74 +244,101 @@ export default function AddGroupForm({
       <form onSubmit={formik.handleSubmit}>
         <Grid container direction="column">
           <Grid item container spacing={3}>
-            <Grid item xs={8} mb={3} sx={{ height: '75px' }}>
+            <Grid item xs={8} mb={3}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+                Nome del gruppo
+              </Typography>
               <CustomTextField
-                {...baseTextFieldProps('name', 'Nome del gruppo', 'Inserisci il nome del gruppo')}
+                {...baseTextFieldProps('name', '', 'Inserisci il nome del gruppo')}
               />
             </Grid>
           </Grid>
           <Grid item container spacing={3}>
-            <Grid item xs={4} mb={3} sx={{ height: '75px' }}>
-              <CustomTextField // TODO TEXTAREA
-                {...baseTextFieldProps('description', 'Descrizione', 'Inserisci una descrizione')}
+            <Grid item xs={8} mb={3}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+                Descrizione
+              </Typography>
+              <CustomTextField
+                {...baseTextFieldProps('description', '', 'Inserisci una descrizione')}
+                variant="outlined"
+                multiline
+                rows={3} // TODO MAX LENGHT 200
               />
+            </Grid>
+
+            <Grid item container spacing={3}>
+              <Grid item xs={4} mb={3}>
+                <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+                  Prodotto
+                </Typography>
+                <Select
+                  placeholder="Seleziona il prodotto" // Todo fix
+                  id="product-select"
+                  fullWidth
+                  value={productSelected?.title ?? ''}
+                  variant="standard" // TODO Placeholder?
+                >
+                  {products.map((p) => (
+                    <MenuItem key={p.id} value={p.title} onClick={() => setProductSelected(p)}>
+                      {p.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
             </Grid>
 
             <Grid item container spacing={3}>
               <Grid item xs={8} mb={3}>
                 <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-                  Prodotto
+                  Referenti
                 </Typography>
 
-                <FormControl sx={{ m: 1, width: 300 }}>
-                  <InputLabel id="demo-multiple-name-label">Prodotto</InputLabel>
-                  <Select
-                    labelId="demo-multiple-name-label"
-                    id="demo-multiple-name"
-                    multiple
-                    value={product}
-                    onChange={handleProduct}
-                    input={<OutlinedInput label="Name" />}
-                  >
-                    {products.map(
-                      (products) =>
-                        // <MenuItem key={products} value={products}>   // TODO
-                        ({ products })
-                      // </MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
+                <Select
+                  disabled={!productSelected}
+                  id="member-check-selection"
+                  variant="standard"
+                  // TODO PLACE HOLDER
+                  multiple
+                  fullWidth
+                  value={formik.values.members}
+                  renderValue={(selectedUsers) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selectedUsers.map((s) => (
+                        <Chip
+                          key={s.id}
+                          label={s.name + ' ' + s.surname}
+                          onDelete={() => {}} // TODO onDelete for closing chip
+                          deleteIcon={<ClearIcon sx={{ color: '#FFFFFF !important' }} />} // Todo Check color of icon
+                        />
+                      ))}
+                    </Box>
+                  )}
+                >
+                  {Object.values(productUsers)
+                    .filter((user) => user.status === 'ACTIVE')
+                    .map((u) => {
+                      const checkedIndex = formik.values.members.findIndex((s) => s.id === u.id);
+                      const isChecked = checkedIndex > -1;
+                      const onItemSelected = () => {
+                        const nextUsersSelected = isChecked
+                          ? formik.values.members.filter((_s, index) => index !== checkedIndex)
+                          : formik.values.members.concat(u);
+                        void formik.setFieldValue('members', nextUsersSelected);
+                      };
+                      return (
+                        <MenuItem
+                          key={u.id}
+                          value={u.name}
+                          sx={{ borderBottom: '1px', borderBottomColor: '#CFDCE6' }}
+                        >
+                          <Checkbox checked={isChecked} onClick={onItemSelected} />
+                          {u.name} {u.surname}
+                        </MenuItem>
+                      );
+                    })}
+                </Select>
               </Grid>
             </Grid>
-
-            {references && (
-              <Grid item container spacing={3}>
-                <Grid item xs={8} mb={3}>
-                  <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-                    Referenti
-                  </Typography>
-                  <FormControl sx={{ m: 1, width: 300 }}>
-                    <InputLabel id="demo-multiple-checkbox-label">Referenti</InputLabel>
-                    <Select
-                      labelId="demo-multiple-checkbox-label"
-                      id="demo-multiple-checkbox"
-                      multiple
-                      value={references}
-                      onChange={handleReferences}
-                      input={<OutlinedInput label="Tag" />} // TODO
-                      renderValue={(selected) => selected.join(', ')}
-                    >
-                      {references.map((references) => (
-                        <MenuItem key={references} value={references}>
-                          <Checkbox checked={references.indexOf(references) > -1} />
-                          <ListItemText primary={references} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
-            )}
 
             <Grid item container spacing={3}>
               <Grid item xs={3} mt={8}>

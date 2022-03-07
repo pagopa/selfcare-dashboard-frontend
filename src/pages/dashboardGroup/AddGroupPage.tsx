@@ -3,21 +3,16 @@ import { TitleBox } from '@pagopa/selfcare-common-frontend';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useHistory } from 'react-router-dom';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
-import { Party } from '../../model/Party';
-import { PartyGroupExt } from '../../model/PartyGroup';
+import withGroupDetail, { withGroupDetailProps } from '../../decorators/withGroupDetail';
 import { Product } from '../../model/Product';
-import { ProductsRolesMap } from '../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../routes';
 import AddGroupForm from './components/AddGroupForm';
 
 type Props = {
-  party: Party;
   activeProducts: Array<Product>;
-  productsRolesMap: ProductsRolesMap;
-  PartyGroupExt: PartyGroupExt;
-};
+} & withGroupDetailProps;
 
-function AddGroupPage({ party, activeProducts, productsRolesMap, PartyGroupExt }: Props) {
+function AddGroupPage({ party, activeProducts, productsMap, partyGroup }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -26,8 +21,8 @@ function AddGroupPage({ party, activeProducts, productsRolesMap, PartyGroupExt }
       onClick: () =>
         history.push(
           resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUP.path, {
-            institutionId: PartyGroupExt.institutionId,
-            groupId: PartyGroupExt.id,
+            institutionId: partyGroup.institutionId,
+            groupId: partyGroup.id,
           })
         ),
     },
@@ -57,8 +52,8 @@ function AddGroupPage({ party, activeProducts, productsRolesMap, PartyGroupExt }
         <AddGroupForm
           party={party}
           products={activeProducts}
-          productsRolesMap={productsRolesMap}
-          PartyGroupExt={PartyGroupExt}
+          productsMap={productsMap}
+          PartyGroupExt={partyGroup}
           initialFormData={{
             name: '',
             description: '',
@@ -73,4 +68,4 @@ function AddGroupPage({ party, activeProducts, productsRolesMap, PartyGroupExt }
   );
 }
 
-export default AddGroupPage;
+export default withGroupDetail(AddGroupPage);
