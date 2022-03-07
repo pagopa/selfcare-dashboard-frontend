@@ -58,7 +58,7 @@ export default function MembersGroup({
   };
 
   return (
-    <Grid container>
+    <Grid container py={2}>
       {partyGroup.members.map((member, index) => (
         <Grid key={member.id} item container>
           <Grid item xs={3}>
@@ -112,7 +112,7 @@ export default function MembersGroup({
             </IconButton>
           </Grid>
           {index !== partyGroup.members.length - 1 && (
-            <Grid item xs={12}>
+            <Grid item xs={12} py={2}>
               <Divider />
             </Grid>
           )}
