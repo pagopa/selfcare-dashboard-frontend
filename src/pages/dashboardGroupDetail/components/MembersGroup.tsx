@@ -58,11 +58,13 @@ export default function MembersGroup({
         <Grid key={member.id} item container>
           <Grid item xs={4}>
             <Link
+              component="button"
+              disabled={isSuspended}
               sx={{
+                width: '100%',
                 textDecoration: 'none',
                 fontWeight: 600,
-                cursor: 'pointer',
-                color: isSuspended ? '#a2adb8' : '#0073E6',
+                cursor: isSuspended ? 'text' : 'pointer',
               }}
               onClick={() =>
                 history.push(
@@ -81,7 +83,13 @@ export default function MembersGroup({
                 <Grid item xs={5} mr={1}>
                   <Typography
                     className="ShowDots"
-                    sx={{ color: '#0073E6', fontWeight: 600, width: '100%' }}
+                    sx={{
+                      color: isSuspended ? '#a2adb8' : '#0073E6',
+                      fontWeight: 600,
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flexStart',
+                    }}
                     title={member.name}
                   >
                     {member.name}
@@ -89,7 +97,13 @@ export default function MembersGroup({
                 </Grid>
                 <Grid item xs={6} mr={1}>
                   <Typography
-                    sx={{ color: '#0073E6', fontWeight: 600, width: '100%' }}
+                    sx={{
+                      color: isSuspended ? '#a2adb8' : '#0073E6',
+                      fontWeight: 600,
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flexStart',
+                    }}
                     className="ShowDots"
                     title={member.surname}
                   >
@@ -130,6 +144,7 @@ export default function MembersGroup({
               sx={{ p: '0px', ':hover': { backgroundColor: 'transparent' } }}
               disableRipple
               onClick={handleClick}
+              disabled={isSuspended}
             >
               <MoreVertIcon sx={{ color: isSuspended ? '#a2adb8' : 'primary' }} />
             </IconButton>
