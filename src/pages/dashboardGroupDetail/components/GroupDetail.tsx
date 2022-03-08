@@ -3,7 +3,7 @@ import { Party } from '../../../model/Party';
 import { PartyGroupExt } from '../../../model/PartyGroup';
 import { Product, ProductsMap } from '../../../model/Product';
 import { ProductRolesLists } from '../../../model/ProductRole';
-import MembersGroup from './MembersGroup';
+import MemberGroup from './MemberGroup';
 
 type Props = {
   partyGroup: PartyGroupExt;
@@ -78,9 +78,8 @@ function GroupDetail({
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <MembersGroup
+          <MemberGroup
             partyGroup={partyGroup}
-            groupStatusClass={groupStatusClass}
             fetchPartyGroup={fetchPartyGroup}
             party={party}
             product={product}
