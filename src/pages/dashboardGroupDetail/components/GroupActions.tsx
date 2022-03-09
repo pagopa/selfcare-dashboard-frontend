@@ -164,7 +164,7 @@ export default function GroupActions({
         addError({
           component: 'Toast',
           id: `'UPDATE_PARTY_GROUP_ERROR-${partyGroup.id}`,
-          displayableTitle: `ERRORE DURANTE LA ${selectedGroupStatusError} DEL GRUPPO `,
+          displayableTitle: `ERRORE DURANTE LA ${selectedGroupStatusError.toUpperCase()} DEL GRUPPO `,
           techDescription: `C'è stato un errore durante l'aggiornamento del gruppo (${partyGroup.name}) con id (${partyGroup.id}): ${partyGroup.status}`,
           blocking: false,
           error: reason,

@@ -114,7 +114,7 @@ export default function GroupMenu({
         onMemberStatusUpdate(member, userProduct as PartyUserProduct, nextStatus);
         addNotify({
           id: 'ACTION_ON_PARTY_USER_COMPLETED',
-          title: `REFERENTE ${selectedUserStatus}`,
+          title: `REFERENTE ${selectedUserStatus.toUpperCase()}`,
           message: (
             <>
               {`Hai ${selectedUserStatus} correttamente `}
@@ -129,7 +129,7 @@ export default function GroupMenu({
         addError({
           component: 'Toast',
           id: `UPDATE_PARTY_USER_ERROR-${member.id}`,
-          displayableTitle: `ERRORE DURANTE LA ${selectedUserStatusError} DELL'UTENTE `,
+          displayableTitle: `ERRORE DURANTE LA ${selectedUserStatusError.toUpperCase()} DELL'UTENTE `,
           techDescription: `C'è stato un errore durante la ${selectedUserStatusError} dell'utente (${member.id}): ${member.status}`,
           blocking: false,
           error: reason,
