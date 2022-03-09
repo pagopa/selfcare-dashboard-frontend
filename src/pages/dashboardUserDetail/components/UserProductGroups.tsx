@@ -9,7 +9,9 @@ export default function UserProductGroups() {
         </Typography>
       </Grid>
       <Grid item xs={9}>
-        <Typography variant="h6">GRUPPO</Typography>
+        <Typography variant="h6" className="CustomInfoStyle">
+          TODO
+        </Typography>
       </Grid>
     </Grid>
   );

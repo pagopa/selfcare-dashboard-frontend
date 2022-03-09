@@ -32,9 +32,9 @@ export default function UserProductDetail({
 
   return (
     <>
-      <Grid item xs={12}>
+      <Grid item xs={10}>
         <Grid container mb={2}>
-          <Grid item xs={6}>
+          <Grid item xs={7}>
             <Grid container item>
               <Box>
                 <Typography variant="h6" sx={{ fontSize: '18px' }}>
@@ -62,7 +62,7 @@ export default function UserProductDetail({
               </Box>
             </Grid>
           </Grid>
-          <Grid item xs={3} display="flex" alignItems="center">
+          <Grid item xs={3} display="flex" alignItems="center" ml="-10px">
             <UserProductActions
               showActions={showActionOnProduct}
               party={party}
@@ -77,23 +77,21 @@ export default function UserProductDetail({
           </Grid>
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item xs={12}>
-          <UserProductRoles
-            showActions={!showActionOnProduct}
-            party={party}
-            user={partyUser}
-            fetchPartyUser={fetchPartyUser}
-            userProduct={userProduct}
-            product={product}
-            productRolesList={productRolesList}
-            canEdit={canEdit}
-            isProductDetailPage={isProductDetailPage}
-          />
-        </Grid>
-        <Grid container item xs={12} mt={3}>
-          <UserProductGroups />
-        </Grid>
+      <Grid item xs={10}>
+        <UserProductRoles
+          showActions={!showActionOnProduct}
+          party={party}
+          user={partyUser}
+          fetchPartyUser={fetchPartyUser}
+          userProduct={userProduct}
+          product={product}
+          productRolesList={productRolesList}
+          canEdit={canEdit}
+          isProductDetailPage={isProductDetailPage}
+        />
+      </Grid>
+      <Grid container item xs={10} mt={3}>
+        <UserProductGroups />
       </Grid>
     </>
   );

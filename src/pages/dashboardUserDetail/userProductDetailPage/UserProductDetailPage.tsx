@@ -173,18 +173,20 @@ function UserProductDetailPage({
       <Grid item xs={11} my={5}>
         <Divider />
       </Grid>
-      <UserProductRoles
-        showActions={true}
-        party={party}
-        user={partyUser}
-        fetchPartyUser={fetchPartyUser}
-        userProduct={userProduct}
-        product={selectedProduct}
-        productRolesList={productRolesList}
-        canEdit={canEdit}
-        isProductDetailPage={isProductDetailPage}
-      />
-      <Grid container item xs={12} mt={3}>
+      <Grid item xs={10}>
+        <UserProductRoles
+          showActions={true}
+          party={party}
+          user={partyUser}
+          fetchPartyUser={fetchPartyUser}
+          userProduct={userProduct}
+          product={selectedProduct}
+          productRolesList={productRolesList}
+          canEdit={canEdit}
+          isProductDetailPage={isProductDetailPage}
+        />
+      </Grid>
+      <Grid container item xs={10} mt={3}>
         <UserProductGroups />
       </Grid>
       <Grid container item my={10} spacing={2}>

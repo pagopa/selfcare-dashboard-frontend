@@ -73,7 +73,7 @@ export default function UserProductRoles({
 
           <Grid item xs={9}>
             <Grid item container>
-              <Grid item xs={4}>
+              <Grid item xs={5}>
                 <CustomTextTransform
                   className="CustomInfoStyle"
                   variant="body2"
