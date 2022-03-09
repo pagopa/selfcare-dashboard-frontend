@@ -2,19 +2,28 @@ import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Box, styled } from '@mui/material';
 import { DataGrid, GridColDef, GridSortDirection, GridSortModel } from '@mui/x-data-grid';
 import React, { useMemo } from 'react';
+import { CustomPagination } from '@pagopa/selfcare-common-frontend';
+import { Page } from '@pagopa/selfcare-common-frontend/model/Page';
 import { Product } from '../../../../../model/Product';
 import { Party } from '../../../../../model/Party';
 import { PartyGroup, PartyGroupStatus } from '../../../../../model/PartyGroup';
 import { buildColumnDefs } from './GroupProductTableColumns';
+import GroupsProductLoading from './GroupsProductLoading';
+import GroupsTableLoadMoreData from './GroupsProductLoadMoreData';
 
 const rowHeight = 81;
 const headerHeight = 56;
 
 interface GroupsTableProps {
+  incrementalLoad: boolean;
+  loading: boolean;
+  noMoreData: boolean;
   party: Party;
   groups: Array<PartyGroup>;
   product: Product;
   canEdit: boolean;
+  fetchPage: (page?: number, size?: number) => void;
+  page: Page;
   sort?: string;
   onSortRequest: (sort: string) => void;
   onRowClick: (partyGroup: PartyGroup) => void;
@@ -83,9 +92,14 @@ const CustomDataGrid = styled(DataGrid)({
 });
 
 export default function GroupsProductTable({
+  incrementalLoad,
+  loading,
+  fetchPage,
+  noMoreData,
   party,
   product,
   canEdit,
+  page,
   groups,
   sort,
   onSortRequest,
@@ -97,7 +111,7 @@ export default function GroupsProductTable({
 
   const columns: Array<GridColDef> = useMemo(
     () => buildColumnDefs(canEdit, party, product, onRowClick, onDelete, onStatusUpdate),
-    [party, product]
+    [party, product, groups]
   );
 
   return (
@@ -117,12 +131,32 @@ export default function GroupsProductTable({
           rows={groups}
           getRowId={(r) => r.id}
           columns={columns}
-          rowHeight={rowHeight}
+          rowHeight={groups.length === 0 && loading ? 0 : rowHeight}
           headerHeight={headerHeight}
           hideFooterSelectedRowCount={true}
-          hideFooter={true}
-          hideFooterPagination={true}
           components={{
+            Footer:
+              loading || incrementalLoad
+                ? () =>
+                    loading ? (
+                      <GroupsProductLoading />
+                    ) : !noMoreData ? (
+                      <GroupsTableLoadMoreData fetchNextPage={fetchPage} />
+                    ) : (
+                      <></>
+                    )
+                : undefined,
+            Pagination: incrementalLoad
+              ? undefined
+              : () => (
+                  <CustomPagination
+                    sort={sort}
+                    page={page}
+                    onPageRequest={(nextPage) => fetchPage(nextPage.page, nextPage.size)}
+                  />
+                ),
+            NoRowsOverlay: () => <></>,
+            NoResultsOverlay: () => <></>,
             ColumnSortedAscendingIcon: () => <ArrowDropDown sx={{ color: '#5C6F82' }} />,
             ColumnSortedDescendingIcon: () => <ArrowDropUp sx={{ color: '#5C6F82' }} />,
           }}

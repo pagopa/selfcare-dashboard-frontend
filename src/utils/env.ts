@@ -37,6 +37,8 @@ export const ENV = {
     .required()
     .asInt(),
 
+  PARTY_GROUPS_PAGE_SIZE: env.get('REACT_APP_PARTY_GROUPS_PAGE_SIZE').required().asInt(),
+
   ANALYTCS: {
     ENABLE: env.get('REACT_APP_ANALYTICS_ENABLE').default('false').asBool(),
     MOCK: env.get('REACT_APP_ANALYTICS_MOCK').default('false').asBool(),

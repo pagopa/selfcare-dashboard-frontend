@@ -1,3 +1,5 @@
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
+import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../model/Party';
@@ -16,17 +18,18 @@ import {
   updatePartyGroupStatus as updatePartyGroupStatusMocked,
   deletePartyGroup as deletePartyGroupMocked,
   fetchPartyGroup as fetchPartyGroupMocked,
+  deleteGroupRelation as deleteGroupRelationMocked,
 } from './__mocks__/groupsService';
 
 export const fetchPartyGroups = (
   party: Party,
-  productsMap: ProductsMap,
+  product: Product,
   currentUser: User,
-  products: Array<Product>
-): Promise<Array<PartyGroup>> => {
+  pageRequest: PageRequest
+): Promise<PageResource<PartyGroup>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
-    return fetchPartyGroupsMocked(party, productsMap, currentUser, products);
+    return fetchPartyGroupsMocked(party, product, currentUser, pageRequest);
   } else {
     throw new Error('TODO');
   }
@@ -107,6 +110,24 @@ export const deletePartyGroup = (
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return deletePartyGroupMocked(party, product, group);
+  } else {
+    throw new Error('TODO');
+  }
+};
+
+export const deleteGroupRelation = (
+  party: Party,
+  product: Product,
+  group: PartyGroupExt,
+  userId: string
+): Promise<any> => {
+  trackEvent('RELATION_GROUP_USER_DELETE', {
+    party_id: party.institutionId,
+    product: product.id,
+  });
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
+    return deleteGroupRelationMocked(party, product, group, userId);
   } else {
     throw new Error('TODO');
   }

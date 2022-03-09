@@ -8,7 +8,6 @@ import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorD
 import UserDetail from '../components/UserDetail';
 import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
 import UserProductRoles from '../components/UserProductRoles';
-import { transcodeProductRole2Title } from '../../../model/ProductRole';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import withSelectedPartyProduct from '../../../decorators/withSelectedPartyProduct';
@@ -66,6 +65,18 @@ function UserProductDetailPage({
     )
       .then((_) => {
         goBack();
+        addNotify({
+          component: 'Toast',
+          id: 'DELETE_PARTY_USER',
+          title: 'REFERENTE ELIMINATO',
+          message: (
+            <>
+              {'Hai eliminato correttamente il referente '}
+              <strong>{`${partyUser.name} ${partyUser.surname}`}</strong>
+              {'.'}
+            </>
+          ),
+        });
       })
       .catch((reason) =>
         addError({
@@ -85,19 +96,10 @@ function UserProductDetailPage({
     addNotify({
       component: 'SessionModal',
       id: 'Notify_Example',
-      title: 'Elimina Ruolo',
+      title: 'Elimina Referente',
       message: (
         <>
-          {'Stai per eliminare il ruolo '}
-          <strong>
-            {transcodeProductRole2Title(
-              (userProduct as PartyUserProduct).roles[0].role,
-              productRolesList
-            )}
-          </strong>
-          {' di '}
-          <strong>{(userProduct as PartyUserProduct).title} </strong>
-          {' assegnato a '}
+          {'Stai per eliminare il referente '}
           <strong style={{ textTransform: 'capitalize' }}>
             {party && `${partyUser.name.toLocaleLowerCase()} ${partyUser.surname}`}
           </strong>

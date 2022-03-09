@@ -1,6 +1,7 @@
 import '@pagopa/selfcare-common-frontend/common-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 import '@pagopa/selfcare-common-frontend/index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
