@@ -1,188 +1,168 @@
-import { Grid, Link, Box, Divider, IconButton, Typography, MenuItem, Menu } from '@mui/material';
+import { Grid, Link, Divider, Typography, Chip } from '@mui/material';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useState } from 'react';
-import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { useEffect, useState } from 'react';
 import { PartyGroupExt } from '../../../model/PartyGroup';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
-import { Party } from '../../../model/Party';
-import { deleteGroupRelation } from './../../../services/groupsService';
+import { Party, UserStatus } from '../../../model/Party';
+import { ProductRolesLists, transcodeProductRole2Title } from '../../../model/ProductRole';
+import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
+import GroupMenu from './GroupMenu';
 
 type Props = {
-  groupStatusClass: string;
   partyGroup: PartyGroupExt;
-  fetchPartyGroup: () => void;
   product: Product;
   party: Party;
   isSuspended: boolean;
+  productRolesLists: ProductRolesLists;
 };
 
 export default function MembersGroup({
   partyGroup,
-  fetchPartyGroup,
   product,
   party,
-  groupStatusClass,
   isSuspended,
+  productRolesLists,
 }: Props) {
-  const ITEM_HEIGHT = 48;
-  const roleLabelsGroup = {
-    ADMIN: {
-      title: 'Ref. Amministrativo',
-    },
-    LIMITED: {
-      title: 'Ref. Operativo',
-    },
-  };
-
   const history = useHistory();
-  const addError = useErrorDispatcher();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
 
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const [members, setMembers] = useState<Array<PartyUser>>([]);
+
+  useEffect(() => {
+    setMembers(partyGroup.members);
+  }, [partyGroup]);
+
+  const onMemberDelete = (member: PartyUser) => {
+    const nextMembers = members.filter((u) => u.id !== member.id);
+    setMembers(nextMembers);
+    // eslint-disable-next-line functional/immutable-data
+    partyGroup.members = nextMembers;
   };
 
-  // TODO:  insert the correct behavior onChangeMemberState
-  const handleChangeMemberState = () => {
-    handleClose();
+  const onMemberStatusUpdate = (
+    member: PartyUser,
+    userProduct: PartyUserProduct,
+    nextStatus: UserStatus
+  ) => {
+    // eslint-disable-next-line functional/immutable-data
+    member.status = nextStatus;
+    // eslint-disable-next-line functional/immutable-data
+    userProduct.roles[0].status = nextStatus;
+    setMembers(members.slice());
   };
 
   return (
     <Grid container py={2}>
-      {partyGroup.members.map((member, index) => (
-        <Grid key={member.id} item container>
-          <Grid item xs={4}>
-            <Link
-              sx={{
-                textDecoration: 'none',
-                fontWeight: 600,
-                cursor: 'pointer',
-                color: isSuspended ? '#a2adb8' : '#0073E6',
-              }}
-              onClick={() =>
-                history.push(
-                  resolvePathVariables(
-                    DASHBOARD_ROUTES.PARTY_USERS.subRoutes.PARTY_USER_DETAIL.path,
-                    {
-                      institutionId: partyGroup.institutionId,
-                      groupId: partyGroup.id,
-                      userId: member.id,
-                    }
-                  )
-                )
-              }
-            >
-              <Grid container>
-                <Grid item xs={5} mr={1}>
-                  <Typography
-                    className="ShowDots"
-                    sx={{ color: '#0073E6', fontWeight: 600, width: '100%' }}
-                    title={member.name}
-                  >
-                    {member.name}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} mr={1}>
-                  <Typography
-                    sx={{ color: '#0073E6', fontWeight: 600, width: '100%' }}
-                    className="ShowDots"
-                    title={member.surname}
-                  >
-                    {member.surname}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Link>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography
-              className={`${groupStatusClass} ShowDots`}
-              width="100%"
-              title={member.email}
-            >
-              {member.email}
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography className={groupStatusClass}>
-              {roleLabelsGroup[member.userRole].title}
-            </Typography>
-          </Grid>
-          <Grid item xs={1} display="flex" justifyContent="flex-end">
-            <IconButton
-              sx={{ p: '0px', ':hover': { backgroundColor: 'transparent' } }}
-              disableRipple
-              onClick={handleClick}
-            >
-              <MoreVertIcon sx={{ color: isSuspended ? '#a2adb8' : 'primary' }} />
-            </IconButton>
-          </Grid>
-          {index !== partyGroup.members.length - 1 && (
-            <Grid item xs={12} py={2}>
-              <Divider />
-            </Grid>
-          )}
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            PaperProps={{
-              style: {
-                maxHeight: ITEM_HEIGHT * 4.5,
-                width: '20ch',
-                padding: '8px 0',
-              },
-            }}
-          >
-            <Box width="100%" display="flex" justifyContent="center">
-              <MenuItem
-                onClick={() => {
-                  setLoading(true);
-                  deleteGroupRelation(party, product, partyGroup, member.id)
-                    .then((_) => {
-                      handleClose();
-                      fetchPartyGroup();
-                    })
-                    .catch((reason) =>
-                      addError({
-                        id: `DELETE_PARTY_GROUP_ERROR-${partyGroup.id}`,
-                        blocking: false,
-                        error: reason,
-                        techDescription: `Something gone wrong while deleting group ${partyGroup.name}`,
-                        toNotify: true,
-                      })
-                    )
-                    .finally(() => setLoading(false));
+      {members.map((member, index) => {
+        const userProduct = member.products.find((p) => p.id === product.id);
+        const isMemeberSuspended =
+          member.status === 'SUSPENDED' ||
+          !userProduct?.roles.find((r) => r.status !== 'SUSPENDED');
+
+        return (
+          <Grid key={member.id} item container spacing={1}>
+            <Grid item xs={4}>
+              <Link
+                component="button"
+                disabled={isSuspended}
+                sx={{
+                  width: '100%',
+                  textDecoration: 'none',
+                  fontWeight: 600,
+                  cursor: isSuspended ? 'text' : 'pointer',
+                  display: 'flex',
                 }}
+                onClick={() =>
+                  history.push(
+                    resolvePathVariables(
+                      DASHBOARD_ROUTES.PARTY_USERS.subRoutes.PARTY_USER_DETAIL.path,
+                      {
+                        institutionId: partyGroup.institutionId,
+                        groupId: partyGroup.id,
+                        userId: member.id,
+                      }
+                    )
+                  )
+                }
               >
-                Dissocia dal gruppo
-              </MenuItem>
-            </Box>
-            <Box width="170px" margin="4px auto">
-              <Divider />
-            </Box>
-            <Box width="100%" display="flex" justifyContent="center">
-              <MenuItem onClick={handleChangeMemberState}>
-                {member.status === 'ACTIVE'
-                  ? 'Sospendi Referente'
-                  : member.status === 'SUSPENDED'
-                  ? 'Riabilita Referente'
-                  : ''}
-              </MenuItem>
-            </Box>
-          </Menu>
-        </Grid>
-      ))}
+                <Typography
+                  className="ShowDots"
+                  sx={{
+                    color: isSuspended ? '#a2adb8' : '#0073E6',
+                    fontWeight: 600,
+                    justifyContent: 'flexStart',
+                  }}
+                  title={`${member.name} ${member.surname}`}
+                >
+                  {`${member.name} ${member.surname}`}
+                </Typography>
+              </Link>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography
+                className="ShowDots"
+                color={isMemeberSuspended || isSuspended ? '#9E9E9E' : undefined}
+                title={member.email}
+                width="100%"
+              >
+                {member.email}
+              </Typography>
+            </Grid>
+            <Grid item xs={isMemeberSuspended ? 3 : 4}>
+              {userProduct?.roles?.map((r, index) => (
+                <Grid container key={index}>
+                  <Grid item xs={isMemeberSuspended ? 8 : 12}>
+                    <Typography
+                      title={transcodeProductRole2Title(r.role, productRolesLists)}
+                      className="ShowDots"
+                      width="100%"
+                      color={r.status === 'SUSPENDED' || isSuspended ? '#9E9E9E' : undefined}
+                    >
+                      {transcodeProductRole2Title(r.role, productRolesLists)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+
+            {isMemeberSuspended && (
+              <Grid item xs={1}>
+                <Chip
+                  label="sospeso"
+                  variant="outlined"
+                  sx={{
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    background: '#E0E0E0',
+                    border: 'none',
+                    borderRadius: '16px',
+                    width: '76px',
+                    height: '24px',
+                  }}
+                />
+              </Grid>
+            )}
+
+            <GroupMenu
+              member={member}
+              party={party}
+              product={product}
+              partyGroup={partyGroup}
+              userProduct={userProduct}
+              isSuspended={isSuspended}
+              productRolesLists={productRolesLists}
+              onMemberStatusUpdate={onMemberStatusUpdate}
+              onMemberDelete={onMemberDelete}
+            />
+            {index !== partyGroup.members.length - 1 && (
+              <Grid item xs={12} py={2}>
+                <Divider />
+              </Grid>
+            )}
+          </Grid>
+        );
+      })}
     </Grid>
   );
 }

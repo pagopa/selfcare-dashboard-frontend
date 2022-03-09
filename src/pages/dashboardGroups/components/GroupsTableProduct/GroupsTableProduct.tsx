@@ -122,6 +122,7 @@ const GroupsTableProduct = ({
           history.push(
             resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_DETAIL.path, {
               groupId: partyGroup.id,
+              institutionId: partyGroup.institutionId,
             })
           )
         }

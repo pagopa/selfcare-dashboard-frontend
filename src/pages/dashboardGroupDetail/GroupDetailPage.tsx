@@ -1,32 +1,44 @@
 import { Grid, Typography, Chip, Link, Box } from '@mui/material';
-import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
-import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import withGroupDetail, { withGroupDetailProps } from '../../decorators/withGroupDetail';
 import { DASHBOARD_ROUTES } from '../../routes';
-import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../utils/constants';
-import { PartyGroupStatus } from '../../model/PartyGroup';
+import withProductsRolesMap, {
+  withProductsRolesMapProps,
+} from '../../decorators/withProductsRolesMap';
+import { PartyGroupExt, PartyGroupStatus } from '../../model/PartyGroup';
 import GroupActions from './components/GroupActions';
 import GroupDetail from './components/GroupDetail';
-import { deletePartyGroup } from './../../services/__mocks__/groupsService';
-import { updatePartyGroupStatus } from './../../services/groupsService';
 
-type Props = withGroupDetailProps & {
-  fetchPartyGroup: () => void;
-};
+type Props = withGroupDetailProps &
+  withProductsRolesMapProps & {
+    fetchPartyGroup: () => void;
+  };
 
-function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Props) {
+function GroupDetailPage({
+  partyGroup,
+  party,
+  productsMap,
+  productsRolesMap,
+  fetchPartyGroup,
+}: Props) {
   const history = useHistory();
-  const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
-  const addError = useErrorDispatcher();
-  const product = productsMap[partyGroup.productId];
-  const addNotify = useUserNotify();
-  const isSuspended = partyGroup.status === 'SUSPENDED';
+
+  const [partyGroupState, setPartyGroupState] = React.useState<PartyGroupExt>(partyGroup);
+
+  const nextGroupStatus: PartyGroupStatus | undefined =
+    partyGroupState.status === 'ACTIVE'
+      ? 'SUSPENDED'
+      : partyGroupState.status === 'SUSPENDED'
+      ? 'ACTIVE'
+      : undefined;
+
+  const product = productsMap[partyGroupState.productId];
+
+  const isSuspended = partyGroupState.status === 'SUSPENDED';
 
   useEffect(() => {
     if (partyGroup) {
@@ -34,150 +46,16 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
     }
   }, [partyGroup]);
 
+  useEffect(() => {
+    setPartyGroupState(partyGroup);
+  }, [partyGroup]);
+
   const goBack = () =>
     history.push(
       resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.MAIN.path, {
-        institutionId: partyGroup.institutionId,
+        institutionId: party.institutionId,
       })
     );
-
-  const goEdit = () =>
-    history.push(
-      resolvePathVariables('' /* TODO: redirect to Group Edit Page */, {
-        institutionId: partyGroup.institutionId,
-        groupId: partyGroup.id,
-      })
-    );
-
-  const goToDuplicate = () =>
-    history.push(
-      resolvePathVariables('' /* TODO: redirect to Group Duplicate Page */, {
-        institutionId: partyGroup.institutionId,
-        // groupId: partyGroup.id,
-      })
-    );
-
-  const handleOpenDelete = () => {
-    addNotify({
-      component: 'SessionModal',
-      id: 'Notify_Example',
-      title: 'Elimina gruppo',
-      message: (
-        <>
-          {'Stai per eliminare il gruppo '}
-          <strong>{partyGroup.name}</strong>
-          {'.'}
-          <br />
-          {'Vuoi continuare?'}
-        </>
-      ),
-      confirmLabel: 'Conferma',
-      closeLabel: 'Annulla',
-      onConfirm: onDelete,
-    });
-  };
-
-  const onDelete = () => {
-    setLoading(true);
-    deletePartyGroup(party, product, partyGroup)
-      .then((_) => {
-        goBack();
-        addNotify({
-          component: 'Toast',
-          id: 'DELETE_PARTY_USER',
-          title: 'GRUPPO ELIMINATO',
-          message: (
-            <>
-              {'Hai eliminato correttamente il gruppo '}
-              <strong>{partyGroup.name}</strong>
-              {'.'}
-            </>
-          ),
-        });
-      })
-      .catch((reason) =>
-        addError({
-          id: `DELETE_PARTY_GROUP_ERROR-${partyGroup.id}`,
-          blocking: false,
-          error: reason,
-          techDescription: `Something gone wrong while deleting group ${partyGroup.name}`,
-          toNotify: true,
-        })
-      )
-      .finally(() => setLoading(false));
-  };
-
-  const confirmChangeStatus = () => {
-    const nextGroupStatus: PartyGroupStatus | undefined =
-      partyGroup.status === 'ACTIVE'
-        ? 'SUSPENDED'
-        : partyGroup.status === 'SUSPENDED'
-        ? 'ACTIVE'
-        : undefined;
-    const selectedGroupStatus = nextGroupStatus === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
-
-    if (!nextGroupStatus) {
-      addError({
-        id: 'INVALID_STATUS_TRANSITION',
-        blocking: false,
-        error: new Error('INVALID_STATUS_TRANSITION'),
-        techDescription: `Invalid status transition while updating group (${partyGroup.id})`,
-        toNotify: true,
-      });
-      return;
-    }
-    setLoading(true);
-    updatePartyGroupStatus(party, product, partyGroup, nextGroupStatus)
-      .then((_) => {
-        fetchPartyGroup();
-        addNotify({
-          id: 'ACTION_ON_PARTY_GROUP_COMPLETED',
-          title: `GRUPPO ${selectedGroupStatus.toUpperCase()}`,
-          message: (
-            <>
-              {`Hai ${selectedGroupStatus} correttamente il gruppo`}
-              <strong>{` ${partyGroup.name} `}</strong>
-              {'.'}
-            </>
-          ),
-          component: 'Toast',
-        });
-      })
-      .catch((reason) =>
-        addError({
-          id: 'UPDATE_PARTY_GROUP_STATUS',
-          blocking: false,
-          error: reason,
-          techDescription: `An error occurred while updating group (${partyGroup.name}) con id (${partyGroup.id}): ${partyGroup.status} -> ${nextGroupStatus}`,
-          toNotify: true,
-        })
-      )
-      .finally(() => setLoading(false));
-  };
-
-  const handleOpen = () => {
-    addNotify({
-      component: 'SessionModal',
-      id: 'Notify_Example',
-      title: partyGroup.status === 'ACTIVE' ? 'Sospendi Gruppo' : 'Riabilita Gruppo',
-      message: (
-        <>
-          {partyGroup.status === 'ACTIVE'
-            ? 'Stai per sospendere il gruppo'
-            : 'Stai per riabilitare il gruppo'}
-          <strong> {partyGroup.name} </strong>
-          {'di'}
-          <strong> {productsMap[partyGroup.productId].title} </strong>
-          {'.'}
-          <br />
-          {'Vuoi continuare?'}
-        </>
-      ),
-      confirmLabel: 'Conferma',
-      closeLabel: 'Annulla',
-      onConfirm: confirmChangeStatus,
-    });
-  };
 
   const paths = [
     {
@@ -185,9 +63,14 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
       onClick: goBack,
     },
     {
-      description: `${partyGroup.name}`,
+      description: `${partyGroupState.name}`,
     },
   ];
+
+  const onGroupStatusUpdate = (nextGroupStatus: PartyGroupStatus) => {
+    setPartyGroupState({ ...partyGroupState, status: nextGroupStatus });
+  };
+
   return (
     <Grid
       container
@@ -203,7 +86,7 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
         <Grid item xs={6}>
           <Box display="flex">
             <Box>
-              <Typography variant="h1">Dettaglio Referente</Typography>
+              <Typography variant="h1">Dettaglio Gruppo</Typography>
             </Box>
             <Box>
               {isSuspended && (
@@ -238,25 +121,28 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
           </Link>
         </Grid>
       </Grid>
-      <Grid container item xs={10}>
+      <Grid container item xs={11}>
         <Grid item mb={3} width="100%">
           <GroupDetail
-            partyGroup={partyGroup}
+            partyGroup={partyGroupState}
             productsMap={productsMap}
             isSuspended={isSuspended}
-            fetchPartyGroup={fetchPartyGroup}
             product={product}
             party={party}
+            productRolesLists={productsRolesMap[product.id]}
           />
         </Grid>
         <Grid item mb={3} mt={15} width="100%">
           <GroupActions
-            goEdit={goEdit}
-            goToDuplicate={goToDuplicate}
-            onDelete={handleOpenDelete}
-            partyGroup={partyGroup}
-            handleOpen={handleOpen}
+            partyGroup={partyGroupState}
             isSuspended={isSuspended}
+            goBack={goBack}
+            party={party}
+            product={product}
+            productsMap={productsMap}
+            fetchPartyGroup={fetchPartyGroup}
+            nextGroupStatus={nextGroupStatus}
+            onGroupStatusUpdate={onGroupStatusUpdate}
           />
         </Grid>
       </Grid>
@@ -264,4 +150,4 @@ function GroupDetailPage({ partyGroup, party, productsMap, fetchPartyGroup }: Pr
   );
 }
 
-export default withGroupDetail(GroupDetailPage);
+export default withGroupDetail(withProductsRolesMap(GroupDetailPage));
