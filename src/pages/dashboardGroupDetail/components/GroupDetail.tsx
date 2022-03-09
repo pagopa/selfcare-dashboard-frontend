@@ -9,7 +9,6 @@ type Props = {
   partyGroup: PartyGroupExt;
   productsMap: ProductsMap;
   isSuspended: boolean;
-  fetchPartyGroup: () => void;
   product: Product;
   party: Party;
   productRolesLists: ProductRolesLists;
@@ -19,7 +18,6 @@ function GroupDetail({
   partyGroup,
   productsMap,
   isSuspended,
-  fetchPartyGroup,
   product,
   party,
   productRolesLists,
@@ -80,7 +78,6 @@ function GroupDetail({
         <Grid item xs={12}>
           <MemberGroup
             partyGroup={partyGroup}
-            fetchPartyGroup={fetchPartyGroup}
             party={party}
             product={product}
             isSuspended={isSuspended}

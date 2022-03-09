@@ -128,20 +128,26 @@ export const updatePartyGroup = (_party: Party, group: PartyGroupOnEdit): Promis
 };
 
 export const fetchPartyGroup = (
-  _institutionId: string,
+  institutionId: string,
   groupId: string,
   _currentUser: User,
   _productsMap: ProductsMap
 ): Promise<PartyGroupExt | null> => {
-  const mockedGroup = mockedGroups.find((u) => u.id === groupId) ?? null;
-  const clone: PartyGroupExt = JSON.parse(JSON.stringify(mockedGroup));
-  // eslint-disable-next-line functional/immutable-data
-  clone.members = clone.membersIds.map((m) => mockedUsers.find((u) => u.id === m) as PartyUser);
-  // eslint-disable-next-line functional/immutable-data
-  clone.createdBy = mockedUsers.find((u) => u.id === clone.createdByUserId) as PartyUser;
-  // eslint-disable-next-line functional/immutable-data
-  clone.modifiedBy = mockedUsers.find((u) => u.id === clone.modifiedByUserId) as PartyUser;
-  return new Promise((resolve) => resolve(mockedGroup ? clone : null));
+  const mockedGroup =
+    mockedGroups.find((u) => u.id === groupId && u.institutionId === institutionId) ?? null;
+
+  if (mockedGroup !== null) {
+    const clone: PartyGroupExt = JSON.parse(JSON.stringify(mockedGroup));
+    // eslint-disable-next-line functional/immutable-data
+    clone.members = clone.membersIds.map((m) => mockedUsers.find((u) => u.id === m) as PartyUser);
+    // eslint-disable-next-line functional/immutable-data
+    clone.createdBy = mockedUsers.find((u) => u.id === clone.createdByUserId) as PartyUser;
+    // eslint-disable-next-line functional/immutable-data
+    clone.modifiedBy = mockedUsers.find((u) => u.id === clone.modifiedByUserId) as PartyUser;
+    return new Promise((resolve) => resolve(clone));
+  } else {
+    return new Promise((resolve) => resolve(null));
+  }
 };
 
 export const updatePartyGroupStatus = (

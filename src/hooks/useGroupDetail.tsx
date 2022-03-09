@@ -4,8 +4,8 @@ import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/use
 import { PartyGroupExt } from '../model/PartyGroup';
 import { ProductsMap } from '../model/Product';
 import { useAppSelector } from '../redux/hooks';
+import { fetchPartyGroup } from '../services/groupsService';
 import { LOADING_TASK_FETCH_PARTY_USER } from '../utils/constants';
-import { fetchPartyGroup } from './../services/__mocks__/groupsService';
 
 export const useGroupDetail = (): ((
   institutionId: string,

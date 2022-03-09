@@ -1,25 +1,17 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-import { Grid, Link, Box, Divider, IconButton, Typography, MenuItem, Menu } from '@mui/material';
+import { Grid, Link, Divider, Typography, Chip } from '@mui/material';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useState } from 'react';
-import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
-import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
+import { useEffect, useState } from 'react';
 import { PartyGroupExt } from '../../../model/PartyGroup';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
 import { Product } from '../../../model/Product';
 import { Party, UserStatus } from '../../../model/Party';
 import { ProductRolesLists, transcodeProductRole2Title } from '../../../model/ProductRole';
-import { updatePartyUserStatus } from '../../../services/usersService';
-import { PartyUserProduct, PartyUserProductRole } from '../../../model/PartyUser';
-import { deleteGroupRelation } from './../../../services/groupsService';
+import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
+import GroupMenu from './GroupMenu';
 
 type Props = {
   partyGroup: PartyGroupExt;
-  fetchPartyGroup: () => void;
   product: Product;
   party: Party;
   isSuspended: boolean;
@@ -28,130 +20,58 @@ type Props = {
 
 export default function MemberGroup({
   partyGroup,
-  fetchPartyGroup,
   product,
   party,
   isSuspended,
   productRolesLists,
 }: Props) {
-  const ITEM_HEIGHT = 48;
-
   const history = useHistory();
-  const addError = useErrorDispatcher();
-  const addNotify = useUserNotify();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
 
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const [members, setMembers] = useState<Array<PartyUser>>([]);
+
+  useEffect(() => {
+    setMembers(partyGroup.members);
+  }, [partyGroup]);
+
+  const onMemberDelete = (member: PartyUser) => {
+    const nextMembers = members.filter((u) => u.id !== member.id);
+    setMembers(nextMembers);
+    // eslint-disable-next-line functional/immutable-data
+    partyGroup.members = nextMembers;
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+
+  const onMemberStatusUpdate = (
+    member: PartyUser,
+    userProduct: PartyUserProduct,
+    nextStatus: UserStatus
+  ) => {
+    // eslint-disable-next-line functional/immutable-data
+    member.status = nextStatus;
+    // eslint-disable-next-line functional/immutable-data
+    userProduct.roles[0].status = nextStatus;
+    setMembers(members.slice());
   };
 
   return (
     <Grid container py={2}>
-      {partyGroup.members.map((member, index) => {
+      {members.map((member, index) => {
         const userProduct = member.products.find((p) => p.id === product.id);
-        const role = userProduct?.roles[0];
-        const handleOpen = () => {
-          addNotify({
-            component: 'SessionModal',
-            id: 'Notify_Example',
-            title: role?.status === 'ACTIVE' ? 'Sospendi Ruolo' : 'Riabilita Ruolo',
-            message: (
-              <>
-                {role?.status === 'ACTIVE'
-                  ? 'Stai per sospendere il ruolo '
-                  : 'Stai per riabilitare il ruolo '}
-                <strong>
-                  {transcodeProductRole2Title(role?.role as string, productRolesLists)}
-                </strong>
-                {' di '}
-                <strong> {product.title} </strong>
-                {' assegnato a '}
-                <strong style={{ textTransform: 'capitalize' }}>
-                  {party && `${member.name.toLocaleLowerCase()} ${member.surname}`}
-                </strong>
-                {'.'}
-                <br />
-                {'Vuoi continuare?'}
-              </>
-            ),
-            confirmLabel: 'Conferma',
-            closeLabel: 'Annulla',
-            onConfirm: confirmChangeStatus,
-          });
-        };
-
-        const confirmChangeStatus = () => {
-          const nextStatus: UserStatus | undefined =
-            role?.status === 'ACTIVE'
-              ? 'SUSPENDED'
-              : role?.status === 'SUSPENDED'
-              ? 'ACTIVE'
-              : undefined;
-          const selectedUserStatus = nextStatus === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
-
-          if (!nextStatus) {
-            addError({
-              id: 'INVALID_STATUS_TRANSITION',
-              blocking: false,
-              error: new Error('INVALID_STATUS_TRANSITION'),
-              techDescription: `Invalid status transition while updating party (${party.institutionId}) user (${member.id}): ${member.status}`,
-              toNotify: true,
-            });
-
-            return;
-          }
-
-          handleClose();
-          setLoading(true);
-          updatePartyUserStatus(
-            party,
-            member,
-            userProduct as PartyUserProduct,
-            role as PartyUserProductRole,
-            nextStatus
-          )
-            .then((_) => {
-              addNotify({
-                id: 'ACTION_ON_PARTY_USER_COMPLETED',
-                title: `REFERENTE ${selectedUserStatus.toUpperCase()}`,
-                message: (
-                  <>
-                    {`Hai ${selectedUserStatus} correttamente `}
-                    <strong>{`${member.name} ${member.surname}`}</strong>
-                    {'.'}
-                  </>
-                ),
-                component: 'Toast',
-              });
-            })
-            .catch((reason) =>
-              addError({
-                id: 'UPDATE_PARTY_USER_STATUS',
-                blocking: false,
-                error: reason,
-                techDescription: `An error occurred while updating party (${party.institutionId}) user (${member.id}): ${member.status} -> ${nextStatus}`,
-                toNotify: true,
-              })
-            )
-            .finally(() => setLoading(false));
-        };
+        const isMemeberSuspended =
+          member.status === 'SUSPENDED' ||
+          !userProduct?.roles.find((r) => r.status !== 'SUSPENDED');
 
         return (
-          <Grid key={member.id} item container>
+          <Grid key={member.id} item container spacing={1}>
             <Grid item xs={4}>
               <Link
                 component="button"
-                disabled={isSuspended || role?.status === 'SUSPENDED'}
+                disabled={isSuspended}
                 sx={{
                   width: '100%',
                   textDecoration: 'none',
                   fontWeight: 600,
-                  cursor: isSuspended || role?.status === 'SUSPENDED' ? 'text' : 'pointer',
+                  cursor: isSuspended ? 'text' : 'pointer',
+                  display: 'flex',
                 }}
                 onClick={() =>
                   history.push(
@@ -166,133 +86,75 @@ export default function MemberGroup({
                   )
                 }
               >
-                <Box display="flex">
-                  <Box mr={1}>
-                    <Typography
-                      className="ShowDots"
-                      sx={{
-                        color: isSuspended || role?.status === 'SUSPENDED' ? '#a2adb8' : '#0073E6',
-                        fontWeight: 600,
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'flexStart',
-                      }}
-                      title={member.name}
-                    >
-                      {member.name}
-                    </Typography>
-                  </Box>
-                  <Box mr={1}>
-                    <Typography
-                      sx={{
-                        color: isSuspended || role?.status === 'SUSPENDED' ? '#a2adb8' : '#0073E6',
-                        fontWeight: 600,
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'flexStart',
-                      }}
-                      className="ShowDots"
-                      title={member.surname}
-                    >
-                      {member.surname}
-                    </Typography>
-                  </Box>
-                </Box>
+                <Typography
+                  className="ShowDots"
+                  sx={{
+                    color: isSuspended ? '#a2adb8' : '#0073E6',
+                    fontWeight: 600,
+                    justifyContent: 'flexStart',
+                  }}
+                  title={`${member.name} ${member.surname}`}
+                >
+                  {`${member.name} ${member.surname}`}
+                </Typography>
               </Link>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography
-                className="ShowDot"
-                color={
-                  role?.status === 'SUSPENDED' || partyGroup.status === 'SUSPENDED'
-                    ? '#9E9E9E'
-                    : undefined
-                }
-                width="100%"
+                className="ShowDots"
+                color={isMemeberSuspended || isSuspended ? '#9E9E9E' : undefined}
                 title={member.email}
+                width="100%"
               >
                 {member.email}
               </Typography>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMemeberSuspended ? 3 : 4}>
               {userProduct?.roles?.map((r, index) => (
-                <Box key={index}>
-                  <Typography
-                    color={
-                      r.status === 'SUSPENDED' || partyGroup.status === 'SUSPENDED'
-                        ? '#9E9E9E'
-                        : undefined
-                    }
-                  >
-                    {transcodeProductRole2Title(r.role, productRolesLists)}
-                  </Typography>
-                </Box>
+                <Grid container key={index}>
+                  <Grid item xs={isMemeberSuspended ? 8 : 12}>
+                    <Typography
+                      title={transcodeProductRole2Title(r.role, productRolesLists)}
+                      className="ShowDots"
+                      width="100%"
+                      color={r.status === 'SUSPENDED' || isSuspended ? '#9E9E9E' : undefined}
+                    >
+                      {transcodeProductRole2Title(r.role, productRolesLists)}
+                    </Typography>
+                  </Grid>
+                </Grid>
               ))}
             </Grid>
-            <Grid item xs={1} display="flex" justifyContent="flex-end">
-              <IconButton
-                sx={{ p: '0px', ':hover': { backgroundColor: 'transparent' } }}
-                disableRipple
-                onClick={handleClick}
-                disabled={isSuspended}
-              >
-                <MoreVertIcon sx={{ color: isSuspended ? '#a2adb8' : 'primary' }} />
-              </IconButton>
-            </Grid>
-            <Menu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              PaperProps={{
-                style: {
-                  maxHeight: ITEM_HEIGHT * 4.5,
-                  width: '20ch',
-                  padding: '8px 0',
-                },
-              }}
-            >
-              <Box width="100%" display="flex" justifyContent="center">
-                <MenuItem
-                  onClick={() => {
-                    setLoading(true);
-                    deleteGroupRelation(party, product, partyGroup, member.id)
-                      .then((_) => {
-                        handleClose();
-                        fetchPartyGroup();
-                      })
-                      .catch((reason) =>
-                        addError({
-                          id: `DELETE_PARTY_GROUP_ERROR-${partyGroup.id}`,
-                          blocking: false,
-                          error: reason,
-                          techDescription: `Something gone wrong while deleting group ${partyGroup.name}`,
-                          toNotify: true,
-                        })
-                      )
-                      .finally(() => setLoading(false));
+
+            {isMemeberSuspended && (
+              <Grid item xs={1}>
+                <Chip
+                  label="sospeso"
+                  variant="outlined"
+                  sx={{
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    background: '#E0E0E0',
+                    border: 'none',
+                    borderRadius: '16px',
+                    width: '76px',
+                    height: '24px',
                   }}
-                >
-                  Dissocia dal gruppo
-                </MenuItem>
-              </Box>
-              {/* TODO: add control && !member.isCurrentUser */}
-              {userProduct?.roles.length === 1 && (
-                <Box key={index}>
-                  <Box width="170px" margin="4px auto">
-                    <Divider />
-                  </Box>
-                  <Box width="100%" display="flex" justifyContent="center">
-                    <MenuItem onClick={handleOpen}>
-                      {role?.status === 'ACTIVE'
-                        ? 'Sospendi Referente'
-                        : role?.status === 'SUSPENDED'
-                        ? 'Riabilita Referente'
-                        : ''}
-                    </MenuItem>
-                  </Box>
-                </Box>
-              )}
-            </Menu>
+                />
+              </Grid>
+            )}
+
+            <GroupMenu
+              member={member}
+              party={party}
+              product={product}
+              partyGroup={partyGroup}
+              userProduct={userProduct}
+              isSuspended={isSuspended}
+              productRolesLists={productRolesLists}
+              onMemberStatusUpdate={onMemberStatusUpdate}
+              onMemberDelete={onMemberDelete}
+            />
             {index !== partyGroup.members.length - 1 && (
               <Grid item xs={12} py={2}>
                 <Divider />
