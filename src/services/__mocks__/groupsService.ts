@@ -1,6 +1,6 @@
-import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
-import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
 import {
   applySort,
   extractPageRequest,
@@ -54,9 +54,9 @@ export const mockedGroups: Array<PartyGroup> = [
     institutionId: 'onboarded',
     productId: 'prod-io',
     status: 'SUSPENDED',
-    membersIds: ['uid', 'loggedUser'],
+    membersIds: ['uid', '0'],
     createdAt: new Date('2022-02-01'),
-    createdByUserId: 'loggedUser',
+    createdByUserId: '0',
     modifiedAt: new Date('2022-02-08 16:00'),
     modifiedByUserId: 'uid',
   },
@@ -74,22 +74,139 @@ export const mockedGroups: Array<PartyGroup> = [
     modifiedAt: new Date('2022-03-01'),
     modifiedByUserId: 'uid7',
   },
+
+  {
+    id: 'groupId5',
+    name: 'Gruppo5',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId6',
+    name: 'Gruppo6',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId7',
+    name: 'Gruppo7',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId8',
+    name: 'Gruppo8',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId9',
+    name: 'Gruppo9',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId10',
+    name: 'Gruppo10',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId11',
+    name: 'Gruppo11',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId12',
+    name: 'Gruppo12',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
+  {
+    id: 'groupId13',
+    name: 'Gruppo13',
+    description: 'Group to have a significant number on prod-io',
+    institutionId: 'onboarded',
+    productId: 'prod-io',
+    status: 'ACTIVE',
+    membersIds: ['uid'],
+    createdAt: new Date('2022-01-01'),
+    createdByUserId: 'uid',
+    modifiedAt: new Date('2022-01-01 16:00'),
+    modifiedByUserId: 'uid',
+  },
 ];
 
 export const fetchPartyGroups = (
-  pageRequest: PageRequest,
-  _party: Party,
-  _productsMap: ProductsMap,
+  party: Party,
+  product: Product,
   _currentUser: User,
-  _checkPermission: boolean,
-  product?: Product
+  pageRequest: PageRequest
 ): Promise<PageResource<PartyGroup>> => {
   const filteredContent = mockedGroups
+    .slice()
     .filter((u) => {
-      if (product) {
-        return u.productId === product.id;
+      if (u.institutionId !== party.institutionId) {
+        return false;
       }
-      return u;
+      return product.id.indexOf(u.productId) > -1;
     })
     .map((u) => JSON.parse(JSON.stringify(u)));
 
@@ -136,20 +253,26 @@ export const updatePartyGroup = (_party: Party, group: PartyGroupOnEdit): Promis
 };
 
 export const fetchPartyGroup = (
-  _institutionId: string,
+  institutionId: string,
   groupId: string,
   _currentUser: User,
   _productsMap: ProductsMap
 ): Promise<PartyGroupExt | null> => {
-  const mockedGroup = mockedGroups.find((u) => u.id === groupId) ?? null;
-  const clone: PartyGroupExt = JSON.parse(JSON.stringify(mockedGroup));
-  // eslint-disable-next-line functional/immutable-data
-  clone.members = clone.membersIds.map((m) => mockedUsers.find((u) => u.id === m) as PartyUser);
-  // eslint-disable-next-line functional/immutable-data
-  clone.createdBy = mockedUsers.find((u) => u.id === clone.createdByUserId) as PartyUser;
-  // eslint-disable-next-line functional/immutable-data
-  clone.modifiedBy = mockedUsers.find((u) => u.id === clone.modifiedByUserId) as PartyUser;
-  return new Promise((resolve) => resolve(mockedGroup ? clone : null));
+  const mockedGroup =
+    mockedGroups.find((u) => u.id === groupId && u.institutionId === institutionId) ?? null;
+
+  if (mockedGroup !== null) {
+    const clone: PartyGroupExt = JSON.parse(JSON.stringify(mockedGroup));
+    // eslint-disable-next-line functional/immutable-data
+    clone.members = clone.membersIds.map((m) => mockedUsers.find((u) => u.id === m) as PartyUser);
+    // eslint-disable-next-line functional/immutable-data
+    clone.createdBy = mockedUsers.find((u) => u.id === clone.createdByUserId) as PartyUser;
+    // eslint-disable-next-line functional/immutable-data
+    clone.modifiedBy = mockedUsers.find((u) => u.id === clone.modifiedByUserId) as PartyUser;
+    return new Promise((resolve) => resolve(clone));
+  } else {
+    return new Promise((resolve) => resolve(null));
+  }
 };
 
 export const updatePartyGroupStatus = (
@@ -183,5 +306,17 @@ export const deletePartyGroup = (
     mockedGroups.findIndex((u) => u.id === group.id),
     1
   );
+  return new Promise<void>((resolve) => resolve());
+};
+
+export const deleteGroupRelation = (
+  _party: Party,
+  _product: Product,
+  group: PartyGroupExt,
+  userId: string
+): Promise<any> => {
+  const selectedGroup = mockedGroups.find((g) => g.id === group.id);
+  // eslint-disable-next-line functional/immutable-data
+  selectedGroup?.membersIds.splice(selectedGroup?.membersIds.indexOf(userId), 1);
   return new Promise<void>((resolve) => resolve());
 };

@@ -14,6 +14,8 @@ import UsersProductPage from './pages/dashboardUsers/UsersProductPage/UsersProdu
 import AddProductToUserPage from './pages/dashboardUserEdit/AddProductToUserPage';
 import EditUserRegistryProductPage from './pages/dashboardUserEdit/EditUserRegistryProductPage';
 import AddGroupPage from './pages/dashboardGroup/AddGroupPage';
+import GroupsPage from './pages/dashboardGroups/GroupsPage';
+import GroupsDetailPage from './pages/dashboardGroupDetail/GroupDetailPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -116,24 +118,28 @@ export const DASHBOARD_ROUTES = {
       ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/users`),
     },
   },
-  PARTY_GROUP: {
-    path: `${BASE_ROUTE}/:institutionId/:groupId`, // TODO
+  PARTY_GROUPS: {
+    path: `${BASE_ROUTE}/:institutionId/groups`,
     exact: false,
     subRoutes: {
       MAIN: {
-        // TODO MAIN
-        path: `${BASE_ROUTE}/:institutionId/:groupId`,
+        path: `${BASE_ROUTE}/:institutionId/groups`,
         exact: true,
-        // todo Component
+        component: GroupsPage,
       },
       ADD_PARTY_GROUP: {
-        path: `${BASE_ROUTE}/:institutionId/:groupId/add`,
+        path: `${BASE_ROUTE}/:institutionId/groups/add`,
         exact: true,
         component: AddGroupPage,
       },
+      PARTY_GROUP_DETAIL: {
+        path: `${BASE_ROUTE}/:institutionId/groups/:groupId`,
+        exact: true,
+        component: GroupsDetailPage,
+      },
     },
-    ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:groupId/users`),
   },
+  ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId`),
 };
 
 export default ROUTES as { [key in keyof typeof ROUTES]: RouteConfig };

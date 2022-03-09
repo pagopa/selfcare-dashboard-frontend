@@ -18,26 +18,18 @@ import {
   updatePartyGroupStatus as updatePartyGroupStatusMocked,
   deletePartyGroup as deletePartyGroupMocked,
   fetchPartyGroup as fetchPartyGroupMocked,
+  deleteGroupRelation as deleteGroupRelationMocked,
 } from './__mocks__/groupsService';
 
 export const fetchPartyGroups = (
-  pageRequest: PageRequest,
   party: Party,
-  productsMap: ProductsMap,
+  product: Product,
   currentUser: User,
-  checkPermission: boolean,
-  product?: Product
+  pageRequest: PageRequest
 ): Promise<PageResource<PartyGroup>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
-    return fetchPartyGroupsMocked(
-      pageRequest,
-      party,
-      productsMap,
-      currentUser,
-      checkPermission,
-      product
-    );
+    return fetchPartyGroupsMocked(party, product, currentUser, pageRequest);
   } else {
     throw new Error('TODO');
   }
@@ -118,6 +110,24 @@ export const deletePartyGroup = (
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return deletePartyGroupMocked(party, product, group);
+  } else {
+    throw new Error('TODO');
+  }
+};
+
+export const deleteGroupRelation = (
+  party: Party,
+  product: Product,
+  group: PartyGroupExt,
+  userId: string
+): Promise<any> => {
+  trackEvent('RELATION_GROUP_USER_DELETE', {
+    party_id: party.institutionId,
+    product: product.id,
+  });
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
+    return deleteGroupRelationMocked(party, product, group, userId);
   } else {
     throw new Error('TODO');
   }
