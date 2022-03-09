@@ -1,9 +1,8 @@
 import { uniqueId } from 'lodash';
 import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { useSelectedParty } from '../hooks/useSelectedParty';
-import { useAppDispatch } from '../redux/hooks';
-import { AppError, appStateActions } from '../redux/slices/appStateSlice';
 import ROUTES from '../routes';
 
 type DashboardUrlParams = {
@@ -16,12 +15,11 @@ export default function withSelectedParty<T>(
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithSelectedParty = (props: T) => {
-    const dispatch = useAppDispatch();
     const { fetchSelectedParty } = useSelectedParty();
     const { institutionId } = useParams<DashboardUrlParams>();
     const history = useHistory();
 
-    const addError = (error: AppError) => dispatch(appStateActions.addError(error));
+    const addError = useErrorDispatcher();
 
     const doFetch = (): void => {
       fetchSelectedParty(institutionId).catch((reason) => {
@@ -47,7 +45,7 @@ export default function withSelectedParty<T>(
     useEffect(() => {
       doFetch();
     }, [institutionId]);
-    return <WrappedComponent {...(props as T)} />;
+    return <WrappedComponent {...props} />;
   };
 
   // eslint-disable-next-line functional/immutable-data

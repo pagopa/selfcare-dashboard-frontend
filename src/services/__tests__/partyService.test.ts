@@ -19,9 +19,7 @@ test('Test fetchParties', async () => {
   expect(parties).toMatchObject(mockedInstitutionResources.map(institutionResource2Party));
 
   parties.forEach((p) =>
-    expect(p.urlLogo).toBe(
-      `https://selcdcheckoutsa.z6.web.core.windows.net/institutions/${p.institutionId}/logo.png`
-    )
+    expect(p.urlLogo).toBe(`http://checkout.selfcare/institutions/${p.institutionId}/logo.png`)
   );
 
   expect(dashboardApiGetInstitutionsSpy).toBeCalledTimes(1);
@@ -34,7 +32,7 @@ describe('Test fetchPartyDetails', () => {
     expect(party).toMatchObject(institutionResource2Party(mockedInstitutionResources[0]));
 
     expect(party.urlLogo).toBe(
-      `https://selcdcheckoutsa.z6.web.core.windows.net/institutions/${expectedInstitutionId}/logo.png`
+      `http://checkout.selfcare/institutions/${expectedInstitutionId}/logo.png`
     );
   };
 

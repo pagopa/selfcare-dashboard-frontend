@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, Button } from '@mui/material';
 import { useHistory } from 'react-router';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../../../model/Party';
 import PartySelectionSearch from '../../../components/partySelectionSearch/PartySelectionSearch';
-import ROUTES, { resolvePathVariables } from '../../../routes';
+import ROUTES from '../../../routes';
+import { useAppDispatch } from '../../../redux/hooks';
+import { partiesActions } from '../../../redux/slices/partiesSlice';
 import PartySelectionTitle from './components/PartySelectionTitle';
 
 type Props = {
@@ -11,13 +15,19 @@ type Props = {
 };
 
 export default function PartySelection({ parties }: Props) {
-  const bodyTitle = "Seleziona il tuo Ente";
+  const bodyTitle = 'Seleziona il tuo Ente';
   const bodyDescription =
     "Se operi per più Enti, puoi modificare la tua scelta all'interno del portale.";
 
   const [selectedParty, setSelectedParty] = React.useState<Party | null>();
   const [disableBtn, setBtnDisable] = React.useState(true);
   const history = useHistory();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(partiesActions.setPartySelected(undefined));
+    dispatch(partiesActions.setPartySelectedProducts(undefined));
+  }, []);
 
   return (
     <Grid
@@ -52,11 +62,13 @@ export default function PartySelection({ parties }: Props) {
           disabled={disableBtn}
           sx={{ width: '190px', height: '40px' }}
           onClick={() =>
-            history.push(
+           { 
+            trackEvent('DASHBOARD_PARTY_SELECTION', { party_id: selectedParty?.institutionId });
+             history.push(
               resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
                 institutionId: selectedParty?.institutionId ?? '',
               })
-            )
+            );}
           }
         >
           Entra

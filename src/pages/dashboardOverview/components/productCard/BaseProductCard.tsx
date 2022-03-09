@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Typography, Button, Box, Grid, Card, CardContent } from '@mui/material';
-import SessionModal from '../../../../components/SessionModal';
 
 type Props = {
   cardTitle: string;
   cardSubTitle?: string;
   buttonLabel: string;
   disableBtn: boolean;
-  logoCard?: string;
+  urlLogo?: string;
   tag?: string;
   btnAction?: () => void;
   heightLogo?: string;
   heightTitle?: string;
   heightSubTitle?: string;
   heightButton?: string;
-  status?: string;
   titleFontSize?: string;
   subTitleFontSize?: string;
 };
@@ -33,19 +31,16 @@ export default function BaseProductCard({
   cardSubTitle,
   buttonLabel,
   disableBtn,
-  logoCard,
+  urlLogo,
   tag,
   btnAction,
   heightLogo,
   heightTitle,
   heightSubTitle,
   heightButton,
-  status,
   titleFontSize = '32px',
   subTitleFontSize = '18px',
 }: Props) {
-  const [openLogoutModal, setOpenLogoutModal] = useState(false);
-
   return (
     <React.Fragment>
       <Card sx={{ border: 'none', boxShadow: 'none' }}>
@@ -53,7 +48,7 @@ export default function BaseProductCard({
           <Grid container height={heightLogo}>
             <Grid item xs={6} mb={3}>
               <Box sx={{ width: '100%' }}>
-                <img src={`data:image/png;base64,${logoCard}`} />
+                <img src={urlLogo} />
               </Box>
             </Grid>
             {tag && (
@@ -109,7 +104,7 @@ export default function BaseProductCard({
           <Grid item xs={12} justifyContent="center" height={heightButton}>
             <Box sx={{ width: '100%' }}>
               <Button
-                onClick={status === 'PENDING' ? () => setOpenLogoutModal(true) : btnAction}
+                onClick={btnAction}
                 disabled={disableBtn}
                 variant="contained"
                 sx={{ width: '100%', height: '48px' }}
@@ -120,16 +115,6 @@ export default function BaseProductCard({
           </Grid>
         </CardContent>
       </Card>
-      <SessionModal
-        handleClose={() => setOpenLogoutModal(false)}
-        onConfirm={btnAction}
-        open={openLogoutModal}
-        title={'Adesione in corso'}
-        message={
-          'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?'
-        }
-        onConfirmLabel={'Procedi con una nuova adesione'}
-      />
     </React.Fragment>
   );
 }
