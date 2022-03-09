@@ -1,22 +1,15 @@
-import { Grid, styled, Typography } from '@mui/material';
-
-const CustomLabelStyle = styled(Typography)({
-  fontSize: '14px',
-  color: '#5C6F82',
-});
+import { Grid, Typography } from '@mui/material';
 
 export default function UserProductGroups() {
   return (
     <Grid container>
       <Grid item xs={3}>
-        <CustomLabelStyle variant="h6" className="labelStyle">
+        <Typography className="CustomLabelStyle" variant="h6">
           GRUPPO
-        </CustomLabelStyle>
+        </Typography>
       </Grid>
       <Grid item xs={9}>
-        <CustomLabelStyle variant="h6" className="labelStyle">
-          GRUPPO
-        </CustomLabelStyle>
+        <Typography variant="h6">GRUPPO</Typography>
       </Grid>
     </Grid>
   );
