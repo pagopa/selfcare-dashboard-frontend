@@ -24,7 +24,6 @@ interface Props {
 
 const emptyFilters: UsersTableFiltersConfig = {
   productIds: [],
-  selcRole: [],
   productRoles: [],
 };
 
