@@ -88,6 +88,7 @@ export default function GroupMenu({
     const nextStatus: UserStatus | undefined =
       role?.status === 'ACTIVE' ? 'SUSPENDED' : role?.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
     const selectedUserStatus = nextStatus === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
+    const selectedUserStatusError = role?.status === 'SUSPENDED' ? 'sospensione' : 'riabilitazione';
 
     if (!nextStatus) {
       addError({
@@ -126,16 +127,77 @@ export default function GroupMenu({
       })
       .catch((reason) =>
         addError({
-          id: 'UPDATE_PARTY_USER_STATUS',
+          component: 'Toast',
+          id: `UPDATE_PARTY_USER_ERROR-${member.id}`,
+          displayableTitle: `ERRORE DURANTE LA ${selectedUserStatusError} DELL'UTENTE `,
+          techDescription: `C'è stato un errore durante la ${selectedUserStatusError} dell'utente (${member.id}): ${member.status}`,
           blocking: false,
           error: reason,
-          techDescription: `An error occurred while updating party (${party.institutionId}) user (${member.id}): ${member.status} -> ${nextStatus}`,
           toNotify: true,
         })
       )
       .finally(() => setLoading(false));
   };
 
+  const confirmDisociateAction = () => {
+    handleClose();
+    addNotify({
+      component: 'SessionModal',
+      id: 'Notify_Example',
+      title: 'Dissocia',
+      message: (
+        <>
+          {'Stai per dissociare '}
+          <strong>{member.name}</strong>
+          {' dal gruppo '}
+          <strong>{partyGroup.name}</strong>
+          {' di '}
+          <strong> {product.title} </strong>
+          {'.'}
+          <br />
+          {'Vuoi continuare?'}
+        </>
+      ),
+      confirmLabel: 'Conferma',
+      closeLabel: 'Annulla',
+      onConfirm: confirmUserDissociation,
+    });
+  };
+
+  const confirmUserDissociation = () => {
+    setLoading(true);
+    deleteGroupRelation(party, product, partyGroup, member.id)
+      .then((_) => {
+        handleClose();
+        onMemberDelete(member);
+        addNotify({
+          id: 'ACTION_ON_PARTY_USER_COMPLETED',
+          title: `UTENTE DISSOCIATO`,
+          message: (
+            <>
+              {`Hai dissociato correttamente `}
+              <strong>{`${member.name} ${member.surname} `}</strong>
+              {'dal gruppo '}
+              <strong>{`${partyGroup.name}`}</strong>
+              {'.'}
+            </>
+          ),
+          component: 'Toast',
+        });
+      })
+      .catch((reason) =>
+        addError({
+          component: 'Toast',
+          id: `DISSOCIATE_PARTY_USER_ERROR-${member.id}`,
+          displayableTitle: `ERRORE DURANTE LA DISSOCIAZIONE DELL'UTENTE `,
+          techDescription: `C'è stato un errore durante la dissociazione dell'utente (${member.id})`,
+          blocking: false,
+          error: reason,
+          toNotify: true,
+        })
+      )
+      .finally(() => setLoading(false));
+  };
   return (
     <>
       <Grid item xs={1} display="flex" justifyContent="flex-end">
@@ -161,28 +223,7 @@ export default function GroupMenu({
         }}
       >
         <Box width="100%" display="flex" justifyContent="center">
-          <MenuItem
-            onClick={() => {
-              setLoading(true);
-              deleteGroupRelation(party, product, partyGroup, member.id)
-                .then((_) => {
-                  handleClose();
-                  onMemberDelete(member);
-                })
-                .catch((reason) =>
-                  addError({
-                    id: `DELETE_PARTY_GROUP_ERROR-${partyGroup.id}`,
-                    blocking: false,
-                    error: reason,
-                    techDescription: `Something gone wrong while deleting group ${partyGroup.name}`,
-                    toNotify: true,
-                  })
-                )
-                .finally(() => setLoading(false));
-            }}
-          >
-            Dissocia dal gruppo
-          </MenuItem>
+          <MenuItem onClick={confirmDisociateAction}>Dissocia dal gruppo</MenuItem>
         </Box>
         {userProduct?.roles.length === 1 && !member.isCurrentUser && (
           <Box key={userProduct.id}>
