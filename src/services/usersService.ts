@@ -63,7 +63,8 @@ export const fetchPartyUsers = (
       return DashboardApi.getPartyProductUsers(
         party.institutionId,
         product.id,
-        selcRoles && selcRoles.length > 0 ? selcRoles[0] : undefined
+        undefined,
+        productRoles
       ).then(
         (
           r // TODO fixme when API will support pagination
@@ -73,7 +74,8 @@ export const fetchPartyUsers = (
       return DashboardApi.getPartyUsers(
         party.institutionId,
         product?.id,
-        selcRoles && selcRoles.length > 0 ? selcRoles[0] : undefined
+        undefined,
+        productRoles
       ).then(
         (
           r // TODO fixme when API will support pagination
