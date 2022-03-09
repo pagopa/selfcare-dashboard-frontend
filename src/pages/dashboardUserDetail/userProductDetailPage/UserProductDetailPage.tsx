@@ -41,7 +41,7 @@ function UserProductDetailPage({
   const addNotify = useUserNotify();
 
   const [userProduct, setUserProduct] = useState<PartyUserProduct>();
-  const canEdit = selectedProduct.userRole === 'ADMIN';
+  const canEdit = selectedProduct.userRole === 'ADMIN' && selectedProduct.status === 'ACTIVE';
 
   useEffect(() => {
     const userProduct = partyUser.products.find((product) => product.id === selectedProduct.id);
@@ -182,7 +182,7 @@ function UserProductDetailPage({
         canEdit={canEdit}
         isProductDetailPage={isProductDetailPage}
       />
-      <Grid container item xs={12}>
+      <Grid container item xs={12} mt={3}>
         <UserProductGroups />
       </Grid>
       <Grid container item my={10} spacing={2}>

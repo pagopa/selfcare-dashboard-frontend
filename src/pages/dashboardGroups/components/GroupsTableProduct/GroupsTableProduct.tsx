@@ -26,7 +26,7 @@ const GroupsTableProduct = ({
 }: Props) => {
   const history = useHistory();
 
-  const canEdit = product.userRole === 'ADMIN';
+  const canEdit = product.userRole === 'ADMIN' && product.status === 'ACTIVE';
 
   return (
     <GroupsProductTable

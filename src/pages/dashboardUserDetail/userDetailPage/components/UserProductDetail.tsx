@@ -91,7 +91,7 @@ export default function UserProductDetail({
             isProductDetailPage={isProductDetailPage}
           />
         </Grid>
-        <Grid container item xs={12}>
+        <Grid container item xs={12} mt={3}>
           <UserProductGroups />
         </Grid>
       </Grid>
