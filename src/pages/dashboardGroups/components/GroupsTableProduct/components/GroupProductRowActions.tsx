@@ -126,7 +126,7 @@ export default function GroupProductRowActions({
 
     askConfirm(
       nextStatus === 'SUSPENDED' ? 'Sospendi Gruppo' : 'Riattiva Gruppo',
-      nextStatus === 'SUSPENDED' ? 'Stai per congelare' : 'Stai per riattivare', // TODO or "sospendere" ?
+      nextStatus === 'SUSPENDED' ? 'Stai per sospendere' : 'Stai per riattivare',
       () => updateStatus(nextStatus)
     );
   };
