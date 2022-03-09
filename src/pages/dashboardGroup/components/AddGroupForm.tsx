@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Chip,
+  FormControl,
   Grid,
   MenuItem,
   Select,
@@ -10,7 +11,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import ClearIcon from '@mui/icons-material/Clear';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import {
@@ -25,8 +25,9 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
+import { ReactComponent as ClearIcon } from '../../../assets/clear.svg';
 import { Party } from '../../../model/Party';
-import { PartyGroupExt, PartyGroupOnCreation } from '../../../model/PartyGroup';
+import { PartyGroupExt, PartyGroupOnCreation, PartyGroupOnEdit } from '../../../model/PartyGroup';
 import { PartyUser } from '../../../model/PartyUser';
 import { Product, ProductsMap } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
@@ -34,6 +35,21 @@ import { savePartyGroup } from '../../../services/groupsService';
 import { LOADING_TASK_FETCH_USER_PRODUCT, LOADING_TASK_SAVE_GROUP } from '../../../utils/constants';
 import { fetchPartyUsers } from '../../../services/usersService';
 import { useAppSelector } from '../../../redux/hooks';
+
+const CustomBox = styled(Box)({
+  '&::-webkit-scrollbar': {
+    width: 8,
+  },
+  '&::-webkit-scrollbar-track': {
+    boxShadow: `inset 10px 10px  #E6E9F2`,
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#0073E6',
+  },
+  overflowY: 'auto',
+  height: '100%',
+  maxHeight: '200px',
+});
 
 const CustomTextField = styled(TextField)({
   '.MuiInputLabel-asterisk': {
@@ -57,6 +73,17 @@ const CustomTextField = styled(TextField)({
   input: {
     '&::placeholder': {
       fontStyle: 'italic',
+      fontSize: '16px',
+      fontWeight: '400',
+      color: '#5C6F82',
+      opacity: '1',
+    },
+  },
+  textArea: {
+    '&::placeholder': {
+      fontStyle: 'italic',
+      fontSize: '16px',
+      fontWeight: '400',
       color: '#5C6F82',
       opacity: '1',
     },
@@ -70,8 +97,8 @@ type Props = {
   party: Party;
   productsMap: ProductsMap;
   PartyGroupExt: PartyGroupExt;
-  initialFormData: PartyGroupOnCreation;
-  canEdit: boolean;
+  initialFormData: PartyGroupOnCreation | PartyGroupOnEdit;
+  isClone: boolean;
   goBack?: () => void;
 };
 
@@ -81,6 +108,7 @@ export default function AddGroupForm({
   initialFormData,
   productsMap,
   PartyGroupExt,
+  isClone,
   goBack,
 }: Props) {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
@@ -99,6 +127,8 @@ export default function AddGroupForm({
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
 
+  const isEdit = !!(initialFormData as PartyGroupOnEdit).id;
+
   useEffect(() => {
     if (productSelected) {
       fetchProductUsers(productSelected);
@@ -115,30 +145,30 @@ export default function AddGroupForm({
         })
       ));
 
-  const validate = (values: Partial<PartyGroupOnCreation>) => {
+  const validate = (values: Partial<PartyGroupOnCreation>) =>
     Object.fromEntries(
       Object.entries({
         groupName: !values.name ? requiredError : undefined,
         description: !values.description ? requiredError : undefined,
-        product: !values.productId ? requiredError : undefined,
         references: values.members?.length === 0 ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
-  };
-
   const save = (values: PartyGroupOnCreation) => {
     setLoadingSaveGroup(true);
     savePartyGroup(party, productSelected as Product, values)
       .then(() => {
         unregisterUnloadEvent();
-        trackEvent('GROUP_CREATE', {
-          party_id: PartyGroupExt.institutionId,
-          group_id: PartyGroupExt.id,
-        });
+        trackEvent(
+          'GROUP_CREATE',
+          /* TODO EDIT AND CLONE */ {
+            party_id: PartyGroupExt.institutionId,
+            group_id: PartyGroupExt.id,
+          }
+        );
         addNotify({
           component: 'Toast',
           id: 'SAVE_GROUP',
-          title: 'GRUPPO CREATO',
+          title: 'GRUPPO CREATO', // TODO GRUPPO MODIFICATO
           message: (
             <>
               {'Hai creato correttamente il gruppo '}
@@ -185,7 +215,9 @@ export default function AddGroupForm({
   const baseTextFieldProps = (
     field: keyof PartyGroupOnCreation,
     label: string,
-    placeholder: string
+    placeholder: string,
+    fontWeight: number = 400,
+    fontSize: number = 16
   ) => {
     const isError = !!formik.errors[field] && formik.errors[field] !== requiredError;
     return {
@@ -202,8 +234,8 @@ export default function AddGroupForm({
       sx: { width: '100%' },
       InputProps: {
         style: {
-          fontSize: '16px',
-          fontWeight: 400,
+          fontSize,
+          fontWeight,
           lineHeight: '24px',
           color: '#5C6F82',
           textAlign: 'start' as const,
@@ -226,7 +258,19 @@ export default function AddGroupForm({
       [],
       []
     )
-      .then((productUsersPage) => setProductUsers(productUsersPage.content))
+      .then((productUsersPage) => {
+        const activeUsers = productUsersPage.content.filter((user) => user.status === 'ACTIVE');
+        setProductUsers(activeUsers);
+        if (!isClone && !isEdit) {
+          void formik.setFieldValue('members', [], true);
+        } else if (isClone) {
+          void formik.setFieldValue(
+            'members',
+            activeUsers.filter((u) => u.products[0].title !== productSelected.title),
+            true
+          );
+        }
+      })
       .catch((reason) =>
         addError({
           id: 'FETCH_PRODUCT_USERS',
@@ -243,125 +287,164 @@ export default function AddGroupForm({
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
         <Grid container direction="column">
-          <Grid item container spacing={3}>
+          <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
-              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
                 Nome del gruppo
               </Typography>
               <CustomTextField
-                {...baseTextFieldProps('name', '', 'Inserisci il nome del gruppo')}
+                {...baseTextFieldProps('name', '', 'Inserisci il nome del gruppo', 700, 20)}
               />
             </Grid>
           </Grid>
-          <Grid item container spacing={3}>
+          <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
-              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
                 Descrizione
               </Typography>
               <CustomTextField
                 {...baseTextFieldProps('description', '', 'Inserisci una descrizione')}
                 variant="outlined"
                 multiline
-                rows={3} // TODO MAX LENGHT 200
+                rows={4}
               />
             </Grid>
+          </Grid>
+          <Grid item container spacing={3} marginBottom={4}>
+            <Grid item xs={4} mb={3}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
+                Prodotto
+              </Typography>
 
-            <Grid item container spacing={3}>
-              <Grid item xs={4} mb={3}>
-                <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-                  Prodotto
-                </Typography>
-                <Select
-                  placeholder="Seleziona il prodotto" // Todo fix
-                  id="product-select"
-                  fullWidth
-                  value={productSelected?.title ?? ''}
-                  variant="standard" // TODO Placeholder?
-                >
-                  {products.map((p) => (
-                    <MenuItem key={p.id} value={p.title} onClick={() => setProductSelected(p)}>
-                      {p.title}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </Grid>
+              <Select
+                id="product-select"
+                fullWidth
+                value={productSelected?.title ?? ''}
+                displayEmpty
+                variant="standard"
+                renderValue={(productSelected) =>
+                  productSelected === '' ? (
+                    <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
+                      Seleziona il prodotto
+                    </Typography>
+                  ) : (
+                    <Typography fontWeight={700} fontSize={20}>
+                      {productSelected}
+                    </Typography>
+                  )
+                }
+              >
+                {products.map((p) => (
+                  <MenuItem
+                    key={p.id}
+                    value={p.title}
+                    sx={{ fontSize: '14px', color: '#000000' }}
+                    onClick={() => setProductSelected(p)}
+                  >
+                    {p.title}
+                  </MenuItem>
+                ))}
+              </Select>
             </Grid>
+          </Grid>
 
-            <Grid item container spacing={3}>
-              <Grid item xs={8} mb={3}>
-                <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={3}>
-                  Referenti
-                </Typography>
-
+          <Grid item container spacing={3} marginBottom={5}>
+            <Grid item xs={8} mb={3}>
+              <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
+                Referenti
+              </Typography>
+              <FormControl fullWidth>
                 <Select
                   disabled={!productSelected}
                   id="member-check-selection"
                   variant="standard"
-                  // TODO PLACE HOLDER
                   multiple
                   fullWidth
                   value={formik.values.members}
+                  displayEmpty
                   renderValue={(selectedUsers) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                      {selectedUsers.length === 0 ? (
+                        <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
+                          Seleziona i referenti che vuoi assegnare al gruppo
+                        </Typography>
+                      ) : undefined}
                       {selectedUsers.map((s) => (
                         <Chip
+                          color="default"
+                          size="small"
+                          variant="outlined"
                           key={s.id}
                           label={s.name + ' ' + s.surname}
-                          onDelete={() => {}} // TODO onDelete for closing chip
-                          deleteIcon={<ClearIcon sx={{ color: '#FFFFFF !important' }} />} // Todo Check color of icon
+                          onDelete={() =>
+                            formik.setFieldValue(
+                              'members',
+                              selectedUsers.filter((us) => us !== s),
+                              true
+                            )
+                          }
+                          deleteIcon={<ClearIcon onMouseDown={(e) => e.stopPropagation()} />}
                         />
                       ))}
                     </Box>
                   )}
                 >
-                  {Object.values(productUsers)
-                    .filter((user) => user.status === 'ACTIVE')
-                    .map((u) => {
+                  <CustomBox>
+                    {Object.values(productUsers).map((u) => {
                       const checkedIndex = formik.values.members.findIndex((s) => s.id === u.id);
                       const isChecked = checkedIndex > -1;
                       const onItemSelected = () => {
                         const nextUsersSelected = isChecked
                           ? formik.values.members.filter((_s, index) => index !== checkedIndex)
                           : formik.values.members.concat(u);
-                        void formik.setFieldValue('members', nextUsersSelected);
+                        void formik.setFieldValue('members', nextUsersSelected, true);
                       };
                       return (
                         <MenuItem
                           key={u.id}
                           value={u.name}
-                          sx={{ borderBottom: '1px', borderBottomColor: '#CFDCE6' }}
+                          sx={{
+                            fontSize: '14px',
+                            color: '#000000',
+                            borderBottom: 'solid',
+                            borderBottomWidth: 'thin',
+                            borderBottomColor: '#CFDCE6',
+                            width: '554px',
+                            height: '48px',
+                          }}
                         >
                           <Checkbox checked={isChecked} onClick={onItemSelected} />
                           {u.name} {u.surname}
                         </MenuItem>
                       );
                     })}
+                  </CustomBox>
                 </Select>
-              </Grid>
+              </FormControl>
             </Grid>
+          </Grid>
 
-            <Grid item container spacing={3}>
-              <Grid item xs={3} mt={8}>
-                <Button
-                  sx={{ width: '100%' }}
-                  color="primary"
-                  variant="outlined"
-                  onClick={() => onExit(goBackInner)}
-                >
-                  Annulla
-                </Button>
-              </Grid>
-              <Grid item xs={3} mt={8}>
-                <Button
-                  disabled={!formik.dirty || !formik.isValid}
-                  sx={{ width: '100%' }}
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                >
-                  Conferma
-                </Button>
-              </Grid>
+          <Grid item container spacing={3}>
+            <Grid item xs={3} mt={8}>
+              <Button
+                sx={{ width: '100%' }}
+                color="primary"
+                variant="outlined"
+                onClick={() => onExit(goBackInner)}
+              >
+                Annulla
+              </Button>
+            </Grid>
+            <Grid item xs={3} mt={8}>
+              <Button
+                disabled={!formik.dirty || !formik.isValid}
+                sx={{ width: '100%' }}
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
+                Conferma
+              </Button>
             </Grid>
           </Grid>
         </Grid>

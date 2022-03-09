@@ -117,7 +117,7 @@ export const DASHBOARD_ROUTES = {
     },
   },
   PARTY_GROUP: {
-    path: `${BASE_ROUTE}/:institutionId/:groupId`, // TODO (NOT USER)
+    path: `${BASE_ROUTE}/:institutionId/:groupId`, // TODO
     exact: false,
     subRoutes: {
       MAIN: {

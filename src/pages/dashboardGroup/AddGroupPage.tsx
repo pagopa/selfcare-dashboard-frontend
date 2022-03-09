@@ -61,7 +61,7 @@ function AddGroupPage({ party, activeProducts, productsMap, partyGroup }: Props)
             institutionId: '',
             productId: '',
           }}
-          canEdit={true}
+          isClone={false}
         />
       </Grid>
     </Grid>
