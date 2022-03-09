@@ -22,7 +22,7 @@ import {
   PartyUserOnCreation,
   productUserResource2PartyUser,
 } from '../../model/PartyUser';
-import { mockedUserRegistry } from '../__mocks__/usersService';
+import { mockedProductRoles as mockedProductRolesService } from '../__mocks__/usersService';
 import { userResource2UserRegistry } from '../../model/UserRegistry';
 import { mockedUsers } from '../__mocks__/usersService';
 import { buildProductsMap } from '../../model/Product';
@@ -49,7 +49,8 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       checkPermission,
       undefined,
-      ['ADMIN']
+      'ADMIN',
+      mockedProductRolesService
     );
 
     expect(partyUsers).toMatchObject({
@@ -68,7 +69,8 @@ describe('Test fetchPartyUsers', () => {
     expect(DashboardApi.getPartyUsers).toBeCalledWith(
       mockedParties[0].institutionId,
       undefined,
-      'ADMIN'
+      'ADMIN',
+      mockedProductRolesService
     );
     expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
   };
@@ -83,7 +85,7 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       true,
       mockedPartyProducts[0],
-      ['LIMITED']
+      'LIMITED'
     );
 
     expect(partyProductUsers).toMatchObject({
@@ -103,7 +105,8 @@ describe('Test fetchPartyUsers', () => {
     expect(DashboardApi.getPartyProductUsers).toBeCalledWith(
       mockedParties[0].institutionId,
       mockedPartyProducts[0].id,
-      'LIMITED'
+      'LIMITED',
+      undefined
     );
   });
 
@@ -117,7 +120,7 @@ describe('Test fetchPartyUsers', () => {
       mockedUser,
       false,
       mockedPartyProducts[0],
-      ['LIMITED']
+      'LIMITED'
     );
 
     expect(partyProductUsers).toMatchObject({
@@ -136,7 +139,8 @@ describe('Test fetchPartyUsers', () => {
     expect(DashboardApi.getPartyUsers).toBeCalledWith(
       mockedParties[0].institutionId,
       mockedPartyProducts[0].id,
-      'LIMITED'
+      'LIMITED',
+      undefined
     );
     expect(DashboardApi.getPartyProductUsers).toBeCalledTimes(0);
   });

@@ -25,7 +25,6 @@ const paths = [
 
 const emptyFilters: UsersTableFiltersConfig = {
   productIds: [],
-  selcRole: [],
   productRoles: [],
 };
 

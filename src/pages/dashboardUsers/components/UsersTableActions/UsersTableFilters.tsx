@@ -1,5 +1,4 @@
 import { Grid } from '@mui/material';
-import { UserRole } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
 import { ProductRole, ProductsRolesMap } from '../../../../model/ProductRole';
 import UsersTableRolesFilter from './UsersTableRolesFilter';
@@ -7,8 +6,6 @@ import UsersTableRolesFilter from './UsersTableRolesFilter';
 export type UsersTableFiltersConfig = {
   /** If the roles configuration imply a set of products, this will be considered as filter */
   productIds: Array<string>;
-  /** The selc roles selected as filter */
-  selcRole: Array<UserRole>;
   /** The product roles selected as filter */
   productRoles: Array<ProductRole>;
 };
@@ -39,7 +36,6 @@ export default function UsersTableFilters({
         disableFilters={disableFilters}
         productRolesSelected={filters.productRoles}
         productRolesList={productRolesList}
-        filterSelcRole={filters.selcRole}
         onFiltersChange={onFiltersChange}
         filters={filters}
         showSelcRoleGrouped={showSelcRoleGrouped}
