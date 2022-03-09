@@ -18,7 +18,7 @@ type Props = {
   productRolesLists: ProductRolesLists;
 };
 
-export default function MemberGroup({
+export default function MembersGroup({
   partyGroup,
   product,
   party,
