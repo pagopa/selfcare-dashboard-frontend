@@ -17,6 +17,7 @@ import withSelectedPartyProductAndRoles, {
   withSelectedPartyProductAndRolesProps,
 } from '../../../decorators/withSelectedPartyProductAndRoles';
 import { ProductsMap } from '../../../model/Product';
+import UserProductGroups from '../components/UserProductGroups';
 import { deletePartyUser } from './../../../services/usersService';
 
 type Props = withSelectedPartyProductAndRolesProps & {
@@ -39,7 +40,7 @@ function UserProductDetailPage({
   const addNotify = useUserNotify();
 
   const [userProduct, setUserProduct] = useState<PartyUserProduct>();
-  const canEdit = selectedProduct.userRole === 'ADMIN';
+  const canEdit = selectedProduct.userRole === 'ADMIN' && selectedProduct.status === 'ACTIVE';
 
   useEffect(() => {
     const userProduct = partyUser.products.find((product) => product.id === selectedProduct.id);
@@ -172,17 +173,27 @@ function UserProductDetailPage({
       <Grid item xs={11} my={5}>
         <Divider />
       </Grid>
-      <UserProductRoles
-        showActions={true}
-        party={party}
-        user={partyUser}
-        fetchPartyUser={fetchPartyUser}
-        userProduct={userProduct}
-        product={selectedProduct}
-        productRolesList={productRolesList}
-        canEdit={canEdit}
-        isProductDetailPage={isProductDetailPage}
-      />
+      <Grid item xs={10}>
+        <UserProductRoles
+          showActions={true}
+          party={party}
+          user={partyUser}
+          fetchPartyUser={fetchPartyUser}
+          userProduct={userProduct}
+          product={selectedProduct}
+          productRolesList={productRolesList}
+          canEdit={canEdit}
+          isProductDetailPage={isProductDetailPage}
+        />
+      </Grid>
+      <Grid container item xs={10} mt={3}>
+        <UserProductGroups
+          party={party}
+          user={partyUser}
+          product={selectedProduct}
+          canEdit={canEdit}
+        />
+      </Grid>
       <Grid container item my={10} spacing={2}>
         <Grid item xs={2}>
           <Button

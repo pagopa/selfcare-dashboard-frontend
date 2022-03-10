@@ -3,15 +3,6 @@ import { Party } from '../../../model/Party';
 import { PartyUser } from '../../../model/PartyUser';
 import { ProductsMap } from '../../../model/Product';
 
-// const CustomLabelStyle = styled(Typography)({
-//   fontSize: '14px',
-//   color: '#5C6F82',
-// });
-
-// const CustomInfoStyle = styled(Typography)({
-//   color: '#000000',
-// });
-
 const CustomStyleCapitolized = styled(Typography)({
   color: '#000000',
   textTransform: 'capitalize',

@@ -23,15 +23,10 @@ type Props = {
   isProductDetailPage: boolean;
 };
 
-const CustomLabelStyle = styled(Typography)({
-  fontSize: '14px',
-  color: '#5C6F82',
-});
-
-const CustomInfoStyle = styled(Typography)({
-  color: '#000000',
+const CustomTextTransform = styled(Typography)({
   textTransform: 'capitalize',
 });
+
 export default function UserProductRoles({
   showActions,
   party,
@@ -50,9 +45,9 @@ export default function UserProductRoles({
           <Grid item xs={3}>
             <Grid container item>
               <Box>
-                <CustomLabelStyle variant="h6" className="labelStyle">
+                <Typography variant="h6" className="CustomLabelStyle">
                   RUOLO
-                </CustomLabelStyle>
+                </Typography>
               </Box>
               {p.status === 'SUSPENDED' &&
                 (isProductDetailPage ||
@@ -78,8 +73,9 @@ export default function UserProductRoles({
 
           <Grid item xs={9}>
             <Grid item container>
-              <Grid item xs={4}>
-                <CustomInfoStyle
+              <Grid item xs={5}>
+                <CustomTextTransform
+                  className="CustomInfoStyle"
                   variant="body2"
                   sx={{ color: p.status === 'SUSPENDED' ? '#A2ADB8' : '#000000' }}
                 >
@@ -94,7 +90,7 @@ export default function UserProductRoles({
                       />
                     </IconButton>
                   </Tooltip>
-                </CustomInfoStyle>
+                </CustomTextTransform>
               </Grid>
               <Grid item xs={4}>
                 <UserProductActions

@@ -19,6 +19,7 @@ import {
   deletePartyGroup as deletePartyGroupMocked,
   fetchPartyGroup as fetchPartyGroupMocked,
   deleteGroupRelation as deleteGroupRelationMocked,
+  fetchUserGroups as fetchUserGroupsMocked,
 } from './__mocks__/groupsService';
 
 export const fetchPartyGroups = (
@@ -128,6 +129,23 @@ export const deleteGroupRelation = (
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return deleteGroupRelationMocked(party, product, group, userId);
+  } else {
+    throw new Error('TODO');
+  }
+};
+
+export const fetchUserGroups = (
+  userId: string,
+  party: Party,
+  product: Product
+): Promise<Array<PartyGroup>> => {
+  trackEvent('GET_USER_GROUPS', {
+    party_id: party.institutionId,
+    product: product.id,
+  });
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
+    return fetchUserGroupsMocked(party, product, userId);
   } else {
     throw new Error('TODO');
   }

@@ -13,13 +13,7 @@ import { Product } from '../../model/Product';
 import { DASHBOARD_ROUTES } from '../../routes';
 import AddUserForm from './components/AddUserForm';
 
-const CustomLabelStyle = styled(Typography)({
-  fontSize: '14px',
-  color: '#5C6F82',
-});
-
-const CustomInfoStyle = styled(Typography)({
-  color: '#000000',
+const CustomTextTransform = styled(Typography)({
   textTransform: 'capitalize',
 });
 
@@ -80,34 +74,38 @@ function AddProductToUserPage({ party, activeProducts, productsRolesMap, partyUs
             <Grid container spacing={2}>
               <Grid container item alignContent="center">
                 <Grid item xs={3}>
-                  <CustomLabelStyle variant="h6" className="labelStyle">
+                  <Typography variant="h6" className="CustomLabelStyle">
                     NOME
-                  </CustomLabelStyle>
+                  </Typography>
                 </Grid>
                 <Grid item xs={9} className="partyUserStyle">
-                  <CustomInfoStyle variant="body2">
+                  <CustomTextTransform variant="body2" className="CustomInfoStyle">
                     {partyUser.name.toLocaleLowerCase()}
-                  </CustomInfoStyle>
+                  </CustomTextTransform>
                 </Grid>
               </Grid>
               <Grid container item alignContent="center">
                 <Grid item xs={3}>
-                  <CustomLabelStyle variant="h6" className="labelStyle">
+                  <Typography variant="h6" className="CustomLabelStyle">
                     COGNOME
-                  </CustomLabelStyle>
+                  </Typography>
                 </Grid>
                 <Grid item xs={9}>
-                  <CustomInfoStyle variant="body2">{partyUser.surname}</CustomInfoStyle>
+                  <CustomTextTransform variant="body2" className="CustomInfoStyle">
+                    {partyUser.surname}
+                  </CustomTextTransform>
                 </Grid>
               </Grid>
               <Grid container item alignContent="center">
                 <Grid item xs={3}>
-                  <CustomLabelStyle variant="h6" className="labelStyle">
+                  <Typography variant="h6" className="CustomLabelStyle">
                     CODICE FISCALE
-                  </CustomLabelStyle>
+                  </Typography>
                 </Grid>
                 <Grid item xs={9}>
-                  <CustomInfoStyle variant="body2">{partyUser.taxCode}</CustomInfoStyle>
+                  <CustomTextTransform variant="body2" className="CustomInfoStyle">
+                    {partyUser.taxCode}
+                  </CustomTextTransform>
                 </Grid>
               </Grid>
             </Grid>

@@ -102,7 +102,7 @@ const GroupsTableProduct = ({
     setGroups({ ...groups });
   };
 
-  const canEdit = product.userRole === 'ADMIN';
+  const canEdit = product.userRole === 'ADMIN' && product.status === 'ACTIVE';
 
   if (error) {
     return <GroupsProductFetchError onRetry={fetchGroups} />;
