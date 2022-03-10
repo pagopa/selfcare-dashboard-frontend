@@ -238,7 +238,11 @@ export const savePartyGroup = (
   return new Promise((resolve) => resolve(200));
 };
 
-export const updatePartyGroup = (_party: Party, group: PartyGroupOnEdit): Promise<any> => {
+export const updatePartyGroup = (
+  _party: Party,
+  _product: Product,
+  group: PartyGroupOnEdit
+): Promise<any> => {
   const updatingGroupIndex = mockedGroups.findIndex((u) => u.id === group.id);
   const clone: PartyGroup = {
     ...mockedGroups[updatingGroupIndex],

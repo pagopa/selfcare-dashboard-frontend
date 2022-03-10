@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   Chip,
-  FormControl,
   Grid,
   MenuItem,
   Select,
@@ -31,7 +30,7 @@ import { PartyGroupOnCreation, PartyGroupOnEdit } from '../../../model/PartyGrou
 import { PartyUser } from '../../../model/PartyUser';
 import { Product, ProductsMap } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { savePartyGroup } from '../../../services/groupsService';
+import { savePartyGroup, updatePartyGroup } from '../../../services/groupsService';
 import { LOADING_TASK_FETCH_USER_PRODUCT, LOADING_TASK_SAVE_GROUP } from '../../../utils/constants';
 import { fetchPartyUsers } from '../../../services/usersService';
 import { useAppSelector } from '../../../redux/hooks';
@@ -134,43 +133,64 @@ export default function AddGroupForm({
     }
   }, [productSelected]);
 
+  useEffect(() => {
+    if (initialFormData.productId) {
+      setProductSelected(productsMap[initialFormData.productId]);
+    }
+  }, [initialFormData.productId]);
+
   const goBackInner =
     goBack ??
     (() =>
       history.push(
-        resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_DETAIL.path, {
-          institutionId: party.institutionId,
-        })
+        resolvePathVariables(
+          isEdit
+            ? DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_DETAIL.path
+            : DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.MAIN.path,
+          {
+            institutionId: party.institutionId,
+            groupId: (initialFormData as PartyGroupOnEdit).id,
+          }
+        )
       ));
 
   const validate = (values: Partial<PartyGroupOnCreation>) =>
     Object.fromEntries(
       Object.entries({
-        groupName: !values.name ? requiredError : undefined,
+        name: !values.name ? requiredError : undefined,
+        institutionId: !values.institutionId ? requiredError : undefined,
+        productId: !productSelected ? requiredError : undefined,
         description: !values.description ? requiredError : undefined,
-        references: values.members?.length === 0 ? requiredError : undefined,
+        members: values.members?.length === 0 ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
   const save = (values: PartyGroupOnCreation) => {
+    // eslint-disable-next-line functional/immutable-data
+    values.productId = (productSelected as Product).id;
     setLoadingSaveGroup(true);
-    savePartyGroup(party, productSelected as Product, values)
+    (isEdit ? updatePartyGroup : savePartyGroup)(
+      party,
+      productSelected as Product,
+      values as PartyGroupOnEdit
+    )
       .then(() => {
         unregisterUnloadEvent();
         trackEvent(
           'GROUP_CREATE',
-          /* TODO EDIT AND CLONE */ {
+          /* TODO CLONE */ {
             party_id: party.institutionId,
-            // TODO only in EDIT -> group_id: (initialFormData as PartyGroupOnEdit).id
             // TODO only in CLONE -> cloned_group_id: partyGroupCloneId
           }
         );
         addNotify({
           component: 'Toast',
           id: 'SAVE_GROUP',
-          title: 'GRUPPO CREATO', // TODO GRUPPO MODIFICATO
+          title: isEdit ? 'GRUPPO MODIFICATO' : 'GRUPPO CREATO',
           message: (
             <>
-              {'Hai creato correttamente il gruppo '}
+              {isEdit
+                ? 'Hai modificato correttamente il gruppo '
+                : 'Hai creato correttamente il gruppo '}
               <strong>{`${values.name}`}</strong>
               {' per il prodotto '}
               <strong>{`${productSelected?.title}`}</strong>
@@ -185,9 +205,13 @@ export default function AddGroupForm({
           component: 'Toast',
           id: 'SAVE_GROUP_ERROR',
           blocking: false,
-          displayableTitle: 'ERRORE DURANTE LA CREAZIONE',
-          displayableDescription: "C'è stato un errore durante la creazione del gruppo. Riprova.",
-          techDescription: `An error occurred while creation of group ${values.name}`,
+          displayableTitle: isEdit ? 'ERRORE DURANTE LA MODIFICA ' : 'ERRORE DURANTE LA CREAZIONE',
+          displayableDescription: isEdit
+            ? "C'è stato un errore durante la modifica del gruppo. Riprova"
+            : "C'è stato un errore durante la creazione del gruppo. Riprova.",
+          techDescription: isEdit
+            ? `An error occurred while edit of group ${values.name}`
+            : `An error occurred while creation of group ${values.name}`,
           error: reason,
           toNotify: true,
         })
@@ -260,8 +284,9 @@ export default function AddGroupForm({
       .then((productUsersPage) => {
         const activeUsers = productUsersPage.content.filter((user) => user.status === 'ACTIVE');
         setProductUsers(activeUsers);
-        if (!isClone && !isEdit) {
-          void formik.setFieldValue('members', [], true);
+        void formik.setFieldValue('members', [], true);
+        if (isEdit) {
+          setProductUsers(productUsersPage.content);
         } else if (isClone) {
           void formik.setFieldValue(
             'members',
@@ -321,28 +346,31 @@ export default function AddGroupForm({
                 value={productSelected?.title ?? ''}
                 displayEmpty
                 variant="standard"
-                renderValue={(productSelected) =>
-                  productSelected === '' ? (
-                    <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
-                      Seleziona il prodotto
-                    </Typography>
-                  ) : (
-                    <Typography fontWeight={700} fontSize={20}>
-                      {productSelected}
-                    </Typography>
-                  )
+                renderValue={
+                  (productSelected) =>
+                    productSelected === '' ? (
+                      <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
+                        Seleziona il prodotto
+                      </Typography>
+                    ) : (
+                      <Typography fontWeight={700} fontSize={20}>
+                        {productSelected}
+                      </Typography>
+                    ) // TODO se Clone && productSelected Undef --> helpertext
                 }
               >
-                {products.map((p) => (
-                  <MenuItem
-                    key={p.id}
-                    value={p.title}
-                    sx={{ fontSize: '14px', color: '#000000' }}
-                    onClick={() => setProductSelected(p)}
-                  >
-                    {p.title}
-                  </MenuItem>
-                ))}
+                {products
+                  .filter((p) => p.userRole === 'ADMIN')
+                  .map((p) => (
+                    <MenuItem
+                      key={p.id}
+                      value={p.title}
+                      sx={{ fontSize: '14px', color: '#000000' }}
+                      onClick={() => setProductSelected(p)}
+                    >
+                      {p.title}
+                    </MenuItem>
+                  ))}
               </Select>
             </Grid>
           </Grid>
@@ -352,74 +380,73 @@ export default function AddGroupForm({
               <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
                 Referenti
               </Typography>
-              <FormControl fullWidth>
-                <Select
-                  disabled={!productSelected}
-                  id="member-check-selection"
-                  variant="standard"
-                  multiple
-                  fullWidth
-                  value={formik.values.members}
-                  displayEmpty
-                  renderValue={(selectedUsers) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                      {selectedUsers.length === 0 ? (
-                        <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
-                          Seleziona i referenti che vuoi assegnare al gruppo
-                        </Typography>
-                      ) : undefined}
-                      {selectedUsers.map((s) => (
-                        <Chip
-                          color="default"
-                          size="small"
-                          variant="outlined"
-                          key={s.id}
-                          label={s.name + ' ' + s.surname}
-                          onDelete={() =>
-                            formik.setFieldValue(
-                              'members',
-                              selectedUsers.filter((us) => us !== s),
-                              true
-                            )
-                          }
-                          deleteIcon={<ClearIcon onMouseDown={(e) => e.stopPropagation()} />}
-                        />
-                      ))}
-                    </Box>
-                  )}
-                >
-                  <CustomBox>
-                    {Object.values(productUsers).map((u) => {
-                      const checkedIndex = formik.values.members.findIndex((s) => s.id === u.id);
-                      const isChecked = checkedIndex > -1;
-                      const onItemSelected = () => {
-                        const nextUsersSelected = isChecked
-                          ? formik.values.members.filter((_s, index) => index !== checkedIndex)
-                          : formik.values.members.concat(u);
-                        void formik.setFieldValue('members', nextUsersSelected, true);
-                      };
-                      return (
-                        <MenuItem
-                          key={u.id}
-                          value={u.name}
-                          sx={{
-                            fontSize: '14px',
-                            color: '#000000',
-                            borderBottom: 'solid',
-                            borderBottomWidth: 'thin',
-                            borderBottomColor: '#CFDCE6',
-                            width: '554px',
-                            height: '48px',
-                          }}
-                        >
-                          <Checkbox checked={isChecked} onClick={onItemSelected} />
-                          {u.name} {u.surname}
-                        </MenuItem>
-                      );
-                    })}
-                  </CustomBox>
-                </Select>
-              </FormControl>
+
+              <Select
+                disabled={!productSelected}
+                id="member-check-selection"
+                variant="standard"
+                multiple
+                fullWidth
+                value={formik.values.members}
+                displayEmpty
+                renderValue={(selectedUsers) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                    {selectedUsers.length === 0 ? (
+                      <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
+                        Seleziona i referenti che vuoi assegnare al gruppo
+                      </Typography>
+                    ) : undefined}
+                    {selectedUsers.map((s) => (
+                      <Chip
+                        color="default"
+                        size="small"
+                        variant="outlined"
+                        key={s.id}
+                        label={s.name + ' ' + s.surname}
+                        onDelete={() =>
+                          formik.setFieldValue(
+                            'members',
+                            selectedUsers.filter((us) => us !== s),
+                            true
+                          )
+                        }
+                        deleteIcon={<ClearIcon onMouseDown={(e) => e.stopPropagation()} />}
+                      />
+                    ))}
+                  </Box>
+                )}
+              >
+                <CustomBox>
+                  {Object.values(productUsers).map((u) => {
+                    const checkedIndex = formik.values.members.findIndex((s) => s.id === u.id);
+                    const isChecked = checkedIndex > -1;
+                    const onItemSelected = () => {
+                      const nextUsersSelected = isChecked
+                        ? formik.values.members.filter((_s, index) => index !== checkedIndex)
+                        : formik.values.members.concat(u);
+                      void formik.setFieldValue('members', nextUsersSelected, true);
+                    };
+                    return (
+                      <MenuItem
+                        key={u.id}
+                        value={u.name}
+                        sx={{
+                          fontSize: '14px',
+                          color: '#000000',
+                          borderBottom: 'solid',
+                          borderBottomWidth: 'thin',
+                          borderBottomColor: '#CFDCE6',
+                          width: '554px',
+                          height: '48px',
+                        }}
+                      >
+                        <Checkbox checked={isChecked} onClick={onItemSelected} />
+                        {u.name} {u.surname}
+                      </MenuItem>
+                    );
+                  })}
+                </CustomBox>
+              </Select>
             </Grid>
           </Grid>
 

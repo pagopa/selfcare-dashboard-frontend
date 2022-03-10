@@ -11,6 +11,7 @@ import { LOADING_TASK_ACTION_ON_PARTY_GROUP } from '../../../../../utils/constan
 import { PartyGroup, PartyGroupStatus } from '../../../../../model/PartyGroup';
 import { Product } from '../../../../../model/Product';
 import { deletePartyGroup, updatePartyGroupStatus } from '../../../../../services/groupsService';
+import { DASHBOARD_ROUTES } from '../../../../../routes';
 
 type Props = {
   party: Party;
@@ -158,7 +159,7 @@ export default function GroupProductRowActions({
   const handleModify = () => {
     handleClose();
     history.push(
-      resolvePathVariables('' /* TODO url to edit group */, {
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_EDIT.path, {
         institutionId: party.institutionId,
         groupId: partyGroup.id,
       })

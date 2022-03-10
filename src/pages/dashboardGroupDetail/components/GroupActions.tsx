@@ -9,6 +9,7 @@ import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants'
 import { PartyGroupExt, PartyGroupStatus } from '../../../model/PartyGroup';
 import { Party } from '../../../model/Party';
 import { Product, ProductsMap } from '../../../model/Product';
+import { DASHBOARD_ROUTES } from '../../../routes';
 
 type Props = {
   partyGroup: PartyGroupExt;
@@ -42,7 +43,7 @@ export default function GroupActions({
 
   const goEdit = () =>
     history.push(
-      resolvePathVariables('' /* TODO: redirect to Group Edit Page */, {
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_EDIT.path, {
         institutionId: partyGroup.institutionId,
         groupId: partyGroup.id,
       })

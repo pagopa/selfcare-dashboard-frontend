@@ -4,9 +4,10 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { useHistory } from 'react-router-dom';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import { Party } from '../../model/Party';
+import { PartyGroupOnCreation } from '../../model/PartyGroup';
 import { Product, ProductsMap } from '../../model/Product';
 import { DASHBOARD_ROUTES } from '../../routes';
-import AddGroupForm from './components/AddGroupForm';
+import AddGroupForm from './components/GroupForm';
 
 type Props = {
   party: Party;
@@ -54,13 +55,15 @@ function AddGroupPage({ party, activeProducts, productsMap }: Props) {
           party={party}
           products={activeProducts}
           productsMap={productsMap}
-          initialFormData={{
-            name: '',
-            description: '',
-            members: [],
-            institutionId: '',
-            productId: '',
-          }}
+          initialFormData={
+            {
+              name: '',
+              description: '',
+              members: [],
+              institutionId: party.institutionId,
+              productId: '',
+            } as PartyGroupOnCreation
+          }
           isClone={false}
         />
       </Grid>
