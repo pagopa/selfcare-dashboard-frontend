@@ -104,7 +104,9 @@ export default function UserProductAddRoles({
             {'Assegna a '}
             <strong> {`${user.name} ${user.surname}`} </strong>
             {'un altro ruolo '}
-            <strong> {`${user.userRole}`} </strong>
+            <strong>
+              {userProduct.roles[0].selcRole === 'ADMIN' ? 'amministratore' : 'operatore'}
+            </strong>
             {' sul prodotto '}
             <strong> {`${product.title}:`} </strong>
 
