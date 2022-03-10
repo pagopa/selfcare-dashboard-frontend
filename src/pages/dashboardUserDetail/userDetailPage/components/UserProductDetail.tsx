@@ -91,7 +91,7 @@ export default function UserProductDetail({
         />
       </Grid>
       <Grid container item xs={10} mt={3}>
-        <UserProductGroups />
+        <UserProductGroups product={product} party={party} user={partyUser} canEdit={canEdit} />
       </Grid>
     </>
   );
