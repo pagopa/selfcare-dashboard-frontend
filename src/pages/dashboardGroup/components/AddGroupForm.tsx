@@ -27,7 +27,7 @@ import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { ReactComponent as ClearIcon } from '../../../assets/clear.svg';
 import { Party } from '../../../model/Party';
-import { PartyGroupExt, PartyGroupOnCreation, PartyGroupOnEdit } from '../../../model/PartyGroup';
+import { PartyGroupOnCreation, PartyGroupOnEdit } from '../../../model/PartyGroup';
 import { PartyUser } from '../../../model/PartyUser';
 import { Product, ProductsMap } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
@@ -96,9 +96,9 @@ type Props = {
   products: Array<Product>;
   party: Party;
   productsMap: ProductsMap;
-  PartyGroupExt: PartyGroupExt;
   initialFormData: PartyGroupOnCreation | PartyGroupOnEdit;
   isClone: boolean;
+  partyGroupCloneId?: string;
   goBack?: () => void;
 };
 
@@ -107,7 +107,6 @@ export default function AddGroupForm({
   party,
   initialFormData,
   productsMap,
-  PartyGroupExt,
   isClone,
   goBack,
 }: Props) {
@@ -139,9 +138,8 @@ export default function AddGroupForm({
     goBack ??
     (() =>
       history.push(
-        resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUP.path, {
-          institutionId: PartyGroupExt.institutionId,
-          groupId: PartyGroupExt.id,
+        resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_DETAIL.path, {
+          institutionId: party.institutionId,
         })
       ));
 
@@ -161,8 +159,9 @@ export default function AddGroupForm({
         trackEvent(
           'GROUP_CREATE',
           /* TODO EDIT AND CLONE */ {
-            party_id: PartyGroupExt.institutionId,
-            group_id: PartyGroupExt.id,
+            party_id: party.institutionId,
+            // TODO only in EDIT -> group_id: (initialFormData as PartyGroupOnEdit).id
+            // TODO only in CLONE -> cloned_group_id: partyGroupCloneId
           }
         );
         addNotify({

@@ -76,6 +76,10 @@ export default function withUserDetail<T extends withUserDetailProps>(
         history.push(resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, { institutionId }));
       } else if (institutionId && userId) {
         doFetch();
+      } else {
+        throw new Error(
+          'Using withUserDetail decorator under a path without institutionId or userId'
+        );
       }
     }, [institutionId, userId]);
 

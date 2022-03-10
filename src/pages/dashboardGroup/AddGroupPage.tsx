@@ -3,16 +3,18 @@ import { TitleBox } from '@pagopa/selfcare-common-frontend';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useHistory } from 'react-router-dom';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
-import withGroupDetail, { withGroupDetailProps } from '../../decorators/withGroupDetail';
-import { Product } from '../../model/Product';
+import { Party } from '../../model/Party';
+import { Product, ProductsMap } from '../../model/Product';
 import { DASHBOARD_ROUTES } from '../../routes';
 import AddGroupForm from './components/AddGroupForm';
 
 type Props = {
+  party: Party;
+  productsMap: ProductsMap;
   activeProducts: Array<Product>;
-} & withGroupDetailProps;
+};
 
-function AddGroupPage({ party, activeProducts, productsMap, partyGroup }: Props) {
+function AddGroupPage({ party, activeProducts, productsMap }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -20,9 +22,8 @@ function AddGroupPage({ party, activeProducts, productsMap, partyGroup }: Props)
       description: 'Gruppi',
       onClick: () =>
         history.push(
-          resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUP.path, {
-            institutionId: partyGroup.institutionId,
-            groupId: partyGroup.id,
+          resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.MAIN.path, {
+            institutionId: party.institutionId,
           })
         ),
     },
@@ -53,7 +54,6 @@ function AddGroupPage({ party, activeProducts, productsMap, partyGroup }: Props)
           party={party}
           products={activeProducts}
           productsMap={productsMap}
-          PartyGroupExt={partyGroup}
           initialFormData={{
             name: '',
             description: '',
@@ -68,4 +68,4 @@ function AddGroupPage({ party, activeProducts, productsMap, partyGroup }: Props)
   );
 }
 
-export default withGroupDetail(AddGroupPage);
+export default AddGroupPage;

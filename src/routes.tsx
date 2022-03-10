@@ -127,7 +127,7 @@ export const DASHBOARD_ROUTES = {
         exact: true,
         component: GroupsPage,
       },
-      ADD_PARTY_GROUP: {
+      PARTY_GROUP_ADD: {
         path: `${BASE_ROUTE}/:institutionId/groups/add`,
         exact: true,
         component: AddGroupPage,
