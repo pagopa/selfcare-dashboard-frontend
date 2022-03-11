@@ -61,7 +61,7 @@ function EditGroupPage({ party, activeProducts, productsMap, partyGroup }: Props
               productId: partyGroup.productId,
             } as PartyGroupOnEdit
           }
-          isClone={false}
+          isClone={true}
         />
       </Grid>
     </Grid>

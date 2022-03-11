@@ -101,7 +101,7 @@ type Props = {
   goBack?: () => void;
 };
 
-export default function AddGroupForm({
+export default function GroupForm({
   products,
   party,
   initialFormData,

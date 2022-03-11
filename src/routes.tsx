@@ -15,6 +15,7 @@ import AddProductToUserPage from './pages/dashboardUserEdit/AddProductToUserPage
 import EditUserRegistryProductPage from './pages/dashboardUserEdit/EditUserRegistryProductPage';
 import AddGroupPage from './pages/dashboardGroupEdit/AddGroupPage';
 import EditGroupPage from './pages/dashboardGroupEdit/EditGroupPage';
+import CloneGroupPage from './pages/dashboardGroupEdit/CloneGroupPage';
 import GroupsPage from './pages/dashboardGroups/GroupsPage';
 import GroupsDetailPage from './pages/dashboardGroupDetail/GroupDetailPage';
 
@@ -142,6 +143,11 @@ export const DASHBOARD_ROUTES = {
         path: `${BASE_ROUTE}/:institutionId/groups/:groupId/edit`,
         exact: true,
         component: EditGroupPage,
+      },
+      PARTY_GROUP_CLONE: {
+        path: `${BASE_ROUTE}/:institutionId/groups/:groupId/clone`,
+        exact: true,
+        component: CloneGroupPage,
       },
     },
   },
