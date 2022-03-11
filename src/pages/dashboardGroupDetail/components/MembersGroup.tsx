@@ -129,7 +129,7 @@ export default function MembersGroup({
             {isMemeberSuspended && (
               <Grid item xs={1}>
                 <Chip
-                  label="sospeso"
+                  label="Sospeso"
                   variant="outlined"
                   sx={{
                     fontWeight: '600',

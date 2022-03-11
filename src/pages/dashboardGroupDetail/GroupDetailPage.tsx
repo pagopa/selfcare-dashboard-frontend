@@ -91,7 +91,7 @@ function GroupDetailPage({
             <Box>
               {isSuspended && (
                 <Chip
-                  label="sospeso"
+                  label="Sospeso"
                   variant="outlined"
                   sx={{
                     fontWeight: '600',
