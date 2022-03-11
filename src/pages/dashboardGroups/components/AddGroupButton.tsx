@@ -2,7 +2,9 @@ import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory } from 'react-router-dom';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Party } from '../../../model/Party';
+import { DASHBOARD_ROUTES } from '../../../routes';
 
 interface AddGroupButtonProps {
   party: Party;
@@ -19,7 +21,11 @@ export default function AddGroupButton({ party }: AddGroupButtonProps) {
       sx={{ py: '10px' }}
       onClick={() =>
         onExit(() =>
-          history.push('', /* TODO use add Group route */ { institutionId: party.institutionId })
+          history.push(
+            resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_ADD.path, {
+              institutionId: party.institutionId,
+            })
+          )
         )
       }
     >

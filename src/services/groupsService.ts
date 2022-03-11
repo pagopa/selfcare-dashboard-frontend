@@ -63,10 +63,14 @@ export const savePartyGroup = (
   }
 };
 
-export const updatePartyGroup = (party: Party, group: PartyGroupOnEdit): Promise<any> => {
+export const updatePartyGroup = (
+  party: Party,
+  product: Product,
+  group: PartyGroupOnEdit
+): Promise<any> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
-    return updatePartyGroupMocked(party, group);
+    return updatePartyGroupMocked(party, product, group);
   } else {
     throw new Error('TODO');
   }

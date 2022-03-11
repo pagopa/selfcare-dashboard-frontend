@@ -73,6 +73,10 @@ export default function withGroupDetail<T extends withGroupDetailProps>(
         history.push(resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, { institutionId }));
       } else if (institutionId && groupId) {
         doFetch();
+      } else {
+        throw new Error(
+          'Using withGroupDetail decorator under a path without institutionId or groupId'
+        );
       }
     }, [institutionId, groupId]);
 

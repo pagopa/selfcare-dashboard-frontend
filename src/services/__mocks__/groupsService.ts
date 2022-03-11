@@ -78,11 +78,11 @@ export const mockedGroups: Array<PartyGroup> = [
   {
     id: 'groupId5',
     name: 'Gruppo5',
-    description: 'Group to have a significant number on prod-io',
+    description: 'groupId5 : use case ACTIVE group having 1 user ACTIVE and 1 user SUSPENDED',
     institutionId: 'onboarded',
     productId: 'prod-io',
     status: 'ACTIVE',
-    membersIds: ['uid'],
+    membersIds: ['uid', 'uid3'],
     createdAt: new Date('2022-01-01'),
     createdByUserId: 'uid',
     modifiedAt: new Date('2022-01-01 16:00'),
@@ -238,7 +238,11 @@ export const savePartyGroup = (
   return new Promise((resolve) => resolve(200));
 };
 
-export const updatePartyGroup = (_party: Party, group: PartyGroupOnEdit): Promise<any> => {
+export const updatePartyGroup = (
+  _party: Party,
+  _product: Product,
+  group: PartyGroupOnEdit
+): Promise<any> => {
   const updatingGroupIndex = mockedGroups.findIndex((u) => u.id === group.id);
   const clone: PartyGroup = {
     ...mockedGroups[updatingGroupIndex],

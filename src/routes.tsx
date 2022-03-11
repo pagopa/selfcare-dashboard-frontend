@@ -12,7 +12,9 @@ import UserProductDetailPage from './pages/dashboardUserDetail/userProductDetail
 import UsersPage from './pages/dashboardUsers/UsersPage/UsersPage';
 import UsersProductPage from './pages/dashboardUsers/UsersProductPage/UsersProductPage';
 import AddProductToUserPage from './pages/dashboardUserEdit/AddProductToUserPage';
-import EditUserRegistrypRoductPage from './pages/dashboardUserEdit/EditUserRegistryProductPage';
+import EditUserRegistryProductPage from './pages/dashboardUserEdit/EditUserRegistryProductPage';
+import AddGroupPage from './pages/dashboardGroupEdit/AddGroupPage';
+import EditGroupPage from './pages/dashboardGroupEdit/EditGroupPage';
 import GroupsPage from './pages/dashboardGroups/GroupsPage';
 import GroupsDetailPage from './pages/dashboardGroupDetail/GroupDetailPage';
 
@@ -102,7 +104,7 @@ export const DASHBOARD_ROUTES = {
       EDIT_PARTY_PRODUCT_USER: {
         path: `${BASE_ROUTE}/:institutionId/:productId/users/:userId/edit`,
         exact: true,
-        component: EditUserRegistrypRoductPage,
+        component: EditUserRegistryProductPage,
       },
       ADD_PARTY_PRODUCT_USER: {
         path: `${BASE_ROUTE}/:institutionId/:productId/users/add`,
@@ -126,10 +128,20 @@ export const DASHBOARD_ROUTES = {
         exact: true,
         component: GroupsPage,
       },
+      PARTY_GROUP_ADD: {
+        path: `${BASE_ROUTE}/:institutionId/groups/add`,
+        exact: true,
+        component: AddGroupPage,
+      },
       PARTY_GROUP_DETAIL: {
         path: `${BASE_ROUTE}/:institutionId/groups/:groupId`,
         exact: true,
         component: GroupsDetailPage,
+      },
+      PARTY_GROUP_EDIT: {
+        path: `${BASE_ROUTE}/:institutionId/groups/:groupId/edit`,
+        exact: true,
+        component: EditGroupPage,
       },
     },
   },
