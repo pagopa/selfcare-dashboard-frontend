@@ -53,6 +53,7 @@ function EditGroupPage({ party, activeProducts, productsMap, partyGroup }: Props
           productsMap={productsMap}
           initialFormData={
             {
+              id: partyGroup.id,
               name: partyGroup.name,
               description: partyGroup.description,
               members: partyGroup.members,

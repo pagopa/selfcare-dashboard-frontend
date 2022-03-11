@@ -164,6 +164,38 @@ export default function AddGroupForm({
         members: values.members?.length === 0 ? requiredError : undefined,
       }).filter(([_key, value]) => value)
     );
+
+  const trackSaveEvent = () =>
+    trackEvent(
+      isEdit ? 'GROUP_UPDATE' : isClone ? 'GROUP_CLONE' : 'GROUP_CREATE',
+      Object.assign(
+        {
+          party_id: party.institutionId,
+        },
+        isEdit
+          ? { group_id: (initialFormData as PartyGroupOnEdit).id }
+          : // TODO isClone? { cloned_group_id: partyGroupCloneId}
+            {}
+      )
+    );
+
+  const notifySuccessfulSave = (values: PartyGroupOnCreation | PartyGroupOnEdit) =>
+    addNotify({
+      component: 'Toast',
+      id: isEdit ? 'EDIT_GROUP' : 'SAVE_GROUP',
+      title: isEdit ? 'GRUPPO MODIFICATO' : 'GRUPPO CREATO',
+      message: (
+        <>
+          {isEdit
+            ? 'Hai modificato correttamente il gruppo '
+            : 'Hai creato correttamente il gruppo '}
+          <strong>{`${values.name}`}</strong>
+          {' per il prodotto '}
+          <strong>{`${productSelected?.title}`}</strong>
+        </>
+      ),
+    });
+
   const save = (values: PartyGroupOnCreation) => {
     // eslint-disable-next-line functional/immutable-data
     values.productId = (productSelected as Product).id;
@@ -175,35 +207,14 @@ export default function AddGroupForm({
     )
       .then(() => {
         unregisterUnloadEvent();
-        trackEvent(
-          'GROUP_CREATE',
-          /* TODO CLONE */ {
-            party_id: party.institutionId,
-            // TODO only in CLONE -> cloned_group_id: partyGroupCloneId
-          }
-        );
-        addNotify({
-          component: 'Toast',
-          id: 'SAVE_GROUP',
-          title: isEdit ? 'GRUPPO MODIFICATO' : 'GRUPPO CREATO',
-          message: (
-            <>
-              {isEdit
-                ? 'Hai modificato correttamente il gruppo '
-                : 'Hai creato correttamente il gruppo '}
-              <strong>{`${values.name}`}</strong>
-              {' per il prodotto '}
-              <strong>{`${productSelected?.title}`}</strong>
-            </>
-          ),
-        });
-
+        trackSaveEvent();
+        notifySuccessfulSave(values);
         goBackInner();
       })
       .catch((reason) =>
         addError({
           component: 'Toast',
-          id: 'SAVE_GROUP_ERROR',
+          id: isEdit ? 'EDIT_GROUP_ERROR' : 'SAVE_GROUP_ERROR',
           blocking: false,
           displayableTitle: isEdit ? 'ERRORE DURANTE LA MODIFICA ' : 'ERRORE DURANTE LA CREAZIONE',
           displayableDescription: isEdit
@@ -282,17 +293,15 @@ export default function AddGroupForm({
       []
     )
       .then((productUsersPage) => {
-        const activeUsers = productUsersPage.content.filter((user) => user.status === 'ACTIVE');
-        setProductUsers(activeUsers);
-        void formik.setFieldValue('members', [], true);
-        if (isEdit) {
-          setProductUsers(productUsersPage.content);
-        } else if (isClone) {
+        setProductUsers(productUsersPage.content.filter((user) => user.status === 'ACTIVE'));
+        if (!isEdit && !isClone) {
           void formik.setFieldValue(
             'members',
-            activeUsers.filter((u) => u.products[0].title !== productSelected.title),
+            (initialFormData as PartyGroupOnCreation).members,
             true
           );
+        } else {
+          void formik.setFieldValue('members', (initialFormData as PartyGroupOnEdit).members, true);
         }
       })
       .catch((reason) =>
@@ -342,6 +351,7 @@ export default function AddGroupForm({
 
               <Select
                 id="product-select"
+                disabled={isEdit}
                 fullWidth
                 value={productSelected?.title ?? ''}
                 displayEmpty

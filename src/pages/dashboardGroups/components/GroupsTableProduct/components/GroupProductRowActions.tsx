@@ -176,6 +176,9 @@ export default function GroupProductRowActions({
     );
   };
 
+  const isSuspended = partyGroup.status === 'SUSPENDED';
+  const isActive = partyGroup.status === 'ACTIVE';
+
   return (
     <div style={{ textAlign: 'right' }}>
       <IconButton onClick={handleClick}>
@@ -192,15 +195,13 @@ export default function GroupProductRowActions({
           },
         }}
       >
-        <MenuItem onClick={handleModify}>Modifica</MenuItem>
-        <MenuItem onClick={handleClone}>Duplica</MenuItem>
-        <MenuItem onClick={handleChangeState}>
-          {partyGroup.status === 'ACTIVE'
-            ? 'Sospendi'
-            : partyGroup.status === 'SUSPENDED'
-            ? 'Riabilita'
-            : ''}
-        </MenuItem>
+        {!isSuspended && <MenuItem onClick={handleModify}>Modifica</MenuItem>}
+        {!isSuspended && <MenuItem onClick={handleClone}>Duplica</MenuItem>}
+        {(isActive || isSuspended) && (
+          <MenuItem onClick={handleChangeState}>
+            {isActive ? 'Sospendi' : isSuspended ? 'Riabilita' : ''}
+          </MenuItem>
+        )}
         <MenuItem onClick={handleDelete}>Elimina</MenuItem>
       </Menu>
     </div>
