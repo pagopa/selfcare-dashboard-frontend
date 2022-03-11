@@ -243,6 +243,14 @@ export default function AddUserForm({
           error: reason,
           techDescription: `An error occurred while saving party user ${party.institutionId}`,
           toNotify: true,
+          displayableTitle: "ERRORE DURANTE L'AGGIUNTA",
+          displayableDescription: (
+            <>
+              {"C'è stato un errore durante l'aggiunta del referente "}
+              <strong>{`${values.name} ${values.surname}`}</strong>.
+            </>
+          ),
+          component: 'Toast',
         })
       )
       .finally(() => setLoadingSaveUser(false));

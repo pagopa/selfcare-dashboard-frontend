@@ -110,6 +110,14 @@ export default function EditUserRegistryForm({ party, user, goBack }: Props) {
             error: reason,
             techDescription: `An error occurred while editing party user ${user.id} of institution ${party.institutionId}`,
             toNotify: true,
+            displayableTitle: 'ERRORE DURANTE LA MODIFICA',
+            displayableDescription: (
+              <>
+                {"C'è stato un errore durante la modifica del referente "}
+                <strong>{`${values.name} ${values.surname}`}</strong>.
+              </>
+            ),
+            component: 'Toast',
           })
         )
         .finally(() => setLoadingSaveUser(false));

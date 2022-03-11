@@ -1,4 +1,5 @@
 import { Breadcrumbs, Link, Typography } from '@mui/material';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import React from 'react';
 import { Product } from '../model/Product';
 
@@ -13,6 +14,8 @@ type Props = {
 };
 
 export default function ProductNavigationBar({ selectedProduct, paths }: Props) {
+  const onExit = useUnloadEventOnExit();
+
   return (
     <React.Fragment>
       <Breadcrumbs aria-label="breadcrumb">
@@ -26,7 +29,7 @@ export default function ProductNavigationBar({ selectedProduct, paths }: Props) 
             <Link
               key={p.description}
               variant="body2"
-              onClick={p.onClick}
+              onClick={() => onExit(p.onClick as () => void)}
               sx={{
                 fontWeight: '700',
                 color: '#5C6F82 !important',
