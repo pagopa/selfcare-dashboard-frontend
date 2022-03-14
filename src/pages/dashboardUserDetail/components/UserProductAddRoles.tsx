@@ -104,16 +104,15 @@ export default function UserProductAddRoles({
             {'Assegna a '}
             <strong> {`${user.name} ${user.surname}`} </strong>
             {'un altro ruolo '}
-            <strong>
-              {userProduct.roles[0].selcRole === 'ADMIN' ? 'amministratore' : 'operatore'}
-            </strong>
+            <strong> {`${user.userRole}`} </strong>
             {' sul prodotto '}
             <strong> {`${product.title}:`} </strong>
 
             {Object.values(productRolesList.groupBySelcRole[userProduct.roles[0].selcRole]).map(
               (p) => {
                 const isSelected = (selectedRoles?.indexOf(p.productRole) ?? -1) > -1;
-                const isDisabled = (userProduct.roles[0].role?.indexOf(p.productRole) ?? -1) > -1;
+                const isDisabled =
+                  (userProduct.roles.map((u) => u.role).indexOf(p.productRole) ?? -1) > -1;
                 return (
                   <Box key={p.productRole}>
                     <FormControlLabel
