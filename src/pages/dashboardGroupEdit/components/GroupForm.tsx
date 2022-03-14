@@ -34,6 +34,7 @@ import { savePartyGroup, updatePartyGroup } from '../../../services/groupsServic
 import { LOADING_TASK_FETCH_USER_PRODUCT, LOADING_TASK_SAVE_GROUP } from '../../../utils/constants';
 import { fetchPartyUsers } from '../../../services/usersService';
 import { useAppSelector } from '../../../redux/hooks';
+import AlertRemoveUsersInClone from '../components/AlertRemoveUsersInClone';
 
 const CustomBox = styled(Box)({
   '&::-webkit-scrollbar': {
@@ -107,6 +108,7 @@ export default function GroupForm({
   initialFormData,
   productsMap,
   isClone,
+  partyGroupCloneId,
   goBack,
 }: Props) {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
@@ -121,6 +123,7 @@ export default function GroupForm({
 
   const [productSelected, setProductSelected] = useState<Product>();
   const [productUsers, setProductUsers] = useState<Array<PartyUser>>([]);
+  const [automaticRemove, setAutomaticRemove] = useState(false);
 
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
@@ -174,26 +177,53 @@ export default function GroupForm({
         },
         isEdit
           ? { group_id: (initialFormData as PartyGroupOnEdit).id }
-          : // TODO isClone? { cloned_group_id: partyGroupCloneId}
-            {}
+          : isClone
+          ? { cloned_group_id: partyGroupCloneId }
+          : {}
       )
     );
 
   const notifySuccessfulSave = (values: PartyGroupOnCreation | PartyGroupOnEdit) =>
     addNotify({
       component: 'Toast',
-      id: isEdit ? 'EDIT_GROUP' : 'SAVE_GROUP',
-      title: isEdit ? 'GRUPPO MODIFICATO' : 'GRUPPO CREATO',
+      id: isEdit ? 'EDIT_GROUP' : isClone ? 'GROUP_CLONE' : 'GROUP_CREATE',
+      title: isEdit ? 'GRUPPO MODIFICATO' : isClone ? 'GRUPPO DUPLICATO' : 'GRUPPO CREATO',
       message: (
         <>
           {isEdit
             ? 'Hai modificato correttamente il gruppo '
+            : isClone
+            ? 'Hai duplicato correttamente il gruppo '
             : 'Hai creato correttamente il gruppo '}
           <strong>{`${values.name}`}</strong>
           {' per il prodotto '}
           <strong>{`${productSelected?.title}`}</strong>
         </>
       ),
+    });
+
+  const notifyErrorOnSave = (values: PartyGroupOnCreation | PartyGroupOnEdit, reason: Error) =>
+    addError({
+      component: 'Toast',
+      id: isEdit ? 'EDIT_GROUP_ERROR' : isClone ? 'CLONE_GROUP_ERROR' : 'SAVE_GROUP_ERROR',
+      blocking: false,
+      displayableTitle: isEdit
+        ? 'ERRORE DURANTE LA MODIFICA '
+        : isClone
+        ? 'ERRORE DURANTE LA DUPLICAZIONE'
+        : 'ERRORE DURANTE LA CREAZIONE',
+      displayableDescription: isEdit
+        ? "C'è stato un errore durante la modifica del gruppo. Riprova"
+        : isClone
+        ? "C'è stato un errore durante la duplicazione del gruppo. Riprova"
+        : "C'è stato un errore durante la creazione del gruppo. Riprova.",
+      techDescription: isEdit
+        ? `An error occurred while edit of group ${values.name}`
+        : isClone
+        ? `An error occurred while clone of group ${values.name}`
+        : `An error occurred while creation of group ${values.name}`,
+      error: reason,
+      toNotify: true,
     });
 
   const save = (values: PartyGroupOnCreation) => {
@@ -211,22 +241,7 @@ export default function GroupForm({
         notifySuccessfulSave(values);
         goBackInner();
       })
-      .catch((reason) =>
-        addError({
-          component: 'Toast',
-          id: isEdit ? 'EDIT_GROUP_ERROR' : 'SAVE_GROUP_ERROR',
-          blocking: false,
-          displayableTitle: isEdit ? 'ERRORE DURANTE LA MODIFICA ' : 'ERRORE DURANTE LA CREAZIONE',
-          displayableDescription: isEdit
-            ? "C'è stato un errore durante la modifica del gruppo. Riprova"
-            : "C'è stato un errore durante la creazione del gruppo. Riprova.",
-          techDescription: isEdit
-            ? `An error occurred while edit of group ${values.name}`
-            : `An error occurred while creation of group ${values.name}`,
-          error: reason,
-          toNotify: true,
-        })
-      )
+      .catch((reason) => notifyErrorOnSave(values, reason))
       .finally(() => setLoadingSaveGroup(false));
   };
 
@@ -280,6 +295,9 @@ export default function GroupForm({
     };
   };
 
+  const containsInitialUsers = () =>
+    !initialFormData.members.find((u) => !u.products.find((p) => p.id === productSelected?.id));
+
   const fetchProductUsers = (productSelected: Product) => {
     setLoadingFetchUserProduct(true);
     fetchPartyUsers(
@@ -293,15 +311,21 @@ export default function GroupForm({
       []
     )
       .then((productUsersPage) => {
-        setProductUsers(productUsersPage.content.filter((user) => user.status === 'ACTIVE'));
+        // suspended users have to be listed
+        // setProductUsers(productUsersPage.content.filter((user) => user.status === 'ACTIVE')); // the status should be evaluated from user.products[current Product].status
+        setProductUsers(productUsersPage.content);
         if (!isEdit && !isClone) {
-          void formik.setFieldValue(
-            'members',
-            (initialFormData as PartyGroupOnCreation).members,
-            true
-          );
-        } else {
+          void formik.setFieldValue('members', [], true);
+        } else if (isEdit) {
           void formik.setFieldValue('members', (initialFormData as PartyGroupOnEdit).members, true);
+        } else if (isClone) {
+          const nextMembers = formik.values.members.filter((u) =>
+            u.products.filter((p) => p.id !== productSelected?.id)
+          ); // u.status === 'ACTIVE' we want also the suspended users, however the status should be evaluated from user.products[current Product].status
+          if (containsInitialUsers()) {
+            setAutomaticRemove(true);
+          }
+          void formik.setFieldValue('members', nextMembers, true);
         }
       })
       .catch((reason) =>
@@ -356,17 +380,16 @@ export default function GroupForm({
                 value={productSelected?.title ?? ''}
                 displayEmpty
                 variant="standard"
-                renderValue={
-                  (productSelected) =>
-                    productSelected === '' ? (
-                      <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
-                        Seleziona il prodotto
-                      </Typography>
-                    ) : (
-                      <Typography fontWeight={700} fontSize={20}>
-                        {productSelected}
-                      </Typography>
-                    ) // TODO se Clone && productSelected Undef --> helpertext
+                renderValue={(productSelected) =>
+                  productSelected === '' ? (
+                    <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
+                      Seleziona il prodotto
+                    </Typography>
+                  ) : (
+                    <Typography fontWeight={700} fontSize={20}>
+                      {productSelected}
+                    </Typography>
+                  )
                 }
               >
                 {products
@@ -382,6 +405,11 @@ export default function GroupForm({
                     </MenuItem>
                   ))}
               </Select>
+              {isClone && productSelected === undefined ? (
+                <Typography color="#F83E5A" sx={{ fontSize: '14px' }}>
+                  Nessun prodotto selezionato
+                </Typography>
+              ) : undefined}
             </Grid>
           </Grid>
 
@@ -434,6 +462,9 @@ export default function GroupForm({
                       const nextUsersSelected = isChecked
                         ? formik.values.members.filter((_s, index) => index !== checkedIndex)
                         : formik.values.members.concat(u);
+                      if (automaticRemove && containsInitialUsers()) {
+                        setAutomaticRemove(false);
+                      }
                       void formik.setFieldValue('members', nextUsersSelected, true);
                     };
                     return (
@@ -458,6 +489,7 @@ export default function GroupForm({
                 </CustomBox>
               </Select>
             </Grid>
+            {isClone && automaticRemove && <AlertRemoveUsersInClone />}
           </Grid>
 
           <Grid item container spacing={3}>

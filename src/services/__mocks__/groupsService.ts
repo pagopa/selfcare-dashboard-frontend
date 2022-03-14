@@ -91,9 +91,9 @@ export const mockedGroups: Array<PartyGroup> = [
   {
     id: 'groupId6',
     name: 'Gruppo6',
-    description: 'Group to have a significant number on prod-io',
+    description: 'groupId6 : use case ACTIVE group which does not have a selected product',
     institutionId: 'onboarded',
-    productId: 'prod-io',
+    productId: '',
     status: 'ACTIVE',
     membersIds: ['uid'],
     createdAt: new Date('2022-01-01'),

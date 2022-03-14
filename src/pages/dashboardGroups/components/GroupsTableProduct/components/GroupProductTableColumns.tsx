@@ -6,6 +6,7 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { PartyGroup, PartyGroupStatus } from '../../../../../model/PartyGroup';
+import { DASHBOARD_ROUTES } from '../../../../../routes';
 import GroupProductRowActions from './GroupProductRowActions';
 
 export function buildColumnDefs(
@@ -99,10 +100,13 @@ export function buildColumnDefs(
               p,
               <Typography variant="h6">
                 <Link
-                  to={resolvePathVariables('' /* TODO duplica page */, {
-                    institutionId: party.institutionId,
-                    groupId: (p.row as PartyGroup).id,
-                  })}
+                  to={resolvePathVariables(
+                    DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_CLONE.path,
+                    {
+                      institutionId: party.institutionId,
+                      groupId: (p.row as PartyGroup).id,
+                    }
+                  )}
                 >
                   Duplica
                 </Link>
