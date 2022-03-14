@@ -82,7 +82,13 @@ export default function UserProductAddRoles({
       )
       .finally(() => setLoading(false));
   };
+  // eslint-disable-next-line functional/immutable-data
+  // const orderedRolesList = useMemo(() => productRolesList.groupBySelcRole[userProduct.roles[0].selcRole].sort(), [productRolesList]);
 
+  console.log(
+    'elementi recuperati',
+    productRolesList.groupBySelcRole[userProduct.roles[0].selcRole]
+  );
   const selcRoleProductRoleList = productRolesList.groupBySelcRole[userProduct.roles[0].selcRole];
   return userProduct.roles.length < selcRoleProductRoleList.length &&
     selcRoleProductRoleList[0].multiroleAllowed ? (
