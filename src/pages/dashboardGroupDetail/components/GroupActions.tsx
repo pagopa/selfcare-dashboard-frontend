@@ -104,6 +104,7 @@ export default function GroupActions({
           blocking: false,
           error: reason,
           toNotify: true,
+          displayableDescription: `C'è stato un errore durante l'eliminazione del gruppo ${partyGroup.name}`,
         })
       )
       .finally(() => setLoading(false));
@@ -170,6 +171,7 @@ export default function GroupActions({
           blocking: false,
           error: reason,
           toNotify: true,
+          displayableDescription: `C'è stato un errore durante l'aggiornamento del gruppo (${partyGroup.name}) con id (${partyGroup.id}): ${partyGroup.status}`,
         })
       )
       .finally(() => setLoading(false));
