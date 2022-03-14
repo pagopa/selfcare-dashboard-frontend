@@ -23,7 +23,7 @@ export function buildColumnDefs(
       headerName: 'NOME',
       align: 'left',
       headerAlign: 'left',
-      width: 175, // TODO fix column sizes
+      width: 175,
       editable: false,
       disableColumnMenu: true,
       renderHeader: showCustmHeader,
