@@ -77,7 +77,12 @@ export default function UserProductAddRoles({
           blocking: false,
           error,
           toNotify: true,
-          displayableDescription: `C'è stato un errore durante l'aggiunta del ruolo per il referente ${user.name} ${user.surname}`,
+          displayableDescription: (
+            <>
+              {"C'è stato un errore durante l'aggiunta del ruolo per il referente "}
+              <strong>{`${user.name} ${user.surname}`}</strong>.
+            </>
+          ),
         })
       )
       .finally(() => setLoading(false));
