@@ -3,11 +3,11 @@ import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionMod
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Party } from '../../../model/Party';
 import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
 import { Product } from '../../../model/Product';
-import { ProductRolesLists } from '../../../model/ProductRole';
+import { ProductRole, ProductRolesLists } from '../../../model/ProductRole';
 import { savePartyUser } from '../../../services/usersService';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
 
@@ -89,6 +89,22 @@ export default function UserProductAddRoles({
   };
 
   const selcRoleProductRoleList = productRolesList.groupBySelcRole[userProduct.roles[0].selcRole];
+
+  const unorderedRolesList = useMemo(
+    () =>
+      selcRoleProductRoleList.slice().sort((a: ProductRole, b: ProductRole) => {
+        if (
+          userProduct.roles.map((r) => r.role === a.productRole) &&
+          userProduct.roles.map((r) => r.role !== b.productRole)
+        ) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }),
+    [productRolesList, userProduct.roles]
+  );
+
   return userProduct.roles.length < selcRoleProductRoleList.length &&
     selcRoleProductRoleList[0].multiroleAllowed ? (
     <>
@@ -114,49 +130,47 @@ export default function UserProductAddRoles({
             {' sul prodotto '}
             <strong> {`${product.title}:`} </strong>
 
-            {Object.values(productRolesList.groupBySelcRole[userProduct.roles[0].selcRole]).map(
-              (p) => {
-                const isSelected = (selectedRoles?.indexOf(p.productRole) ?? -1) > -1;
-                const isDisabled =
-                  (userProduct.roles.map((u) => u.role).indexOf(p.productRole) ?? -1) > -1;
-                return (
-                  <Box key={p.productRole}>
-                    <FormControlLabel
-                      sx={{ marginTop: 2, marginBottom: 2 }}
-                      checked={isSelected}
-                      disabled={isDisabled}
-                      value={p.productRole}
-                      control={<Checkbox />}
-                      label={
-                        <>
-                          <Typography> {p.title} </Typography>
-                          <Typography
-                            variant="subtitle2"
-                            sx={{
-                              fontWeight: 400,
-                              fontSize: '12px',
-                              color: '#5C6F82',
-                            }}
-                          >
-                            {p.description}
-                          </Typography>
-                        </>
-                      }
-                      onChange={
-                        isDisabled
-                          ? undefined
-                          : () =>
-                              setSelectedRoles(
-                                isSelected
-                                  ? selectedRoles?.filter((s) => s !== p.productRole)
-                                  : selectedRoles?.concat([p.productRole])
-                              )
-                      }
-                    />
-                  </Box>
-                );
-              }
-            )}
+            {Object.values(unorderedRolesList).map((p) => {
+              const isSelected = (selectedRoles?.indexOf(p.productRole) ?? -1) > -1;
+              const isDisabled =
+                (userProduct.roles.map((u) => u.role).indexOf(p.productRole) ?? -1) > -1;
+              return (
+                <Box key={p.productRole}>
+                  <FormControlLabel
+                    sx={{ marginTop: 2, marginBottom: 2 }}
+                    checked={isSelected}
+                    disabled={isDisabled}
+                    value={p.productRole}
+                    control={<Checkbox />}
+                    label={
+                      <>
+                        <Typography> {p.title} </Typography>
+                        <Typography
+                          variant="subtitle2"
+                          sx={{
+                            fontWeight: 400,
+                            fontSize: '12px',
+                            color: '#5C6F82',
+                          }}
+                        >
+                          {p.description}
+                        </Typography>
+                      </>
+                    }
+                    onChange={
+                      isDisabled
+                        ? undefined
+                        : () =>
+                            setSelectedRoles(
+                              isSelected
+                                ? selectedRoles?.filter((s) => s !== p.productRole)
+                                : selectedRoles?.concat([p.productRole])
+                            )
+                    }
+                  />
+                </Box>
+              );
+            })}
           </>
         }
         onConfirm={onAddMultiRole}
