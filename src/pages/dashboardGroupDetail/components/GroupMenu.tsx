@@ -134,6 +134,7 @@ export default function GroupMenu({
           blocking: false,
           error: reason,
           toNotify: true,
+          displayableDescription: `C'è stato un errore durante la ${selectedUserStatusError} dell'utente (${member.id}): ${member.status}`,
         })
       )
       .finally(() => setLoading(false));
@@ -194,6 +195,7 @@ export default function GroupMenu({
           blocking: false,
           error: reason,
           toNotify: true,
+          displayableDescription: `C'è stato un errore durante la dissociazione dell'utente (${member.id})`,
         })
       )
       .finally(() => setLoading(false));
