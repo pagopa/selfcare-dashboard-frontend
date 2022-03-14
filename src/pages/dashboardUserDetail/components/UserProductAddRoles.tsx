@@ -82,14 +82,18 @@ export default function UserProductAddRoles({
       )
       .finally(() => setLoading(false));
   };
+
+  const selcRoleProductRoleList = productRolesList.groupBySelcRole[userProduct.roles[0].selcRole];
+
   // eslint-disable-next-line functional/immutable-data
-  // const orderedRolesList = useMemo(() => productRolesList.groupBySelcRole[userProduct.roles[0].selcRole].sort(), [productRolesList]);
+  // const orderedRolesList = useMemo(() => selcRoleProductRoleList.sort(), [productRolesList]);
 
   console.log(
     'elementi recuperati',
-    productRolesList.groupBySelcRole[userProduct.roles[0].selcRole]
+    // eslint-disable-next-line functional/immutable-data
+    selcRoleProductRoleList
   );
-  const selcRoleProductRoleList = productRolesList.groupBySelcRole[userProduct.roles[0].selcRole];
+
   return userProduct.roles.length < selcRoleProductRoleList.length &&
     selcRoleProductRoleList[0].multiroleAllowed ? (
     <>
