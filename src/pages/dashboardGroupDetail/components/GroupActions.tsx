@@ -32,9 +32,9 @@ export default function GroupActions({
   onGroupStatusUpdate,
   nextGroupStatus,
 }: Props) {
-  const selectedGroupStatus = nextGroupStatus === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
+  const selectedGroupStatus = nextGroupStatus === 'SUSPENDED' ? 'sospeso' : 'riattivato';
   const selectedGroupStatusError =
-    partyGroup.status === 'SUSPENDED' ? 'sospensione' : 'riabilitazione';
+    partyGroup.status === 'SUSPENDED' ? 'sospensione' : 'riattivazione';
 
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   const addError = useErrorDispatcher();
@@ -104,7 +104,13 @@ export default function GroupActions({
           blocking: false,
           error: reason,
           toNotify: true,
-          displayableDescription: `C'è stato un errore durante l'eliminazione del gruppo ${partyGroup.name}`,
+          displayableDescription: (
+            <>
+              {"C'è stato un errore durante l'eliminazione del gruppo "}
+              <strong>{` ${partyGroup.name} `}</strong>
+              {'.'}
+            </>
+          ),
         })
       )
       .finally(() => setLoading(false));
@@ -167,11 +173,17 @@ export default function GroupActions({
           component: 'Toast',
           id: `'UPDATE_PARTY_GROUP_ERROR-${partyGroup.id}`,
           displayableTitle: `ERRORE DURANTE LA ${selectedGroupStatusError.toUpperCase()} DEL GRUPPO `,
-          techDescription: `C'è stato un errore durante l'aggiornamento del gruppo (${partyGroup.name}) con id (${partyGroup.id}): ${partyGroup.status}`,
+          techDescription: `C'è stato un errore durante la ${selectedGroupStatusError} del gruppo (${partyGroup.name}) con id (${partyGroup.id}): ${partyGroup.status}`,
           blocking: false,
           error: reason,
           toNotify: true,
-          displayableDescription: `C'è stato un errore durante l'aggiornamento del gruppo (${partyGroup.name}) con id (${partyGroup.id}): ${partyGroup.status}`,
+          displayableDescription: (
+            <>
+              {`C'è stato un errore durante la ${selectedGroupStatusError} del gruppo`}
+              <strong>{` ${partyGroup.name} `}</strong>
+              {'.'}
+            </>
+          ),
         })
       )
       .finally(() => setLoading(false));
