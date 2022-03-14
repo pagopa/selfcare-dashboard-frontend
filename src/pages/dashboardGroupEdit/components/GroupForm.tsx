@@ -467,6 +467,7 @@ export default function GroupForm({
                       }
                       void formik.setFieldValue('members', nextUsersSelected, true);
                     };
+
                     return (
                       <MenuItem
                         key={u.id}
