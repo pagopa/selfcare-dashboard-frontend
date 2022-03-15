@@ -202,7 +202,7 @@ export default function GroupForm({
       ),
     });
 
-  const notifyErrorOnSave = (values: PartyGroupOnCreation | PartyGroupOnEdit, reason: Error) =>
+  const notifyErrorOnSave = (values: PartyGroupOnCreation | PartyGroupOnEdit, reason: any) =>
     addError({
       component: 'Toast',
       id: isEdit ? 'EDIT_GROUP_ERROR' : isClone ? 'CLONE_GROUP_ERROR' : 'SAVE_GROUP_ERROR',
@@ -226,6 +226,29 @@ export default function GroupForm({
       toNotify: true,
     });
 
+  const notifyErrorOnGroupName = (values: PartyGroupOnCreation | PartyGroupOnEdit, reason: any) => {
+    addError({
+      component: 'Toast',
+      id: 'NAME_GROUP_ERROR',
+      blocking: false,
+      displayableTitle:
+        !isEdit && !isClone
+          ? 'ERRORE DURANTE LA CREAZIONE'
+          : isClone
+          ? 'ERRORE DURANTE LA DUPLICAZIONE'
+          : undefined,
+      displayableDescription: 'Il nome che hai scelto per il nuovo gruppo è già in uso. Cambialo',
+      techDescription:
+        !isEdit && !isClone
+          ? `An error occurred while creation of group ${values.name}`
+          : isClone
+          ? `An error occurred while clone of group ${values.name}`
+          : undefined,
+      error: reason.httpStatus,
+      toNotify: true,
+    });
+  };
+
   const save = (values: PartyGroupOnCreation) => {
     // eslint-disable-next-line functional/immutable-data
     values.productId = (productSelected as Product).id;
@@ -241,7 +264,11 @@ export default function GroupForm({
         notifySuccessfulSave(values);
         goBackInner();
       })
-      .catch((reason) => notifyErrorOnSave(values, reason))
+      .catch((reason) =>
+        !isEdit && reason.httpStatus === '409'
+          ? notifyErrorOnGroupName
+          : notifyErrorOnSave(values, reason)
+      )
       .finally(() => setLoadingSaveGroup(false));
   };
 
@@ -353,6 +380,11 @@ export default function GroupForm({
                 {...baseTextFieldProps('name', '', 'Inserisci il nome del gruppo', 700, 20)}
               />
             </Grid>
+            {!isEdit && formik.values.name ? ( // TODO
+              <Typography color="#F83E5A" sx={{ fontSize: '14px' }}>
+                Questo nome è già in uso
+              </Typography>
+            ) : undefined}
           </Grid>
           <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
