@@ -238,12 +238,11 @@ export default function GroupForm({
           ? 'ERRORE DURANTE LA DUPLICAZIONE'
           : undefined,
       displayableDescription: 'Il nome che hai scelto per il nuovo gruppo è già in uso. Cambialo',
-      techDescription:
-        !isEdit && !isClone
-          ? `An error occurred while creation of group ${values.name}`
-          : isClone
-          ? `An error occurred while clone of group ${values.name}`
-          : undefined,
+      techDescription: !isEdit
+        ? `An error occurred while edit of group ${values.name}`
+        : isClone
+        ? `An error occurred while clone of group ${values.name}`
+        : `An error occurred while creation of group ${values.name}`,
       error: reason.httpStatus,
       toNotify: true,
     });
@@ -445,7 +444,7 @@ export default function GroupForm({
             </Grid>
           </Grid>
 
-          <Grid item container spacing={3} marginBottom={1}>
+          <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
               <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
                 Referenti
@@ -466,6 +465,23 @@ export default function GroupForm({
                         Seleziona i referenti che vuoi assegnare al gruppo
                       </Typography>
                     ) : undefined}
+                    {selectedUsers.map((s) => (
+                      <Chip
+                        color="default"
+                        size="small"
+                        variant="outlined"
+                        key={s.id}
+                        label={s.name + ' ' + s.surname}
+                        onDelete={() =>
+                          formik.setFieldValue(
+                            'members',
+                            selectedUsers.filter((us) => us !== s),
+                            true
+                          )
+                        }
+                        deleteIcon={<ClearIcon onMouseDown={(e) => e.stopPropagation()} />}
+                      />
+                    ))}
                   </Box>
                 )}
               >
@@ -504,32 +520,6 @@ export default function GroupForm({
                   })}
                 </CustomBox>
               </Select>
-
-              <Grid>
-                {formik.values.members.map((s) => (
-                  <Chip
-                    sx={{
-                      fontWeight: 600,
-                      marginTop: 2.2,
-                      marginRight: 1.6,
-                    }}
-                    color="default"
-                    size="medium"
-                    variant="outlined"
-                    key={s.id}
-                    label={s.name + ' ' + s.surname}
-                    onDelete={() =>
-                      formik.setFieldValue(
-                        'members',
-                        formik.values.members.filter((us) => us !== s),
-                        true
-                      )
-                    }
-                    deleteIcon={<ClearIcon onMouseDown={(e) => e.stopPropagation()} />}
-                  />
-                ))}
-              </Grid>
-              {isClone && automaticRemove && <AlertRemoveUsersInClone />}
             </Grid>
             {isClone && automaticRemove && <AlertRemoveUsersInClone />}
           </Grid>
