@@ -35,6 +35,7 @@ import { LOADING_TASK_FETCH_USER_PRODUCT, LOADING_TASK_SAVE_GROUP } from '../../
 import { fetchPartyUsers } from '../../../services/usersService';
 import { useAppSelector } from '../../../redux/hooks';
 import AlertRemoveUsersInClone from '../components/AlertRemoveUsersInClone';
+import { mockedGroups } from '../../../services/__mocks__/groupsService';
 
 const CustomBox = styled(Box)({
   '&::-webkit-scrollbar': {
@@ -130,6 +131,8 @@ export default function GroupForm({
 
   const isEdit = !!(initialFormData as PartyGroupOnEdit).id;
 
+  const groups = mockedGroups; // TODO RemoveMe
+
   useEffect(() => {
     if (productSelected) {
       fetchProductUsers(productSelected);
@@ -222,7 +225,7 @@ export default function GroupForm({
         : isClone
         ? `An error occurred while clone of group ${values.name}`
         : `An error occurred while creation of group ${values.name}`,
-      error: reason,
+      error: reason.httpStatus,
       toNotify: true,
     });
 
@@ -265,7 +268,7 @@ export default function GroupForm({
       })
       .catch((reason) =>
         !isEdit && reason.httpStatus === '409'
-          ? notifyErrorOnGroupName
+          ? notifyErrorOnGroupName(values, reason)
           : notifyErrorOnSave(values, reason)
       )
       .finally(() => setLoadingSaveGroup(false));
@@ -378,12 +381,12 @@ export default function GroupForm({
               <CustomTextField
                 {...baseTextFieldProps('name', '', 'Inserisci il nome del gruppo', 700, 20)}
               />
+              {!isEdit && groups.find((g) => g.name === formik.values.name) ? (
+                <Typography color="#F83E5A" sx={{ fontSize: '14px', paddingLeft: '15px' }}>
+                  Questo nome è già in uso
+                </Typography>
+              ) : undefined}
             </Grid>
-            {!isEdit && formik.values.name ? ( // TODO
-              <Typography color="#F83E5A" sx={{ fontSize: '14px' }}>
-                Questo nome è già in uso
-              </Typography>
-            ) : undefined}
           </Grid>
           <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
