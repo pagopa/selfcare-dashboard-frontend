@@ -11,16 +11,9 @@ import GroupForm from './components/GroupForm';
 
 type Props = {
   activeProducts: Array<Product>;
-  partyGroupCloneId: string;
 } & withGroupDetailProps;
 
-function CloneGroupPage({
-  party,
-  activeProducts,
-  productsMap,
-  partyGroup,
-  partyGroupCloneId,
-}: Props) {
+function CloneGroupPage({ party, activeProducts, productsMap, partyGroup }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -58,14 +51,23 @@ function CloneGroupPage({
           party={party}
           products={activeProducts}
           productsMap={productsMap}
+          partyGroupCloneId={partyGroup.id}
           initialFormData={
             {
-              id: partyGroupCloneId,
+              id: '',
               name: 'Copia di ' + partyGroup.name,
               description: partyGroup.description,
               members: partyGroup.members,
               institutionId: partyGroup.institutionId,
-              productId: partyGroup.productId,
+              productId:
+                partyGroup.members.find(
+                  (cu) =>
+                    cu.isCurrentUser &&
+                    cu.products.find(
+                      (p) =>
+                        p.id === partyGroup.productId && p.roles.find((r) => r.selcRole === 'ADMIN')
+                    )
+                ) && partyGroup.productId,
             } as PartyGroupOnEdit
           }
           isClone={true}

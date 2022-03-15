@@ -74,7 +74,7 @@ export const mockedUsers: Array<PartyUser> = [
           {
             relationshipId: 'rel2',
             role: 'referente-tecnico',
-            selcRole: 'LIMITED',
+            selcRole: 'ADMIN',
             status: 'ACTIVE',
           },
         ],

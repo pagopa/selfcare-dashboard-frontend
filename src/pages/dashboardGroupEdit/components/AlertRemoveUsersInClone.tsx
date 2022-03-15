@@ -19,7 +19,7 @@ export default function AlertRemoveUsersInClone() {
       >
         Alcuni referenti sono stati eliminati dal gruppo duplicato perchè
         <strong> non presenti </strong>
-        nel prodotto selezionato o perchè <strong>sospesi.</strong> Puoi comunque assegnare altri
+        nel prodotto selezionato o perchè <strong>sospesi</strong>. Puoi comunque assegnare altri
         referenti al gruppo duplicato.
       </Alert>
     </Grid>
