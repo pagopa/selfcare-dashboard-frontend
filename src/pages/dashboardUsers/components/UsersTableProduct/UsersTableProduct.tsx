@@ -63,7 +63,7 @@ const UsersTableProduct = ({
       currentUser ?? ({ uid: 'NONE' } as User),
       canEdit,
       product,
-      filterConfiguration.selcRole,
+      undefined,
       filterConfiguration.productRoles
     ).then((data) => data.content)
   );
