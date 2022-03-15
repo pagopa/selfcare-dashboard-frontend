@@ -4,6 +4,7 @@ import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend
 import { store } from '../redux/store';
 import { PartyUserOnCreation, PartyUserOnEdit } from '../model/PartyUser';
 import { ENV } from '../utils/env';
+import { PartyGroupOnEdit } from '../model/PartyGroup';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
@@ -170,5 +171,24 @@ export const DashboardApi = {
       body: { externalId: taxCode },
     });
     return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  deletePartyGroup: async (id: string): Promise<void> => {
+    const result = await apiClient.deleteUserGroupUsingDELETE({
+      id,
+    });
+    return extractResponse(result, 204, onRedirectToLogin);
+  },
+
+  updatePartyGroup: async (id: string, group: PartyGroupOnEdit): Promise<void> => {
+    const result = await apiClient.updateUserGroupUsingPUT({
+      id,
+      body: {
+        description: group.description,
+        members: group.members.map((u) => u.id),
+        name: group.name,
+      },
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
   },
 };

@@ -2,6 +2,7 @@ import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest'
 import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { DashboardApi } from '../api/DashboardApiClient';
 import { Party } from '../model/Party';
 import {
   PartyGroup,
@@ -72,7 +73,7 @@ export const updatePartyGroup = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return updatePartyGroupMocked(party, product, group);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.updatePartyGroup(group.id, group);
   }
 };
 
@@ -116,7 +117,7 @@ export const deletePartyGroup = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return deletePartyGroupMocked(party, product, group);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.deletePartyGroup(group.id);
   }
 };
 
