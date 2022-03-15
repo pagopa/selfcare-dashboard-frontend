@@ -24,6 +24,8 @@ type Props = {
   withUserDetailProps;
 
 function AddProductToUserPage({ party, activeProducts, productsRolesMap, partyUser }: Props) {
+  const history = useHistory();
+
   const goBack = () =>
     history.push(
       resolvePathVariables(DASHBOARD_ROUTES.PARTY_USERS.subRoutes.PARTY_USER_DETAIL.path, {
@@ -31,7 +33,7 @@ function AddProductToUserPage({ party, activeProducts, productsRolesMap, partyUs
         userId: partyUser.id,
       })
     );
-  const history = useHistory();
+
   const paths = [
     {
       description: 'Referenti',

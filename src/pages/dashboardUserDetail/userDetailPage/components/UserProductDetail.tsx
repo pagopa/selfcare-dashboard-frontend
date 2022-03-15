@@ -44,7 +44,7 @@ export default function UserProductDetail({
               <Box ml={2}>
                 {!userProduct.roles.find((p) => p.status !== 'SUSPENDED') && (
                   <Chip
-                    label="sospeso"
+                    label="Sospeso"
                     variant="outlined"
                     sx={{
                       fontWeight: '600',

@@ -28,7 +28,6 @@ const MenuProps = {
 type Props = {
   productRolesList: Array<ProductRole>;
   productRolesSelected: Array<ProductRole>;
-  filterSelcRole: Array<UserRole>;
   filters: UsersTableFiltersConfig;
   onFiltersChange: (f: UsersTableFiltersConfig) => void;
   disableFilters: boolean;
@@ -282,7 +281,6 @@ export default function UsersTableRolesFilter({
                     setOpen(false);
                     onFiltersChange({
                       ...filters,
-                      selcRole: [],
                       productRoles: nextProductRolesFilter,
                     });
                   }}
@@ -299,7 +297,7 @@ export default function UsersTableRolesFilter({
                   type="submit"
                   onClick={() => {
                     setOpen(false);
-                    onFiltersChange({ ...filters, selcRole: [], productRoles: [] });
+                    onFiltersChange({ ...filters, productRoles: [] });
                   }}
                 >
                   Cancella filtri

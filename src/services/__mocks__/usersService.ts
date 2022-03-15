@@ -726,16 +726,12 @@ export const fetchPartyUsers = (
   _currentUser: User,
   _checkPermission: boolean,
   product?: Product,
-  selcRoles?: Array<UserRole>,
+  selcRole?: UserRole,
   productRoles?: Array<ProductRole>
 ): Promise<PageResource<PartyUser>> => {
   const filteredContent = mockedUsers
     .filter((u) => {
-      if (
-        selcRoles &&
-        selcRoles.length > 0 &&
-        !u.products.find((p) => p.roles.find((r) => selcRoles.indexOf(r.selcRole) > -1))
-      ) {
+      if (selcRole && !u.products.find((p) => p.roles.find((r) => selcRole === r.selcRole))) {
         return false;
       }
       if (

@@ -499,6 +499,7 @@ export default function GroupForm({
               </Grid>
               {isClone && automaticRemove && <AlertRemoveUsersInClone />}
             </Grid>
+            {isClone && automaticRemove && <AlertRemoveUsersInClone />}
           </Grid>
 
           <Grid item container spacing={3}>
