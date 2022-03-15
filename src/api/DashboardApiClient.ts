@@ -4,7 +4,7 @@ import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend
 import { store } from '../redux/store';
 import { PartyUserOnCreation, PartyUserOnEdit } from '../model/PartyUser';
 import { ENV } from '../utils/env';
-import { PartyGroupOnEdit } from '../model/PartyGroup';
+import { PartyGroupExt, PartyGroupOnCreation, PartyGroupOnEdit } from '../model/PartyGroup';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
@@ -188,6 +188,14 @@ export const DashboardApi = {
     return extractResponse(result, 204, onRedirectToLogin);
   },
 
+  fetchPartyGroup: async (id: string, institutionId: string): Promise<PartyGroupExt | null> => {
+    const result = await apiClient.getUserGroupByIdUsingGET({
+      id,
+      institutionId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
   updatePartyGroup: async (id: string, group: PartyGroupOnEdit): Promise<void> => {
     const result = await apiClient.updateUserGroupUsingPUT({
       id,
@@ -210,6 +218,19 @@ export const DashboardApi = {
   updatePartyGroupStatusSuspend: async (id: string): Promise<void> => {
     const result = await apiClient.suspendUserGroupUsingPOST({
       id,
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
+  },
+
+  savePartyGroup: async (group: PartyGroupOnCreation): Promise<void> => {
+    const result = await apiClient.createUserGroupUsingPOST({
+      body: {
+        description: group.description,
+        institutionId: group.institutionId,
+        members: group.members.map((u) => u.id),
+        name: group.name,
+        productId: group.productId,
+      },
     });
     return extractResponse(result, 201, onRedirectToLogin);
   },
