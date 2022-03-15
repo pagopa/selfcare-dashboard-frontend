@@ -180,6 +180,14 @@ export const DashboardApi = {
     return extractResponse(result, 204, onRedirectToLogin);
   },
 
+  deleteGroupRelation: async (userGroupId: string, userId: string): Promise<void> => {
+    const result = await apiClient.deleteMemberFromUserGroupUsingDELETE({
+      userGroupId,
+      userId,
+    });
+    return extractResponse(result, 204, onRedirectToLogin);
+  },
+
   updatePartyGroup: async (id: string, group: PartyGroupOnEdit): Promise<void> => {
     const result = await apiClient.updateUserGroupUsingPUT({
       id,
@@ -188,6 +196,20 @@ export const DashboardApi = {
         members: group.members.map((u) => u.id),
         name: group.name,
       },
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
+  },
+
+  updatePartyGroupStatusActivate: async (id: string): Promise<void> => {
+    const result = await apiClient.activateUserGroupUsingPOST({
+      id,
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
+  },
+
+  updatePartyGroupStatusSuspend: async (id: string): Promise<void> => {
+    const result = await apiClient.suspendUserGroupUsingPOST({
+      id,
     });
     return extractResponse(result, 201, onRedirectToLogin);
   },

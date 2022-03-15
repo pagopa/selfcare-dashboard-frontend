@@ -92,13 +92,13 @@ export const updatePartyGroupStatus = (
       party_id: party.institutionId,
       product: product.id,
     });
-    throw new Error('TODO');
+    return DashboardApi.updatePartyGroupStatusActivate(group.id);
   } else if (status === 'SUSPENDED') {
     trackEvent('GROUP_SUSPEND', {
       party_id: party.institutionId,
       product: product.id,
     });
-    throw new Error('TODO');
+    return DashboardApi.updatePartyGroupStatusSuspend(group.id);
   } else {
     throw new Error(`Not allowed next status: ${status}`);
   }
@@ -135,7 +135,7 @@ export const deleteGroupRelation = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return deleteGroupRelationMocked(party, product, group, userId);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.deleteGroupRelation(group.id, userId);
   }
 };
 
