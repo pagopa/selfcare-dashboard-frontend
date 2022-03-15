@@ -59,13 +59,11 @@ function CloneGroupPage({ party, activeProducts, productsMap, partyGroup }: Prop
               description: partyGroup.description,
               members: partyGroup.members,
               institutionId: partyGroup.institutionId,
-              productId:
-                partyGroup.members.find(
-                  (cu) =>
-                    cu.isCurrentUser &&
-                    productsMap.product?.id === partyGroup.productId &&
-                    productsMap.product.userRole === 'ADMIN'
-                ) && partyGroup.productId,
+              productId: partyGroup.members.find(
+                (cu) => cu.isCurrentUser && productsMap[partyGroup.productId]?.userRole === 'ADMIN'
+              )
+                ? partyGroup.productId
+                : undefined,
             } as PartyGroupOnEdit
           }
           isClone={true}
