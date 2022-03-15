@@ -2,7 +2,7 @@ import { Alert, Grid } from '@mui/material';
 
 export default function AlertRemoveUsersInClone() {
   return (
-    <Grid item xs={8} mb={3}>
+    <Grid item xs={8} mb={3} sx={{ marginTop: 3 }}>
       <Alert
         severity="error"
         sx={{

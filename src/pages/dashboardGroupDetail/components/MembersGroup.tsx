@@ -95,7 +95,9 @@ export default function MembersGroup({
                   }}
                   title={`${member.name} ${member.surname}`}
                 >
-                  {`${member.name} ${member.surname}`}
+                  {`${member.name}
+                  ${member.surname}
+                  ${member.isCurrentUser ? ' (tu)' : ''}`}
                 </Typography>
               </Link>
             </Grid>
