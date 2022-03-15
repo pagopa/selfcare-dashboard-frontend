@@ -63,10 +63,8 @@ function CloneGroupPage({ party, activeProducts, productsMap, partyGroup }: Prop
                 partyGroup.members.find(
                   (cu) =>
                     cu.isCurrentUser &&
-                    cu.products.find(
-                      (p) =>
-                        p.id === partyGroup.productId && p.roles.find((r) => r.selcRole === 'ADMIN')
-                    )
+                    productsMap.product?.id === partyGroup.productId &&
+                    productsMap.product.userRole === 'ADMIN'
                 ) && partyGroup.productId,
             } as PartyGroupOnEdit
           }
