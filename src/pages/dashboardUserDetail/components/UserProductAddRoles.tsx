@@ -89,14 +89,25 @@ export default function UserProductAddRoles({
   };
 
   const selcRoleProductRoleList = productRolesList.groupBySelcRole[userProduct.roles[0].selcRole];
+  const initialRolesMap = useMemo(
+    () =>
+      userProduct.roles.reduce((acc: any, r) => {
+        // eslint-disable-next-line functional/immutable-data
+        acc[r.role] = true;
+        return acc;
+      }, {}),
+    [userProduct.roles]
+  );
 
-  const unorderedRolesList = useMemo(
+  const orderedRolesList = useMemo(
     () =>
       selcRoleProductRoleList.slice().sort((a: ProductRole, b: ProductRole) => {
-        if (
-          userProduct.roles.map((r) => r.role === a.productRole) &&
-          userProduct.roles.map((r) => r.role !== b.productRole)
-        ) {
+        const existA = initialRolesMap[a.productRole];
+        const existB = initialRolesMap[b.productRole];
+        // eslint-disable-next-line no-bitwise
+        if (!(existA ^ existB)) {
+          return 0;
+        } else if (existA) {
           return -1;
         } else {
           return 1;
@@ -130,7 +141,7 @@ export default function UserProductAddRoles({
             {' sul prodotto '}
             <strong> {`${product.title}:`} </strong>
 
-            {Object.values(unorderedRolesList).map((p) => {
+            {Object.values(orderedRolesList).map((p) => {
               const isSelected = (selectedRoles?.indexOf(p.productRole) ?? -1) > -1;
               const isDisabled =
                 (userProduct.roles.map((u) => u.role).indexOf(p.productRole) ?? -1) > -1;
