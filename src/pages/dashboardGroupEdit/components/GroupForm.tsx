@@ -307,7 +307,7 @@ export default function GroupForm({
       currentUser ?? ({ uid: 'NONE' } as User),
       true,
       productSelected,
-      [],
+      undefined,
       []
     )
       .then((productUsersPage) => {
