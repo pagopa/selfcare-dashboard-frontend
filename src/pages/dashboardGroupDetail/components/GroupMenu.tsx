@@ -213,16 +213,18 @@ export default function GroupMenu({
   };
   return (
     <>
-      <Grid item xs={1} display="flex" justifyContent="flex-end">
-        <IconButton
-          sx={{ p: '0px', ':hover': { backgroundColor: 'transparent' } }}
-          disableRipple
-          onClick={handleClick}
-          disabled={isSuspended}
-        >
-          <MoreVertIcon sx={{ color: isSuspended ? '#a2adb8' : 'primary' }} />
-        </IconButton>
-      </Grid>
+      {!member.isCurrentUser && (
+        <Grid item xs={1} display="flex" justifyContent="flex-end">
+          <IconButton
+            sx={{ p: '0px', ':hover': { backgroundColor: 'transparent' } }}
+            disableRipple
+            onClick={handleClick}
+            disabled={isSuspended}
+          >
+            <MoreVertIcon sx={{ color: isSuspended ? '#a2adb8' : 'primary' }} />
+          </IconButton>
+        </Grid>
+      )}
       <Menu
         anchorEl={anchorEl}
         open={open}
