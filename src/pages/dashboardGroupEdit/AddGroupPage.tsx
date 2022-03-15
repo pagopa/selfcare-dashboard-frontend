@@ -7,7 +7,7 @@ import { Party } from '../../model/Party';
 import { PartyGroupOnCreation } from '../../model/PartyGroup';
 import { Product, ProductsMap } from '../../model/Product';
 import { DASHBOARD_ROUTES } from '../../routes';
-import AddGroupForm from './components/GroupForm';
+import GroupForm from './components/GroupForm';
 
 type Props = {
   party: Party;
@@ -51,7 +51,7 @@ function AddGroupPage({ party, activeProducts, productsMap }: Props) {
         />
       </Grid>
       <Grid item xs={12}>
-        <AddGroupForm
+        <GroupForm
           party={party}
           products={activeProducts}
           productsMap={productsMap}

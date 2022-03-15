@@ -51,9 +51,9 @@ export default function GroupActions({
 
   const goToDuplicate = () =>
     history.push(
-      resolvePathVariables('' /* TODO: redirect to Group Duplicate Page */, {
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_CLONE.path, {
         institutionId: partyGroup.institutionId,
-        // groupId: partyGroup.id,
+        groupId: partyGroup.id,
       })
     );
 

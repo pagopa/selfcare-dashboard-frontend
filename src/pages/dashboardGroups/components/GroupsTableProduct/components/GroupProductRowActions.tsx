@@ -169,7 +169,7 @@ export default function GroupProductRowActions({
   const handleClone = () => {
     handleClose();
     history.push(
-      resolvePathVariables('CLONE' /* TODO url to clone group */, {
+      resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.PARTY_GROUP_CLONE.path, {
         institutionId: party.institutionId,
         groupId: partyGroup.id,
       })
