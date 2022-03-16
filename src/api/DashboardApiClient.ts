@@ -1,10 +1,17 @@
 import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
+import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
 import { store } from '../redux/store';
 import { PartyUserOnCreation, PartyUserOnEdit } from '../model/PartyUser';
 import { ENV } from '../utils/env';
-import { PartyGroupExt, PartyGroupOnCreation, PartyGroupOnEdit } from '../model/PartyGroup';
+import {
+  PartyGroup,
+  PartyGroupExt,
+  PartyGroupOnCreation,
+  PartyGroupOnEdit,
+} from '../model/PartyGroup';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
@@ -187,11 +194,32 @@ export const DashboardApi = {
     });
     return extractResponse(result, 204, onRedirectToLogin);
   },
+  fetchPartyGroups: async (
+    productId: string,
+    institutionId: string,
+    pageRequest: PageRequest
+  ): Promise<PageResource<PartyGroup>> => {
+    const result = await apiClient.getGroupsByInstitutionAndProductIdsUsingGET({
+      institutionId,
+      page: pageRequest.page,
+      size: pageRequest.size,
+      sort: pageRequest.sort ? [pageRequest.sort] : undefined,
+      productId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
 
   fetchPartyGroup: async (id: string, institutionId: string): Promise<PartyGroupExt | null> => {
     const result = await apiClient.getUserGroupByIdUsingGET({
       id,
       institutionId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  fetchUserGroups: async (userId: string): Promise<Array<PartyGroup>> => {
+    const result = await apiClient.getGroupsByUserIdUsingGET({
+      userId,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

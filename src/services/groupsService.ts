@@ -33,7 +33,7 @@ export const fetchPartyGroups = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchPartyGroupsMocked(party, product, currentUser, pageRequest);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.fetchPartyGroups(product.id, party.institutionId, pageRequest);
   }
 };
 
@@ -152,6 +152,6 @@ export const fetchUserGroups = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchUserGroupsMocked(party, product, userId);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.fetchUserGroups(userId);
   }
 };
