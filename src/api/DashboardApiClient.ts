@@ -12,6 +12,7 @@ import {
   PartyGroupOnCreation,
   PartyGroupOnEdit,
 } from '../model/PartyGroup';
+import { ProductRole } from '../model/ProductRole';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
@@ -92,9 +93,15 @@ export const DashboardApi = {
   getPartyUsers: async (
     institutionId: string,
     productId?: string,
-    role?: string
+    role?: string,
+    productRoles?: Array<ProductRole>
   ): Promise<Array<InstitutionUserResource>> => {
-    const result = await apiClient.getInstitutionUsersUsingGET({ institutionId, role, productId });
+    const result = await apiClient.getInstitutionUsersUsingGET({
+      institutionId,
+      role,
+      productId,
+      productRoles: productRoles?.map((r) => r.productRole).join(','),
+    });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
@@ -109,12 +116,14 @@ export const DashboardApi = {
   getPartyProductUsers: async (
     institutionId: string,
     productId: string,
-    role?: string
+    role?: string,
+    productRoles?: Array<ProductRole>
   ): Promise<Array<ProductUserResource>> => {
     const result = await apiClient.getInstitutionProductUsersUsingGET({
       institutionId,
       productId,
       role,
+      productRoles: productRoles?.map((r) => r.productRole).join(','),
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

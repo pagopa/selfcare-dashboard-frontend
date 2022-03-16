@@ -13,7 +13,7 @@ type Props = {
   activeProducts: Array<Product>;
 } & withGroupDetailProps;
 
-function EditGroupPage({ party, activeProducts, productsMap, partyGroup }: Props) {
+function CloneGroupPage({ party, activeProducts, productsMap, partyGroup }: Props) {
   const history = useHistory();
 
   const paths = [
@@ -28,7 +28,7 @@ function EditGroupPage({ party, activeProducts, productsMap, partyGroup }: Props
         ),
     },
     {
-      description: 'Modifica gruppo',
+      description: 'Duplica gruppo',
     },
   ];
 
@@ -44,28 +44,32 @@ function EditGroupPage({ party, activeProducts, productsMap, partyGroup }: Props
         <ProductNavigationBar paths={paths} />
       </Grid>
       <Grid item xs={12} mb={9}>
-        <TitleBox title="Modifica gruppo" subTitle={`Duplica il gruppo e modifica i dati`} />
+        <TitleBox title="Duplica gruppo" subTitle={`Duplica il gruppo e modifica i dati`} />
       </Grid>
       <Grid item xs={12}>
         <GroupForm
           party={party}
           products={activeProducts}
           productsMap={productsMap}
+          partyGroupCloneId={partyGroup.id}
           initialFormData={
             {
-              id: partyGroup.id,
-              name: partyGroup.name,
+              id: '',
+              name: 'Copia di ' + partyGroup.name,
               description: partyGroup.description,
               members: partyGroup.members,
               institutionId: partyGroup.institutionId,
-              productId: partyGroup.productId,
+              productId:
+                productsMap[partyGroup.productId]?.userRole === 'ADMIN'
+                  ? partyGroup.productId
+                  : undefined,
             } as PartyGroupOnEdit
           }
-          isClone={false}
+          isClone={true}
         />
       </Grid>
     </Grid>
   );
 }
 
-export default withGroupDetail(EditGroupPage);
+export default withGroupDetail(CloneGroupPage);

@@ -44,7 +44,7 @@ export const fetchPartyUsers = (
   currentUser: User,
   checkPermission: boolean,
   product?: Product,
-  selcRoles?: Array<UserRole>,
+  selcRole?: UserRole,
   productRoles?: Array<ProductRole>
 ): Promise<PageResource<PartyUser>> => {
   /* istanbul ignore if */
@@ -55,7 +55,7 @@ export const fetchPartyUsers = (
       currentUser,
       checkPermission,
       product,
-      selcRoles,
+      selcRole,
       productRoles
     );
   } else {
@@ -63,7 +63,8 @@ export const fetchPartyUsers = (
       return DashboardApi.getPartyProductUsers(
         party.institutionId,
         product.id,
-        selcRoles && selcRoles.length > 0 ? selcRoles[0] : undefined
+        selcRole,
+        productRoles
       ).then(
         (
           r // TODO fixme when API will support pagination
@@ -73,7 +74,8 @@ export const fetchPartyUsers = (
       return DashboardApi.getPartyUsers(
         party.institutionId,
         product?.id,
-        selcRoles && selcRoles.length > 0 ? selcRoles[0] : undefined
+        selcRole,
+        productRoles
       ).then(
         (
           r // TODO fixme when API will support pagination
