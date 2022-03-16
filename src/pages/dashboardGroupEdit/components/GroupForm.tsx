@@ -124,6 +124,7 @@ export default function GroupForm({
   const [productSelected, setProductSelected] = useState<Product>();
   const [productUsers, setProductUsers] = useState<Array<PartyUser>>([]);
   const [automaticRemove, setAutomaticRemove] = useState(false);
+  const [isNameDuplicated, setIsNameDuplicated] = useState(false);
 
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
@@ -202,7 +203,11 @@ export default function GroupForm({
       ),
     });
 
-  const notifyErrorOnSave = (values: PartyGroupOnCreation | PartyGroupOnEdit, reason: Error) =>
+  const notifyErrorOnSave = (
+    values: PartyGroupOnCreation | PartyGroupOnEdit,
+    reason: any,
+    displayableDescription: string
+  ) =>
     addError({
       component: 'Toast',
       id: isEdit ? 'EDIT_GROUP_ERROR' : isClone ? 'CLONE_GROUP_ERROR' : 'SAVE_GROUP_ERROR',
@@ -212,11 +217,7 @@ export default function GroupForm({
         : isClone
         ? 'ERRORE DURANTE LA DUPLICAZIONE'
         : 'ERRORE DURANTE LA CREAZIONE',
-      displayableDescription: isEdit
-        ? "C'è stato un errore durante la modifica del gruppo. Riprova"
-        : isClone
-        ? "C'è stato un errore durante la duplicazione del gruppo. Riprova"
-        : "C'è stato un errore durante la creazione del gruppo. Riprova.",
+      displayableDescription,
       techDescription: isEdit
         ? `An error occurred while edit of group ${values.name}`
         : isClone
@@ -241,7 +242,27 @@ export default function GroupForm({
         notifySuccessfulSave(values);
         goBackInner();
       })
-      .catch((reason) => notifyErrorOnSave(values, reason))
+      .catch((reason) => {
+        if (reason.httpStatus === 409) {
+          setIsNameDuplicated(true);
+          notifyErrorOnSave(
+            values,
+            reason,
+            'Il nome che hai scelto per il nuovo gruppo è già in uso. Cambialo'
+          );
+        } else {
+          setIsNameDuplicated(false);
+          notifyErrorOnSave(
+            values,
+            reason,
+            isEdit
+              ? "C'è stato un errore durante la modifica del gruppo. Riprova"
+              : isClone
+              ? "C'è stato un errore durante la duplicazione del gruppo. Riprova"
+              : "C'è stato un errore durante la creazione del gruppo. Riprova."
+          );
+        }
+      })
       .finally(() => setLoadingSaveGroup(false));
   };
 
@@ -320,9 +341,9 @@ export default function GroupForm({
           void formik.setFieldValue('members', (initialFormData as PartyGroupOnEdit).members, true);
         } else if (isClone) {
           const nextMembers = formik.values.members.filter((u) =>
-            u.products.filter((p) => p.id !== productSelected?.id)
+            u.products.find((p) => p.id === productSelected?.id)
           ); // u.status === 'ACTIVE' we want also the suspended users, however the status should be evaluated from user.products[current Product].status
-          if (containsInitialUsers()) {
+          if (!containsInitialUsers()) {
             setAutomaticRemove(true);
           }
           void formik.setFieldValue('members', nextMembers, true);
@@ -351,7 +372,16 @@ export default function GroupForm({
               </Typography>
               <CustomTextField
                 {...baseTextFieldProps('name', '', 'Inserisci il nome del gruppo', 700, 20)}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  setIsNameDuplicated(false);
+                }}
               />
+              {isNameDuplicated ? (
+                <Typography color="#F83E5A" sx={{ fontSize: '14px', paddingLeft: '15px' }}>
+                  Questo nome è già in uso
+                </Typography>
+              ) : undefined}
             </Grid>
           </Grid>
           <Grid item container spacing={3} marginBottom={5}>
@@ -413,7 +443,7 @@ export default function GroupForm({
             </Grid>
           </Grid>
 
-          <Grid item container spacing={3} marginBottom={1}>
+          <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
               <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
                 Referenti
@@ -472,7 +502,6 @@ export default function GroupForm({
                   })}
                 </CustomBox>
               </Select>
-
               <Grid>
                 {formik.values.members.map((s) => (
                   <Chip
@@ -497,7 +526,6 @@ export default function GroupForm({
                   />
                 ))}
               </Grid>
-              {isClone && automaticRemove && <AlertRemoveUsersInClone />}
             </Grid>
             {isClone && automaticRemove && <AlertRemoveUsersInClone />}
           </Grid>
