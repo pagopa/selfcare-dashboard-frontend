@@ -203,7 +203,11 @@ export default function GroupForm({
       ),
     });
 
-  const notifyErrorOnSave = (values: PartyGroupOnCreation | PartyGroupOnEdit, reason: any) =>
+  const notifyErrorOnSave = (
+    values: PartyGroupOnCreation | PartyGroupOnEdit,
+    reason: any,
+    displayableDescription: string
+  ) =>
     addError({
       component: 'Toast',
       id: isEdit ? 'EDIT_GROUP_ERROR' : isClone ? 'CLONE_GROUP_ERROR' : 'SAVE_GROUP_ERROR',
@@ -213,11 +217,7 @@ export default function GroupForm({
         : isClone
         ? 'ERRORE DURANTE LA DUPLICAZIONE'
         : 'ERRORE DURANTE LA CREAZIONE',
-      displayableDescription: isEdit
-        ? "C'è stato un errore durante la modifica del gruppo. Riprova"
-        : isClone
-        ? "C'è stato un errore durante la duplicazione del gruppo. Riprova"
-        : "C'è stato un errore durante la creazione del gruppo. Riprova.",
+      displayableDescription,
       techDescription: isEdit
         ? `An error occurred while edit of group ${values.name}`
         : isClone
@@ -226,27 +226,6 @@ export default function GroupForm({
       error: reason,
       toNotify: true,
     });
-
-  const notifyErrorOnGroupName = (values: PartyGroupOnCreation | PartyGroupOnEdit, reason: any) => {
-    addError({
-      component: 'Toast',
-      id: 'NAME_GROUP_ERROR',
-      blocking: false,
-      displayableTitle: isEdit
-        ? 'ERRORE DURANTE LA MODIFICA'
-        : isClone
-        ? 'ERRORE DURANTE LA DUPLICAZIONE'
-        : 'ERRORE DURANTE LA CREAZIONE',
-      displayableDescription: 'Il nome che hai scelto per il nuovo gruppo è già in uso. Cambialo',
-      techDescription: isEdit
-        ? `An error occurred while edit of group ${values.name}`
-        : isClone
-        ? `An error occurred while clone of group ${values.name}`
-        : `An error occurred while creation of group ${values.name}`,
-      error: reason,
-      toNotify: true,
-    });
-  };
 
   const save = (values: PartyGroupOnCreation) => {
     // eslint-disable-next-line functional/immutable-data
@@ -266,10 +245,22 @@ export default function GroupForm({
       .catch((reason) => {
         if (reason.httpStatus === 409) {
           setIsNameDuplicated(true);
-          notifyErrorOnGroupName(values, 409);
+          notifyErrorOnSave(
+            values,
+            reason,
+            'Il nome che hai scelto per il nuovo gruppo è già in uso. Cambialo'
+          );
         } else {
           setIsNameDuplicated(false);
-          notifyErrorOnSave(values, reason);
+          notifyErrorOnSave(
+            values,
+            reason,
+            isEdit
+              ? "C'è stato un errore durante la modifica del gruppo. Riprova"
+              : isClone
+              ? "C'è stato un errore durante la duplicazione del gruppo. Riprova"
+              : "C'è stato un errore durante la creazione del gruppo. Riprova."
+          );
         }
       })
       .finally(() => setLoadingSaveGroup(false));
@@ -350,9 +341,9 @@ export default function GroupForm({
           void formik.setFieldValue('members', (initialFormData as PartyGroupOnEdit).members, true);
         } else if (isClone) {
           const nextMembers = formik.values.members.filter((u) =>
-            u.products.filter((p) => p.id !== productSelected?.id)
+            u.products.find((p) => p.id === productSelected?.id)
           ); // u.status === 'ACTIVE' we want also the suspended users, however the status should be evaluated from user.products[current Product].status
-          if (containsInitialUsers()) {
+          if (!containsInitialUsers()) {
             setAutomaticRemove(true);
           }
           void formik.setFieldValue('members', nextMembers, true);
