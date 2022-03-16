@@ -1,9 +1,17 @@
 import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
+import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
+import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
 import { store } from '../redux/store';
 import { PartyUserOnCreation, PartyUserOnEdit } from '../model/PartyUser';
 import { ENV } from '../utils/env';
+import {
+  PartyGroup,
+  PartyGroupExt,
+  PartyGroupOnCreation,
+  PartyGroupOnEdit,
+} from '../model/PartyGroup';
 import { ProductRole } from '../model/ProductRole';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
@@ -179,5 +187,94 @@ export const DashboardApi = {
       body: { externalId: taxCode },
     });
     return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  deletePartyGroup: async (id: string): Promise<void> => {
+    const result = await apiClient.deleteUserGroupUsingDELETE({
+      id,
+    });
+    return extractResponse(result, 204, onRedirectToLogin);
+  },
+
+  deleteGroupRelation: async (userGroupId: string, userId: string): Promise<void> => {
+    const result = await apiClient.deleteMemberFromUserGroupUsingDELETE({
+      userGroupId,
+      userId,
+    });
+    return extractResponse(result, 204, onRedirectToLogin);
+  },
+  fetchPartyGroups: async (
+    productId: string,
+    institutionId: string,
+    pageRequest: PageRequest
+  ): Promise<PageResource<PartyGroup>> => {
+    const result = await apiClient.getUserGroupsUsingGET({
+      institutionId,
+      page: pageRequest.page,
+      size: pageRequest.size,
+      sort: pageRequest.sort ? [pageRequest.sort] : undefined,
+      productId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  fetchPartyGroup: async (id: string, institutionId: string): Promise<PartyGroupExt | null> => {
+    const result = await apiClient.getUserGroupByIdUsingGET({
+      id,
+      institutionId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  fetchUserGroups: async (
+    institutionId: string,
+    productId: string,
+    userId: string
+  ): Promise<Array<PartyGroup>> => {
+    const result = await apiClient.getUserGroupsUsingGET({
+      institutionId,
+      productId,
+      userId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  updatePartyGroup: async (id: string, group: PartyGroupOnEdit): Promise<void> => {
+    const result = await apiClient.updateUserGroupUsingPUT({
+      id,
+      body: {
+        description: group.description,
+        members: group.members.map((u) => u.id),
+        name: group.name,
+      },
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
+  },
+
+  updatePartyGroupStatusActivate: async (id: string): Promise<void> => {
+    const result = await apiClient.activateUserGroupUsingPOST({
+      id,
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
+  },
+
+  updatePartyGroupStatusSuspend: async (id: string): Promise<void> => {
+    const result = await apiClient.suspendUserGroupUsingPOST({
+      id,
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
+  },
+
+  savePartyGroup: async (group: PartyGroupOnCreation): Promise<void> => {
+    const result = await apiClient.createUserGroupUsingPOST({
+      body: {
+        description: group.description,
+        institutionId: group.institutionId,
+        members: group.members.map((u) => u.id),
+        name: group.name,
+        productId: group.productId,
+      },
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
   },
 };

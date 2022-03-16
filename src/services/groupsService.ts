@@ -2,6 +2,7 @@ import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest'
 import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { DashboardApi } from '../api/DashboardApiClient';
 import { Party } from '../model/Party';
 import {
   PartyGroup,
@@ -32,7 +33,7 @@ export const fetchPartyGroups = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchPartyGroupsMocked(party, product, currentUser, pageRequest);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.fetchPartyGroups(product.id, party.institutionId, pageRequest);
   }
 };
 
@@ -46,7 +47,7 @@ export const fetchPartyGroup = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchPartyGroupMocked(institutionId, groupId, currentUser, productsMap);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.fetchPartyGroup(groupId, institutionId);
   }
 };
 
@@ -59,7 +60,7 @@ export const savePartyGroup = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return savePartyGroupMocked(party, product, group);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.savePartyGroup(group);
   }
 };
 
@@ -72,7 +73,7 @@ export const updatePartyGroup = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return updatePartyGroupMocked(party, product, group);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.updatePartyGroup(group.id, group);
   }
 };
 
@@ -91,13 +92,13 @@ export const updatePartyGroupStatus = (
       party_id: party.institutionId,
       product: product.id,
     });
-    throw new Error('TODO');
+    return DashboardApi.updatePartyGroupStatusActivate(group.id);
   } else if (status === 'SUSPENDED') {
     trackEvent('GROUP_SUSPEND', {
       party_id: party.institutionId,
       product: product.id,
     });
-    throw new Error('TODO');
+    return DashboardApi.updatePartyGroupStatusSuspend(group.id);
   } else {
     throw new Error(`Not allowed next status: ${status}`);
   }
@@ -116,7 +117,7 @@ export const deletePartyGroup = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return deletePartyGroupMocked(party, product, group);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.deletePartyGroup(group.id);
   }
 };
 
@@ -134,7 +135,7 @@ export const deleteGroupRelation = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return deleteGroupRelationMocked(party, product, group, userId);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.deleteGroupRelation(group.id, userId);
   }
 };
 
@@ -151,6 +152,6 @@ export const fetchUserGroups = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchUserGroupsMocked(party, product, userId);
   } else {
-    throw new Error('TODO');
+    return DashboardApi.fetchUserGroups(party.institutionId, product.id, userId);
   }
 };
