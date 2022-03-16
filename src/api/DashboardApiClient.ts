@@ -199,7 +199,7 @@ export const DashboardApi = {
     institutionId: string,
     pageRequest: PageRequest
   ): Promise<PageResource<PartyGroup>> => {
-    const result = await apiClient.getGroupsByInstitutionAndProductIdsUsingGET({
+    const result = await apiClient.getUserGroupsUsingGET({
       institutionId,
       page: pageRequest.page,
       size: pageRequest.size,
@@ -217,8 +217,14 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  fetchUserGroups: async (userId: string): Promise<Array<PartyGroup>> => {
-    const result = await apiClient.getGroupsByUserIdUsingGET({
+  fetchUserGroups: async (
+    institutionId: string,
+    productId: string,
+    userId: string
+  ): Promise<Array<PartyGroup>> => {
+    const result = await apiClient.getUserGroupsUsingGET({
+      institutionId,
+      productId,
       userId,
     });
     return extractResponse(result, 200, onRedirectToLogin);

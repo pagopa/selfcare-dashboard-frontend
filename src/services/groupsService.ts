@@ -152,6 +152,6 @@ export const fetchUserGroups = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchUserGroupsMocked(party, product, userId);
   } else {
-    return DashboardApi.fetchUserGroups(userId);
+    return DashboardApi.fetchUserGroups(party.institutionId, product.id, userId);
   }
 };
