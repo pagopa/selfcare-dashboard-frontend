@@ -223,7 +223,7 @@ export default function GroupForm({
         : isClone
         ? `An error occurred while clone of group ${values.name}`
         : `An error occurred while creation of group ${values.name}`,
-      error: reason.httpStatus,
+      error: reason,
       toNotify: true,
     });
 
@@ -243,7 +243,7 @@ export default function GroupForm({
         : isClone
         ? `An error occurred while clone of group ${values.name}`
         : `An error occurred while creation of group ${values.name}`,
-      error: reason.httpStatus,
+      error: reason,
       toNotify: true,
     });
   };
