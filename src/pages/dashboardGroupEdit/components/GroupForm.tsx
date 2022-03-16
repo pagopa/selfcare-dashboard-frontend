@@ -35,7 +35,6 @@ import { LOADING_TASK_FETCH_USER_PRODUCT, LOADING_TASK_SAVE_GROUP } from '../../
 import { fetchPartyUsers } from '../../../services/usersService';
 import { useAppSelector } from '../../../redux/hooks';
 import AlertRemoveUsersInClone from '../components/AlertRemoveUsersInClone';
-import { mockedGroups } from '../../../services/__mocks__/groupsService';
 
 const CustomBox = styled(Box)({
   '&::-webkit-scrollbar': {
@@ -125,13 +124,12 @@ export default function GroupForm({
   const [productSelected, setProductSelected] = useState<Product>();
   const [productUsers, setProductUsers] = useState<Array<PartyUser>>([]);
   const [automaticRemove, setAutomaticRemove] = useState(false);
+  const [isNameDuplicated, setIsNameDuplicated] = useState(false);
 
   const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
   const onExit = useUnloadEventOnExit();
 
   const isEdit = !!(initialFormData as PartyGroupOnEdit).id;
-
-  const groups = mockedGroups; // TODO RemoveMe
 
   useEffect(() => {
     if (productSelected) {
@@ -234,14 +232,13 @@ export default function GroupForm({
       component: 'Toast',
       id: 'NAME_GROUP_ERROR',
       blocking: false,
-      displayableTitle:
-        !isEdit && !isClone
-          ? 'ERRORE DURANTE LA CREAZIONE'
-          : isClone
-          ? 'ERRORE DURANTE LA DUPLICAZIONE'
-          : undefined,
+      displayableTitle: isEdit
+        ? 'ERRORE DURANTE LA MODIFICA'
+        : isClone
+        ? 'ERRORE DURANTE LA DUPLICAZIONE'
+        : 'ERRORE DURANTE LA CREAZIONE',
       displayableDescription: 'Il nome che hai scelto per il nuovo gruppo è già in uso. Cambialo',
-      techDescription: !isEdit
+      techDescription: isEdit
         ? `An error occurred while edit of group ${values.name}`
         : isClone
         ? `An error occurred while clone of group ${values.name}`
@@ -266,11 +263,15 @@ export default function GroupForm({
         notifySuccessfulSave(values);
         goBackInner();
       })
-      .catch((reason) =>
-        !isEdit && reason.httpStatus === '409'
-          ? notifyErrorOnGroupName(values, reason)
-          : notifyErrorOnSave(values, reason)
-      )
+      .catch((reason) => {
+        if (reason.httpStatus === 409) {
+          setIsNameDuplicated(true);
+          notifyErrorOnGroupName(values, 409);
+        } else {
+          setIsNameDuplicated(false);
+          notifyErrorOnSave(values, reason);
+        }
+      })
       .finally(() => setLoadingSaveGroup(false));
   };
 
@@ -380,8 +381,12 @@ export default function GroupForm({
               </Typography>
               <CustomTextField
                 {...baseTextFieldProps('name', '', 'Inserisci il nome del gruppo', 700, 20)}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  setIsNameDuplicated(false);
+                }}
               />
-              {!isEdit && groups.find((g) => g.name === formik.values.name) ? (
+              {isNameDuplicated ? (
                 <Typography color="#F83E5A" sx={{ fontSize: '14px', paddingLeft: '15px' }}>
                   Questo nome è già in uso
                 </Typography>
@@ -468,23 +473,6 @@ export default function GroupForm({
                         Seleziona i referenti che vuoi assegnare al gruppo
                       </Typography>
                     ) : undefined}
-                    {selectedUsers.map((s) => (
-                      <Chip
-                        color="default"
-                        size="small"
-                        variant="outlined"
-                        key={s.id}
-                        label={s.name + ' ' + s.surname}
-                        onDelete={() =>
-                          formik.setFieldValue(
-                            'members',
-                            selectedUsers.filter((us) => us !== s),
-                            true
-                          )
-                        }
-                        deleteIcon={<ClearIcon onMouseDown={(e) => e.stopPropagation()} />}
-                      />
-                    ))}
                   </Box>
                 )}
               >
@@ -523,6 +511,30 @@ export default function GroupForm({
                   })}
                 </CustomBox>
               </Select>
+              <Grid>
+                {formik.values.members.map((s) => (
+                  <Chip
+                    sx={{
+                      fontWeight: 600,
+                      marginTop: 2.2,
+                      marginRight: 1.6,
+                    }}
+                    color="default"
+                    size="medium"
+                    variant="outlined"
+                    key={s.id}
+                    label={s.name + ' ' + s.surname}
+                    onDelete={() =>
+                      formik.setFieldValue(
+                        'members',
+                        formik.values.members.filter((us) => us !== s),
+                        true
+                      )
+                    }
+                    deleteIcon={<ClearIcon onMouseDown={(e) => e.stopPropagation()} />}
+                  />
+                ))}
+              </Grid>
             </Grid>
             {isClone && automaticRemove && <AlertRemoveUsersInClone />}
           </Grid>

@@ -223,19 +223,25 @@ export const savePartyGroup = (
   _product: Product,
   group: PartyGroupOnCreation
 ): Promise<any> => {
-  const clone: PartyGroup = {
-    ...group,
-    id: `${Date.now()}`,
-    status: 'ACTIVE',
-    membersIds: group.members.map((m) => m.id),
-    createdAt: new Date(),
-    createdByUserId: '0',
-    modifiedAt: new Date(),
-    modifiedByUserId: '0',
-  };
-  // eslint-disable-next-line functional/immutable-data
-  mockedGroups.push(clone);
-  return new Promise((resolve) => resolve(200));
+  const errorHttpStatus =
+    group.name === 'ERROR' ? 500 : group.name === 'DUPLICATE' ? 409 : undefined;
+  if (!errorHttpStatus) {
+    const clone: PartyGroup = {
+      ...group,
+      id: `${Date.now()}`,
+      status: 'ACTIVE',
+      membersIds: group.members.map((m) => m.id),
+      createdAt: new Date(),
+      createdByUserId: '0',
+      modifiedAt: new Date(),
+      modifiedByUserId: '0',
+    };
+    // eslint-disable-next-line functional/immutable-data
+    mockedGroups.push(clone);
+  }
+  return new Promise((resolve, error) =>
+    errorHttpStatus ? error({ httpStatus: errorHttpStatus }) : resolve(200)
+  );
 };
 
 export const updatePartyGroup = (
