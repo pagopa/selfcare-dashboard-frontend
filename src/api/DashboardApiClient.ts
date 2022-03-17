@@ -1,17 +1,11 @@
 import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
-import { PageResource } from '@pagopa/selfcare-common-frontend/model/PageResource';
 import { PageRequest } from '@pagopa/selfcare-common-frontend/model/PageRequest';
 import { store } from '../redux/store';
 import { PartyUserOnCreation, PartyUserOnEdit } from '../model/PartyUser';
 import { ENV } from '../utils/env';
-import {
-  PartyGroup,
-  PartyGroupExt,
-  PartyGroupOnCreation,
-  PartyGroupOnEdit,
-} from '../model/PartyGroup';
+import { PartyGroupOnCreation, PartyGroupOnEdit } from '../model/PartyGroup';
 import { ProductRole } from '../model/ProductRole';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
@@ -21,6 +15,8 @@ import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResour
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 import { UserResource } from './generated/b4f-dashboard/UserResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
+import { UserGroupPlainResource } from './generated/b4f-dashboard/UserGroupPlainResource';
+import { UserGroupResource } from './generated/b4f-dashboard/UserGroupResource';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
@@ -207,7 +203,7 @@ export const DashboardApi = {
     productId: string,
     institutionId: string,
     pageRequest: PageRequest
-  ): Promise<PageResource<PartyGroup>> => {
+  ): Promise<Array<UserGroupPlainResource>> => {
     const result = await apiClient.getUserGroupsUsingGET({
       institutionId,
       page: pageRequest.page,
@@ -218,7 +214,7 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  fetchPartyGroup: async (id: string, institutionId: string): Promise<PartyGroupExt | null> => {
+  fetchPartyGroup: async (id: string, institutionId: string): Promise<UserGroupResource | null> => {
     const result = await apiClient.getUserGroupByIdUsingGET({
       id,
       institutionId,
@@ -230,7 +226,7 @@ export const DashboardApi = {
     institutionId: string,
     productId: string,
     userId: string
-  ): Promise<Array<PartyGroup>> => {
+  ): Promise<Array<UserGroupPlainResource>> => {
     const result = await apiClient.getUserGroupsUsingGET({
       institutionId,
       productId,

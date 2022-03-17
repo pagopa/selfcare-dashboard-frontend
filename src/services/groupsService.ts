@@ -10,6 +10,8 @@ import {
   PartyGroupOnCreation,
   PartyGroupOnEdit,
   PartyGroupStatus,
+  usersGroupPlainResource2PartyGroup,
+  usersGroupResource2PartyGroupExt,
 } from '../model/PartyGroup';
 import { Product, ProductsMap } from '../model/Product';
 import {
@@ -33,7 +35,17 @@ export const fetchPartyGroups = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchPartyGroupsMocked(party, product, currentUser, pageRequest);
   } else {
-    return DashboardApi.fetchPartyGroups(product.id, party.institutionId, pageRequest);
+    return DashboardApi.fetchPartyGroups(product.id, party.institutionId, pageRequest).then(
+      (resources) => ({
+        content: resources?.map(usersGroupPlainResource2PartyGroup) ?? [],
+        page: {
+          number: pageRequest.page,
+          size: Math.min(pageRequest.size, resources?.length ?? 0),
+          totalElements: -1,
+          totalPages: -1,
+        },
+      })
+    );
   }
 };
 
@@ -47,7 +59,7 @@ export const fetchPartyGroup = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchPartyGroupMocked(institutionId, groupId, currentUser, productsMap);
   } else {
-    return DashboardApi.fetchPartyGroup(groupId, institutionId);
+    return DashboardApi.fetchPartyGroup(groupId, institutionId).then((resource) => resource ? usersGroupResource2PartyGroupExt(resource, currentUser, productsMap[resource.productId]));
   }
 };
 
@@ -152,6 +164,6 @@ export const fetchUserGroups = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchUserGroupsMocked(party, product, userId);
   } else {
-    return DashboardApi.fetchUserGroups(party.institutionId, product.id, userId);
+    return DashboardApi.fetchUserGroups(party.institutionId, product.id, userId).then((resources) => resources?.map(usersGroupPlainResource2PartyGroup) ?? []);;
   }
 };
