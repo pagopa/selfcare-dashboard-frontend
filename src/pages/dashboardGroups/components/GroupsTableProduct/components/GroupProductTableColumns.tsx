@@ -67,7 +67,7 @@ export function buildColumnDefs(
       hideSortIcons: true,
       disableColumnMenu: true,
       editable: false,
-      valueGetter: (params) => (params.row as PartyGroup).membersIds.length,
+      valueGetter: (params) => (params.row as PartyGroup).membersCount,
       renderCell: (params) => renderCell(params, undefined, onRowClick),
       renderHeader: showCustmHeader,
       sortable: false,

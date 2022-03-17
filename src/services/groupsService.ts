@@ -59,7 +59,11 @@ export const fetchPartyGroup = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchPartyGroupMocked(institutionId, groupId, currentUser, productsMap);
   } else {
-    return DashboardApi.fetchPartyGroup(groupId, institutionId).then((resource) => resource ? usersGroupResource2PartyGroupExt(resource, currentUser, productsMap[resource.productId]));
+    return DashboardApi.fetchPartyGroup(groupId, institutionId).then((resource) =>
+      resource
+        ? usersGroupResource2PartyGroupExt(resource, currentUser, productsMap[resource.productId])
+        : null
+    );
   }
 };
 
@@ -164,6 +168,8 @@ export const fetchUserGroups = (
   if (process.env.REACT_APP_API_MOCK_PARTY_GROUPS === 'true') {
     return fetchUserGroupsMocked(party, product, userId);
   } else {
-    return DashboardApi.fetchUserGroups(party.institutionId, product.id, userId).then((resources) => resources?.map(usersGroupPlainResource2PartyGroup) ?? []);;
+    return DashboardApi.fetchUserGroups(party.institutionId, product.id, userId).then(
+      (resources) => resources?.map(usersGroupPlainResource2PartyGroup) ?? []
+    );
   }
 };

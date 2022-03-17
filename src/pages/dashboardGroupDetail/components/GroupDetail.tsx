@@ -103,7 +103,7 @@ function GroupDetail({
         </Grid>
         <Grid item xs={8}>
           <Typography variant="body2" className={groupStatusClass}>
-            {`${partyGroup.createdBy.name} ${partyGroup.createdBy.surname}`}
+            {`${partyGroup.createdBy?.name} ${partyGroup.createdBy?.surname}`}
           </Typography>
         </Grid>
       </Grid>
@@ -127,7 +127,7 @@ function GroupDetail({
           <Typography
             variant="body2"
             className={groupStatusClass}
-          >{`${partyGroup.modifiedBy.name} ${partyGroup.modifiedBy.surname}`}</Typography>
+          >{`${partyGroup.modifiedBy?.name} ${partyGroup.modifiedBy?.surname}`}</Typography>
         </Grid>
       </Grid>
     </Grid>
