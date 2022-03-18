@@ -1797,6 +1797,16 @@
         ],
         "type": "object",
         "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Date on which the group was created",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "User by which the group was created",
+            "format": "uuid"
+          },
           "description": {
             "type": "string",
             "description": "Users group's description"
@@ -1813,6 +1823,16 @@
             "type": "integer",
             "description": "Number all the members of the group",
             "format": "int32"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "description": "Date on which the group was modified",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "description": "User by which the group was modified",
+            "format": "uuid"
           },
           "name": {
             "type": "string",
@@ -1867,7 +1887,7 @@
             "type": "array",
             "description": "List of all the members of the group",
             "items": {
-              "$ref": "#/components/schemas/PlainUserResource"
+              "$ref": "#/components/schemas/ProductUserResource"
             }
           },
           "modifiedAt": {
