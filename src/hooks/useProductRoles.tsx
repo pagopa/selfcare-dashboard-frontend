@@ -6,7 +6,7 @@ import {
   ProductsRolesMap,
 } from '../model/ProductRole';
 import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
-import { fetchProductRoles } from '../services/usersService';
+import { fetchProductRoles } from '../services/productService';
 
 export const useProductRoles = (): ((product: Product) => Promise<ProductRolesLists>) =>
   useReduxCachedValueParametricRetrieverTranscoded(

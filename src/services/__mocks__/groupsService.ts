@@ -330,17 +330,3 @@ export const deleteGroupRelation = (
   selectedGroup?.membersIds.splice(selectedGroup?.membersIds.indexOf(userId), 1);
   return new Promise<void>((resolve) => resolve());
 };
-
-export const fetchUserGroups = (
-  party: Party,
-  product: Product,
-  userId: string
-): Promise<Array<PartyGroup>> => {
-  const userGroups = mockedGroups.filter(
-    (g) =>
-      g.institutionId === party.institutionId &&
-      g.productId === product.id &&
-      g.membersIds.indexOf(userId) > -1
-  );
-  return new Promise((resolve) => resolve(userGroups));
-};

@@ -5,14 +5,14 @@ import { PartyGroupExt } from '../model/PartyGroup';
 import { ProductsMap } from '../model/Product';
 import { useAppSelector } from '../redux/hooks';
 import { fetchPartyGroup } from '../services/groupsService';
-import { LOADING_TASK_FETCH_PARTY_USER } from '../utils/constants';
+import { LOADING_TASK_FETCH_PARTY_GROUP } from '../utils/constants';
 
 export const useGroupDetail = (): ((
   institutionId: string,
   groupId: string,
   productsMap: ProductsMap
 ) => Promise<PartyGroupExt | null>) => {
-  const setLoading = useLoading(LOADING_TASK_FETCH_PARTY_USER);
+  const setLoading = useLoading(LOADING_TASK_FETCH_PARTY_GROUP);
   const currentUser = useAppSelector(userSelectors.selectLoggedUser) as User;
 
   return (

@@ -4,7 +4,8 @@ import { useHistory } from 'react-router';
 import { History } from 'history';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
-import { DASHBOARD_ROUTES, RouteConfig } from '../../../../routes';
+import { DASHBOARD_ROUTES } from '../../../../routes';
+import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
 import { useTokenExchange } from '../../../../hooks/useTokenExchange';
@@ -18,13 +19,13 @@ type Props = {
 const applicationLinkBehaviour = (
   history: History,
   onExit: (exitAction: () => void) => void,
-  route: RouteConfig,
+  path: string,
   pathVariables?: { [key: string]: string }
 ) => {
-  const path = pathVariables ? resolvePathVariables(route.path, pathVariables) : route.path;
+  const resolvedPath = pathVariables ? resolvePathVariables(path, pathVariables) : path;
   return {
-    onClick: () => onExit(() => history.push(path)),
-    isSelected: () => history.location.pathname === path,
+    onClick: () => onExit(() => history.push(resolvedPath)),
+    isSelected: () => history.location.pathname === resolvedPath,
   };
 };
 
@@ -45,7 +46,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
           groupId: 'selfCare',
           title: 'Panoramica',
           active: true,
-          ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW, {
+          ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
             institutionId: party.institutionId,
           }),
         },
@@ -54,7 +55,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
               groupId: 'selfCare',
               title: 'Referenti',
               active: true,
-              ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.PARTY_USERS, {
+              ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
                 institutionId: party.institutionId,
               }),
             }
@@ -64,7 +65,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
               groupId: 'selfCare',
               title: 'Gruppi',
               active: true,
-              ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.PARTY_GROUPS, {
+              ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.PARTY_GROUPS.path, {
                 institutionId: party.institutionId,
               }),
             }
@@ -92,7 +93,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
                 groupId: p.id,
                 title: 'Referenti',
                 active: p.authorized ?? false,
-                ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.PARTY_PRODUCT_USERS, {
+                ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.PRODUCT_USERS, {
                   institutionId: party.institutionId,
                   productId: p.id,
                 }),

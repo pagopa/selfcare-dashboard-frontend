@@ -8,7 +8,7 @@ import {
 import { useAppSelector } from '../redux/hooks';
 import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
 import { RootState } from '../redux/store';
-import { fetchProductRoles } from '../services/usersService';
+import { fetchProductRoles } from '../services/productService';
 
 export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);

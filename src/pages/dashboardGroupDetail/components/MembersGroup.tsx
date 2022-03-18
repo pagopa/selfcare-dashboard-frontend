@@ -3,11 +3,11 @@ import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useEffect, useState } from 'react';
 import { PartyGroupExt } from '../../../model/PartyGroup';
-import { DASHBOARD_ROUTES } from '../../../routes';
 import { Product } from '../../../model/Product';
 import { Party, UserStatus } from '../../../model/Party';
 import { ProductRolesLists, transcodeProductRole2Title } from '../../../model/ProductRole';
 import { PartyUser, PartyUserProduct } from '../../../model/PartyUser';
+import { ENV } from '../../../utils/env';
 import GroupMenu from './GroupMenu';
 
 type Props = {
@@ -75,14 +75,10 @@ export default function MembersGroup({
                 }}
                 onClick={() =>
                   history.push(
-                    resolvePathVariables(
-                      DASHBOARD_ROUTES.PARTY_USERS.subRoutes.PARTY_USER_DETAIL.path,
-                      {
-                        institutionId: partyGroup.institutionId,
-                        groupId: partyGroup.id,
-                        userId: member.id,
-                      }
-                    )
+                    resolvePathVariables(ENV.ROUTES.USERS_DETAIL, {
+                      institutionId: partyGroup.institutionId,
+                      userId: member.id,
+                    })
                   )
                 }
               >

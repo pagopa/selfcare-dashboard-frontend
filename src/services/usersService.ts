@@ -22,7 +22,6 @@ import {
   updatePartyUser as updatePartyUserMocked,
   updatePartyUserStatus as updatePartyUserStatusMocked,
   deletePartyUser as deletePartyUserMocked,
-  fetchProductRoles as fetchProductRolesMocked,
   fetchPartyUser as fetchPartyUserMocked,
   mockedUserRegistry,
 } from './__mocks__/usersService';
@@ -176,29 +175,6 @@ export const deletePartyUser = (
     return deletePartyUserMocked(party, user, product, role);
   } else {
     return DashboardApi.deletePartyRelation(role.relationshipId);
-  }
-};
-
-export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
-  /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PARTY_USERS === 'true') {
-    return fetchProductRolesMocked(product);
-  } else {
-    return DashboardApi.getProductRoles(product.id).then((roles) =>
-      roles
-        .map((pr) =>
-          pr.productRoles.map((r) => ({
-            productId: product.id,
-            partyRole: pr.partyRole,
-            selcRole: pr.selcRole,
-            multiroleAllowed: pr.multiroleAllowed,
-            productRole: r.code,
-            title: r.label,
-            description: r.description,
-          }))
-        )
-        .flatMap((x) => x)
-    );
   }
 };
 
