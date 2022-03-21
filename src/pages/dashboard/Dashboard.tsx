@@ -1,4 +1,4 @@
-import { Grid, Box } from '@mui/material';
+import { Grid, Box, useTheme } from '@mui/material';
 import { useMemo } from 'react';
 import { Route, Switch, useHistory } from 'react-router';
 import { useStore } from 'react-redux';
@@ -73,6 +73,7 @@ const Dashboard = () => {
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const store = useStore();
+  const theme = useTheme();
 
   const activeProducts: Array<Product> =
     useMemo(() => products?.filter((p) => p.status === 'ACTIVE'), [products]) ?? [];
@@ -106,6 +107,7 @@ const Dashboard = () => {
               productsMap={productsMap}
               history={history}
               store={store}
+              theme={theme}
               decorators={decorators}
             />
           </Route>
@@ -117,6 +119,7 @@ const Dashboard = () => {
               productsMap={productsMap}
               history={history}
               store={store}
+              theme={theme}
               decorators={decorators}
             />
           </Route>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { History } from 'history';
+import { Theme } from '@mui/material';
 import { DashboardDecoratorsType } from '../pages/dashboard/Dashboard';
 import { Party } from '../model/Party';
 import { Product, ProductsMap } from '../model/Product';
@@ -14,6 +15,7 @@ export type DashboardPageProps = {
 
 export type MicroserviceProps = {
   history: History;
+  theme: Theme;
   store: ReturnType<typeof createStore>;
 };
 
@@ -27,6 +29,7 @@ const RemoteRoutingUsers = React.lazy(() => import('selfcareUsers/RoutingUsers')
 export default ({
   history,
   store,
+  theme,
   decorators,
   party,
   products,
@@ -37,6 +40,7 @@ export default ({
     <RemoteRoutingUsers
       history={history}
       store={store}
+      theme={theme}
       decorators={decorators}
       party={party}
       products={products}

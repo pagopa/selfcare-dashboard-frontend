@@ -4,8 +4,7 @@ const commonDependencies = require('@pagopa/selfcare-common-frontend/package.jso
 module.exports = {
   name: 'host',
   remotes: {
-    // selfcareUsers: `selfcareUsers@${process.env.MICROFRONTEND_URL_USERS}/remoteEntry.js`, TODO
-    selfcareUsers: `selfcareUsers@http://localhost:3001/remoteEntry.js`,
+    selfcareUsers: `selfcareUsers@${process.env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
   },
   shared: {
     '@pagopa/selfcare-common-frontend': {

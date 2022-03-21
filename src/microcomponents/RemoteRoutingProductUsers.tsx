@@ -12,6 +12,7 @@ const RemoteRoutingProductUsers = React.lazy(() => import('selfcareUsers/Routing
 export default ({
   history,
   store,
+  theme,
   decorators,
   party,
   products,
@@ -22,6 +23,7 @@ export default ({
     <RemoteRoutingProductUsers
       history={history}
       store={store}
+      theme={theme}
       decorators={decorators}
       party={party}
       products={products}
