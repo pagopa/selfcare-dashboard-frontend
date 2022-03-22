@@ -1,5 +1,6 @@
 import { Card, Grid, Box, Typography } from '@mui/material';
 import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
+import { useTranslation } from 'react-i18next';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function ActiveProductCard({ party, product }: Props) {
+  const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
   const isDisabled = product.authorized === false;
   const lastServiceActivationDate = undefined; // actually this info is not available
@@ -24,12 +26,13 @@ export default function ActiveProductCard({ party, product }: Props) {
             cardTitle={product.title}
             cardSubTitle={
               product.activationDateTime
-                ? `Attivo dal ${
+                ? t('overview.activeProductCard.activationOf') +
+                  `${
                     product.activationDateTime && formatDateAsLongString(product.activationDateTime)
                   }`
-                : 'Attivo'
+                : t('overview.activeProductCard.active')
             }
-            buttonLabel="Gestisci"
+            buttonLabel={t('overview.activeProductCard.buttonLabel')}
             urlLogo={product.logo}
             tag={product.tag}
             btnAction={() => invokeProductBo(product, party)}
@@ -39,9 +42,10 @@ export default function ActiveProductCard({ party, product }: Props) {
             heightButton="45px"
           />
           {lastServiceActivationDate && (
-            <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>{`Ultimo servizio attivato: ${
-              lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)
-            }`}</Typography>
+            <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>
+              {t('overview.lastServiceActive') +
+                `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
+            </Typography>
           )}
         </Box>
       </Card>

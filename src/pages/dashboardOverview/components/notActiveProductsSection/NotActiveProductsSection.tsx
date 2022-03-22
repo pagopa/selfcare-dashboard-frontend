@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import { useTranslation } from 'react-i18next';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
 import NotActiveProductCard from './components/NotActiveProductCard';
@@ -11,11 +12,12 @@ type Props = {
 };
 
 export default function NotActiveProductsSection({ party, products }: Props) {
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <TitleBox
-        title="Scopri i nuovi prodotti"
-        subTitle="Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi."
+        title={t('overview.notActiveProductSection.title')}
+        subTitle={t('overview.notActiveProductSection.subTitle')}
         mbTitle={1}
         mtTitle={10}
         mbSubTitle={6}

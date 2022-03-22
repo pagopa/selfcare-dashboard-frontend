@@ -2,6 +2,7 @@ import { Card, Grid, Link } from '@mui/material';
 import { Box } from '@mui/material';
 import { SessionModal } from '@pagopa/selfcare-common-frontend';
 import { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { ENV } from '../../../../../utils/env';
@@ -18,6 +19,7 @@ const goToOnboarding = (product: Product, party: Party): void =>
   );
 
 export default function NotActiveProductCard({ party, product }: Props) {
+  const { t } = useTranslation();
   const [onboardingPendingProduct, setOnboardingPendingProduct] = useState<Product | undefined>();
 
   return (
@@ -30,7 +32,7 @@ export default function NotActiveProductCard({ party, product }: Props) {
             disableBtn={false}
             cardTitle={product.title}
             cardSubTitle={product.description}
-            buttonLabel="Aderisci"
+            buttonLabel={t('notActiveProductCard.buttonLabel')}
             urlLogo={product.logo}
             tag={product.tag}
             btnAction={() => {
@@ -51,13 +53,15 @@ export default function NotActiveProductCard({ party, product }: Props) {
             <Grid item xs={12} px={2}>
               <Box mb={3}>
                 {product.urlPublic && (
-                  <Link
-                    underline="none"
-                    sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
-                    href={product.urlPublic}
-                  >
-                    {'SCOPRI DI PIÙ →'}
-                  </Link>
+                  <Trans i18nKey="discoverMore">
+                    <Link
+                      underline="none"
+                      sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
+                      href={product.urlPublic}
+                    >
+                      {'SCOPRI DI PIÙ →'}
+                    </Link>
+                  </Trans>
                 )}
               </Box>
             </Grid>
@@ -67,11 +71,11 @@ export default function NotActiveProductCard({ party, product }: Props) {
       <SessionModal
         open={!!onboardingPendingProduct}
         handleClose={() => setOnboardingPendingProduct(undefined)}
-        title="Adesione in corso"
-        message="Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?"
-        onConfirmLabel="Procedi con una nuova adesione"
+        title={t('overview.adhesionPopup.title')}
+        message={t('overview.adhesionPopup.description')}
+        onConfirmLabel={t('overview.adhesionPopup.confirmButton')}
         onConfirm={() => goToOnboarding(onboardingPendingProduct as Product, party)}
-        onCloseLabel="Esci"
+        onCloseLabel={t('overview.adhesionPopup.closeButton')}
       />
     </Grid>
   );

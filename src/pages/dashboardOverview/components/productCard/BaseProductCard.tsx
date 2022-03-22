@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Button, Box, Grid, Card, CardContent } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   cardTitle: string;
@@ -41,6 +42,7 @@ export default function BaseProductCard({
   titleFontSize = '32px',
   subTitleFontSize = '18px',
 }: Props) {
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <Card sx={{ border: 'none', boxShadow: 'none' }}>
@@ -85,7 +87,7 @@ export default function BaseProductCard({
           <Grid item xs={12} height={heightTitle} display="flex" alignItems={'center'}>
             {cardTitle && (
               <Typography variant="h2" sx={{ fontSize: titleFontSize }}>
-                {cardTitle}
+                {(t('overview.baseProductCard.title'), { title: cardTitle })}
               </Typography>
             )}
           </Grid>
@@ -96,7 +98,7 @@ export default function BaseProductCard({
                 sx={{ ...cardSubTitleStyle, fontSize: subTitleFontSize }}
                 title={cardSubTitle.toString()}
               >
-                {cardSubTitle}
+                {(t('overview.baseProductCard.subTitle'), { subTitle: cardSubTitle })}
               </Typography>
             )}
           </Grid>
@@ -109,7 +111,7 @@ export default function BaseProductCard({
                 variant="contained"
                 sx={{ width: '100%', height: '48px' }}
               >
-                {buttonLabel}
+                {(t('overview.baseProductCard.buttonLabel'), { buttonLabel })}
               </Button>
             </Box>
           </Grid>

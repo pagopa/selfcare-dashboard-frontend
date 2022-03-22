@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { uniqueId } from 'lodash';
+import { TFunction, useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
@@ -15,23 +16,24 @@ type Props = {
   canUploadLogo: boolean;
 };
 
-const getLabelLinkText = () =>
+const getLabelLinkText = (t: TFunction<'translation', undefined>) =>
   document.querySelector('#partyLogo')?.children[0].tagName === 'svg'
-    ? 'Carica il logo del tuo Ente'
-    : 'Modifica Logo';
+    ? t('overview.partyLogo.upload')
+    : t('overview.partyLogo.modify');
 
 export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
   const dispatch = useAppDispatch();
   const setUrlLogo = (urlLogo?: string) =>
     dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
-  const [labelLink, setLabelLink] = useState('Modifica Logo');
+  const [labelLink, setLabelLink] = useState(t('overview.partyLogo.modify') as string);
   const addError = useErrorDispatcher();
 
   useEffect(() => {
-    setTimeout(() => setLabelLink(getLabelLinkText()), 400);
+    setTimeout(() => setLabelLink(getLabelLinkText(t)), 400);
   }, [urlLogo]);
 
   const maxLength = 400;
@@ -43,9 +45,8 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
       blocking: false,
       error: new Error(),
       techDescription: `Wrong File Extension : ${files[0]}`,
-      displayableTitle: 'Caricamento non riuscito',
-      displayableDescription:
-        'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo',
+      displayableTitle: t('overview.partyLogo.uploadError.title'),
+      displayableDescription: t('overview.partyLogo.uploadError.description'),
       toNotify: false,
       onRetry: open,
     });
@@ -62,7 +63,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         .then(() => {
           setUrlLogo(urlLogo);
           setLoading(false);
-          setLabelLink('Modifica Logo');
+          setLabelLink(t);
           trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', {
             party_id: institutionId,
             request_id: requestId,
@@ -79,12 +80,12 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
             blocking: false,
             error: reason,
             techDescription: 'An error occurred while uploading new logo',
-            displayableTitle: 'Caricamento non riuscito',
-            displayableDescription: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
+            displayableTitle: t('overview.partyLogo.modifyError.title'),
+            displayableDescription: t('overview.partyLogo.modifyError.description'),
             toNotify: false,
             onRetry: open,
           });
-          setLabelLink(getLabelLinkText());
+          setLabelLink(getLabelLinkText(t));
         });
     },
     onDropRejected: onFileRejected,
