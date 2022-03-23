@@ -5,8 +5,9 @@ import {
   applySort,
   extractPageRequest,
 } from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
+import { cloneDeep } from 'lodash';
 import { Party } from '../../model/Party';
-import { PartyUser } from '../../model/PartyUser';
+import { PartyUser, PartyUserSimple } from '../../model/PartyUser';
 import { Product, ProductsMap } from '../../model/Product';
 import {
   PartyGroup,
@@ -17,7 +18,13 @@ import {
 } from '../../model/PartyGroup';
 import { mockedUsers } from './usersService';
 
-export const mockedGroups: Array<PartyGroup> = [
+type PartyGroupMock = PartyGroup & {
+  membersIds: Array<string>;
+  createdByUserId: string;
+  modifiedByUserId: string;
+};
+
+export const mockedGroups: Array<PartyGroupMock> = [
   {
     id: 'groupId1',
     name: 'Gruppo1',
@@ -192,7 +199,11 @@ export const mockedGroups: Array<PartyGroup> = [
     modifiedAt: new Date('2022-01-01 16:00'),
     modifiedByUserId: 'uid',
   },
-];
+].map((o) => ({
+  ...o,
+  membersCount: o.membersIds.length,
+  status: o.status as PartyGroupStatus,
+}));
 
 export const fetchPartyGroups = (
   party: Party,
@@ -208,7 +219,7 @@ export const fetchPartyGroups = (
       }
       return product.id.indexOf(u.productId) > -1;
     })
-    .map((u) => JSON.parse(JSON.stringify(u)));
+    .map((u) => cloneDeep(u));
 
   if (pageRequest.sort) {
     applySort(filteredContent, pageRequest.sort);
@@ -226,11 +237,12 @@ export const savePartyGroup = (
   const errorHttpStatus =
     group.name === 'ERROR' ? 500 : group.name === 'DUPLICATE' ? 409 : undefined;
   if (!errorHttpStatus) {
-    const clone: PartyGroup = {
+    const clone: PartyGroupMock = {
       ...group,
       id: `${Date.now()}`,
       status: 'ACTIVE',
       membersIds: group.members.map((m) => m.id),
+      membersCount: group.members.length,
       createdAt: new Date(),
       createdByUserId: '0',
       modifiedAt: new Date(),
@@ -250,10 +262,11 @@ export const updatePartyGroup = (
   group: PartyGroupOnEdit
 ): Promise<any> => {
   const updatingGroupIndex = mockedGroups.findIndex((u) => u.id === group.id);
-  const clone: PartyGroup = {
+  const clone: PartyGroupMock = {
     ...mockedGroups[updatingGroupIndex],
     ...group,
     membersIds: group.members.map((m) => m.id),
+    membersCount: group.members.length,
     modifiedAt: new Date(),
     modifiedByUserId: '0',
   };
@@ -272,14 +285,20 @@ export const fetchPartyGroup = (
     mockedGroups.find((u) => u.id === groupId && u.institutionId === institutionId) ?? null;
 
   if (mockedGroup !== null) {
-    const clone: PartyGroupExt = JSON.parse(JSON.stringify(mockedGroup));
+    const clone: PartyGroupMock = cloneDeep(mockedGroup);
     // eslint-disable-next-line functional/immutable-data
-    clone.members = clone.membersIds.map((m) => mockedUsers.find((u) => u.id === m) as PartyUser);
+    (clone as unknown as PartyGroupExt).members = clone.membersIds.map(
+      (m) => mockedUsers.find((u) => u.id === m) as PartyUser
+    );
     // eslint-disable-next-line functional/immutable-data
-    clone.createdBy = mockedUsers.find((u) => u.id === clone.createdByUserId) as PartyUser;
+    (clone as unknown as PartyGroupExt).createdBy = mockedUsers.find(
+      (u) => u.id === clone.createdByUserId
+    ) as PartyUserSimple;
     // eslint-disable-next-line functional/immutable-data
-    clone.modifiedBy = mockedUsers.find((u) => u.id === clone.modifiedByUserId) as PartyUser;
-    return new Promise((resolve) => resolve(clone));
+    (clone as unknown as PartyGroupExt).modifiedBy = mockedUsers.find(
+      (u) => u.id === clone.modifiedByUserId
+    ) as PartyUser;
+    return new Promise((resolve) => resolve(clone as unknown as PartyGroupExt));
   } else {
     return new Promise((resolve) => resolve(null));
   }
@@ -292,7 +311,7 @@ export const updatePartyGroupStatus = (
   status: PartyGroupStatus
 ): Promise<any> => {
   if (status === 'ACTIVE' || status === 'SUSPENDED') {
-    const clone = { ...group, status };
+    const clone = { ...group, status } as PartyGroupMock;
     // eslint-disable-next-line functional/immutable-data
     mockedGroups.splice(
       mockedGroups.findIndex((u) => u.id === group.id),

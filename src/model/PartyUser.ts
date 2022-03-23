@@ -18,6 +18,12 @@ export type PartyUser = {
   certification: boolean;
 };
 
+export type PartyUserSimple = {
+  id: string;
+  name: string;
+  surname: string;
+};
+
 export type PartyUserProduct = {
   id: string;
   title: string;
