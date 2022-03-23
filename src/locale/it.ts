@@ -117,4 +117,10 @@ export default {
   membersGroup: {
     memberName: ' (tu)',
   },
+  dashboardGroupEdit: {
+    alertRemoveUsersInClone: {
+      label: `Alcuni referenti sono stati eliminati dal gruppo duplicato perchè <1> non presenti </1> nel prodotto selezionato o perchè <3>sospesi</3>. Puoi comunque assegnare altri referenti al gruppo duplicato.`,
+    },
+    GroupForm: {},
+  },
 };
