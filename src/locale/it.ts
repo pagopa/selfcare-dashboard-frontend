@@ -177,4 +177,11 @@ export default {
       subTitle: `Duplica il gruppo e modifica i dati`,
     },
   },
+  dashboardGroup: {
+    groupsPage: {
+      title: 'Gruppi',
+      subTitle:
+        'Consulta e crea dei gruppi (es. uno per ogni Dipartimento o Ufficio) in modo da gestire meglio il lavoro del tuo Ente.',
+    },
+  },
 };
