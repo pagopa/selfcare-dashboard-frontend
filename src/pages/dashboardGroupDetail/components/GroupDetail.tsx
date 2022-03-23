@@ -104,9 +104,13 @@ function GroupDetail({
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography variant="body2" className={groupStatusClass}>
-            {`${partyGroup.createdBy?.name} ${partyGroup.createdBy?.surname}`}
-          </Typography>
+          {partyGroup.createdBy ? (
+            <Typography variant="body2" className={groupStatusClass}>
+              {`${partyGroup.createdBy.name} ${partyGroup.createdBy?.surname}`}
+            </Typography>
+          ) : (
+            ''
+          )}
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
@@ -130,10 +134,14 @@ function GroupDetail({
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography
-            variant="body2"
-            className={groupStatusClass}
-          >{`${partyGroup.modifiedBy?.name} ${partyGroup.modifiedBy?.surname}`}</Typography>
+          {partyGroup.modifiedBy ? (
+            <Typography
+              variant="body2"
+              className={groupStatusClass}
+            >{`${partyGroup.modifiedBy?.name} ${partyGroup.modifiedBy?.surname}`}</Typography>
+          ) : (
+            ''
+          )}
         </Grid>
       </Grid>
     </Grid>
