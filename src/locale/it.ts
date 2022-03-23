@@ -158,7 +158,23 @@ export default {
       },
     },
     addGroupPage: {
+      groupPathDescription: 'Gruppi',
       pathDescription: 'Crea un nuovo gruppo',
+      title: 'Crea un nuovo gruppo',
+      subTitle: `Inserisci i dati del gruppo che vuoi creare e assegna a gestire i gruppi per il {{partyDescription}}.`,
+    },
+    cloneGroupPage: {
+      groupPathDescription: 'Gruppi',
+      pathDescription: 'Duplica gruppo',
+      title: 'Duplica gruppo',
+      subTitle: `Duplica il gruppo e modifica i dati`,
+      placeholderDuplicateName: 'Copia di ',
+    },
+    editGroupPage: {
+      groupPathDescription: 'Gruppi',
+      pathDescription: 'Modifica gruppo',
+      title: 'Modifica gruppo',
+      subTitle: `Duplica il gruppo e modifica i dati`,
     },
   },
 };

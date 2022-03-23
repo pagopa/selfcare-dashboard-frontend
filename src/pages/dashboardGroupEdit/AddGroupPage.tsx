@@ -21,7 +21,7 @@ function AddGroupPage({ party, activeProducts, productsMap }: Props) {
   const { t } = useTranslation();
   const paths = [
     {
-      description: 'Gruppi',
+      description: t('dashboardGroupEdit.addGroupPage.groupPathDescription'),
       onClick: () =>
         history.push(
           resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.MAIN.path, {
@@ -47,8 +47,10 @@ function AddGroupPage({ party, activeProducts, productsMap }: Props) {
       </Grid>
       <Grid item xs={12} mb={9}>
         <TitleBox
-          title="Crea un nuovo gruppo"
-          subTitle={`Inserisci i dati del gruppo che vuoi creare e assegna a gestire i gruppi per il ${party.description}.`}
+          title={t('dashboardGroupEdit.addGroupPage.title')}
+          subTitle={t('dashboardGroupEdit.addGroupPage.subTitle', {
+            partyDescription: `${party.description}`,
+          })}
         />
       </Grid>
       <Grid item xs={12}>
