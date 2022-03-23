@@ -2,6 +2,7 @@ import { Grid } from '@mui/material';
 import { TitleBox } from '@pagopa/selfcare-common-frontend';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import { Party } from '../../model/Party';
 import { PartyGroupOnCreation } from '../../model/PartyGroup';
@@ -17,7 +18,7 @@ type Props = {
 
 function AddGroupPage({ party, activeProducts, productsMap }: Props) {
   const history = useHistory();
-
+  const { t } = useTranslation();
   const paths = [
     {
       description: 'Gruppi',
@@ -29,7 +30,7 @@ function AddGroupPage({ party, activeProducts, productsMap }: Props) {
         ),
     },
     {
-      description: 'Crea un nuovo gruppo',
+      description: t('dashboardGroupEdit.addGroupPage.pathDescription'),
     },
   ];
 

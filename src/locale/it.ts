@@ -121,6 +121,44 @@ export default {
     alertRemoveUsersInClone: {
       label: `Alcuni referenti sono stati eliminati dal gruppo duplicato perchè <1> non presenti </1> nel prodotto selezionato o perchè <3>sospesi</3>. Puoi comunque assegnare altri referenti al gruppo duplicato.`,
     },
-    GroupForm: {},
+    groupForm: {
+      formLabels: {
+        groupName: 'Nome del gruppo',
+        groupNameDuplicated: 'Questo nome è già in uso',
+        groupNamePlaceholder: 'Inserisci il nome del gruppo',
+        description: 'Descrizione',
+        descriptionPlaceholder: 'Inserisci una descrizione',
+        product: 'Prodotto',
+        prductPlaceholter: 'Seleziona il prodotto',
+        noProductSelected: 'Nessun prodotto selezionato',
+        referents: 'Referenti',
+        referentsPlaceholter: 'Seleziona i referenti che vuoi assegnare al gruppo',
+        cancelActionLabel: 'Annulla',
+        confirmActionLabel: 'Conferma',
+      },
+      notifySuccessfulSave: {
+        isEdit: 'Hai modificato correttamente il gruppo ',
+        isClone: 'Hai duplicato correttamente il gruppo ',
+        isCreate: 'Hai creato correttamente il gruppo ',
+        message: `<0>{{valuesName}}</0> per il prodotto <2>{{productSelectedtitle}}</>`,
+      },
+      notifyErrorOnSave: {
+        isEdit: 'ERRORE DURANTE LA MODIFICA ',
+        isClone: 'ERRORE DURANTE LA DUPLICAZIONE',
+        isCreate: 'ERRORE DURANTE LA CREAZIONE',
+        displayableDescriptionEdit: `An error occurred while edit of group {{valuesName}}`,
+        displayableDescriptionClone: `An error occurred while clone of group {{valuesName}}`,
+        displayableDescriptionCreate: `An error occurred while creation of group {{valuesName}}`,
+      },
+      save: {
+        groupNameAlreadyExists: 'Il nome che hai scelto per il nuovo gruppo è già in uso. Cambialo',
+        isEdit: "C'è stato un errore durante la modifica del gruppo. Riprova.",
+        isClone: "C'è stato un errore durante la duplicazione del gruppo. Riprova.",
+        isCreate: "C'è stato un errore durante la creazione del gruppo. Riprova.",
+      },
+    },
+    addGroupPage: {
+      pathDescription: 'Crea un nuovo gruppo',
+    },
   },
 };
