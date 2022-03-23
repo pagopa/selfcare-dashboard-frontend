@@ -30,11 +30,11 @@ export default {
         referents: 'Referenti',
       },
     },
-    activeProductSection: {
+    activeProductsSection: {
       title: 'Prodotti attivi',
       subTitle: 'I prodotti PagoPA a cui il tuo Ente ha aderito.',
     },
-    activeProductCard: {
+    activeProducts: {
       tag: '{{tag}}',
       productName: '{{productName}}',
       activationOf: 'Attivo dal ',
@@ -42,14 +42,15 @@ export default {
       manageButton: 'Gestisci',
     },
     lastServiceActive: 'Ultimo servizio attivato: ',
-    notActiveProductSection: {
+    notActiveProductsSection: {
       title: 'Scopri i nuovi prodotti',
       subTitle: 'Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi.',
     },
-    notActiveProductCard: {
+    notActiveProducts: {
+      tag: '{{tag}}',
       productName: '{{productName}}',
       productDescription: '{{productDescription}}',
-      buttonLabel: 'Aderisci',
+      joinButton: 'Aderisci',
     },
     discoverMore: '<0> SCOPRI DI PIÙ → </0>',
     adhesionPopup: {
@@ -58,6 +59,12 @@ export default {
         'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?',
       confirmButton: 'Procedi con una nuova adesione',
       closeButton: 'Esci',
+    },
+    productInfo: {
+      tag: '{{tag}}',
+      productName: '{{productName}}',
+      activationInfo: '{{activationInfo}}',
+      manageButton: '{{manageButton}}',
     },
     partyLogo: {
       upload: 'Carica il logo del tuo Ente',
@@ -71,8 +78,6 @@ export default {
         title: 'Caricamento non riuscito',
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
-    },
-    partyDescription: {
       type: 'formato .png',
       size: 'dimensione 300x300px',
     },

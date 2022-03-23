@@ -78,7 +78,7 @@ export default function BaseProductCard({
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    {tag ? t('overview.activeProductCard.tag', { tag: `${tag}` }) : ''}
+                    {tag ? t('overview.productInfo.tag', { tag: `${tag}` }) : ''}
                   </Typography>
                 </Box>
               </Grid>
@@ -87,7 +87,7 @@ export default function BaseProductCard({
           <Grid item xs={12} height={heightTitle} display="flex" alignItems={'center'}>
             {cardTitle && (
               <Typography variant="h2" sx={{ fontSize: titleFontSize }}>
-                {t('overview.activeProductCard.productName', { productName: `${cardTitle}` })}
+                {t('overview.productInfo.productName', { productName: `${cardTitle}` })}
               </Typography>
             )}
           </Grid>
@@ -98,7 +98,7 @@ export default function BaseProductCard({
                 sx={{ ...cardSubTitleStyle, fontSize: subTitleFontSize }}
                 title={cardSubTitle.toString()}
               >
-                {t('overview.activeProductCard.activationOf', { activationOf: `${cardSubTitle}` })}
+                {t('overview.productInfo.activationInfo', { activationInfo: `${cardSubTitle}` })}
               </Typography>
             )}
           </Grid>
@@ -111,7 +111,7 @@ export default function BaseProductCard({
                 variant="contained"
                 sx={{ width: '100%', height: '48px' }}
               >
-                {t('overview.activeProductCard.manageButton', { manageButton: `${buttonLabel}` })}
+                {t('overview.productInfo.manageButton', { manageButton: `${buttonLabel}` })}
               </Button>
             </Box>
           </Grid>

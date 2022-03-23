@@ -23,20 +23,20 @@ export default function ActiveProductCard({ party, product }: Props) {
         <Box mx={8} my={5}>
           <BaseProductCard
             disableBtn={isDisabled}
-            cardTitle={t('overview.activeProductCard.productName', {
+            cardTitle={t('overview.activeProducts.productName', {
               productName: `${product.title}`,
             })}
             cardSubTitle={
               product.activationDateTime
-                ? t('overview.activeProductCard.activationOf') +
+                ? t('overview.activeProducts.activationOf') +
                   `${
                     product.activationDateTime && formatDateAsLongString(product.activationDateTime)
                   }`
-                : t('overview.activeProductCard.active')
+                : t('overview.activeProducts.active')
             }
-            buttonLabel={t('overview.activeProductCard.manageButton')}
+            buttonLabel={t('overview.activeProducts.manageButton')}
             urlLogo={product.logo}
-            tag={product.tag ? t('overview.activeProductCard.tag', { tag: `${product.tag}` }) : ''}
+            tag={product.tag && t('overview.activeProducts.tag', { tag: `${product.tag}` })}
             btnAction={() => invokeProductBo(product, party)}
             heightLogo="70px"
             heightTitle="80px"

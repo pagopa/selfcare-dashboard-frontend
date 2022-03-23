@@ -16,8 +16,8 @@ export default function NotActiveProductsSection({ party, products }: Props) {
   return (
     <React.Fragment>
       <TitleBox
-        title={t('overview.notActiveProductSection.title')}
-        subTitle={t('overview.notActiveProductSection.subTitle')}
+        title={t('overview.notActiveProductsSection.title')}
+        subTitle={t('overview.notActiveProductsSection.subTitle')}
         mbTitle={1}
         mtTitle={10}
         mbSubTitle={6}

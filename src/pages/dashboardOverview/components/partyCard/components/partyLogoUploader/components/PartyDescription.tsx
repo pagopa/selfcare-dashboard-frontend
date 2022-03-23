@@ -33,7 +33,7 @@ export function PartyDescription({ labelLink, open }: Props) {
           mt: 1,
         }}
       >
-        {t('overview.partyDescription.type')}
+        {t('overview.partyLogo.type')}
       </Typography>
       <Typography
         variant="body2"
@@ -45,7 +45,7 @@ export function PartyDescription({ labelLink, open }: Props) {
           mt: 1,
         }}
       >
-        {t('overview.partyDescription.size')}
+        {t('overview.partyLogo.size')}
       </Typography>
     </Grid>
   );
