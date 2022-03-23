@@ -22,14 +22,11 @@ function GroupDetail({
   party,
   productRolesLists,
 }: Props) {
-  function formatDate(data: any) {
-    const datePart = data.match(/\d+/g);
-    const year = datePart[0];
-    const month = datePart[1];
-    const day = datePart[2];
-
-    return `${day}/${month}/${year}`;
+  function formatDate(data?: Date) {
+    const d = new Date(data as Date);
+    return d.toLocaleDateString('it', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
+
   const groupStatusClass = isSuspended ? 'CustomDisabledLabel' : 'CustomInfoStyle';
   return (
     <Grid container spacing={2}>
@@ -91,10 +88,15 @@ function GroupDetail({
             DATA CREAZIONE
           </Typography>
         </Grid>
+
         <Grid item xs={8}>
-          <Typography variant="body2" className={groupStatusClass}>
-            {formatDate(partyGroup.createdAt)}
-          </Typography>
+          {partyGroup.createdAt ? (
+            <Typography variant="body2" className={groupStatusClass}>
+              {formatDate(partyGroup.createdAt)}
+            </Typography>
+          ) : (
+            ''
+          )}
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
@@ -114,9 +116,13 @@ function GroupDetail({
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography variant="body2" className={groupStatusClass}>
-            {formatDate(partyGroup.modifiedAt)}
-          </Typography>
+          {partyGroup.modifiedAt ? (
+            <Typography variant="body2" className={groupStatusClass}>
+              {formatDate(partyGroup.modifiedAt)}
+            </Typography>
+          ) : (
+            ''
+          )}
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">

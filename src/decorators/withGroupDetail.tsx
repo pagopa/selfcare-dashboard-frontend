@@ -29,7 +29,7 @@ export default function withGroupDetail<T extends withGroupDetailProps>(
   const ComponentWithGroupDetail = (props: T) => {
     const { institutionId, groupId } = useParams<GroupUrlParams>();
 
-    const fetchUserDetail = useGroupDetail();
+    const fetchGroupDetail = useGroupDetail();
 
     const [partyGroup, setPartyGroup] = useState<PartyGroupExt | null>();
 
@@ -37,7 +37,7 @@ export default function withGroupDetail<T extends withGroupDetailProps>(
     const history = useHistory();
 
     const doFetch = () => {
-      fetchUserDetail(institutionId, groupId, props.productsMap)
+      fetchGroupDetail(institutionId, groupId, props.productsMap)
         .then((group) => {
           if (group === null) {
             const goBackUrl = resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.path, {
