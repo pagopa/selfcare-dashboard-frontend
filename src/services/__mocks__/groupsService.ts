@@ -5,6 +5,7 @@ import {
   applySort,
   extractPageRequest,
 } from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
+import { cloneDeep } from 'lodash';
 import { Party } from '../../model/Party';
 import { PartyUser, PartyUserSimple } from '../../model/PartyUser';
 import { Product, ProductsMap } from '../../model/Product';
@@ -284,7 +285,7 @@ export const fetchPartyGroup = (
     mockedGroups.find((u) => u.id === groupId && u.institutionId === institutionId) ?? null;
 
   if (mockedGroup !== null) {
-    const clone: PartyGroupMock = JSON.parse(JSON.stringify(mockedGroup));
+    const clone: PartyGroupMock = cloneDeep(mockedGroup);
     // eslint-disable-next-line functional/immutable-data
     (clone as unknown as PartyGroupExt).members = clone.membersIds.map(
       (m) => mockedUsers.find((u) => u.id === m) as PartyUser
