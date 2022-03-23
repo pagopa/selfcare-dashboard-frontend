@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../../model/Party';
 import { PartyGroupExt } from '../../../model/PartyGroup';
 import { Product, ProductsMap } from '../../../model/Product';
@@ -31,12 +32,14 @@ function GroupDetail({
     return `${day}/${month}/${year}`;
   }
   const groupStatusClass = isSuspended ? 'CustomDisabledLabel' : 'CustomInfoStyle';
+  const { t } = useTranslation();
+
   return (
     <Grid container spacing={2}>
       <Grid container item alignContent="center">
         <Grid item xs={4}>
           <Typography className="CustomLabelStyle" variant="h6">
-            NOME
+            {t('groupDetail.name')}
           </Typography>
         </Grid>
         <Grid item xs={8}>
@@ -48,19 +51,19 @@ function GroupDetail({
       <Grid container item alignContent="center">
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
-            DESCRIZIONE
+            {t('groupDetail.description')}
           </Typography>
         </Grid>
         <Grid item xs={3}>
           <Typography variant="body2" className={groupStatusClass}>
-            {partyGroup.description}
+            {t('partyGroup.description')}
           </Typography>
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
-            PRODOTTO
+            {t('groupDetail.product')}
           </Typography>
         </Grid>
         <Grid item xs={8}>
@@ -72,7 +75,7 @@ function GroupDetail({
       <Grid container item alignContent="center">
         <Grid item xs={12}>
           <Typography variant="h6" className="CustomLabelStyle">
-            REFERENTI
+            {t('groupDetail.referents')}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -88,7 +91,7 @@ function GroupDetail({
       <Grid container item alignContent="center">
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
-            DATA CREAZIONE
+            {t('groupDetail.creationDate')}
           </Typography>
         </Grid>
         <Grid item xs={8}>
@@ -98,7 +101,7 @@ function GroupDetail({
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
-            DA
+            {t('groupDetail.createdByLabel')}
           </Typography>
         </Grid>
         <Grid item xs={8}>
@@ -110,7 +113,7 @@ function GroupDetail({
       <Grid container item alignContent="center">
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
-            DATA ULTIMA MODIFICA
+            {t('groupDetail.modifiedAt')}
           </Typography>
         </Grid>
         <Grid item xs={8}>
@@ -120,7 +123,7 @@ function GroupDetail({
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
-            DA
+            {t('groupDetail.modifiedBy')}
           </Typography>
         </Grid>
         <Grid item xs={8}>

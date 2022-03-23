@@ -248,7 +248,13 @@ export default function GroupActions({
             <>
               <Trans i18nKey="groupActions.confirmChangeStatus.updatePartyGroupStatusCatch.displayableDescription">
                 C&apos;è stato un errore durante la
-                {t('', { selectedGroupStatusError: `${selectedGroupStatusError}` })} del gruppo
+                {
+                  (t(
+                    'groupActions.confirmChangeStatus.updatePartyGroupStatusCatch.displayableDescription'
+                  ),
+                  { selectedGroupStatusError: `${selectedGroupStatusError}` })
+                }
+                del gruppo
                 <strong>
                   {
                     (t(

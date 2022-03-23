@@ -4,6 +4,7 @@ import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorD
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
+import { useTranslation, Trans } from 'react-i18next';
 import { PartyUser, PartyUserProduct, PartyUserProductRole } from '../../../model/PartyUser';
 import { deleteGroupRelation } from '../../../services/groupsService';
 import { LOADING_TASK_UPDATE_PARTY_USER_STATUS } from '../../../utils/constants';
@@ -44,8 +45,10 @@ export default function GroupMenu({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
+  const { t } = useTranslation();
 
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -60,26 +63,48 @@ export default function GroupMenu({
     addNotify({
       component: 'SessionModal',
       id: 'Notify_Example',
-      title: role?.status === 'ACTIVE' ? 'Sospendi Ruolo' : 'Riabilita Ruolo',
+      title:
+        role?.status === 'ACTIVE'
+          ? t('groupMenu.confirmAction.titleSuspended')
+          : t('groupMenu.confirmAction.titleActive'),
       message: (
         <>
           {role?.status === 'ACTIVE'
-            ? 'Stai per sospendere il ruolo '
-            : 'Stai per riabilitare il ruolo '}
-          <strong>{transcodeProductRole2Title(role?.role as string, productRolesLists)}</strong>
-          {' di '}
-          <strong> {product.title} </strong>
-          {' assegnato a '}
-          <strong style={{ textTransform: 'capitalize' }}>
-            {party && `${member.name.toLocaleLowerCase()} ${member.surname}`}
-          </strong>
-          {'.'}
-          <br />
-          {'Vuoi continuare?'}
+            ? t('groupMenu.confirmAction.messageSuspended')
+            : t('groupMenu.confirmAction.messageActive')}
+          <Trans i18nKey="groupMenu.confirmAction.message">
+            <strong>
+              {
+                (t('groupMenu.confirmAction.message'),
+                {
+                  transcodeProductRole2Title: `${transcodeProductRole2Title(
+                    role?.role as string,
+                    productRolesLists
+                  )}`,
+                })
+              }
+            </strong>
+            di
+            <strong>
+              {(t('groupMenu.confirmAction.message'), { productTitle: `${product.title}` })}
+            </strong>
+            assegnato a
+            <strong style={{ textTransform: 'capitalize' }}>
+              {
+                (t('groupMenu.confirmAction.message'),
+                {
+                  memberMame: `${party && member.name.toLocaleLowerCase()} ${member.surname}`,
+                })
+              }
+            </strong>
+            .
+            <br />
+            Vuoi continuare?
+          </Trans>
         </>
       ),
-      confirmLabel: 'Conferma',
-      closeLabel: 'Annulla',
+      confirmLabel: t('groupMenu.confirmAction.confirmLabel'),
+      closeLabel: t('groupMenu.confirmAction.closeLabel'),
       onConfirm: confirmChangeStatus,
     });
   };
@@ -87,8 +112,14 @@ export default function GroupMenu({
   const confirmChangeStatus = () => {
     const nextStatus: UserStatus | undefined =
       role?.status === 'ACTIVE' ? 'SUSPENDED' : role?.status === 'SUSPENDED' ? 'ACTIVE' : undefined;
-    const selectedUserStatus = nextStatus === 'SUSPENDED' ? 'sospeso' : 'riabilitato';
-    const selectedUserStatusError = role?.status === 'SUSPENDED' ? 'sospensione' : 'riabilitazione';
+    const selectedUserStatus =
+      nextStatus === 'SUSPENDED'
+        ? t('groupMenu.confirmChangeStatus.selectedUserStatusSuspended')
+        : t('groupMenu.confirmChangeStatus.selectedUserStatusActive');
+    const selectedUserStatusError =
+      role?.status === 'SUSPENDED'
+        ? t('groupMenu.confirmChangeStatus.selectedUserStatusErrorSuspended')
+        : t('groupMenu.confirmChangeStatus.selectedUserStatusErrorActive');
 
     if (!nextStatus) {
       addError({
@@ -114,12 +145,26 @@ export default function GroupMenu({
         onMemberStatusUpdate(member, userProduct as PartyUserProduct, nextStatus);
         addNotify({
           id: 'ACTION_ON_PARTY_USER_COMPLETED',
-          title: `REFERENTE ${selectedUserStatus.toUpperCase()}`,
+          title: t('groupMenu.confirmChangeStatus.updatePartyUserStatusThen.title', {
+            selectedUserStatus: `${selectedUserStatus.toUpperCase()}`,
+          }),
           message: (
             <>
-              {`Hai ${selectedUserStatus} correttamente `}
-              <strong>{`${member.name} ${member.surname}`}</strong>
-              {'.'}
+              <Trans i18nKey="groupMenu.confirmChangeStatus.updatePartyUserStatusThen.message">
+                Hai
+                {
+                  (t('groupMenu.confirmChangeStatus.updatePartyUserStatusThen.message'),
+                  { selectedUserStatus: `${selectedUserStatus}` })
+                }
+                correttamente
+                <strong>
+                  {
+                    (t('groupMenu.confirmChangeStatus.updatePartyUserStatusThen.message'),
+                    { membersName: `${member.name} ${member.surname}` })
+                  }
+                </strong>
+                .
+              </Trans>
             </>
           ),
           component: 'Toast',
@@ -129,15 +174,39 @@ export default function GroupMenu({
         addError({
           component: 'Toast',
           id: `UPDATE_PARTY_USER_ERROR-${member.id}`,
-          displayableTitle: `ERRORE DURANTE LA ${selectedUserStatusError.toUpperCase()} DELL'UTENTE `,
+          displayableTitle: t(
+            'groupMenu.confirmChangeStatus.updatePartyUserStatusCatch.displayableTitle',
+            {
+              selectedUserStatusError: `${selectedUserStatusError.toUpperCase()}`,
+            }
+          ),
           techDescription: `C'è stato un errore durante la ${selectedUserStatusError} dell'utente (${member.id}): ${member.status}`,
           blocking: false,
           error: reason,
           toNotify: true,
           displayableDescription: (
             <>
-              {`C'è stato un errore durante la ${selectedUserStatusError} dell'utente`}
-              <strong>{`${member.name} ${member.surname}`}</strong>.
+              <Trans i18nKey="groupMenu.confirmChangeStatus.updatePartyUserStatusCatch.displayableDescription">
+                C&apos;è stato un errore durante la
+                {
+                  (t(
+                    'groupMenu.confirmChangeStatus.updatePartyUserStatusCatch.displayableDescription'
+                  ),
+                  { selectedUserStatusError: `${selectedUserStatusError}` })
+                }
+                dell&apos;utente
+                <strong>
+                  {
+                    (t(
+                      'groupMenu.confirmChangeStatus.updatePartyUserStatusCatch.displayableDescription'
+                    ),
+                    {
+                      memberName: `${member.name} ${member.surname}`,
+                    })
+                  }
+                </strong>
+                .
+              </Trans>
             </>
           ),
         })
@@ -150,22 +219,33 @@ export default function GroupMenu({
     addNotify({
       component: 'SessionModal',
       id: 'Notify_Example',
-      title: 'Dissocia',
+      title: t('groupMenu.confirmDisociateAction.title'),
       message: (
         <>
-          {'Stai per dissociare '}
-          <strong>{member.name}</strong>
-          {' dal gruppo '}
-          <strong>{partyGroup.name}</strong>
-          {' di '}
-          <strong> {product.title} </strong>
-          {'.'}
-          <br />
-          {'Vuoi continuare?'}
+          <Trans i18nKey="groupMenu.confirmDisociateAction.message">
+            Stai per dissociare
+            <strong>
+              {(t('groupMenu.confirmDisociateAction.message'), { memberName: `${member.name}` })}
+            </strong>
+            dal gruppo
+            <strong>
+              {(t('groupMenu.confirmDisociateAction.message'), { groupName: `${partyGroup.name}` })}
+            </strong>
+            di
+            <strong>
+              {
+                (t('groupMenu.confirmDisociateAction.message'),
+                { productTitle: `${product.title}` })
+              }
+            </strong>
+            .
+            <br />
+            Vuoi continuare?
+          </Trans>
         </>
       ),
-      confirmLabel: 'Conferma',
-      closeLabel: 'Annulla',
+      confirmLabel: t('groupMenu.confirmDisociateAction.confirmLabel'),
+      closeLabel: t('groupMenu.confirmDisociateAction.closeLabel'),
       onConfirm: confirmUserDissociation,
     });
   };
@@ -178,14 +258,26 @@ export default function GroupMenu({
         onMemberDelete(member);
         addNotify({
           id: 'ACTION_ON_PARTY_USER_COMPLETED',
-          title: `UTENTE DISSOCIATO`,
+          title: t('groupMenu.confirmUserDissociation.deleteGroupRelationThen.title'),
           message: (
             <>
-              {`Hai dissociato correttamente `}
-              <strong>{`${member.name} ${member.surname} `}</strong>
-              {'dal gruppo '}
-              <strong>{`${partyGroup.name}`}</strong>
-              {'.'}
+              <Trans i18nKey="groupMenu.confirmUserDissociation.deleteGroupRelationThen.message">
+                Hai dissociato correttamente
+                <strong>
+                  {
+                    (t('groupMenu.confirmUserDissociation.deleteGroupRelationThen.message'),
+                    { memberName: `${member.name} ${member.surname} ` })
+                  }
+                </strong>
+                dal gruppo
+                <strong>
+                  {
+                    (t('groupMenu.confirmUserDissociation.deleteGroupRelationThen.message'),
+                    { groupName: `${partyGroup.name}` })
+                  }
+                </strong>
+                .
+              </Trans>
             </>
           ),
           component: 'Toast',
@@ -195,16 +287,27 @@ export default function GroupMenu({
         addError({
           component: 'Toast',
           id: `DISSOCIATE_PARTY_USER_ERROR-${member.id}`,
-          displayableTitle: `ERRORE DURANTE LA DISSOCIAZIONE DELL'UTENTE `,
+          displayableTitle: t(
+            'groupMenu.confirmUserDissociation.deleteGroupRelationCatch.displayableTitle'
+          ),
           techDescription: `C'è stato un errore durante la dissociazione dell'utente (${member.id})`,
           blocking: false,
           error: reason,
           toNotify: true,
           displayableDescription: (
             <>
-              {"C'è stato un errore durante la dissociazione dell'utente "}
-              <strong>{`${member.name} ${member.surname}`}</strong>
-              {'.'}
+              <Trans i18nKey="groupMenu.confirmUserDissociation.deleteGroupRelationCatch.displayableDescription">
+                C&apos;è stato un errore durante la dissociazione dell&apos;utente
+                <strong>
+                  {
+                    (t(
+                      'groupMenu.confirmUserDissociation.deleteGroupRelationCatch.displayableDescription'
+                    ),
+                    { memberName: `${member.name} ${member.surname}` })
+                  }
+                </strong>
+                .
+              </Trans>
             </>
           ),
         })
@@ -238,7 +341,9 @@ export default function GroupMenu({
         }}
       >
         <Box width="100%" display="flex" justifyContent="center">
-          <MenuItem onClick={confirmDisociateAction}>Dissocia dal gruppo</MenuItem>
+          <MenuItem onClick={confirmDisociateAction}>
+            {t('groupMenu.dissociateMenuItem.label')}
+          </MenuItem>
         </Box>
         {userProduct?.roles.length === 1 && !member.isCurrentUser && (
           <Box key={userProduct.id}>
@@ -248,9 +353,9 @@ export default function GroupMenu({
             <Box width="100%" display="flex" justifyContent="center">
               <MenuItem onClick={confirmAction}>
                 {role?.status === 'ACTIVE'
-                  ? 'Sospendi Referente'
+                  ? t('groupMenu.suspendMenuItem.suspendLabel')
                   : role?.status === 'SUSPENDED'
-                  ? 'Riabilita Referente'
+                  ? t('groupMenu.suspendMenuItem.activeLabel')
                   : ''}
               </MenuItem>
             </Box>
