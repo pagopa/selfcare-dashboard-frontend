@@ -219,7 +219,7 @@ export const fetchPartyGroups = (
       }
       return product.id.indexOf(u.productId) > -1;
     })
-    .map((u) => JSON.parse(JSON.stringify(u)));
+    .map((u) => cloneDeep(u));
 
   if (pageRequest.sort) {
     applySort(filteredContent, pageRequest.sort);
