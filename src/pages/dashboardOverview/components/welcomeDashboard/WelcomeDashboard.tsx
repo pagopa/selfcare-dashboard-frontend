@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 export default function WelcomeDashboard() {
   const { t } = useTranslation();
-  const title = t('overview.welcome.title');
-  const subTitle = t('overview.welcome.subTitle');
+  const title = t('overview.title');
+  const subTitle = t('overview.subTitle');
   return (
     <TitleBox
       title={title}

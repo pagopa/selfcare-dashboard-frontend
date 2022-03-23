@@ -30,9 +30,13 @@ export default function NotActiveProductCard({ party, product }: Props) {
         <Box mx={3} my={4}>
           <BaseProductCard
             disableBtn={false}
-            cardTitle={product.title}
-            cardSubTitle={product.description}
-            buttonLabel={t('notActiveProductCard.buttonLabel')}
+            cardTitle={t('overview.notActiveProductCard.productName', {
+              productName: `${product.title}`,
+            })}
+            cardSubTitle={t('overview.notActiveProductCard.productDescription', {
+              productDescription: `${product.description}`,
+            })}
+            buttonLabel={t('overview.notActiveProductCard.buttonLabel')}
             urlLogo={product.logo}
             tag={product.tag}
             btnAction={() => {

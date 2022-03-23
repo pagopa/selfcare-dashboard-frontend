@@ -115,7 +115,10 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                   </Typography>
                 </Grid>
                 <Grid item xs={10} mb={4}>
-                  <LogoSubMenu title={description} subTitle={role} />
+                  <LogoSubMenu
+                    title={t('subHeader.logoSubMenu.partyName', { partyName: `${description}` })}
+                    subTitle={t('subHeader.logoSubMenu.role', { role: `${role}` })}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Divider sx={{ borderColor: '#CCD4DC' }} />
@@ -123,12 +126,12 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 <Grid item mb={3} xs={12}>
                   {parties2Show && (
                     <PartySelectionSearch
-                      partyTitle={t('subHeader.title')}
+                      partyTitle={t('subHeader.partySelectionSearch.title')}
                       pxTitleSubTitle="32px"
                       iconMarginRight="-10px"
                       showAvatar={false}
                       iconColor="#0073E6"
-                      label={t('subHeader.label')}
+                      label={t('subHeader.partySelectionSearch.label')}
                       disableUnderline={true}
                       parties={parties2Show}
                       onPartySelectionChange={(selectedParty: Party | null) => {

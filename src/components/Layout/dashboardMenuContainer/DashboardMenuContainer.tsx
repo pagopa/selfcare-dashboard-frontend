@@ -16,9 +16,11 @@ const DashboardMenuContainer = () => {
     <Grid container item direction="row" xs={6} alignContent="center" justifyContent="flex-end">
       <Grid item xs={5}>
         <LogoSubMenu
-          title={t('subHeader.logoSubMenu.selected.title', { title: selectedParty.description })}
-          subTitle={t('subHeader.logoSubMenu.selected.subTitle', {
-            subTitle: roleLabels[selectedParty.userRole].longLabel,
+          title={t('subHeader.logoSubMenu.selected.partyName', {
+            partyName: `${selectedParty.description}`,
+          })}
+          subTitle={t('subHeader.logoSubMenu.selected.role', {
+            role: `${roleLabels[selectedParty.userRole].longLabel}`,
           })}
           color="background.default"
         />
@@ -26,12 +28,14 @@ const DashboardMenuContainer = () => {
       <Grid item xs={1} sx={{ height: '100%' }}>
         <DashboardSubMenu
           ownerName={`${user?.name} ${user?.surname}`}
-          selectedParty={t('subHeader.dashboardSubMenu.selected.title', { title: selectedParty })}
+          selectedParty={t('subHeader.dashboardSubMenu.selected.partyName', {
+            partyName: `${selectedParty}`,
+          })}
           description={t('subHeader.dashboardSubMenu.selected.description', {
-            description: selectedParty.description,
+            description: `${selectedParty.description}`,
           })}
           role={t('subHeader.dashboardSubMenu.selected.role', {
-            role: roleLabels[selectedParty.userRole].longLabel,
+            role: `${roleLabels[selectedParty.userRole].longLabel}`,
           })}
         />
       </Grid>

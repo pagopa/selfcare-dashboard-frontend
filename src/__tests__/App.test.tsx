@@ -7,6 +7,7 @@ import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router';
+import './../locale';
 
 jest.mock('@pagopa/selfcare-common-frontend/decorators/withLogin');
 jest.mock('../decorators/withParties');

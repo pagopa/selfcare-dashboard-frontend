@@ -1,16 +1,54 @@
 export default {
+  partySelection: {
+    title: 'Seleziona il tuo Ente',
+    subTitle: "Se operi per più Enti, puoi modificare la tua scelta all'interno del portale.",
+    searchBar: 'Cerca',
+    partyName: '{{partyName}}',
+    role: '{{role}}',
+    partyStatus: 'Da completare',
+    enterButton: 'Entra',
+  },
   overview: {
-    activeProductCard: {
-      activationOf: 'Attivo dal ',
-      active: 'Attivo',
-      buttonLabel: 'Gestisci',
+    title: 'La panoramica del tuo Ente',
+    subTitle: 'Visualizza e gestisci i prodotti PagoPA a cui il tuo Ente ha aderito.',
+    sideMenu: {
+      institutionManagement: {
+        title: 'Gestione Ente',
+        overview: {
+          title: 'Panoramica',
+        },
+        referents: {
+          title: 'Referenti',
+        },
+        groups: {
+          title: 'Gruppi',
+        },
+      },
+      product: {
+        title: '{{title}}',
+        overview: 'Panoramica',
+        referents: 'Referenti',
+      },
     },
-    lastServiceActive: 'Ultimo servizio attivato: ',
     activeProductSection: {
       title: 'Prodotti attivi',
       subTitle: 'I prodotti PagoPA a cui il tuo Ente ha aderito.',
     },
+    activeProductCard: {
+      tag: '{{tag}}',
+      productName: '{{productName}}',
+      activationOf: 'Attivo dal ',
+      active: 'Attivo',
+      manageButton: 'Gestisci',
+    },
+    lastServiceActive: 'Ultimo servizio attivato: ',
+    notActiveProductSection: {
+      title: 'Scopri i nuovi prodotti',
+      subTitle: 'Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi.',
+    },
     notActiveProductCard: {
+      productName: '{{productName}}',
+      productDescription: '{{productDescription}}',
       buttonLabel: 'Aderisci',
     },
     discoverMore: '<0> SCOPRI DI PIÙ → </0>',
@@ -21,16 +59,9 @@ export default {
       confirmButton: 'Procedi con una nuova adesione',
       closeButton: 'Esci',
     },
-    notActiveProductSection: {
-      title: 'Scopri i nuovi prodotti',
-      subTitle: 'Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi.',
-      // TODO Fix buttons
-    },
     partyLogo: {
-      // TODO Check && fix
       upload: 'Carica il logo del tuo Ente',
       modify: 'Modifica Logo',
-      labelLink: 'Modifica Logo',
       uploadError: {
         title: 'Caricamento non riuscito',
         description:
@@ -45,14 +76,8 @@ export default {
       type: 'formato .png',
       size: 'dimensione 300x300px',
     },
-    /*
-    baseProductCard: {
-      title: '{{title}}',
-      subTitle: '{{subTitle}}',
-      buttonLabel: '{{buttonLabel}}',
-    },
-    */
     partyDetail: {
+      category: '{{category}}',
       title: '{{title}}',
       ipaCode: 'Codice IPA',
       companyName: 'Ragione sociale',
@@ -62,10 +87,6 @@ export default {
       contactToModify:
         "<0>Per modificare questi dati, <1>contatta</1> l'Indice della Pubblica Amministrazione (IPA)</0>",
     },
-    welcome: {
-      title: 'La panoramica del tuo Ente',
-      subTitle: 'Visualizza e gestisci i prodotti PagoPA a cui il tuo Ente ha aderito.',
-    },
   },
   subHeader: {
     partySelectionSearch: {
@@ -74,16 +95,16 @@ export default {
     },
     backButton: 'Esci',
     logoSubMenu: {
-      titleLogo: '{{title}}',
-      subTitle: '{{subTitle}}',
+      partyName: '{{partyName}}',
+      role: '{{role}}',
       selected: {
-        titleLogo: '{{title}}',
-        subTitleLogo: '{{subTitle}}',
+        partyName: '{{partyName}}',
+        role: '{{role}}',
       },
     },
     dashboardSubMenu: {
       selected: {
-        titleDash: '{{title}}',
+        partyName: '{{partyName}}',
         description: '{{description}}',
         role: '{{role}}',
       },

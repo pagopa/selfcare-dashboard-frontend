@@ -5,6 +5,7 @@ import { Product } from '../../../../model/Product';
 import { partiesActions } from '../../../../redux/slices/partiesSlice';
 import { createStore, store } from '../../../../redux/store';
 import PartySelection from '../PartySelection';
+import './../../../../locale';
 
 const parties: Array<Party> = [
   {
