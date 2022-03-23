@@ -1,28 +1,11 @@
 import React from 'react';
-import { History } from 'history';
-import { Theme } from '@mui/material';
-import { DashboardDecoratorsType } from '../pages/dashboard/Dashboard';
-import { Party } from '../model/Party';
-import { Product, ProductsMap } from '../model/Product';
-import { createStore } from '../redux/store';
-
-export type DashboardPageProps = {
-  party: Party;
-  products: Array<Product>;
-  activeProducts: Array<Product>;
-  productsMap: ProductsMap;
-};
-
-export type MicroserviceProps = {
-  history: History;
-  theme: Theme;
-  store: ReturnType<typeof createStore>;
-};
+import { DashboardDecoratorsType, DashboardPageProps } from '../pages/dashboard/Dashboard';
+import { MicroComponentsProps } from './dashboardMicrocomponentsUtils';
 
 type Props = {
   decorators: DashboardDecoratorsType;
 } & DashboardPageProps &
-  MicroserviceProps;
+  MicroComponentsProps;
 
 const RemoteRoutingUsers = React.lazy(() => import('selfcareUsers/RoutingUsers'));
 

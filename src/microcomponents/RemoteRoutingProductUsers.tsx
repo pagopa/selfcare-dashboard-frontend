@@ -1,11 +1,11 @@
 import React from 'react';
-import { DashboardDecoratorsType } from '../pages/dashboard/Dashboard';
-import { DashboardPageProps, MicroserviceProps } from './RemoteRoutingUsers';
+import { DashboardDecoratorsType, DashboardPageProps } from '../pages/dashboard/Dashboard';
+import { MicroComponentsProps } from './dashboardMicrocomponentsUtils';
 
 type Props = {
   decorators: DashboardDecoratorsType;
 } & DashboardPageProps &
-  MicroserviceProps;
+  MicroComponentsProps;
 
 const RemoteRoutingProductUsers = React.lazy(() => import('selfcareUsers/RoutingProductUsers'));
 

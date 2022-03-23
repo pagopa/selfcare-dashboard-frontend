@@ -16,6 +16,13 @@ import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
+export type DashboardPageProps = {
+  party: Party;
+  products: Array<Product>;
+  activeProducts: Array<Product>;
+  productsMap: ProductsMap;
+};
+
 export type DashboardDecoratorsType = {
   withProductRolesMap: (WrappedComponent: React.ComponentType<any>) => React.ComponentType<any>;
   withSelectedProduct: (WrappedComponent: React.ComponentType<any>) => React.ComponentType<any>;
