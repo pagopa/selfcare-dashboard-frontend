@@ -543,7 +543,7 @@ export default function GroupForm({
             </Grid>
             <Grid item xs={3} mt={8}>
               <Button
-                disabled={!formik.dirty || !formik.isValid}
+                disabled={(!isClone && !formik.dirty) || !formik.isValid}
                 sx={{ width: '100%' }}
                 color="primary"
                 variant="contained"
