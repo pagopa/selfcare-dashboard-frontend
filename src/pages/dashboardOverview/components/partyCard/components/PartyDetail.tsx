@@ -16,7 +16,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
       <Grid item>
         {party.category && (
           <Chip
-            label={t('overview.partyDetail.category', { category: `${party.category}` })}
+            label={party.category}
             variant="outlined"
             sx={{
               background: '#FCFDFF',
@@ -29,7 +29,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
       </Grid>
       <Grid item sx={{ mt: '18px', mb: '24px' }}>
         <Typography variant="h1" component="h2">
-          {t('overview.partyDetail.title', { title: `${party.description}` })}
+          {party.description}
         </Typography>
       </Grid>
       <Grid item>
@@ -81,7 +81,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             mt: 1,
           }}
         >
-          {t('overview.partyDetail.description', { description: `${party.description}` })}
+          {party.description}
         </Typography>
       </Grid>
       <Grid item>

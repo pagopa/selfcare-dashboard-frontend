@@ -29,7 +29,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
   const setUrlLogo = (urlLogo?: string) =>
     dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
-  const [labelLink, setLabelLink] = useState(t('overview.partyLogo.modify') as string);
+  const [labelLink, setLabelLink] = useState<string>(t('overview.partyLogo.modify') as string);
   const addError = useErrorDispatcher();
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         .then(() => {
           setUrlLogo(urlLogo);
           setLoading(false);
-          setLabelLink(t);
+          setLabelLink(t('overview.partyLogo.modify') as string);
           trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', {
             party_id: institutionId,
             request_id: requestId,

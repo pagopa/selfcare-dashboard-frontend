@@ -27,12 +27,12 @@ export default function LogoSubMenu({ title, subTitle, color }: Props) {
           <Grid container direction="column">
             <Grid item xs={12} mb={0.5}>
               <Typography variant="h6" sx={{ fontWeight: '700', color }}>
-                {t('subHeader.logoSubMenu.partyName', { partyName: `${title}` })}
+                {title}
               </Typography>
             </Grid>
             <Grid item xs={4}>
               <Typography variant="h5" sx={{ fontSize: '14px', color }}>
-                {t('subHeader.logoSubMenu.role', { role: `${subTitle}` })}
+                {subTitle}
               </Typography>
             </Grid>
           </Grid>

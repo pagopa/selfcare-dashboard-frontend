@@ -80,7 +80,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
       .filter((p) => p.status === 'ACTIVE')
       .map((p) => ({
         groupId: p.id,
-        title: t('overview.sideMenu.product.title', { title: `${p.title}` }),
+        title: p.title,
         active: p.authorized ?? false,
         subMenu: [
           {

@@ -30,21 +30,11 @@ export default function NotActiveProductCard({ party, product }: Props) {
         <Box mx={3} my={4}>
           <BaseProductCard
             disableBtn={false}
-            cardTitle={t('overview.notActiveProducts.productName', {
-              productName: `${product.title}`,
-            })}
-            cardSubTitle={t('overview.notActiveProducts.productDescription', {
-              productDescription: `${product.description}`,
-            })}
+            cardTitle={product.title}
+            cardSubTitle={product.description}
             buttonLabel={t('overview.notActiveProducts.joinButton')}
             urlLogo={product.logo}
-            tag={
-              product.tag
-                ? t('overview.notActiveProducts.tag', {
-                    tag: `${product.tag}`,
-                  })
-                : ''
-            }
+            tag={product.tag}
             btnAction={() => {
               if (product.status === 'PENDING') {
                 setOnboardingPendingProduct(product);

@@ -115,10 +115,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                   </Typography>
                 </Grid>
                 <Grid item xs={10} mb={4}>
-                  <LogoSubMenu
-                    title={t('subHeader.logoSubMenu.partyName', { partyName: `${description}` })}
-                    subTitle={t('subHeader.logoSubMenu.role', { role: `${role}` })}
-                  />
+                  <LogoSubMenu title={description} subTitle={role} />
                 </Grid>
                 <Grid item xs={12}>
                   <Divider sx={{ borderColor: '#CCD4DC' }} />

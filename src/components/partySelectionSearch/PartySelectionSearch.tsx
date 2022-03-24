@@ -95,7 +95,8 @@ export default function PartySelectionSearch({
               ) : (
                 parties.length >= 1 && (
                   <Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}>
-                    {t('partySelection.partyName', { partyName: `${partyTitle}` })}
+                    {' '}
+                    {partyTitle}
                   </Typography>
                 )
               )}
@@ -116,10 +117,8 @@ export default function PartySelectionSearch({
                       key={party.institutionId}
                       borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                       selectedItem={selectedParty === party}
-                      title={t('partySelection.partyName', { partyName: `${party.description}` })}
-                      subTitle={t('partySelection.role', {
-                        role: `${roleLabels[party.userRole].longLabel}`,
-                      })}
+                      title={party.description}
+                      subTitle={roleLabels[party.userRole].longLabel}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}

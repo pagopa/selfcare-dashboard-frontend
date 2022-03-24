@@ -16,27 +16,17 @@ const DashboardMenuContainer = () => {
     <Grid container item direction="row" xs={6} alignContent="center" justifyContent="flex-end">
       <Grid item xs={5}>
         <LogoSubMenu
-          title={t('subHeader.logoSubMenu.selected.partyName', {
-            partyName: `${selectedParty.description}`,
-          })}
-          subTitle={t('subHeader.logoSubMenu.selected.role', {
-            role: `${roleLabels[selectedParty.userRole].longLabel}`,
-          })}
+          title={selectedParty.description}
+          subTitle={roleLabels[selectedParty.userRole].longLabel}
           color="background.default"
         />
       </Grid>
       <Grid item xs={1} sx={{ height: '100%' }}>
         <DashboardSubMenu
           ownerName={`${user?.name} ${user?.surname}`}
-          selectedParty={t('subHeader.dashboardSubMenu.selected.partyName', {
-            partyName: `${selectedParty}`,
-          })}
-          description={t('subHeader.dashboardSubMenu.selected.description', {
-            description: `${selectedParty.description}`,
-          })}
-          role={t('subHeader.dashboardSubMenu.selected.role', {
-            role: `${roleLabels[selectedParty.userRole].longLabel}`,
-          })}
+          selectedParty={selectedParty}
+          description={selectedParty.description}
+          role={roleLabels[selectedParty.userRole].longLabel}
         />
       </Grid>
     </Grid>
