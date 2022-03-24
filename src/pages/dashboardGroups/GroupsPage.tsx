@@ -6,6 +6,7 @@ import { HashLink } from 'react-router-hash-link';
 import useScrollSpy from 'react-use-scrollspy';
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import { useTranslation } from 'react-i18next';
 import { Product, ProductsMap } from '../../model/Product';
 import { Party } from '../../model/Party';
 import { useAppSelector } from '../../redux/hooks';
@@ -21,6 +22,7 @@ interface Props {
 
 function GroupsPage({ party, activeProducts, productsMap }: Props) {
   useEffect(() => trackEvent('GROUP_LIST', { party_id: party.institutionId }), [party]);
+  const { t } = useTranslation();
 
   const prodSectionRefs = useMemo(
     () => activeProducts.map((_) => React.createRef<HTMLDivElement>()),
@@ -70,10 +72,10 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
         <Grid container direction="row" justifyContent="space-between" columns={9}>
           <Grid item xs={6}>
             <TitleBox
-              title="Gruppi"
+              title={t('dashboardGroup.groupsPage.title')}
               variantTitle={titleVariant}
               mbTitle={mbTitle}
-              subTitle="Consulta e crea dei gruppi (es. uno per ogni Dipartimento o Ufficio) in modo da gestire meglio il lavoro del tuo Ente."
+              subTitle={t('dashboardGroup.groupsPage.subTitle')}
             />
           </Grid>
           {productHavingGroups.length > 0 && (

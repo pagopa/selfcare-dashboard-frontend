@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import { History } from 'history';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import { useTranslation } from 'react-i18next';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
@@ -30,6 +31,7 @@ const applicationLinkBehaviour = (
 };
 
 export default function DashboardSideMenu({ products, party }: Props) {
+  const { t } = useTranslation();
   const history = useHistory();
   const { invokeProductBo } = useTokenExchange();
   const onExit = useUnloadEventOnExit();
@@ -39,12 +41,12 @@ export default function DashboardSideMenu({ products, party }: Props) {
   const navigationMenu: Array<MenuItem> = [
     {
       groupId: 'selfCare',
-      title: 'Gestione Ente',
+      title: t('overview.sideMenu.institutionManagement.title'),
       active: true,
       subMenu: [
         {
           groupId: 'selfCare',
-          title: 'Panoramica',
+          title: t('overview.sideMenu.institutionManagement.overview.title'),
           active: true,
           ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
             institutionId: party.institutionId,
@@ -53,7 +55,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
         canSeeRoles
           ? {
               groupId: 'selfCare',
-              title: 'Referenti',
+              title: t('overview.sideMenu.institutionManagement.referents.title'),
               active: true,
               ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
                 institutionId: party.institutionId,
@@ -63,7 +65,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
         canSeeGroups
           ? {
               groupId: 'selfCare',
-              title: 'Gruppi',
+              title: t('overview.sideMenu.institutionManagement.groups.title'),
               active: true,
               ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.PARTY_GROUPS.path, {
                 institutionId: party.institutionId,
@@ -84,14 +86,14 @@ export default function DashboardSideMenu({ products, party }: Props) {
         subMenu: [
           {
             groupId: p.id,
-            title: 'Panoramica',
+            title: t('overview.sideMenu.product.overview'),
             active: p.authorized ?? false,
             onClick: () => invokeProductBo(p, party),
           },
           p.userRole === 'ADMIN'
             ? {
                 groupId: p.id,
-                title: 'Referenti',
+                title: t('overview.sideMenu.product.referents'),
                 active: p.authorized ?? false,
                 ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.PRODUCT_USERS, {
                   institutionId: party.institutionId,

@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../../model/Party';
 import AddGroupButton from './AddGroupButton';
 
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export default function NoGroups({ party }: Props) {
+  const { t } = useTranslation();
   return (
     <Grid
       container
@@ -19,7 +21,7 @@ export default function NoGroups({ party }: Props) {
       justifyContent="center"
     >
       <Grid item xs={12} textAlign="center">
-        <Typography variant="body2">Non è ancora stato creato alcun Gruppo.</Typography>
+        <Typography variant="body2">{t('dashboardGroup.noGroups.noGroupsLabel')}</Typography>
       </Grid>
       <Grid item xs={12} textAlign="center" mt={2}>
         <AddGroupButton party={party} />

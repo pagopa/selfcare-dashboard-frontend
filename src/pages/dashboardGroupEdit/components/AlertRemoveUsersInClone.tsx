@@ -1,4 +1,5 @@
 import { Alert, Grid } from '@mui/material';
+import { Trans } from 'react-i18next';
 
 export default function AlertRemoveUsersInClone() {
   return (
@@ -17,10 +18,12 @@ export default function AlertRemoveUsersInClone() {
           borderLeftWidth: '4px',
         }}
       >
-        Alcuni referenti sono stati eliminati dal gruppo duplicato perchè
-        <strong> non presenti </strong>
-        nel prodotto selezionato o perchè <strong>sospesi</strong>. Puoi comunque assegnare altri
-        referenti al gruppo duplicato.
+        <Trans i18nKey="dashboardGroupEdit.alertRemoveUsersInClone.label">
+          Alcuni referenti sono stati eliminati dal gruppo duplicato perchè
+          <strong> non presenti </strong>
+          nel prodotto selezionato o perchè <strong>sospesi</strong>. Puoi comunque assegnare altri
+          referenti al gruppo duplicato.
+        </Trans>
       </Alert>
     </Grid>
   );
