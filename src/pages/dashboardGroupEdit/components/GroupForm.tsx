@@ -316,8 +316,8 @@ export default function GroupForm({
     };
   };
 
-  const containsInitialUsers = () =>
-    !initialFormData.members.find((u) => !u.products.find((p) => p.id === productSelected?.id));
+  const containsInitialUsers = (productUsers: Array<PartyUser>) =>
+    initialFormData.members.every((u) => productUsers.find((p) => p.id === u.id));
 
   const fetchProductUsers = (productSelected: Product) => {
     setLoadingFetchUserProduct(true);
@@ -340,10 +340,18 @@ export default function GroupForm({
         } else if (isEdit) {
           void formik.setFieldValue('members', (initialFormData as PartyGroupOnEdit).members, true);
         } else if (isClone) {
-          const nextMembers = formik.values.members.filter((u) =>
-            u.products.find((p) => p.id === productSelected?.id)
-          ); // u.status === 'ACTIVE' we want also the suspended users, however the status should be evaluated from user.products[current Product].status
-          if (!containsInitialUsers()) {
+          const selectedIds = formik.values.members.reduce((acc, u) => {
+            // eslint-disable-next-line functional/immutable-data
+            acc[u.id] = true;
+            return acc;
+          }, {} as { [userId: string]: boolean });
+          const nextMembers = productUsersPage.content.filter((u) => selectedIds[u.id]);
+
+          // const nextMembers = formik.values.members.filter((u) => cannot use this if we are fetching just the current product setting
+          //   u.products.find((p) => p.id === productSelected?.id)
+
+          // ); // u.status === 'ACTIVE' we want also the suspended users, however the status should be evaluated from user.products[current Product].status
+          if (!containsInitialUsers(productUsersPage.content)) {
             setAutomaticRemove(true);
           }
           void formik.setFieldValue('members', nextMembers, true);
@@ -475,7 +483,7 @@ export default function GroupForm({
                       const nextUsersSelected = isChecked
                         ? formik.values.members.filter((_s, index) => index !== checkedIndex)
                         : formik.values.members.concat(u);
-                      if (automaticRemove && containsInitialUsers()) {
+                      if (automaticRemove && containsInitialUsers(productUsers)) {
                         setAutomaticRemove(false);
                       }
                       void formik.setFieldValue('members', nextUsersSelected, true);
@@ -543,7 +551,7 @@ export default function GroupForm({
             </Grid>
             <Grid item xs={3} mt={8}>
               <Button
-                disabled={!formik.dirty || !formik.isValid}
+                disabled={(!isClone && !formik.dirty) || !formik.isValid}
                 sx={{ width: '100%' }}
                 color="primary"
                 variant="contained"

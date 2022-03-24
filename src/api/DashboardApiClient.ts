@@ -244,21 +244,21 @@ export const DashboardApi = {
         name: group.name,
       },
     });
-    return extractResponse(result, 201, onRedirectToLogin);
+    return extractResponse(result, 204, onRedirectToLogin);
   },
 
   updatePartyGroupStatusActivate: async (id: string): Promise<void> => {
     const result = await apiClient.activateUserGroupUsingPOST({
       id,
     });
-    return extractResponse(result, 201, onRedirectToLogin);
+    return extractResponse(result, 204, onRedirectToLogin);
   },
 
   updatePartyGroupStatusSuspend: async (id: string): Promise<void> => {
     const result = await apiClient.suspendUserGroupUsingPOST({
       id,
     });
-    return extractResponse(result, 201, onRedirectToLogin);
+    return extractResponse(result, 204, onRedirectToLogin);
   },
 
   savePartyGroup: async (group: PartyGroupOnCreation): Promise<void> => {
