@@ -5,6 +5,7 @@ import {
   applySort,
   extractPageRequest,
 } from '@pagopa/selfcare-common-frontend/hooks/useFakePagination';
+import { cloneDeep } from 'lodash';
 import { Party, UserRole, UserStatus } from '../../model/Party';
 import {
   PartyUser,
@@ -724,7 +725,7 @@ export const fetchPartyUsers = (
   pageRequest: PageRequest,
   _party: Party,
   _currentUser: User,
-  _checkPermission: boolean,
+  fetchOnlyCurrentProduct: boolean,
   product?: Product,
   selcRole?: UserRole,
   productRoles?: Array<ProductRole>
@@ -748,7 +749,17 @@ export const fetchPartyUsers = (
       }
       return u;
     })
-    .map((u) => JSON.parse(JSON.stringify(u)));
+    .map((u) => {
+      if (fetchOnlyCurrentProduct && product) {
+        const clone = cloneDeep(u);
+        // eslint-disable-next-line functional/immutable-data
+        clone.products = [u.products.find((p) => p.id === product.id) as PartyUserProduct];
+        return clone;
+      } else {
+        return u;
+      }
+    })
+    .map((u) => cloneDeep(u));
 
   if (pageRequest.sort) {
     applySort(filteredContent, pageRequest.sort);
