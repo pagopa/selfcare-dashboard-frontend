@@ -258,7 +258,7 @@ export const DashboardApi = {
     const result = await apiClient.suspendUserGroupUsingPOST({
       id,
     });
-    return extractResponse(result, 204, onRedirectToLogin);
+    return extractResponse(result, 20, onRedirectToLogin);
   },
 
   savePartyGroup: async (group: PartyGroupOnCreation): Promise<void> => {
