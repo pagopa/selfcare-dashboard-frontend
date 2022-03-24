@@ -316,8 +316,8 @@ export default function GroupForm({
     };
   };
 
-  const containsInitialUsers = () =>
-    !initialFormData.members.find((u) => !u.products.find((p) => p.id === productSelected?.id));
+  const containsInitialUsers = (productUsers: Array<PartyUser>) =>
+    initialFormData.members.every((u) => productUsers.find((p) => p.id === u.id));
 
   const fetchProductUsers = (productSelected: Product) => {
     setLoadingFetchUserProduct(true);
@@ -351,7 +351,7 @@ export default function GroupForm({
           //   u.products.find((p) => p.id === productSelected?.id)
 
           // ); // u.status === 'ACTIVE' we want also the suspended users, however the status should be evaluated from user.products[current Product].status
-          if (!containsInitialUsers()) {
+          if (!containsInitialUsers(productUsersPage.content)) {
             setAutomaticRemove(true);
           }
           void formik.setFieldValue('members', nextMembers, true);
@@ -483,7 +483,7 @@ export default function GroupForm({
                       const nextUsersSelected = isChecked
                         ? formik.values.members.filter((_s, index) => index !== checkedIndex)
                         : formik.values.members.concat(u);
-                      if (automaticRemove && containsInitialUsers()) {
+                      if (automaticRemove && containsInitialUsers(productUsers)) {
                         setAutomaticRemove(false);
                       }
                       void formik.setFieldValue('members', nextUsersSelected, true);
