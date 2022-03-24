@@ -199,23 +199,9 @@ export default function GroupForm({
             ? t('dashboardGroupEdit.groupForm.notifySuccessfulSave.isClone')
             : t('dashboardGroupEdit.groupForm.notifySuccessfulSave.isCreate')}
           <Trans i18nKey="dashboardGroupEdit.groupForm.notifySuccessfulSave.message">
-            <strong>
-              {
-                (t('dashboardGroupEdit.groupForm.notifySuccessfulSave.message'),
-                {
-                  valuesName: `${values.name}`,
-                })
-              }
-            </strong>
+            <strong>{{ valuesName: values.name }}</strong>
             per il prodotto
-            <strong>
-              {
-                (t('dashboardGroupEdit.groupForm.notifySuccessfulSave.message'),
-                {
-                  productSelectedtitle: `${productSelected?.title}`,
-                })
-              }
-            </strong>
+            <strong>{{ productSelectedtitle: productSelected?.title }}</strong>
           </Trans>
         </>
       ),

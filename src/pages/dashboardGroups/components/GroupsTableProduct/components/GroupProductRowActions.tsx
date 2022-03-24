@@ -55,24 +55,11 @@ export default function GroupProductRowActions({
       message: (
         <>
           <Trans i18nKey="dashboardGroup.groupProductRowActions.askConfirm.message">
-            {
-              (t('dashboardGroup.groupProductRowActions.askConfirm.message'),
-              { message: `${actionMessage}` })
-            }
+            {{ message: actionMessage }}
             il gruppo
-            <strong>
-              {
-                (t('dashboardGroup.groupProductRowActions.askConfirm.message'),
-                { groupName: `${partyGroup.name}` })
-              }
-            </strong>
+            <strong>{{ groupName: partyGroup.name }}</strong>
             di
-            <strong>
-              {
-                (t('dashboardGroup.groupProductRowActions.askConfirm.message'),
-                { productTitle: `${product.title}` })
-              }
-            </strong>
+            <strong>{{ productTitle: product.title }}</strong>
             .
             <br />
             Vuoi continuare?
@@ -109,22 +96,9 @@ export default function GroupProductRowActions({
           message: (
             <>
               <Trans i18nKey="dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusThen.message">
-                {
-                  (t(
-                    'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusThen.message'
-                  ),
-                  { message: `${actionMessage}` })
-                }
+                {{ message: actionMessage }}
                 il gruppo
-                <strong>
-                  {
-                    (t(
-                      'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusThen.message'
-                    ),
-                    { groupName: `${partyGroup.name}` })
-                  }
-                </strong>
-                .
+                <strong>{{ groupName: partyGroup.name }}</strong>.
               </Trans>
             </>
           ),
@@ -149,24 +123,9 @@ export default function GroupProductRowActions({
             <>
               <Trans i18nKey="dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.displayableDescription">
                 C&apos;è stato un errore durante la
-                {
-                  (t(
-                    'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.displayableDescription'
-                  ),
-                  { selectedGroupStatusError: `${selectedGroupStatusError}` })
-                }
+                {{ selectedGroupStatusError }}
                 del gruppo
-                <strong>
-                  {
-                    (t(
-                      'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.displayableDescription'
-                    ),
-                    {
-                      groupName: `${partyGroup.name}`,
-                    })
-                  }
-                </strong>
-                .
+                <strong>{{ groupName: partyGroup.name }}</strong>.
               </Trans>
             </>
           ),

@@ -73,9 +73,7 @@ export default function GroupActions({
         <>
           <Trans i18nKey="groupActions.handleOpenDelete.addNotify.message">
             Stai per eliminare il gruppo
-            <strong>
-              {(t('groupActions.handleOpenDelete.message'), { groupName: `${partyGroup.name}` })}
-            </strong>
+            <strong>{{ groupName: partyGroup.name }}</strong>
             .
             <br />
             Vuoi continuare?
@@ -101,13 +99,7 @@ export default function GroupActions({
             <>
               <Trans i18nKey="groupActions.onDelete.toastComponentThen.message">
                 Hai eliminato correttamente il gruppo
-                <strong>
-                  {
-                    (t('groupActions.onDelete.toastComponentThen.message'),
-                    { groupName: `${partyGroup.name}` })
-                  }
-                </strong>
-                .
+                <strong>{{ groupName: partyGroup.name }}</strong>.
               </Trans>
             </>
           ),
@@ -126,13 +118,7 @@ export default function GroupActions({
             <>
               <Trans i18nKey="groupActions.onDelete.toastComponentCatch.displayableDescription">
                 C&apos;è stato un errore durante l&apos;eliminazione del gruppo
-                <strong>
-                  {
-                    (t('groupActions.onDelete.toastComponentCatch.displayableDescription'),
-                    { groupName: `${partyGroup.name}` })
-                  }
-                </strong>
-                .
+                <strong>{{ groupName: partyGroup.name }}</strong>.
               </Trans>
             </>
           ),
@@ -155,23 +141,9 @@ export default function GroupActions({
             ? t('groupActions.handleOpen.addNotify.messageActive')
             : t('groupActions.handleOpen.addNotify.messageSuspended')}
           <Trans i18nKey="groupActions.handleOpen.addNotify.messageGroup">
-            <strong>
-              {
-                (t('groupActions.handleOpen.addNotify.messageGroup'),
-                {
-                  groupName: `${partyGroup.name}`,
-                })
-              }
-            </strong>
+            <strong>{{ groupName: partyGroup.name }}</strong>
             di
-            <strong>
-              {
-                (t('groupActions.handleOpen.addNotify.messageGroup'),
-                {
-                  productTitle: `${productsMap[partyGroup.productId].title}`,
-                })
-              }
-            </strong>
+            <strong>{{ productTitle: productsMap[partyGroup.productId].title }}</strong>
             .
             <br />
             Vuoi continuare?
@@ -208,22 +180,9 @@ export default function GroupActions({
             <>
               <Trans i18nKey="groupActions.confirmChangeStatus.updatePartyGroupStatusThen.message">
                 Hai
-                {
-                  (t('groupActions.confirmChangeStatus.updatePartyGroupStatusThen.message'),
-                  {
-                    selectedGroupStatus: `${selectedGroupStatus}`,
-                  })
-                }
+                {{ selectedGroupStatus }}
                 correttamente il gruppo
-                <strong>
-                  {
-                    (t('groupActions.confirmChangeStatus.updatePartyGroupStatusThen.message'),
-                    {
-                      groupName: `${partyGroup.name}`,
-                    })
-                  }
-                </strong>
-                .
+                <strong>{{ groupName: partyGroup.name }}</strong>.
               </Trans>
             </>
           ),
@@ -248,24 +207,9 @@ export default function GroupActions({
             <>
               <Trans i18nKey="groupActions.confirmChangeStatus.updatePartyGroupStatusCatch.displayableDescription">
                 C&apos;è stato un errore durante la
-                {
-                  (t(
-                    'groupActions.confirmChangeStatus.updatePartyGroupStatusCatch.displayableDescription'
-                  ),
-                  { selectedGroupStatusError: `${selectedGroupStatusError}` })
-                }
+                {{ selectedGroupStatusError }}
                 del gruppo
-                <strong>
-                  {
-                    (t(
-                      'groupActions.confirmChangeStatus.updatePartyGroupStatusCatch.displayableDescription'
-                    ),
-                    {
-                      groupName: `${partyGroup.name}`,
-                    })
-                  }
-                </strong>
-                .
+                <strong>{{ groupName: partyGroup.name }}</strong>.
               </Trans>
             </>
           ),

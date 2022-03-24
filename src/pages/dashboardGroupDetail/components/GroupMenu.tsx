@@ -74,28 +74,18 @@ export default function GroupMenu({
             : t('groupMenu.confirmAction.messageActive')}
           <Trans i18nKey="groupMenu.confirmAction.message">
             <strong>
-              {
-                (t('groupMenu.confirmAction.message'),
-                {
-                  transcodeProductRole2Title: `${transcodeProductRole2Title(
-                    role?.role as string,
-                    productRolesLists
-                  )}`,
-                })
-              }
+              {{
+                transcodeProductRole2Title: transcodeProductRole2Title(
+                  role?.role as string,
+                  productRolesLists
+                ),
+              }}
             </strong>
             di
-            <strong>
-              {(t('groupMenu.confirmAction.message'), { productTitle: `${product.title}` })}
-            </strong>
+            <strong>{{ productTitle: product.title }}</strong>
             assegnato a
             <strong style={{ textTransform: 'capitalize' }}>
-              {
-                (t('groupMenu.confirmAction.message'),
-                {
-                  memberMame: `${party && member.name.toLocaleLowerCase()} ${member.surname}`,
-                })
-              }
+              {{ memberMame: `${party && member.name.toLocaleLowerCase()} ${member.surname}` }}
             </strong>
             .
             <br />
@@ -152,18 +142,9 @@ export default function GroupMenu({
             <>
               <Trans i18nKey="groupMenu.confirmChangeStatus.updatePartyUserStatusThen.message">
                 Hai
-                {
-                  (t('groupMenu.confirmChangeStatus.updatePartyUserStatusThen.message'),
-                  { selectedUserStatus: `${selectedUserStatus}` })
-                }
+                {{ selectedUserStatus }}
                 correttamente
-                <strong>
-                  {
-                    (t('groupMenu.confirmChangeStatus.updatePartyUserStatusThen.message'),
-                    { membersName: `${member.name} ${member.surname}` })
-                  }
-                </strong>
-                .
+                <strong>{{ membersName: `${member.name} ${member.surname}` }}</strong>.
               </Trans>
             </>
           ),
@@ -188,24 +169,9 @@ export default function GroupMenu({
             <>
               <Trans i18nKey="groupMenu.confirmChangeStatus.updatePartyUserStatusCatch.displayableDescription">
                 C&apos;è stato un errore durante la
-                {
-                  (t(
-                    'groupMenu.confirmChangeStatus.updatePartyUserStatusCatch.displayableDescription'
-                  ),
-                  { selectedUserStatusError: `${selectedUserStatusError}` })
-                }
+                {{ selectedUserStatusError }}
                 dell&apos;utente
-                <strong>
-                  {
-                    (t(
-                      'groupMenu.confirmChangeStatus.updatePartyUserStatusCatch.displayableDescription'
-                    ),
-                    {
-                      memberName: `${member.name} ${member.surname}`,
-                    })
-                  }
-                </strong>
-                .
+                <strong>{{ memberName: `${member.name} ${member.surname}` }}</strong>.
               </Trans>
             </>
           ),
@@ -224,20 +190,11 @@ export default function GroupMenu({
         <>
           <Trans i18nKey="groupMenu.confirmDisociateAction.message">
             Stai per dissociare
-            <strong>
-              {(t('groupMenu.confirmDisociateAction.message'), { memberName: `${member.name}` })}
-            </strong>
+            <strong>{{ memberName: member.name }}</strong>
             dal gruppo
-            <strong>
-              {(t('groupMenu.confirmDisociateAction.message'), { groupName: `${partyGroup.name}` })}
-            </strong>
+            <strong>{{ groupName: partyGroup.name }}</strong>
             di
-            <strong>
-              {
-                (t('groupMenu.confirmDisociateAction.message'),
-                { productTitle: `${product.title}` })
-              }
-            </strong>
+            <strong>{{ productTitle: product.title }}</strong>
             .
             <br />
             Vuoi continuare?
@@ -263,20 +220,9 @@ export default function GroupMenu({
             <>
               <Trans i18nKey="groupMenu.confirmUserDissociation.deleteGroupRelationThen.message">
                 Hai dissociato correttamente
-                <strong>
-                  {
-                    (t('groupMenu.confirmUserDissociation.deleteGroupRelationThen.message'),
-                    { memberName: `${member.name} ${member.surname} ` })
-                  }
-                </strong>
+                <strong>{{ memberName: `${member.name} ${member.surname} ` }}</strong>
                 dal gruppo
-                <strong>
-                  {
-                    (t('groupMenu.confirmUserDissociation.deleteGroupRelationThen.message'),
-                    { groupName: `${partyGroup.name}` })
-                  }
-                </strong>
-                .
+                <strong>{{ groupName: partyGroup.name }}</strong>.
               </Trans>
             </>
           ),
@@ -298,15 +244,7 @@ export default function GroupMenu({
             <>
               <Trans i18nKey="groupMenu.confirmUserDissociation.deleteGroupRelationCatch.displayableDescription">
                 C&apos;è stato un errore durante la dissociazione dell&apos;utente
-                <strong>
-                  {
-                    (t(
-                      'groupMenu.confirmUserDissociation.deleteGroupRelationCatch.displayableDescription'
-                    ),
-                    { memberName: `${member.name} ${member.surname}` })
-                  }
-                </strong>
-                .
+                <strong>{{ memberName: `${member.name} ${member.surname}` }}</strong>.
               </Trans>
             </>
           ),
