@@ -21,7 +21,12 @@ type Props = {
   color?: string;
 };
 
-const DashboardSideMenuItem = ({ item, selectedItem, handleClick, color ='primary.main' }: Props) => {
+const DashboardSideMenuItem = ({
+  item,
+  selectedItem,
+  handleClick,
+  color = 'primary.main',
+}: Props) => {
   if (!item) {
     return <></>;
   }
@@ -67,11 +72,7 @@ const DashboardSideMenuItem = ({ item, selectedItem, handleClick, color ='primar
           </Grid>
           {item.subMenu && (
             <Grid item xs={2}>
-              {isOpened ? (
-                <ExpandLess sx={{ color }} />
-              ) : (
-                <ExpandMore sx={{ color }} />
-              )}
+              {isOpened ? <ExpandLess sx={{ color }} /> : <ExpandMore sx={{ color }} />}
             </Grid>
           )}
         </Grid>

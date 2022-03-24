@@ -1,6 +1,7 @@
 import { fireEvent, getByText, render, screen } from '@testing-library/react';
 import { Party } from '../../../model/Party';
 import PartySelectionSearch from '../PartySelectionSearch';
+import './../../../locale';
 
 let selectedParty: Party | null = null;
 
