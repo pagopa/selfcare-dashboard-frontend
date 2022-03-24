@@ -22,6 +22,7 @@ type Props = {
   fetchPartyGroup: () => void;
   onGroupStatusUpdate: (nextGroupStatus: PartyGroupStatus) => void;
   nextGroupStatus: PartyGroupStatus | undefined;
+  canEdit: boolean;
 };
 export default function GroupActions({
   partyGroup,
@@ -32,6 +33,7 @@ export default function GroupActions({
   productsMap,
   onGroupStatusUpdate,
   nextGroupStatus,
+  canEdit,
 }: Props) {
   const setLoading = useLoading(LOADING_TASK_UPDATE_PARTY_USER_STATUS);
   const addError = useErrorDispatcher();
@@ -220,22 +222,24 @@ export default function GroupActions({
 
   return (
     <Grid container spacing={4}>
-      {!isSuspended && (
+      {!isSuspended && canEdit && (
         <Grid item xs={3}>
           <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={goEdit}>
             {t('groupActions.editActionLabel')}
           </Button>
         </Grid>
       )}
-      <Grid item xs={3}>
-        <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={handleOpen}>
-          {partyGroup.status === 'SUSPENDED'
-            ? t('groupActions.groupActionActive')
-            : partyGroup.status === 'ACTIVE'
-            ? t('groupActions.groupActionSuspend')
-            : ''}
-        </Button>
-      </Grid>
+      {canEdit && (
+        <Grid item xs={3}>
+          <Button variant="contained" sx={{ height: '40px', width: '100%' }} onClick={handleOpen}>
+            {partyGroup.status === 'SUSPENDED'
+              ? t('groupActions.groupActionActive')
+              : partyGroup.status === 'ACTIVE'
+              ? t('groupActions.groupActionSuspend')
+              : ''}
+          </Button>
+        </Grid>
+      )}
       {!isSuspended && (
         <Grid item xs={3}>
           <Button
@@ -247,16 +251,18 @@ export default function GroupActions({
           </Button>
         </Grid>
       )}
-      <Grid item xs={3}>
-        <Button
-          variant="outlined"
-          color="error"
-          sx={{ height: '40px', width: '100%' }}
-          onClick={handleOpenDelete}
-        >
-          {t('groupActions.groupDeleteAction')}
-        </Button>
-      </Grid>
+      {canEdit && (
+        <Grid item xs={3}>
+          <Button
+            variant="outlined"
+            color="error"
+            sx={{ height: '40px', width: '100%' }}
+            onClick={handleOpenDelete}
+          >
+            {t('groupActions.groupDeleteAction')}
+          </Button>
+        </Grid>
+      )}
     </Grid>
   );
 }

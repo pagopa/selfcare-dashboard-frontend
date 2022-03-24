@@ -39,6 +39,7 @@ function GroupDetailPage({
       : undefined;
 
   const product = productsMap[partyGroupState.productId];
+  const canEdit = product.userRole === 'ADMIN' && product.status === 'ACTIVE';
 
   const isSuspended = partyGroupState.status === 'SUSPENDED';
 
@@ -132,6 +133,7 @@ function GroupDetailPage({
             product={product}
             party={party}
             productRolesLists={productsRolesMap[product.id]}
+            canEdit={canEdit}
           />
         </Grid>
         <Grid item mb={3} mt={15} width="100%">
@@ -145,6 +147,7 @@ function GroupDetailPage({
             fetchPartyGroup={fetchPartyGroup}
             nextGroupStatus={nextGroupStatus}
             onGroupStatusUpdate={onGroupStatusUpdate}
+            canEdit={canEdit}
           />
         </Grid>
       </Grid>
