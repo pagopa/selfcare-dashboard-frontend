@@ -88,6 +88,7 @@ function GroupsPage({ party, activeProducts, productsMap }: Props) {
           )}
         </Grid>
       </Grid>
+
       {productHavingGroups.length > 1 && (
         <Grid
           item

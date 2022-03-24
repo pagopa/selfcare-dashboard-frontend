@@ -30,6 +30,7 @@ function GroupDetailPage({
 
   const [partyGroupState, setPartyGroupState] = React.useState<PartyGroupExt>(partyGroup);
   const { t } = useTranslation();
+
   const nextGroupStatus: PartyGroupStatus | undefined =
     partyGroupState.status === 'ACTIVE'
       ? 'SUSPENDED'

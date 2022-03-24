@@ -19,7 +19,7 @@ export default function GroupsProductFetchError({ onRetry }: Props) {
     >
       <DissatisfiedIcon />
       <Typography>
-        <Trans i18nKey="dashboardGroup.GroupsProductFetchError.message">
+        <Trans i18nKey="dashboardGroup.groupsProductFetchError.message">
           Spiacenti, qualcosa è andato storto.
           <Link onClick={onRetry} sx={{ textDecoration: 'none!important', cursor: 'pointer' }}>
             <b> Riprova</b>

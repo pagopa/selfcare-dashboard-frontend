@@ -1,4 +1,5 @@
 import { Grid, Link, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 // Utility to wait some time
 
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export function PartyDescription({ labelLink, open }: Props) {
+  const { t } = useTranslation();
   return (
     <Grid container direction="column" justifyContent={'center'} alignItems={'center'}>
       <Link
@@ -31,7 +33,7 @@ export function PartyDescription({ labelLink, open }: Props) {
           mt: 1,
         }}
       >
-        {'formato .png'}
+        {t('overview.partyLogo.type')}
       </Typography>
       <Typography
         variant="body2"
@@ -43,7 +45,7 @@ export function PartyDescription({ labelLink, open }: Props) {
           mt: 1,
         }}
       >
-        {'dimensione 300x300px'}
+        {t('overview.partyLogo.size')}
       </Typography>
     </Grid>
   );

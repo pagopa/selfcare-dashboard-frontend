@@ -9,6 +9,7 @@ import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorD
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import PartySelectionSearch from '../../../partySelectionSearch/PartySelectionSearch';
 import ROUTES from '../../../../routes';
@@ -30,6 +31,7 @@ type Props = {
 };
 
 export default function DashboardSubMenu({ ownerName, description, role, selectedParty }: Props) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const history = useHistory();
@@ -121,12 +123,12 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                 <Grid item mb={3} xs={12}>
                   {parties2Show && (
                     <PartySelectionSearch
-                      partyTitle="I tuoi enti"
+                      partyTitle={t('subHeader.partySelectionSearch.title')}
                       pxTitleSubTitle="32px"
                       iconMarginRight="-10px"
                       showAvatar={false}
                       iconColor="#0073E6"
-                      label="I tuoi enti"
+                      label={t('subHeader.partySelectionSearch.label')}
                       disableUnderline={true}
                       parties={parties2Show}
                       onPartySelectionChange={(selectedParty: Party | null) => {
@@ -154,7 +156,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                       sx={{ height: '40px', width: '100%' }}
                       onClick={() => window.location.assign(ENV.URL_FE.LOGOUT)}
                     >
-                      Esci
+                      {t('subHeader.backButton')}
                     </Button>
                   </Grid>
                 </Grid>

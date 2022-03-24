@@ -28,7 +28,7 @@ export default function GroupsTableLoadMoreData({ fetchNextPage }: Props) {
             fontWeight: 600,
           }}
         >
-          {t('dashboardGroup.GroupsTableLoadMoreData.loadMoreMessage')}
+          {t('dashboardGroup.groupsTableLoadMoreData.loadMoreMessage')}
           <ExpandMore fontSize="small" sx={{ position: 'absolute', bottom: 0 }} />
         </Link>
       </Typography>

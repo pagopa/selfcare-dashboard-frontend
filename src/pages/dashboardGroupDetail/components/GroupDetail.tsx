@@ -23,14 +23,11 @@ function GroupDetail({
   party,
   productRolesLists,
 }: Props) {
-  function formatDate(data: any) {
-    const datePart = data.match(/\d+/g);
-    const year = datePart[0];
-    const month = datePart[1];
-    const day = datePart[2];
-
-    return `${day}/${month}/${year}`;
+  function formatDate(data?: Date) {
+    const d = new Date(data as Date);
+    return d.toLocaleDateString('it', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
+
   const groupStatusClass = isSuspended ? 'CustomDisabledLabel' : 'CustomInfoStyle';
   const { t } = useTranslation();
 
