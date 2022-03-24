@@ -42,7 +42,7 @@ export const fetchPartyUsers = (
   party: Party,
   productsMap: ProductsMap,
   currentUser: User,
-  checkPermission: boolean,
+  fetchOnlyCurrentProduct: boolean,
   product?: Product,
   selcRole?: UserRole,
   productRoles?: Array<ProductRole>
@@ -53,13 +53,13 @@ export const fetchPartyUsers = (
       pageRequest,
       party,
       currentUser,
-      checkPermission,
+      fetchOnlyCurrentProduct,
       product,
       selcRole,
       productRoles
     );
   } else {
-    if (product && checkPermission) {
+    if (product && fetchOnlyCurrentProduct) {
       return DashboardApi.getPartyProductUsers(
         party.institutionId,
         product.id,
