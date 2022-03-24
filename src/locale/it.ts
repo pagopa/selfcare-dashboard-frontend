@@ -320,7 +320,7 @@ export default {
         name: 'NOME',
         description: 'DESCRIZIONE',
         product: 'PRODOTTO',
-        referents: 'REFERENTI',
+        referents: 'N.REFERENTI',
       },
     },
     groupsProductFetchError: {
