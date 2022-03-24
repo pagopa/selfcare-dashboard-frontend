@@ -1,4 +1,5 @@
 import React from 'react';
+import { LoadingOverlayComponent } from '@pagopa/selfcare-common-frontend';
 import { DashboardDecoratorsType, DashboardPageProps } from '../pages/dashboard/Dashboard';
 import { MicroComponentsProps } from './dashboardMicrocomponentsUtils';
 
@@ -19,7 +20,7 @@ export default ({
   activeProducts,
   productsMap,
 }: Props) => (
-  <React.Suspense fallback="Loading RoutingUsers">
+  <React.Suspense fallback={<LoadingOverlayComponent open={true} />}>
     <RemoteRoutingUsers
       history={history}
       store={store}

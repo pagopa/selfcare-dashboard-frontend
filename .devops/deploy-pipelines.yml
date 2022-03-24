@@ -39,7 +39,7 @@ variables:
 
     react_app_url_api_party_process: '$(UAT_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_dashboard: '$(UAT_REACT_APP_URL_API_DASHBOARD)'
-    
+
     react_app_enable_assistance: 'true'
     react_app_url_storage: '$(UAT_REACT_APP_URL_STORAGE)'
     react_app_analytics_enabled: '$(UAT_ANALYTICS_ENABLED)'
@@ -59,9 +59,9 @@ variables:
     react_app_url_fe_onboarding: '$(PROD_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_landing: '$(PROD_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(PROD_REACT_APP_URL_FE_ASSISTANCE)'
-    
-    react_app_url_api_party_process: '$(PROD_REACT_APP_URL_API_PARTY_PROCESS)'
-    react_app_url_api_dashboard: '$(PROD_REACT_APP_URL_API_DASHBOARD)'
+
+    react_app_url_fe_dashboard_users: '$(PROD_REACT_APP_URL_FE_DASHBOARD_USERS)'
+    react_app_url_fe_dashboard_groups: '$(PROD_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
 
     react_app_url_api_party_process: '$(PROD_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_dashboard: '$(PROD_REACT_APP_URL_API_DASHBOARD)'
@@ -88,8 +88,8 @@ variables:
     react_app_url_fe_landing: '$(DEV_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(DEV_REACT_APP_URL_FE_ASSISTANCE)'
 
-    react_app_url_api_party_process: '$(DEV_REACT_APP_URL_API_PARTY_PROCESS)'
-    react_app_url_api_dashboard: '$(DEV_REACT_APP_URL_API_DASHBOARD)'
+    react_app_url_fe_dashboard_users: '$(DEV_REACT_APP_URL_FE_DASHBOARD_USERS)'
+    react_app_url_fe_dashboard_groups: '$(DEV_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
 
     react_app_url_api_party_process: '$(DEV_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_dashboard: '$(DEV_REACT_APP_URL_API_DASHBOARD)'
