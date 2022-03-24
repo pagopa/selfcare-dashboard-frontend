@@ -199,7 +199,7 @@ export default {
     },
   },
   membersGroup: {
-    memberName: ' (tu)',
+    currentUser: ' (tu)',
   },
   dashboardGroupEdit: {
     alertRemoveUsersInClone: {

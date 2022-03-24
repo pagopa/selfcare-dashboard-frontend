@@ -98,7 +98,7 @@ export default function MembersGroup({
                   title={`${member.name} ${member.surname}`}
                 >
                   {`${member.name} ${member.surname}${
-                    member.isCurrentUser ? t('membersGroup.memberName') : ''
+                    member.isCurrentUser ? t('membersGroup.currentUser') : ''
                   }`}
                 </Typography>
               </Link>
