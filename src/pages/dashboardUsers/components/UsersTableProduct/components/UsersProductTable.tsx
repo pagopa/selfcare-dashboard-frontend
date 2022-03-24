@@ -15,7 +15,7 @@ import UserTableLoadMoreData from './UserProductLoadMoreData';
 const rowHeight = 81;
 const headerHeight = 56;
 
-interface UsersSearchTableProps {
+interface UsersTableProps {
   incrementalLoad: boolean;
   loading: boolean;
   noMoreData: boolean;
@@ -109,8 +109,8 @@ export default function UsersProductTable({
   onRowClick,
   onDelete,
   onStatusUpdate,
-}: UsersSearchTableProps) {
-  const sortSplitted = sort ? sort.split(',') : undefined;
+}: UsersTableProps) {
+  const sortSplitted = sort && sort !== '' ? sort.split(',') : undefined;
 
   const columns: Array<GridColDef> = buildColumnDefs(
     canEdit,
@@ -130,7 +130,6 @@ export default function UsersProductTable({
           position: 'relative',
           width: '100% !important',
           border: 'none',
-          px: '16px',
         }}
         justifyContent="start"
       >
@@ -173,12 +172,12 @@ export default function UsersProductTable({
           filterMode="server"
           sortingMode="server"
           onSortModelChange={(model: GridSortModel) =>
-            onSortRequest(model.map((m) => `${m.field},${m.sort}`)[0])
+            onSortRequest(model.map((m) => `${m.field},${m.sort}`)[0] ?? '')
           }
           sortModel={
             sortSplitted
               ? [{ field: sortSplitted[0], sort: sortSplitted[1] as GridSortDirection }]
-              : undefined
+              : []
           }
         />
       </Box>

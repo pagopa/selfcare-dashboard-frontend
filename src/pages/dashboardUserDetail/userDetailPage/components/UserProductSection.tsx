@@ -75,7 +75,7 @@ export default function UserProductSection({
               fetchPartyUser={fetchPartyUser}
               userProduct={userProduct}
               productRolesList={productsRolesMap[userProduct.id]}
-              canEdit={product?.userRole === 'ADMIN'}
+              canEdit={product?.userRole === 'ADMIN' && product.status === 'ACTIVE'}
               product={product}
               isProductDetailPage={isProductDetailPage}
             />

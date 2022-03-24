@@ -34,6 +34,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
   const onExit = useUnloadEventOnExit();
 
   const canSeeRoles = party.userRole === 'ADMIN';
+  const canSeeGroups = party.userRole === 'ADMIN';
   const navigationMenu: Array<MenuItem> = [
     {
       groupId: 'selfCare',
@@ -54,6 +55,16 @@ export default function DashboardSideMenu({ products, party }: Props) {
               title: 'Referenti',
               active: true,
               ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.PARTY_USERS, {
+                institutionId: party.institutionId,
+              }),
+            }
+          : undefined,
+        canSeeGroups
+          ? {
+              groupId: 'selfCare',
+              title: 'Gruppi',
+              active: true,
+              ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.PARTY_GROUPS, {
                 institutionId: party.institutionId,
               }),
             }

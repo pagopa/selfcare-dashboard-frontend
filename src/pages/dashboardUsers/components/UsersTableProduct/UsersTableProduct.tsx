@@ -68,7 +68,7 @@ const UsersTableProduct = ({
     ).then((data) => data.content)
   );
 
-  const canEdit = product.userRole === 'ADMIN';
+  const canEdit = product.userRole === 'ADMIN' && product.status === 'ACTIVE';
 
   useEffect(() => {
     if (
