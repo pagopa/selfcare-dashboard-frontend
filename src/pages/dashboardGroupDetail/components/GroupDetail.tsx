@@ -92,9 +92,13 @@ function GroupDetail({
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography variant="body2" className={groupStatusClass}>
-            {formatDate(partyGroup.createdAt)}
-          </Typography>
+          {partyGroup.createdAt ? (
+            <Typography variant="body2" className={groupStatusClass}>
+              {formatDate(partyGroup.createdAt)}
+            </Typography>
+          ) : (
+            ''
+          )}
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
@@ -102,9 +106,13 @@ function GroupDetail({
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography variant="body2" className={groupStatusClass}>
-            {`${partyGroup.createdBy?.name} ${partyGroup.createdBy?.surname}`}
-          </Typography>
+          {partyGroup.createdBy ? (
+            <Typography variant="body2" className={groupStatusClass}>
+              {`${partyGroup.createdBy.name} ${partyGroup.createdBy?.surname}`}
+            </Typography>
+          ) : (
+            ''
+          )}
         </Grid>
       </Grid>
       <Grid container item alignContent="center">
@@ -114,9 +122,13 @@ function GroupDetail({
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography variant="body2" className={groupStatusClass}>
-            {formatDate(partyGroup.modifiedAt)}
-          </Typography>
+          {partyGroup.modifiedAt ? (
+            <Typography variant="body2" className={groupStatusClass}>
+              {formatDate(partyGroup.modifiedAt)}
+            </Typography>
+          ) : (
+            ''
+          )}
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6" className="CustomLabelStyle">
@@ -124,10 +136,14 @@ function GroupDetail({
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography
-            variant="body2"
-            className={groupStatusClass}
-          >{`${partyGroup.modifiedBy?.name} ${partyGroup.modifiedBy?.surname}`}</Typography>
+          {partyGroup.modifiedBy ? (
+            <Typography
+              variant="body2"
+              className={groupStatusClass}
+            >{`${partyGroup.modifiedBy?.name} ${partyGroup.modifiedBy?.surname}`}</Typography>
+          ) : (
+            ''
+          )}
         </Grid>
       </Grid>
     </Grid>
