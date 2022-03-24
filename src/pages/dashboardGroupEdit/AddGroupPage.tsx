@@ -2,6 +2,7 @@ import { Grid } from '@mui/material';
 import { TitleBox } from '@pagopa/selfcare-common-frontend';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import { Party } from '../../model/Party';
 import { PartyGroupOnCreation } from '../../model/PartyGroup';
@@ -17,10 +18,10 @@ type Props = {
 
 function AddGroupPage({ party, activeProducts, productsMap }: Props) {
   const history = useHistory();
-
+  const { t } = useTranslation();
   const paths = [
     {
-      description: 'Gruppi',
+      description: t('dashboardGroupEdit.addGroupPage.groupPathDescription'),
       onClick: () =>
         history.push(
           resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.MAIN.path, {
@@ -29,7 +30,7 @@ function AddGroupPage({ party, activeProducts, productsMap }: Props) {
         ),
     },
     {
-      description: 'Crea un nuovo gruppo',
+      description: t('dashboardGroupEdit.addGroupPage.pathDescription'),
     },
   ];
 
@@ -46,8 +47,10 @@ function AddGroupPage({ party, activeProducts, productsMap }: Props) {
       </Grid>
       <Grid item xs={12} mb={9}>
         <TitleBox
-          title="Crea un nuovo gruppo"
-          subTitle={`Inserisci i dati del gruppo che vuoi creare e assegna a gestire i gruppi per il ${party.description}.`}
+          title={t('dashboardGroupEdit.addGroupPage.title')}
+          subTitle={t('dashboardGroupEdit.addGroupPage.subTitle', {
+            partyDescription: `${party.description}`,
+          })}
         />
       </Grid>
       <Grid item xs={12}>

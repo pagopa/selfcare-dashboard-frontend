@@ -5,6 +5,7 @@ import { retrieveTokenExchange } from '../../../../../../services/tokenExchangeS
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
 import ActiveProductCard from '../ActiveProductCard';
+import './../../../../../../locale';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {

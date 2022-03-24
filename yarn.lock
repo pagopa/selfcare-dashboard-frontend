@@ -1958,10 +1958,10 @@
     write-yaml-file "^4.1.3"
     yargs "^15.0.1"
 
-"@pagopa/selfcare-common-frontend@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@pagopa/selfcare-common-frontend/-/selfcare-common-frontend-1.6.0.tgz#8e8cbe6b03170f0fcbddc7e2c6e447c24608afa7"
-  integrity sha512-UKfMjND+0ODTA6ghEHAvtDUP1BVn8/URneNe12ASu0mbSxO5diidi0SNlPx3yYb2AL+Bi++Z0DY+cHnronWlyQ==
+"@pagopa/selfcare-common-frontend@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@pagopa/selfcare-common-frontend/-/selfcare-common-frontend-1.6.2.tgz#fcb0318bb8717d5d8c508a9ce780e3ff45390921"
+  integrity sha512-5Ila5q8oRdIeH1hDwwcjduSxhhe74RP15Bfq9KGqMOqgPruOdsK+QYpZV6+9MYy6dBHwGg03j3ZNKRQyVMmouA==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
@@ -11241,7 +11241,7 @@ react-fast-compare@^2.0.1:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
-react-i18next@^11.15.6:
+react-i18next@^11.15.6, react-i18next@^11.16.1:
   version "11.16.1"
   resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.16.1.tgz#707e6ce56e97df97a271a2274d401ba8bec4b679"
   integrity sha512-6Wf/YtPqANloFmnN5ol0ANeweFPzDWGykRq/dk4wU3ZkjWBR3d5iH210gMg8e8AgLQ1Dq7suUIL7WGfu08OehQ==

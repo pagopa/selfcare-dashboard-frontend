@@ -24,6 +24,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
+import { useTranslation, Trans } from 'react-i18next';
 import { ReactComponent as ClearIcon } from '../../../assets/clear.svg';
 import { Party } from '../../../model/Party';
 import { PartyGroupOnCreation, PartyGroupOnEdit } from '../../../model/PartyGroup';
@@ -112,6 +113,7 @@ export default function GroupForm({
   goBack,
 }: Props) {
   const currentUser = useAppSelector(userSelectors.selectLoggedUser);
+  const { t } = useTranslation();
 
   const setLoadingSaveGroup = useLoading(LOADING_TASK_SAVE_GROUP);
   const setLoadingFetchUserProduct = useLoading(LOADING_TASK_FETCH_USER_PRODUCT);
@@ -192,13 +194,15 @@ export default function GroupForm({
       message: (
         <>
           {isEdit
-            ? 'Hai modificato correttamente il gruppo '
+            ? t('dashboardGroupEdit.groupForm.notifySuccessfulSave.isEdit')
             : isClone
-            ? 'Hai duplicato correttamente il gruppo '
-            : 'Hai creato correttamente il gruppo '}
-          <strong>{`${values.name}`}</strong>
-          {' per il prodotto '}
-          <strong>{`${productSelected?.title}`}</strong>
+            ? t('dashboardGroupEdit.groupForm.notifySuccessfulSave.isClone')
+            : t('dashboardGroupEdit.groupForm.notifySuccessfulSave.isCreate')}
+          <Trans i18nKey="dashboardGroupEdit.groupForm.notifySuccessfulSave.message">
+            <strong>{{ valuesName: values.name }}</strong>
+            per il prodotto
+            <strong>{{ productSelectedtitle: productSelected?.title }}</strong>
+          </Trans>
         </>
       ),
     });
@@ -213,16 +217,22 @@ export default function GroupForm({
       id: isEdit ? 'EDIT_GROUP_ERROR' : isClone ? 'CLONE_GROUP_ERROR' : 'SAVE_GROUP_ERROR',
       blocking: false,
       displayableTitle: isEdit
-        ? 'ERRORE DURANTE LA MODIFICA '
+        ? t('dashboardGroupEdit.groupForm.notifyErrorOnSave.isEdit')
         : isClone
-        ? 'ERRORE DURANTE LA DUPLICAZIONE'
-        : 'ERRORE DURANTE LA CREAZIONE',
+        ? t('dashboardGroupEdit.groupForm.notifyErrorOnSave.isClone')
+        : t('dashboardGroupEdit.groupForm.notifyErrorOnSave.isCreate'),
       displayableDescription,
       techDescription: isEdit
-        ? `An error occurred while edit of group ${values.name}`
+        ? t('dashboardGroupEdit.groupForm.notifyErrorOnSave.displayableDescriptionEdit', {
+            valuesName: `${values.name}`,
+          })
         : isClone
-        ? `An error occurred while clone of group ${values.name}`
-        : `An error occurred while creation of group ${values.name}`,
+        ? t('dashboardGroupEdit.groupForm.notifyErrorOnSave.displayableDescriptionClone', {
+            valuesName: `${values.name}`,
+          })
+        : t('dashboardGroupEdit.groupForm.notifyErrorOnSave.displayableDescriptionCreate', {
+            valuesName: `${values.name}`,
+          }),
       error: reason,
       toNotify: true,
     });
@@ -248,7 +258,7 @@ export default function GroupForm({
           notifyErrorOnSave(
             values,
             reason,
-            'Il nome che hai scelto per il nuovo gruppo è già in uso. Cambialo'
+            t('dashboardGroupEdit.groupForm.save.groupNameAlreadyExists')
           );
         } else {
           setIsNameDuplicated(false);
@@ -256,10 +266,10 @@ export default function GroupForm({
             values,
             reason,
             isEdit
-              ? "C'è stato un errore durante la modifica del gruppo. Riprova"
+              ? t('dashboardGroupEdit.groupForm.save.isEdit')
               : isClone
-              ? "C'è stato un errore durante la duplicazione del gruppo. Riprova"
-              : "C'è stato un errore durante la creazione del gruppo. Riprova."
+              ? t('dashboardGroupEdit.groupForm.save.isClone')
+              : t('dashboardGroupEdit.groupForm.save.isCreate')
           );
         }
       })
@@ -376,10 +386,16 @@ export default function GroupForm({
           <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
               <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
-                Nome del gruppo
+                {t('dashboardGroupEdit.groupForm.formLabels.groupName')}
               </Typography>
               <CustomTextField
-                {...baseTextFieldProps('name', '', 'Inserisci il nome del gruppo', 700, 20)}
+                {...baseTextFieldProps(
+                  'name',
+                  '',
+                  t('dashboardGroupEdit.groupForm.formLabels.groupNamePlaceholder'),
+                  700,
+                  20
+                )}
                 onChange={(e) => {
                   formik.handleChange(e);
                   setIsNameDuplicated(false);
@@ -387,7 +403,7 @@ export default function GroupForm({
               />
               {isNameDuplicated ? (
                 <Typography color="#F83E5A" sx={{ fontSize: '14px', paddingLeft: '15px' }}>
-                  Questo nome è già in uso
+                  {t('dashboardGroupEdit.groupForm.formLabels.groupNameDuplicated')}
                 </Typography>
               ) : undefined}
             </Grid>
@@ -395,10 +411,14 @@ export default function GroupForm({
           <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
               <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
-                Descrizione
+                {t('dashboardGroupEdit.groupForm.formLabels.description')}
               </Typography>
               <CustomTextField
-                {...baseTextFieldProps('description', '', 'Inserisci una descrizione')}
+                {...baseTextFieldProps(
+                  'description',
+                  '',
+                  t('dashboardGroupEdit.groupForm.formLabels.descriptionPlaceholder')
+                )}
                 variant="outlined"
                 multiline
                 rows={4}
@@ -408,7 +428,7 @@ export default function GroupForm({
           <Grid item container spacing={3} marginBottom={4}>
             <Grid item xs={4} mb={3}>
               <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
-                Prodotto
+                {t('dashboardGroupEdit.groupForm.formLabels.product')}
               </Typography>
 
               <Select
@@ -421,7 +441,7 @@ export default function GroupForm({
                 renderValue={(productSelected) =>
                   productSelected === '' ? (
                     <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
-                      Seleziona il prodotto
+                      {t('dashboardGroupEdit.groupForm.formLabels.prductPlaceholter')}
                     </Typography>
                   ) : (
                     <Typography fontWeight={700} fontSize={20}>
@@ -445,7 +465,7 @@ export default function GroupForm({
               </Select>
               {isClone && productSelected === undefined ? (
                 <Typography color="#F83E5A" sx={{ fontSize: '14px' }}>
-                  Nessun prodotto selezionato
+                  {t('dashboardGroupEdit.groupForm.formLabels.noProductSelected')}
                 </Typography>
               ) : undefined}
             </Grid>
@@ -454,7 +474,7 @@ export default function GroupForm({
           <Grid item container spacing={3} marginBottom={5}>
             <Grid item xs={8} mb={3}>
               <Typography variant="h6" sx={{ fontWeight: '700', color: '#5C6F82' }} pb={1}>
-                Referenti
+                {t('dashboardGroupEdit.groupForm.formLabels.referents')}
               </Typography>
 
               <Select
@@ -469,7 +489,7 @@ export default function GroupForm({
                   <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                     {selectedUsers.length === 0 ? (
                       <Typography sx={{ fontStyle: 'italic', fontSize: '16px' }}>
-                        Seleziona i referenti che vuoi assegnare al gruppo
+                        {t('dashboardGroupEdit.groupForm.formLabels.referentsPlaceholter')}
                       </Typography>
                     ) : undefined}
                   </Box>
@@ -546,7 +566,7 @@ export default function GroupForm({
                 variant="outlined"
                 onClick={() => onExit(goBackInner)}
               >
-                Annulla
+                {t('dashboardGroupEdit.groupForm.formLabels.cancelActionLabel')}
               </Button>
             </Grid>
             <Grid item xs={3} mt={8}>
@@ -557,7 +577,7 @@ export default function GroupForm({
                 variant="contained"
                 type="submit"
               >
-                Conferma
+                {t('dashboardGroupEdit.groupForm.formLabels.confirmActionLabel')}
               </Button>
             </Grid>
           </Grid>

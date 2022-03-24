@@ -2,6 +2,7 @@ import { Grid } from '@mui/material';
 import { TitleBox } from '@pagopa/selfcare-common-frontend';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import withGroupDetail, { withGroupDetailProps } from '../../decorators/withGroupDetail';
 import { PartyGroupOnEdit } from '../../model/PartyGroup';
@@ -15,10 +16,11 @@ type Props = {
 
 function EditGroupPage({ party, activeProducts, productsMap, partyGroup }: Props) {
   const history = useHistory();
+  const { t } = useTranslation();
 
   const paths = [
     {
-      description: 'Gruppi',
+      description: t('dashboardGroupEdit.editGroupPage.groupPathDescription'),
       onClick: () =>
         history.push(
           resolvePathVariables(DASHBOARD_ROUTES.PARTY_GROUPS.subRoutes.MAIN.path, {
@@ -28,7 +30,7 @@ function EditGroupPage({ party, activeProducts, productsMap, partyGroup }: Props
         ),
     },
     {
-      description: 'Modifica gruppo',
+      description: t('dashboardGroupEdit.editGroupPage.pathDescription'),
     },
   ];
 
@@ -44,7 +46,10 @@ function EditGroupPage({ party, activeProducts, productsMap, partyGroup }: Props
         <ProductNavigationBar paths={paths} />
       </Grid>
       <Grid item xs={12} mb={9}>
-        <TitleBox title="Modifica gruppo" subTitle={`Duplica il gruppo e modifica i dati`} />
+        <TitleBox
+          title={t('dashboardGroupEdit.editGroupPage.title')}
+          subTitle={t('dashboardGroupEdit.editGroupPage.subTitle')}
+        />
       </Grid>
       <Grid item xs={12}>
         <GroupForm

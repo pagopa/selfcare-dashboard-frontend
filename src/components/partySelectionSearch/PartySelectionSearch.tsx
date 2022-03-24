@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
@@ -46,6 +47,7 @@ export default function PartySelectionSearch({
   pxTitleSubTitle,
   partyTitle,
 }: Props) {
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
   const [selectedParty, setSelectedParty] = React.useState<Party | null>(null);
@@ -83,7 +85,7 @@ export default function PartySelectionSearch({
                     label={label}
                     iconMarginRight={iconMarginRight}
                     disableUnderline={disableUnderline}
-                    placeholder="Cerca"
+                    placeholder={t('partySelection.searchBar')}
                     onChange={(e) => onFilterChange(e.target.value)}
                     input={input}
                     clearField={() => onFilterChange('')}
@@ -119,7 +121,7 @@ export default function PartySelectionSearch({
                       subTitle={roleLabels[party.userRole].longLabel}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
-                      chip={party.status === 'PENDING' ? 'Da completare' : ''}
+                      chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}
                       action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                         handleListItemClick(event, party)
                       }
@@ -129,7 +131,7 @@ export default function PartySelectionSearch({
             </CustomBox>
           </Grid>
         </Grid>
-      )}{' '}
+      )}
     </React.Fragment>
   );
 }
