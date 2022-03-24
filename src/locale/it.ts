@@ -183,5 +183,67 @@ export default {
       subTitle:
         'Consulta e crea dei gruppi (es. uno per ogni Dipartimento o Ufficio) in modo da gestire meglio il lavoro del tuo Ente.',
     },
+    addGroupButton: {
+      createActionLabel: 'Crea',
+    },
+    noGroups: {
+      noGroupsLabel: 'Non è ancora stato creato alcun Gruppo.',
+    },
+    groupProductRowActions: {
+      modifyActionLink: 'Modifica',
+      duplicateActionLink: 'Duplica',
+      suspendActionLink: 'Sospendi',
+      activateActionLink: 'Riattiva',
+      askConfirm: {
+        message: `{{message}} il gruppo <2>{{groupName}}</2> di <4>{{productTitle}}</4>.<6 />Vuoi continuare?`,
+        confirmLabel: 'Conferma',
+      },
+      performAction: {
+        updatePartyGroupStatusThen: {
+          message: `{{message}} il gruppo <2>{{groupName}}</2>.`,
+        },
+        updatePartyGroupStatusCatch: {
+          displayableTitle: 'ERRORE DURANTE LA {{selectedGroupStatusError}} DEL GRUPPO ',
+          displayableDescription: `C'è stato un errore durante la {{selectedGroupStatusError}} del gruppo <3>{{groupName}}</3>.`,
+          selectedGroupStatusErrorSuspended: 'sospensione ',
+          selectedGroupStatusErrorActive: 'riattivazione ',
+        },
+      },
+      handleChangeState: {
+        askConfirmSuspend: 'Sospendi Gruppo',
+        askConfirmActive: 'Riattiva Gruppo',
+        askConfirmBeforeSuspend: 'Stai per sospendere',
+        askConfirmBeforeActive: 'Stai per riattivare',
+      },
+      updateStatus: {
+        nextStatusSuspended: 'sospeso',
+        nextStatusActive: 'riattivato',
+        performActionTitle: `REFERENTE {{selectedUserStatus}}`,
+        performActionActionMessage: `Hai {{selectedUserStatus}} correttamente`,
+      },
+      handleDelete: {
+        askConfirmDeleted: 'Elimina Gruppo',
+        askConfirmBeforeDeleted: 'Stai per eliminare',
+      },
+      deleteGroup: {
+        performActionTitle: 'GRUPPO ELIMINATO',
+        performActionMessage: 'Hai eliminato correttamente',
+      },
+    },
+    groupProductTableColumns: {
+      duplicateActionLink: 'Duplica',
+      headerFields: {
+        name: 'NOME',
+        description: 'DESCRIZIONE',
+        product: 'PRODOTTO',
+        referents: 'REFERENTI',
+      },
+    },
+    GroupsProductFetchError: {
+      message: `Spiacenti, qualcosa è andato storto. <1><0>Riprova</0></1>.`,
+    },
+    GroupsTableLoadMoreData: {
+      loadMoreMessage: 'Carica altri',
+    },
   },
 };

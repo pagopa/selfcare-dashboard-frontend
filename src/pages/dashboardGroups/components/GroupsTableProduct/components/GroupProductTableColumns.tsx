@@ -3,6 +3,7 @@ import { GridColDef, GridColumnHeaderParams, GridRenderCellParams } from '@mui/x
 import React, { CSSProperties, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { TFunction } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { PartyGroup, PartyGroupStatus } from '../../../../../model/PartyGroup';
@@ -15,13 +16,14 @@ export function buildColumnDefs(
   product: Product,
   onRowClick: (partyGroup: PartyGroup) => void,
   onDelete: (partyGroup: PartyGroup) => void,
-  onStatusUpdate: (partyGroup: PartyGroup, nextStatus: PartyGroupStatus) => void
+  onStatusUpdate: (partyGroup: PartyGroup, nextStatus: PartyGroupStatus) => void,
+  t: TFunction<'translation', undefined>
 ) {
   return [
     {
       field: 'name',
       cellClassName: 'justifyContentBold',
-      headerName: 'NOME',
+      headerName: t('dashboardGroup.groupProductTableColumns.headerFields.name'),
       align: 'left',
       headerAlign: 'left',
       width: 175,
@@ -34,7 +36,7 @@ export function buildColumnDefs(
     {
       field: 'description',
       cellClassName: 'justifyContentNormal',
-      headerName: 'DESCRIZIONE',
+      headerName: t('dashboardGroup.groupProductTableColumns.headerFields.description'),
       align: 'left',
       headerAlign: 'left',
       width: 293,
@@ -47,7 +49,7 @@ export function buildColumnDefs(
     {
       field: 'productId',
       cellClassName: 'justifyContentBold',
-      headerName: 'PRODOTTO',
+      headerName: t('dashboardGroup.groupProductTableColumns.headerFields.product'),
       align: 'left',
       headerAlign: 'left',
       width: 200,
@@ -61,7 +63,7 @@ export function buildColumnDefs(
     {
       field: 'referenti',
       cellClassName: 'justifyContentNormalRight',
-      headerName: 'REFERENTI',
+      headerName: t('dashboardGroup.groupProductTableColumns.headerFields.referents'),
       align: 'center',
       width: 110,
       hideSortIcons: true,
@@ -108,7 +110,7 @@ export function buildColumnDefs(
                     }
                   )}
                 >
-                  Duplica
+                  {t('dashboardGroup.groupProductTableColumns.duplicateActionLink')}
                 </Link>
               </Typography>
             ),

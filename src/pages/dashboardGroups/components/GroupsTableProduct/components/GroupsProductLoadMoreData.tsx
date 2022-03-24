@@ -1,11 +1,13 @@
 import { Grid, Link, Typography } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   fetchNextPage: () => void;
 };
 
 export default function GroupsTableLoadMoreData({ fetchNextPage }: Props) {
+  const { t } = useTranslation();
   return (
     <Grid
       container
@@ -26,7 +28,7 @@ export default function GroupsTableLoadMoreData({ fetchNextPage }: Props) {
             fontWeight: 600,
           }}
         >
-          Carica altri
+          {t('dashboardGroup.GroupsTableLoadMoreData.loadMoreMessage')}
           <ExpandMore fontSize="small" sx={{ position: 'absolute', bottom: 0 }} />
         </Link>
       </Typography>

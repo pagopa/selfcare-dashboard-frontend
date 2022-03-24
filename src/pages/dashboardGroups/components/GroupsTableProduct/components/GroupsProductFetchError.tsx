@@ -1,4 +1,5 @@
 import { Grid, Link, Typography } from '@mui/material';
+import { Trans } from 'react-i18next';
 import { ReactComponent as DissatisfiedIcon } from '../../../../../assets/dissatisfied-face.svg';
 
 type Props = {
@@ -18,11 +19,13 @@ export default function GroupsProductFetchError({ onRetry }: Props) {
     >
       <DissatisfiedIcon />
       <Typography>
-        {'Spiacenti, qualcosa è andato storto. '}
-        <Link onClick={onRetry} sx={{ textDecoration: 'none!important', cursor: 'pointer' }}>
-          <b>Riprova</b>
-        </Link>
-        .
+        <Trans i18nKey="dashboardGroup.GroupsProductFetchError.message">
+          Spiacenti, qualcosa è andato storto.
+          <Link onClick={onRetry} sx={{ textDecoration: 'none!important', cursor: 'pointer' }}>
+            <b> Riprova</b>
+          </Link>
+          .
+        </Trans>
       </Typography>
     </Grid>
   );

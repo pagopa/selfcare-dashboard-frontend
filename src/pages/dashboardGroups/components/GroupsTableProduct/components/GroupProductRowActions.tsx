@@ -6,6 +6,7 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import useUserNotify from '@pagopa/selfcare-common-frontend/hooks/useUserNotify';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import { useTranslation, Trans } from 'react-i18next';
 import { Party, UserStatus } from '../../../../../model/Party';
 import { LOADING_TASK_ACTION_ON_PARTY_GROUP } from '../../../../../utils/constants';
 import { PartyGroup, PartyGroupStatus } from '../../../../../model/PartyGroup';
@@ -32,6 +33,7 @@ export default function GroupProductRowActions({
 }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const history = useHistory();
+  const { t } = useTranslation();
 
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
@@ -52,18 +54,33 @@ export default function GroupProductRowActions({
       title,
       message: (
         <>
-          {actionMessage}
-          {' il gruppo '}
-          <strong>{`${partyGroup.name}`}</strong>
-          {' di '}
-          <strong>{`${product.title}`}</strong>
-          {'.'}
-          <br />
-          {'Vuoi continuare?'}
+          <Trans i18nKey="dashboardGroup.groupProductRowActions.askConfirm.message">
+            {
+              (t('dashboardGroup.groupProductRowActions.askConfirm.message'),
+              { message: `${actionMessage}` })
+            }
+            il gruppo
+            <strong>
+              {
+                (t('dashboardGroup.groupProductRowActions.askConfirm.message'),
+                { groupName: `${partyGroup.name}` })
+              }
+            </strong>
+            di
+            <strong>
+              {
+                (t('dashboardGroup.groupProductRowActions.askConfirm.message'),
+                { productTitle: `${product.title}` })
+              }
+            </strong>
+            .
+            <br />
+            Vuoi continuare?
+          </Trans>
         </>
       ),
       onConfirm,
-      confirmLabel: 'Conferma',
+      confirmLabel: t('dashboardGroup.groupProductRowActions.askConfirm.confirmLabel'),
     });
   };
 
@@ -73,20 +90,42 @@ export default function GroupProductRowActions({
     actionMessage: string,
     onComplete: () => void
   ) => {
+    const selectedGroupStatusError =
+      partyGroup.status === 'SUSPENDED'
+        ? t(
+            'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.selectedGroupStatusErrorSuspended'
+          )
+        : t(
+            'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.selectedGroupStatusErrorActive'
+          );
+
     setLoading(true);
     action()
       .then((_) => {
         onComplete();
-
         addNotify({
           id: 'ACTION_ON_PARTY_GROUP_COMPLETED',
           title,
           message: (
             <>
-              {actionMessage}
-              {' il gruppo '}
-              <strong>{`${partyGroup.name}`}</strong>
-              {'.'}
+              <Trans i18nKey="dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusThen.message">
+                {
+                  (t(
+                    'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusThen.message'
+                  ),
+                  { message: `${actionMessage}` })
+                }
+                il gruppo
+                <strong>
+                  {
+                    (t(
+                      'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusThen.message'
+                    ),
+                    { groupName: `${partyGroup.name}` })
+                  }
+                </strong>
+                .
+              </Trans>
             </>
           ),
           component: 'Toast',
@@ -94,11 +133,43 @@ export default function GroupProductRowActions({
       })
       .catch((reason) =>
         addError({
-          id: 'ACTION_ON_PARTY_GROUP_ERROR',
+          component: 'Toast',
+          id: `'UPDATE_PARTY_GROUP_ERROR-${partyGroup.id}`,
+          displayableTitle: t(
+            'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.displayableTitle',
+            {
+              selectedGroupStatusError: `${selectedGroupStatusError.toUpperCase()}`,
+            }
+          ),
+          techDescription: `C'è stato un errore durante la ${selectedGroupStatusError} del gruppo (${partyGroup.name}) con id (${partyGroup.id}): ${partyGroup.status}`,
           blocking: false,
           error: reason,
-          techDescription: `An error occurred while performing action ${title} on party (${party.institutionId}) and group (${partyGroup.id})`,
           toNotify: true,
+          displayableDescription: (
+            <>
+              <Trans i18nKey="dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.displayableDescription">
+                C&apos;è stato un errore durante la
+                {
+                  (t(
+                    'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.displayableDescription'
+                  ),
+                  { selectedGroupStatusError: `${selectedGroupStatusError}` })
+                }
+                del gruppo
+                <strong>
+                  {
+                    (t(
+                      'dashboardGroup.groupProductRowActions.performAction.updatePartyGroupStatusCatch.displayableDescription'
+                    ),
+                    {
+                      groupName: `${partyGroup.name}`,
+                    })
+                  }
+                </strong>
+                .
+              </Trans>
+            </>
+          ),
         })
       )
       .finally(() => setLoading(false));
@@ -126,32 +197,47 @@ export default function GroupProductRowActions({
     }
 
     askConfirm(
-      nextStatus === 'SUSPENDED' ? 'Sospendi Gruppo' : 'Riattiva Gruppo',
-      nextStatus === 'SUSPENDED' ? 'Stai per sospendere' : 'Stai per riattivare',
+      nextStatus === 'SUSPENDED'
+        ? t('dashboardGroup.groupProductRowActions.handleChangeState.askConfirmSuspend')
+        : t('dashboardGroup.groupProductRowActions.handleChangeState.askConfirmActive'),
+      nextStatus === 'SUSPENDED'
+        ? t('dashboardGroup.groupProductRowActions.handleChangeState.askConfirmBeforeSuspend')
+        : t('dashboardGroup.groupProductRowActions.handleChangeState.askConfirmBeforeActive'),
       () => updateStatus(nextStatus)
     );
   };
 
   const updateStatus = (nextStatus: PartyGroupStatus) => {
-    const selectedUserStatus = nextStatus === 'SUSPENDED' ? 'sospeso' : 'riattivato';
+    const selectedUserStatus =
+      nextStatus === 'SUSPENDED'
+        ? t('dashboardGroup.groupProductRowActions.updateStatus.nextStatusSuspended')
+        : t('dashboardGroup.groupProductRowActions.updateStatus.nextStatusActive');
     performAction(
       () => updatePartyGroupStatus(party, product, partyGroup, nextStatus),
-      `REFERENTE ${selectedUserStatus.toUpperCase()}`,
-      `Hai ${selectedUserStatus} correttamente`,
+      t('dashboardGroup.groupProductRowActions.updateStatus.performActionTitle', {
+        selectedUserStatus: `${selectedUserStatus.toUpperCase()}`,
+      }),
+      t('dashboardGroup.groupProductRowActions.updateStatus.performActionActionMessage', {
+        selectedUserStatus: `${selectedUserStatus}`,
+      }),
       () => onStatusUpdate(partyGroup, nextStatus)
     );
   };
 
   const handleDelete = () => {
     handleClose();
-    askConfirm('Elimina Gruppo', 'Stai per eliminare', deleteGroup);
+    askConfirm(
+      t('dashboardGroup.groupProductRowActions.handleDelete.askConfirmDeleted'),
+      t('dashboardGroup.groupProductRowActions.handleDelete.askConfirmBeforeDeleted'),
+      deleteGroup
+    );
   };
 
   const deleteGroup = () => {
     performAction(
       () => deletePartyGroup(party, product, partyGroup),
-      'GRUPPO ELIMINATO',
-      'Hai eliminato correttamente',
+      t('dashboardGroup.groupProductRowActions.deleteGroup.performActionTitle'),
+      t('dashboardGroup.groupProductRowActions.deleteGroup.performActionMessage'),
       () => onDelete(partyGroup)
     );
   };
@@ -195,11 +281,23 @@ export default function GroupProductRowActions({
           },
         }}
       >
-        {!isSuspended && <MenuItem onClick={handleModify}>Modifica</MenuItem>}
-        {!isSuspended && <MenuItem onClick={handleClone}>Duplica</MenuItem>}
+        {!isSuspended && (
+          <MenuItem onClick={handleModify}>
+            {t('dashboardGroup.groupProductRowActions.modifyActionLink')}
+          </MenuItem>
+        )}
+        {!isSuspended && (
+          <MenuItem onClick={handleClone}>
+            {t('dashboardGroup.groupProductRowActions.duplicateActionLink')}
+          </MenuItem>
+        )}
         {(isActive || isSuspended) && (
           <MenuItem onClick={handleChangeState}>
-            {isActive ? 'Sospendi' : isSuspended ? 'Riabilita' : ''}
+            {isActive
+              ? t('dashboardGroup.groupProductRowActions.suspendActionLink')
+              : isSuspended
+              ? t('dashboardGroup.groupProductRowActions.activateActionLink')
+              : ''}
           </MenuItem>
         )}
         <MenuItem onClick={handleDelete}>Elimina</MenuItem>
