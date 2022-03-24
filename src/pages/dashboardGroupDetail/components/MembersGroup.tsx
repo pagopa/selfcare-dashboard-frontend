@@ -2,6 +2,7 @@ import { Grid, Link, Divider, Typography, Chip } from '@mui/material';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PartyGroupExt } from '../../../model/PartyGroup';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { Product } from '../../../model/Product';
@@ -28,6 +29,7 @@ export default function MembersGroup({
   const history = useHistory();
 
   const [members, setMembers] = useState<Array<PartyUser>>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setMembers(partyGroup.members);
@@ -95,7 +97,9 @@ export default function MembersGroup({
                   }}
                   title={`${member.name} ${member.surname}`}
                 >
-                  {`${member.name} ${member.surname}${member.isCurrentUser ? ' (tu)' : ''}`}
+                  {`${member.name} ${member.surname}${
+                    member.isCurrentUser ? t('membersGroup.currentUser') : ''
+                  }`}
                 </Typography>
               </Link>
             </Grid>

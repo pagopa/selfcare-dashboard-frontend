@@ -3,6 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useHistory } from 'react-router-dom';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../../model/Party';
 import { DASHBOARD_ROUTES } from '../../../routes';
 
@@ -13,6 +14,7 @@ interface AddGroupButtonProps {
 export default function AddGroupButton({ party }: AddGroupButtonProps) {
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
+  const { t } = useTranslation();
 
   return (
     <Button
@@ -29,7 +31,7 @@ export default function AddGroupButton({ party }: AddGroupButtonProps) {
         )
       }
     >
-      Crea
+      {t('dashboardGroup.addGroupButton.createActionLabel')}
     </Button>
   );
 }

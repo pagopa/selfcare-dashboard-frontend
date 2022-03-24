@@ -3,6 +3,7 @@ import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsS
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import withGroupDetail, { withGroupDetailProps } from '../../decorators/withGroupDetail';
 import { DASHBOARD_ROUTES } from '../../routes';
@@ -28,6 +29,7 @@ function GroupDetailPage({
   const history = useHistory();
 
   const [partyGroupState, setPartyGroupState] = React.useState<PartyGroupExt>(partyGroup);
+  const { t } = useTranslation();
 
   const nextGroupStatus: PartyGroupStatus | undefined =
     partyGroupState.status === 'ACTIVE'
@@ -59,7 +61,7 @@ function GroupDetailPage({
 
   const paths = [
     {
-      description: 'Gruppi',
+      description: t('groupDetailPage.path.groupDescription'),
       onClick: goBack,
     },
     {
@@ -86,7 +88,7 @@ function GroupDetailPage({
         <Grid item xs={6}>
           <Box display="flex">
             <Box>
-              <Typography variant="h1">Dettaglio Gruppo</Typography>
+              <Typography variant="h1">{t('groupDetailPage.title')}</Typography>
             </Box>
             <Box>
               {isSuspended && (
@@ -117,7 +119,7 @@ function GroupDetailPage({
             }}
             onClick={goBack}
           >
-            Indietro
+            {t('groupDetailPage.backActionLabel')}
           </Link>
         </Grid>
       </Grid>
