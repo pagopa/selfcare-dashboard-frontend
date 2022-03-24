@@ -302,7 +302,7 @@ export default {
       updateStatus: {
         nextStatusSuspended: 'sospeso',
         nextStatusActive: 'riattivato',
-        performActionTitle: `REFERENTE {{selectedUserStatus}}`,
+        performActionTitle: `GRUPPO {{selectedUserStatus}}`,
         performActionActionMessage: `Hai {{selectedUserStatus}} correttamente`,
       },
       handleDelete: {
