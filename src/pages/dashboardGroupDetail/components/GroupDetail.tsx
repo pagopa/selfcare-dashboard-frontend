@@ -13,6 +13,7 @@ type Props = {
   product: Product;
   party: Party;
   productRolesLists: ProductRolesLists;
+  canEdit: boolean;
 };
 
 function GroupDetail({
@@ -22,6 +23,7 @@ function GroupDetail({
   product,
   party,
   productRolesLists,
+  canEdit,
 }: Props) {
   function formatDate(data?: Date) {
     const d = new Date(data as Date);
@@ -82,6 +84,7 @@ function GroupDetail({
             product={product}
             isSuspended={isSuspended}
             productRolesLists={productRolesLists}
+            canEdit={canEdit}
           />
         </Grid>
       </Grid>
