@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, Box, Typography } from '@mui/material';
 import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
-import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
 
@@ -12,7 +11,6 @@ type Props = {
 };
 
 export default function LogoSubMenu({ title, subTitle, color }: Props) {
-  const { t } = useTranslation();
   const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
 
   return (

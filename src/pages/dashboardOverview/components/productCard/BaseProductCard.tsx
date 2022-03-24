@@ -1,6 +1,5 @@
 import React from 'react';
 import { Typography, Button, Box, Grid, Card, CardContent } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   cardTitle: string;
@@ -42,7 +41,6 @@ export default function BaseProductCard({
   titleFontSize = '32px',
   subTitleFontSize = '18px',
 }: Props) {
-  const { t } = useTranslation();
   return (
     <React.Fragment>
       <Card sx={{ border: 'none', boxShadow: 'none' }}>

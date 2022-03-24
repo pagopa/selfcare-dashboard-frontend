@@ -3,8 +3,6 @@ export default {
     title: 'Seleziona il tuo Ente',
     subTitle: "Se operi per più Enti, puoi modificare la tua scelta all'interno del portale.",
     searchBar: 'Cerca',
-    partyName: '{{partyName}}',
-    role: '{{role}}',
     partyStatus: 'Da completare',
     enterButton: 'Entra',
   },
@@ -25,7 +23,6 @@ export default {
         },
       },
       product: {
-        title: '{{title}}',
         overview: 'Panoramica',
         referents: 'Referenti',
       },
@@ -35,8 +32,6 @@ export default {
       subTitle: 'I prodotti PagoPA a cui il tuo Ente ha aderito.',
     },
     activeProducts: {
-      tag: '{{tag}}',
-      productName: '{{productName}}',
       activationOf: 'Attivo dal ',
       active: 'Attivo',
       manageButton: 'Gestisci',
@@ -47,9 +42,6 @@ export default {
       subTitle: 'Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi.',
     },
     notActiveProducts: {
-      tag: '{{tag}}',
-      productName: '{{productName}}',
-      productDescription: '{{productDescription}}',
       joinButton: 'Aderisci',
     },
     discoverMore: '<0> SCOPRI DI PIÙ → </0>',
@@ -59,12 +51,6 @@ export default {
         'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?',
       confirmButton: 'Procedi con una nuova adesione',
       closeButton: 'Esci',
-    },
-    productInfo: {
-      tag: '{{tag}}',
-      productName: '{{productName}}',
-      activationInfo: '{{activationInfo}}',
-      manageButton: '{{manageButton}}',
     },
     partyLogo: {
       upload: 'Carica il logo del tuo Ente',
@@ -82,11 +68,8 @@ export default {
       size: 'dimensione 300x300px',
     },
     partyDetail: {
-      category: '{{category}}',
-      title: '{{title}}',
       ipaCode: 'Codice IPA',
       companyName: 'Ragione sociale',
-      description: '{{description}}',
       fiscalCode: 'Codice fiscale',
       pec: 'PEC',
       contactToModify:
@@ -99,20 +82,5 @@ export default {
       label: 'I tuoi enti',
     },
     backButton: 'Esci',
-    logoSubMenu: {
-      partyName: '{{partyName}}',
-      role: '{{role}}',
-      selected: {
-        partyName: '{{partyName}}',
-        role: '{{role}}',
-      },
-    },
-    dashboardSubMenu: {
-      selected: {
-        partyName: '{{partyName}}',
-        description: '{{description}}',
-        role: '{{role}}',
-      },
-    },
   },
 };

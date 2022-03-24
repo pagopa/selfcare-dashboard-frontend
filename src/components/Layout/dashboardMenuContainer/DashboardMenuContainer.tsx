@@ -1,14 +1,12 @@
 import { Grid } from '@mui/material';
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../redux/hooks';
 import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import LogoSubMenu from './components/LogoSubMenu';
 import DashboardSubMenu from './components/DashboardSubMenu';
 
 const DashboardMenuContainer = () => {
-  const { t } = useTranslation();
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
   const user = useAppSelector(userSelectors.selectLoggedUser);
 
