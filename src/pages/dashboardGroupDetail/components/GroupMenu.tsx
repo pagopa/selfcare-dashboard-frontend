@@ -28,6 +28,7 @@ type Props = {
     nextStatus: UserStatus
   ) => void;
   onMemberDelete: (member: PartyUser) => void;
+  canEdit: boolean;
 };
 export default function GroupMenu({
   member,
@@ -39,6 +40,7 @@ export default function GroupMenu({
   isSuspended,
   onMemberStatusUpdate,
   onMemberDelete,
+  canEdit,
 }: Props) {
   const ITEM_HEIGHT = 48;
 
@@ -254,7 +256,7 @@ export default function GroupMenu({
   };
   return (
     <>
-      {!member.isCurrentUser && (
+      {!member.isCurrentUser && canEdit && (
         <Grid item xs={1} display="flex" justifyContent="flex-end">
           <IconButton
             sx={{ p: '0px', ':hover': { backgroundColor: 'transparent' } }}
