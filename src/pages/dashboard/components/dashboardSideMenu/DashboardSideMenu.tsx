@@ -67,7 +67,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
               groupId: 'selfCare',
               title: t('overview.sideMenu.institutionManagement.groups.title'),
               active: true,
-              ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.PARTY_GROUPS.path, {
+              ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
                 institutionId: party.institutionId,
               }),
             }

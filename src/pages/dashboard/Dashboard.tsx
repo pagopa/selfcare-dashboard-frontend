@@ -2,6 +2,7 @@ import { Grid, Box, useTheme } from '@mui/material';
 import { useMemo } from 'react';
 import { Route, Switch, useHistory } from 'react-router';
 import { useStore } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
@@ -14,6 +15,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
+import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -81,6 +83,7 @@ const Dashboard = () => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const store = useStore();
   const theme = useTheme();
+  const { i18n } = useTranslation();
 
   const activeProducts: Array<Product> =
     useMemo(() => products?.filter((p) => p.status === 'ACTIVE'), [products]) ?? [];
@@ -115,6 +118,7 @@ const Dashboard = () => {
               history={history}
               store={store}
               theme={theme}
+              i18n={i18n}
               decorators={decorators}
             />
           </Route>
@@ -127,6 +131,20 @@ const Dashboard = () => {
               history={history}
               store={store}
               theme={theme}
+              i18n={i18n}
+              decorators={decorators}
+            />
+          </Route>
+          <Route path={ENV.ROUTES.GROUPS} exact={false}>
+            <RemoteRoutingGroups
+              party={party}
+              products={products}
+              activeProducts={activeProducts}
+              productsMap={productsMap}
+              history={history}
+              store={store}
+              theme={theme}
+              i18n={i18n}
               decorators={decorators}
             />
           </Route>

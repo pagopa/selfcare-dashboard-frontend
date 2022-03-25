@@ -15,6 +15,8 @@ export const ENV = {
     USERS: `${PUBLIC_URL_INNER}/:institutionId/users`,
     USERS_DETAIL: `${PUBLIC_URL_INNER}/:institutionId/users/:userId`,
     PRODUCT_USERS: `${PUBLIC_URL_INNER}/:institutionId/:productId/users`,
+    GROUPS: `${PUBLIC_URL_INNER}/:institutionId/groups`,
+    GROUP_DETAIL: `${PUBLIC_URL_INNER}/:institutionId/groups/:groupId`,
   },
 
   URL_FE: {
@@ -37,8 +39,6 @@ export const ENV = {
     PREFIX: env.get('REACT_APP_URL_INSTITUTION_LOGO_PREFIX').required().asString(),
     SUFFIX: env.get('REACT_APP_URL_INSTITUTION_LOGO_SUFFIX').required().asString(),
   },
-
-  PARTY_GROUPS_PAGE_SIZE: env.get('REACT_APP_PARTY_GROUPS_PAGE_SIZE').required().asInt(),
 
   ANALYTCS: {
     ENABLE: env.get('REACT_APP_ANALYTICS_ENABLE').default('false').asBool(),

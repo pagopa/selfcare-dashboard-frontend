@@ -2,7 +2,7 @@ import React from 'react';
 import { LoadingOverlayComponent } from '@pagopa/selfcare-common-frontend';
 import { DashboardMicrofrontendPageProps } from '../dashboardMicrocomponentsUtils';
 
-const RemoteRoutingUsers = React.lazy(() => import('selfcareUsers/RoutingUsers'));
+const RemoteRoutingGroups = React.lazy(() => import('selfcareGroups/RoutingGroups'));
 
 export default ({
   history,
@@ -16,7 +16,7 @@ export default ({
   productsMap,
 }: DashboardMicrofrontendPageProps) => (
   <React.Suspense fallback={<LoadingOverlayComponent open={true} />}>
-    <RemoteRoutingUsers
+    <RemoteRoutingGroups
       history={history}
       store={store}
       theme={theme}

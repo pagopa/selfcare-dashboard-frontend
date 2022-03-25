@@ -4,11 +4,6 @@ import Dashboard from './pages/dashboard/Dashboard';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
-import AddGroupPage from './pages/dashboardGroupEdit/AddGroupPage';
-import EditGroupPage from './pages/dashboardGroupEdit/EditGroupPage';
-import CloneGroupPage from './pages/dashboardGroupEdit/CloneGroupPage';
-import GroupsPage from './pages/dashboardGroups/GroupsPage';
-import GroupsDetailPage from './pages/dashboardGroupDetail/GroupDetailPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -19,6 +14,9 @@ export type RouteConfig = {
   exact?: boolean;
   subRoutes?: RoutesObject;
   component?: React.ComponentType<any>;
+  withProductRolesMap?: boolean;
+  withSelectedProduct?: boolean;
+  withSelectedProductRoles?: boolean;
 };
 
 const buildRedirectToBasePath = (basePath: string): RoutesObject => ({
@@ -51,37 +49,6 @@ export const DASHBOARD_ROUTES = {
     path: `${BASE_ROUTE}/:institutionId`,
     exact: true,
     component: DashboardOverview,
-  },
-  PARTY_GROUPS: {
-    path: `${BASE_ROUTE}/:institutionId/groups`,
-    exact: false,
-    subRoutes: {
-      MAIN: {
-        path: `${BASE_ROUTE}/:institutionId/groups`,
-        exact: true,
-        component: GroupsPage,
-      },
-      PARTY_GROUP_ADD: {
-        path: `${BASE_ROUTE}/:institutionId/groups/add`,
-        exact: true,
-        component: AddGroupPage,
-      },
-      PARTY_GROUP_DETAIL: {
-        path: `${BASE_ROUTE}/:institutionId/groups/:groupId`,
-        exact: true,
-        component: GroupsDetailPage,
-      },
-      PARTY_GROUP_EDIT: {
-        path: `${BASE_ROUTE}/:institutionId/groups/:groupId/edit`,
-        exact: true,
-        component: EditGroupPage,
-      },
-      PARTY_GROUP_CLONE: {
-        path: `${BASE_ROUTE}/:institutionId/groups/:groupId/clone`,
-        exact: true,
-        component: CloneGroupPage,
-      },
-    },
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId`),
 };

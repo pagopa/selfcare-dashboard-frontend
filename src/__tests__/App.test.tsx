@@ -11,7 +11,6 @@ import { Router } from 'react-router';
 jest.mock('@pagopa/selfcare-common-frontend/decorators/withLogin');
 jest.mock('../decorators/withParties');
 jest.mock('../decorators/withSelectedParty');
-jest.mock('../services/usersService');
 
 const renderApp = (
   injectedStore?: ReturnType<typeof createStore>,

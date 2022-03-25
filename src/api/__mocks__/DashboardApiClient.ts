@@ -1,5 +1,3 @@
-import { PartyUserOnCreation } from '../../model/PartyUser';
-import { ProductRole } from '../../model/ProductRole';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
 import {
@@ -256,39 +254,6 @@ export const DashboardApi = {
     _productId: string
   ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
-  getPartyUsers: async (
-    _institutionId: string,
-    _productId?: string,
-    _role?: string,
-    _productRoles?: Array<ProductRole>
-  ): Promise<Array<InstitutionUserResource>> =>
-    new Promise((resolve) => resolve(mockedInstitutionUserResource)),
-
-  getPartyProductUsers: async (
-    _institutionId: string,
-    _productId: string,
-    _role?: string
-  ): Promise<Array<ProductUserResource>> =>
-    new Promise((resolve) => resolve(mockedProductUserResource)),
-
-  savePartyUser: async (
-    _institutionId: string,
-    _productId: string,
-    _user: PartyUserOnCreation
-  ): Promise<void> => new Promise((resolve) => resolve()),
-
-  suspendPartyRelation: async (_relationshipId: string): Promise<void> =>
-    new Promise((resolve) => resolve()),
-
-  activatePartyRelation: async (_relationshipId: string): Promise<void> =>
-    new Promise((resolve) => resolve()),
-
   getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
-
-  fetchUserRegistryByFiscalCode: async (_taxCode: string): Promise<UserResource | null> =>
-    new Promise((resolve) => resolve(mockedUserResource)),
-
-  deletePartyRelation: async (_relationshipId: string): Promise<void> =>
-    new Promise<void>((resolve) => resolve()),
 };

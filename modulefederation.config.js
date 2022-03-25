@@ -12,6 +12,7 @@ module.exports = {
   name: 'host',
   remotes: {
     selfcareUsers: `selfcareUsers@${process.env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
+    selfcareGroups: `selfcareGroups@${process.env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
   },
   shared: {
     '@pagopa/selfcare-common-frontend': {
