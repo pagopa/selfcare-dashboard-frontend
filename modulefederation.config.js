@@ -59,6 +59,11 @@ module.exports = {
       singleton: true,
       requiredVersion: dependencies['@mui/material'],
     },
+    '@mui/lab': {
+      eager: true,
+      singleton: true,
+      requiredVersion: dependencies['@mui/lab'],
+    },
     '@mui/x-data-grid': {
       eager: true,
       singleton: true,

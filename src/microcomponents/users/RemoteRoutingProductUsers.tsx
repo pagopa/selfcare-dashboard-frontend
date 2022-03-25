@@ -1,14 +1,8 @@
 import React from 'react';
 import { LoadingOverlayComponent } from '@pagopa/selfcare-common-frontend';
-import { DashboardDecoratorsType, DashboardPageProps } from '../pages/dashboard/Dashboard';
-import { MicroComponentsProps } from './dashboardMicrocomponentsUtils';
+import { DashboardMicrofrontendPageProps } from '../dashboardMicrocomponentsUtils';
 
-type Props = {
-  decorators: DashboardDecoratorsType;
-} & DashboardPageProps &
-  MicroComponentsProps;
-
-const RemoteRoutingUsers = React.lazy(() => import('selfcareUsers/RoutingUsers'));
+const RemoteRoutingProductUsers = React.lazy(() => import('selfcareUsers/RoutingProductUsers'));
 
 export default ({
   history,
@@ -19,9 +13,9 @@ export default ({
   products,
   activeProducts,
   productsMap,
-}: Props) => (
+}: DashboardMicrofrontendPageProps) => (
   <React.Suspense fallback={<LoadingOverlayComponent open={true} />}>
-    <RemoteRoutingUsers
+    <RemoteRoutingProductUsers
       history={history}
       store={store}
       theme={theme}
