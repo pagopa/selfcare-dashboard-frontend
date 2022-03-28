@@ -179,16 +179,24 @@ stages:
             env:
               INLINE_RUNTIME_CHUNK: 'false'
               REACT_APP_ENV: '$(environment)'
+
               REACT_APP_URL_FE_LOGIN: '$(react_app_url_fe_auth)/login'
               REACT_APP_URL_FE_LOGOUT: '$(react_app_url_fe_auth)/logout'
               REACT_APP_URL_FE_ONBOARDING: '$(react_app_url_fe_onboarding)'
               REACT_APP_URL_FE_LANDING: '$(react_app_url_fe_landing)'
               REACT_APP_URL_FE_ASSISTANCE: '$(react_app_url_fe_assistance)'
+
+              MICROFRONTEND_URL_USERS: '$(react_app_url_fe_dashboard_users)'
+              MICROFRONTEND_URL_GROUPS: '$(react_app_url_fe_dashboard_groups)'
+
               REACT_APP_URL_API_PARTY_PROCESS: '$(react_app_url_api_party_process)'
               REACT_APP_URL_API_DASHBOARD: '$(react_app_url_api_dashboard)'
+
               REACT_APP_ENABLE_ASSISTANCE: '$(react_app_enable_assistance)'
               REACT_APP_PAGOPA_HELP_EMAIL: '$(react_app_pagopa_help_email)'
+
               REACT_APP_URL_INSTITUTION_LOGO_PREFIX: '$(react_app_url_storage)/institutions/'
+
               REACT_APP_ANALYTICS_ENABLE: '$(react_app_analytics_enabled)'
               REACT_APP_ANALYTICS_MOCK: '$(react_app_analytics_mocked)'
               REACT_APP_MIXPANEL_TOKEN: '$(react_app_mixpanel_token)'
