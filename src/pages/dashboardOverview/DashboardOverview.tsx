@@ -1,7 +1,6 @@
 import { Grid, Box } from '@mui/material';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
-import Prova from '../Prova';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
@@ -22,9 +21,6 @@ const DashboardOverview = ({ party, products }: Props) => (
     {products && products.findIndex((product) => product.status !== 'ACTIVE') > -1 && (
       <NotActiveProductsSection party={party} products={products} />
     )}
-    <div style={{ display: 'none' }}>
-      <Prova />
-    </div>
   </Box>
 );
 
