@@ -10,7 +10,7 @@ import withProductsRolesMap from '../../decorators/withProductsRolesMap';
 import { useEffect, useState } from 'react';
 import { ProductRole } from '../../model/ProductRole';
 
-jest.mock('../../services/usersService');
+jest.mock('../../services/productService');
 
 const renderApp = (product: Product, injectedStore?: ReturnType<typeof createStore>) => {
   const store = injectedStore ? injectedStore : createStore();
@@ -54,7 +54,7 @@ const renderWithProductsRolesMapDecorated = (injectedStore?: ReturnType<typeof c
 let fetchProductRolesSpy: jest.SpyInstance;
 
 beforeEach(() => {
-  fetchProductRolesSpy = jest.spyOn(require('../../services/usersService'), 'fetchProductRoles');
+  fetchProductRolesSpy = jest.spyOn(require('../../services/productService'), 'fetchProductRoles');
 });
 
 test('Test', async () => {

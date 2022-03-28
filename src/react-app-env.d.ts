@@ -6,8 +6,6 @@ declare namespace NodeJS {
 
     REACT_APP_API_MOCK_PARTIES: string;
     REACT_APP_API_MOCK_PRODUCTS: string;
-    REACT_APP_API_MOCK_PARTY_USERS: string;
-    REACT_APP_API_MOCK_PARTY_GROUPS: string;
   }
 }
 interface Window {

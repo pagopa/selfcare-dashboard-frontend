@@ -1,4 +1,5 @@
 import { ProductsResource } from '../api/generated/b4f-dashboard/ProductsResource';
+import { UserRole } from './Party';
 
 export type Product = {
   activationDateTime?: Date;
@@ -9,7 +10,7 @@ export type Product = {
   urlBO: string;
   urlPublic?: string;
   tag?: string;
-  userRole?: string;
+  userRole?: UserRole;
   authorized?: boolean;
   status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
 };
@@ -32,7 +33,7 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   urlBO: resource.urlBO,
   urlPublic: resource.urlPublic,
   tag: undefined,
-  userRole: resource.userRole,
+  userRole: resource.userRole as UserRole,
   authorized: resource.authorized,
   status: resource.status,
 });

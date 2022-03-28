@@ -1,4 +1,4 @@
-import { mockedProductRoles } from '../../services/__mocks__/usersService';
+import { mockedProductRoles } from '../../services/__mocks__/productService';
 import { ProductRole, productRoles2ProductRolesList } from '../ProductRole';
 
 test('Test productRoles2ProductRolesList', () => {
