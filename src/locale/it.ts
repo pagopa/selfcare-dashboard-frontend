@@ -1,4 +1,10 @@
 export default {
+  session: {
+    expired: {
+      title: 'Sessione scaduta',
+      message: 'Stai per essere rediretto alla pagina di login...',
+    },
+  },
   partySelection: {
     title: 'Seleziona il tuo Ente',
     subTitle: "Se operi per più Enti, puoi modificare la tua scelta all'interno del portale.",
