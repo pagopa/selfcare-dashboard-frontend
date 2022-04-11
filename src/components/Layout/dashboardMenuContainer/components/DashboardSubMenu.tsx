@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { IconButton, Grid, Divider, Button, Popper, ClickAwayListener, Paper } from '@mui/material';
+import {
+  IconButton,
+  Grid,
+  Divider,
+  Button,
+  Popper,
+  ClickAwayListener,
+  Paper,
+  useTheme,
+} from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useHistory } from 'react-router';
 import { uniqueId } from 'lodash';
@@ -40,6 +49,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
   const [parties2Show, setParties2Show] = useState<Array<Party>>();
   const addError = useErrorDispatcher();
   const fetchParties = useParties();
+  const theme = useTheme();
 
   const onExit = useUnloadEventOnExit();
 
@@ -88,7 +98,11 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
     <Grid container justifyContent="center" sx={{ height: '100%' }}>
       <Grid item>
         <CustomIconButton onClick={handleClick} sx={{ height: '100%' }} disableRipple={true}>
-          {open ? <ExpandLess sx={{ color: 'white' }} /> : <ExpandMore sx={{ color: 'white' }} />}
+          {open ? (
+            <ExpandLess sx={{ color: theme.palette.text.primary }} />
+          ) : (
+            <ExpandMore sx={{ color: theme.palette.text.primary }} />
+          )}
         </CustomIconButton>
         <Popper
           id={id}
@@ -110,12 +124,19 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
             >
               <Grid container px={4} width="392px" maxHeight="560px">
                 <Grid item xs={12} mt={4} mb={4}>
-                  <Typography variant="h3" sx={{ fontSize: '26px' }}>
+                  <Typography
+                    variant="h3"
+                    sx={{ fontSize: '26px', color: theme.palette.text.primary }}
+                  >
                     {ownerName}
                   </Typography>
                 </Grid>
                 <Grid item xs={10} mb={4}>
-                  <LogoSubMenu title={description} subTitle={role} />
+                  <LogoSubMenu
+                    title={description}
+                    subTitle={role}
+                    color={theme.palette.text.primary}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Divider sx={{ borderColor: '#CCD4DC' }} />
