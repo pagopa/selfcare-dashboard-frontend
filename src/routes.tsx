@@ -1,12 +1,11 @@
 import { Redirect, useParams } from 'react-router';
-import withSelectedPartyProduct from './decorators/withSelectedPartyProduct';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import Dashboard from './pages/dashboard/Dashboard';
-import AddUserContainer from './pages/dashboardAddUser/AddUserContainer';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
-import DashboardUsers from './pages/dashboardUsers/DashboardUsers';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
+import { ENV } from './utils/env';
 
-export const BASE_ROUTE = process.env.PUBLIC_URL ? process.env.PUBLIC_URL : '/dashboard';
+export const BASE_ROUTE = ENV.PUBLIC_URL;
 
 export type RoutesObject = { [key: string]: RouteConfig };
 
@@ -15,13 +14,10 @@ export type RouteConfig = {
   exact?: boolean;
   subRoutes?: RoutesObject;
   component?: React.ComponentType<any>;
+  withProductRolesMap?: boolean;
+  withSelectedProduct?: boolean;
+  withSelectedProductRoles?: boolean;
 };
-
-export const resolvePathVariables = (path: string, pathVariables: { [key: string]: string }) =>
-  Object.keys(pathVariables).reduce(
-    (result, key) => result.replace(`:${key}`, pathVariables[key]),
-    path
-  );
 
 const buildRedirectToBasePath = (basePath: string): RoutesObject => ({
   SUBPATH_DEFAULT: {
@@ -53,29 +49,6 @@ export const DASHBOARD_ROUTES = {
     path: `${BASE_ROUTE}/:institutionId`,
     exact: true,
     component: DashboardOverview,
-  },
-  PARTY_USERS: {
-    path: `${BASE_ROUTE}/:institutionId/roles`,
-    exact: false,
-    component: DashboardUsers,
-    subRoutes: buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/roles`),
-  },
-  PARTY_PRODUCT_USERS: {
-    path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
-    exact: false,
-    subRoutes: {
-      MAIN: {
-        path: `${BASE_ROUTE}/:institutionId/:productId/roles`,
-        exact: true,
-        component: withSelectedPartyProduct(DashboardUsers),
-      },
-      ADD_PARTY_PRODUCT_USER: {
-        path: `${BASE_ROUTE}/:institutionId/:productId/roles/add`,
-        exact: true,
-        component: AddUserContainer,
-      },
-      ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId/:productId/roles`),
-    },
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId`),
 };
