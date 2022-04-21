@@ -1,22 +1,18 @@
-import { storageRead } from '../utils/storage-utils';
-import { STORAGE_KEY_TOKEN } from '../utils/constants';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
+import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
+import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { store } from '../redux/store';
-import { appStateActions } from '../redux/slices/appStateSlice';
-import { PartyUserOnCreation } from '../model/PartyUser';
+import { ENV } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
-import { buildFetchApi, extractResponse } from './api-utils';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
-import { InstitutionUserResource } from './generated/b4f-dashboard/InstitutionUserResource';
-import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
-
-const dashboardBaseUrl = process.env.REACT_APP_URL_API_DASHBOARD;
-const dashboardTimeoutMs = process.env.REACT_APP_API_DASHBOARD_TIMEOUT_MS;
+import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 
 const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   (wrappedOperation) => (params: any) => {
-    const token = storageRead(STORAGE_KEY_TOKEN, 'string');
+    const token = storageTokenOps.read();
     return wrappedOperation({
       ...params,
       bearerAuth: `Bearer ${token}`,
@@ -24,9 +20,9 @@ const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
   };
 
 const apiClient = createClient({
-  baseUrl: dashboardBaseUrl,
+  baseUrl: ENV.URL_API.API_DASHBOARD,
   basePath: '',
-  fetchApi: buildFetchApi(dashboardTimeoutMs),
+  fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.DASHBOARD),
   withDefaults: withBearerAndInstitutionId,
 });
 
@@ -38,8 +34,8 @@ const onRedirectToLogin = () =>
       techDescription: 'token expired or not valid',
       toNotify: false,
       blocking: false,
-      displayableTitle: 'Sessione scaduta',
-      displayableDescription: 'Stai per essere rediretto alla pagina di login...',
+      displayableTitle: i18n.t('session.expired.title'),
+      displayableDescription: i18n.t('session.expired.message'),
     })
   );
 
@@ -82,56 +78,7 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getPartyUsers: async (
-    institutionId: string,
-    productId?: string,
-    role?: string
-  ): Promise<Array<InstitutionUserResource>> => {
-    const result = await apiClient.getInstitutionUsersUsingGET({ institutionId, role, productId });
-    return extractResponse(result, 200, onRedirectToLogin);
-  },
-
-  getPartyProductUsers: async (
-    institutionId: string,
-    productId: string,
-    role?: string
-  ): Promise<Array<ProductUserResource>> => {
-    const result = await apiClient.getInstitutionProductUsersUsingGET({
-      institutionId,
-      productId,
-      role,
-    });
-    return extractResponse(result, 200, onRedirectToLogin);
-  },
-
-  savePartyUser: async (
-    institutionId: string,
-    productId: string,
-    user: PartyUserOnCreation
-  ): Promise<void> => {
-    const result = await apiClient.createInstitutionProductUserUsingPOST({
-      institutionId,
-      productId,
-      body: user,
-    });
-    return extractResponse(result, 201, onRedirectToLogin);
-  },
-
-  suspendPartyRelation: async (relationshipId: string): Promise<void> => {
-    const result = await apiClient.suspendRelationshipUsingPOST({
-      relationshipId,
-    });
-    return extractResponse(result, 204, onRedirectToLogin);
-  },
-
-  activatePartyRelation: async (relationshipId: string): Promise<void> => {
-    const result = await apiClient.activateRelationshipUsingPOST({
-      relationshipId,
-    });
-    return extractResponse(result, 204, onRedirectToLogin);
-  },
-
-  getProductRoles: async (productId: string): Promise<Array<string>> => {
+  getProductRoles: async (productId: string): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
     });

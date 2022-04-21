@@ -18,9 +18,15 @@ type Props = {
   item?: MenuItem;
   selectedItem: MenuItem | null;
   handleClick: (_event: React.MouseEvent<HTMLDivElement, MouseEvent>, menuItem: any) => void;
+  color?: string;
 };
 
-const DashboardSideMenuItem = ({ item, selectedItem, handleClick }: Props) => {
+const DashboardSideMenuItem = ({
+  item,
+  selectedItem,
+  handleClick,
+  color = 'primary.main',
+}: Props) => {
   if (!item) {
     return <></>;
   }
@@ -51,7 +57,7 @@ const DashboardSideMenuItem = ({ item, selectedItem, handleClick }: Props) => {
               variant="h6"
               sx={{
                 fontSize: item.subMenu ? '18px' : '16px',
-                color: 'primary.main',
+                color,
                 fontWeight: isSelectedAccordion
                   ? '600'
                   : isSelected
@@ -66,11 +72,7 @@ const DashboardSideMenuItem = ({ item, selectedItem, handleClick }: Props) => {
           </Grid>
           {item.subMenu && (
             <Grid item xs={2}>
-              {isOpened ? (
-                <ExpandLess sx={{ color: 'primary.main' }} />
-              ) : (
-                <ExpandMore sx={{ color: 'primary.main' }} />
-              )}
+              {isOpened ? <ExpandLess sx={{ color }} /> : <ExpandMore sx={{ color }} />}
             </Grid>
           )}
         </Grid>

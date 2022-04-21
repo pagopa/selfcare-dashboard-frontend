@@ -1,5 +1,4 @@
-import { Grid, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Typography, Box } from '@mui/material';
 
 type Props = {
   bodyTitle: string;

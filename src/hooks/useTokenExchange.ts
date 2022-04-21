@@ -1,19 +1,16 @@
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { LOADING_TASK_TOKEN_EXCHANGE } from '../utils/constants';
-import { useAppDispatch } from '../redux/hooks';
 import { Product } from '../model/Product';
 import { retrieveTokenExchange } from '../services/tokenExchangeService';
 import { Party } from '../model/Party';
-import { AppError, appStateActions } from '../redux/slices/appStateSlice';
-import useLoading from './useLoading';
 
 const tokenPlaceholder = '<IdentityToken>';
-const hostnameRegexp = /(?<=^https?:\/\/)[-.a-zA-Z0-9_]+/;
+const hostnameRegexp = /^(?:https?:\/\/)([-.a-zA-Z0-9_]+)/;
 
 export const useTokenExchange = () => {
-  const dispatch = useAppDispatch();
-  const addError = (error: AppError): void => {
-    dispatch(appStateActions.addError(error));
-  };
+  const addError = useErrorDispatcher();
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE);
 
   const invokeProductBo = async (product: Product, selectedParty: Party): Promise<void> => {
@@ -31,7 +28,13 @@ export const useTokenExchange = () => {
 
     setLoading(true);
     retrieveTokenExchange(result, selectedParty, product)
-      .then((t) => window.location.assign(product.urlBO.replace(tokenPlaceholder, t)))
+      .then((t) =>
+        trackEvent(
+          'DASHBOARD_OPEN_PRODUCT',
+          { party_id: selectedParty.institutionId, product: product.id, product_role: product.userRole },
+          () => window.location.assign(product.urlBO.replace(tokenPlaceholder, t))
+        )
+      )
       .catch((error) =>
         addError({
           id: `TokenExchangeError-${product.id}`,
@@ -62,8 +65,8 @@ export const validateUrlBO = (url: string): string | Error => {
 
 const hostnameFromUrl = (url: string): string | null => {
   const regexpResults = hostnameRegexp.exec(url);
-  if (regexpResults && regexpResults.length > 0) {
-    return regexpResults[0];
+  if (regexpResults && regexpResults.length > 1) {
+    return regexpResults[1];
   } else {
     return null;
   }

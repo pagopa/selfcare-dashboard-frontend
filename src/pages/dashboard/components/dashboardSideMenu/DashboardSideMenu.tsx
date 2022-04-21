@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import { List, Grid } from '@mui/material';
-import { matchPath } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { History } from 'history';
-import { DASHBOARD_ROUTES, resolvePathVariables, RouteConfig } from '../../../../routes';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import { useTranslation } from 'react-i18next';
+import { DASHBOARD_ROUTES } from '../../../../routes';
+import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
 import { useTokenExchange } from '../../../../hooks/useTokenExchange';
@@ -16,39 +19,55 @@ type Props = {
 
 const applicationLinkBehaviour = (
   history: History,
-  route: RouteConfig,
+  onExit: (exitAction: () => void) => void,
+  path: string,
   pathVariables?: { [key: string]: string }
-) => ({
-  onClick: () =>
-    history.push(pathVariables ? resolvePathVariables(route.path, pathVariables) : route.path),
-  isSelected: () => matchPath(history.location.pathname, route) !== null,
-});
+) => {
+  const resolvedPath = pathVariables ? resolvePathVariables(path, pathVariables) : path;
+  return {
+    onClick: () => onExit(() => history.push(resolvedPath)),
+    isSelected: () => history.location.pathname === resolvedPath,
+  };
+};
 
 export default function DashboardSideMenu({ products, party }: Props) {
+  const { t } = useTranslation();
   const history = useHistory();
   const { invokeProductBo } = useTokenExchange();
+  const onExit = useUnloadEventOnExit();
 
   const canSeeRoles = party.userRole === 'ADMIN';
+  const canSeeGroups = party.userRole === 'ADMIN';
   const navigationMenu: Array<MenuItem> = [
     {
       groupId: 'selfCare',
-      title: 'Gestione Ente',
+      title: t('overview.sideMenu.institutionManagement.title'),
       active: true,
       subMenu: [
         {
           groupId: 'selfCare',
-          title: 'Panoramica',
+          title: t('overview.sideMenu.institutionManagement.overview.title'),
           active: true,
-          ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.OVERVIEW, {
+          ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
             institutionId: party.institutionId,
           }),
         },
         canSeeRoles
           ? {
               groupId: 'selfCare',
-              title: 'Referenti',
+              title: t('overview.sideMenu.institutionManagement.referents.title'),
               active: true,
-              ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.PARTY_USERS, {
+              ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
+                institutionId: party.institutionId,
+              }),
+            }
+          : undefined,
+        canSeeGroups
+          ? {
+              groupId: 'selfCare',
+              title: t('overview.sideMenu.institutionManagement.groups.title'),
+              active: true,
+              ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
                 institutionId: party.institutionId,
               }),
             }
@@ -59,7 +78,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
   const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(navigationMenu[0]);
   const arrayMenu: Array<MenuItem> = navigationMenu.concat(
     products
-      .filter((p) => p.active)
+      .filter((p) => p.status === 'ACTIVE')
       .map((p) => ({
         groupId: p.id,
         title: p.title,
@@ -67,16 +86,16 @@ export default function DashboardSideMenu({ products, party }: Props) {
         subMenu: [
           {
             groupId: p.id,
-            title: 'Panoramica',
+            title: t('overview.sideMenu.product.overview'),
             active: p.authorized ?? false,
             onClick: () => invokeProductBo(p, party),
           },
           p.userRole === 'ADMIN'
             ? {
                 groupId: p.id,
-                title: 'Referenti',
+                title: t('overview.sideMenu.product.referents'),
                 active: p.authorized ?? false,
-                ...applicationLinkBehaviour(history, DASHBOARD_ROUTES.PARTY_PRODUCT_USERS, {
+                ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.PRODUCT_USERS, {
                   institutionId: party.institutionId,
                   productId: p.id,
                 }),
@@ -116,6 +135,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
             arrayMenu.map((item) => (
               <DashboardSideMenuItem
                 key={item.title}
+                color={!item.active ? '#CCD4DC' : 'primary.main'}
                 item={item}
                 selectedItem={selectedItem}
                 handleClick={handleClick}
