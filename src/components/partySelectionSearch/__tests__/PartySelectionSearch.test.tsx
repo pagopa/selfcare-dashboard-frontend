@@ -1,12 +1,13 @@
 import { fireEvent, getByText, render, screen } from '@testing-library/react';
 import { Party } from '../../../model/Party';
 import PartySelectionSearch from '../PartySelectionSearch';
+import './../../../locale';
 
 let selectedParty: Party | null = null;
 
 const parties: Array<Party> = [
   {
-    role: 'MANAGER',
+    fiscalCode: 'BARI_FC',
     description: 'Comune di Bari',
     urlLogo: 'image',
     status: 'PENDING',
@@ -15,7 +16,7 @@ const parties: Array<Party> = [
     userRole: 'ADMIN',
   },
   {
-    role: 'MANAGER',
+    fiscalCode: 'MILANO_FC',
     description: 'Comune di Milano',
     urlLogo: 'image',
     status: 'PENDING',
@@ -24,7 +25,7 @@ const parties: Array<Party> = [
     userRole: 'ADMIN',
   },
   {
-    role: 'MANAGER',
+    fiscalCode: 'ROMA_FC',
     description: 'Comune di Roma',
     urlLogo: 'image',
     status: 'ACTIVE',
@@ -33,7 +34,7 @@ const parties: Array<Party> = [
     userRole: 'ADMIN',
   },
   {
-    role: 'MANAGER',
+    fiscalCode: 'NAPOLI_FC',
     description: 'Comune di Napoli',
     urlLogo: 'image',
     status: 'ACTIVE',

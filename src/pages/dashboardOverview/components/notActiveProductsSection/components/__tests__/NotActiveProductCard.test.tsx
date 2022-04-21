@@ -3,6 +3,7 @@ import { Product } from '../../../../../../model/Product';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
 import NotActiveProductCard from '../NotActiveProductCard';
+import './../../../../../../locale';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {

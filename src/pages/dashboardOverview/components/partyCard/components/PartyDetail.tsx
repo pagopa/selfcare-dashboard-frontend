@@ -1,7 +1,7 @@
-import { Grid, Link, Typography } from '@mui/material';
+import { Grid, Link, Typography, Box } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import { InfoOutlined } from '@mui/icons-material';
-import { Box } from '@mui/system';
+import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 };
 
 export default function PartyDetail({ party, canUploadLogo }: Props) {
+  const { t } = useTranslation();
   return (
     <Grid container direction="column" alignItems={'flex-start'}>
       <Grid item>
@@ -41,7 +42,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             lineHeight: '28px',
           }}
         >
-          {'Codice IPA'}
+          {t('overview.partyDetail.ipaCode')}
         </Typography>
         <Typography
           variant="body2"
@@ -67,7 +68,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             mt: 1,
           }}
         >
-          {'Ragione sociale'}
+          {t('overview.partyDetail.companyName')}
         </Typography>
         <Typography
           variant="body2"
@@ -94,7 +95,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             mt: 1,
           }}
         >
-          {'Codice fiscale'}
+          {t('overview.partyDetail.fiscalCode')}
         </Typography>
         <Typography
           variant="body2"
@@ -121,7 +122,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             mt: 1,
           }}
         >
-          {'PEC'}
+          {t('overview.partyDetail.pec')}
         </Typography>
         <Typography
           variant="body2"
@@ -139,11 +140,13 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
         {canUploadLogo && (
           <Box display="flex" alignItems="center" pt={3}>
             <InfoOutlined sx={{ width: '20px', height: '20spx', mr: '4px', color: '#5C6F82' }} />
-            <Typography variant="body2" sx={{ fontSize: '12px' }}>
-              Per modificare questi dati,&nbsp;
-              <Link href="https://indicepa.gov.it/ipa-portale/contatti">contatta</Link>
-              &nbsp;l&apos;Indice della Pubblica Amministrazione (IPA)
-            </Typography>
+            <Trans i18nKey="overview.partyDetail.contactToModify" shouldUnescape>
+              <Typography variant="body2" sx={{ fontSize: '12px' }}>
+                Per modificare questi dati,&nbsp;
+                <Link href="https://indicepa.gov.it/ipa-portale/contatti">contatta</Link>
+                &nbsp;l&apos;Indice della Pubblica Amministrazione (IPA)
+              </Typography>
+            </Trans>
           </Box>
         )}
       </Grid>

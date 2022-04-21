@@ -1,6 +1,5 @@
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Typography, Box } from '@mui/material';
 import PartyItem from './PartyItem';
 
 type Props = {
@@ -15,7 +14,7 @@ type Props = {
   chip: string;
   action?: React.Dispatch<React.MouseEvent<HTMLDivElement, MouseEvent>>;
   showAvatar?: boolean;
-  pxTitleSubTitle?:string;
+  pxTitleSubTitle?: string;
 };
 export default function PartyItemContainer({
   isDisabled,

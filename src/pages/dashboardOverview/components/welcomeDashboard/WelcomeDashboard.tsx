@@ -1,8 +1,10 @@
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import { useTranslation } from 'react-i18next';
 
 export default function WelcomeDashboard() {
-  const title = 'La panoramica del tuo Ente';
-  const subTitle = 'Visualizza e gestisci i prodotti PagoPA a cui il tuo Ente ha aderito.';
+  const { t } = useTranslation();
+  const title = t('overview.title');
+  const subTitle = t('overview.subTitle');
   return (
     <TitleBox
       title={title}

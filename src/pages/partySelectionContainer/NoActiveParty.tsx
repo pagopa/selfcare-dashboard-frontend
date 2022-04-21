@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Button, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Button, Typography, Box } from '@mui/material';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Party } from '../../model/Party';
 import { ENV } from '../../utils/env';

@@ -1,12 +1,22 @@
 import * as env from 'env-var';
 
-const PUBLIC_URL_INNER: string | undefined = env.get('PUBLIC_URL').asString();
+const PUBLIC_URL_INNER: string | undefined = env.get('PUBLIC_URL').asString() || '/dashboard';
 export const ENV = {
-  PUBLIC_URL: PUBLIC_URL_INNER ? PUBLIC_URL_INNER : '/dashboard',
+  ENV: env.get('REACT_APP_ENV').required().asString(),
+  PUBLIC_URL: PUBLIC_URL_INNER,
 
   ASSISTANCE: {
     ENABLE: env.get('REACT_APP_ENABLE_ASSISTANCE').required().asBool(),
     EMAIL: env.get('REACT_APP_PAGOPA_HELP_EMAIL').required().asString(),
+  },
+
+  ROUTES: {
+    OVERVIEW: `${PUBLIC_URL_INNER}/:institutionId`,
+    USERS: `${PUBLIC_URL_INNER}/:institutionId/users`,
+    USERS_DETAIL: `${PUBLIC_URL_INNER}/:institutionId/users/:userId`,
+    PRODUCT_USERS: `${PUBLIC_URL_INNER}/:institutionId/:productId/users`,
+    GROUPS: `${PUBLIC_URL_INNER}/:institutionId/groups`,
+    GROUP_DETAIL: `${PUBLIC_URL_INNER}/:institutionId/groups/:groupId`,
   },
 
   URL_FE: {
@@ -30,5 +40,14 @@ export const ENV = {
     SUFFIX: env.get('REACT_APP_URL_INSTITUTION_LOGO_SUFFIX').required().asString(),
   },
 
-  PARTY_USERS_PAGE_SIZE: env.get('REACT_APP_PARTY_USERS_PAGE_SIZE').required().asInt(),
+  ANALYTCS: {
+    ENABLE: env.get('REACT_APP_ANALYTICS_ENABLE').default('false').asBool(),
+    MOCK: env.get('REACT_APP_ANALYTICS_MOCK').default('false').asBool(),
+    DEBUG: env.get('REACT_APP_ANALYTICS_DEBUG').default('false').asBool(),
+    TOKEN: env.get('REACT_APP_MIXPANEL_TOKEN').required().asString(),
+    API_HOST: env
+      .get('REACT_APP_MIXPANEL_API_HOST')
+      .default('https://api-eu.mixpanel.com')
+      .asString(),
+  },
 };

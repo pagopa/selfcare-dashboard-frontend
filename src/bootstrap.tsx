@@ -1,6 +1,6 @@
-import '@pagopa/selfcare-common-frontend/common-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 import '@pagopa/selfcare-common-frontend/index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -12,6 +12,8 @@ import reportWebVitals from './reportWebVitals';
 import { store } from './redux/store';
 import { MOCK_USER } from './utils/constants';
 import { ENV } from './utils/env';
+import './consentAndAnalyticsConfiguration.ts';
+import './locale';
 
 // eslint-disable-next-line functional/immutable-data
 CONFIG.MOCKS.MOCK_USER = MOCK_USER;

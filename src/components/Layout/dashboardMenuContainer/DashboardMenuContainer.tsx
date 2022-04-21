@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useAppSelector } from '../../../redux/hooks';
@@ -9,6 +9,7 @@ import DashboardSubMenu from './components/DashboardSubMenu';
 const DashboardMenuContainer = () => {
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
   const user = useAppSelector(userSelectors.selectLoggedUser);
+  const theme = useTheme();
 
   return selectedParty ? (
     <Grid container item direction="row" xs={6} alignContent="center" justifyContent="flex-end">
@@ -16,7 +17,7 @@ const DashboardMenuContainer = () => {
         <LogoSubMenu
           title={selectedParty.description}
           subTitle={roleLabels[selectedParty.userRole].longLabel}
-          color="background.default"
+          color={theme.palette.text.primary}
         />
       </Grid>
       <Grid item xs={1} sx={{ height: '100%' }}>
