@@ -103,13 +103,11 @@ export const mockedProductResources: Array<ProductsResource> = [
 export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   {
     id: '1',
-    fiscalCode: 'AAAAAA11A11A123K',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
-    certification: true,
     products: [
       {
         id: 'productId',
@@ -127,13 +125,11 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   },
   {
     id: '2',
-    fiscalCode: 'AAAAAA11A11A124K',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address',
-    certification: true,
     products: [
       {
         id: 'productId2',
@@ -154,7 +150,6 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
 export const mockedProductUserResource: Array<ProductUserResource> = [
   {
     id: '1',
-    fiscalCode: 'AAAAAA11A11A123K',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -176,7 +171,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
   },
   {
     id: '2',
-    fiscalCode: 'BBAABB11A11A123K',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
@@ -231,11 +225,11 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
 ];
 
 export const mockedUserResource: UserResource = {
+  id: 'id',
   fiscalCode: 'AAAAAA11A11A123K',
-  name: 'Gigi',
-  surname: 'Verdi',
-  email: 'gigi.v@email.com',
-  certification: true,
+  name: { certified: true, value: 'Gigi' },
+  familyName: { certified: true, value: 'Verdi' },
+  email: { certified: true, value: 'gigi.v@email.com' },
 };
 
 export const DashboardApi = {

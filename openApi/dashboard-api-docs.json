@@ -493,7 +493,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InstitutionUserResource"
+                  "$ref": "#/components/schemas/InstitutionUserDetailsResource"
                 }
               }
             }
@@ -750,12 +750,67 @@
         ]
       }
     },
-    "/users/external-id": {
+    "/users/save-user": {
       "post": {
         "tags": ["user"],
-        "summary": "getUserByExternalId",
-        "description": "Retrieve the user for a given internal id",
-        "operationId": "getUserByExternalIdUsingPOST",
+        "summary": "saveUser",
+        "description": "Save new user",
+        "operationId": "saveUserUsingPOST",
+        "parameters": [
+          {
+            "name": "institutionId",
+            "in": "query",
+            "description": "Institution's unique identifier (i.e.: IPA code)",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserIdResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
+    },
+    "/users/search": {
+      "post": {
+        "tags": ["user"],
+        "summary": "search",
+        "description": "Retrieve the user for a given external id",
+        "operationId": "searchUsingPOST",
         "parameters": [
           {
             "name": "institutionId",
@@ -809,6 +864,61 @@
       }
     },
     "/users/{id}": {
+      "get": {
+        "tags": ["user"],
+        "summary": "getUserByInternalId",
+        "description": "Retrieve the user by internal id",
+        "operationId": "getUserByInternalIdUsingGET",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User's unique identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "institutionId",
+            "in": "query",
+            "description": "Institution's unique identifier (i.e.: IPA code)",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      },
       "put": {
         "tags": ["user"],
         "summary": "updateUser",
@@ -861,6 +971,41 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["user"],
+        "summary": "deleteUserById",
+        "description": "Delete user using internal id",
+        "operationId": "deleteUserByIdUsingDELETE",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User's unique identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         },
         "security": [
@@ -1234,6 +1379,9 @@
           "201": {
             "description": "Created"
           },
+          "204": {
+            "description": "No Content"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -1343,6 +1491,18 @@
   },
   "components": {
     "schemas": {
+      "certifiedBooleanResource": {
+        "title": "certifiedBooleanResource",
+        "type": "object",
+        "properties": {
+          "certified": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
       "CreateUserDto": {
         "title": "CreateUserDto",
         "required": ["email", "name", "productRoles", "surname", "taxCode"],
@@ -1461,8 +1621,8 @@
           }
         }
       },
-      "InstitutionUserResource": {
-        "title": "InstitutionUserResource",
+      "InstitutionUserDetailsResource": {
+        "title": "InstitutionUserDetailsResource",
         "required": [
           "certification",
           "email",
@@ -1488,6 +1648,45 @@
           "fiscalCode": {
             "type": "string",
             "description": "User's fiscal code"
+          },
+          "id": {
+            "type": "string",
+            "description": "User's unique identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "products": {
+            "type": "array",
+            "description": "Authorized user products",
+            "items": {
+              "$ref": "#/components/schemas/ProductInfoResource"
+            }
+          },
+          "role": {
+            "type": "string",
+            "description": "User's role",
+            "enum": ["ADMIN", "LIMITED"]
+          },
+          "status": {
+            "type": "string",
+            "description": "User's status"
+          },
+          "surname": {
+            "type": "string",
+            "description": "User's surname"
+          }
+        }
+      },
+      "InstitutionUserResource": {
+        "title": "InstitutionUserResource",
+        "required": ["email", "id", "name", "products", "role", "status", "surname"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email"
           },
           "id": {
             "type": "string",
@@ -1637,7 +1836,6 @@
         "required": [
           "certification",
           "email",
-          "fiscalCode",
           "id",
           "name",
           "product",
@@ -1655,10 +1853,6 @@
           "email": {
             "type": "string",
             "description": "User's email"
-          },
-          "fiscalCode": {
-            "type": "string",
-            "description": "User's fiscal code"
           },
           "id": {
             "type": "string",
@@ -1702,6 +1896,13 @@
             "description": "flag indicating whether the logged user has the authorization to manage the product",
             "example": false
           },
+          "children": {
+            "type": "array",
+            "description": "Product's sub products list",
+            "items": {
+              "$ref": "#/components/schemas/SubProductResource"
+            }
+          },
           "description": {
             "type": "string",
             "description": "Product's description"
@@ -1737,6 +1938,26 @@
           }
         }
       },
+      "SubProductResource": {
+        "title": "SubProductResource",
+        "required": ["id", "status", "title"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Product's unique identifier"
+          },
+          "status": {
+            "type": "string",
+            "description": "Product's status",
+            "enum": ["ACTIVE", "INACTIVE", "PENDING"]
+          },
+          "title": {
+            "type": "string",
+            "description": "Product's title"
+          }
+        }
+      },
       "UpdateUserDto": {
         "title": "UpdateUserDto",
         "required": ["email", "fiscalCode", "name", "surname"],
@@ -1744,7 +1965,7 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's institutional email"
+            "description": "${swagger.dashboard.user.model.institutionalEmail}"
           },
           "fiscalCode": {
             "type": "string",
@@ -1781,6 +2002,29 @@
           "name": {
             "type": "string",
             "description": "Users group's name"
+          }
+        }
+      },
+      "UserDto": {
+        "title": "UserDto",
+        "required": ["email", "fiscalCode", "name", "surname"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's institution email"
+          },
+          "fiscalCode": {
+            "type": "string",
+            "description": "User's fiscal code"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "surname": {
+            "type": "string",
+            "description": "User's surname"
           }
         }
       },
@@ -1914,31 +2158,43 @@
           }
         }
       },
-      "UserResource": {
-        "title": "UserResource",
-        "required": ["certification", "email", "fiscalCode", "name", "surname"],
+      "UserIdResource": {
+        "title": "UserIdResource",
+        "required": ["id"],
         "type": "object",
         "properties": {
-          "certification": {
-            "type": "boolean",
-            "description": "User's certification source",
-            "example": false
-          },
-          "email": {
+          "id": {
             "type": "string",
-            "description": "User's email"
+            "description": "User's unique identifier",
+            "format": "uuid"
+          }
+        }
+      },
+      "UserResource": {
+        "title": "UserResource",
+        "required": ["id"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "description": "User's institution email",
+            "$ref": "#/components/schemas/certifiedBooleanResource"
+          },
+          "familyName": {
+            "description": "User's surname",
+            "$ref": "#/components/schemas/certifiedBooleanResource"
           },
           "fiscalCode": {
             "type": "string",
             "description": "User's fiscal code"
           },
-          "name": {
+          "id": {
             "type": "string",
-            "description": "User's name"
+            "description": "User's unique identifier",
+            "format": "uuid"
           },
-          "surname": {
-            "type": "string",
-            "description": "User's surname"
+          "name": {
+            "description": "User's name",
+            "$ref": "#/components/schemas/certifiedBooleanResource"
           }
         }
       }
