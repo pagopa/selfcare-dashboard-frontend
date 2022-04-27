@@ -17,7 +17,7 @@ test('Test institutionResource2Party', () => {
     userRole: 'LIMITED',
     description: 'Comune di Bari',
     status: 'PENDING',
-    institutionId: '1',
+    partyId: '1',
     fiscalCode: 'fiscalCode',
     digitalAddress: 'address',
     category: 'Ente locale',

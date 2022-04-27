@@ -19,7 +19,7 @@ test('Test fetchParties', async () => {
   expect(parties).toMatchObject(mockedInstitutionResources.map(institutionResource2Party));
 
   parties.forEach((p) =>
-    expect(p.urlLogo).toBe(`http://checkout.selfcare/institutions/${p.institutionId}/logo.png`)
+    expect(p.urlLogo).toBe(`http://checkout.selfcare/institutions/${p.partyId}/logo.png`)
   );
 
   expect(dashboardApiGetInstitutionsSpy).toBeCalledTimes(1);
@@ -57,7 +57,7 @@ describe('Test fetchPartyDetails', () => {
 
     checkDashboardInvocation(0);
 
-    const partialParties = parties.filter((p) => p.institutionId !== expectedInstitutionId);
+    const partialParties = parties.filter((p) => p.partyId !== expectedInstitutionId);
     const party2 = await fetchPartyDetails(expectedInstitutionId, partialParties);
     expect(party2).toStrictEqual(party);
 
