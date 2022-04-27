@@ -39,7 +39,6 @@ export const useSelectedParty = (): {
     fetchProducts(institutionId).then((products) => {
       if (products) {
         setPartyProducts(products);
-        setPartyProducts(products);
         dispatch(
           partiesActions.setPartySelectedProductsRolesMap(
             products.reduce((acc, p) => {
