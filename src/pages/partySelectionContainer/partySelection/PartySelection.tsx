@@ -63,10 +63,10 @@ export default function PartySelection({ parties }: Props) {
           disabled={disableBtn}
           sx={{ width: '190px', height: '40px' }}
           onClick={() => {
-            trackEvent('DASHBOARD_PARTY_SELECTION', { party_id: selectedParty?.institutionId });
+            trackEvent('DASHBOARD_PARTY_SELECTION', { party_id: selectedParty?.partyId });
             history.push(
               resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                institutionId: selectedParty?.institutionId ?? '',
+                institutionId: selectedParty?.partyId ?? '',
               })
             );
           }}

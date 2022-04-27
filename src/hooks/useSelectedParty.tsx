@@ -58,7 +58,7 @@ export const useSelectedParty = (): {
     });
 
   const fetchSelectedParty = (institutionId: string) => {
-    if (!selectedParty || selectedParty.institutionId !== institutionId) {
+    if (!selectedParty || selectedParty.partyId !== institutionId) {
       setLoadingDetails(true);
       setLoadingProducts(true);
 

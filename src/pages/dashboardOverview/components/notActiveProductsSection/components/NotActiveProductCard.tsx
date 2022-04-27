@@ -14,9 +14,7 @@ type Props = {
 };
 
 const goToOnboarding = (product: Product, party: Party): void =>
-  window.location.assign(
-    `${ENV.URL_FE.ONBOARDING}/${product.id}?institutionId=${party.institutionId}`
-  );
+  window.location.assign(`${ENV.URL_FE.ONBOARDING}/${product.id}?institutionId=${party.partyId}`);
 
 export default function NotActiveProductCard({ party, product }: Props) {
   const { t } = useTranslation();

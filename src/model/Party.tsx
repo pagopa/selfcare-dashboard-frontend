@@ -6,7 +6,9 @@ export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED';
 
 export type Party = {
-  institutionId: string;
+  partyId: string;
+  // externalId: string;
+  originId?: string;
   description: string;
   digitalAddress: string;
   status: UserStatus;
@@ -22,7 +24,7 @@ const buildUrlLog = (institutionId: string) =>
 export const institutionResource2Party = (institutionResource: InstitutionResource): Party => {
   const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
   return {
-    institutionId: institutionResource.id,
+    partyId: institutionResource.id,
     description: institutionResource.name,
     digitalAddress: institutionResource.mailAddress,
     status: institutionResource.status as 'ACTIVE' | 'PENDING',

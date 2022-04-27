@@ -20,7 +20,7 @@ export const fetchPartyDetails = (
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
     return new Promise((resolve) =>
-      resolve(mockedParties.find((p) => p.institutionId === institutionId) ?? null)
+      resolve(mockedParties.find((p) => p.partyId === institutionId) ?? null)
     );
   }
 
@@ -33,7 +33,7 @@ const retrieveParty = (
   parties: Array<Party> | undefined
 ): Promise<Party | null> => {
   if (parties) {
-    const selected = parties.filter((p) => p.institutionId === institutionId);
+    const selected = parties.filter((p) => p.partyId === institutionId);
     if (selected && selected.length > 0) {
       return new Promise((resolve) => resolve(selected[0]));
     } else {

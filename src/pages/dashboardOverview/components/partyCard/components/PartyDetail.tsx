@@ -54,7 +54,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             marginLeft: 1,
           }}
         >
-          {party.institutionId}
+          {party.originId}
         </Typography>
       </Grid>
       <Grid item>
