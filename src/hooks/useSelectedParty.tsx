@@ -1,6 +1,7 @@
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
+import { ProductsRolesMap } from '../model/ProductRole';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
 import { fetchPartyDetails } from '../services/partyService';
@@ -19,6 +20,7 @@ export const useSelectedParty = (): {
     dispatch(partiesActions.setPartySelectedProducts(products));
   const setLoadingDetails = useLoading(LOADING_TASK_SEARCH_PARTY);
   const setLoadingProducts = useLoading(LOADING_TASK_SEARCH_PRODUCTS);
+  const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
 
   const fetchParty = (institutionId: string): Promise<Party | null> =>
     fetchPartyDetails(institutionId, parties).then((party) => {
@@ -37,6 +39,18 @@ export const useSelectedParty = (): {
     fetchProducts(institutionId).then((products) => {
       if (products) {
         setPartyProducts(products);
+        dispatch(
+          partiesActions.setPartySelectedProductsRolesMap(
+            products.reduce((acc, p) => {
+              const rolesMap = productsRolesMap[p.id];
+              if (rolesMap) {
+                // eslint-disable-next-line functional/immutable-data
+                acc[p.id] = rolesMap;
+              }
+              return acc;
+            }, {} as ProductsRolesMap)
+          )
+        );
         return products;
       } else {
         throw new Error(`Cannot find products of institutionId ${institutionId}`);
