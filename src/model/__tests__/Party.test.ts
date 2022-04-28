@@ -22,7 +22,7 @@ test('Test institutionResource2Party', () => {
     digitalAddress: 'address',
     category: 'Ente locale',
     urlLogo: 'http://checkout.selfcare/institutions/1/logo.png',
-    externalId: '',
-    originId: '',
+    externalId: '', // TODO
+    originId: '', // TODO
   });
 });
