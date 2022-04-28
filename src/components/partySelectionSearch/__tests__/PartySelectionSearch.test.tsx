@@ -14,6 +14,8 @@ const parties: Array<Party> = [
     partyId: '1',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId1',
+    originId: 'originId1',
   },
   {
     fiscalCode: 'MILANO_FC',
@@ -23,6 +25,8 @@ const parties: Array<Party> = [
     partyId: '2',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId2',
+    originId: 'originId2',
   },
   {
     fiscalCode: 'ROMA_FC',
@@ -32,6 +36,8 @@ const parties: Array<Party> = [
     partyId: '3',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId3',
+    originId: 'originId3',
   },
   {
     fiscalCode: 'NAPOLI_FC',
@@ -41,6 +47,8 @@ const parties: Array<Party> = [
     partyId: '4',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId4',
+    originId: 'originId4',
   },
 ];
 
