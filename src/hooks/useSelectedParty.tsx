@@ -34,21 +34,22 @@ export const useSelectedParty = (): {
         throw new Error(`Cannot find institutionId ${institutionId}`);
       }
     });
-
   const fetchProductLists = (institutionId: string) =>
     fetchProducts(institutionId).then((products) => {
       if (products) {
         setPartyProducts(products);
         dispatch(
           partiesActions.setPartySelectedProductsRolesMap(
-            products.reduce((acc, p) => {
-              const rolesMap = productsRolesMap[p.id];
-              if (rolesMap) {
-                // eslint-disable-next-line functional/immutable-data
-                acc[p.id] = rolesMap;
-              }
-              return acc;
-            }, {} as ProductsRolesMap)
+            products
+              .filter((p) => p.status === 'ACTIVE')
+              .reduce((acc, p) => {
+                const rolesMap = productsRolesMap[p.id];
+                if (rolesMap) {
+                  // eslint-disable-next-line functional/immutable-data
+                  acc[p.id] = rolesMap;
+                }
+                return acc;
+              }, {} as ProductsRolesMap)
           )
         );
         return products;
