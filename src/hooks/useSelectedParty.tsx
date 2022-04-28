@@ -42,6 +42,7 @@ export const useSelectedParty = (): {
         dispatch(
           partiesActions.setPartySelectedProductsRolesMap(
             products
+
               .filter((p) => p.status === 'ACTIVE')
               .reduce((acc, p) => {
                 const rolesMap = productsRolesMap[p.id];
