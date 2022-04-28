@@ -34,7 +34,6 @@ export const useSelectedParty = (): {
         throw new Error(`Cannot find institutionId ${institutionId}`);
       }
     });
-
   const fetchProductLists = (institutionId: string) =>
     fetchProducts(institutionId).then((products) => {
       if (products) {
@@ -42,7 +41,6 @@ export const useSelectedParty = (): {
         dispatch(
           partiesActions.setPartySelectedProductsRolesMap(
             products
-
               .filter((p) => p.status === 'ACTIVE')
               .reduce((acc, p) => {
                 const rolesMap = productsRolesMap[p.id];
