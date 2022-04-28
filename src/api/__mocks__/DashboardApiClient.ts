@@ -242,7 +242,7 @@ export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
 
-  getInstitution: async (_institutionId: string): Promise<InstitutionResource> =>
+  getInstitution: async (_partyId: string): Promise<InstitutionResource> =>
     new Promise((resolve) => resolve(mockedInstitutionResources[0])),
 
   getProducts: async (): Promise<Array<ProductsResource>> =>
@@ -250,7 +250,7 @@ export const DashboardApi = {
 
   getTokenExchange: async (
     _hostname: string,
-    _institutionId: string,
+    _partyId: string,
     _productId: string
   ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 

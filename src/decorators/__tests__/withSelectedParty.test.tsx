@@ -11,7 +11,7 @@ import { boolean } from 'fp-ts';
 jest.mock('../../services/partyService');
 jest.mock('../../services/productService');
 
-const expectedInstitutionId: string = '3';
+const expectedPartyId: string = '3';
 
 let fetchPartyDetailsSpy: jest.SpyInstance;
 let fetchPartyProductsSpy: jest.SpyInstance;
@@ -30,7 +30,7 @@ const renderApp = async (
   const history = injectedHistory ? injectedHistory : createMemoryHistory();
 
   if (!injectedHistory) {
-    history.push(`/${expectedInstitutionId}`);
+    history.push(`/${expectedPartyId}`);
   }
 
   const Component = () => <></>;
@@ -40,7 +40,7 @@ const renderApp = async (
     <Router history={history}>
       <Provider store={store}>
         <Switch>
-          <Route path="/:institutionId">
+          <Route path="/:partyId">
             <DecoratedComponent />
           </Route>
         </Switch>
@@ -83,8 +83,8 @@ const checkSelectedParty = (state: RootState) => {
 
 const checkMockInvocation = (expectedCallsNumber: number) => {
   expect(fetchPartyDetailsSpy).toBeCalledTimes(expectedCallsNumber);
-  expect(fetchPartyDetailsSpy).toBeCalledWith(expectedInstitutionId, undefined);
+  expect(fetchPartyDetailsSpy).toBeCalledWith(expectedPartyId, undefined);
 
   expect(fetchPartyProductsSpy).toBeCalledTimes(expectedCallsNumber);
-  expect(fetchPartyProductsSpy).toBeCalledWith(expectedInstitutionId);
+  expect(fetchPartyProductsSpy).toBeCalledWith(expectedPartyId);
 };

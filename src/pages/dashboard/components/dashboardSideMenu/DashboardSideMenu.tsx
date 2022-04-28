@@ -49,7 +49,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
           title: t('overview.sideMenu.institutionManagement.overview.title'),
           active: true,
           ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
-            institutionId: party.partyId,
+            partyId: party.partyId,
           }),
         },
         canSeeRoles
@@ -58,7 +58,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
               title: t('overview.sideMenu.institutionManagement.referents.title'),
               active: true,
               ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
-                institutionId: party.partyId,
+                partyId: party.partyId,
               }),
             }
           : undefined,
@@ -68,7 +68,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
               title: t('overview.sideMenu.institutionManagement.groups.title'),
               active: true,
               ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
-                institutionId: party.partyId,
+                partyId: party.partyId,
               }),
             }
           : undefined,
@@ -96,7 +96,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
                 title: t('overview.sideMenu.product.referents'),
                 active: p.authorized ?? false,
                 ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.PRODUCT_USERS, {
-                  institutionId: party.partyId,
+                  partyId: party.partyId,
                   productId: p.id,
                 }),
               }

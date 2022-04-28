@@ -14,37 +14,37 @@ export const fetchParties = (): Promise<Array<Party>> => {
 };
 
 export const fetchPartyDetails = (
-  institutionId: string,
+  partyId: string,
   parties?: Array<Party>
 ): Promise<Party | null> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
     return new Promise((resolve) =>
-      resolve(mockedParties.find((p) => p.partyId === institutionId) ?? null)
+      resolve(mockedParties.find((p) => p.partyId === partyId) ?? null)
     );
   }
 
-  return retrieveParty(institutionId, parties);
+  return retrieveParty(partyId, parties);
 };
 
 // check inside parties as first
 const retrieveParty = (
-  institutionId: string,
+  partyId: string,
   parties: Array<Party> | undefined
 ): Promise<Party | null> => {
   if (parties) {
-    const selected = parties.filter((p) => p.partyId === institutionId);
+    const selected = parties.filter((p) => p.partyId === partyId);
     if (selected && selected.length > 0) {
       return new Promise((resolve) => resolve(selected[0]));
     } else {
-      return retrieveParty_fetch(institutionId);
+      return retrieveParty_fetch(partyId);
     }
   } else {
-    return retrieveParty_fetch(institutionId);
+    return retrieveParty_fetch(partyId);
   }
 };
 
-const retrieveParty_fetch = (institutionId: string): Promise<Party | null> =>
-  DashboardApi.getInstitution(institutionId).then((institutionResource) =>
+const retrieveParty_fetch = (partyId: string): Promise<Party | null> =>
+  DashboardApi.getInstitution(partyId).then((institutionResource) =>
     institutionResource ? institutionResource2Party(institutionResource) : null
   );

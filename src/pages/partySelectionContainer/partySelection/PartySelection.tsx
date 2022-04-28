@@ -66,7 +66,7 @@ export default function PartySelection({ parties }: Props) {
             trackEvent('DASHBOARD_PARTY_SELECTION', { party_id: selectedParty?.partyId });
             history.push(
               resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                institutionId: selectedParty?.partyId ?? '',
+                partyId: selectedParty?.partyId ?? '',
               })
             );
           }}

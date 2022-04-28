@@ -10,6 +10,8 @@ export const mockedParties: Array<Party> = [
     digitalAddress: '',
     fiscalCode: 'fiscalCodeBari',
     category: '',
+    externalId: 'externalId1',
+    originId: 'originId1',
   },
   {
     userRole: 'ADMIN',
@@ -20,6 +22,8 @@ export const mockedParties: Array<Party> = [
     digitalAddress: '',
     fiscalCode: 'fiscalCodeMilano',
     category: '',
+    externalId: 'externalId2',
+    originId: 'originId2',
   },
   {
     userRole: 'ADMIN',
@@ -30,6 +34,8 @@ export const mockedParties: Array<Party> = [
     digitalAddress: '',
     fiscalCode: 'fiscalCodeRoma',
     category: '',
+    externalId: 'externalId3',
+    originId: 'originId3',
   },
   {
     userRole: 'LIMITED',
@@ -40,6 +46,8 @@ export const mockedParties: Array<Party> = [
     digitalAddress: '',
     fiscalCode: 'fiscalCodeNapoli',
     category: '',
+    externalId: 'externalId4',
+    originId: 'originId4',
   },
   {
     userRole: 'ADMIN',
@@ -50,6 +58,8 @@ export const mockedParties: Array<Party> = [
     digitalAddress: '',
     fiscalCode: 'fiscalCodeONBOARDED',
     category: '',
+    externalId: 'externalId5',
+    originId: 'originId5',
   },
 ];
 
@@ -64,7 +74,7 @@ export const verifyFetchPartyDetailsMockExecution = (party: Party) => {
 };
 
 export const fetchPartyDetails = (
-  institutionId: string,
+  partyId: string,
   _parties?: Array<Party>
 ): Promise<Party | null> =>
-  new Promise((resolve) => resolve(mockedParties.find((p) => p.partyId === institutionId) ?? null));
+  new Promise((resolve) => resolve(mockedParties.find((p) => p.partyId === partyId) ?? null));

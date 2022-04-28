@@ -157,7 +157,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                           onExit(() =>
                             history.push(
                               resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                                institutionId: selectedParty.partyId,
+                                partyId: selectedParty.partyId,
                               })
                             )
                           );

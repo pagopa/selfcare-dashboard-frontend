@@ -23,7 +23,7 @@ export default function PartyCard({ party }: Props) {
         <Grid item xs={3}>
           <Grid container direction="column" alignItems={'center'}>
             <Grid item>
-              <PartyLogoUploader institutionId={party.partyId} canUploadLogo={canUploadLogo} />
+              <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
             </Grid>
           </Grid>
         </Grid>

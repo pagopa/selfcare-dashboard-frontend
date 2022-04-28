@@ -62,7 +62,7 @@ describe('test onboarding', () => {
     fireEvent.click(button);
 
     expect(mockedLocation.assign).toBeCalledWith(
-      `http://selfcare/onboarding/${mockedProduct.id}?institutionId=${mockedParties[0].institutionId}`
+      `http://selfcare/onboarding/${mockedProduct.id}?partyId=${mockedParties[0].partyId}`
     );
   });
 
@@ -92,7 +92,7 @@ describe('test onboarding', () => {
     fireEvent.click(screen.getByText('Procedi con una nuova adesione'));
 
     expect(mockedLocation.assign).toBeCalledWith(
-      `http://selfcare/onboarding/${mockedProduct.id}?institutionId=${mockedParties[0].institutionId}`
+      `http://selfcare/onboarding/${mockedProduct.id}?partyId=${mockedParties[0].partyId}`
     );
   });
 });
