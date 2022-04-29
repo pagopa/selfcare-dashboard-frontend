@@ -8,9 +8,9 @@ import { TFunction, useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
-import { PartyLogo } from './components/PartyLogo';
+// import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
-
+import PartyLogoNew from './components/PartyLogoNew';
 type Props = {
   institutionId: string;
   canUploadLogo: boolean;
@@ -138,11 +138,23 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
   });
 
   return (
-    <Grid container direction="row" justifyItems={'center'} alignItems={'center'}>
-      <Box {...getRootProps({ className: 'dropzone' })}>
-        {canUploadLogo && <input {...getInputProps()} />}
-        <PartyLogo loading={loading} urlLogo={urlLogo} />
-        {canUploadLogo && <PartyDescription labelLink={labelLink} open={open} />}
+    <Grid container direction="row">
+      <Box
+        {...getRootProps({ className: 'dropzone' })}
+        display="flex"
+        justifyItems={'center'}
+        alignItems={'center'}
+      >
+        <Box>
+          {canUploadLogo && <input {...getInputProps()} />}
+          <PartyLogoNew loading={loading} urlLogo={urlLogo} />
+          {/* <PartyLogo loading={loading} urlLogo={urlLogo} /> */}
+        </Box>
+        <Box>
+          {canUploadLogo && ( //  TODO verificare schermata figma in caso di userRole !== Admin
+            <PartyDescription labelLink={labelLink} open={open} loading={loading} />
+          )}
+        </Box>
       </Box>
     </Grid>
   );

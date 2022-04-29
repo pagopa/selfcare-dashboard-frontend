@@ -1,5 +1,5 @@
 import { Grid, Link, Typography, Box } from '@mui/material';
-import Chip from '@mui/material/Chip';
+// import Chip from '@mui/material/Chip';
 import { InfoOutlined } from '@mui/icons-material';
 import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
@@ -13,7 +13,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
   const { t } = useTranslation();
   return (
     <Grid container direction="column" alignItems={'flex-start'}>
-      <Grid item>
+      {/* <Grid item> // TODO chiedere se presente la chip, da prototipo non c'è
         {party.category && (
           <Chip
             label={party.category}
@@ -26,12 +26,7 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
             }}
           />
         )}
-      </Grid>
-      <Grid item sx={{ mt: '18px', mb: '24px' }}>
-        <Typography variant="h1" component="h2">
-          {party.description}
-        </Typography>
-      </Grid>
+      </Grid> */}
       <Grid item>
         <Typography
           variant="body2"

@@ -1,5 +1,7 @@
 import { Grid, Link, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import EditIcon from '@mui/icons-material/Edit';
+import { Box } from '@mui/system';
 
 // Utility to wait some time
 
@@ -9,40 +11,32 @@ type Props = {
     | React.MouseEventHandler<HTMLAnchorElement>
     | React.MouseEventHandler<HTMLSpanElement>
     | undefined;
+  loading: boolean;
 };
 
-export function PartyDescription({ labelLink, open }: Props) {
+export function PartyDescription({ labelLink, open, loading }: Props) {
   const { t } = useTranslation();
   return (
-    <Grid container direction="column" justifyContent={'center'} alignItems={'center'}>
-      <Link
-        underline={'always'}
-        color={'primary'}
-        onClick={open}
-        sx={{ fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
-      >
-        {labelLink}
-      </Link>
-      <Typography
-        display="center"
-        sx={{
-          color: '#000000',
-          fontWeight: 'normal',
-          lineHeight: '18px',
-          fontSize: '12px',
-          mt: 1,
-        }}
-      >
-        {t('overview.partyLogo.type')}
-      </Typography>
+    <Grid container justifyContent={'flex-start'} alignItems={'center'}>
+      {!loading && <EditIcon color={'primary'} fontSize="small" />}
+      <Box display="flex" alignItems="center">
+        <Link
+          underline={'always'}
+          color={'primary'}
+          onClick={open}
+          sx={{ fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
+        >
+          {labelLink}
+        </Link>
+      </Box>
       <Typography
         variant="body2"
         sx={{
-          color: '#000000',
-          fontWeight: 'normal',
+          color: '#5C6F82',
+          fontWeight: '400',
           lineHeight: '18px',
-          fontSize: '12px',
-          mt: 1,
+          fontSize: '14px',
+          width: '100%',
         }}
       >
         {t('overview.partyLogo.size')}

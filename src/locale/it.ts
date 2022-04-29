@@ -59,7 +59,7 @@ export default {
       closeButton: 'Esci',
     },
     partyLogo: {
-      upload: 'Carica il logo del tuo Ente',
+      upload: "Carica il logo dell'ente",
       modify: 'Modifica Logo',
       uploadError: {
         title: 'Caricamento non riuscito',
@@ -70,8 +70,7 @@ export default {
         title: 'Caricamento non riuscito',
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
-      type: 'formato .png',
-      size: 'dimensione 300x300px',
+      size: 'Dimensione massima 300 x 300px - Formato .jpg o . png',
     },
     partyDetail: {
       ipaCode: 'Codice IPA',
