@@ -13,6 +13,7 @@ export type Product = {
   userRole?: UserRole;
   authorized?: boolean;
   status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
+  imageUrl?: string;
 };
 
 export type ProductsMap = { [id: string]: Product };
