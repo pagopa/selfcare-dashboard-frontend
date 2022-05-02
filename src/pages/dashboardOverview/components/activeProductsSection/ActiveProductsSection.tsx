@@ -18,7 +18,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
       <TitleBox
         title={t('overview.activeProductsSection.title')}
         // subTitle={t('overview.activeProductsSection.subTitle')}
-        mbTitle={1}
+        mbTitle={2}
         mtTitle={10}
         mbSubTitle={5}
         variantTitle="h2"
@@ -29,7 +29,12 @@ export default function ActiveProductsSection({ party, products }: Props) {
           products
             .filter((p) => p.status === 'ACTIVE')
             .map((product) => (
-              <ActiveProductCard key={product.id} party={party} product={product} />
+              <ActiveProductCard
+                key={product.id}
+                party={party}
+                product={product}
+                tooltip={t('overview.activeProductsSection.tooltip')}
+              />
             ))}
       </Grid>
     </React.Fragment>

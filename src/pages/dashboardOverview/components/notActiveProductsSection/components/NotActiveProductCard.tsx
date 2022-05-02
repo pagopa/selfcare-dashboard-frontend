@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { ENV } from '../../../../../utils/env';
-import BaseProductCard from '../../productCard/BaseProductCard';
+// import BaseProductCard from '../../productCard/BaseProductCard';
 
 type Props = {
   party: Party;
@@ -28,7 +28,7 @@ export default function NotActiveProductCard({ party, product }: Props) {
         sx={{ height: '100%', maxHeight: '410px', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}
       >
         <Box mx={3} my={4}>
-          <BaseProductCard
+          {/* <BaseProductCard
             disableBtn={false}
             cardTitle={product.title}
             cardSubTitle={product.description}
@@ -48,7 +48,7 @@ export default function NotActiveProductCard({ party, product }: Props) {
             heightButton="45px"
             titleFontSize="24px"
             subTitleFontSize="16px"
-          />
+          /> */}
           <Grid container height="30px">
             <Grid item xs={12} px={2}>
               <Box mb={3}>

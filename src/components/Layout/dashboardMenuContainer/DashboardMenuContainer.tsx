@@ -16,7 +16,7 @@ const DashboardMenuContainer = () => {
       <Grid item xs={5}>
         <LogoSubMenu
           title={selectedParty.description}
-          subTitle={roleLabels[selectedParty.userRole].longLabel}
+          subTitle={roleLabels[selectedParty.userRole].longLabelKey}
           color={theme.palette.text.primary}
         />
       </Grid>
@@ -25,7 +25,7 @@ const DashboardMenuContainer = () => {
           ownerName={`${user?.name} ${user?.surname}`}
           selectedParty={selectedParty}
           description={selectedParty.description}
-          role={roleLabels[selectedParty.userRole].longLabel}
+          role={roleLabels[selectedParty.userRole].longLabelKey}
         />
       </Grid>
     </Grid>

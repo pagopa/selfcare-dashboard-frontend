@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Button, Box, Grid, Card, CardContent } from '@mui/material';
+import { Typography, Button, Box, Grid, Card, CardContent, Tooltip } from '@mui/material';
+import { InfoOutlined } from '@mui/icons-material';
 
 type Props = {
   cardTitle: string;
@@ -15,6 +16,7 @@ type Props = {
   heightButton?: string;
   titleFontSize?: string;
   subTitleFontSize?: string;
+  tooltip: string;
 };
 
 const cardSubTitleStyle = {
@@ -37,6 +39,7 @@ export default function BaseProductCard({
   heightSubTitle,
   heightButton,
   subTitleFontSize = '18px',
+  tooltip,
 }: Props) {
   return (
     <React.Fragment>
@@ -111,6 +114,13 @@ export default function BaseProductCard({
               >
                 {buttonLabel}
               </Button>
+              {disableBtn && (
+                <Box display="flex" alignItems="center" ml={3} sx={{ color: '#5C6F82' }}>
+                  <Tooltip title={tooltip}>
+                    <InfoOutlined />
+                  </Tooltip>
+                </Box>
+              )}
             </Box>
           </Grid>
         </CardContent>

@@ -9,9 +9,10 @@ import BaseProductCard from '../../productCard/BaseProductCard';
 type Props = {
   party: Party;
   product: Product;
+  tooltip: string;
 };
 
-export default function ActiveProductCard({ party, product }: Props) {
+export default function ActiveProductCard({ party, product, tooltip }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
   const isDisabled = product.authorized === false;
@@ -25,9 +26,7 @@ export default function ActiveProductCard({ party, product }: Props) {
         // cardSubTitle={
         //   product.activationDateTime
         //     ? t('overview.activeProducts.activationOf') +
-        //       `${
-        //         product.activationDateTime && formatDateAsLongString(product.activationDateTime)
-        //       }`
+        //       `${product.activationDateTime && formatDateAsLongString(product.activationDateTime)}`
         //     : t('overview.activeProducts.active')
         // }
         buttonLabel={t('overview.activeProducts.manageButton')}
@@ -38,6 +37,7 @@ export default function ActiveProductCard({ party, product }: Props) {
         heightTitle="80px"
         heightSubTitle="20px"
         heightButton="45px"
+        tooltip={tooltip}
       />
       {lastServiceActivationDate && (
         <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>

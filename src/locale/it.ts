@@ -36,6 +36,7 @@ export default {
     activeProductsSection: {
       title: 'Prodotti attivi',
       subTitle: 'I prodotti PagoPA a cui il tuo Ente ha aderito.',
+      tooltip: 'Vuoi i permessi per gestire questo prodotto? Chiedi a uno dei suoi Amministratori ',
     },
     activeProducts: {
       activationOf: 'Attivo dal ',

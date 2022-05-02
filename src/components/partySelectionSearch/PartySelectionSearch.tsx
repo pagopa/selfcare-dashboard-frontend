@@ -118,7 +118,7 @@ export default function PartySelectionSearch({
                       borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                       selectedItem={selectedParty === party}
                       title={party.description}
-                      subTitle={roleLabels[party.userRole].longLabel}
+                      subTitle={roleLabels[party.userRole].longLabelKey}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}

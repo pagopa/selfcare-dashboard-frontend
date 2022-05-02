@@ -65,7 +65,7 @@ export default function NoActiveParty({ parties }: Props) {
                       disabled={isDisabled}
                       key={party.institutionId}
                       title={party.description}
-                      subTitle={roleLabels[party.userRole].longLabel}
+                      subTitle={roleLabels[party.userRole].longLabelKey}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? 'Da completare' : ''}
