@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Party } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
@@ -117,11 +118,7 @@ export default function PartySelectionSearch({
                       borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                       selectedItem={selectedParty === party}
                       title={party.description}
-                      subTitle={
-                        party.userRole === 'ADMIN'
-                          ? t('common.roles.admin.longLabel')
-                          : t('common.roles.limited.longLabel')
-                      }
+                      subTitle={t(roleLabels[party.userRole].longLabelKey)}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}

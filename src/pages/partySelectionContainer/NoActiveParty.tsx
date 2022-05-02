@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography, Box } from '@mui/material';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../model/Party';
 import { ENV } from '../../utils/env';
@@ -67,11 +68,7 @@ export default function NoActiveParty({ parties }: Props) {
                       disabled={isDisabled}
                       key={party.institutionId}
                       title={party.description}
-                      subTitle={
-                        party.userRole === 'ADMIN'
-                          ? t('common.roles.admin.longLabel')
-                          : t('common.roles.limited.longLabel')
-                      }
+                      subTitle={t(roleLabels[party.userRole].longLabelKey)}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? 'Da completare' : ''}
