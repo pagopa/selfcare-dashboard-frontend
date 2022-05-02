@@ -14,6 +14,8 @@ export type Party = {
   category?: string;
   urlLogo?: string;
   fiscalCode: string;
+  registeredOffice: string;
+  typology: string;
 };
 
 const buildUrlLog = (institutionId: string) =>
@@ -30,5 +32,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     category: institutionResource.category,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
+    registeredOffice: 'TODO',
+    typology: 'TODO',
   };
 };

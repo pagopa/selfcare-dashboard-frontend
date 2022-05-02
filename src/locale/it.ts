@@ -73,12 +73,15 @@ export default {
       size: 'Dimensione massima 300 x 300px - Formato .jpg o . png',
     },
     partyDetail: {
+      typology: 'Tipologia',
       ipaCode: 'Codice IPA',
       companyName: 'Ragione sociale',
-      fiscalCode: 'Codice fiscale',
-      pec: 'PEC',
+      fiscalCode: 'Codice Fiscale',
+      pec: 'Indirizzo PEC primario',
+      registeredOffice: 'Sede Legale',
+      recipientCode: 'Codice destinatario',
       contactToModify:
-        "<0>Per modificare questi dati, <1>contatta</1> l'Indice della Pubblica Amministrazione (IPA)</0>",
+        "<0>Vuoi modificare questi dati? <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
     },
   },
   subHeader: {

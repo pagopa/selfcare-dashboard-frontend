@@ -12,10 +12,12 @@ type Props = {
     | React.MouseEventHandler<HTMLSpanElement>
     | undefined;
   loading: boolean;
+  files: Array<File>;
 };
 
-export function PartyDescription({ labelLink, open, loading }: Props) {
+export function PartyDescription({ labelLink, open, loading, files }: Props) {
   const { t } = useTranslation();
+  console.log('files', files);
   return (
     <Grid container justifyContent={'flex-start'} alignItems={'center'}>
       {!loading && <EditIcon color={'primary'} fontSize="small" />}
@@ -26,7 +28,7 @@ export function PartyDescription({ labelLink, open, loading }: Props) {
           onClick={open}
           sx={{ fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
         >
-          {labelLink}
+          {files && files.length > 0 && files[0].name ? files[0].name : labelLink}
         </Link>
       </Box>
       <Typography

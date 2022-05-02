@@ -11,6 +11,7 @@ import { partiesActions, partiesSelectors } from '../../../../../../redux/slices
 // import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
 import PartyLogoNew from './components/PartyLogoNew';
+
 type Props = {
   institutionId: string;
   canUploadLogo: boolean;
@@ -31,6 +32,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
 
   const [labelLink, setLabelLink] = useState<string>(t('overview.partyLogo.modify') as string);
   const addError = useErrorDispatcher();
+  const [uploadedFiles, setUploadedFiles] = useState<Array<File>>([]);
 
   useEffect(() => {
     setTimeout(() => setLabelLink(getLabelLinkText(t)), 400);
@@ -55,6 +57,7 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
   const { getRootProps, getInputProps, open } = useDropzone({
     onDropAccepted: (files: Array<File>) => {
       setLoading(true);
+      setUploadedFiles(files);
       setLabelLink(files[0].name);
       const requestId = uniqueId();
       trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: institutionId, request_id: requestId });
@@ -151,8 +154,13 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
           {/* <PartyLogo loading={loading} urlLogo={urlLogo} /> */}
         </Box>
         <Box>
-          {canUploadLogo && ( //  TODO verificare schermata figma in caso di userRole !== Admin
-            <PartyDescription labelLink={labelLink} open={open} loading={loading} />
+          {canUploadLogo && (
+            <PartyDescription
+              labelLink={labelLink}
+              open={open}
+              loading={loading}
+              files={uploadedFiles}
+            />
           )}
         </Box>
       </Box>

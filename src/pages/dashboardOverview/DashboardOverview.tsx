@@ -6,6 +6,7 @@ import NotActiveProductsSection from './components/notActiveProductsSection/NotA
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
 import PartyCard from './components/partyCard/PartyCard';
 import { PartyLogoUploader } from './components/partyCard/components/partyLogoUploader/PartyLogoUploader';
+import DashboardInfoSection from './components/DashboardInfoSection';
 
 type Props = {
   party: Party;
@@ -29,8 +30,13 @@ const DashboardOverview = ({ party, products }: Props) => {
           </Typography>
         </Grid>
       </Grid>
+      <Grid item xs={12}>
+        <PartyCard party={party} />
+      </Grid>
+      <Grid item xs={12} my={2}>
+        {canUploadLogo && <DashboardInfoSection />}
+      </Grid>
 
-      <PartyCard party={party} />
       <ActiveProductsSection products={products} party={party} />
       {products && products.findIndex((product) => product.status !== 'ACTIVE') > -1 && (
         <NotActiveProductsSection party={party} products={products} />

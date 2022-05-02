@@ -1,18 +1,16 @@
-import { Grid, Link, Typography, Box } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 // import Chip from '@mui/material/Chip';
-import { InfoOutlined } from '@mui/icons-material';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 
 type Props = {
   party: Party;
-  canUploadLogo: boolean;
 };
 
-export default function PartyDetail({ party, canUploadLogo }: Props) {
+export default function PartyDetail({ party }: Props) {
   const { t } = useTranslation();
   return (
-    <Grid container direction="column" alignItems={'flex-start'}>
+    <Grid container alignItems={'flex-start'}>
       {/* <Grid item> // TODO chiedere se presente la chip, da prototipo non c'è
         {party.category && (
           <Chip
@@ -27,123 +25,170 @@ export default function PartyDetail({ party, canUploadLogo }: Props) {
           />
         )}
       </Grid> */}
-      <Grid item>
-        <Typography
-          variant="body2"
-          display="inline"
-          sx={{
-            color: 'text.disabled',
-            fontWeight: 'normal',
-            lineHeight: '28px',
-          }}
-        >
-          {t('overview.partyDetail.ipaCode')}
-        </Typography>
-        <Typography
-          variant="body2"
-          display="inline"
-          sx={{
-            color: '#000000',
-            fontWeight: 'normal',
-            lineHeight: '28px',
-            marginLeft: 1,
-          }}
-        >
-          {party.institutionId}
-        </Typography>
+      <Grid container item xs={6} alignItems={'flex-start'}>
+        {/* tipologia */}
+        <Grid item xs={4}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: 'text.disabled',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {t('overview.partyDetail.typology')}
+          </Typography>
+        </Grid>
+        <Grid item xs={8}>
+          <Typography>
+            {party.typology} {party.category && `· ${party.category}`}
+          </Typography>
+        </Grid>
+        {/* ragione sociale */}
+        <Grid item xs={4}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: 'text.disabled',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {t('overview.partyDetail.companyName')}
+          </Typography>
+        </Grid>
+        <Grid item xs={8}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: '#000000',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {party.description}
+          </Typography>
+        </Grid>
+        {/* codice IPA */}
+        <Grid item xs={4}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: 'text.disabled',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {t('overview.partyDetail.ipaCode')}
+          </Typography>
+        </Grid>
+        <Grid item xs={8}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: '#000000',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {party.institutionId}
+          </Typography>
+        </Grid>
+        {/* codice fiscale */}
+        <Grid item xs={4}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: 'text.disabled',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {t('overview.partyDetail.fiscalCode')}
+          </Typography>
+        </Grid>
+        <Grid item xs={8}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: '#000000',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {party.fiscalCode}
+          </Typography>
+        </Grid>
       </Grid>
-      <Grid item>
-        <Typography
-          variant="body2"
-          display="inline"
-          sx={{
-            color: 'text.disabled',
-            fontWeight: 'normal',
-            lineHeight: '28px',
-            mt: 1,
-          }}
-        >
-          {t('overview.partyDetail.companyName')}
-        </Typography>
-        <Typography
-          variant="body2"
-          display="inline"
-          sx={{
-            color: '#000000',
-            fontWeight: 'normal',
-            lineHeight: '28px',
-            marginLeft: 1,
-            mt: 1,
-          }}
-        >
-          {party.description}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Typography
-          variant="body2"
-          display="inline"
-          sx={{
-            color: 'text.disabled',
-            fontWeight: 'normal',
-            lineHeight: '28px',
-            mt: 1,
-          }}
-        >
-          {t('overview.partyDetail.fiscalCode')}
-        </Typography>
-        <Typography
-          variant="body2"
-          display="inline"
-          sx={{
-            color: '#000000',
-            fontWeight: 'normal',
-            lineHeight: '28px',
-            marginLeft: 1,
-            mt: 1,
-          }}
-        >
-          {party.fiscalCode}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Typography
-          variant="body2"
-          display="inline"
-          sx={{
-            color: 'text.disabled',
-            fontWeight: 'normal',
-            lineHeight: '28px',
-            mt: 1,
-          }}
-        >
-          {t('overview.partyDetail.pec')}
-        </Typography>
-        <Typography
-          variant="body2"
-          display="inline"
-          sx={{
-            color: '#000000',
-            fontWeight: 'normal',
-            lineHeight: '28px',
-            marginLeft: 1,
-            mt: 1,
-          }}
-        >
-          {party.digitalAddress}
-        </Typography>
-        {canUploadLogo && (
-          <Box display="flex" alignItems="center" pt={3}>
-            <InfoOutlined sx={{ width: '20px', height: '20spx', mr: '4px', color: '#5C6F82' }} />
-            <Trans i18nKey="overview.partyDetail.contactToModify" shouldUnescape>
-              <Typography variant="body2" sx={{ fontSize: '12px' }}>
-                Per modificare questi dati,&nbsp;
-                <Link href="https://indicepa.gov.it/ipa-portale/contatti">contatta</Link>
-                &nbsp;l&apos;Indice della Pubblica Amministrazione (IPA)
-              </Typography>
-            </Trans>
-          </Box>
-        )}
+      <Grid container item xs={6}>
+        {/* indirizzo PEC primario */}
+        <Grid item xs={4}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: 'text.disabled',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {t('overview.partyDetail.pec')}
+          </Typography>
+        </Grid>
+        <Grid item xs={8} width="100%" className="ShowDots">
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: '#000000',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {party.digitalAddress}
+          </Typography>
+        </Grid>
+        {/* sede legale  */}
+        <Grid item xs={4}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: 'text.disabled',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {t('overview.partyDetail.registeredOffice')}
+          </Typography>
+        </Grid>
+        <Grid item xs={8}>
+          <Typography>{party.registeredOffice}</Typography>
+        </Grid>
+        {/* codice destinatario */}
+        <Grid item xs={4}>
+          <Typography
+            variant="body2"
+            display="inline"
+            sx={{
+              color: 'text.disabled',
+              fontWeight: 'normal',
+              lineHeight: '28px',
+            }}
+          >
+            {t('overview.partyDetail.recipientCode')}
+          </Typography>
+        </Grid>
+        <Grid item xs={8}>
+          <Typography>TODO CODICE DESTINATARIO</Typography>
+        </Grid>
       </Grid>
     </Grid>
   );
