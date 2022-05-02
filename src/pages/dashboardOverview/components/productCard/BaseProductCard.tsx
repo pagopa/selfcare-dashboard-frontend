@@ -115,7 +115,12 @@ export default function BaseProductCard({
                 {buttonLabel}
               </Button>
               {disableBtn && (
-                <Box display="flex" alignItems="center" ml={3} sx={{ color: '#5C6F82' }}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  ml={3}
+                  sx={{ color: '#5C6F82', cursor: 'pointer' }}
+                >
                   <Tooltip title={tooltip}>
                     <InfoOutlined />
                   </Tooltip>
