@@ -15,15 +15,12 @@ export default function PartyCard({ party }: Props) {
         width: '100%',
         boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)',
         py: 3,
+        px: 2,
         backgroundColor: '#EEEEEE',
         border: 'none',
       }}
     >
-      {/* <Grid container direction="row" alignItems={'center'} px={4}>
-        <Grid item xs={12}> */}
       <PartyDetail party={party} />
-      {/* </Grid>
-      </Grid> */}
     </Card>
   );
 }

@@ -1,4 +1,4 @@
-import { Card, Grid, Box, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
 import { useTranslation } from 'react-i18next';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
@@ -18,37 +18,33 @@ export default function ActiveProductCard({ party, product }: Props) {
   const lastServiceActivationDate = undefined; // actually this info is not available
 
   return (
-    <Grid item xs={6}>
-      <Card sx={{ height: '100%', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
-        <Box mx={8} my={5}>
-          <BaseProductCard
-            disableBtn={isDisabled}
-            cardTitle={product.title}
-            cardSubTitle={
-              product.activationDateTime
-                ? t('overview.activeProducts.activationOf') +
-                  `${
-                    product.activationDateTime && formatDateAsLongString(product.activationDateTime)
-                  }`
-                : t('overview.activeProducts.active')
-            }
-            buttonLabel={t('overview.activeProducts.manageButton')}
-            urlLogo={product.logo}
-            tag={product.tag}
-            btnAction={() => invokeProductBo(product, party)}
-            heightLogo="70px"
-            heightTitle="80px"
-            heightSubTitle="20px"
-            heightButton="45px"
-          />
-          {lastServiceActivationDate && (
-            <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>
-              {t('overview.lastServiceActive') +
-                `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
-            </Typography>
-          )}
-        </Box>
-      </Card>
+    <Grid item xs={4} sx={{}}>
+      <BaseProductCard
+        disableBtn={isDisabled}
+        cardTitle={product.title}
+        // cardSubTitle={
+        //   product.activationDateTime
+        //     ? t('overview.activeProducts.activationOf') +
+        //       `${
+        //         product.activationDateTime && formatDateAsLongString(product.activationDateTime)
+        //       }`
+        //     : t('overview.activeProducts.active')
+        // }
+        buttonLabel={t('overview.activeProducts.manageButton')}
+        urlLogo={product.logo}
+        tag={product.tag}
+        btnAction={() => invokeProductBo(product, party)}
+        heightLogo="70px"
+        heightTitle="80px"
+        heightSubTitle="20px"
+        heightButton="45px"
+      />
+      {lastServiceActivationDate && (
+        <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>
+          {t('overview.lastServiceActive') +
+            `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
+        </Typography>
+      )}
     </Grid>
   );
 }

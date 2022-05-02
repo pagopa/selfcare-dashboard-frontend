@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
 // import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
-import PartyLogoNew from './components/PartyLogoNew';
+import PartyLogoNew from './components/PartyLogo';
 
 type Props = {
   institutionId: string;
@@ -151,7 +151,6 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         <Box>
           {canUploadLogo && <input {...getInputProps()} />}
           <PartyLogoNew loading={loading} urlLogo={urlLogo} />
-          {/* <PartyLogo loading={loading} urlLogo={urlLogo} /> */}
         </Box>
         <Box>
           {canUploadLogo && (

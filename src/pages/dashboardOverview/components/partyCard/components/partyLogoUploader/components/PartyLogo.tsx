@@ -1,46 +1,36 @@
-import { CircularProgress, Box } from '@mui/material';
-import CustomAvatar from '@pagopa/selfcare-common-frontend/components/CustomAvatar';
+// import React from 'react'
+import { Box } from '@mui/material';
+import { CircularProgress } from '@mui/material';
+import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
+import logoPlaceholder from '../../../../../../../assets/logo-placeholder.svg';
 
-type Props = {
-  loading: boolean;
-  urlLogo?: string;
-};
-
-export function PartyLogo({ loading, urlLogo }: Props) {
+export default function PartyLogo({ loading, urlLogo }: Props) {
+  console.log(urlLogo);
   return (
-    <Box sx={{ width: '152px', height: '152px', alignItems: 'center' }}>
-      <Box sx={{ position: 'relative', display: loading ? undefined : 'none' }}>
-        <CircularProgress
-          variant="determinate"
-          sx={{
-            color: '#D1E7FF',
-          }}
-          size={152}
-          thickness={5}
-          value={100}
+    <Box width="60px" height="60px" mr={2}>
+      {!loading ? (
+        <CustomAvatar
+          customSrc={urlLogo ? urlLogo : logoPlaceholder ? logoPlaceholder : undefined}
+          customWidth="100%"
+          customHeight="100%"
+          loading={loading}
+          id="partyLogo"
         />
-        <CircularProgress
-          variant="indeterminate"
-          disableShrink
+      ) : (
+        <Box
           sx={{
-            color: 'primary.main',
-            animationDuration: '1.5s',
-            position: 'absolute',
-            left: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            borderRadius: '50%',
+            width: '100%',
+            height: '100%',
+            alignItems: 'center',
           }}
-          size={152}
-          thickness={7}
-        />
-      </Box>
-
-      <CustomAvatar
-        customAlt=""
-        customSrc={urlLogo}
-        customWidth="100%"
-        customHeight="100%"
-        loading={loading}
-        id="partyLogo"
-      />
+        >
+          <CircularProgress sx={{ color: '#5C6F82' }} size={30} />
+        </Box>
+      )}
     </Box>
   );
 }

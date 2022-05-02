@@ -11,21 +11,7 @@ export default function PartyDetail({ party }: Props) {
   const { t } = useTranslation();
   return (
     <Grid container alignItems={'flex-start'}>
-      {/* <Grid item> // TODO chiedere se presente la chip, da prototipo non c'è
-        {party.category && (
-          <Chip
-            label={party.category}
-            variant="outlined"
-            sx={{
-              background: '#FCFDFF',
-              border: '1px solid #E6E9F2',
-              boxSizing: 'border-box',
-              borderRadius: '12px',
-            }}
-          />
-        )}
-      </Grid> */}
-      <Grid container item xs={6} alignItems={'flex-start'}>
+      <Grid container item xs={6} alignItems={'flex-start'} spacing={1}>
         {/* tipologia */}
         <Grid item xs={4}>
           <Typography
@@ -41,7 +27,7 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography>
+          <Typography variant="h6">
             {party.typology} {party.category && `· ${party.category}`}
           </Typography>
         </Grid>
@@ -61,11 +47,10 @@ export default function PartyDetail({ party }: Props) {
         </Grid>
         <Grid item xs={8}>
           <Typography
-            variant="body2"
+            variant="h6"
             display="inline"
             sx={{
               color: '#000000',
-              fontWeight: 'normal',
               lineHeight: '28px',
             }}
           >
@@ -88,11 +73,10 @@ export default function PartyDetail({ party }: Props) {
         </Grid>
         <Grid item xs={8}>
           <Typography
-            variant="body2"
+            variant="h6"
             display="inline"
             sx={{
               color: '#000000',
-              fontWeight: 'normal',
               lineHeight: '28px',
             }}
           >
@@ -115,11 +99,10 @@ export default function PartyDetail({ party }: Props) {
         </Grid>
         <Grid item xs={8}>
           <Typography
-            variant="body2"
+            variant="h6"
             display="inline"
             sx={{
               color: '#000000',
-              fontWeight: 'normal',
               lineHeight: '28px',
             }}
           >
@@ -127,7 +110,7 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
       </Grid>
-      <Grid container item xs={6}>
+      <Grid container item xs={6} spacing={1}>
         {/* indirizzo PEC primario */}
         <Grid item xs={4}>
           <Typography
@@ -144,11 +127,10 @@ export default function PartyDetail({ party }: Props) {
         </Grid>
         <Grid item xs={8} width="100%" className="ShowDots">
           <Typography
-            variant="body2"
+            variant="h6"
             display="inline"
             sx={{
               color: '#000000',
-              fontWeight: 'normal',
               lineHeight: '28px',
             }}
           >
@@ -170,7 +152,7 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography>{party.registeredOffice}</Typography>
+          <Typography variant="h6">{party.registeredOffice}</Typography>
         </Grid>
         {/* codice destinatario */}
         <Grid item xs={4}>
@@ -187,7 +169,7 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography>TODO CODICE DESTINATARIO</Typography>
+          <Typography variant="h6">TODO CODICE DESTINATARIO</Typography>
         </Grid>
       </Grid>
     </Grid>
