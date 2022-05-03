@@ -17,10 +17,8 @@ export default function NotActiveProductsSection({ party, products }: Props) {
     <React.Fragment>
       <TitleBox
         title={t('overview.notActiveProductsSection.title')}
-        // subTitle={t('overview.notActiveProductsSection.subTitle')}
-        mbTitle={1}
+        mbTitle={2}
         mtTitle={10}
-        mbSubTitle={6}
         variantTitle="h2"
         variantSubTitle="body2"
       />

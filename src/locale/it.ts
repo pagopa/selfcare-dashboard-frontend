@@ -6,15 +6,17 @@ export default {
     },
   },
   partySelection: {
-    title: 'Seleziona il tuo Ente',
-    subTitle: "Se operi per più Enti, puoi modificare la tua scelta all'interno del portale.",
+    title: 'Seleziona il tuo ente',
+    subTitle:
+      'Se operi per più enti, potrai modificare la tua scelta dopo aver effettuato l’accesso.',
     searchBar: 'Cerca',
     partyStatus: 'Da completare',
-    enterButton: 'Entra',
+    continueButton: 'Continua',
   },
   overview: {
-    title: 'La panoramica del tuo Ente',
-    subTitle: 'Visualizza e gestisci i prodotti PagoPA a cui il tuo Ente ha aderito.',
+    title: 'Panoramica',
+    subTitle:
+      'Gestisci i prodotti PagoPA attivi per questo ente. Se hai i permessi, puoi anche aderire a nuovi prodotti.',
     sideMenu: {
       institutionManagement: {
         title: 'Gestione Ente',
@@ -22,7 +24,7 @@ export default {
           title: 'Panoramica',
         },
         referents: {
-          title: 'Referenti',
+          title: 'Utenti',
         },
         groups: {
           title: 'Gruppi',
@@ -35,8 +37,6 @@ export default {
     },
     activeProductsSection: {
       title: 'Prodotti attivi',
-      subTitle: 'I prodotti PagoPA a cui il tuo Ente ha aderito.',
-      tooltip: 'Vuoi i permessi per gestire questo prodotto? Chiedi a uno dei suoi Amministratori ',
     },
     activeProducts: {
       activationOf: 'Attivo dal ',
@@ -45,8 +45,7 @@ export default {
     },
     lastServiceActive: 'Ultimo servizio attivato: ',
     notActiveProductsSection: {
-      title: 'Scopri i nuovi prodotti',
-      subTitle: 'Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi.',
+      title: 'Prodotti disponibili',
     },
     notActiveProducts: {
       joinButton: 'Aderisci',
