@@ -17,7 +17,6 @@ type Props = {
 
 export function PartyDescription({ labelLink, open, loading, files }: Props) {
   const { t } = useTranslation();
-  console.log('files', files);
   return (
     <Grid container justifyContent={'flex-start'} alignItems={'center'}>
       {!loading && <EditIcon color={'primary'} fontSize="small" />}

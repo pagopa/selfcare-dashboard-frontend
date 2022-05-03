@@ -2,7 +2,7 @@
 import { Box } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
-import logoPlaceholder from '../../../../../../../assets/logo-placeholder.svg';
+// import logoPlaceholder from '../../../../../../../assets/logo-placeholder.svg';
 
 export default function PartyLogo({ loading, urlLogo }: Props) {
   console.log(urlLogo);
@@ -10,7 +10,7 @@ export default function PartyLogo({ loading, urlLogo }: Props) {
     <Box width="60px" height="60px" mr={2}>
       {!loading ? (
         <CustomAvatar
-          customSrc={urlLogo ? urlLogo : logoPlaceholder ? logoPlaceholder : undefined}
+          customSrc={urlLogo}
           customWidth="100%"
           customHeight="100%"
           loading={loading}
