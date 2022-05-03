@@ -1,5 +1,6 @@
-import { Typography, Box, Card, CardContent, Button, Grid } from '@mui/material';
+import { Typography, Box, Card, CardContent, Button, Grid, Link } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
+import { Trans } from 'react-i18next';
 
 type Props = {
   image?: string;
@@ -8,6 +9,7 @@ type Props = {
   btnAction?: () => void;
   disableBtn: boolean;
   buttonLabel: string;
+  urlPublic?: string;
 };
 
 export default function NotActiveProductCard({
@@ -17,10 +19,11 @@ export default function NotActiveProductCard({
   btnAction,
   disableBtn,
   buttonLabel,
+  urlPublic,
 }: Props) {
   return (
     <Grid container>
-      <Card sx={{ maxWidth: 345, height: '411px' }}>
+      <Card sx={{ maxWidth: 345, height: '411px', borderRadius: '16px' }}>
         <Box
           sx={{
             width: '100%',
@@ -29,7 +32,7 @@ export default function NotActiveProductCard({
             '&::after': { position: 'absolute' },
           }}
         >
-          <CardMedia component="img" height="100%" image={image} />
+          <CardMedia component="img" height="100%" width="100%" image={image} />
         </Box>
         <Box
           mx={3}
@@ -57,22 +60,46 @@ export default function NotActiveProductCard({
             {description}
           </Typography>
         </CardContent>
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }} p={3}>
-          <Button
-            onClick={btnAction}
-            disabled={disableBtn}
-            variant="outlined"
+        <Grid container p={3}>
+          <Grid
+            item
+            xs={6}
             sx={{
-              height: '40px',
-              fontWeight: 'bold',
-              borderWidth: 'medium',
-              borderColor: '#0073E6',
-              '&:hover': { borderWidth: 'medium', backgroundColor: 'transparent' },
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
             }}
           >
-            {buttonLabel}
-          </Button>
-        </Box>
+            {urlPublic && (
+              <Trans i18nKey="discoverMore">
+                <Link
+                  sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
+                  href={urlPublic}
+                >
+                  {'Scopri di più'}
+                </Link>
+              </Trans>
+            )}
+          </Grid>
+
+          <Grid item xs={6} sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              onClick={btnAction}
+              disabled={disableBtn}
+              variant="outlined"
+              sx={{
+                height: '40px',
+                fontWeight: 'bold',
+                borderWidth: 'medium',
+                borderColor: '#0073E6',
+                '&:hover': { borderWidth: 'medium', backgroundColor: 'transparent' },
+              }}
+            >
+              {buttonLabel}
+            </Button>
+          </Grid>
+        </Grid>
       </Card>
     </Grid>
   );
