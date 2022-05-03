@@ -1,20 +1,19 @@
-// import React from 'react'
 import { Box } from '@mui/material';
 import { CircularProgress } from '@mui/material';
-import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
-// import logoPlaceholder from '../../../../../../../assets/logo-placeholder.svg';
+import { EntityAvatar } from '@pagopa/mui-italia/dist/components/EntityAvatar';
 
 export default function PartyLogo({ loading, urlLogo }: Props) {
   return (
-    <Box width="60px" height="60px" mr={2}>
+    <Box
+      width="60px"
+      height="60px"
+      mr={2}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
       {!loading ? (
-        <CustomAvatar
-          customSrc={urlLogo}
-          customWidth="100%"
-          customHeight="100%"
-          loading={loading}
-          id="partyLogo"
-        />
+        <EntityAvatar customSrc={urlLogo} id="partyLogo" customAlt={undefined} />
       ) : (
         <Box
           sx={{

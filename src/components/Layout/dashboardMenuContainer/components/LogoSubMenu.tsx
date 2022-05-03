@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Box, Typography } from '@mui/material';
-import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
+import { EntityAvatar } from '@pagopa/mui-italia/dist/components/EntityAvatar';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
 
@@ -18,7 +18,7 @@ export default function LogoSubMenu({ title, subTitle, color }: Props) {
       <Grid container>
         <Grid item xs={3}>
           <Box>
-            <CustomAvatar customAlt="" customSrc={urlLogo} />
+            <EntityAvatar customSrc={urlLogo} id="partyLogo" customAlt={undefined} />
           </Box>
         </Grid>
         <Grid item xs={9}>
