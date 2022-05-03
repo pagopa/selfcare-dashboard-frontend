@@ -5,7 +5,6 @@ import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
 // import logoPlaceholder from '../../../../../../../assets/logo-placeholder.svg';
 
 export default function PartyLogo({ loading, urlLogo }: Props) {
-  console.log(urlLogo);
   return (
     <Box width="60px" height="60px" mr={2}>
       {!loading ? (
