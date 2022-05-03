@@ -1,50 +1,105 @@
-import { Grid, Typography } from '@mui/material';
-import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
-import { useTranslation } from 'react-i18next';
-import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
-import { Party } from '../../../../../model/Party';
-import { Product } from '../../../../../model/Product';
-import BaseProductCard from '../../productCard/BaseProductCard';
+import React from 'react';
+import { Typography, Button, Box, Grid, Card, CardContent, Tooltip } from '@mui/material';
+import { InfoOutlined } from '@mui/icons-material';
 
 type Props = {
-  party: Party;
-  product: Product;
+  cardTitle: string;
+  cardSubTitle?: string;
+  buttonLabel: string;
+  disableBtn: boolean;
+  urlLogo?: string;
+  tag?: string;
+  btnAction?: () => void;
+  heightLogo?: string;
+  heightTitle?: string;
+  heightSubTitle?: string;
+  heightButton?: string;
+  titleFontSize?: string;
+  subTitleFontSize?: string;
   tooltip: string;
 };
 
-export default function ActiveProductCard({ party, product, tooltip }: Props) {
-  const { t } = useTranslation();
-  const { invokeProductBo } = useTokenExchange();
-  const isDisabled = product.authorized === false;
-  const lastServiceActivationDate = undefined; // actually this info is not available
+const cardSubTitleStyle = {
+  height: '100%',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  display: '-webkit-box',
+  WebkitLineClamp: 3,
+  WebkitBoxOrient: 'vertical' as const,
+};
 
+export default function ActiveProductCard({
+  cardTitle,
+  cardSubTitle,
+  buttonLabel,
+  disableBtn,
+  urlLogo,
+  btnAction,
+  heightTitle,
+  heightSubTitle,
+  heightButton,
+  subTitleFontSize = '18px',
+  tooltip,
+}: Props) {
   return (
-    <Grid item xs={4} sx={{}}>
-      <BaseProductCard
-        disableBtn={isDisabled}
-        cardTitle={product.title}
-        // cardSubTitle={
-        //   product.activationDateTime
-        //     ? t('overview.activeProducts.activationOf') +
-        //       `${product.activationDateTime && formatDateAsLongString(product.activationDateTime)}`
-        //     : t('overview.activeProducts.active')
-        // }
-        buttonLabel={t('overview.activeProducts.manageButton')}
-        urlLogo={product.logo}
-        tag={product.tag}
-        btnAction={() => invokeProductBo(product, party)}
-        heightLogo="70px"
-        heightTitle="80px"
-        heightSubTitle="20px"
-        heightButton="45px"
-        tooltip={tooltip}
-      />
-      {lastServiceActivationDate && (
-        <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>
-          {t('overview.lastServiceActive') +
-            `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
-        </Typography>
-      )}
-    </Grid>
+    <React.Fragment>
+      <Card
+        sx={{
+          border: 'none',
+          borderRadius: '16px !important',
+          boxShadow:
+            '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+        }}
+      >
+        <CardContent>
+          <Box display="flex">
+            <Box sx={{ width: '88px', height: '88px' }} mr={2}>
+              <img src={urlLogo} />
+            </Box>
+            {cardTitle && (
+              <Box height={heightTitle} display="flex" alignItems={'center'}>
+                <Typography variant="h4">{cardTitle}</Typography>
+              </Box>
+            )}
+          </Box>
+          {cardSubTitle && (
+            <Grid item xs={12} mb={3} height={heightSubTitle} display="flex" alignItems={'center'}>
+              <Typography
+                variant="body2"
+                sx={{ ...cardSubTitleStyle, fontSize: subTitleFontSize }}
+                title={cardSubTitle.toString()}
+              >
+                {cardSubTitle}
+              </Typography>
+            </Grid>
+          )}
+
+          <Grid item xs={12} justifyContent="center" height={heightButton}>
+            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                onClick={btnAction}
+                disabled={disableBtn}
+                variant="contained"
+                sx={{ height: '40px' }}
+              >
+                {buttonLabel}
+              </Button>
+              {disableBtn && (
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  ml={3}
+                  sx={{ color: '#5C6F82', cursor: 'pointer' }}
+                >
+                  <Tooltip title={tooltip}>
+                    <InfoOutlined />
+                  </Tooltip>
+                </Box>
+              )}
+            </Box>
+          </Grid>
+        </CardContent>
+      </Card>
+    </React.Fragment>
   );
 }

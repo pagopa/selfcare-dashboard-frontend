@@ -4,7 +4,7 @@ import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
 import { useTranslation } from 'react-i18next';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
-import ActiveProductCard from './components/ActiveProductCard';
+import ActiveProductCardContainer from './components/ActiveProductCardContainer';
 
 type Props = {
   party: Party;
@@ -29,7 +29,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
           products
             .filter((p) => p.status === 'ACTIVE')
             .map((product) => (
-              <ActiveProductCard
+              <ActiveProductCardContainer
                 key={product.id}
                 party={party}
                 product={product}

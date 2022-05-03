@@ -13,7 +13,7 @@ export type Product = {
   userRole?: UserRole;
   authorized?: boolean;
   status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
-  imageUrl?: string;
+  imageUrl: string;
 };
 
 export type ProductsMap = { [id: string]: Product };
@@ -37,4 +37,5 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   userRole: resource.userRole as UserRole,
   authorized: resource.authorized,
   status: resource.status,
+  imageUrl: 'TODO',
 });

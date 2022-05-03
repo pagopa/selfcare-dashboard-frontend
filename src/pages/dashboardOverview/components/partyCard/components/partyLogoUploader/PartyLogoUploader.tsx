@@ -148,20 +148,22 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
         justifyItems={'center'}
         alignItems={'center'}
       >
-        <Box>
-          {canUploadLogo && <input {...getInputProps()} />}
-          <PartyLogoNew loading={loading} urlLogo={urlLogo} />
-        </Box>
-        <Box>
-          {canUploadLogo && (
-            <PartyDescription
-              labelLink={labelLink}
-              open={open}
-              loading={loading}
-              files={uploadedFiles}
-            />
-          )}
-        </Box>
+        {canUploadLogo && (
+          <>
+            <Box>
+              <input {...getInputProps()} />
+              <PartyLogoNew loading={loading} urlLogo={urlLogo} />
+            </Box>
+            <Box>
+              <PartyDescription
+                labelLink={labelLink}
+                open={open}
+                loading={loading}
+                files={uploadedFiles}
+              />
+            </Box>
+          </>
+        )}
       </Box>
     </Grid>
   );
