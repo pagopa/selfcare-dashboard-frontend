@@ -10,6 +10,7 @@ import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
 import { useTokenExchange } from '../../../../hooks/useTokenExchange';
+import DashboardSidenav from '../DashboardSidenav';
 import DashboardSideMenuItem, { MenuItem } from './DashboardSideMenuItem';
 
 type Props = {
@@ -129,6 +130,9 @@ export default function DashboardSideMenu({ products, party }: Props) {
 
   return (
     <Grid container item mt={11}>
+      <Grid item xs={12}>
+        <DashboardSidenav />
+      </Grid>
       <Grid item xs={12}>
         <List>
           {arrayMenu &&
