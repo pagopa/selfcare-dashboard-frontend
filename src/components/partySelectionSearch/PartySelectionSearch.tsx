@@ -78,7 +78,7 @@ export default function PartySelectionSearch({
       {parties.length >= 1 && (
         <Grid container item direction="column">
           {(partyTitle || parties.length > 3) && (
-            <Grid item my={2} className="pippo">
+            <Grid item my={2}>
               {parties.length > 3 ? (
                 <Box>
                   <PartySelectionSearchInput

@@ -26,6 +26,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
       <NotActiveProductCard
         image={product.imageUrl}
         urlLogo={product.logo}
+        title={product.title}
         description={product.description}
         disableBtn={false}
         btnAction={() => {

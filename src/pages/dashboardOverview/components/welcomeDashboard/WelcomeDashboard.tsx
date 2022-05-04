@@ -9,11 +9,11 @@ export default function WelcomeDashboard() {
     <TitleBox
       title={title}
       subTitle={subTitle}
-      mbTitle={2}
+      mbTitle={0}
       mtTitle={10}
       mbSubTitle={6}
-      variantTitle="h1"
-      variantSubTitle="h5"
+      variantTitle="h4"
+      variantSubTitle="body1"
     />
   );
 }

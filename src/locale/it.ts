@@ -60,7 +60,7 @@ export default {
     },
     partyLogo: {
       upload: "Carica il logo dell'ente",
-      modify: 'Modifica Logo',
+      modify: 'Modifica',
       uploadError: {
         title: 'Caricamento non riuscito',
         description:

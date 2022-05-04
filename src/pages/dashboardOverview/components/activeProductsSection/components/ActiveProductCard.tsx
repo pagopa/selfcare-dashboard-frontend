@@ -53,12 +53,12 @@ export default function ActiveProductCard({
       >
         <CardContent>
           <Box display="flex">
-            <Box sx={{ width: '88px', height: '88px' }} mr={2}>
+            <Box sx={{ width: '88px', height: '88px', textAlign: 'center', pt: '10px' }} mr={2}>
               <img src={urlLogo} />
             </Box>
             {cardTitle && (
               <Box height={heightTitle} display="flex" alignItems={'center'}>
-                <Typography variant="h4">{cardTitle}</Typography>
+                <Typography variant="h6">{cardTitle}</Typography>
               </Box>
             )}
           </Box>

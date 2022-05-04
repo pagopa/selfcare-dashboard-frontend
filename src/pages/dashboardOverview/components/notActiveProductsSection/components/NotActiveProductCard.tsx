@@ -1,4 +1,4 @@
-import { Typography, Box, Card, CardContent, Button, Grid, Link } from '@mui/material';
+import { Typography, Box, Card, CardContent, Button, Grid, Link, useTheme } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import { Trans } from 'react-i18next';
 
@@ -6,6 +6,7 @@ type Props = {
   image?: string;
   urlLogo?: string;
   description: string;
+  title: string;
   btnAction?: () => void;
   disableBtn: boolean;
   buttonLabel: string;
@@ -20,7 +21,10 @@ export default function NotActiveProductCard({
   disableBtn,
   buttonLabel,
   urlPublic,
+  title,
 }: Props) {
+  const theme = useTheme();
+
   return (
     <Grid container>
       <Card sx={{ maxWidth: 345, height: '411px', borderRadius: '16px' }}>
@@ -41,7 +45,7 @@ export default function NotActiveProductCard({
             height: '88px',
             borderRadius: '4px',
             backgroundColor: 'white',
-            marginTop: '-32px',
+            marginTop: '-3rem',
             position: 'relative',
             textAlign: 'center',
             '&::after': {
@@ -55,8 +59,9 @@ export default function NotActiveProductCard({
         >
           <img src={urlLogo} style={{ paddingTop: '15px' }} />
         </Box>
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
+        <CardContent sx={{ p: '0px 24px' }}>
+          <Typography variant="h6">{title}</Typography>
+          <Typography sx={{ fontSize: theme.typography.fontSize, height: '50px' }}>
             {description}
           </Typography>
         </CardContent>

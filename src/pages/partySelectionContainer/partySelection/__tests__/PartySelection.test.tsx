@@ -16,6 +16,8 @@ const parties: Array<Party> = [
     institutionId: '1',
     digitalAddress: '',
     userRole: 'ADMIN',
+    registeredOffice: 'registeredOffice',
+    typology: 'typology',
   },
   {
     fiscalCode: 'Milano',
@@ -25,6 +27,8 @@ const parties: Array<Party> = [
     institutionId: '2',
     digitalAddress: '',
     userRole: 'ADMIN',
+    registeredOffice: 'registeredOffice',
+    typology: 'typology',
   },
   {
     fiscalCode: 'Roma',
@@ -34,6 +38,8 @@ const parties: Array<Party> = [
     institutionId: '3',
     digitalAddress: '',
     userRole: 'ADMIN',
+    registeredOffice: 'registeredOffice',
+    typology: 'typology',
   },
   {
     fiscalCode: 'Napoli',
@@ -43,6 +49,8 @@ const parties: Array<Party> = [
     institutionId: '4',
     digitalAddress: '',
     userRole: 'ADMIN',
+    registeredOffice: 'registeredOffice',
+    typology: 'typology',
   },
 ];
 const mockedProducts: Array<Product> = [
@@ -57,6 +65,7 @@ const mockedProducts: Array<Product> = [
     activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'https://io.italia.it/ ',
     urlBO: 'https://io.selfcare.pagopa.it/path/acs?token=<IdentityToken>',
+    imageUrl: '',
   },
   {
     logo: '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',
@@ -68,6 +77,7 @@ const mockedProducts: Array<Product> = [
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
+    imageUrl: '',
   },
 ];
 const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
