@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Box, Typography } from '@mui/material';
+import { Grid, Box, Typography, useTheme } from '@mui/material';
 import { EntityAvatar } from '@pagopa/mui-italia/dist/components/EntityAvatar';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
@@ -12,6 +12,7 @@ type Props = {
 
 export default function LogoSubMenu({ title, subTitle, color }: Props) {
   const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
+  const theme = useTheme();
 
   return (
     <React.Fragment>
@@ -23,13 +24,19 @@ export default function LogoSubMenu({ title, subTitle, color }: Props) {
         </Grid>
         <Grid item xs={9}>
           <Grid container direction="column">
-            <Grid item xs={12} mb={0.5}>
-              <Typography variant="h6" sx={{ fontWeight: '700', color: `${color} !important` }}>
+            <Grid item xs={12}>
+              <Typography
+                sx={{
+                  fontWeight: theme.typography.fontWeightBold,
+                  fonstSize: theme.typography.fontSize,
+                  color: `${color} !important`,
+                }}
+              >
                 {title}
               </Typography>
             </Grid>
             <Grid item xs={4}>
-              <Typography variant="h5" sx={{ fontSize: '14px', color: `${color} !important` }}>
+              <Typography variant="caption" sx={{ fontSize: '14px', color: `${color} !important` }}>
                 {subTitle}
               </Typography>
             </Grid>

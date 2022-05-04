@@ -125,8 +125,11 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
               <Grid container px={4} width="392px" maxHeight="560px">
                 <Grid item xs={12} mt={4} mb={4}>
                   <Typography
-                    variant="h3"
-                    sx={{ fontSize: '26px', color: theme.palette.text.primary }}
+                    sx={{
+                      fontSize: '26px',
+                      fontWeight: theme.typography.fontWeightBold,
+                      color: theme.palette.text.primary,
+                    }}
                   >
                     {ownerName}
                   </Typography>

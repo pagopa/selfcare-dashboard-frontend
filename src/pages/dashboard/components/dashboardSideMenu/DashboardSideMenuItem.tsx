@@ -54,7 +54,6 @@ const DashboardSideMenuItem = ({
         <Grid container>
           <Grid item xs={10}>
             <Typography
-              variant="h6"
               sx={{
                 fontSize: item.subMenu ? '18px' : '16px',
                 color,

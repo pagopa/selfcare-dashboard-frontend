@@ -19,8 +19,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
         title={t('overview.activeProductsSection.title')}
         mbTitle={2}
         mtTitle={10}
-        variantTitle="h2"
-        variantSubTitle="body2"
+        variantTitle="h6"
       />
       <Grid container spacing={2}>
         {products &&

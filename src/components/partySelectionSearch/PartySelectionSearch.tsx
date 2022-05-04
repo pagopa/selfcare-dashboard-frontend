@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
@@ -52,6 +52,8 @@ export default function PartySelectionSearch({
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
   const [selectedParty, setSelectedParty] = React.useState<Party | null>(null);
 
+  const theme = useTheme();
+
   const onFilterChange = (value: string) => {
     setInput(value);
     if (!value) {
@@ -94,8 +96,10 @@ export default function PartySelectionSearch({
                 </Box>
               ) : (
                 parties.length >= 1 && (
-                  <Typography variant="h6" sx={{ fontSize: '14px', color: 'text.disabled' }}>
-                    {' '}
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: theme.typography.fontWeightBold, color: 'text.disabled' }}
+                  >
                     {partyTitle}
                   </Typography>
                 )

@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItemButton, Typography, Grid, Box } from '@mui/material';
+import { List, ListItemButton, Typography, Grid, Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
 // import { withStyles } from '@mui/styles/';
@@ -14,8 +14,6 @@ type Props = {
   disabled?: boolean;
   bgColor?: string;
   titleColor?: string;
-  titleSize?: string;
-  subTitleSize?: string;
   showAvatar?: boolean;
   pxTitleSubTitle?: string;
 };
@@ -49,11 +47,10 @@ export default function PartyItem({
   disabled,
   bgColor,
   titleColor,
-  titleSize,
-  subTitleSize,
   showAvatar = true,
   pxTitleSubTitle,
 }: Props) {
+  const theme = useTheme();
   return (
     <CustomList
       aria-label="main mailbox folders"
@@ -73,14 +70,18 @@ export default function PartyItem({
         )}
         <Grid container sx={{ px: pxTitleSubTitle }}>
           <Grid item xs={12}>
-            <Typography variant="h1" sx={{ fontSize: titleSize, color: titleColor }}>
+            <Typography
+              sx={{
+                fontSize: theme.typography.fontSize,
+                fontWeight: theme.typography.fontWeightBold,
+                color: titleColor,
+              }}
+            >
               {title}
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="caption" sx={{ fontSize: subTitleSize }}>
-              {subTitle}
-            </Typography>
+            <Typography variant="caption">{subTitle}</Typography>
           </Grid>
         </Grid>
       </ListItemButton>

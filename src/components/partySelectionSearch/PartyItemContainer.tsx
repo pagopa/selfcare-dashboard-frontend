@@ -49,8 +49,6 @@ export default function PartyItemContainer({
             title={title}
             subTitle={subTitle}
             titleColor={titleColor}
-            titleSize="16px"
-            subTitleSize="14px"
             image={image}
             action={action}
             showAvatar={showAvatar}
@@ -72,11 +70,7 @@ export default function PartyItemContainer({
                 marginRight: '20px',
               }}
             >
-              <Typography
-                role="PartyItemDisabled"
-                variant="caption"
-                sx={{ fontSize: '12px', fontWeight: '600' }}
-              >
+              <Typography role="PartyItemDisabled" sx={{ fontSize: '12px', fontWeight: 600 }}>
                 {chip}
               </Typography>
             </Grid>

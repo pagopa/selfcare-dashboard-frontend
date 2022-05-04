@@ -20,14 +20,10 @@ const DashboardOverview = ({ party, products }: Props) => {
       <WelcomeDashboard />
       <Grid container direction="row" justifyContent={'center'} mb={2}>
         <Grid item xs={6} display="flex" alignItems="center">
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
-            {party.description}
-          </Typography>
+          <Typography variant="h6">{party.description}</Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography variant="h1">
-            <PartyLogoUploader institutionId={party.institutionId} canUploadLogo={canUploadLogo} />
-          </Typography>
+          <PartyLogoUploader institutionId={party.institutionId} canUploadLogo={canUploadLogo} />
         </Grid>
       </Grid>
       <Grid item xs={12}>
