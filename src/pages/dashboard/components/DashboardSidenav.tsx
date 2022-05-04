@@ -27,7 +27,7 @@ export default function DashboardSidenav() {
     >
       <List component="nav" aria-label="main piattaforma-notifiche sender">
         {/* Panoramica */}
-        <ListItemButton>
+        <ListItemButton onClick={() => handleListItemClick(0)}>
           <ListItemIcon>
             <DashboardCustomize fontSize="inherit" />
           </ListItemIcon>
