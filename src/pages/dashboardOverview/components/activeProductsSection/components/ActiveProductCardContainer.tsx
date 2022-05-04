@@ -31,11 +31,8 @@ export default function ActiveProductCardContainer({ party, product, tooltip }: 
         // }
         buttonLabel={t('overview.activeProducts.manageButton')}
         urlLogo={product.logo}
-        tag={product.tag}
         btnAction={() => invokeProductBo(product, party)}
-        heightLogo="70px"
         heightTitle="80px"
-        heightSubTitle="20px"
         heightButton="45px"
         tooltip={tooltip}
       />

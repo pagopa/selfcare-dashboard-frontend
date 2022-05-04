@@ -1,4 +1,14 @@
-import { Typography, Box, Card, CardContent, Button, Grid, Link, useTheme } from '@mui/material';
+import {
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  Button,
+  Grid,
+  Link,
+  useTheme,
+  Tooltip,
+} from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import { Trans } from 'react-i18next';
 
@@ -60,15 +70,32 @@ export default function NotActiveProductCard({
           <img src={urlLogo} style={{ paddingTop: '15px' }} />
         </Box>
         <CardContent sx={{ p: '0px 24px' }}>
-          <Typography variant="h6">{title}</Typography>
-          <Typography sx={{ fontSize: theme.typography.fontSize, height: '50px' }}>
-            {description}
-          </Typography>
-        </CardContent>
-        <Grid container p={3}>
+          <Grid item xs={12}>
+            <Typography variant="h6">{title}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Tooltip title={description}>
+              <Typography
+                sx={{
+                  fontSize: theme.typography.fontSize,
+                  height: '100%',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical' as const,
+                }}
+              >
+                {description}
+              </Typography>
+            </Tooltip>
+          </Grid>
           <Grid
+            mt={1}
+            height="16px"
             item
-            xs={6}
+            xs={12}
             sx={{
               width: '100%',
               display: 'flex',
@@ -76,19 +103,19 @@ export default function NotActiveProductCard({
               alignItems: 'center',
             }}
           >
-            {urlPublic && (
-              <Trans i18nKey="discoverMore">
-                <Link
-                  sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
-                  href={urlPublic}
-                >
-                  {'Scopri di più'}
-                </Link>
-              </Trans>
-            )}
+            <Trans i18nKey="discoverMore">
+              <Link sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }} href={urlPublic}>
+                {urlPublic && 'Scopri di più'}
+              </Link>
+            </Trans>
           </Grid>
 
-          <Grid item xs={6} sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+          <Grid
+            item
+            xs={12}
+            sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}
+            py={2}
+          >
             <Button
               onClick={btnAction}
               disabled={disableBtn}
@@ -104,7 +131,7 @@ export default function NotActiveProductCard({
               {buttonLabel}
             </Button>
           </Grid>
-        </Grid>
+        </CardContent>
       </Card>
     </Grid>
   );

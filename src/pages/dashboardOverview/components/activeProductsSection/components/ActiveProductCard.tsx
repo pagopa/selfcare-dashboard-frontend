@@ -4,41 +4,22 @@ import { InfoOutlined } from '@mui/icons-material';
 
 type Props = {
   cardTitle: string;
-  cardSubTitle?: string;
   buttonLabel: string;
   disableBtn: boolean;
   urlLogo?: string;
-  tag?: string;
   btnAction?: () => void;
-  heightLogo?: string;
   heightTitle?: string;
-  heightSubTitle?: string;
   heightButton?: string;
-  titleFontSize?: string;
-  subTitleFontSize?: string;
   tooltip: string;
 };
-
-const cardSubTitleStyle = {
-  height: '100%',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  display: '-webkit-box',
-  WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical' as const,
-};
-
 export default function ActiveProductCard({
   cardTitle,
-  cardSubTitle,
   buttonLabel,
   disableBtn,
   urlLogo,
   btnAction,
   heightTitle,
-  heightSubTitle,
   heightButton,
-  subTitleFontSize = '18px',
   tooltip,
 }: Props) {
   return (
@@ -62,17 +43,6 @@ export default function ActiveProductCard({
               </Box>
             )}
           </Box>
-          {cardSubTitle && (
-            <Grid item xs={12} mb={3} height={heightSubTitle} display="flex" alignItems={'center'}>
-              <Typography
-                variant="body2"
-                sx={{ ...cardSubTitleStyle, fontSize: subTitleFontSize }}
-                title={cardSubTitle.toString()}
-              >
-                {cardSubTitle}
-              </Typography>
-            </Grid>
-          )}
 
           <Grid item xs={12} justifyContent="center" height={heightButton}>
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
