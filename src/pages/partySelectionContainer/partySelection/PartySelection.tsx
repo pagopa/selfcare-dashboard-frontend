@@ -61,7 +61,6 @@ export default function PartySelection({ parties }: Props) {
         <Button
           variant="contained"
           disabled={disableBtn}
-          sx={{ width: '190px', height: '40px' }}
           onClick={() => {
             trackEvent('DASHBOARD_PARTY_SELECTION', { party_id: selectedParty?.partyId });
             history.push(
@@ -71,7 +70,7 @@ export default function PartySelection({ parties }: Props) {
             );
           }}
         >
-          {t('partySelection.enterButton')}
+          {t('partySelection.continueButton')}
         </Button>
       </Grid>
     </Grid>

@@ -17,10 +17,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
     <React.Fragment>
       <TitleBox
         title={t('overview.activeProductsSection.title')}
-        subTitle={t('overview.activeProductsSection.subTitle')}
-        mbTitle={1}
+        mbTitle={2}
         mtTitle={10}
-        mbSubTitle={5}
         variantTitle="h2"
         variantSubTitle="body2"
       />
