@@ -34,8 +34,8 @@ export const useSelectedParty = (): {
         throw new Error(`Cannot find partyId ${partyId}`);
       }
     });
-  const fetchProductLists = (institutionId: string) =>
-    fetchProducts(institutionId).then((products) => {
+  const fetchProductLists = (partyId: string) =>
+    fetchProducts(partyId).then((products) => {
       if (products) {
         setPartyProducts(products);
         dispatch(
