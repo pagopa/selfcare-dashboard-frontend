@@ -9,6 +9,7 @@ export type Party = {
   partyId: string;
   externalId: string;
   originId: string;
+  origin: string;
   description: string;
   digitalAddress: string;
   status: UserStatus;
@@ -16,6 +17,7 @@ export type Party = {
   category?: string;
   urlLogo?: string;
   fiscalCode: string;
+  institutionType?: string;
 };
 
 const buildUrlLog = (partyId: string) =>
@@ -25,8 +27,9 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
   const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
   return {
     partyId: institutionResource.id,
-    externalId: '', // TODO
-    originId: '', // TODO
+    externalId: institutionResource.externalId,
+    originId: institutionResource.originId,
+    origin: institutionResource.origin,
     description: institutionResource.name,
     digitalAddress: institutionResource.mailAddress,
     status: institutionResource.status as 'ACTIVE' | 'PENDING',
@@ -34,5 +37,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     category: institutionResource.category,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
+    institutionType: institutionResource.institutionType,
   };
 };

@@ -1,4 +1,7 @@
-import { InstitutionResource } from '../../api/generated/b4f-dashboard/InstitutionResource';
+import {
+  InstitutionResource,
+  InstitutionTypeEnum,
+} from '../../api/generated/b4f-dashboard/InstitutionResource';
 import { institutionResource2Party } from '../Party';
 
 test('Test institutionResource2Party', () => {
@@ -6,10 +9,14 @@ test('Test institutionResource2Party', () => {
     name: 'Comune di Bari',
     status: 'PENDING',
     id: '1',
+    externalId: 'externalId1',
+    originId: 'originId1',
+    origin: 'IPA',
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
+    institutionType: InstitutionTypeEnum.PA,
   };
 
   const party = institutionResource2Party(institutionResource);
@@ -22,7 +29,9 @@ test('Test institutionResource2Party', () => {
     digitalAddress: 'address',
     category: 'Ente locale',
     urlLogo: 'http://checkout.selfcare/institutions/1/logo.png',
-    externalId: '', // TODO
-    originId: '', // TODO
+    externalId: 'externalId1',
+    originId: 'originId1',
+    origin: 'IPA',
+    institutionType: 'PA',
   });
 });

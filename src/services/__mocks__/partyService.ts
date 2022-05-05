@@ -12,6 +12,8 @@ export const mockedParties: Array<Party> = [
     category: '',
     externalId: 'externalId1',
     originId: 'originId1',
+    origin: 'IPA',
+    institutionType: 'PA',
   },
   {
     userRole: 'ADMIN',
@@ -24,6 +26,8 @@ export const mockedParties: Array<Party> = [
     category: '',
     externalId: 'externalId2',
     originId: 'originId2',
+    origin: 'IPA',
+    institutionType: 'PA',
   },
   {
     userRole: 'ADMIN',
@@ -36,6 +40,8 @@ export const mockedParties: Array<Party> = [
     category: '',
     externalId: 'externalId3',
     originId: 'originId3',
+    origin: 'IPA',
+    institutionType: 'PA',
   },
   {
     userRole: 'LIMITED',
@@ -48,6 +54,8 @@ export const mockedParties: Array<Party> = [
     category: '',
     externalId: 'externalId4',
     originId: 'originId4',
+    origin: 'IPA',
+    institutionType: 'PA',
   },
   {
     userRole: 'ADMIN',
@@ -60,6 +68,8 @@ export const mockedParties: Array<Party> = [
     category: '',
     externalId: 'externalId5',
     originId: 'originId5',
+    origin: 'MOCK',
+    institutionType: 'GSP',
   },
 ];
 

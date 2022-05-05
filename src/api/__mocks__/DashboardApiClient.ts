@@ -1,5 +1,8 @@
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
-import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
+import {
+  InstitutionResource,
+  InstitutionTypeEnum,
+} from '../generated/b4f-dashboard/InstitutionResource';
 import {
   InstitutionUserResource,
   RoleEnum,
@@ -18,19 +21,27 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     name: 'Comune di Bari',
     status: 'ACTIVE',
     id: '1',
+    externalId: 'externalId1',
+    originId: 'originId1',
+    origin: 'IPA',
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
+    institutionType: InstitutionTypeEnum.PA,
   },
   {
     name: 'Comune di Milano',
     status: 'PENDING',
     id: '2',
+    externalId: 'externalId2',
+    originId: 'originId2',
+    origin: 'IPA',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'ADMIN',
     category: '',
+    institutionType: InstitutionTypeEnum.PA,
   },
 ];
 
@@ -103,13 +114,11 @@ export const mockedProductResources: Array<ProductsResource> = [
 export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   {
     id: '1',
-    fiscalCode: 'AAAAAA11A11A123K',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
-    certification: true,
     products: [
       {
         id: 'productId',
@@ -127,13 +136,11 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   },
   {
     id: '2',
-    fiscalCode: 'AAAAAA11A11A124K',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address',
-    certification: true,
     products: [
       {
         id: 'productId2',
@@ -154,7 +161,6 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
 export const mockedProductUserResource: Array<ProductUserResource> = [
   {
     id: '1',
-    fiscalCode: 'AAAAAA11A11A123K',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -176,7 +182,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
   },
   {
     id: '2',
-    fiscalCode: 'BBAABB11A11A123K',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
