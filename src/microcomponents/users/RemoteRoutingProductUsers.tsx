@@ -1,5 +1,6 @@
 import React from 'react';
 import { LoadingOverlayComponent } from '@pagopa/selfcare-common-frontend';
+import { CONFIG } from '@pagopa/selfcare-common-frontend/config/env';
 import { DashboardMicrofrontendPageProps } from '../dashboardMicrocomponentsUtils';
 
 const RemoteRoutingProductUsers = React.lazy(() => import('selfcareUsers/RoutingProductUsers'));
@@ -26,6 +27,7 @@ export default ({
       products={products}
       activeProducts={activeProducts}
       productsMap={productsMap}
+      CONFIG={CONFIG}
     />
   </React.Suspense>
 );
