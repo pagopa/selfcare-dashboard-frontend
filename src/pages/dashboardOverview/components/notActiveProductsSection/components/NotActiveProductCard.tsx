@@ -37,7 +37,7 @@ export default function NotActiveProductCard({
 
   return (
     <Grid container>
-      <Card sx={{ maxWidth: 345, height: '411px', borderRadius: '16px' }}>
+      <Card sx={{ maxWidth: 345, height: '411px', borderRadius: '16px', width: '100%' }}>
         <Box
           sx={{
             width: '100%',
@@ -73,7 +73,7 @@ export default function NotActiveProductCard({
           <Grid item xs={12}>
             <Typography variant="h6">{title}</Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} height="48px">
             <Tooltip title={description}>
               <Typography
                 sx={{

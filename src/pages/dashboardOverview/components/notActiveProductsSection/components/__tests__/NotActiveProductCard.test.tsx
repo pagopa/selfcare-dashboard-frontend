@@ -26,7 +26,17 @@ const mockedProduct = Object.assign({}, mockedPartyProducts[0]);
 const renderCard = (status: 'ACTIVE' | 'INACTIVE' | 'PENDING', urlPublic?: string) => {
   mockedProduct.status = status;
   mockedProduct.urlPublic = urlPublic;
-  render(<NotActiveProductCard party={mockedParties[0]} product={mockedProduct} />);
+  render(
+    <NotActiveProductCard
+      image={mockedProduct.imageUrl}
+      urlLogo={mockedProduct.logo}
+      description={mockedProduct.description}
+      title={mockedProduct.title}
+      disableBtn={false}
+      buttonLabel={'Aderisci'}
+      urlPublic={mockedProduct.urlPublic}
+    />
+  );
 };
 
 const checkBaseFields = () => {
@@ -40,14 +50,14 @@ describe('test public url', () => {
     renderCard('INACTIVE');
 
     checkBaseFields();
-    expect(screen.queryByText('SCOPRI DI PIÙ →')).toBeNull();
+    expect(screen.queryByText('Scopri di più')).toBeNull();
   });
 
   test('test render product with public url', async () => {
     renderCard('INACTIVE', 'http://publicUrl');
 
     checkBaseFields();
-    screen.getByText('SCOPRI DI PIÙ →');
+    screen.getByText('Scopri di più');
   });
 });
 
@@ -73,7 +83,7 @@ describe('test onboarding', () => {
 
     const button = screen.getByText('Aderisci');
 
-    fireEvent.click(button);
+    await waitFor(() => fireEvent.click(button));
 
     screen.getByText('Adesione in corso');
     screen.getByText(

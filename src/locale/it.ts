@@ -37,6 +37,7 @@ export default {
     },
     activeProductsSection: {
       title: 'Prodotti attivi',
+      tooltip: 'tooltip',
     },
     activeProducts: {
       activationOf: 'Attivo dal ',

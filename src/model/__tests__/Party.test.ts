@@ -33,5 +33,7 @@ test('Test institutionResource2Party', () => {
     originId: 'originId1',
     origin: 'IPA',
     institutionType: 'PA',
+    registeredOffice: 'TODO',
+    typology: 'TODO',
   });
 });
