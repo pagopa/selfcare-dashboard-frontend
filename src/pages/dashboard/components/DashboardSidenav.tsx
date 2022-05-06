@@ -1,21 +1,41 @@
-import React from 'react';
+import { ListItemButton, ListItemText, ListItemIcon, Box } from '@mui/material';
+// import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
+// import Home from '@mui/icons-material/Home';
 
-import { List, ListItemButton, ListItemText, ListItemIcon, Box } from '@mui/material';
+// import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
+// import PeopleAlt from '@mui/icons-material/PeopleAlt';
+// import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
+import { MenuItem } from './dashboardSideMenu/DashboardSideMenu';
 
-/* Icons */
-import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
-import PeopleAlt from '@mui/icons-material/PeopleAlt';
-import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
-// import { useHistory } from 'react-router-dom';
-// import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+type Props = {
+  item?: MenuItem;
+  selectedItem: MenuItem | null;
+  handleClick: (_event: React.MouseEvent<HTMLDivElement, MouseEvent>, menuItem: any) => void;
+};
 
-export default function DashboardSidenav() {
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-  //   const history = useHistory();
+export default function DashboardSidenav({ item, handleClick }: Props) {
+  const isSelected = item?.isSelected && item?.isSelected();
 
-  const handleListItemClick = (index: number) => {
-    setSelectedIndex(index);
-  };
+  // const Icons = [
+  //   {
+  //     id: 1,
+  //     item: 'Dashboard',
+  //     description: 'icon',
+  //     icon: DashboardCustomize,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'PeopleAlt',
+  //     description: 'icon',
+  //     icon: PeopleAlt,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'SupervisedUserCircle',
+  //     description: 'icon',
+  //     icon: SupervisedUserCircle,
+  //   },
+  // ];
 
   return (
     <Box
@@ -25,29 +45,14 @@ export default function DashboardSidenav() {
         backgroundColor: 'background.paper',
       }}
     >
-      <List component="nav" aria-label="main piattaforma-notifiche sender">
-        {/* Panoramica */}
-        <ListItemButton selected={selectedIndex === 0} onClick={() => handleListItemClick(0)}>
-          <ListItemIcon>
-            <DashboardCustomize fontSize="inherit" />
-          </ListItemIcon>
-          <ListItemText primary="Panoramica" />
-        </ListItemButton>
-        {/* Utenti */}
-        <ListItemButton selected={selectedIndex === 1} onClick={() => handleListItemClick(1)}>
-          <ListItemIcon>
-            <PeopleAlt fontSize="inherit" />
-          </ListItemIcon>
-          <ListItemText primary="Utenti" />
-        </ListItemButton>
-        {/* Gruppi */}
-        <ListItemButton selected={selectedIndex === 2} onClick={() => handleListItemClick(2)}>
-          <ListItemIcon>
-            <SupervisedUserCircle fontSize="inherit" />
-          </ListItemIcon>
-          <ListItemText primary="Gruppi" />
-        </ListItemButton>
-      </List>
+      <ListItemButton
+        selected={isSelected}
+        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => handleClick(event, item)}
+      >
+        <ListItemIcon>{item && <item.icon />}</ListItemIcon>
+
+        <ListItemText primary={item?.title} />
+      </ListItemButton>
     </Box>
   );
 }

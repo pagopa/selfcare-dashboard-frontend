@@ -1,21 +1,33 @@
 import React, { useEffect } from 'react';
 import { List, Grid } from '@mui/material';
+import { SvgIconComponent } from '@mui/icons-material';
 import { useHistory } from 'react-router';
 import { History } from 'history';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { useTranslation } from 'react-i18next';
+import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
+import PeopleAlt from '@mui/icons-material/PeopleAlt';
+import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
-import { useTokenExchange } from '../../../../hooks/useTokenExchange';
 import DashboardSidenav from '../DashboardSidenav';
-import DashboardSideMenuItem, { MenuItem } from './DashboardSideMenuItem';
 
 type Props = {
   products: Array<Product>;
   party: Party;
+};
+
+export type MenuItem = {
+  groupId: string;
+  subMenu?: Array<MenuItem | undefined>;
+  onClick?: () => void;
+  title: string;
+  active: boolean;
+  isSelected?: () => boolean;
+  icon: SvgIconComponent;
 };
 
 const applicationLinkBehaviour = (
@@ -31,85 +43,50 @@ const applicationLinkBehaviour = (
   };
 };
 
-export default function DashboardSideMenu({ products, party }: Props) {
+export default function DashboardSideMenu({ party }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
-  const { invokeProductBo } = useTokenExchange();
   const onExit = useUnloadEventOnExit();
 
-  const canSeeRoles = party.userRole === 'ADMIN';
-  const canSeeGroups = party.userRole === 'ADMIN';
-  const navigationMenu: Array<MenuItem> = [
+  // const canSeeRoles = party.userRole === 'ADMIN';
+  // const canSeeGroups = party.userRole === 'ADMIN';
+
+  const sideNavItem: Array<MenuItem> = [
     {
       groupId: 'selfCare',
-      title: t('overview.sideMenu.institutionManagement.title'),
+      title: t('overview.sideMenu.institutionManagement.overview.title'),
       active: true,
-      subMenu: [
-        {
-          groupId: 'selfCare',
-          title: t('overview.sideMenu.institutionManagement.overview.title'),
-          active: true,
-          ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
-            institutionId: party.institutionId,
-          }),
-        },
-        canSeeRoles
-          ? {
-              groupId: 'selfCare',
-              title: t('overview.sideMenu.institutionManagement.referents.title'),
-              active: true,
-              ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
-                institutionId: party.institutionId,
-              }),
-            }
-          : undefined,
-        canSeeGroups
-          ? {
-              groupId: 'selfCare',
-              title: t('overview.sideMenu.institutionManagement.groups.title'),
-              active: true,
-              ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
-                institutionId: party.institutionId,
-              }),
-            }
-          : undefined,
-      ],
+      ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
+        institutionId: party.institutionId,
+      }),
+      icon: DashboardCustomize,
+    },
+    {
+      groupId: 'selfCare',
+      title: t('overview.sideMenu.institutionManagement.referents.title'),
+      active: true,
+      ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
+        institutionId: party.institutionId,
+      }),
+      icon: PeopleAlt,
+    },
+    {
+      groupId: 'selfCare',
+      title: t('overview.sideMenu.institutionManagement.groups.title'),
+      active: true,
+      ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
+        institutionId: party.institutionId,
+      }),
+      icon: SupervisedUserCircle,
     },
   ];
-  const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(navigationMenu[0]);
-  const arrayMenu: Array<MenuItem> = navigationMenu.concat(
-    products
-      .filter((p) => p.status === 'ACTIVE')
-      .map((p) => ({
-        groupId: p.id,
-        title: p.title,
-        active: p.authorized ?? false,
-        subMenu: [
-          {
-            groupId: p.id,
-            title: t('overview.sideMenu.product.overview'),
-            active: p.authorized ?? false,
-            onClick: () => invokeProductBo(p, party),
-          },
-          p.userRole === 'ADMIN'
-            ? {
-                groupId: p.id,
-                title: t('overview.sideMenu.product.referents'),
-                active: p.authorized ?? false,
-                ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.PRODUCT_USERS, {
-                  institutionId: party.institutionId,
-                  productId: p.id,
-                }),
-              }
-            : undefined,
-        ],
-      }))
-  );
+
+  const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(sideNavItem[0]);
 
   useEffect(
     () =>
       setSelectedItem(
-        arrayMenu.find(
+        sideNavItem.find(
           (m) => m.isSelected || (m.subMenu && m.subMenu.findIndex((m) => m?.isSelected) > -1)
         ) ?? null
       ),
@@ -131,15 +108,11 @@ export default function DashboardSideMenu({ products, party }: Props) {
   return (
     <Grid container item mt={11}>
       <Grid item xs={12}>
-        <DashboardSidenav />
-      </Grid>
-      <Grid item xs={12}>
         <List>
-          {arrayMenu &&
-            arrayMenu.map((item) => (
-              <DashboardSideMenuItem
+          {sideNavItem &&
+            sideNavItem.map((item) => (
+              <DashboardSidenav
                 key={item.title}
-                color={!item.active ? '#CCD4DC' : 'primary.main'}
                 item={item}
                 selectedItem={selectedItem}
                 handleClick={handleClick}

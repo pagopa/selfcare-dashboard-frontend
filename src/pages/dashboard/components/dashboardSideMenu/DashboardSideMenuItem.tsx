@@ -4,15 +4,7 @@ import { Typography } from '@mui/material';
 import { ExpandLess } from '@mui/icons-material';
 import { ExpandMore } from '@mui/icons-material';
 import Collapse from '@mui/material/Collapse';
-
-export type MenuItem = {
-  groupId: string;
-  subMenu?: Array<MenuItem | undefined>;
-  onClick?: () => void;
-  title: string;
-  active: boolean;
-  isSelected?: () => boolean;
-};
+import { MenuItem } from './DashboardSideMenu';
 
 type Props = {
   item?: MenuItem;
@@ -54,7 +46,6 @@ const DashboardSideMenuItem = ({
         <Grid container>
           <Grid item xs={10}>
             <Typography
-              variant="h6"
               sx={{
                 fontSize: item.subMenu ? '18px' : '16px',
                 color,
