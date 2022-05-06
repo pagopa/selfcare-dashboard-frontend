@@ -2,8 +2,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Product } from '../../../../../../model/Product';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
-import NotActiveProductCard from '../NotActiveProductCard';
 import './../../../../../../locale';
+import NotActiveProductCardContainer from './../NotActiveProductCardContainer';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
@@ -26,17 +26,7 @@ const mockedProduct = Object.assign({}, mockedPartyProducts[0]);
 const renderCard = (status: 'ACTIVE' | 'INACTIVE' | 'PENDING', urlPublic?: string) => {
   mockedProduct.status = status;
   mockedProduct.urlPublic = urlPublic;
-  render(
-    <NotActiveProductCard
-      image={mockedProduct.imageUrl}
-      urlLogo={mockedProduct.logo}
-      description={mockedProduct.description}
-      title={mockedProduct.title}
-      disableBtn={false}
-      buttonLabel={'Aderisci'}
-      urlPublic={mockedProduct.urlPublic}
-    />
-  );
+  render(<NotActiveProductCardContainer party={mockedParties[0]} product={mockedProduct} />);
 };
 
 const checkBaseFields = () => {
@@ -83,7 +73,7 @@ describe('test onboarding', () => {
 
     const button = screen.getByText('Aderisci');
 
-    await waitFor(() => fireEvent.click(button));
+    fireEvent.click(button);
 
     screen.getByText('Adesione in corso');
     screen.getByText(
