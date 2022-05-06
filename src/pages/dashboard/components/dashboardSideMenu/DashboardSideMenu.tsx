@@ -57,7 +57,7 @@ export default function DashboardSideMenu({ party }: Props) {
       title: t('overview.sideMenu.institutionManagement.overview.title'),
       active: true,
       ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
-        institutionId: party.partyId,
+        partyId: party.partyId,
       }),
       icon: DashboardCustomize,
     },
@@ -66,7 +66,7 @@ export default function DashboardSideMenu({ party }: Props) {
       title: t('overview.sideMenu.institutionManagement.referents.title'),
       active: true,
       ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
-        institutionId: party.partyId,
+        partyId: party.partyId,
       }),
       icon: PeopleAlt,
     },
@@ -75,7 +75,7 @@ export default function DashboardSideMenu({ party }: Props) {
       title: t('overview.sideMenu.institutionManagement.groups.title'),
       active: true,
       ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
-        institutionId: party.partyId,
+        partyId: party.partyId,
       }),
       icon: SupervisedUserCircle,
     },

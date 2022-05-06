@@ -23,7 +23,7 @@ const DashboardOverview = ({ party, products }: Props) => {
           <Typography variant="h6">{party.description}</Typography>
         </Grid>
         <Grid item xs={6}>
-          <PartyLogoUploader institutionId={party.institutionId} canUploadLogo={canUploadLogo} />
+          <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
         </Grid>
       </Grid>
       <Grid item xs={12}>

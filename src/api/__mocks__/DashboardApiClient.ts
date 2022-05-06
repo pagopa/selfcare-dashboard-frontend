@@ -1,7 +1,7 @@
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import {
   InstitutionResource,
-  InstitutionTypeEnum,
+  // InstitutionTypeEnum,
 } from '../generated/b4f-dashboard/InstitutionResource';
 import {
   InstitutionUserResource,
@@ -21,27 +21,27 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     name: 'Comune di Bari',
     status: 'ACTIVE',
     id: '1',
-    externalId: 'externalId1',
-    originId: 'originId1',
-    origin: 'IPA',
+    // externalId: 'externalId1',
+    // originId: 'originId1',
+    // origin: 'IPA',
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
-    institutionType: InstitutionTypeEnum.PA,
+    // institutionType: InstitutionTypeEnum.PA,
   },
   {
     name: 'Comune di Milano',
     status: 'PENDING',
     id: '2',
-    externalId: 'externalId2',
-    originId: 'originId2',
-    origin: 'IPA',
+    // externalId: 'externalId2',
+    // originId: 'originId2',
+    // origin: 'IPA',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'ADMIN',
     category: '',
-    institutionType: InstitutionTypeEnum.PA,
+    // institutionType: InstitutionTypeEnum.PA,
   },
 ];
 
@@ -119,6 +119,8 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
+    certification: true,
+    fiscalCode: 'AAAAAA11A11A123K',
     products: [
       {
         id: 'productId',
@@ -141,6 +143,8 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address',
+    certification: true,
+    fiscalCode: 'AAAAAA11A11A123K',
     products: [
       {
         id: 'productId2',
@@ -166,6 +170,8 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
+    certification: true,
+    fiscalCode: 'AAAAAA11A11A123K',
     product: {
       id: 'prod-io',
       title: 'App IO',
@@ -178,7 +184,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
         },
       ],
     },
-    certification: true,
   },
   {
     id: '2',
@@ -187,6 +192,8 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address2',
+    certification: true,
+    fiscalCode: 'AAAAAA11A11A123K',
     product: {
       id: 'prod-io',
       title: 'App IO',
@@ -199,7 +206,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
         },
       ],
     },
-    certification: true,
   },
 ];
 

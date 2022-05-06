@@ -29,9 +29,9 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
   const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
   return {
     partyId: institutionResource.id,
-    externalId: '', //TODO institutionResource.externalId,
-    originId:'', //TODO institutionResource.originId,
-    origin:'', //TODO institutionResource.origin,
+    externalId: '', // TODO institutionResource.externalId,
+    originId: '', // TODO institutionResource.originId,
+    origin: '', // TODO institutionResource.origin,
     description: institutionResource.name,
     digitalAddress: institutionResource.mailAddress,
     status: institutionResource.status as 'ACTIVE' | 'PENDING',
@@ -41,6 +41,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     fiscalCode: institutionResource.fiscalCode,
     registeredOffice: 'TODO',
     typology: 'TODO',
-    institutionType:''//TODO institutionResource.institutionType,
+    institutionType: '', // TODO institutionResource.institutionType,
   };
 };
