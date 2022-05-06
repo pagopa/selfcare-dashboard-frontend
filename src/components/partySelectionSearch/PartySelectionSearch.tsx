@@ -118,7 +118,7 @@ export default function PartySelectionSearch({
                       showAvatar={showAvatar}
                       isDisabled={isDisabled}
                       disabled={isDisabled}
-                      key={party.institutionId}
+                      key={party.partyId}
                       borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                       selectedItem={selectedParty === party}
                       title={party.description}

@@ -13,7 +13,7 @@ import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
-import DashboardSidenav from '../DashboardSidenav';
+import DashboardSidenav from './../DashboardSidenav';
 
 type Props = {
   products: Array<Product>;
@@ -57,7 +57,7 @@ export default function DashboardSideMenu({ party }: Props) {
       title: t('overview.sideMenu.institutionManagement.overview.title'),
       active: true,
       ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
-        institutionId: party.institutionId,
+        institutionId: party.partyId,
       }),
       icon: DashboardCustomize,
     },
@@ -66,7 +66,7 @@ export default function DashboardSideMenu({ party }: Props) {
       title: t('overview.sideMenu.institutionManagement.referents.title'),
       active: true,
       ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
-        institutionId: party.institutionId,
+        institutionId: party.partyId,
       }),
       icon: PeopleAlt,
     },
@@ -75,7 +75,7 @@ export default function DashboardSideMenu({ party }: Props) {
       title: t('overview.sideMenu.institutionManagement.groups.title'),
       active: true,
       ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
-        institutionId: party.institutionId,
+        institutionId: party.partyId,
       }),
       icon: SupervisedUserCircle,
     },

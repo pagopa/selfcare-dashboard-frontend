@@ -66,7 +66,7 @@ export default function NoActiveParty({ parties }: Props) {
                     <PartyItemContainer
                       isDisabled={isDisabled}
                       disabled={isDisabled}
-                      key={party.institutionId}
+                      key={party.partyId}
                       title={party.description}
                       subTitle={t(roleLabels[party.userRole].longLabelKey)}
                       titleColor={isDisabled ? '' : '#0073E6'}

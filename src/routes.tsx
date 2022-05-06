@@ -38,7 +38,7 @@ const ROUTES = {
     component: PartySelectionContainer,
   },
   PARTY_DASHBOARD: {
-    path: `${BASE_ROUTE}/:institutionId`,
+    path: `${BASE_ROUTE}/:partyId`,
     exact: false,
     component: Dashboard,
   },
@@ -46,11 +46,11 @@ const ROUTES = {
 
 export const DASHBOARD_ROUTES = {
   OVERVIEW: {
-    path: `${BASE_ROUTE}/:institutionId`,
+    path: `${BASE_ROUTE}/:partyId`,
     exact: true,
     component: DashboardOverview,
   },
-  ...buildRedirectToBasePath(`${BASE_ROUTE}/:institutionId`),
+  ...buildRedirectToBasePath(`${BASE_ROUTE}/:partyId`),
 };
 
 export default ROUTES as { [key in keyof typeof ROUTES]: RouteConfig };

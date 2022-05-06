@@ -73,9 +73,9 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Tooltip title={party.institutionId}>
+          <Tooltip title={party.originId}>
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-              {party.institutionId}
+            {party.originId}
             </Typography>
           </Tooltip>
         </Grid>

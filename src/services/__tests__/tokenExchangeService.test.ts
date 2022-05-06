@@ -17,7 +17,7 @@ test('Test retrieveTokenExchange', async () => {
   expect(DashboardApi.getTokenExchange).toBeCalledTimes(1);
   expect(DashboardApi.getTokenExchange).toBeCalledWith(
     'url',
-    mockedParties[0].institutionId,
+    mockedParties[0].partyId,
     mockedPartyProducts[0].id
   );
 });
