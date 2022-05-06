@@ -33,7 +33,7 @@ export default function PartyDetail({ party }: Props) {
             </Typography>
           </Tooltip>
         </Grid>
-        {/* Area di competenza */}
+        {/* Categoria */}
         {party.category && (
           <>
             <Grid item xs={4}>
@@ -75,7 +75,7 @@ export default function PartyDetail({ party }: Props) {
         <Grid item xs={8}>
           <Tooltip title={party.originId}>
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-            {party.originId}
+              {party.originId}
             </Typography>
           </Tooltip>
         </Grid>

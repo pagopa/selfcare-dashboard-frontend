@@ -75,7 +75,7 @@ export default {
     },
     partyDetail: {
       typology: 'Tipologia',
-      category: 'Area di competenza',
+      category: 'Categoria',
       ipaCode: 'Codice IPA',
       companyName: 'Ragione sociale',
       fiscalCode: 'Codice Fiscale',
