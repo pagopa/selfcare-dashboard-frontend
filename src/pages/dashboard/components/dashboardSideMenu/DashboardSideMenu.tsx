@@ -48,10 +48,10 @@ export default function DashboardSideMenu({ party }: Props) {
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
 
-  // const canSeeRoles = party.userRole === 'ADMIN';
-  // const canSeeGroups = party.userRole === 'ADMIN';
+  const canSeeRoles = party.userRole === 'ADMIN';
+  const canSeeGroups = party.userRole === 'ADMIN';
 
-  const sideNavItem: Array<MenuItem> = [
+  const sideNavItem: Array<MenuItem | undefined> = [
     {
       groupId: 'selfCare',
       title: t('overview.sideMenu.institutionManagement.overview.title'),
@@ -61,33 +61,39 @@ export default function DashboardSideMenu({ party }: Props) {
       }),
       icon: DashboardCustomize,
     },
-    {
-      groupId: 'selfCare',
-      title: t('overview.sideMenu.institutionManagement.referents.title'),
-      active: true,
-      ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
-        partyId: party.partyId,
-      }),
-      icon: PeopleAlt,
-    },
-    {
-      groupId: 'selfCare',
-      title: t('overview.sideMenu.institutionManagement.groups.title'),
-      active: true,
-      ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
-        partyId: party.partyId,
-      }),
-      icon: SupervisedUserCircle,
-    },
+    canSeeRoles
+      ? {
+          groupId: 'selfCare',
+          title: t('overview.sideMenu.institutionManagement.referents.title'),
+          active: true,
+          ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
+            partyId: party.partyId,
+          }),
+          icon: PeopleAlt,
+        }
+      : undefined,
+    canSeeGroups
+      ? {
+          groupId: 'selfCare',
+          title: t('overview.sideMenu.institutionManagement.groups.title'),
+          active: true,
+          ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
+            partyId: party.partyId,
+          }),
+          icon: SupervisedUserCircle,
+        }
+      : undefined,
   ];
 
-  const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(sideNavItem[0]);
+  const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(
+    sideNavItem[0] as MenuItem
+  );
 
   useEffect(
     () =>
       setSelectedItem(
         sideNavItem.find(
-          (m) => m.isSelected || (m.subMenu && m.subMenu.findIndex((m) => m?.isSelected) > -1)
+          (m) => m?.isSelected || (m?.subMenu && m?.subMenu.findIndex((m) => m?.isSelected) > -1)
         ) ?? null
       ),
     []
@@ -112,7 +118,7 @@ export default function DashboardSideMenu({ party }: Props) {
           {sideNavItem &&
             sideNavItem.map((item) => (
               <DashboardSidenav
-                key={item.title}
+                key={item?.title}
                 item={item}
                 selectedItem={selectedItem}
                 handleClick={handleClick}
