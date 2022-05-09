@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Route, Switch, useHistory } from 'react-router';
 import { useStore } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { CONFIG } from '@pagopa/selfcare-common-frontend/config/env';
+
 import withSelectedParty from '../../decorators/withSelectedParty';
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
@@ -121,7 +121,6 @@ const Dashboard = () => {
               theme={theme}
               i18n={i18n}
               decorators={decorators}
-              CONFIG={CONFIG}
             />
           </Route>
           <Route path={ENV.ROUTES.PRODUCT_USERS} exact={false}>
@@ -135,7 +134,6 @@ const Dashboard = () => {
               theme={theme}
               i18n={i18n}
               decorators={decorators}
-              CONFIG={CONFIG}
             />
           </Route>
           <Route path={ENV.ROUTES.GROUPS} exact={false}>
@@ -149,7 +147,6 @@ const Dashboard = () => {
               theme={theme}
               i18n={i18n}
               decorators={decorators}
-              CONFIG={CONFIG}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
