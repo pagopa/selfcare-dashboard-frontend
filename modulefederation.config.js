@@ -100,5 +100,10 @@ module.exports = {
       singleton: true,
       requiredVersion: dependencies['core-js'],
     },
+    'mixpanel-browser': {
+      eager: true,
+      singleton: true,
+      requiredVersion: dependencies['core-js'],
+    },
   },
 };
