@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { Route, Switch, useHistory } from 'react-router';
 import { useStore } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-
 import withSelectedParty from '../../decorators/withSelectedParty';
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
