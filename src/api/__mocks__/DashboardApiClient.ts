@@ -22,6 +22,9 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
+    externalId: 'externalId1',
+    origin: 'origin1',
+    originId: 'originId1',
   },
   {
     name: 'Comune di Milano',
@@ -31,6 +34,9 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     fiscalCode: 'fiscalCode',
     userRole: 'ADMIN',
     category: '',
+    externalId: 'externalId2',
+    origin: 'origin2',
+    originId: 'originId2',
   },
 ];
 
@@ -167,7 +173,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
         },
       ],
     },
-    certification: true,
   },
   {
     id: '2',
@@ -188,7 +193,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
         },
       ],
     },
-    certification: true,
   },
 ];
 
