@@ -103,7 +103,7 @@ module.exports = {
     'mixpanel-browser': {
       eager: true,
       singleton: true,
-      requiredVersion: dependencies['core-js'],
+      requiredVersion: dependencies['mixpanel-browser'],
     },
   },
 };
