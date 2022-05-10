@@ -20,7 +20,7 @@ const parties: Array<Party> = [
     typology: 'typology',
     externalId: 'externalId1',
     originId: 'originI1',
-    origin:'IPA'
+    origin: 'IPA',
   },
   {
     fiscalCode: 'Milano',
@@ -34,7 +34,7 @@ const parties: Array<Party> = [
     typology: 'typology',
     externalId: 'externalId2',
     originId: 'originI2',
-    origin:'IPA'
+    origin: 'IPA',
   },
   {
     fiscalCode: 'Roma',
@@ -48,7 +48,7 @@ const parties: Array<Party> = [
     typology: 'typology',
     externalId: 'externalId3',
     originId: 'originI3',
-    origin:'IPA'
+    origin: 'IPA',
   },
   {
     fiscalCode: 'Napoli',
@@ -62,7 +62,7 @@ const parties: Array<Party> = [
     typology: 'typology',
     externalId: 'externalId4',
     originId: 'originI4',
-    origin:'IPA'
+    origin: 'IPA',
   },
 ];
 const mockedProducts: Array<Product> = [
