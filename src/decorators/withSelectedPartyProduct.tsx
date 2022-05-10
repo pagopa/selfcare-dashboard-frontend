@@ -11,7 +11,7 @@ import { LOADING_TASK_FETCH_PRODUCT_ROLES } from '../utils/constants';
 import { buildEmptyProductRolesLists, ProductRolesLists } from '../model/ProductRole';
 
 type ProductUrlParams = {
-  institutionId: string;
+  partyId: string;
   productId: string;
 };
 
@@ -26,7 +26,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithSelectedPartyProduct = (props: T) => {
-    const { institutionId, productId } = useParams<ProductUrlParams>();
+    const { partyId, productId } = useParams<ProductUrlParams>();
     const history = useHistory();
     const selectedPartyProduct = useSelectedPartyProduct(productId, props.products);
     const addError = useErrorDispatcher();
@@ -42,7 +42,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
           toNotify: false,
           error: new Error('INVALID_PARTY_PRODUCT_ID'),
           onClose: () =>
-            history.push(resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, { institutionId })),
+            history.push(resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, { partyId })),
         });
       }
     }, [selectedPartyProduct]);

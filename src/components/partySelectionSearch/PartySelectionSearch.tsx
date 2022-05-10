@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useTranslation } from 'react-i18next';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Party } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
@@ -114,11 +114,11 @@ export default function PartySelectionSearch({
                       showAvatar={showAvatar}
                       isDisabled={isDisabled}
                       disabled={isDisabled}
-                      key={party.institutionId}
+                      key={party.partyId}
                       borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                       selectedItem={selectedParty === party}
                       title={party.description}
-                      subTitle={roleLabels[party.userRole].longLabel}
+                      subTitle={t(roleLabels[party.userRole].longLabelKey)}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}

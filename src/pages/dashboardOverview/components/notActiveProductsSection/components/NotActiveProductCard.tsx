@@ -15,7 +15,7 @@ type Props = {
 
 const goToOnboarding = (product: Product, party: Party): void =>
   window.location.assign(
-    `${ENV.URL_FE.ONBOARDING}/${product.id}?institutionId=${party.institutionId}`
+    `${ENV.URL_FE.ONBOARDING}/${product.id}?partyExternalId=${party.externalId}`
   );
 
 export default function NotActiveProductCard({ party, product }: Props) {

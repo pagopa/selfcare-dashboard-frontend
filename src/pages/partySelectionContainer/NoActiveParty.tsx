@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography, Box } from '@mui/material';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../model/Party';
 import { ENV } from '../../utils/env';
 import PartyItemContainer from './../../components/partySelectionSearch/PartyItemContainer';
@@ -14,6 +15,8 @@ export default function NoActiveParty({ parties }: Props) {
   const bodyDescription = "L'adesione potrebbe essere ancora in corso.";
   const bodyDescription2 = 'Verifica di aver completato tutti i passaggi richiesti.';
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     setFilteredParties(parties);
@@ -63,9 +66,9 @@ export default function NoActiveParty({ parties }: Props) {
                     <PartyItemContainer
                       isDisabled={isDisabled}
                       disabled={isDisabled}
-                      key={party.institutionId}
+                      key={party.partyId}
                       title={party.description}
-                      subTitle={roleLabels[party.userRole].longLabel}
+                      subTitle={t(roleLabels[party.userRole].longLabelKey)}
                       titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? 'Da completare' : ''}

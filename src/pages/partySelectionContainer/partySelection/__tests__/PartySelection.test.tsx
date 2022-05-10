@@ -13,36 +13,44 @@ const parties: Array<Party> = [
     description: 'Comune di Bari',
     urlLogo: 'image',
     status: 'PENDING',
-    institutionId: '1',
+    partyId: '1',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId1',
+    originId: 'originI1',
   },
   {
     fiscalCode: 'Milano',
     description: 'Comune di Milano',
     urlLogo: 'image',
     status: 'PENDING',
-    institutionId: '2',
+    partyId: '2',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId2',
+    originId: 'originI2',
   },
   {
     fiscalCode: 'Roma',
     description: 'Comune di Roma',
     urlLogo: 'image',
     status: 'ACTIVE',
-    institutionId: '3',
+    partyId: '3',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId3',
+    originId: 'originI3',
   },
   {
     fiscalCode: 'Napoli',
     description: 'Comune di Napoli',
     urlLogo: 'image',
     status: 'ACTIVE',
-    institutionId: '4',
+    partyId: '4',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId4',
+    originId: 'originI4',
   },
 ];
 const mockedProducts: Array<Product> = [
@@ -90,13 +98,13 @@ test('Test rendering', () => {
   checkStore(store);
   const input = screen.getByPlaceholderText('Cerca');
 
-  screen.getByText('Seleziona il tuo Ente');
+  screen.getByText('Seleziona il tuo ente');
 
   // search button  "Cerca"
   expect(input.tagName).toBe('INPUT');
 
-  // search button  "Entra"
-  const button = screen.getByRole('button', { name: 'Entra' });
+  // search button  "Continua"
+  const button = screen.getByRole('button', { name: 'Continua' });
   expect(button).toBeDisabled();
 
   const button2 = document.querySelectorAll("*[type='button']")[1];
@@ -152,13 +160,13 @@ test('Test selection', () => {
   const store = renderApp();
   checkStore(store);
   const input = screen.getByPlaceholderText('Cerca');
-  const filterPartyNapoli = 'Comune di Napoli Referente Amministrativo';
+  const filterPartyNapoli = 'Comune di Napoli Amministratore';
   // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
   const filterNapoli = 'Napoli';
   const filterRoma = 'ROMA';
 
   // cerca bottone disabilitato
-  const button = screen.getByRole('button', { name: 'Entra' });
+  const button = screen.getByRole('button', { name: 'Continua' });
   expect(button).toBeDisabled();
 
   // seleziona su uno dei party Napoli
@@ -196,7 +204,7 @@ test('Test pending party', () => {
     )
     .iterateNext();
   expect(firstPartyDisabled).not.toBeNull();
-  expect(firstPartyDisabled.textContent).toBe('Comune di BariReferente Amministrativo');
+  expect(firstPartyDisabled.textContent).toBe('Comune di BariAmministratore');
 
   // cerca comune di bari e verifica che contenga "Da completare"
   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');

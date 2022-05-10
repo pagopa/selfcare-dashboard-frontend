@@ -18,25 +18,25 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     name: 'Comune di Bari',
     status: 'ACTIVE',
     id: '1',
+    externalId: 'externalId1',
+    originId: 'originId1',
+    origin: 'IPA',
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
-    externalId: 'externalId1',
-    origin: 'origin1',
-    originId: 'originId1',
   },
   {
     name: 'Comune di Milano',
     status: 'PENDING',
     id: '2',
+    externalId: 'externalId2',
+    originId: 'originId2',
+    origin: 'IPA',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'ADMIN',
     category: '',
-    externalId: 'externalId2',
-    origin: 'origin2',
-    originId: 'originId2',
   },
 ];
 
@@ -240,7 +240,7 @@ export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
 
-  getInstitution: async (_institutionId: string): Promise<InstitutionResource> =>
+  getInstitution: async (_partyId: string): Promise<InstitutionResource> =>
     new Promise((resolve) => resolve(mockedInstitutionResources[0])),
 
   getProducts: async (): Promise<Array<ProductsResource>> =>
@@ -248,7 +248,7 @@ export const DashboardApi = {
 
   getTokenExchange: async (
     _hostname: string,
-    _institutionId: string,
+    _partyId: string,
     _productId: string
   ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 

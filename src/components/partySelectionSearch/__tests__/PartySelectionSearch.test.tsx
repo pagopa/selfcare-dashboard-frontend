@@ -11,36 +11,44 @@ const parties: Array<Party> = [
     description: 'Comune di Bari',
     urlLogo: 'image',
     status: 'PENDING',
-    institutionId: '1',
+    partyId: '1',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId1',
+    originId: 'originId1',
   },
   {
     fiscalCode: 'MILANO_FC',
     description: 'Comune di Milano',
     urlLogo: 'image',
     status: 'PENDING',
-    institutionId: '2',
+    partyId: '2',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId2',
+    originId: 'originId2',
   },
   {
     fiscalCode: 'ROMA_FC',
     description: 'Comune di Roma',
     urlLogo: 'image',
     status: 'ACTIVE',
-    institutionId: '3',
+    partyId: '3',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId3',
+    originId: 'originId3',
   },
   {
     fiscalCode: 'NAPOLI_FC',
     description: 'Comune di Napoli',
     urlLogo: 'image',
     status: 'ACTIVE',
-    institutionId: '4',
+    partyId: '4',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId4',
+    originId: 'originId4',
   },
 ];
 
@@ -107,7 +115,7 @@ test('Test selection', () => {
     <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
   );
   const input = screen.getByPlaceholderText('Cerca');
-  const filterPartyNapoli = 'Comune di Napoli Referente Amministrativo';
+  const filterPartyNapoli = 'Comune di Napoli Amministratore';
   // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
   const filterNapoli = 'Napoli';
   const filterRoma = 'ROMA';
@@ -152,7 +160,7 @@ test('Test pending party', () => {
     )
     .iterateNext();
   expect(firstPartyDisabled).not.toBeNull();
-  expect(firstPartyDisabled.textContent).toBe('Comune di BariReferente Amministrativo');
+  expect(firstPartyDisabled.textContent).toBe('Comune di BariAmministratore');
 
   // cerca comune di bari e verifica che contenga "Da completare"
   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');
