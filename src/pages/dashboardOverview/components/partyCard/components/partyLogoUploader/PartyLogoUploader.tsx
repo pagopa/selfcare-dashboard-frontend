@@ -12,7 +12,7 @@ import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
 
 type Props = {
-  institutionId: string;
+  partyId: string;
   canUploadLogo: boolean;
 };
 
@@ -21,7 +21,7 @@ const getLabelLinkText = (t: TFunction<'translation', undefined>) =>
     ? t('overview.partyLogo.upload')
     : t('overview.partyLogo.modify');
 
-export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
+export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
@@ -57,21 +57,21 @@ export function PartyLogoUploader({ canUploadLogo, institutionId }: Props) {
       setLoading(true);
       setLabelLink(files[0].name);
       const requestId = uniqueId();
-      trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: institutionId, request_id: requestId });
+      trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: partyId, request_id: requestId });
 
-      DashboardApi.uploadLogo(institutionId, files[0])
+      DashboardApi.uploadLogo(partyId, files[0])
         .then(() => {
           setUrlLogo(urlLogo);
           setLoading(false);
           setLabelLink(t('overview.partyLogo.modify') as string);
           trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', {
-            party_id: institutionId,
+            party_id: partyId,
             request_id: requestId,
           });
         })
         .catch((reason) => {
           trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_FAILURE', {
-            party_id: institutionId,
+            party_id: partyId,
             request_id: requestId,
           });
           setLoading(false);

@@ -45,7 +45,9 @@ It contains party's info, onboarding status and the selc role of the current use
 
 | Field | Type | Mandatory | Description |
 |-------|------|-----------|-------------|
-| institutionId | string | Y | The party's id |
+| partyId | string | Y | The party's id |
+| externalId | string | Y | The external id |
+| originId | string | Y | The origin id |
 | description | string | Y | The party's name |
 | digitalAddress | string | Y | The party's PEC |
 | fiscalCode | string | Y | The party's tax code |
