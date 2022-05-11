@@ -1,5 +1,4 @@
 import { List, Grid } from '@mui/material';
-import { SvgIconComponent } from '@mui/icons-material';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
@@ -18,16 +17,6 @@ type Props = {
   party: Party;
 };
 
-export type MenuItem = {
-  groupId: string;
-  subMenu?: Array<MenuItem | undefined>;
-  onClick?: () => void;
-  title: string;
-  active: boolean;
-  isSelected?: () => boolean;
-  icon: SvgIconComponent;
-};
-
 export default function DashboardSideMenu({ party }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
@@ -36,21 +25,23 @@ export default function DashboardSideMenu({ party }: Props) {
   const canSeeRoles = party.userRole === 'ADMIN';
   const canSeeGroups = party.userRole === 'ADMIN';
 
-  const isOVerviewSelected =
-    window.location.pathname ===
-    resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, {
-      partyId: party.partyId,
-    });
-  const isRoleSelected = window.location.pathname.startsWith(
-    resolvePathVariables(ENV.ROUTES.USERS, {
-      partyId: party.partyId,
-    })
-  );
-  const isGroupSelected = window.location.pathname.startsWith(
-    resolvePathVariables(ENV.ROUTES.GROUPS, {
-      partyId: party.partyId,
-    })
-  );
+  const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
+  const usersRoute = ENV.ROUTES.USERS;
+  const groupsRoute = ENV.ROUTES.GROUPS;
+
+  const overviewPath = resolvePathVariables(overviewRoute, {
+    partyId: party.partyId,
+  });
+  const usersPath = resolvePathVariables(usersRoute, {
+    partyId: party.partyId,
+  });
+  const groupsPath = resolvePathVariables(groupsRoute, {
+    partyId: party.partyId,
+  });
+
+  const isOVerviewSelected = window.location.pathname === overviewPath;
+  const isRoleSelected = window.location.pathname.startsWith(usersPath);
+  const isGroupSelected = window.location.pathname.startsWith(groupsPath);
 
   return (
     <Grid container item mt={11}>
@@ -59,15 +50,7 @@ export default function DashboardSideMenu({ party }: Props) {
           <DashboardSidenavItem
             title={t('overview.sideMenu.institutionManagement.overview.title')}
             handleClick={() =>
-              onExit(() =>
-                history.push(
-                  party.partyId
-                    ? resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, {
-                        partyId: party.partyId,
-                      })
-                    : DASHBOARD_ROUTES.OVERVIEW.path
-                )
-              )
+              onExit(() => history.push(party.partyId ? overviewPath : overviewRoute))
             }
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
@@ -75,17 +58,7 @@ export default function DashboardSideMenu({ party }: Props) {
           {canSeeRoles && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.referents.title')}
-              handleClick={() =>
-                onExit(() =>
-                  history.push(
-                    party.partyId
-                      ? resolvePathVariables(ENV.ROUTES.USERS, {
-                          partyId: party.partyId,
-                        })
-                      : ENV.ROUTES.USERS
-                  )
-                )
-              }
+              handleClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
               isSelected={isRoleSelected}
               icon={PeopleAlt}
             />
@@ -94,15 +67,7 @@ export default function DashboardSideMenu({ party }: Props) {
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.groups.title')}
               handleClick={() =>
-                onExit(() =>
-                  history.push(
-                    party.partyId
-                      ? resolvePathVariables(ENV.ROUTES.GROUPS, {
-                          partyId: party.partyId,
-                        })
-                      : ENV.ROUTES.GROUPS
-                  )
-                )
+                onExit(() => history.push(party.partyId ? groupsPath : groupsRoute))
               }
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}

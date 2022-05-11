@@ -20,16 +20,16 @@ export default function PartyDetail({ party }: Props) {
   return (
     <Grid container alignItems={'flex-start'}>
       <Grid container item xs={6} alignItems={'flex-start'} spacing={1}>
-        {/* tipologia */}
+        {/* institutionType */}
         <Grid item xs={4}>
           <Typography variant="body2" sx={{ ...labelStyles }}>
-            {t('overview.partyDetail.typology')}
+            {t('overview.partyDetail.institutionType')}
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Tooltip title={party.typology}>
+          <Tooltip title={party.institutionType ? party.institutionType : ''}>
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-              {party.typology}
+              {party.institutionType}
             </Typography>
           </Tooltip>
         </Grid>

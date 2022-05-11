@@ -74,7 +74,7 @@ export default {
       size: 'Dimensione massima 300 x 300px - Formato .jpg o . png',
     },
     partyDetail: {
-      typology: 'Tipologia',
+      institutionType: 'Tipologia',
       category: 'Categoria',
       ipaCode: 'Codice IPA',
       companyName: 'Ragione sociale',
