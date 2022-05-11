@@ -76,7 +76,7 @@ export default {
     partyDetail: {
       institutionType: 'Tipologia',
       category: 'Categoria',
-      ipaCode: 'Codice IPA',
+      originId: 'Codice',
       companyName: 'Ragione sociale',
       fiscalCode: 'Codice Fiscale',
       pec: 'Indirizzo PEC primario',

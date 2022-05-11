@@ -66,10 +66,10 @@ export default function PartyDetail({ party }: Props) {
             </Typography>
           </Tooltip>
         </Grid>
-        {/* codice IPA */}
+        {/* origin */}
         <Grid item xs={4}>
           <Typography variant="body2" sx={{ ...labelStyles }}>
-            {t('overview.partyDetail.ipaCode')}
+            {t('overview.partyDetail.originId')}&nbsp;{party.origin}
           </Typography>
         </Grid>
         <Grid item xs={8}>
