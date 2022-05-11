@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
 import { List, Grid } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
 import { useHistory } from 'react-router';
-import { History } from 'history';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +11,7 @@ import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
-import DashboardSidenav from './../DashboardSidenav';
+import DashboardSidenavItem from './DashboardSidenavItem';
 
 type Props = {
   products: Array<Product>;
@@ -30,19 +28,6 @@ export type MenuItem = {
   icon: SvgIconComponent;
 };
 
-const applicationLinkBehaviour = (
-  history: History,
-  onExit: (exitAction: () => void) => void,
-  path: string,
-  pathVariables?: { [key: string]: string }
-) => {
-  const resolvedPath = pathVariables ? resolvePathVariables(path, pathVariables) : path;
-  return {
-    onClick: () => onExit(() => history.push(resolvedPath)),
-    isSelected: () => history.location.pathname === resolvedPath,
-  };
-};
-
 export default function DashboardSideMenu({ party }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
@@ -51,79 +36,78 @@ export default function DashboardSideMenu({ party }: Props) {
   const canSeeRoles = party.userRole === 'ADMIN';
   const canSeeGroups = party.userRole === 'ADMIN';
 
-  const sideNavItem: Array<MenuItem | undefined> = [
-    {
-      groupId: 'selfCare',
-      title: t('overview.sideMenu.institutionManagement.overview.title'),
-      active: true,
-      ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
-        partyId: party.partyId,
-      }),
-      icon: DashboardCustomize,
-    },
-    canSeeRoles
-      ? {
-          groupId: 'selfCare',
-          title: t('overview.sideMenu.institutionManagement.referents.title'),
-          active: true,
-          ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
-            partyId: party.partyId,
-          }),
-          icon: PeopleAlt,
-        }
-      : undefined,
-    canSeeGroups
-      ? {
-          groupId: 'selfCare',
-          title: t('overview.sideMenu.institutionManagement.groups.title'),
-          active: true,
-          ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
-            partyId: party.partyId,
-          }),
-          icon: SupervisedUserCircle,
-        }
-      : undefined,
-  ];
-
-  const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(
-    sideNavItem[0] as MenuItem
+  const isOVerviewSelected =
+    window.location.pathname ===
+    resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, {
+      partyId: party.partyId,
+    });
+  const isRoleSelected = window.location.pathname.startsWith(
+    resolvePathVariables(ENV.ROUTES.USERS, {
+      partyId: party.partyId,
+    })
   );
-
-  useEffect(
-    () =>
-      setSelectedItem(
-        sideNavItem.find(
-          (m) => m?.isSelected || (m?.subMenu && m?.subMenu.findIndex((m) => m?.isSelected) > -1)
-        ) ?? null
-      ),
-    []
+  const isGroupSelected = window.location.pathname.startsWith(
+    resolvePathVariables(ENV.ROUTES.GROUPS, {
+      partyId: party.partyId,
+    })
   );
-
-  const handleClick = (
-    _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    menuItem: MenuItem
-  ) => {
-    setSelectedItem(
-      menuItem.groupId === selectedItem?.groupId && menuItem.subMenu ? null : menuItem
-    );
-    if (menuItem.onClick) {
-      menuItem.onClick();
-    }
-  };
 
   return (
     <Grid container item mt={11}>
       <Grid item xs={12}>
         <List>
-          {sideNavItem &&
-            sideNavItem.map((item) => (
-              <DashboardSidenav
-                key={item?.title}
-                item={item}
-                selectedItem={selectedItem}
-                handleClick={handleClick}
-              />
-            ))}
+          <DashboardSidenavItem
+            title={t('overview.sideMenu.institutionManagement.overview.title')}
+            handleClick={() =>
+              onExit(() =>
+                history.push(
+                  party.partyId
+                    ? resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, {
+                        partyId: party.partyId,
+                      })
+                    : DASHBOARD_ROUTES.OVERVIEW.path
+                )
+              )
+            }
+            isSelected={isOVerviewSelected}
+            icon={DashboardCustomize}
+          />
+          {canSeeRoles && (
+            <DashboardSidenavItem
+              title={t('overview.sideMenu.institutionManagement.referents.title')}
+              handleClick={() =>
+                onExit(() =>
+                  history.push(
+                    party.partyId
+                      ? resolvePathVariables(ENV.ROUTES.USERS, {
+                          partyId: party.partyId,
+                        })
+                      : ENV.ROUTES.USERS
+                  )
+                )
+              }
+              isSelected={isRoleSelected}
+              icon={PeopleAlt}
+            />
+          )}
+          {canSeeGroups && (
+            <DashboardSidenavItem
+              title={t('overview.sideMenu.institutionManagement.groups.title')}
+              handleClick={() =>
+                onExit(() =>
+                  history.push(
+                    party.partyId
+                      ? resolvePathVariables(ENV.ROUTES.GROUPS, {
+                          partyId: party.partyId,
+                        })
+                      : ENV.ROUTES.GROUPS
+                  )
+                )
+              }
+              isSelected={isGroupSelected}
+              icon={SupervisedUserCircle}
+            />
+          )}
         </List>
       </Grid>
     </Grid>

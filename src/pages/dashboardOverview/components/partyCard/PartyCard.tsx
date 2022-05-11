@@ -13,7 +13,6 @@ export default function PartyCard({ party }: Props) {
       variant="outlined"
       sx={{
         width: '100%',
-        boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)',
         py: 3,
         px: 1,
         backgroundColor: '#EEEEEE',

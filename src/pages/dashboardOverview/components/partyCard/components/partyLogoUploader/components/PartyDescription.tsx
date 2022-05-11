@@ -22,10 +22,14 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
       {!loading && <EditIcon color={'primary'} fontSize="small" />}
       <Box display="flex" alignItems="center">
         <Link
-          underline={'always'}
           color={'primary'}
           onClick={open}
-          sx={{ fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
+          sx={{
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            textDecoration: 'none !important',
+          }}
         >
           {files && files.length > 0 && files[0].name ? files[0].name : labelLink}
         </Link>
