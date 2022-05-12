@@ -1624,7 +1624,7 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fontsource/titillium-web@^4.5.0", "@fontsource/titillium-web@^4.5.3":
+"@fontsource/titillium-web@^4.5.0", "@fontsource/titillium-web@^4.5.8":
   version "4.5.8"
   resolved "https://registry.yarnpkg.com/@fontsource/titillium-web/-/titillium-web-4.5.8.tgz#1bebb1daf86b02c7c8d816071a850121904f7b56"
   integrity sha512-9sOpgikaqh9qvYRYLnk7C0PSIU4GNt17Qtw3txUwLioRcLWiL0OeNDE1vndC1NzeWII6AicTRMOoMTbthRuFIw==
@@ -2348,12 +2348,13 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@pagopa/mui-italia@0.6.9":
-  version "0.6.9"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.9.tgz#75f545982ba3b692a1108c6f9cfea770ff56b636"
-  integrity sha512-SeVSiVvmSN/JvtG/a9oNmdezt2NnDjMJ3npuSwWl1quqrvqNkDU3JT2GXaUSXnykUBz8R2OKs/fswNQ1EeR5ZA==
+"@pagopa/mui-italia@0.6.18":
+  version "0.6.18"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.18.tgz#61b3e4575c64fba90b54eac011a631b067759e91"
+  integrity sha512-4ROcTxavxRiNp9P2VKuup9Pg4fGc8P8EZFc337Ec9+chxpkazoPVl0qA0oP4PUV+lPZtNn8ImGC3xTTAmKuJjA==
   dependencies:
-    "@fontsource/titillium-web" "^4.5.3"
+    "@fontsource/titillium-web" "^4.5.8"
+    clsx "^1.1.1"
 
 "@pagopa/mui-italia@pagopa/mui-italia":
   version "0.3.1"

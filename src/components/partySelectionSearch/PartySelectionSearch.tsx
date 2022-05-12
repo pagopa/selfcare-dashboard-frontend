@@ -12,10 +12,8 @@ type Props = {
   onPartySelectionChange: (selectedParty: Party | null) => void;
   disableUnderline?: boolean;
   label?: string;
-  showAvatar?: boolean;
   iconColor?: string;
   iconMarginRight?: string;
-  pxTitleSubTitle?: string;
   partyTitle?: string;
 };
 
@@ -23,17 +21,17 @@ const verifyPartyFilter = (party: Party, filter: string) =>
   party.description.toUpperCase().indexOf(filter.toUpperCase()) >= 0;
 const CustomBox = styled(Box)({
   '&::-webkit-scrollbar': {
-    width: 8,
+    width: 4,
   },
   '&::-webkit-scrollbar-track': {
     boxShadow: `inset 10px 10px  #E6E9F2`,
   },
   '&::-webkit-scrollbar-thumb': {
     backgroundColor: '#0073E6',
+    borderRadius: '16px',
   },
   overflowY: 'auto',
   height: '100%',
-  maxHeight: '200px',
 });
 
 export default function PartySelectionSearch({
@@ -41,10 +39,8 @@ export default function PartySelectionSearch({
   onPartySelectionChange,
   disableUnderline = false,
   label,
-  showAvatar,
   iconColor,
   iconMarginRight,
-  pxTitleSubTitle,
   partyTitle,
 }: Props) {
   const { t } = useTranslation();
@@ -75,19 +71,20 @@ export default function PartySelectionSearch({
     onPartySelectionChange(party);
   };
 
+  const moreThan3Parties = parties.length > 3;
+
   return (
     <React.Fragment>
       {parties.length >= 1 && (
         <Grid container item direction="column">
-          {(partyTitle || parties.length > 3) && (
+          {(partyTitle || moreThan3Parties) && (
             <Grid item my={2}>
-              {parties.length > 3 ? (
+              {moreThan3Parties ? (
                 <Box>
                   <PartySelectionSearchInput
                     label={label}
                     iconMarginRight={iconMarginRight}
                     disableUnderline={disableUnderline}
-                    placeholder={t('partySelection.searchBar')}
                     onChange={(e) => onFilterChange(e.target.value)}
                     input={input}
                     clearField={() => onFilterChange('')}
@@ -107,23 +104,19 @@ export default function PartySelectionSearch({
             </Grid>
           )}
 
-          <Grid item>
-            <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
+          <Grid item sx={{ overflow: 'auto', height: '220px' }}>
+            <CustomBox>
               {filteredParties &&
                 filteredParties.map((party) => {
                   const isDisabled = party.status === 'PENDING';
                   return (
                     <PartyItemContainer
-                      pxTitleSubTitle={pxTitleSubTitle}
-                      showAvatar={showAvatar}
+                      moreThan3Parties={moreThan3Parties}
                       isDisabled={isDisabled}
-                      disabled={isDisabled}
                       key={party.partyId}
-                      borderList={selectedParty === party ? '2px solid #0073E6' : 'transparent'}
                       selectedItem={selectedParty === party}
                       title={party.description}
                       subTitle={t(roleLabels[party.userRole].longLabelKey)}
-                      titleColor={isDisabled ? '' : '#0073E6'}
                       image={party.urlLogo}
                       chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}
                       action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>

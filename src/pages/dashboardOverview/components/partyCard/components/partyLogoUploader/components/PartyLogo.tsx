@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { CircularProgress } from '@mui/material';
-import { EntityAvatar } from '@pagopa/mui-italia/dist/components/EntityAvatar';
+import { PartyAvatar } from '@pagopa/mui-italia/dist/components/PartyAvatar';
 type Props = {
   loading: boolean;
   urlLogo?: string;
@@ -17,7 +17,7 @@ export default function PartyLogo({ loading, urlLogo }: Props) {
       alignItems="center"
     >
       {!loading ? (
-        <EntityAvatar customSrc={urlLogo} id="partyLogo" customAlt={undefined} />
+        <PartyAvatar customSrc={urlLogo} id="partyLogo" customAlt={undefined} />
       ) : (
         <Box
           sx={{

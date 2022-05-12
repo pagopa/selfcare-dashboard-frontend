@@ -144,9 +144,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                   {parties2Show && (
                     <PartySelectionSearch
                       partyTitle={t('subHeader.partySelectionSearch.title')}
-                      pxTitleSubTitle="32px"
                       iconMarginRight="-10px"
-                      showAvatar={false}
                       iconColor="#0073E6"
                       label={t('subHeader.partySelectionSearch.label')}
                       disableUnderline={true}

@@ -9,9 +9,15 @@ export default {
     title: 'Seleziona il tuo ente',
     subTitle:
       'Se operi per più enti, potrai modificare la tua scelta dopo aver effettuato l’accesso.',
-    searchBar: 'Cerca',
     partyStatus: 'Da completare',
-    continueButton: 'Continua',
+    continueButton: 'Entra',
+    label: 'Cerca ente',
+  },
+  NoActiveParty: {
+    bodyTitle: 'Non risultano richieste di adesione <1 /> per il tuo Ente',
+    bodyDescription:
+      "L'adesione potrebbe essere ancora in corso. <1 /> Verifica di aver completato tutti i passaggi richiesti.",
+    backButton: 'Torna alla Home',
   },
   overview: {
     title: 'Panoramica',

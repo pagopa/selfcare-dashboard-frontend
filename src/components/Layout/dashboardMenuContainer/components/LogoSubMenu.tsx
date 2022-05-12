@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Box, Typography, useTheme } from '@mui/material';
-import { EntityAvatar } from '@pagopa/mui-italia/dist/components/EntityAvatar';
+import { PartyAvatar } from '@pagopa/mui-italia/dist/components/PartyAvatar';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
 
@@ -19,7 +19,7 @@ export default function LogoSubMenu({ title, subTitle, color }: Props) {
       <Grid container>
         <Grid item xs={3}>
           <Box>
-            <EntityAvatar customSrc={urlLogo} id="partyLogo" customAlt={undefined} />
+            <PartyAvatar customSrc={urlLogo} id="partyLogo" customAlt={undefined} />
           </Box>
         </Grid>
         <Grid item xs={9}>
