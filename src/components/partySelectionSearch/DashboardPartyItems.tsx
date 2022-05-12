@@ -32,7 +32,7 @@ type Props = {
   chip: string;
   action?: React.Dispatch<React.MouseEvent<HTMLDivElement, MouseEvent>>;
 };
-export default function DashboardPartyItems({
+export default function DashboardPartyItem({
   selectedItem,
   title,
   subTitle,

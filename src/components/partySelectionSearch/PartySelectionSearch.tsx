@@ -6,6 +6,7 @@ import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Party } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
+import DashboardPartyItem from './DashboardPartyItems';
 
 type Props = {
   parties: Array<Party>;
@@ -104,28 +105,42 @@ export default function PartySelectionSearch({
             </Grid>
           )}
 
-          <Grid item sx={{ overflow: 'auto', height: '220px' }}>
-            <CustomBox>
-              {filteredParties &&
-                filteredParties.map((party) => {
-                  const isDisabled = party.status === 'PENDING';
-                  return (
-                    <PartyItemContainer
-                      moreThan3Parties={moreThan3Parties}
-                      isDisabled={isDisabled}
-                      key={party.partyId}
-                      selectedItem={selectedParty === party}
-                      title={party.description}
-                      subTitle={t(roleLabels[party.userRole].longLabelKey)}
-                      image={party.urlLogo}
-                      chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}
-                      action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                        handleListItemClick(event, party)
-                      }
-                    />
-                  );
-                })}
-            </CustomBox>
+          <Grid item sx={{ overflow: 'auto', height: 'auto', maxHeight: '220px' }}>
+            {selectedParty ? (
+              <DashboardPartyItem
+                disabled={selectedParty.status === 'PENDING'}
+                selectedItem={!!selectedParty}
+                title={selectedParty.description}
+                subTitle={t(roleLabels[selectedParty.userRole].longLabelKey)}
+                image={selectedParty.urlLogo}
+                action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                  handleListItemClick(event, selectedParty)
+                }
+                chip={selectedParty.status === 'PENDING' ? t('partySelection.partyStatus') : ''}
+              />
+            ) : (
+              <CustomBox>
+                {filteredParties &&
+                  filteredParties.map((party) => {
+                    const isDisabled = party.status === 'PENDING';
+                    return (
+                      <PartyItemContainer
+                        moreThan3Parties={moreThan3Parties}
+                        isDisabled={isDisabled}
+                        key={party.partyId}
+                        selectedItem={selectedParty === party}
+                        title={party.description}
+                        subTitle={t(roleLabels[party.userRole].longLabelKey)}
+                        image={party.urlLogo}
+                        chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}
+                        action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                          handleListItemClick(event, party)
+                        }
+                      />
+                    );
+                  })}
+              </CustomBox>
+            )}
           </Grid>
         </Grid>
       )}

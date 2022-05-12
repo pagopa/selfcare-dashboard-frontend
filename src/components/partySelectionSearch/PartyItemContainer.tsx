@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
 import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
-import DashboardPartyItems from './DashboardPartyItems';
+import DashboardPartyItem from './DashboardPartyItems';
 
 type Props = {
   isDisabled?: boolean;
@@ -33,7 +33,7 @@ export default function PartyItemContainer({
       data-testid={`PartyItemContainer: ${title}`}
     >
       {moreThan3Parties ? (
-        <DashboardPartyItems
+        <DashboardPartyItem
           disabled={isDisabled}
           selectedItem={selectedItem}
           title={title}
