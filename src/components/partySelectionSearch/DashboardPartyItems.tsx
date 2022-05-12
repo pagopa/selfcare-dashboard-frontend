@@ -46,9 +46,20 @@ export default function DashboardPartyItems({
   return (
     <Grid container data-testid={`PartyItemContainer: ${title}`}>
       <Grid item xs={disabled ? 8 : 12}>
-        <CustomList aria-label="main mailbox folders" sx={{ backgroundColor: 'white' }}>
+        <CustomList
+          aria-label="main mailbox folders"
+          sx={{
+            backgroundColor: 'white',
+            '& .MuiListItemButton-root.MuiListItemButton-gutters.Mui-selected': {
+              borderColor: 'transparent !important',
+            },
+          }}
+        >
           <ListItemButton
-            sx={{ paddingLeft: 0, height: '50px' }}
+            sx={{
+              paddingLeft: 0,
+              height: '50px',
+            }}
             disableRipple
             disabled={disabled}
             selected={selectedItem}
