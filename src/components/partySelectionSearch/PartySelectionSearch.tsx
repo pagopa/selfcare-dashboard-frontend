@@ -78,7 +78,7 @@ export default function PartySelectionSearch({
     <React.Fragment>
       {parties.length >= 1 && (
         <Grid container item direction="column">
-          {(partyTitle || moreThan3Parties) && (
+          {(partyTitle || moreThan3Parties) && !selectedParty && (
             <Grid item my={2}>
               {moreThan3Parties ? (
                 <Box>
