@@ -1,8 +1,9 @@
 import React from 'react';
-import { Grid, Box, ListItemButton, Typography, useTheme, List } from '@mui/material';
+import { Grid, Box, ListItemButton, Typography, useTheme, List, IconButton } from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
 import { styled } from '@mui/material/styles';
 import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
 const CustomList = styled(List)({
   '& .MuiListItemButton-root': {
@@ -31,6 +32,9 @@ type Props = {
   image: string | undefined;
   chip: string;
   action?: React.Dispatch<React.MouseEvent<HTMLDivElement, MouseEvent>>;
+  iconColor?: string;
+  clearField?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  moreThan3Parties?: boolean;
 };
 export default function DashboardPartyItem({
   selectedItem,
@@ -40,12 +44,15 @@ export default function DashboardPartyItem({
   chip,
   action,
   disabled,
+  iconColor,
+  clearField,
+  moreThan3Parties,
 }: Props) {
   const theme = useTheme();
 
   return (
     <Grid container data-testid={`PartyItemContainer: ${title}`}>
-      <Grid item xs={disabled ? 8 : 12}>
+      <Grid item xs={disabled || selectedItem ? 8 : 12}>
         <CustomList
           aria-label="main mailbox folders"
           sx={{
@@ -87,6 +94,17 @@ export default function DashboardPartyItem({
           </ListItemButton>
         </CustomList>
       </Grid>
+      {selectedItem && moreThan3Parties && (
+        <Grid item xs={4} display="flex" justifyContent="end">
+          <IconButton
+            disableRipple={true}
+            onClick={clearField}
+            sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+          >
+            <ClearOutlinedIcon sx={{ color: iconColor }} />
+          </IconButton>
+        </Grid>
+      )}
       {disabled && (
         <Grid
           item

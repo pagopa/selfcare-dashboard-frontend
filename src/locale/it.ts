@@ -11,10 +11,11 @@ export default {
       'Se operi per più enti, potrai modificare la tua scelta dopo aver effettuato l’accesso.',
     partyStatus: 'Da completare',
     continueButton: 'Entra',
+    backButton: 'Indietro',
     label: 'Cerca ente',
   },
   NoActiveParty: {
-    bodyTitle: 'Non risultano richieste di adesione <1 /> per il tuo Ente',
+    bodyTitle: 'Non risultano richieste di <1 /> adesione per questo Ente',
     bodyDescription:
       "L'adesione potrebbe essere ancora in corso. <1 /> Verifica di aver completato tutti i passaggi richiesti.",
     backButton: 'Torna alla Home',

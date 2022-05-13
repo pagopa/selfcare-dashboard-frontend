@@ -6,7 +6,7 @@ import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Party } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
-import DashboardPartyItem from './DashboardPartyItems';
+import DashboardPartyItem from './DashboardPartyItem';
 
 type Props = {
   parties: Array<Party>;
@@ -106,7 +106,7 @@ export default function PartySelectionSearch({
           )}
 
           <Grid item sx={{ overflow: 'auto', height: 'auto', maxHeight: '220px' }}>
-            {selectedParty ? (
+            {selectedParty && moreThan3Parties ? (
               <DashboardPartyItem
                 disabled={selectedParty.status === 'PENDING'}
                 selectedItem={!!selectedParty}
@@ -117,6 +117,9 @@ export default function PartySelectionSearch({
                   handleListItemClick(event, selectedParty)
                 }
                 chip={selectedParty.status === 'PENDING' ? t('partySelection.partyStatus') : ''}
+                clearField={() => setSelectedParty(null)}
+                iconColor={iconColor}
+                moreThan3Parties={moreThan3Parties}
               />
             ) : (
               <CustomBox>

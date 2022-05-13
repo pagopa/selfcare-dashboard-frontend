@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
 import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
-import DashboardPartyItem from './DashboardPartyItems';
+import DashboardPartyItem from './DashboardPartyItem';
 
 type Props = {
   isDisabled?: boolean;

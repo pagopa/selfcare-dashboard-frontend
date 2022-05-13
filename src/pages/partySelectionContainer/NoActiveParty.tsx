@@ -24,13 +24,12 @@ export default function NoActiveParty({ parties }: Props) {
 
   return (
     <React.Fragment>
-      <Grid container display="flex" justifyContent="center" spacing={2} my={'auto'}>
+      <Grid container display="flex" justifyContent="center" spacing={1} my={'auto'}>
         <Grid item xs={12} display="flex" justifyContent="center">
-          <Typography variant="h3" sx={{ lineHeight: '1.1' }} textAlign="center">
+          <Typography variant="h3" sx={{ lineHeight: '1.1 !important' }} textAlign="center">
             <Trans i18nKey="NoActiveParty.bodyTitle">
-              Non risultano richieste di adesione
-              <br />
-              per il tuo Ente
+              Non risultano richieste di <br />
+              adesione per questo Ente
             </Trans>
           </Typography>
         </Grid>
@@ -80,7 +79,7 @@ export default function NoActiveParty({ parties }: Props) {
           </Box>
         </Grid>
 
-        <Grid item xs={2} mt={2}>
+        <Grid item xs={2} mt={2} display="flex" justifyContent="center">
           <Button
             variant="contained"
             sx={{ height: '40px' }}
