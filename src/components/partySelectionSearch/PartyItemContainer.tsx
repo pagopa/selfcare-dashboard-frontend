@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
 import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
 import DashboardPartyItem from './DashboardPartyItem';
@@ -43,15 +43,17 @@ export default function PartyItemContainer({
           chip={chip}
         />
       ) : (
-        <PartyAccountItemButton
-          partyName={title as string}
-          partyRole={subTitle as string}
-          image={image}
-          selectedItem={selectedItem}
-          action={!isDisabled ? action : undefined}
-          disabled={isDisabled}
-          endSlot={isDisabled ? <Tag value={chip} color="warning" /> : undefined}
-        />
+        <Box data-testid={selectedItem && 'selectedLessThen3'} width="100%">
+          <PartyAccountItemButton
+            partyName={title as string}
+            partyRole={subTitle as string}
+            image={image}
+            selectedItem={selectedItem}
+            action={!isDisabled ? action : undefined}
+            disabled={isDisabled}
+            endSlot={isDisabled ? <Tag value={chip} color="warning" /> : undefined}
+          />
+        </Box>
       )}
     </Grid>
   );

@@ -78,6 +78,7 @@ export default function DashboardPartyItem({
             <Grid container>
               <Grid item xs={12}>
                 <Typography
+                  data-testid={selectedItem && 'selectedMoreThen3'}
                   sx={{
                     fontSize: theme.typography.fontSize,
                     fontWeight: theme.typography.fontWeightBold,
@@ -113,6 +114,7 @@ export default function DashboardPartyItem({
             display: 'flex',
             alignItems: 'center',
           }}
+          id="toBeCompletedChip"
         >
           <Tag value={chip} color="warning" />
         </Grid>
