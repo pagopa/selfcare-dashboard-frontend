@@ -155,9 +155,8 @@ test('Test selection when there are > 3 parties', async () => {
   );
   const input = document.getElementById('search');
   const filterPartyNapoli = 'Comune di Napoli Amministratore';
-  // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
-  const filterNapoli = 'Napoli';
-  const filterRoma = 'ROMA';
+  const buttonClear = document.getElementById('clearIcon');
+  expect(buttonClear).toBeNull();
   expect(selectedParty).toBe(null);
   // seleziona su uno dei party Napoli
   const buttonParty = screen.getByRole('button', { name: filterPartyNapoli });
@@ -167,6 +166,7 @@ test('Test selection when there are > 3 parties', async () => {
   // verifichiamo che al click sia selezionato il pulsante "Napoli"
   const selectedLessThen3 = screen.getByTestId('selectedMoreThen3');
   getByText(selectedLessThen3, 'Comune di Napoli');
+  expect(buttonClear);
 });
 
 test('Test pending party', () => {

@@ -101,6 +101,7 @@ export default function DashboardPartyItem({
             disableRipple={true}
             onClick={clearField}
             sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+            id="clearIcon"
           >
             <ClearOutlinedIcon sx={{ color: iconColor }} />
           </IconButton>
