@@ -105,7 +105,14 @@ export default function PartySelectionSearch({
             </Grid>
           )}
 
-          <Grid item sx={{ overflow: 'auto', height: 'auto', maxHeight: '220px' }}>
+          <Grid
+            item
+            sx={{
+              overflow: 'auto',
+              height: 'auto',
+              maxHeight: moreThan3Parties ? '220px' : '270px',
+            }}
+          >
             {selectedParty && moreThan3Parties ? (
               <DashboardPartyItem
                 disabled={selectedParty.status === 'PENDING'}

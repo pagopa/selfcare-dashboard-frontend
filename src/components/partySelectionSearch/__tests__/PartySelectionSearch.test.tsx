@@ -164,9 +164,13 @@ test('Test selection when there are > 3 parties', async () => {
   fireEvent.click(buttonParty);
 
   // verifichiamo che al click sia selezionato il pulsante "Napoli"
-  const selectedLessThen3 = screen.getByTestId('selectedMoreThen3');
-  getByText(selectedLessThen3, 'Comune di Napoli');
+  const selectedMoreThen3 = screen.getByTestId('selectedMoreThen3');
+  getByText(selectedMoreThen3, 'Comune di Napoli');
   expect(buttonClear);
+
+  fireEvent.click(document.getElementById('clearIcon'));
+  const partyRoma = screen.getByText('Comune di Roma');
+  expect(partyRoma);
 });
 
 test('Test pending party', () => {
