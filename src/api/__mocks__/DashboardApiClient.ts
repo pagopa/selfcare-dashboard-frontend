@@ -253,11 +253,8 @@ export const DashboardApi = {
   getProducts: async (): Promise<Array<ProductsResource>> =>
     new Promise((resolve) => resolve(mockedProductResources)),
 
-  getTokenExchange: async (
-    _hostname: string,
-    _partyId: string,
-    _productId: string
-  ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
+  getTokenExchange: async (_partyId: string, _productId: string): Promise<IdentityTokenResource> =>
+    new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
   getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),

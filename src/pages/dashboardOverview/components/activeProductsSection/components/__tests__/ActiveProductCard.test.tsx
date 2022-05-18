@@ -68,11 +68,7 @@ test('test render and behavior', async () => {
   fireEvent.click(button);
 
   await waitFor(() =>
-    expect(retrieveTokenExchange).toBeCalledWith(
-      'io.selfcare.pagopa.it',
-      mockedParties[0],
-      mockedProduct
-    )
+    expect(retrieveTokenExchange).toBeCalledWith(mockedParties[0], mockedProduct)
   );
 
   expect(mockedLocation.assign).toBeCalledWith(
