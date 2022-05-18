@@ -29,6 +29,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
+    address: 'Piazza della Scala, 2 - 20121 Milano',
   },
   {
     name: 'Comune di Milano',
@@ -42,6 +43,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     userRole: 'ADMIN',
     category: '',
     institutionType: InstitutionTypeEnum.PA,
+    address: 'Piazza della Scala, 2 - 20121 Milano',
   },
 ];
 
@@ -166,7 +168,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
-    certification: true,
     product: {
       id: 'prod-io',
       title: 'App IO',
@@ -187,7 +188,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address2',
-    certification: true,
     product: {
       id: 'prod-io',
       title: 'App IO',
@@ -236,11 +236,11 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
 ];
 
 export const mockedUserResource: UserResource = {
+  id: 'id1',
   fiscalCode: 'AAAAAA11A11A123K',
-  name: 'Gigi',
-  surname: 'Verdi',
-  email: 'gigi.v@email.com',
-  certification: true,
+  name: { certified: true, value: 'Gigi' },
+  familyName: { certified: true, value: 'Verdi' },
+  email: { certified: true, value: 'gigi.v@email.com' },
 };
 
 export const DashboardApi = {

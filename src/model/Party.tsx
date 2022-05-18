@@ -39,7 +39,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     category: institutionResource.category,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
-    registeredOffice: 'TODO',
+    registeredOffice: institutionResource.address,
     typology: 'TODO',
     institutionType: institutionResource.institutionType,
   };
