@@ -65,14 +65,12 @@ export const DashboardApi = {
   },
 
   getTokenExchange: async (
-    hostname: string,
     institutionId: string,
     productId: string
   ): Promise<IdentityTokenResource> => {
     const result = await apiClient.exchangeUsingGET({
       productId,
       institutionId,
-      realm: hostname,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
