@@ -27,7 +27,7 @@ export const useTokenExchange = () => {
     }
 
     setLoading(true);
-    retrieveTokenExchange(result, selectedParty, product)
+    retrieveTokenExchange(selectedParty, product)
       .then((t) =>
         trackEvent(
           'DASHBOARD_OPEN_PRODUCT',

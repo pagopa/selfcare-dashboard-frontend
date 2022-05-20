@@ -93,7 +93,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
           p.userRole === 'ADMIN'
             ? {
                 groupId: p.id,
-                title: t('overview.sideMenu.product.referents'),
+                title: t('overview.sideMenu.product.users'),
                 active: p.authorized ?? false,
                 ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.PRODUCT_USERS, {
                   partyId: party.partyId,
