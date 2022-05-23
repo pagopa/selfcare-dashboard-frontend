@@ -1,8 +1,5 @@
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
-import {
-  InstitutionResource,
-  InstitutionTypeEnum,
-} from '../generated/b4f-dashboard/InstitutionResource';
+import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
 import {
   InstitutionUserResource,
   RoleEnum,
@@ -28,7 +25,6 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
-    institutionType: InstitutionTypeEnum.PA,
   },
   {
     name: 'Comune di Milano',
@@ -41,7 +37,6 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     fiscalCode: 'fiscalCode',
     userRole: 'ADMIN',
     category: '',
-    institutionType: InstitutionTypeEnum.PA,
   },
 ];
 
@@ -178,7 +173,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
         },
       ],
     },
-    certification: true,
   },
   {
     id: '2',
@@ -199,7 +193,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
         },
       ],
     },
-    certification: true,
   },
 ];
 
@@ -236,11 +229,11 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
 ];
 
 export const mockedUserResource: UserResource = {
+  id: 'id',
   fiscalCode: 'AAAAAA11A11A123K',
-  name: 'Gigi',
-  surname: 'Verdi',
-  email: 'gigi.v@email.com',
-  certification: true,
+  name: { certified: true, value: 'Gigi' },
+  familyName: { certified: true, value: 'Verdi' },
+  email: { certified: true, value: 'gigi.v@email.com' },
 };
 
 export const DashboardApi = {
