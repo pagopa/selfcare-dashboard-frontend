@@ -34,7 +34,7 @@ export default function PartyItemContainer({
       container
       my={1}
       direction={'row'}
-      aria-label={'institution'}
+      role={'institution'}
       data-testid={`PartyItemContainer: ${title}`}
       sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}
     >
