@@ -103,7 +103,7 @@ export default function PartySelectionSearch({
             </Grid>
           )}
 
-          <Grid item>
+          <Grid item aria-label="institutionList">
             <CustomBox sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
               {filteredParties &&
                 filteredParties.map((party) => {

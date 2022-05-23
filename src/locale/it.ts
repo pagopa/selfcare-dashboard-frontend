@@ -9,7 +9,7 @@ export default {
     title: 'Seleziona il tuo ente',
     subTitle:
       'Se operi per più enti, potrai modificare la tua scelta dopo aver effettuato l’accesso.',
-    searchBar: 'Cerca',
+    searchBar: 'Cerca ente',
     partyStatus: 'Da completare',
     continueButton: 'Continua',
   },

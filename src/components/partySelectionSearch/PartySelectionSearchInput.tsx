@@ -74,19 +74,21 @@ export default function PartySelectionSearchInput({
             <InputAdornment position="end">
               {!input ? (
                 <CustomIconButton
+                  aria-label="search"
                   disableRipple={true}
                   onClick={focusTextInput}
                   style={{ marginRight: iconMarginRight }}
                 >
-                  <SearchOutlinedIcon sx={{ color: iconColor }} />
+                  <SearchOutlinedIcon role="searchIcon" sx={{ color: iconColor }} />
                 </CustomIconButton>
               ) : (
                 <CustomIconButton
+                  aria-label="remove"
                   disableRipple={true}
                   onClick={clearField}
                   style={{ marginRight: '-10px' }}
                 >
-                  <ClearOutlinedIcon />
+                  <ClearOutlinedIcon role="removeSelectionIcon" />
                 </CustomIconButton>
               )}
             </InputAdornment>

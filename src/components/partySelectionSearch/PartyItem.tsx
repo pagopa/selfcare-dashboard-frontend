@@ -55,15 +55,13 @@ export default function PartyItem({
   pxTitleSubTitle,
 }: Props) {
   return (
-    <CustomList
-      aria-label="main mailbox folders"
-      sx={{ border: borderList, backgroundColor: bgColor }}
-    >
+    <CustomList sx={{ border: borderList, backgroundColor: bgColor }}>
       <ListItemButton
         sx={{ paddingLeft: 0 }}
         disableRipple
         disabled={disabled}
         selected={selectedItem}
+        aria-label={selectedItem ? title : undefined}
         onClick={action}
       >
         {showAvatar && (
