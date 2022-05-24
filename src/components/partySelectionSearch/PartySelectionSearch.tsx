@@ -81,17 +81,15 @@ export default function PartySelectionSearch({
           {(partyTitle || moreThan3Parties) && !selectedParty && (
             <Grid item my={2}>
               {moreThan3Parties ? (
-                <Box>
-                  <PartySelectionSearchInput
-                    label={label}
-                    iconMarginRight={iconMarginRight}
-                    disableUnderline={disableUnderline}
-                    onChange={(e) => onFilterChange(e.target.value)}
-                    input={input}
-                    clearField={() => onFilterChange('')}
-                    iconColor={iconColor}
-                  />
-                </Box>
+                <PartySelectionSearchInput
+                  label={label}
+                  iconMarginRight={iconMarginRight}
+                  disableUnderline={disableUnderline}
+                  onChange={(e) => onFilterChange(e.target.value)}
+                  input={input}
+                  clearField={() => onFilterChange('')}
+                  iconColor={iconColor}
+                />
               ) : (
                 parties.length >= 1 && (
                   <Typography

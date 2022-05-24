@@ -65,7 +65,11 @@ export default function PartySelectionSearchInput({
             </InputAdornment>
           ),
           endAdornment: (
-            <CustomIconButton disableRipple={true} onClick={clearField}>
+            <CustomIconButton
+              disableRipple={true}
+              onClick={clearField}
+              aria-label="removeSelectionIcon"
+            >
               <ClearOutlinedIcon sx={{ color: iconColor }} />
             </CustomIconButton>
           ),

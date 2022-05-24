@@ -1,11 +1,15 @@
 import React from 'react';
-import { Grid, Box, ListItemButton, Typography, useTheme, List, IconButton } from '@mui/material';
+import { Grid, Box, ListItemButton, Typography, useTheme, IconButton } from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
 import { styled } from '@mui/material/styles';
 import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
-const CustomList = styled(List)({
+const CustomGridContainer = styled(Grid)({
+  backgroundColor: 'white',
+  '& .MuiListItemButton-root.MuiListItemButton-gutters.Mui-selected': {
+    borderColor: 'transparent !important',
+  },
   '& .MuiListItemButton-root': {
     '&.Mui-disabled ': {
       opacity: '0.38',
@@ -52,49 +56,43 @@ export default function DashboardPartyItem({
 
   return (
     <Grid container data-testid={`PartyItemContainer: ${title}`}>
-      <Grid item xs={disabled || selectedItem ? 8 : 12}>
-        <CustomList
-          aria-label="main mailbox folders"
+      <CustomGridContainer item xs={disabled || selectedItem ? 8 : 12} p={1}>
+        <ListItemButton
           sx={{
-            backgroundColor: 'white',
-            '& .MuiListItemButton-root.MuiListItemButton-gutters.Mui-selected': {
-              borderColor: 'transparent !important',
-            },
+            paddingLeft: 0,
+            height: '50px',
           }}
+          disableRipple
+          disabled={disabled}
+          selected={selectedItem}
+          onClick={action}
+          aria-labelledby={selectedItem ? `Selected Institution: ${title}` : undefined}
         >
-          <ListItemButton
-            sx={{
-              paddingLeft: 0,
-              height: '50px',
-            }}
-            disableRipple
-            disabled={disabled}
-            selected={selectedItem}
-            onClick={action}
-          >
-            <Box pr={2}>
-              <CustomAvatar customAlt="" customSrc={image} />
-            </Box>
-            <Grid container>
-              <Grid item xs={12}>
-                <Typography
-                  data-testid={selectedItem && 'selectedMoreThen3'}
-                  sx={{
-                    fontSize: theme.typography.fontSize,
-                    fontWeight: theme.typography.fontWeightBold,
-                    color: 'text.colorTextPrimary',
-                  }}
-                >
-                  {title}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="caption">{subTitle}</Typography>
-              </Grid>
+          <Box pr={2}>
+            <CustomAvatar customSrc={image} />
+          </Box>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography
+                aria-labelledby={title}
+                data-testid={selectedItem && 'selectedMoreThen3'}
+                sx={{
+                  fontSize: theme.typography.fontSize,
+                  fontWeight: theme.typography.fontWeightBold,
+                  color: 'text.colorTextPrimary',
+                }}
+              >
+                {title}
+              </Typography>
             </Grid>
-          </ListItemButton>
-        </CustomList>
-      </Grid>
+            <Grid item xs={12}>
+              <Typography variant="caption" aria-labelledby={subTitle}>
+                {subTitle}
+              </Typography>
+            </Grid>
+          </Grid>
+        </ListItemButton>
+      </CustomGridContainer>
       {selectedItem && moreThan3Parties && (
         <Grid item xs={4} display="flex" justifyContent="end">
           <IconButton
@@ -102,6 +100,7 @@ export default function DashboardPartyItem({
             onClick={clearField}
             sx={{ '&:hover': { backgroundColor: 'transparent' } }}
             id="clearIcon"
+            aria-label="removeSelectionIcon"
           >
             <ClearOutlinedIcon sx={{ color: iconColor }} />
           </IconButton>
@@ -117,7 +116,7 @@ export default function DashboardPartyItem({
           }}
           id="toBeCompletedChip"
         >
-          <Tag value={chip} color="warning" />
+          <Tag value={chip} color="warning" aria-labelledby={chip} />
         </Grid>
       )}
     </Grid>
