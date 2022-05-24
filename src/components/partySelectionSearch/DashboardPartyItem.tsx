@@ -66,7 +66,7 @@ export default function DashboardPartyItem({
           disabled={disabled}
           selected={selectedItem}
           onClick={action}
-          aria-labelledby={selectedItem ? `Selected Institution: ${title}` : undefined}
+          aria-label={selectedItem ? `Selected Institution: ${title}` : undefined}
         >
           <Box pr={2}>
             <CustomAvatar customSrc={image} />
@@ -74,7 +74,7 @@ export default function DashboardPartyItem({
           <Grid container>
             <Grid item xs={12}>
               <Typography
-                aria-labelledby={title}
+                aria-label={title}
                 data-testid={selectedItem && 'selectedMoreThen3'}
                 sx={{
                   fontSize: theme.typography.fontSize,
@@ -86,7 +86,7 @@ export default function DashboardPartyItem({
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="caption" aria-labelledby={subTitle}>
+              <Typography variant="caption" aria-label={subTitle}>
                 {subTitle}
               </Typography>
             </Grid>
@@ -116,7 +116,7 @@ export default function DashboardPartyItem({
           }}
           id="toBeCompletedChip"
         >
-          <Tag value={chip} color="warning" aria-labelledby={chip} />
+          <Tag value={chip} color="warning" aria-label={chip} />
         </Grid>
       )}
     </Grid>
