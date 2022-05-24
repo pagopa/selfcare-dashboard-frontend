@@ -16,6 +16,7 @@ const parties: Array<Party> = [
     partyId: '1',
     digitalAddress: '',
     userRole: 'ADMIN',
+    origin: 'IPA',
     externalId: 'externalId1',
     originId: 'originI1',
   },
@@ -27,6 +28,7 @@ const parties: Array<Party> = [
     partyId: '2',
     digitalAddress: '',
     userRole: 'ADMIN',
+    origin: 'IPA',
     externalId: 'externalId2',
     originId: 'originI2',
   },
@@ -38,6 +40,7 @@ const parties: Array<Party> = [
     partyId: '3',
     digitalAddress: '',
     userRole: 'ADMIN',
+    origin: 'IPA',
     externalId: 'externalId3',
     originId: 'originI3',
   },
@@ -49,6 +52,7 @@ const parties: Array<Party> = [
     partyId: '4',
     digitalAddress: '',
     userRole: 'ADMIN',
+    origin: 'IPA',
     externalId: 'externalId4',
     originId: 'originI4',
   },
@@ -96,7 +100,7 @@ const checkStore = (store: ReturnType<typeof createStore>) => {
 test('Test rendering', () => {
   const store = renderApp();
   checkStore(store);
-  const input = screen.getByPlaceholderText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca ente');
 
   screen.getByText('Seleziona il tuo ente');
 
@@ -127,7 +131,7 @@ test('Test rendering', () => {
 test('Test filter', () => {
   const store = renderApp();
   checkStore(store);
-  const input = screen.getByPlaceholderText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca ente');
   const filterNapoli = 'Napoli';
 
   // modify input field
@@ -159,7 +163,7 @@ test('Test filter', () => {
 test('Test selection', () => {
   const store = renderApp();
   checkStore(store);
-  const input = screen.getByPlaceholderText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca ente');
   const filterPartyNapoli = 'Comune di Napoli Amministratore';
   // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
   const filterNapoli = 'Napoli';
@@ -197,7 +201,7 @@ test('Test pending party', () => {
   // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare' in XPath
   const firstPartyDisabled = document
     .evaluate(
-      '//div[@role="PartyItemContainer" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
+      '//div[@role="Institution" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
       document,
       null,
       XPathResult.ANY_TYPE
