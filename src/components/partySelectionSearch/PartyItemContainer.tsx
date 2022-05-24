@@ -34,7 +34,7 @@ export default function PartyItemContainer({
       container
       my={1}
       direction={'row'}
-      role={'institution'}
+      role={'Institution'}
       data-testid={`PartyItemContainer: ${title}`}
       sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}
     >
@@ -73,7 +73,7 @@ export default function PartyItemContainer({
               }}
             >
               <Typography
-                role="PartyItemDisabled"
+                role="DisabledInstitution"
                 variant="caption"
                 sx={{ fontSize: '12px', fontWeight: '600' }}
               >

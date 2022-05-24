@@ -61,7 +61,7 @@ export default function PartyItem({
         disableRipple
         disabled={disabled}
         selected={selectedItem}
-        aria-label={selectedItem ? title : undefined}
+        aria-label={selectedItem ? `Selected Institution: ${title}` : undefined}
         onClick={action}
       >
         {showAvatar && (
@@ -70,12 +70,12 @@ export default function PartyItem({
           </Box>
         )}
         <Grid container sx={{ px: pxTitleSubTitle }}>
-          <Grid item xs={12}>
+          <Grid item xs={12} aria-label={title}>
             <Typography variant="h1" sx={{ fontSize: titleSize, color: titleColor }}>
               {title}
             </Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} aria-label={subTitle}>
             <Typography variant="caption" sx={{ fontSize: subTitleSize }}>
               {subTitle}
             </Typography>

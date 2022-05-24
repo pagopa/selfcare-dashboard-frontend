@@ -157,7 +157,7 @@ test('Test pending party', () => {
   // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare' in XPath
   const firstPartyDisabled = document
     .evaluate(
-      '//div[@role="institution" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
+      '//div[@role="Institution" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
       document,
       null,
       XPathResult.ANY_TYPE
