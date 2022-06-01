@@ -10,20 +10,19 @@ import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 
-const withBearerAndInstitutionId: WithDefaultsT<'bearerAuth'> =
-  (wrappedOperation) => (params: any) => {
-    const token = storageTokenOps.read();
-    return wrappedOperation({
-      ...params,
-      bearerAuth: `Bearer ${token}`,
-    });
-  };
+const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
+  const token = storageTokenOps.read();
+  return wrappedOperation({
+    ...params,
+    bearerAuth: `Bearer ${token}`,
+  });
+};
 
 const apiClient = createClient({
   baseUrl: ENV.URL_API.API_DASHBOARD,
   basePath: '',
   fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.DASHBOARD),
-  withDefaults: withBearerAndInstitutionId,
+  withDefaults: withBearerAndPartyId,
 });
 
 const onRedirectToLogin = () =>
@@ -66,14 +65,12 @@ export const DashboardApi = {
   },
 
   getTokenExchange: async (
-    hostname: string,
     institutionId: string,
     productId: string
   ): Promise<IdentityTokenResource> => {
     const result = await apiClient.exchangeUsingGET({
       productId,
       institutionId,
-      realm: hostname,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

@@ -18,6 +18,9 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     name: 'Comune di Bari',
     status: 'ACTIVE',
     id: '1',
+    externalId: 'externalId1',
+    originId: 'originId1',
+    origin: 'IPA',
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
@@ -27,6 +30,9 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     name: 'Comune di Milano',
     status: 'PENDING',
     id: '2',
+    externalId: 'externalId2',
+    originId: 'originId2',
+    origin: 'IPA',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'ADMIN',
@@ -103,13 +109,11 @@ export const mockedProductResources: Array<ProductsResource> = [
 export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   {
     id: '1',
-    fiscalCode: 'AAAAAA11A11A123K',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
     email: 'address',
-    certification: true,
     products: [
       {
         id: 'productId',
@@ -127,13 +131,11 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
   },
   {
     id: '2',
-    fiscalCode: 'AAAAAA11A11A124K',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
     email: 'address',
-    certification: true,
     products: [
       {
         id: 'productId2',
@@ -154,7 +156,6 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
 export const mockedProductUserResource: Array<ProductUserResource> = [
   {
     id: '1',
-    fiscalCode: 'AAAAAA11A11A123K',
     name: 'Name',
     surname: 'Surname',
     status: 'PENDING',
@@ -172,11 +173,9 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
         },
       ],
     },
-    certification: true,
   },
   {
     id: '2',
-    fiscalCode: 'BBAABB11A11A123K',
     name: 'Name2',
     surname: 'Surname2',
     status: 'ACTIVE',
@@ -194,7 +193,6 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
         },
       ],
     },
-    certification: true,
   },
 ];
 
@@ -231,28 +229,25 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
 ];
 
 export const mockedUserResource: UserResource = {
+  id: 'id',
   fiscalCode: 'AAAAAA11A11A123K',
-  name: 'Gigi',
-  surname: 'Verdi',
-  email: 'gigi.v@email.com',
-  certification: true,
+  name: { certified: true, value: 'Gigi' },
+  familyName: { certified: true, value: 'Verdi' },
+  email: { certified: true, value: 'gigi.v@email.com' },
 };
 
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
 
-  getInstitution: async (_institutionId: string): Promise<InstitutionResource> =>
+  getInstitution: async (_partyId: string): Promise<InstitutionResource> =>
     new Promise((resolve) => resolve(mockedInstitutionResources[0])),
 
   getProducts: async (): Promise<Array<ProductsResource>> =>
     new Promise((resolve) => resolve(mockedProductResources)),
 
-  getTokenExchange: async (
-    _hostname: string,
-    _institutionId: string,
-    _productId: string
-  ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
+  getTokenExchange: async (_partyId: string, _productId: string): Promise<IdentityTokenResource> =>
+    new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
   getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),

@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItemButton, Typography, Grid, Box } from '@mui/material';
+import { ListItemButton, Typography, Grid, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
 // import { withStyles } from '@mui/styles/';
@@ -20,7 +20,7 @@ type Props = {
   pxTitleSubTitle?: string;
 };
 
-const CustomList = styled(List)({
+const CustomListItemButton = styled(ListItemButton)({
   '& .MuiListItemButton-root': {
     '&.Mui-disabled ': {
       opacity: '0.38',
@@ -55,35 +55,31 @@ export default function PartyItem({
   pxTitleSubTitle,
 }: Props) {
   return (
-    <CustomList
-      aria-label="main mailbox folders"
-      sx={{ border: borderList, backgroundColor: bgColor }}
+    <CustomListItemButton
+      sx={{ paddingLeft: 0, border: borderList, backgroundColor: bgColor }}
+      disableRipple
+      disabled={disabled}
+      selected={selectedItem}
+      aria-label={selectedItem ? `Selected Institution: ${title}` : undefined}
+      onClick={action}
     >
-      <ListItemButton
-        sx={{ paddingLeft: 0 }}
-        disableRipple
-        disabled={disabled}
-        selected={selectedItem}
-        onClick={action}
-      >
-        {showAvatar && (
-          <Box pl={1} pr={2}>
-            <CustomAvatar customAlt="" customSrc={image} />
-          </Box>
-        )}
-        <Grid container sx={{ px: pxTitleSubTitle }}>
-          <Grid item xs={12}>
-            <Typography variant="h1" sx={{ fontSize: titleSize, color: titleColor }}>
-              {title}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="caption" sx={{ fontSize: subTitleSize }}>
-              {subTitle}
-            </Typography>
-          </Grid>
+      {showAvatar && (
+        <Box pl={1} pr={2}>
+          <CustomAvatar customAlt="" customSrc={image} />
+        </Box>
+      )}
+      <Grid container sx={{ px: pxTitleSubTitle }}>
+        <Grid item xs={12} aria-label={title}>
+          <Typography variant="h1" sx={{ fontSize: titleSize, color: titleColor }}>
+            {title}
+          </Typography>
         </Grid>
-      </ListItemButton>
-    </CustomList>
+        <Grid item xs={12} aria-label={subTitle}>
+          <Typography variant="caption" sx={{ fontSize: subTitleSize }}>
+            {subTitle}
+          </Typography>
+        </Grid>
+      </Grid>
+    </CustomListItemButton>
   );
 }

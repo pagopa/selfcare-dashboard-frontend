@@ -44,7 +44,7 @@ test('Test rendering dashboard no parties loaded', () => {
   expect(store.getState().parties.list).toBeUndefined();
 });
 
-test('Test routing', async () => {
+test('Test routing ', async () => {
   const { history, store } = renderApp();
   expect(history.location.pathname).toBe('/dashboard');
 

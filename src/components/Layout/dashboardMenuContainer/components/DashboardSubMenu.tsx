@@ -58,9 +58,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
       .then((parties) => {
         setParties(parties);
         setParties2Show(
-          parties.filter(
-            (p) => p.status === 'ACTIVE' && p.institutionId !== selectedParty.institutionId
-          )
+          parties.filter((p) => p.status === 'ACTIVE' && p.partyId !== selectedParty.partyId)
         );
       })
       .catch((reason) => {
@@ -83,9 +81,7 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
       doFetch();
     } else {
       setParties2Show(
-        parties.filter(
-          (p) => p.status === 'ACTIVE' && p.institutionId !== selectedParty.institutionId
-        )
+        parties.filter((p) => p.status === 'ACTIVE' && p.partyId !== selectedParty.partyId)
       );
     }
   };
@@ -156,12 +152,12 @@ export default function DashboardSubMenu({ ownerName, description, role, selecte
                         if (selectedParty) {
                           handleClose();
                           trackEvent('DASHBOARD_PARTY_SELECTION', {
-                            party_id: selectedParty.institutionId,
+                            party_id: selectedParty.partyId,
                           });
                           onExit(() =>
                             history.push(
                               resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                                institutionId: selectedParty.institutionId,
+                                partyId: selectedParty.partyId,
                               })
                             )
                           );

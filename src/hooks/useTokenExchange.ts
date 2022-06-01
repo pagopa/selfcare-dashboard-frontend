@@ -27,11 +27,11 @@ export const useTokenExchange = () => {
     }
 
     setLoading(true);
-    retrieveTokenExchange(result, selectedParty, product)
+    retrieveTokenExchange(selectedParty, product)
       .then((t) =>
         trackEvent(
           'DASHBOARD_OPEN_PRODUCT',
-          { party_id: selectedParty.institutionId, product: product.id, product_role: product.userRole },
+          { party_id: selectedParty.partyId, product: product.id, product_role: product.userRole },
           () => window.location.assign(product.urlBO.replace(tokenPlaceholder, t))
         )
       )

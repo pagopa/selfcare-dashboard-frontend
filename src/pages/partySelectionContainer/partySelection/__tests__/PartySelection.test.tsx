@@ -13,36 +13,48 @@ const parties: Array<Party> = [
     description: 'Comune di Bari',
     urlLogo: 'image',
     status: 'PENDING',
-    institutionId: '1',
+    partyId: '1',
     digitalAddress: '',
     userRole: 'ADMIN',
+    origin: 'IPA',
+    externalId: 'externalId1',
+    originId: 'originI1',
   },
   {
     fiscalCode: 'Milano',
     description: 'Comune di Milano',
     urlLogo: 'image',
     status: 'PENDING',
-    institutionId: '2',
+    partyId: '2',
     digitalAddress: '',
     userRole: 'ADMIN',
+    origin: 'IPA',
+    externalId: 'externalId2',
+    originId: 'originI2',
   },
   {
     fiscalCode: 'Roma',
     description: 'Comune di Roma',
     urlLogo: 'image',
     status: 'ACTIVE',
-    institutionId: '3',
+    partyId: '3',
     digitalAddress: '',
     userRole: 'ADMIN',
+    origin: 'IPA',
+    externalId: 'externalId3',
+    originId: 'originI3',
   },
   {
     fiscalCode: 'Napoli',
     description: 'Comune di Napoli',
     urlLogo: 'image',
     status: 'ACTIVE',
-    institutionId: '4',
+    partyId: '4',
     digitalAddress: '',
     userRole: 'ADMIN',
+    origin: 'IPA',
+    externalId: 'externalId4',
+    originId: 'originI4',
   },
 ];
 const mockedProducts: Array<Product> = [
@@ -88,15 +100,15 @@ const checkStore = (store: ReturnType<typeof createStore>) => {
 test('Test rendering', () => {
   const store = renderApp();
   checkStore(store);
-  const input = screen.getByPlaceholderText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca ente');
 
-  screen.getByText('Seleziona il tuo Ente');
+  screen.getByText('Seleziona il tuo ente');
 
   // search button  "Cerca"
   expect(input.tagName).toBe('INPUT');
 
-  // search button  "Entra"
-  const button = screen.getByRole('button', { name: 'Entra' });
+  // search button  "Continua"
+  const button = screen.getByRole('button', { name: 'Continua' });
   expect(button).toBeDisabled();
 
   const button2 = document.querySelectorAll("*[type='button']")[1];
@@ -119,7 +131,7 @@ test('Test rendering', () => {
 test('Test filter', () => {
   const store = renderApp();
   checkStore(store);
-  const input = screen.getByPlaceholderText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca ente');
   const filterNapoli = 'Napoli';
 
   // modify input field
@@ -151,14 +163,14 @@ test('Test filter', () => {
 test('Test selection', () => {
   const store = renderApp();
   checkStore(store);
-  const input = screen.getByPlaceholderText('Cerca');
-  const filterPartyNapoli = 'Comune di Napoli Referente Amministrativo';
+  const input = screen.getByPlaceholderText('Cerca ente');
+  const filterPartyNapoli = 'Comune di Napoli Amministratore';
   // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
   const filterNapoli = 'Napoli';
   const filterRoma = 'ROMA';
 
   // cerca bottone disabilitato
-  const button = screen.getByRole('button', { name: 'Entra' });
+  const button = screen.getByRole('button', { name: 'Continua' });
   expect(button).toBeDisabled();
 
   // seleziona su uno dei party Napoli
@@ -189,14 +201,14 @@ test('Test pending party', () => {
   // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare' in XPath
   const firstPartyDisabled = document
     .evaluate(
-      '//div[@role="PartyItemContainer" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
+      '//div[@role="Institution" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
       document,
       null,
       XPathResult.ANY_TYPE
     )
     .iterateNext();
   expect(firstPartyDisabled).not.toBeNull();
-  expect(firstPartyDisabled.textContent).toBe('Comune di BariReferente Amministrativo');
+  expect(firstPartyDisabled.textContent).toBe('Comune di BariAmministratore');
 
   // cerca comune di bari e verifica che contenga "Da completare"
   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');

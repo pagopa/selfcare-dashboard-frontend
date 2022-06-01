@@ -6,7 +6,7 @@ import { useSelectedParty } from '../hooks/useSelectedParty';
 import ROUTES from '../routes';
 
 type DashboardUrlParams = {
-  institutionId: string;
+  partyId: string;
 };
 
 export default function withSelectedParty<T>(
@@ -16,13 +16,13 @@ export default function withSelectedParty<T>(
 
   const ComponentWithSelectedParty = (props: T) => {
     const { fetchSelectedParty } = useSelectedParty();
-    const { institutionId } = useParams<DashboardUrlParams>();
+    const { partyId } = useParams<DashboardUrlParams>();
     const history = useHistory();
 
     const addError = useErrorDispatcher();
 
     const doFetch = (): void => {
-      fetchSelectedParty(institutionId).catch((reason) => {
+      fetchSelectedParty(partyId).catch((reason) => {
         const invalidState =
           reason instanceof Error && reason.message.startsWith('INVALID_PARTY_STATE_')
             ? reason.message.replace('INVALID_PARTY_STATE_', '')
@@ -33,8 +33,8 @@ export default function withSelectedParty<T>(
           error: reason,
           displayableDescription: invalidState ? "L'ente selezionato non è gestibile" : undefined,
           techDescription: invalidState
-            ? `Requested a party (${institutionId}) with a not handled state ${invalidState}`
-            : `An error occurred while retrieving selected party having IPACode ${institutionId} in component ${ComponentWithSelectedParty.displayName}`,
+            ? `Requested a party (${partyId}) with a not handled state ${invalidState}`
+            : `An error occurred while retrieving selected party having IPACode ${partyId} in component ${ComponentWithSelectedParty.displayName}`,
           onRetry: !invalidState ? doFetch : undefined,
           onClose: () => history.push(ROUTES.PARTY_SELECTION.path),
           toNotify: !invalidState,
@@ -44,7 +44,7 @@ export default function withSelectedParty<T>(
 
     useEffect(() => {
       doFetch();
-    }, [institutionId]);
+    }, [partyId]);
     return <WrappedComponent {...props} />;
   };
 
