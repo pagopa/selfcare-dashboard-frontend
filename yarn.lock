@@ -1922,10 +1922,10 @@
     write-yaml-file "^4.1.3"
     yargs "^15.0.1"
 
-"@pagopa/selfcare-common-frontend@^1.11.2":
-  version "1.11.2"
-  resolved "https://registry.yarnpkg.com/@pagopa/selfcare-common-frontend/-/selfcare-common-frontend-1.11.2.tgz#aacb14e27fe7c2dd722696b1fe68e5ff95d3f931"
-  integrity sha512-x9fkfGknISHCwgvDIJL4KwXoRUhX/bpy7JmaS0QdXWl7i1zaynJvosIUHLinh/+wV4RxnJq2rA5u760et/LrYw==
+"@pagopa/selfcare-common-frontend@^1.11.3":
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/@pagopa/selfcare-common-frontend/-/selfcare-common-frontend-1.11.3.tgz#f97b1c475ed0db8fa490d240ff20462bf59332ff"
+  integrity sha512-ky29UWOXt+phdMCAbW7F4w9n3zuktmExTWx5QbDaTQcp/wmvDPJgb1B+swtKf/V9NzNpFhjh7bkRtB9rRcwyfQ==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
@@ -2568,7 +2568,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^17.0.18":
+"@types/react@*":
   version "17.0.42"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.42.tgz#8242b9219bf8a911c47f248e327206fea3f4ee5a"
   integrity sha512-nuab3x3CpJ7VFeNA+3HTUuEkvClYHXqWtWd7Ud6AZYW7Z3NH9WKtgU+tFB0ZLcHq+niB/HnzLcaZPqMJ95+k5Q==
