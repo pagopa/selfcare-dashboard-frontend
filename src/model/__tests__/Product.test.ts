@@ -32,7 +32,7 @@ test('Test institutionInfo2Party', () => {
     urlPublic: 'http://pagopa/public',
     tag: undefined,
     userRole: 'LIMITED',
-    subProduct: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE' }],
+    subProducts: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE' }],
     imageUrl: 'TODO',
   });
 });

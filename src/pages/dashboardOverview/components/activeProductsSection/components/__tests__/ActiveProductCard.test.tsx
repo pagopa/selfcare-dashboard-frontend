@@ -49,12 +49,9 @@ const checkBaseFields = () => {
 
 test('test render with optional text', () => {
   renderCard(false, 'PROVA TAG', new Date('2022-01-01'));
-
-  const button = checkBaseFields();
-  expect(button).toBeDisabled();
-
-  // screen.getByText('PROVA TAG');
-  // screen.getByText('Attivo dal 01 gennaio 2022');
+  if (!mockedProduct.authorized === false) {
+    expect(screen.getByText('Per gestire questo prodotto, chiedi a uno dei suoi Amministratori'));
+  }
 });
 
 test('test render and behavior', async () => {
