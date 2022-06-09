@@ -1,5 +1,4 @@
 import { Grid, Tooltip, Typography, useTheme } from '@mui/material';
-// import Chip from '@mui/material/Chip';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 
@@ -120,19 +119,19 @@ export default function PartyDetail({ party }: Props) {
             </Typography>
           </Tooltip>
         </Grid>
-        {/* codice destinatario */}
-        <Grid item xs={4}>
+        {/* TODO  codice destinatario */}
+        {/* <Grid item xs={4}>
           <Typography variant="body2" sx={{ ...labelStyles }}>
             {t('overview.partyDetail.recipientCode')}
           </Typography>
         </Grid>
-        <Grid item xs={8}>
+         <Grid item xs={8}>
           <Tooltip title="TODO CODICE DESTINATARIO">
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               TODO CODICE DESTINATARIO
             </Typography>
           </Tooltip>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Grid>
   );

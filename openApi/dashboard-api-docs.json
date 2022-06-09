@@ -1904,6 +1904,10 @@
             "type": "string",
             "description": "Product's unique identifier"
           },
+          "imageUrl": {
+            "type": "string",
+            "description": "Product's depict image"
+          },
           "logo": {
             "type": "string",
             "description": "Product's logo"

@@ -20,6 +20,9 @@ export default {
       "L'adesione potrebbe essere ancora in corso. <1 /> Verifica di aver completato tutti i passaggi richiesti.",
     backButton: 'Torna alla Home',
   },
+  activeProductCard: {
+    disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',
+  },
   overview: {
     title: 'Panoramica',
     subTitle:
@@ -78,7 +81,7 @@ export default {
         title: 'Caricamento non riuscito',
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
-      size: 'Dimensione massima 300 x 300px - Formato .jpg o . png',
+      size: 'Dimensione massima 300 x 300px - Formato .png',
     },
     partyDetail: {
       institutionType: 'Tipologia',

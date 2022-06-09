@@ -14,6 +14,7 @@ export const mockedPartyProducts: Array<Product> = [
     urlPublic: 'https://io.italia.it/ ',
     urlBO: 'https://io.selfcare.pagopa.it/path/acs?token=<IdentityToken>',
     imageUrl: '',
+    subProducts: [],
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png',
@@ -26,6 +27,7 @@ export const mockedPartyProducts: Array<Product> = [
     activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
     imageUrl: '',
+    subProducts: [{ id: 'prod-io-premium', title: 'Premium', status: 'ACTIVE' }],
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
@@ -39,6 +41,7 @@ export const mockedPartyProducts: Array<Product> = [
     activationDateTime: new Date(2021, 1, 3),
     urlPublic: 'http://pagopa/public',
     imageUrl: '',
+    subProducts: [],
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.png',
@@ -50,6 +53,7 @@ export const mockedPartyProducts: Array<Product> = [
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
     urlPublic: 'http://www.google.it',
     imageUrl: '',
+    subProducts: [],
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png',
@@ -61,6 +65,7 @@ export const mockedPartyProducts: Array<Product> = [
     status: 'INACTIVE',
     urlPublic: undefined,
     imageUrl: '',
+    subProducts: [],
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.png',
@@ -73,6 +78,7 @@ export const mockedPartyProducts: Array<Product> = [
     status: 'ACTIVE',
     urlPublic: undefined,
     imageUrl: '',
+    subProducts: [],
   },
 ];
 

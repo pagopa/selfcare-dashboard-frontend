@@ -15,6 +15,8 @@ test('Test institutionInfo2Party', () => {
     activatedAt: date,
     urlPublic: 'http://pagopa/public',
     userRole: 'LIMITED',
+    children: [{ id: 'subProductId', title: 'Premium', status: StatusEnum.ACTIVE }],
+    imageUrl: 'TODO',
   };
 
   const product = productResource2Product(productResource);
@@ -30,6 +32,7 @@ test('Test institutionInfo2Party', () => {
     urlPublic: 'http://pagopa/public',
     tag: undefined,
     userRole: 'LIMITED',
+    subProduct: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE' }],
     imageUrl: 'TODO',
   });
 });

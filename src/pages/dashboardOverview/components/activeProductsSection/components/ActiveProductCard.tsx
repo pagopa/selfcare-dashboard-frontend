@@ -1,6 +1,12 @@
-import React from 'react';
-import { Typography, Button, Box, Grid, Card, CardContent, Tooltip } from '@mui/material';
-import { InfoOutlined } from '@mui/icons-material';
+import React, { useMemo } from 'react';
+import { Typography, Button, Box, Grid, Card, CardContent, Link, Chip } from '@mui/material';
+import { Trans } from 'react-i18next';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
+import { useHistory } from 'react-router';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { ENV } from '../../../../../utils/env';
+import { Party } from '../../../../../model/Party';
+import { Product, SubProduct } from '../../../../../model/Product';
 
 type Props = {
   cardTitle: string;
@@ -8,9 +14,9 @@ type Props = {
   disableBtn: boolean;
   urlLogo?: string;
   btnAction?: () => void;
-  heightTitle?: string;
-  heightButton?: string;
   tooltip: string;
+  party: Party;
+  product: Product;
 };
 export default function ActiveProductCard({
   cardTitle,
@@ -18,14 +24,25 @@ export default function ActiveProductCard({
   disableBtn,
   urlLogo,
   btnAction,
-  heightTitle,
-  heightButton,
-  tooltip,
+  party,
+  product,
 }: Props) {
+  const onExit = useUnloadEventOnExit();
+  const history = useHistory();
+  const usersRoute = ENV.ROUTES.USERS;
+  const usersPath = resolvePathVariables(usersRoute, {
+    partyId: party.partyId,
+  });
+
+  const activeSubProducts: Array<SubProduct> = useMemo(
+    () => product.subProducts.filter((p) => p.status === 'ACTIVE' && !disableBtn) ?? [],
+    [product.subProducts]
+  );
   return (
     <React.Fragment>
       <Card
         sx={{
+          height: '180px',
           border: 'none',
           borderRadius: '16px !important',
           boxShadow:
@@ -34,37 +51,63 @@ export default function ActiveProductCard({
       >
         <CardContent>
           <Box display="flex">
-            <Box sx={{ width: '88px', height: '88px', textAlign: 'center', pt: '10px' }} mr={2}>
+            <Box
+              sx={{ columnWidth: '88px', height: '88px', textAlign: 'center', pt: '10px' }}
+              mr={2}
+            >
               <img src={urlLogo} />
             </Box>
-            {cardTitle && (
-              <Box height={heightTitle} display="flex" alignItems={'center'}>
-                <Typography variant="h6">{cardTitle}</Typography>
-              </Box>
-            )}
+            <Box>
+              {cardTitle && (
+                <Box display="flex" alignItems={'center'}>
+                  <Typography variant="h6">{cardTitle}</Typography>
+                </Box>
+              )}
+
+              {activeSubProducts.map((p) => (
+                <Chip
+                  key={p.id}
+                  label={p.title}
+                  color="primary"
+                  size="small"
+                  sx={{ borderRadius: '4px', mt: 1 }}
+                />
+              ))}
+            </Box>
           </Box>
 
-          <Grid item xs={12} justifyContent="center" height={heightButton}>
+          <Grid item xs={12} justifyContent="center" height="45'px">
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                onClick={btnAction}
-                disabled={disableBtn}
-                variant="contained"
-                sx={{ height: '40px' }}
-              >
-                {buttonLabel}
-              </Button>
-              {disableBtn && (
+              {disableBtn ? (
                 <Box
                   display="flex"
                   alignItems="center"
-                  ml={3}
+                  justifyContent="start"
                   sx={{ color: '#5C6F82', cursor: 'pointer' }}
                 >
-                  <Tooltip title={tooltip}>
-                    <InfoOutlined />
-                  </Tooltip>
+                  <Typography sx={{ fontSize: '16px' }}>
+                    <Trans i18nKey="activeProductCard.disableInfo">
+                      Per gestire questo prodotto, chiedi a uno dei suoi
+                      <Link
+                        onClick={() =>
+                          onExit(() => history.push(party.partyId ? usersPath : usersRoute))
+                        }
+                        sx={{ fontWeight: '600' }}
+                      >
+                        Amministratori
+                      </Link>
+                    </Trans>
+                  </Typography>
                 </Box>
+              ) : (
+                <Button
+                  onClick={btnAction}
+                  disabled={disableBtn}
+                  variant="contained"
+                  sx={{ height: '40px' }}
+                >
+                  {buttonLabel}
+                </Button>
               )}
             </Box>
           </Grid>
