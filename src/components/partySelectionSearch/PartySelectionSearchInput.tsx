@@ -20,7 +20,6 @@ const CustomTextField = styled(TextField)({
 type Props = {
   onChange: ChangeEventHandler<HTMLInputElement>;
   input: string;
-  disableUnderline?: boolean;
   clearField?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   label?: string;
   iconColor?: string;
@@ -30,7 +29,6 @@ type Props = {
 export default function PartySelectionSearchInput({
   onChange,
   input,
-  disableUnderline,
   clearField,
   label,
   iconColor = '#475A6D',
@@ -54,7 +52,6 @@ export default function PartySelectionSearchInput({
         onChange={onChange}
         id="search"
         InputProps={{
-          disableUnderline,
           startAdornment: (
             <InputAdornment position="start">
               {

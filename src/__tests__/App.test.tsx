@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import App from '../App';
 import { Provider } from 'react-redux';
 import { createStore } from '../redux/store';
@@ -7,6 +7,9 @@ import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router';
+import { mockedParties } from '../services/__mocks__/partyService';
+import { ThemeProvider } from '@mui/material';
+import { theme } from '@pagopa/mui-italia';
 
 jest.mock('@pagopa/selfcare-common-frontend/decorators/withLogin');
 jest.mock('../decorators/withParties');
@@ -19,11 +22,13 @@ const renderApp = (
   const store = injectedStore ? injectedStore : createStore();
   const history = injectedHistory ? injectedHistory : createMemoryHistory();
   render(
-    <Router history={history}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router history={history}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </Router>
+    </ThemeProvider>
   );
   return { store, history };
 };
@@ -34,19 +39,19 @@ test('Test rendering', () => {
   verifyPartiesMockExecution(store.getState());
 });
 
-test('Test rendering dashboard no parties loaded', () => {
+test('Test rendering dashboard parties loaded', () => {
   const history = createMemoryHistory();
-  history.push('/dashboard/1');
+  history.push('/dashboard/6');
 
   const { store } = renderApp(undefined, history);
 
   verifyLoginMockExecution(store.getState());
-  expect(store.getState().parties.list).toBeUndefined();
+  expect(store.getState().parties.list).toBe(mockedParties); // the new UI is always fetching parties list
 });
 
 test('Test routing', async () => {
   const { history, store } = renderApp();
-  expect(history.location.pathname).toBe('/dashboard');
+  await waitFor(() => expect(history.location.pathname).toBe('/dashboard'));
 
   history.push('/dashboard/1');
   expect(history.location.pathname).toBe('/dashboard/1');

@@ -11,7 +11,6 @@ import DashboardPartyItem from './DashboardPartyItem';
 type Props = {
   parties: Array<Party>;
   onPartySelectionChange: (selectedParty: Party | null) => void;
-  disableUnderline?: boolean;
   label?: string;
   iconColor?: string;
   iconMarginRight?: string;
@@ -38,7 +37,6 @@ const CustomBox = styled(Box)({
 export default function PartySelectionSearch({
   parties,
   onPartySelectionChange,
-  disableUnderline = false,
   label,
   iconColor,
   iconMarginRight,
@@ -84,7 +82,6 @@ export default function PartySelectionSearch({
                 <PartySelectionSearchInput
                   label={label}
                   iconMarginRight={iconMarginRight}
-                  disableUnderline={disableUnderline}
                   onChange={(e) => onFilterChange(e.target.value)}
                   input={input}
                   clearField={() => onFilterChange('')}

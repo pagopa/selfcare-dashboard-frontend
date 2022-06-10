@@ -9,11 +9,11 @@ export const verifyMockExecution = (state: RootState) => {
   expect(state.parties.selected).toMatchObject(mockedParties[0]);
 };
 
-export default (WrappedComponent: React.ComponentType<any>) => () => {
+export default (WrappedComponent: React.ComponentType<any>) => (props: any) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(partiesActions.setPartySelected(mockedParties[0]));
     dispatch(partiesActions.setPartySelectedProducts(mockedPartyProducts));
   }, []);
-  return <WrappedComponent />;
+  return <WrappedComponent {...props} />;
 };
