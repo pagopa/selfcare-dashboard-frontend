@@ -40,7 +40,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
     registeredOffice: institutionResource.address,
-    typology: 'TODO',
+    typology: 'TODO', // it will represent the tax name of the party
     institutionType: institutionResource.institutionType,
   };
 };

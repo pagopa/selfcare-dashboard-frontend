@@ -14,7 +14,7 @@ export const mockedPartyProducts: Array<Product> = [
     urlPublic: 'https://io.italia.it/ ',
     urlBO: 'https://io.selfcare.pagopa.it/path/acs?token=<IdentityToken>',
     imageUrl: '',
-    subProducts: [],
+    subProducts: [{ id: 'prod-io-premium', title: 'Premium', status: 'ACTIVE' }],
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png',
@@ -27,7 +27,7 @@ export const mockedPartyProducts: Array<Product> = [
     activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
     imageUrl: '',
-    subProducts: [{ id: 'prod-io-premium', title: 'Premium', status: 'ACTIVE' }],
+    subProducts: [],
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',

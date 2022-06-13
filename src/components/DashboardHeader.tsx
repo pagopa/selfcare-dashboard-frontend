@@ -12,6 +12,7 @@ import { Party } from '../model/Party';
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
+import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
   onExit: (exitAction: () => void) => void;
@@ -46,19 +47,25 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       partyList={parties2Show.map((party) => ({
         id: party.partyId,
         name: party.description,
-        productRole: '',
+        productRole: party.userRole,
         logoUrl: party.urlLogo,
       }))}
-      loggedUser={{
-        id: loggedUser ? loggedUser.uid : '',
-        name: loggedUser?.name,
-        surname: loggedUser?.surname,
-        email: loggedUser?.email,
-      }}
-      assistanceEmail="assistance@selfcare.it"
+      loggedUser={
+        loggedUser
+          ? {
+              id: loggedUser ? loggedUser.uid : '',
+              name: loggedUser?.name,
+              surname: loggedUser?.surname,
+              email: loggedUser?.email,
+            }
+          : false
+      }
+      assistanceEmail={ENV.ASSISTANCE.EMAIL}
       enableLogin={true}
       onSelectedProduct={(p) =>
-        invokeProductBo(activeProducts.find((ap) => ap.id === p.id) as Product, party as Party)
+        onExit(() =>
+          invokeProductBo(activeProducts.find((ap) => ap.id === p.id) as Product, party as Party)
+        )
       }
       onSelectedParty={(selectedParty: PartySwitchItem) => {
         if (selectedParty) {
