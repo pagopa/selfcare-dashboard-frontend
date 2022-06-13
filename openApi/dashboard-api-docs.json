@@ -1876,7 +1876,16 @@
       },
       "ProductsResource": {
         "title": "ProductsResource",
-        "required": ["authorized", "description", "id", "logo", "status", "title", "urlBO"],
+        "required": [
+          "authorized",
+          "description",
+          "id",
+          "imageUrl",
+          "logo",
+          "status",
+          "title",
+          "urlBO"
+        ],
         "type": "object",
         "properties": {
           "activatedAt": {

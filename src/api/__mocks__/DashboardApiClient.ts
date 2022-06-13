@@ -58,6 +58,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://appio/bo#<IdentityToken>',
     activatedAt: new Date(2021, 1, 1, 0, 0, 0, 0),
     urlPublic: 'http://appio/public',
+    imageUrl: '',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png',
@@ -69,6 +70,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 2, 0, 0, 0, 0),
     urlPublic: 'http://notifiche/public',
+    imageUrl: '',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
@@ -80,6 +82,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 3, 0, 0, 0, 0),
     urlPublic: 'http://pagopa/public',
+    imageUrl: '',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.png',
@@ -90,6 +93,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     status: StatusEnum.PENDING,
     urlPublic: 'http://www.google.it',
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
+    imageUrl: '',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png',
@@ -100,6 +104,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     status: StatusEnum.ACTIVE,
     urlPublic: undefined,
     urlBO: 'http://cgn/bo#token=<IdentityToken>',
+    imageUrl: '',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.png',
@@ -110,6 +115,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     status: StatusEnum.INACTIVE,
     urlPublic: undefined,
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
+    imageUrl: '',
   },
 ];
 
