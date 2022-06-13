@@ -35,7 +35,7 @@ export default function ActiveProductCard({
   });
 
   const activeSubProducts: Array<SubProduct> = useMemo(
-    () => product.subProducts.filter((p) => p.status === 'ACTIVE' && !disableBtn) ?? [],
+    () => product.subProducts.filter((p) => p.status === 'ACTIVE') ?? [],
     [product.subProducts]
   );
   return (
@@ -63,16 +63,16 @@ export default function ActiveProductCard({
                   <Typography variant="h6">{cardTitle}</Typography>
                 </Box>
               )}
-
-              {activeSubProducts.map((p) => (
-                <Chip
-                  key={p.id}
-                  label={p.title}
-                  color="primary"
-                  size="small"
-                  sx={{ borderRadius: '4px', mt: 1 }}
-                />
-              ))}
+              {!disableBtn &&
+                activeSubProducts.map((p) => (
+                  <Chip
+                    key={p.id}
+                    label={p.title}
+                    color="primary"
+                    size="small"
+                    sx={{ borderRadius: '4px', mt: 1 }}
+                  />
+                ))}
             </Box>
           </Box>
 

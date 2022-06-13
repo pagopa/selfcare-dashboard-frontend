@@ -5,6 +5,8 @@ import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsS
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
 import { Product } from '../model/Product';
@@ -20,6 +22,7 @@ type Props = WithPartiesProps & {
 };
 
 const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
+  const { t } = useTranslation();
   const history = useHistory();
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
@@ -47,7 +50,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       partyList={parties2Show.map((party) => ({
         id: party.partyId,
         name: party.description,
-        productRole: party.userRole,
+        productRole: t(roleLabels[party.userRole].longLabelKey),
         logoUrl: party.urlLogo,
       }))}
       loggedUser={
