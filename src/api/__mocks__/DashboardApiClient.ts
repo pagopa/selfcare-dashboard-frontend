@@ -1,3 +1,4 @@
+import { EmailString } from '@pagopa/ts-commons/lib/strings';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import {
   InstitutionResource,
@@ -132,7 +133,7 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
-    email: 'address',
+    email: 'address' as EmailString,
     products: [
       {
         id: 'productId',
@@ -154,7 +155,7 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
-    email: 'address',
+    email: 'address' as EmailString,
     products: [
       {
         id: 'productId2',
@@ -179,7 +180,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
-    email: 'address',
+    email: 'address' as EmailString,
     product: {
       id: 'prod-io',
       title: 'App IO',
@@ -199,7 +200,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
-    email: 'address2',
+    email: 'address2' as EmailString,
     product: {
       id: 'prod-io',
       title: 'App IO',
