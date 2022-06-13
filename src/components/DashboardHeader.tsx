@@ -27,9 +27,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
-  const parties2Show = parties.filter(
-    (party) => party.status === 'ACTIVE' && party.partyId !== selectedParty?.partyId
-  );
+  const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
   const activeProducts: Array<Product> = useMemo(
     () => products?.filter((p) => p.status === 'ACTIVE' && p.authorized) ?? [],
     [products]
@@ -41,6 +39,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     <Header
       onExit={onExit}
       withSecondHeader={!!party}
+      selectedPartyId={selectedParty?.partyId}
       productsList={activeProducts.map((p) => ({
         id: p.id,
         title: p.title,
