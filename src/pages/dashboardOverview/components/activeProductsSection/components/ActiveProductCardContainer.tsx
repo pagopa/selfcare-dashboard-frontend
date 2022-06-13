@@ -9,10 +9,9 @@ import ActiveProductCard from './ActiveProductCard';
 type Props = {
   party: Party;
   product: Product;
-  tooltip: string;
 };
 
-export default function ActiveProductCardContainer({ party, product, tooltip }: Props) {
+export default function ActiveProductCardContainer({ party, product }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
   const isDisabled = product.authorized === false;
@@ -26,7 +25,6 @@ export default function ActiveProductCardContainer({ party, product, tooltip }: 
         buttonLabel={t('overview.activeProducts.manageButton')}
         urlLogo={product.logo}
         btnAction={() => invokeProductBo(product, party)}
-        tooltip={tooltip}
         party={party}
         product={product}
       />

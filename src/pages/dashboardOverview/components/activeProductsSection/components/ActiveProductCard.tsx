@@ -14,7 +14,6 @@ type Props = {
   disableBtn: boolean;
   urlLogo?: string;
   btnAction?: () => void;
-  tooltip: string;
   party: Party;
   product: Product;
 };

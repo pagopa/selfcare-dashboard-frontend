@@ -13,7 +13,8 @@ export const mockedPartyProducts: Array<Product> = [
     activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'https://io.italia.it/ ',
     urlBO: 'https://io.selfcare.pagopa.it/path/acs?token=<IdentityToken>',
-    imageUrl: '',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [{ id: 'prod-io-premium', title: 'Premium', status: 'ACTIVE' }],
   },
   {
@@ -26,7 +27,8 @@ export const mockedPartyProducts: Array<Product> = [
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
-    imageUrl: '',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
   },
   {
@@ -40,7 +42,8 @@ export const mockedPartyProducts: Array<Product> = [
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
     activationDateTime: new Date(2021, 1, 3),
     urlPublic: 'http://pagopa/public',
-    imageUrl: '',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
   },
   {
@@ -52,7 +55,8 @@ export const mockedPartyProducts: Array<Product> = [
     status: 'PENDING',
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
     urlPublic: 'http://www.google.it',
-    imageUrl: '',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
   },
   {
@@ -64,7 +68,8 @@ export const mockedPartyProducts: Array<Product> = [
     authorized: false,
     status: 'INACTIVE',
     urlPublic: undefined,
-    imageUrl: '',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
   },
   {
@@ -77,7 +82,8 @@ export const mockedPartyProducts: Array<Product> = [
     userRole: 'ADMIN',
     status: 'ACTIVE',
     urlPublic: undefined,
-    imageUrl: '',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
   },
 ];

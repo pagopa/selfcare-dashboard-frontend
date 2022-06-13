@@ -37,7 +37,7 @@ const renderCard = (authorized: boolean, tag?: string, activationDateTime?: Date
   mockedProduct.activationDateTime = activationDateTime;
   render(
     <Provider store={createStore()}>
-      <ActiveProductCardContainer party={mockedParties[0]} product={mockedProduct} tooltip={''} />
+      <ActiveProductCardContainer party={mockedParties[0]} product={mockedProduct} />
     </Provider>
   );
 };

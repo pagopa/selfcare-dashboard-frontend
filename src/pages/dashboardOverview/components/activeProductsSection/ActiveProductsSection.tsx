@@ -26,12 +26,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
           products
             .filter((p) => p.status === 'ACTIVE')
             .map((product) => (
-              <ActiveProductCardContainer
-                key={product.id}
-                party={party}
-                product={product}
-                tooltip={t('overview.activeProductsSection.tooltip')}
-              />
+              <ActiveProductCardContainer key={product.id} party={party} product={product} />
             ))}
       </Grid>
     </React.Fragment>

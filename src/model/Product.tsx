@@ -45,6 +45,6 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   userRole: resource.userRole as UserRole,
   authorized: resource.authorized,
   status: resource.status,
-  imageUrl: resource.imageUrl ?? 'TODO',
+  imageUrl: resource.imageUrl,
   subProducts: resource.children?.slice() ?? [],
 });

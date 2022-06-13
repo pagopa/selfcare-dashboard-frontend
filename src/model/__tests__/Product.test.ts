@@ -16,7 +16,8 @@ test('Test institutionInfo2Party', () => {
     urlPublic: 'http://pagopa/public',
     userRole: 'LIMITED',
     children: [{ id: 'subProductId', title: 'Premium', status: StatusEnum.ACTIVE }],
-    imageUrl: 'TODO',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
   };
 
   const product = productResource2Product(productResource);
@@ -33,6 +34,7 @@ test('Test institutionInfo2Party', () => {
     tag: undefined,
     userRole: 'LIMITED',
     subProducts: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE' }],
-    imageUrl: 'TODO',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
   });
 });
