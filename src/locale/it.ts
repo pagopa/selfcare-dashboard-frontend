@@ -42,7 +42,7 @@ export default {
       },
       product: {
         overview: 'Panoramica',
-        referents: 'Referenti',
+        users: 'Utenti',
       },
     },
     activeProductsSection: {

@@ -49,7 +49,7 @@ test('Test rendering dashboard parties loaded', () => {
   expect(store.getState().parties.list).toBe(mockedParties); // the new UI is always fetching parties list
 });
 
-test('Test routing', async () => {
+test('Test routing ', async () => {
   const { history, store } = renderApp();
   await waitFor(() => expect(history.location.pathname).toBe('/dashboard'));
 

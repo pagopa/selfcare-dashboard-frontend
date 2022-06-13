@@ -359,6 +359,81 @@
         },
         "responses": {
           "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserIdResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
+    },
+    "/institutions/{institutionId}/products/{productId}/users/{userId}": {
+      "put": {
+        "tags": ["institutions"],
+        "summary": "addUserProductRoles",
+        "description": "Service to add a new role/product to a specific user",
+        "operationId": "addUserProductRolesUsingPUT",
+        "parameters": [
+          {
+            "name": "institutionId",
+            "in": "path",
+            "description": "Institution's unique internal identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product's unique identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User's unique identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProductRoles"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
             "description": "Created"
           },
           "401": {
@@ -1130,7 +1205,14 @@
         },
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserGroupIdResource"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -1499,7 +1581,7 @@
       },
       "CreateUserDto": {
         "title": "CreateUserDto",
-        "required": ["email", "name", "productRoles", "surname", "taxCode"],
+        "required": ["productRoles", "taxCode"],
         "type": "object",
         "properties": {
           "email": {
@@ -1977,7 +2059,6 @@
       },
       "UpdateUserDto": {
         "title": "UpdateUserDto",
-        "required": ["email", "name", "surname"],
         "type": "object",
         "properties": {
           "email": {
@@ -2038,6 +2119,17 @@
           "surname": {
             "type": "string",
             "description": "User's surname"
+          }
+        }
+      },
+      "UserGroupIdResource": {
+        "title": "UserGroupIdResource",
+        "required": ["id"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Users group's unique identifier"
           }
         }
       },
@@ -2180,6 +2272,19 @@
             "type": "string",
             "description": "User's unique identifier",
             "format": "uuid"
+          }
+        }
+      },
+      "UserProductRoles": {
+        "title": "UserProductRoles",
+        "type": "object",
+        "properties": {
+          "productRoles": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

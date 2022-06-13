@@ -12,6 +12,7 @@ const parties: Array<Party> = [
     description: 'Comune di Bari',
     urlLogo: 'image',
     status: 'PENDING',
+    origin: 'IPA',
     partyId: '1',
     digitalAddress: '',
     userRole: 'ADMIN',
@@ -26,6 +27,7 @@ const parties: Array<Party> = [
     description: 'Comune di Milano',
     urlLogo: 'image',
     status: 'PENDING',
+    origin: 'IPA',
     partyId: '2',
     digitalAddress: '',
     userRole: 'ADMIN',
@@ -40,6 +42,7 @@ const parties: Array<Party> = [
     description: 'Comune di Roma',
     urlLogo: 'image',
     status: 'ACTIVE',
+    origin: 'IPA',
     partyId: '3',
     digitalAddress: '',
     userRole: 'ADMIN',
@@ -54,6 +57,7 @@ const parties: Array<Party> = [
     description: 'Comune di Napoli',
     urlLogo: 'image',
     status: 'ACTIVE',
+    origin: 'IPA',
     partyId: '4',
     digitalAddress: '',
     userRole: 'ADMIN',
@@ -181,7 +185,7 @@ test('Test pending party', () => {
   // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare' in XPath
   const firstPartyDisabled = document
     .evaluate(
-      '//div[@role="PartyItemContainer" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
+      '//div[@role="Institution" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
       document,
       null,
       XPathResult.ANY_TYPE

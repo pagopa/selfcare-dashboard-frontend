@@ -29,7 +29,7 @@ export default function PartyItemContainer({
       container
       my={1}
       direction={'row'}
-      role="PartyItemContainer"
+      role={'Institution'}
       data-testid={`PartyItemContainer: ${title}`}
     >
       {moreThan3Parties ? (

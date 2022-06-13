@@ -81,6 +81,42 @@ export const mockedParties: Array<Party> = [
     origin: 'MOCK',
     institutionType: 'GSP',
   },
+  // Usable when not mocking the BE
+  {
+    partyId: 'f572bb09-b689-4785-8ea8-4c7a8b081998',
+    externalId: '00856930102',
+    originId: 'c_d969',
+    origin: 'IPA',
+    institutionType: 'PA',
+    description: 'Comune di Genova',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    fiscalCode: '00856930102',
+    userRole: 'ADMIN',
+    status: 'ACTIVE',
+    digitalAddress: 'comunegenova@postemailcertificata.it',
+    urlLogo:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/f572bb09-b689-4785-8ea8-4c7a8b081998/logo.png',
+    registeredOffice: 'Piazza della Scala, 2 - 20121 Milano',
+    typology: 'Pubblica Amministrazione',
+  },
+  // Usable when not mocking the BE
+  {
+    partyId: '7784b9d3-e834-4342-a6ef-d0566b058af2',
+    externalId: '00441340122',
+    originId: 'c_l682',
+    origin: 'IPA',
+    institutionType: 'PA',
+    description: 'Comune di Varese',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    fiscalCode: '00441340122',
+    userRole: 'ADMIN',
+    status: 'ACTIVE',
+    digitalAddress: 'protocollo@comune.varese.legalmail.it',
+    urlLogo:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/7784b9d3-e834-4342-a6ef-d0566b058af2/logo.png',
+    registeredOffice: 'Piazza della Scala, 2 - 20121 Milano',
+    typology: 'Pubblica Amministrazione',
+  },
 ];
 
 export const verifyFetchPartiesMockExecution = (parties: Array<Party>) => {
