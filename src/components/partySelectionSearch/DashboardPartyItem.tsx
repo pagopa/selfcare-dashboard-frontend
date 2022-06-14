@@ -1,5 +1,13 @@
 import React from 'react';
-import { Grid, Box, ListItemButton, Typography, useTheme, IconButton } from '@mui/material';
+import {
+  Grid,
+  Box,
+  ListItemButton,
+  Typography,
+  useTheme,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
 import { styled } from '@mui/material/styles';
 import { CustomAvatar } from '@pagopa/selfcare-common-frontend';
@@ -53,10 +61,11 @@ export default function DashboardPartyItem({
   moreThan3Parties,
 }: Props) {
   const theme = useTheme();
+  const partyActiveWidth = 35;
 
   return (
     <Grid container data-testid={`PartyItemContainer: ${title}`}>
-      <CustomGridContainer item xs={disabled || selectedItem ? 8 : 12} p={1}>
+      <CustomGridContainer item xs={disabled ? 8 : selectedItem ? 10 : 12} p={1}>
         <ListItemButton
           sx={{
             paddingLeft: 0,
@@ -71,19 +80,28 @@ export default function DashboardPartyItem({
           <Box pr={2}>
             <CustomAvatar customSrc={image} />
           </Box>
-          <Grid container>
-            <Grid item xs={12}>
-              <Typography
-                aria-label={title}
-                data-testid={selectedItem && 'selectedMoreThen3'}
-                sx={{
-                  fontSize: theme.typography.fontSize,
-                  fontWeight: theme.typography.fontWeightBold,
-                  color: 'text.colorTextPrimary',
-                }}
-              >
-                {title}
-              </Typography>
+          <Grid container display="flex" alignItems="center">
+            <Grid
+              item
+              xs={12}
+              sx={{ display: 'inline-block ', whiteSpace: 'nowrap ', width: '200px' }}
+            >
+              <Tooltip title={title && title.length > partyActiveWidth + 1 ? title : ''}>
+                <Typography
+                  aria-label={title}
+                  data-testid={selectedItem && 'selectedMoreThen3'}
+                  sx={{
+                    fontSize: theme.typography.fontSize,
+                    fontWeight: theme.typography.fontWeightBold,
+                    color: 'text.colorTextPrimary',
+                    overflow: ' hidden ',
+                    textOverflow: 'ellipsis ',
+                    width: disabled ? '20ch' : ` ${partyActiveWidth}ch`,
+                  }}
+                >
+                  {title}
+                </Typography>
+              </Tooltip>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="caption" aria-label={subTitle}>
@@ -94,7 +112,7 @@ export default function DashboardPartyItem({
         </ListItemButton>
       </CustomGridContainer>
       {selectedItem && moreThan3Parties && (
-        <Grid item xs={4} display="flex" justifyContent="end">
+        <Grid item xs={2} display="flex" justifyContent="end">
           <IconButton
             disableRipple={true}
             onClick={clearField}

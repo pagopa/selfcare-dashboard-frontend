@@ -53,7 +53,7 @@ export default function PartySelection({ parties }: Props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            minWidth: '480px',
+            width: '480px',
             borderRadius: '16px',
             boxShadow:
               '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1);',
