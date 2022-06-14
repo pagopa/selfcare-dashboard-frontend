@@ -16,6 +16,10 @@ export default function PartyDetail({ party }: Props) {
     fontWeight: theme.typography.fontWeightMedium,
     fontSize: theme.typography.fontSize,
   };
+
+  const institutionTypeTransoce = (institutionType: any) =>
+    t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
+
   return (
     <Grid container alignItems={'flex-start'}>
       <Grid container item xs={6} alignItems={'flex-start'} spacing={1}>
@@ -28,7 +32,7 @@ export default function PartyDetail({ party }: Props) {
         <Grid item xs={8}>
           <Tooltip title={party.institutionType ? party.institutionType : ''}>
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-              {party.institutionType}
+              {institutionTypeTransoce(party.institutionType)}
             </Typography>
           </Tooltip>
         </Grid>
