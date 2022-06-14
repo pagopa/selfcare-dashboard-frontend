@@ -81,6 +81,25 @@ export const mockedParties: Array<Party> = [
     origin: 'MOCK',
     institutionType: 'GSP',
   },
+  {
+    userRole: 'ADMIN',
+    description: `Commissario straordinario per la realizzazione di
+    approdi temporanei e di interventi complementari per la
+    salvaguardia di Venezia e della sua laguna e ulteriori
+    interventi per la salvaguardia della laguna di Venezia`,
+    urlLogo: 'image',
+    status: 'ACTIVE',
+    partyId: '5',
+    digitalAddress: 'comune.veneto@pec.it',
+    fiscalCode: 'fiscalCodeVeneto',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Piazza della Scala, 2 - 20121 Milano',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'externalId1',
+    originId: 'originId1',
+    origin: 'IPA',
+    institutionType: 'GSP',
+  },
   // Usable when not mocking the BE
   {
     partyId: 'f572bb09-b689-4785-8ea8-4c7a8b081998',

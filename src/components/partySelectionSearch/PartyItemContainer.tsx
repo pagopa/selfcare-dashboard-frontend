@@ -25,6 +25,7 @@ export default function PartyItemContainer({
 }: Props) {
   return (
     <Grid
+      id={moreThan3Parties ? 'selectedMoreThen3' : 'selectedLessThen3'}
       container
       my={1}
       direction={'row'}
