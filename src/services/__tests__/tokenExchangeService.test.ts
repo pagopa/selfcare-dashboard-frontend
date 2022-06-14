@@ -10,14 +10,13 @@ beforeEach(() => {
 });
 
 test('Test retrieveTokenExchange', async () => {
-  const token = await retrieveTokenExchange('url', mockedParties[0], mockedPartyProducts[0]);
+  const token = await retrieveTokenExchange(mockedParties[0], mockedPartyProducts[0]);
 
   expect(token).toBe('DUMMYTOKEN');
 
   expect(DashboardApi.getTokenExchange).toBeCalledTimes(1);
   expect(DashboardApi.getTokenExchange).toBeCalledWith(
-    'url',
-    mockedParties[0].institutionId,
+    mockedParties[0].partyId,
     mockedPartyProducts[0].id
   );
 });

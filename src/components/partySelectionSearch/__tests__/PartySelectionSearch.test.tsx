@@ -11,36 +11,48 @@ const parties: Array<Party> = [
     description: 'Comune di Bari',
     urlLogo: 'image',
     status: 'PENDING',
-    institutionId: '1',
+    origin: 'IPA',
+    partyId: '1',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId1',
+    originId: 'originId1',
   },
   {
     fiscalCode: 'MILANO_FC',
     description: 'Comune di Milano',
     urlLogo: 'image',
     status: 'PENDING',
-    institutionId: '2',
+    origin: 'IPA',
+    partyId: '2',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId2',
+    originId: 'originId2',
   },
   {
     fiscalCode: 'ROMA_FC',
     description: 'Comune di Roma',
     urlLogo: 'image',
     status: 'ACTIVE',
-    institutionId: '3',
+    origin: 'IPA',
+    partyId: '3',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId3',
+    originId: 'originId3',
   },
   {
     fiscalCode: 'NAPOLI_FC',
     description: 'Comune di Napoli',
     urlLogo: 'image',
     status: 'ACTIVE',
-    institutionId: '4',
+    origin: 'IPA',
+    partyId: '4',
     digitalAddress: '',
     userRole: 'ADMIN',
+    externalId: 'externalId4',
+    originId: 'originId4',
   },
 ];
 
@@ -50,7 +62,7 @@ test('Test rendering', () => {
   render(
     <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
   );
-  const input = screen.getByPlaceholderText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca ente');
 
   // search button  "Cerca"
   expect(input.tagName).toBe('INPUT');
@@ -73,7 +85,7 @@ test('Test filter', () => {
   render(
     <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
   );
-  const input = screen.getByPlaceholderText('Cerca');
+  const input = screen.getByPlaceholderText('Cerca ente');
   const filterNapoli = 'Napoli';
 
   // modify input field
@@ -106,8 +118,8 @@ test('Test selection', () => {
   render(
     <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
   );
-  const input = screen.getByPlaceholderText('Cerca');
-  const filterPartyNapoli = 'Comune di Napoli Referente Amministrativo';
+  const input = screen.getByPlaceholderText('Cerca ente');
+  const filterPartyNapoli = 'Comune di Napoli Amministratore';
   // const filterPartyBari= 'Comune di Bari Referente Amministrativo';
   const filterNapoli = 'Napoli';
   const filterRoma = 'ROMA';
@@ -145,14 +157,14 @@ test('Test pending party', () => {
   // verifica che esista almeno un bottone disabilitato che ha etichetta 'da completare' in XPath
   const firstPartyDisabled = document
     .evaluate(
-      '//div[@role="PartyItemContainer" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
+      '//div[@role="Institution" and .//text()="Da completare"]//*[contains(@class,"Mui-disabled")]',
       document,
       null,
       XPathResult.ANY_TYPE
     )
     .iterateNext();
   expect(firstPartyDisabled).not.toBeNull();
-  expect(firstPartyDisabled.textContent).toBe('Comune di BariReferente Amministrativo');
+  expect(firstPartyDisabled.textContent).toBe('Comune di BariAmministratore');
 
   // cerca comune di bari e verifica che contenga "Da completare"
   const PartyItemContainer = screen.getByTestId('PartyItemContainer: Comune di Bari');

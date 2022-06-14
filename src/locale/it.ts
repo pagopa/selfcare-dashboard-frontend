@@ -6,15 +6,17 @@ export default {
     },
   },
   partySelection: {
-    title: 'Seleziona il tuo Ente',
-    subTitle: "Se operi per più Enti, puoi modificare la tua scelta all'interno del portale.",
-    searchBar: 'Cerca',
+    title: 'Seleziona il tuo ente',
+    subTitle:
+      'Se operi per più enti, potrai modificare la tua scelta dopo aver effettuato l’accesso.',
+    searchBar: 'Cerca ente',
     partyStatus: 'Da completare',
-    enterButton: 'Entra',
+    continueButton: 'Continua',
   },
   overview: {
-    title: 'La panoramica del tuo Ente',
-    subTitle: 'Visualizza e gestisci i prodotti PagoPA a cui il tuo Ente ha aderito.',
+    title: 'Panoramica',
+    subTitle:
+      'Gestisci i prodotti PagoPA attivi per questo ente. Se hai i permessi, puoi anche aderire a nuovi prodotti.',
     sideMenu: {
       institutionManagement: {
         title: 'Gestione Ente',
@@ -22,7 +24,7 @@ export default {
           title: 'Panoramica',
         },
         referents: {
-          title: 'Referenti',
+          title: 'Utenti',
         },
         groups: {
           title: 'Gruppi',
@@ -30,12 +32,11 @@ export default {
       },
       product: {
         overview: 'Panoramica',
-        referents: 'Referenti',
+        users: 'Utenti',
       },
     },
     activeProductsSection: {
       title: 'Prodotti attivi',
-      subTitle: 'I prodotti PagoPA a cui il tuo Ente ha aderito.',
     },
     activeProducts: {
       activationOf: 'Attivo dal ',
@@ -44,8 +45,7 @@ export default {
     },
     lastServiceActive: 'Ultimo servizio attivato: ',
     notActiveProductsSection: {
-      title: 'Scopri i nuovi prodotti',
-      subTitle: 'Attiva qui altri prodotti PagoPA, a tua disposizione in pochi passi.',
+      title: 'Prodotti disponibili',
     },
     notActiveProducts: {
       joinButton: 'Aderisci',
@@ -79,7 +79,7 @@ export default {
       fiscalCode: 'Codice fiscale',
       pec: 'PEC',
       contactToModify:
-        "<0>Per modificare questi dati, <1>contatta</1> l'Indice della Pubblica Amministrazione (IPA)</0>",
+        "<0>Vuoi modificare questi dati? <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
     },
   },
   subHeader: {

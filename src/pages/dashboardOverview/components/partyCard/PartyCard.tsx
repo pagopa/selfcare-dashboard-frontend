@@ -17,16 +17,13 @@ export default function PartyCard({ party }: Props) {
     >
       <Grid container direction="row" alignItems={'center'} px={4}>
         <Grid item xs={9}>
-          <PartyDetail party={party} canUploadLogo={canUploadLogo}/>
+          <PartyDetail party={party} canUploadLogo={canUploadLogo} />
         </Grid>
 
         <Grid item xs={3}>
           <Grid container direction="column" alignItems={'center'}>
             <Grid item>
-              <PartyLogoUploader
-                institutionId={party.institutionId}
-                canUploadLogo={canUploadLogo}
-              />
+              <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
             </Grid>
           </Grid>
         </Grid>

@@ -49,7 +49,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
           title: t('overview.sideMenu.institutionManagement.overview.title'),
           active: true,
           ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
-            institutionId: party.institutionId,
+            partyId: party.partyId,
           }),
         },
         canSeeRoles
@@ -58,7 +58,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
               title: t('overview.sideMenu.institutionManagement.referents.title'),
               active: true,
               ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
-                institutionId: party.institutionId,
+                partyId: party.partyId,
               }),
             }
           : undefined,
@@ -68,7 +68,7 @@ export default function DashboardSideMenu({ products, party }: Props) {
               title: t('overview.sideMenu.institutionManagement.groups.title'),
               active: true,
               ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
-                institutionId: party.institutionId,
+                partyId: party.partyId,
               }),
             }
           : undefined,
@@ -93,10 +93,10 @@ export default function DashboardSideMenu({ products, party }: Props) {
           p.userRole === 'ADMIN'
             ? {
                 groupId: p.id,
-                title: t('overview.sideMenu.product.referents'),
+                title: t('overview.sideMenu.product.users'),
                 active: p.authorized ?? false,
                 ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.PRODUCT_USERS, {
-                  institutionId: party.institutionId,
+                  partyId: party.partyId,
                   productId: p.id,
                 }),
               }

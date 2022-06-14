@@ -22,7 +22,7 @@ test('Test productRoles2ProductRolesList', () => {
           selcRole: 'ADMIN',
           multiroleAllowed: false,
           productRole: 'referente-amministrativo',
-          title: 'Referente Amministrativo',
+          title: 'Amministratore',
           description: 'Descrizione referente-amministrativo',
         },
         {
@@ -65,7 +65,7 @@ test('Test productRoles2ProductRolesList', () => {
           productId: 'PRODID',
           productRole: 'referente-amministrativo',
           selcRole: 'ADMIN',
-          title: 'Referente Amministrativo',
+          title: 'Amministratore',
         },
       ],
       MANAGER: [
@@ -127,7 +127,7 @@ test('Test productRoles2ProductRolesList', () => {
         selcRole: 'ADMIN',
         multiroleAllowed: false,
         productRole: 'referente-amministrativo',
-        title: 'Referente Amministrativo',
+        title: 'Amministratore',
         description: 'Descrizione referente-amministrativo',
       },
       'incaricato-ente-creditore': {
