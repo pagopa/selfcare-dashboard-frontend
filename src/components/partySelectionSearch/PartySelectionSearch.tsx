@@ -3,10 +3,10 @@ import { Grid, Typography, Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { PartyAccountItem } from '@pagopa/mui-italia';
 import { Party } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
-import DashboardPartyItem from './DashboardPartyItem';
 
 type Props = {
   parties: Array<Party>;
@@ -109,19 +109,11 @@ export default function PartySelectionSearch({
             }}
           >
             {selectedParty && moreThan3Parties ? (
-              <DashboardPartyItem
-                disabled={selectedParty.status === 'PENDING'}
-                selectedItem={!!selectedParty}
-                title={selectedParty.description}
-                subTitle={t(roleLabels[selectedParty.userRole].longLabelKey)}
+              <PartyAccountItem
+                partyName={selectedParty.description}
+                partyRole={t(roleLabels[selectedParty.userRole].longLabelKey)}
                 image={selectedParty.urlLogo}
-                action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                  handleListItemClick(event, selectedParty)
-                }
-                chip={selectedParty.status === 'PENDING' ? t('partySelection.partyStatus') : ''}
-                clearField={() => setSelectedParty(null)}
-                iconColor={iconColor}
-                moreThan3Parties={moreThan3Parties}
+                // clearField={() => setSelectedParty(null)}
               />
             ) : (
               <CustomBox>

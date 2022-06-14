@@ -1,8 +1,7 @@
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
 import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
-import DashboardPartyItem from './DashboardPartyItem';
 
 type Props = {
   isDisabled?: boolean;
@@ -32,29 +31,15 @@ export default function PartyItemContainer({
       role={'Institution'}
       data-testid={`PartyItemContainer: ${title}`}
     >
-      {moreThan3Parties ? (
-        <DashboardPartyItem
-          disabled={isDisabled}
-          selectedItem={selectedItem}
-          title={title}
-          subTitle={subTitle}
-          image={image}
-          action={action}
-          chip={chip}
-        />
-      ) : (
-        <Box data-testid={selectedItem && 'selectedLessThen3'} width="100%">
-          <PartyAccountItemButton
-            partyName={title as string}
-            partyRole={subTitle as string}
-            image={image}
-            selectedItem={selectedItem}
-            action={!isDisabled ? action : undefined}
-            disabled={isDisabled}
-            endSlot={isDisabled ? <Tag value={chip} color="warning" /> : undefined}
-          />
-        </Box>
-      )}
+      <PartyAccountItemButton
+        partyName={title as string}
+        partyRole={!moreThan3Parties ? (subTitle as string) : undefined}
+        image={image}
+        selectedItem={moreThan3Parties ? false : selectedItem}
+        action={!isDisabled ? action : undefined}
+        disabled={isDisabled}
+        endSlot={isDisabled ? <Tag value={chip} color="warning" /> : undefined}
+      />
     </Grid>
   );
 }
