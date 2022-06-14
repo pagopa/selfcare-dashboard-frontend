@@ -31,7 +31,7 @@ const CustomGridContainer = styled(Grid)({
       backgroundColor: 'transparent !important',
     },
     '&:hover': {
-      backgroundColor: 'transparent !important',
+      backgroundColor: 'rgba(23, 50, 77, 0.08)',
     },
   },
 });
@@ -70,6 +70,7 @@ export default function DashboardPartyItem({
           sx={{
             paddingLeft: 0,
             height: '50px',
+            padding: '16px',
           }}
           disableRipple
           disabled={disabled}
