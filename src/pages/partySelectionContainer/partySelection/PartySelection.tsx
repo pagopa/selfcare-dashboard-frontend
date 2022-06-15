@@ -54,7 +54,7 @@ export default function PartySelection({ parties }: Props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            borderRadius: theme.spacing(3),
+            borderRadius: theme.spacing(2),
           }}
         >
           <Grid container item xs={3} md={4} lg={3} sx={{ minWidth: '100%', p: 2 }}>
