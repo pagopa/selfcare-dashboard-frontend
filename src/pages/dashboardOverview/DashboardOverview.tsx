@@ -16,30 +16,32 @@ type Props = {
 const DashboardOverview = ({ party, products }: Props) => {
   const canUploadLogo = party.userRole === 'ADMIN';
   return (
-    <Box sx={{ width: '985px', padding: '0 16px' }}>
-      <WelcomeDashboard />
-      <Grid container direction="row" justifyContent={'center'} mb={2}>
-        <Grid item xs={6} display="flex" alignItems="center">
-          <Typography variant="h6" sx={{ fontWeight: '700' }}>
-            {party.description}
-          </Typography>
+    <div style={{ width: '100%', padding: '8px' }}>
+      <Box sx={{ width: '985px', padding: '0 16px' }}>
+        <WelcomeDashboard />
+        <Grid container direction="row" justifyContent={'center'} mb={2}>
+          <Grid item xs={6} display="flex" alignItems="center">
+            <Typography variant="h6" sx={{ fontWeight: '700' }}>
+              {party.description}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
+        <Grid item xs={12}>
+          <PartyCard party={party} />
         </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <PartyCard party={party} />
-      </Grid>
-      <Grid item xs={12} my={2}>
-        {canUploadLogo && <DashboardInfoSection />}
-      </Grid>
+        <Grid item xs={12} my={2}>
+          {canUploadLogo && <DashboardInfoSection />}
+        </Grid>
 
-      <ActiveProductsSection products={products} party={party} />
-      {products && products.findIndex((product) => product.status !== 'ACTIVE') > -1 && (
-        <NotActiveProductsSection party={party} products={products} />
-      )}
-    </Box>
+        <ActiveProductsSection products={products} party={party} />
+        {products && products.findIndex((product) => product.status !== 'ACTIVE') > -1 && (
+          <NotActiveProductsSection party={party} products={products} />
+        )}
+      </Box>
+    </div>
   );
 };
 

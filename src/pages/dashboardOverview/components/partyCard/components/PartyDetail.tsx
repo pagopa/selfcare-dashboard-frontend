@@ -22,7 +22,7 @@ export default function PartyDetail({ party }: Props) {
 
   return (
     <Grid container alignItems={'flex-start'}>
-      <Grid container item xs={6} alignItems={'flex-start'} spacing={1}>
+      <Grid container item xs={6} alignItems={'flex-start'} spacing={1} pr={2}>
         {/* institutionType */}
         <Grid item xs={4}>
           <Typography variant="body2" sx={{ ...labelStyles }}>
