@@ -3,10 +3,10 @@ import { Grid, Typography, Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import { PartyAccountItem } from '@pagopa/mui-italia';
 import { Party } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
+import PartyAccountItemSelection from './PartyAccountItemSelection';
 
 type Props = {
   parties: Array<Party>;
@@ -109,11 +109,9 @@ export default function PartySelectionSearch({
             }}
           >
             {selectedParty && moreThan3Parties ? (
-              <PartyAccountItem
-                partyName={selectedParty.description}
-                partyRole={t(roleLabels[selectedParty.userRole].longLabelKey)}
-                image={selectedParty.urlLogo}
-                // clearField={() => setSelectedParty(null)}
+              <PartyAccountItemSelection
+                selectedParty={selectedParty}
+                clearField={() => setSelectedParty(null)}
               />
             ) : (
               <CustomBox>

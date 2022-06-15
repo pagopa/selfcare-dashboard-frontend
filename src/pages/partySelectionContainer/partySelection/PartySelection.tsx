@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Paper, useTheme } from '@mui/material';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/system';
 import { Party } from '../../../model/Party';
 import PartySelectionSearch from '../../../components/partySelectionSearch/PartySelectionSearch';
 import ROUTES from '../../../routes';
@@ -20,7 +19,7 @@ export default function PartySelection({ parties }: Props) {
   const { t } = useTranslation();
   const bodyTitle = t('partySelection.title');
   const bodyDescription = t('partySelection.subTitle');
-
+  const theme = useTheme();
   const [selectedParty, setSelectedParty] = React.useState<Party | null>();
   const [disableBtn, setBtnDisable] = React.useState(true);
   const history = useHistory();
@@ -47,16 +46,15 @@ export default function PartySelection({ parties }: Props) {
       </Grid>
 
       <Grid item display="flex" justifyContent="center">
-        <Box
+        <Paper
+          elevation={8}
           sx={{
-            backgroundColor: '#FFFFFF',
+            maxWidth: '480px',
+            minWidth: '480px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '480px',
-            borderRadius: '16px',
-            boxShadow:
-              '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1);',
+            borderRadius: theme.spacing(3),
           }}
         >
           <Grid container item xs={3} md={4} lg={3} sx={{ minWidth: '100%', p: 2 }}>
@@ -70,7 +68,7 @@ export default function PartySelection({ parties }: Props) {
               }}
             />
           </Grid>
-        </Box>
+        </Paper>
       </Grid>
       <Grid item xs={2} display="flex" justifyContent="center">
         <Button
