@@ -1,5 +1,15 @@
 import React, { useMemo } from 'react';
-import { Typography, Button, Box, Grid, Card, CardContent, Link, Chip } from '@mui/material';
+import {
+  Typography,
+  Button,
+  Box,
+  Grid,
+  CardContent,
+  Link,
+  Chip,
+  Paper,
+  useTheme,
+} from '@mui/material';
 import { Trans } from 'react-i18next';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
 import { useHistory } from 'react-router';
@@ -32,6 +42,7 @@ export default function ActiveProductCard({
   const usersPath = resolvePathVariables(usersRoute, {
     partyId: party.partyId,
   });
+  const theme = useTheme();
 
   const activeSubProducts: Array<SubProduct> = useMemo(
     () => product.subProducts.filter((p) => p.status === 'ACTIVE') ?? [],
@@ -39,13 +50,11 @@ export default function ActiveProductCard({
   );
   return (
     <React.Fragment>
-      <Card
+      <Paper
+        elevation={8}
         sx={{
           height: '180px',
-          border: 'none',
-          borderRadius: '16px !important',
-          boxShadow:
-            '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+          borderRadius: theme.spacing(2),
         }}
       >
         <CardContent>
@@ -69,7 +78,7 @@ export default function ActiveProductCard({
                     label={p.title}
                     color="primary"
                     size="small"
-                    sx={{ borderRadius: '4px', mt: 1 }}
+                    sx={{ borderRadius: theme.shape, mt: 1 }}
                   />
                 ))}
             </Box>
@@ -91,7 +100,7 @@ export default function ActiveProductCard({
                         onClick={() =>
                           onExit(() => history.push(party.partyId ? usersPath : usersRoute))
                         }
-                        sx={{ fontWeight: '600' }}
+                        sx={{ fontWeight: 'fontWeightMedium' }}
                       >
                         Amministratori
                       </Link>
@@ -111,7 +120,7 @@ export default function ActiveProductCard({
             </Box>
           </Grid>
         </CardContent>
-      </Card>
+      </Paper>
     </React.Fragment>
   );
 }

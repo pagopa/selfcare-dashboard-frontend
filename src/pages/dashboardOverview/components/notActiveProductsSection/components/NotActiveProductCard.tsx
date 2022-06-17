@@ -53,8 +53,8 @@ export default function NotActiveProductCard({
           sx={{
             width: '88px',
             height: '88px',
-            borderRadius: '4px',
-            backgroundColor: 'white',
+            borderRadius: theme.shape,
+            backgroundColor: 'background.paper',
             marginTop: '-3rem',
             position: 'relative',
             textAlign: 'center',

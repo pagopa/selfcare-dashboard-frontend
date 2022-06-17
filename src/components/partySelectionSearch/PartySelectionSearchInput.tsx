@@ -10,7 +10,7 @@ const CustomIconButton = styled(IconButton)({
   },
 });
 const CustomTextField = styled(TextField)({
-  label: { fontSize: '14px', fontWeight: '600', color: '#475A6D', paddingLeft: '8px' },
+  label: { fontSize: '14px', fontWeight: 'fontWeightMedium', color: '#475A6D', paddingLeft: '8px' },
   input: { cursor: 'pointer' },
   '& .MuiOutlinedInput-root.MuiInputBase-adornedStart.MuiInputBase-adornedEnd': {
     height: '48px',

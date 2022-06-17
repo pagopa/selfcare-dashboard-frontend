@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Button, Typography, Box } from '@mui/material';
+import { Grid, Button, Typography, Box, Paper, useTheme } from '@mui/material';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../model/Party';
@@ -12,11 +12,8 @@ type Props = {
 
 export default function NoActiveParty({ parties }: Props) {
   const { t } = useTranslation();
-
-  // const bodyTitle = 'Non risultano richieste di adesione per il tuo Ente';
-  // const bodyDescription = "L'adesione potrebbe essere ancora in corso.";
-  // const bodyDescription2 = 'Verifica di aver completato tutti i passaggi richiesti.';
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
+  const theme = useTheme();
 
   useEffect(() => {
     setFilteredParties(parties);
@@ -46,16 +43,15 @@ export default function NoActiveParty({ parties }: Props) {
         </Grid>
 
         <Grid item container justifyContent="center">
-          <Box
+          <Paper
+            className="paper-test"
+            elevation={8}
             sx={{
-              backgroundColor: '#FFFFFF',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               minWidth: '480px',
-              borderRadius: '16px',
-              boxShadow:
-                '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1);',
+              borderRadius: theme.spacing(2),
             }}
           >
             <Grid item xs={10}>
@@ -76,7 +72,7 @@ export default function NoActiveParty({ parties }: Props) {
                   })}
               </Box>
             </Grid>
-          </Box>
+          </Paper>
         </Grid>
 
         <Grid item xs={2} mt={2} display="flex" justifyContent="center">

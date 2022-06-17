@@ -26,7 +26,7 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
           onClick={open}
           sx={{
             fontSize: '14px',
-            fontWeight: '600',
+            fontWeight: 'fontWeightMedium',
             cursor: 'pointer',
             textDecoration: 'none !important',
           }}

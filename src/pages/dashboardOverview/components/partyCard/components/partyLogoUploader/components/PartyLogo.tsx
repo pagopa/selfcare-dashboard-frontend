@@ -23,7 +23,7 @@ export default function PartyLogo({ loading, urlLogo }: Props) {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            backgroundColor: 'white',
+            backgroundColor: 'background.paper',
             borderRadius: '50%',
             width: '100%',
             height: '100%',
