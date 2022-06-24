@@ -20,7 +20,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
   const { t } = useTranslation();
   const addNotify = useUserNotify();
   return (
-    <Grid item xs={4} key={product.id}>
+    <Grid item xs={6} lg={4} xl={3} key={product.id}>
       <NotActiveProductCard
         image={product.imageUrl}
         urlLogo={product.logo}

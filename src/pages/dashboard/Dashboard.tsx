@@ -94,7 +94,7 @@ const Dashboard = () => {
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
 
   return party && products ? (
-    <Grid container item pl={{ xs: 3, md: 4 }} xs={12} sx={{ backgroundColor: 'background.paper' }}>
+    <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
       <Grid item xs={2}>
         <Box>
           <DashboardSideMenu products={products} party={party} />

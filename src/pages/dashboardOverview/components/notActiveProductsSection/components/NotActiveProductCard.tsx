@@ -38,7 +38,7 @@ export default function NotActiveProductCard({
 
   return (
     <Grid container>
-      <Card sx={{ maxWidth: 345, height: '411px', borderRadius: '16px', width: '100%' }}>
+      <Card sx={{ height: '450px', borderRadius: '16px', width: '100%' }}>
         <Box
           sx={{
             width: '100%',

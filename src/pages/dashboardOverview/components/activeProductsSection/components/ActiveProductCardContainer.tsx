@@ -18,7 +18,7 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
   const lastServiceActivationDate = undefined; // actually this info is not available
 
   return (
-    <Grid item xs={4} sx={{}}>
+    <Grid item xs={6} lg={4} xl={3}>
       <ActiveProductCard
         disableBtn={isDisabled}
         cardTitle={product.title}

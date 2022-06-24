@@ -53,7 +53,7 @@ export default function ActiveProductCard({
       <Paper
         elevation={8}
         sx={{
-          height: '180px',
+          height: '200px',
           borderRadius: theme.spacing(2),
         }}
       >

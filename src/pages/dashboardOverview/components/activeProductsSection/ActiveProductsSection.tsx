@@ -21,7 +21,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
         mtTitle={10}
         variantTitle="h6"
       />
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {products &&
           products
             .filter((p) => p.status === 'ACTIVE')

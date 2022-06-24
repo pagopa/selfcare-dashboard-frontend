@@ -44,9 +44,9 @@ export default function DashboardSideMenu({ party }: Props) {
   const isGroupSelected = window.location.pathname.startsWith(groupsPath);
 
   return (
-    <Grid container item mt={1}>
+    <Grid container item mt={1} width="100%">
       <Grid item xs={12}>
-        <List>
+        <List sx={{ width: '100%' }}>
           <DashboardSidenavItem
             title={t('overview.sideMenu.institutionManagement.overview.title')}
             handleClick={() =>
