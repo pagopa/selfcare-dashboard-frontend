@@ -20,7 +20,9 @@ export default function PartySelection({ parties }: Props) {
   const bodyTitle = t('partySelection.title');
   const bodyDescription = t('partySelection.subTitle');
   const theme = useTheme();
-  const [selectedParty, setSelectedParty] = React.useState<Party | null>();
+  const [selectedParty, setSelectedParty] = React.useState<Party | null>(
+    parties.length === 1 ? parties[0] : null
+  );
   const [disableBtn, setBtnDisable] = React.useState(true);
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -29,6 +31,10 @@ export default function PartySelection({ parties }: Props) {
     dispatch(partiesActions.setPartySelected(undefined));
     dispatch(partiesActions.setPartySelectedProducts(undefined));
   }, []);
+
+  useEffect(() => {
+    setBtnDisable(!selectedParty);
+  }, [selectedParty]);
 
   return (
     <Grid
@@ -63,7 +69,6 @@ export default function PartySelection({ parties }: Props) {
               label={t('partySelection.label')}
               parties={parties}
               onPartySelectionChange={(selectedParty: Party | null) => {
-                setBtnDisable(selectedParty === null);
                 setSelectedParty(selectedParty);
               }}
             />
