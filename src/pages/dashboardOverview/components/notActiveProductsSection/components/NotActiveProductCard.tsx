@@ -71,7 +71,6 @@ export default function NotActiveProductCard({
           <img src={urlLogo} style={{ paddingTop: '15px' }} />
         </Box>
         <Paper
-          elevation={8}
           sx={{
             height: '180px',
             borderRadius: theme.spacing(2),
