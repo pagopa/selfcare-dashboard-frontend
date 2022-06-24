@@ -32,7 +32,7 @@ export default function PartySelection({ parties }: Props) {
   }, []);
 
   useEffect(() => {
-    setBtnDisable(selectedParty ? false : true);
+    setBtnDisable(!selectedParty);
   }, [selectedParty]);
 
   return (
