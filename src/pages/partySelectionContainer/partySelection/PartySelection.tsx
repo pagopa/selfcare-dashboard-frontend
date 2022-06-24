@@ -32,6 +32,8 @@ export default function PartySelection({ parties }: Props) {
 
     if (selectedParty) {
       setBtnDisable(false);
+    } else {
+      setBtnDisable(selectedParty === null);
     }
   }, [selectedParty]);
 
@@ -56,7 +58,6 @@ export default function PartySelection({ parties }: Props) {
           <PartySelectionSearch
             parties={parties}
             onPartySelectionChange={(selectedParty: Party | null) => {
-              setBtnDisable(selectedParty === null);
               setSelectedParty(selectedParty);
             }}
           />
