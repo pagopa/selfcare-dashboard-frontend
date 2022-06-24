@@ -29,12 +29,10 @@ export default function PartySelection({ parties }: Props) {
   useEffect(() => {
     dispatch(partiesActions.setPartySelected(undefined));
     dispatch(partiesActions.setPartySelectedProducts(undefined));
+  }, []);
 
-    if (selectedParty) {
-      setBtnDisable(false);
-    } else {
-      setBtnDisable(selectedParty === null);
-    }
+  useEffect(() => {
+    setBtnDisable(selectedParty ? false : true);
   }, [selectedParty]);
 
   return (
