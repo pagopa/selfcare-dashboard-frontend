@@ -68,6 +68,7 @@ export default function PartySelection({ parties }: Props) {
               iconColor={'#17324D'}
               label={t('partySelection.label')}
               parties={parties}
+              selectedParty={selectedParty}
               onPartySelectionChange={(selectedParty: Party | null) => {
                 setSelectedParty(selectedParty);
               }}
