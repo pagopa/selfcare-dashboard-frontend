@@ -19,16 +19,23 @@ export default function PartySelection({ parties }: Props) {
   const { t } = useTranslation();
   const bodyTitle = t('partySelection.title');
   const bodyDescription = t('partySelection.subTitle');
-
   const [selectedParty, setSelectedParty] = React.useState<Party | null>();
   const [disableBtn, setBtnDisable] = React.useState(true);
   const history = useHistory();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(partiesActions.setPartySelected(undefined));
+    dispatch(
+      partiesActions.setPartySelected(
+        parties.length === 1 ? void setSelectedParty(parties[0]) : undefined
+      )
+    );
     dispatch(partiesActions.setPartySelectedProducts(undefined));
-  }, []);
+
+    if (selectedParty) {
+      setBtnDisable(false);
+    }
+  }, [selectedParty]);
 
   return (
     <Grid
