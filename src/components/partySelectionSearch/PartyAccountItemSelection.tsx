@@ -13,7 +13,7 @@ type Props = {
 export default function PartyAccountItemSelection({ selectedParty, clearField }: Props) {
   const { t } = useTranslation();
   return (
-    <Box display="flex">
+    <Box display="flex" p={2}>
       <Box width="100%">
         <PartyAccountItem
           partyName={selectedParty ? selectedParty.description : ''}
@@ -21,7 +21,7 @@ export default function PartyAccountItemSelection({ selectedParty, clearField }:
           image={selectedParty?.urlLogo}
         />
       </Box>
-      <Box>
+      <Box display="flex" alignItems="center">
         <IconButton onClick={clearField} id="clearIcon" aria-label="removeSelectionIcon">
           <ClearOutlinedIcon />
         </IconButton>
