@@ -57,67 +57,73 @@ export default function ActiveProductCard({
           borderRadius: theme.spacing(2),
         }}
       >
-        <CardContent>
-          <Box display="flex">
-            <Box
-              sx={{ columnWidth: '88px', height: '88px', textAlign: 'center', pt: '10px' }}
-              mr={2}
-            >
-              <img src={urlLogo} />
-            </Box>
-            <Box>
-              {cardTitle && (
-                <Box display="flex" alignItems={'center'}>
-                  <Typography variant="h6">{cardTitle}</Typography>
-                </Box>
-              )}
-              {!disableBtn &&
-                activeSubProducts.map((p) => (
-                  <Chip
-                    key={p.id}
-                    label={p.title}
-                    color="primary"
-                    size="small"
-                    sx={{ borderRadius: theme.shape, mt: 1 }}
-                  />
-                ))}
-            </Box>
-          </Box>
-
-          <Grid item xs={12} justifyContent="center" height="45'px">
-            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-              {disableBtn ? (
+        <CardContent sx={{ height: '100%' }}>
+          <Grid container sx={{ height: '100%' }}>
+            <Grid item xs={12} display="flex" alignItems="center">
+              <Box display="flex">
                 <Box
                   display="flex"
-                  alignItems="center"
-                  justifyContent="start"
-                  sx={{ color: '#5C6F82', cursor: 'pointer' }}
+                  flexDirection="column"
+                  justifyContent="center"
+                  // sx={{ columnWidth: '88px', height: '88px', textAlign: 'center', pt: '10px' }}
+                  mr={2}
                 >
-                  <Typography sx={{ fontSize: '16px' }}>
-                    <Trans i18nKey="activeProductCard.disableInfo">
-                      Per gestire questo prodotto, chiedi a uno dei suoi
-                      <Link
-                        onClick={() =>
-                          onExit(() => history.push(party.partyId ? usersPath : usersRoute))
-                        }
-                        sx={{ fontWeight: 'fontWeightMedium' }}
-                      >
-                        Amministratori
-                      </Link>
-                    </Trans>
-                  </Typography>
+                  <img src={urlLogo} />
                 </Box>
-              ) : (
-                <Button
-                  onClick={btnAction}
-                  disabled={disableBtn}
-                  variant="contained"
-                  sx={{ height: '40px' }}
-                >
-                  {buttonLabel}
-                </Button>
-              )}
-            </Box>
+                <Box display="flex" flexDirection="column" justifyContent="center">
+                  {cardTitle && (
+                    <Box display="flex" alignItems={'center'}>
+                      <Typography variant="h6">{cardTitle}</Typography>
+                    </Box>
+                  )}
+                  {!disableBtn &&
+                    activeSubProducts.map((p) => (
+                      <Chip
+                        key={p.id}
+                        label={p.title}
+                        color="primary"
+                        size="small"
+                        sx={{ borderRadius: theme.shape, mt: 1 }}
+                      />
+                    ))}
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} display="flex" alignItems="flex-end">
+              <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                {disableBtn ? (
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="start"
+                    sx={{ color: '#5C6F82', cursor: 'pointer' }}
+                  >
+                    <Typography sx={{ fontSize: '16px' }}>
+                      <Trans i18nKey="activeProductCard.disableInfo">
+                        Per gestire questo prodotto, chiedi a uno dei suoi
+                        <Link
+                          onClick={() =>
+                            onExit(() => history.push(party.partyId ? usersPath : usersRoute))
+                          }
+                          sx={{ fontWeight: 'fontWeightMedium' }}
+                        >
+                          Amministratori
+                        </Link>
+                      </Trans>
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Button
+                    onClick={btnAction}
+                    disabled={disableBtn}
+                    variant="contained"
+                    sx={{ height: '40px' }}
+                  >
+                    {buttonLabel}
+                  </Button>
+                )}
+              </Box>
+            </Grid>
           </Grid>
         </CardContent>
       </Paper>
