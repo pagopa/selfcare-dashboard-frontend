@@ -15,12 +15,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
   return (
     <React.Fragment>
-      <TitleBox
-        title={t('overview.activeProductsSection.title')}
-        mbTitle={2}
-        mtTitle={10}
-        variantTitle="h6"
-      />
+      <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
       <Grid container spacing={3}>
         {products &&
           products

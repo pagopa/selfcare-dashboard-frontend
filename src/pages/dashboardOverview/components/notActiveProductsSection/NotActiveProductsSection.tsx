@@ -18,10 +18,10 @@ export default function NotActiveProductsSection({ party, products }: Props) {
       <TitleBox
         title={t('overview.notActiveProductsSection.title')}
         mbTitle={2}
-        mtTitle={10}
-        variantTitle="h6"
+        mtTitle={5}
+        variantTitle="h5"
       />
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {products &&
           products
             .filter((product) => product.status !== 'ACTIVE')

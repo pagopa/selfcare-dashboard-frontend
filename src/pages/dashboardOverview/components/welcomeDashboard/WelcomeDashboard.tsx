@@ -10,8 +10,7 @@ export default function WelcomeDashboard() {
       title={title}
       subTitle={subTitle}
       mbTitle={2}
-      mtTitle={10}
-      mbSubTitle={6}
+      mbSubTitle={5}
       variantTitle="h4"
       variantSubTitle="body1"
     />

@@ -32,10 +32,12 @@ const DashboardOverview = ({ party, products }: Props) => {
         <Grid item xs={12}>
           <PartyCard party={party} />
         </Grid>
-        <Grid item xs={12} my={2}>
-          {canUploadLogo && <DashboardInfoSection />}
-        </Grid>
-        <Grid item xs={12} my={2}>
+        {canUploadLogo && (
+          <Grid item xs={12} mt={2}>
+            <DashboardInfoSection />
+          </Grid>
+        )}
+        <Grid item xs={12} mb={2} mt={5}>
           <ActiveProductsSection products={products} party={party} />
           {products && products.findIndex((product) => product.status !== 'ACTIVE') > -1 && (
             <NotActiveProductsSection party={party} products={products} />
