@@ -10,6 +10,7 @@ import PartyAccountItemSelection from './PartyAccountItemSelection';
 
 type Props = {
   parties: Array<Party>;
+  selectedParty: Party | null;
   onPartySelectionChange: (selectedParty: Party | null) => void;
   label?: string;
   iconColor?: string;
@@ -36,6 +37,7 @@ const CustomBox = styled(Box)({
 
 export default function PartySelectionSearch({
   parties,
+  selectedParty,
   onPartySelectionChange,
   label,
   iconColor,
@@ -45,7 +47,6 @@ export default function PartySelectionSearch({
   const { t } = useTranslation();
   const [input, setInput] = useState('');
   const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
-  const [selectedParty, setSelectedParty] = React.useState<Party | null>(null);
 
   const theme = useTheme();
 
@@ -57,7 +58,6 @@ export default function PartySelectionSearch({
       setFilteredParties(parties?.filter((e) => verifyPartyFilter(e, value)));
     }
     if (value && selectedParty && !verifyPartyFilter(selectedParty, value)) {
-      setSelectedParty(null);
       onPartySelectionChange(null);
     }
   };
@@ -66,7 +66,6 @@ export default function PartySelectionSearch({
     _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     party: Party
   ) => {
-    setSelectedParty(party);
     onPartySelectionChange(party);
   };
 
@@ -111,7 +110,7 @@ export default function PartySelectionSearch({
             {selectedParty && moreThan3Parties ? (
               <PartyAccountItemSelection
                 selectedParty={selectedParty}
-                clearField={() => setSelectedParty(null)}
+                clearField={() => onPartySelectionChange(null)}
               />
             ) : (
               <CustomBox>
