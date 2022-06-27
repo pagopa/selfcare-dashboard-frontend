@@ -68,7 +68,11 @@ beforeEach(() => (selectedParty = null));
 
 test('Test rendering', () => {
   render(
-    <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
+    <PartySelectionSearch
+      parties={parties}
+      onPartySelectionChange={(p) => (selectedParty = p)}
+      selectedParty={selectedParty}
+    />
   );
   const input = document.getElementById('search');
 
@@ -91,7 +95,11 @@ test('Test rendering', () => {
 
 test('Test filter', () => {
   render(
-    <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
+    <PartySelectionSearch
+      parties={parties}
+      onPartySelectionChange={(p) => (selectedParty = p)}
+      selectedParty={selectedParty}
+    />
   );
   const input = document.getElementById('search');
   const filterNapoli = 'Napoli';
@@ -132,6 +140,7 @@ test('Test selection when there are < 3 parties', async () => {
     <PartySelectionSearch
       parties={partiesLessThen3}
       onPartySelectionChange={(p) => (selectedParty = p)}
+      selectedParty={selectedParty}
     />
   );
   const filterPartyNapoli = 'Comune di Napoli Comune di Napoli Amministratore';
@@ -149,22 +158,30 @@ test('Test selection when there are < 3 parties', async () => {
 
 test('Test selection when there are > 3 parties', async () => {
   render(
-    <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
+    <PartySelectionSearch
+      parties={parties}
+      onPartySelectionChange={(p) => (selectedParty = p)}
+      selectedParty={selectedParty}
+    />
   );
-  const filterPartyNapoli = 'Comune di Napoli Comune di Napoli';
+  const filterPartyBari = 'Comune di Bari Comune di Bari Da completare';
   expect(selectedParty).toBe(null);
   // seleziona su uno dei party Napoli
-  const buttonParty = screen.getByRole('button', { name: filterPartyNapoli });
+  const buttonParty = screen.getByRole('button', { name: filterPartyBari });
 
   fireEvent.click(buttonParty);
 
   // verifichiamo che al click sia selezionato il pulsante "Napoli"
   const selectedMoreThen3 = document.getElementById('selectedMoreThen3');
-  if (selectedMoreThen3) getByText(selectedMoreThen3, 'Comune di Napoli');
+  if (selectedMoreThen3) getByText(selectedMoreThen3, 'Comune di Bari');
 });
 test('Test pending party', () => {
   render(
-    <PartySelectionSearch parties={parties} onPartySelectionChange={(p) => (selectedParty = p)} />
+    <PartySelectionSearch
+      parties={parties}
+      onPartySelectionChange={(p) => (selectedParty = p)}
+      selectedParty={selectedParty}
+    />
   );
   if (selectedParty?.status === 'PENDING') {
     screen.getByText('Da completare');
