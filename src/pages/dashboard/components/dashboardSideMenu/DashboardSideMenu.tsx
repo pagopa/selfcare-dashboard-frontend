@@ -1,146 +1,78 @@
-import React, { useEffect } from 'react';
 import { List, Grid } from '@mui/material';
 import { useHistory } from 'react-router';
-import { History } from 'history';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import { useTranslation } from 'react-i18next';
+import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
+import PeopleAlt from '@mui/icons-material/PeopleAlt';
+import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
-import { useTokenExchange } from '../../../../hooks/useTokenExchange';
-import DashboardSideMenuItem, { MenuItem } from './DashboardSideMenuItem';
+import DashboardSidenavItem from './DashboardSidenavItem';
 
 type Props = {
   products: Array<Product>;
   party: Party;
 };
 
-const applicationLinkBehaviour = (
-  history: History,
-  onExit: (exitAction: () => void) => void,
-  path: string,
-  pathVariables?: { [key: string]: string }
-) => {
-  const resolvedPath = pathVariables ? resolvePathVariables(path, pathVariables) : path;
-  return {
-    onClick: () => onExit(() => history.push(resolvedPath)),
-    isSelected: () => history.location.pathname === resolvedPath,
-  };
-};
-
-export default function DashboardSideMenu({ products, party }: Props) {
+export default function DashboardSideMenu({ party }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
-  const { invokeProductBo } = useTokenExchange();
   const onExit = useUnloadEventOnExit();
 
   const canSeeRoles = party.userRole === 'ADMIN';
   const canSeeGroups = party.userRole === 'ADMIN';
-  const navigationMenu: Array<MenuItem> = [
-    {
-      groupId: 'selfCare',
-      title: t('overview.sideMenu.institutionManagement.title'),
-      active: true,
-      subMenu: [
-        {
-          groupId: 'selfCare',
-          title: t('overview.sideMenu.institutionManagement.overview.title'),
-          active: true,
-          ...applicationLinkBehaviour(history, onExit, DASHBOARD_ROUTES.OVERVIEW.path, {
-            partyId: party.partyId,
-          }),
-        },
-        canSeeRoles
-          ? {
-              groupId: 'selfCare',
-              title: t('overview.sideMenu.institutionManagement.referents.title'),
-              active: true,
-              ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.USERS, {
-                partyId: party.partyId,
-              }),
-            }
-          : undefined,
-        canSeeGroups
-          ? {
-              groupId: 'selfCare',
-              title: t('overview.sideMenu.institutionManagement.groups.title'),
-              active: true,
-              ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.GROUPS, {
-                partyId: party.partyId,
-              }),
-            }
-          : undefined,
-      ],
-    },
-  ];
-  const [selectedItem, setSelectedItem] = React.useState<MenuItem | null>(navigationMenu[0]);
-  const arrayMenu: Array<MenuItem> = navigationMenu.concat(
-    products
-      .filter((p) => p.status === 'ACTIVE')
-      .map((p) => ({
-        groupId: p.id,
-        title: p.title,
-        active: p.authorized ?? false,
-        subMenu: [
-          {
-            groupId: p.id,
-            title: t('overview.sideMenu.product.overview'),
-            active: p.authorized ?? false,
-            onClick: () => invokeProductBo(p, party),
-          },
-          p.userRole === 'ADMIN'
-            ? {
-                groupId: p.id,
-                title: t('overview.sideMenu.product.users'),
-                active: p.authorized ?? false,
-                ...applicationLinkBehaviour(history, onExit, ENV.ROUTES.PRODUCT_USERS, {
-                  partyId: party.partyId,
-                  productId: p.id,
-                }),
-              }
-            : undefined,
-        ],
-      }))
-  );
 
-  useEffect(
-    () =>
-      setSelectedItem(
-        arrayMenu.find(
-          (m) => m.isSelected || (m.subMenu && m.subMenu.findIndex((m) => m?.isSelected) > -1)
-        ) ?? null
-      ),
-    []
-  );
+  const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
+  const usersRoute = ENV.ROUTES.USERS;
+  const groupsRoute = ENV.ROUTES.GROUPS;
 
-  const handleClick = (
-    _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    menuItem: MenuItem
-  ) => {
-    setSelectedItem(
-      menuItem.groupId === selectedItem?.groupId && menuItem.subMenu ? null : menuItem
-    );
-    if (menuItem.onClick) {
-      menuItem.onClick();
-    }
-  };
+  const overviewPath = resolvePathVariables(overviewRoute, {
+    partyId: party.partyId,
+  });
+  const usersPath = resolvePathVariables(usersRoute, {
+    partyId: party.partyId,
+  });
+  const groupsPath = resolvePathVariables(groupsRoute, {
+    partyId: party.partyId,
+  });
+
+  const isOVerviewSelected = window.location.pathname === overviewPath;
+  const isRoleSelected = window.location.pathname.startsWith(usersPath);
+  const isGroupSelected = window.location.pathname.startsWith(groupsPath);
 
   return (
-    <Grid container item mt={11}>
+    <Grid container item mt={1} width="100%">
       <Grid item xs={12}>
-        <List>
-          {arrayMenu &&
-            arrayMenu.map((item) => (
-              <DashboardSideMenuItem
-                key={item.title}
-                color={!item.active ? '#CCD4DC' : 'primary.main'}
-                item={item}
-                selectedItem={selectedItem}
-                handleClick={handleClick}
-              />
-            ))}
+        <List sx={{ width: '100%' }}>
+          <DashboardSidenavItem
+            title={t('overview.sideMenu.institutionManagement.overview.title')}
+            handleClick={() =>
+              onExit(() => history.push(party.partyId ? overviewPath : overviewRoute))
+            }
+            isSelected={isOVerviewSelected}
+            icon={DashboardCustomize}
+          />
+          {canSeeRoles && (
+            <DashboardSidenavItem
+              title={t('overview.sideMenu.institutionManagement.referents.title')}
+              handleClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
+              isSelected={isRoleSelected}
+              icon={PeopleAlt}
+            />
+          )}
+          {canSeeGroups && (
+            <DashboardSidenavItem
+              title={t('overview.sideMenu.institutionManagement.groups.title')}
+              handleClick={() =>
+                onExit(() => history.push(party.partyId ? groupsPath : groupsRoute))
+              }
+              isSelected={isGroupSelected}
+              icon={SupervisedUserCircle}
+            />
+          )}
         </List>
       </Grid>
     </Grid>

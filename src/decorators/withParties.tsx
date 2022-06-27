@@ -2,7 +2,7 @@ import withRetrievedValue from '@pagopa/selfcare-common-frontend/decorators/with
 import { useParties } from '../hooks/useParties';
 import { Party } from '../model/Party';
 
-type WithPartiesProps = {
+export type WithPartiesProps = {
   parties: Array<Party>;
 };
 

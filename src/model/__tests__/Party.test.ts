@@ -17,6 +17,7 @@ test('Test institutionResource2Party', () => {
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
+    address: 'address',
   };
 
   const party = institutionResource2Party(institutionResource);
@@ -33,5 +34,7 @@ test('Test institutionResource2Party', () => {
     originId: 'originId1',
     origin: 'IPA',
     institutionType: 'PA',
+    registeredOffice: 'address',
+    typology: 'TODO',
   });
 });

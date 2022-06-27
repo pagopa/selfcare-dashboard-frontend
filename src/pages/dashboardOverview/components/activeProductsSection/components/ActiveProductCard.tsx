@@ -1,54 +1,132 @@
-import { Card, Grid, Box, Typography } from '@mui/material';
-import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
-import { useTranslation } from 'react-i18next';
-import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
+import React, { useMemo } from 'react';
+import {
+  Typography,
+  Button,
+  Box,
+  Grid,
+  CardContent,
+  Link,
+  Chip,
+  Paper,
+  useTheme,
+} from '@mui/material';
+import { Trans } from 'react-i18next';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
+import { useHistory } from 'react-router';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { ENV } from '../../../../../utils/env';
 import { Party } from '../../../../../model/Party';
-import { Product } from '../../../../../model/Product';
-import BaseProductCard from '../../productCard/BaseProductCard';
+import { Product, SubProduct } from '../../../../../model/Product';
 
 type Props = {
+  cardTitle: string;
+  buttonLabel: string;
+  disableBtn: boolean;
+  urlLogo?: string;
+  btnAction?: () => void;
   party: Party;
   product: Product;
 };
+export default function ActiveProductCard({
+  cardTitle,
+  buttonLabel,
+  disableBtn,
+  urlLogo,
+  btnAction,
+  party,
+  product,
+}: Props) {
+  const onExit = useUnloadEventOnExit();
+  const history = useHistory();
+  const usersRoute = ENV.ROUTES.USERS;
+  const usersPath = resolvePathVariables(usersRoute, {
+    partyId: party.partyId,
+  });
+  const theme = useTheme();
 
-export default function ActiveProductCard({ party, product }: Props) {
-  const { t } = useTranslation();
-  const { invokeProductBo } = useTokenExchange();
-  const isDisabled = product.authorized === false;
-  const lastServiceActivationDate = undefined; // actually this info is not available
-
+  const activeSubProducts: Array<SubProduct> = useMemo(
+    () => product.subProducts.filter((p) => p.status === 'ACTIVE') ?? [],
+    [product.subProducts]
+  );
   return (
-    <Grid item xs={6}>
-      <Card sx={{ height: '100%', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}>
-        <Box mx={8} my={5}>
-          <BaseProductCard
-            disableBtn={isDisabled}
-            cardTitle={product.title}
-            cardSubTitle={
-              product.activationDateTime
-                ? t('overview.activeProducts.activationOf') +
-                  `${
-                    product.activationDateTime && formatDateAsLongString(product.activationDateTime)
-                  }`
-                : t('overview.activeProducts.active')
-            }
-            buttonLabel={t('overview.activeProducts.manageButton')}
-            urlLogo={product.logo}
-            tag={product.tag}
-            btnAction={() => invokeProductBo(product, party)}
-            heightLogo="70px"
-            heightTitle="80px"
-            heightSubTitle="20px"
-            heightButton="45px"
-          />
-          {lastServiceActivationDate && (
-            <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>
-              {t('overview.lastServiceActive') +
-                `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
-            </Typography>
-          )}
-        </Box>
-      </Card>
-    </Grid>
+    <React.Fragment>
+      <Paper
+        elevation={8}
+        sx={{
+          height: '200px',
+          borderRadius: theme.spacing(2),
+        }}
+      >
+        <CardContent sx={{ height: '100%' }}>
+          <Grid container sx={{ height: '100%' }}>
+            <Grid item xs={12} display="flex" alignItems="center">
+              <Box display="flex">
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                  // sx={{ columnWidth: '88px', height: '88px', textAlign: 'center', pt: '10px' }}
+                  mr={2}
+                >
+                  <img src={urlLogo} />
+                </Box>
+                <Box display="flex" flexDirection="column" justifyContent="center">
+                  {cardTitle && (
+                    <Box display="flex" alignItems={'center'}>
+                      <Typography variant="h6">{cardTitle}</Typography>
+                    </Box>
+                  )}
+                  {!disableBtn &&
+                    activeSubProducts.map((p) => (
+                      <Chip
+                        key={p.id}
+                        label={p.title}
+                        color="primary"
+                        size="small"
+                        sx={{ borderRadius: theme.shape, mt: 1 }}
+                      />
+                    ))}
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} display="flex" alignItems="flex-end">
+              <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                {disableBtn ? (
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="start"
+                    sx={{ color: '#5C6F82', cursor: 'pointer' }}
+                  >
+                    <Typography sx={{ fontSize: '16px' }}>
+                      <Trans i18nKey="activeProductCard.disableInfo">
+                        Per gestire questo prodotto, chiedi a uno dei suoi
+                        <Link
+                          onClick={() =>
+                            onExit(() => history.push(party.partyId ? usersPath : usersRoute))
+                          }
+                          sx={{ fontWeight: 'fontWeightMedium' }}
+                        >
+                          Amministratori
+                        </Link>
+                      </Trans>
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Button
+                    onClick={btnAction}
+                    disabled={disableBtn}
+                    variant="contained"
+                    sx={{ height: '40px' }}
+                  >
+                    {buttonLabel}
+                  </Button>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Paper>
+    </React.Fragment>
   );
 }

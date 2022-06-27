@@ -2,8 +2,12 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Product } from '../../../../../../model/Product';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
-import NotActiveProductCard from '../NotActiveProductCard';
 import './../../../../../../locale';
+import NotActiveProductCardContainer from './../NotActiveProductCardContainer';
+import { createStore } from './../../../../../../redux/store';
+import { createMemoryHistory } from 'history';
+import { Router } from 'react-router';
+import { Provider } from 'react-redux';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
@@ -23,10 +27,24 @@ afterAll(() => {
 
 const mockedProduct = Object.assign({}, mockedPartyProducts[0]);
 
-const renderCard = (status: 'ACTIVE' | 'INACTIVE' | 'PENDING', urlPublic?: string) => {
+const renderCard = (
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING',
+  urlPublic?: string,
+  injectedStore?: ReturnType<typeof createStore>,
+  injectedHistory?: ReturnType<typeof createMemoryHistory>
+) => {
+  const store = injectedStore ? injectedStore : createStore();
+  const history = injectedHistory ? injectedHistory : createMemoryHistory();
+
   mockedProduct.status = status;
   mockedProduct.urlPublic = urlPublic;
-  render(<NotActiveProductCard party={mockedParties[0]} product={mockedProduct} />);
+  render(
+    <Router history={history}>
+      <Provider store={store}>
+        <NotActiveProductCardContainer party={mockedParties[0]} product={mockedProduct} />{' '}
+      </Provider>
+    </Router>
+  );
 };
 
 const checkBaseFields = () => {
@@ -40,14 +58,14 @@ describe('test public url', () => {
     renderCard('INACTIVE');
 
     checkBaseFields();
-    expect(screen.queryByText('SCOPRI DI PIÙ →')).toBeNull();
+    expect(screen.queryByText('Scopri di più')).toBeNull();
   });
 
   test('test render product with public url', async () => {
     renderCard('INACTIVE', 'http://publicUrl');
 
     checkBaseFields();
-    screen.getByText('SCOPRI DI PIÙ →');
+    screen.getByText('Scopri di più');
   });
 });
 
@@ -75,24 +93,26 @@ describe('test onboarding', () => {
 
     fireEvent.click(button);
 
-    screen.getByText('Adesione in corso');
-    screen.getByText(
-      'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?'
+    waitFor(() => screen.getByText('Adesione in corso'));
+    waitFor(() =>
+      screen.getByText(
+        'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?'
+      )
     );
-    screen.getByText('Procedi con una nuova adesione');
+    waitFor(() => screen.getByText('Procedi con una nuova adesione'));
 
-    const cancelButton = screen.getByText('Esci');
-
-    fireEvent.click(cancelButton);
+    waitFor(() => fireEvent.click(screen.getByText('Esci')));
 
     await waitFor(() => expect(screen.queryByText('Adesione in corso')).toBeNull());
 
     fireEvent.click(button);
 
-    fireEvent.click(screen.getByText('Procedi con una nuova adesione'));
+    waitFor(() => fireEvent.click(screen.getByText('Procedi con una nuova adesione')));
 
-    expect(mockedLocation.assign).toBeCalledWith(
-      `http://selfcare/onboarding/${mockedProduct.id}?partyExternalId=${mockedParties[0].externalId}`
+    waitFor(() =>
+      expect(mockedLocation.assign).toBeCalledWith(
+        `http://selfcare/onboarding/${mockedProduct.id}?partyExternalId=${mockedParties[0].externalId}`
+      )
     );
   });
 });

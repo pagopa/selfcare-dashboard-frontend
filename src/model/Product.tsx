@@ -1,6 +1,8 @@
 import { ProductsResource } from '../api/generated/b4f-dashboard/ProductsResource';
 import { UserRole } from './Party';
 
+export type ProductStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING';
+
 export type Product = {
   activationDateTime?: Date;
   description: string;
@@ -12,9 +14,16 @@ export type Product = {
   tag?: string;
   userRole?: UserRole;
   authorized?: boolean;
-  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
+  status: ProductStatus;
+  imageUrl: string;
+  subProducts: Array<SubProduct>;
 };
 
+export type SubProduct = {
+  id: string;
+  title: string;
+  status: ProductStatus;
+};
 export type ProductsMap = { [id: string]: Product };
 
 export const buildProductsMap = (products: Array<Product>): ProductsMap =>
@@ -36,4 +45,6 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   userRole: resource.userRole as UserRole,
   authorized: resource.authorized,
   status: resource.status,
+  imageUrl: resource.imageUrl,
+  subProducts: resource.children?.slice() ?? [],
 });
