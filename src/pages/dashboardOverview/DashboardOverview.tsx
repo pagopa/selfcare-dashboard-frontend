@@ -16,10 +16,10 @@ type Props = {
 const DashboardOverview = ({ party, products }: Props) => {
   const canUploadLogo = party.userRole === 'ADMIN';
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <Box p={3} sx={{ width: '100%' }}>
         <WelcomeDashboard />
-        <Grid container direction="row" justifyContent={'center'}>
+        <Grid container direction="row" justifyContent={'center'} alignItems="center" mb={2}>
           <Grid item xs={6} display="flex" alignItems="center">
             <Typography variant="h6" sx={{ fontWeight: '700' }}>
               {party.description}

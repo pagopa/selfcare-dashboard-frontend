@@ -1,5 +1,5 @@
 import { Grid, Link, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box } from '@mui/system';
 
@@ -20,12 +20,12 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
   return (
     <Grid container justifyContent={'flex-start'} alignItems={'center'}>
       {!loading && <EditIcon color={'primary'} fontSize="small" />}
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" ml={1}>
         <Link
           color={'primary'}
           onClick={open}
+          variant="caption"
           sx={{
-            fontSize: '14px',
             fontWeight: 'fontWeightMedium',
             cursor: 'pointer',
             textDecoration: 'none !important',
@@ -35,6 +35,7 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
         </Link>
       </Box>
       <Typography
+        mt={1}
         variant="body2"
         sx={{
           color: '#5C6F82',
@@ -45,6 +46,16 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
         }}
       >
         {t('overview.partyLogo.size')}
+      </Typography>
+      <Typography
+        mt={1}
+        sx={{ fontSize: '12px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
+      >
+        <Trans i18nKey="overview.partyLogo.info">
+          Inserisci solo il logo del tuo ente.
+          <br />
+          Sarai responsabile dell’inserimento di immagini diverse da quella indicata.
+        </Trans>
       </Typography>
     </Grid>
   );

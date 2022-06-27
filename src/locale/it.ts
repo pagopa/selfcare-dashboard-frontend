@@ -81,6 +81,7 @@ export default {
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
       size: 'Dimensione massima 300 x 300px - Formato .png',
+      info: 'Inserisci solo il logo del tuo ente. <1/> Sarai responsabile dell’inserimento di immagini diverse da quella indicata. ',
     },
     partyDetail: {
       institutionType: 'Tipologia',

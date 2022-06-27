@@ -83,10 +83,7 @@ export const mockedParties: Array<Party> = [
   },
   {
     userRole: 'ADMIN',
-    description: `Commissario straordinario per la realizzazione di
-    approdi temporanei e di interventi complementari per la
-    salvaguardia di Venezia e della sua laguna e ulteriori
-    interventi per la salvaguardia della laguna di Venezia`,
+    description: `Commissario straordinario per la realizzazione di approdi temporanei e di interventi complementari per la salvaguardia di Venezia e della sua laguna e ulteriori interventi per la salvaguardia della laguna di Venezia`,
     urlLogo: 'image',
     status: 'ACTIVE',
     partyId: '5',
