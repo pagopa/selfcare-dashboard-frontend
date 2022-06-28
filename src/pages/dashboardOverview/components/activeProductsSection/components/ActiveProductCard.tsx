@@ -9,6 +9,7 @@ import {
   Chip,
   Paper,
   useTheme,
+  Tooltip,
 } from '@mui/material';
 import { Trans } from 'react-i18next';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
@@ -73,7 +74,23 @@ export default function ActiveProductCard({
                 <Box display="flex" flexDirection="column" justifyContent="center">
                   {cardTitle && (
                     <Box display="flex" alignItems={'center'}>
-                      <Typography variant="h6">{cardTitle}</Typography>
+                      <Tooltip title={cardTitle.length > 27 ? cardTitle : ''}>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontSize: theme.typography.fontSize,
+                            height: '100%',
+                            width: '100%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical' as const,
+                            WebkitLineClamp: 2,
+                          }}
+                        >
+                          {cardTitle}
+                        </Typography>
+                      </Tooltip>
                     </Box>
                   )}
                   {!disableBtn &&
@@ -83,7 +100,7 @@ export default function ActiveProductCard({
                         label={p.title}
                         color="primary"
                         size="small"
-                        sx={{ borderRadius: theme.shape, mt: 1 }}
+                        sx={{ borderRadius: theme.shape, mt: 1, width: '80px' }}
                       />
                     ))}
                 </Box>
