@@ -8,8 +8,9 @@ import { TFunction, useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
-import { PartyLogo } from './components/PartyLogo';
+// import { PartyLogo } from './components/PartyLogo';
 import { PartyDescription } from './components/PartyDescription';
+import PartyLogo from './components/PartyLogo';
 
 type Props = {
   partyId: string;
@@ -31,6 +32,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
 
   const [labelLink, setLabelLink] = useState<string>(t('overview.partyLogo.modify') as string);
   const addError = useErrorDispatcher();
+  const [uploadedFiles, setUploadedFiles] = useState<Array<File>>([]);
 
   useEffect(() => {
     setTimeout(() => setLabelLink(getLabelLinkText(t)), 400);
@@ -55,6 +57,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const { getRootProps, getInputProps, open } = useDropzone({
     onDropAccepted: (files: Array<File>) => {
       setLoading(true);
+      setUploadedFiles(files);
       setLabelLink(files[0].name);
       const requestId = uniqueId();
       trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: partyId, request_id: requestId });
@@ -138,11 +141,29 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   });
 
   return (
-    <Grid container direction="row" justifyItems={'center'} alignItems={'center'}>
-      <Box {...getRootProps({ className: 'dropzone' })}>
-        {canUploadLogo && <input {...getInputProps()} />}
-        <PartyLogo loading={loading} urlLogo={urlLogo} />
-        {canUploadLogo && <PartyDescription labelLink={labelLink} open={open} />}
+    <Grid container direction="row">
+      <Box
+        {...getRootProps({ className: 'dropzone' })}
+        display="flex"
+        justifyItems={'center'}
+        alignItems={'center'}
+      >
+        {canUploadLogo && (
+          <>
+            <Box>
+              <input {...getInputProps()} />
+              <PartyLogo loading={loading} urlLogo={urlLogo} />
+            </Box>
+            <Box>
+              <PartyDescription
+                labelLink={labelLink}
+                open={open}
+                loading={loading}
+                files={uploadedFiles}
+              />
+            </Box>
+          </>
+        )}
       </Box>
     </Grid>
   );

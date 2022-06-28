@@ -1,23 +1,19 @@
 import { Grid, Box } from '@mui/material';
-import { Footer, Header } from '@pagopa/selfcare-common-frontend';
-import {
-  useUnloadEventLogout,
-  useUnloadEventOnExit,
-} from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import { Footer } from '@pagopa/selfcare-common-frontend';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
 import React from 'react';
-import { useAppSelector } from '../../redux/hooks';
-import { partiesSelectors } from '../../redux/slices/partiesSlice';
-import { ENV } from '../../utils/env';
-import DashboardMenuContainer from './dashboardMenuContainer/DashboardMenuContainer';
+import { useSelector } from 'react-redux';
+import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
+import DashboardHeader from '../DashboardHeader';
+import withParties from '../../decorators/withParties';
 
 type Props = {
   children?: React.ReactNode;
 };
 
-export default function Layout({ children }: Props) {
-  const party = useAppSelector(partiesSelectors.selectPartySelected);
+const Layout = ({ children }: Props) => {
   const onExit = useUnloadEventOnExit();
-  const onLogout = useUnloadEventLogout();
+  const loggedUser = useSelector(userSelectors.selectLoggedUser);
 
   return (
     <Box
@@ -27,18 +23,12 @@ export default function Layout({ children }: Props) {
         minHeight: '100vh',
       }}
     >
-      <Header
-        withSecondHeader={!!party}
-        subHeaderChild={party && <DashboardMenuContainer />}
-        onExitAction={onLogout}
-      />
+      <DashboardHeader onExit={onExit} loggedUser={loggedUser} />
       <Grid container direction="row" flexGrow={1}>
         {children}
       </Grid>
-      <Footer
-        assistanceEmail={ENV.ASSISTANCE.ENABLE ? ENV.ASSISTANCE.EMAIL : undefined}
-        onExit={onExit}
-      />
+      <Footer onExit={onExit} loggedUser={!!loggedUser} />
     </Box>
   );
-}
+};
+export default withParties(Layout);

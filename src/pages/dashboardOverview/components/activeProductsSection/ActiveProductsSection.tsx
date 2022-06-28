@@ -4,7 +4,7 @@ import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
 import { useTranslation } from 'react-i18next';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
-import ActiveProductCard from './components/ActiveProductCard';
+import ActiveProductCardContainer from './components/ActiveProductCardContainer';
 
 type Props = {
   party: Party;
@@ -15,19 +15,13 @@ export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
   return (
     <React.Fragment>
-      <TitleBox
-        title={t('overview.activeProductsSection.title')}
-        mbTitle={2}
-        mtTitle={10}
-        variantTitle="h2"
-        variantSubTitle="body2"
-      />
-      <Grid container spacing={4}>
+      <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
+      <Grid container spacing={3}>
         {products &&
           products
             .filter((p) => p.status === 'ACTIVE')
             .map((product) => (
-              <ActiveProductCard key={product.id} party={party} product={product} />
+              <ActiveProductCardContainer key={product.id} party={party} product={product} />
             ))}
       </Grid>
     </React.Fragment>

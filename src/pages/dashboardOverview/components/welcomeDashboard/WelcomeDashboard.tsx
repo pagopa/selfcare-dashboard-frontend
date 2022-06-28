@@ -10,10 +10,9 @@ export default function WelcomeDashboard() {
       title={title}
       subTitle={subTitle}
       mbTitle={2}
-      mtTitle={10}
-      mbSubTitle={6}
-      variantTitle="h1"
-      variantSubTitle="h5"
+      mbSubTitle={5}
+      variantTitle="h4"
+      variantSubTitle="body1"
     />
   );
 }

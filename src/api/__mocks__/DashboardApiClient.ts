@@ -1,5 +1,9 @@
+import { EmailString } from '@pagopa/ts-commons/lib/strings';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
-import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
+import {
+  InstitutionResource,
+  InstitutionTypeEnum,
+} from '../generated/b4f-dashboard/InstitutionResource';
 import {
   InstitutionUserResource,
   RoleEnum,
@@ -25,6 +29,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
+    institutionType: InstitutionTypeEnum.PA,
+    address: 'Piazza della Scala, 2 - 20121 Milano',
   },
   {
     name: 'Comune di Milano',
@@ -37,6 +43,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     fiscalCode: 'fiscalCode',
     userRole: 'ADMIN',
     category: '',
+    institutionType: InstitutionTypeEnum.PA,
+    address: 'Piazza della Scala, 2 - 20121 Milano',
   },
 ];
 
@@ -51,6 +59,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://appio/bo#<IdentityToken>',
     activatedAt: new Date(2021, 1, 1, 0, 0, 0, 0),
     urlPublic: 'http://appio/public',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.png',
@@ -62,6 +72,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 2, 0, 0, 0, 0),
     urlPublic: 'http://notifiche/public',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
@@ -73,6 +85,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 3, 0, 0, 0, 0),
     urlPublic: 'http://pagopa/public',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.png',
@@ -83,6 +97,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     status: StatusEnum.PENDING,
     urlPublic: 'http://www.google.it',
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png',
@@ -93,6 +109,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     status: StatusEnum.ACTIVE,
     urlPublic: undefined,
     urlBO: 'http://cgn/bo#token=<IdentityToken>',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.png',
@@ -103,6 +121,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     status: StatusEnum.INACTIVE,
     urlPublic: undefined,
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
   },
 ];
 
@@ -113,7 +133,7 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
-    email: 'address',
+    email: 'address' as EmailString,
     products: [
       {
         id: 'productId',
@@ -135,7 +155,7 @@ export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
-    email: 'address',
+    email: 'address' as EmailString,
     products: [
       {
         id: 'productId2',
@@ -160,7 +180,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     surname: 'Surname',
     status: 'PENDING',
     role: 'LIMITED' as RoleEnum,
-    email: 'address',
+    email: 'address' as EmailString,
     product: {
       id: 'prod-io',
       title: 'App IO',
@@ -180,7 +200,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     surname: 'Surname2',
     status: 'ACTIVE',
     role: 'ADMIN' as RoleEnum,
-    email: 'address2',
+    email: 'address2' as EmailString,
     product: {
       id: 'prod-io',
       title: 'App IO',
@@ -229,7 +249,7 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
 ];
 
 export const mockedUserResource: UserResource = {
-  id: 'id',
+  id: 'id1',
   fiscalCode: 'AAAAAA11A11A123K',
   name: { certified: true, value: 'Gigi' },
   familyName: { certified: true, value: 'Verdi' },

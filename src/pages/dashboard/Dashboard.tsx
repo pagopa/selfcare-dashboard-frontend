@@ -94,9 +94,9 @@ const Dashboard = () => {
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
 
   return party && products ? (
-    <Grid container item pl={{ xs: 4, md: 5, lg: 10 }} xs={12}>
+    <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
       <Grid item xs={2}>
-        <Box sx={{ backgroundColor: 'background.default' }}>
+        <Box>
           <DashboardSideMenu products={products} party={party} />
         </Box>
       </Grid>
@@ -106,7 +106,7 @@ const Dashboard = () => {
         sx={{ backgroundColor: '#F5F6F7' }}
         display="flex"
         justifyContent="center"
-        pb={16}
+        pb={8}
       >
         <Switch>
           <Route path={ENV.ROUTES.USERS} exact={false}>

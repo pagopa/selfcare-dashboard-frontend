@@ -1,88 +1,46 @@
 import React from 'react';
-import { Grid, Typography, Box } from '@mui/material';
-import PartyItem from './PartyItem';
+import { Grid } from '@mui/material';
+import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
+import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
 
 type Props = {
   isDisabled?: boolean;
-  disabled?: boolean;
-  borderList?: string;
   selectedItem?: boolean;
   title: string | undefined;
   subTitle: string | undefined;
-  titleColor: string;
   image: string | undefined;
   chip: string;
   action?: React.Dispatch<React.MouseEvent<HTMLDivElement, MouseEvent>>;
-  showAvatar?: boolean;
-  pxTitleSubTitle?: string;
+  moreThan3Parties?: boolean;
 };
 export default function PartyItemContainer({
   isDisabled,
-  borderList,
   selectedItem,
   title,
   subTitle,
-  titleColor,
   image,
   chip,
   action,
-  showAvatar,
-  pxTitleSubTitle,
+  moreThan3Parties,
 }: Props) {
   return (
     <Grid
+      id={moreThan3Parties ? 'selectedMoreThen3' : 'selectedLessThen3'}
       container
       my={1}
       direction={'row'}
       role={'Institution'}
       data-testid={`PartyItemContainer: ${title}`}
-      sx={{ boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}
     >
-      <Grid item xs={isDisabled ? 8 : 12}>
-        <Box>
-          <PartyItem
-            pxTitleSubTitle={pxTitleSubTitle}
-            bgColor="transparent"
-            borderList={borderList}
-            disabled={isDisabled}
-            selectedItem={selectedItem}
-            title={title}
-            subTitle={subTitle}
-            titleColor={titleColor}
-            titleSize="16px"
-            subTitleSize="14px"
-            image={image}
-            action={action}
-            showAvatar={showAvatar}
-          />
-        </Box>
-      </Grid>
-      {isDisabled && (
-        <Grid item xs={4}>
-          <Box>
-            <Grid
-              className="chip"
-              sx={{
-                borderRadius: '56px',
-                backgroundColor: '#00C5CA',
-                fontSize: 12,
-                display: 'flex',
-                justifyContent: 'space-around',
-                marginTop: '20px',
-                marginRight: '20px',
-              }}
-            >
-              <Typography
-                role="DisabledInstitution"
-                variant="caption"
-                sx={{ fontSize: '12px', fontWeight: '600' }}
-              >
-                {chip}
-              </Typography>
-            </Grid>
-          </Box>
-        </Grid>
-      )}
+      <PartyAccountItemButton
+        partyName={title as string}
+        partyRole={!moreThan3Parties ? (subTitle as string) : undefined}
+        image={image}
+        selectedItem={moreThan3Parties ? false : selectedItem}
+        action={!isDisabled ? action : undefined}
+        disabled={isDisabled}
+        endSlot={isDisabled ? <Tag value={chip} color="warning" /> : undefined}
+      />
     </Grid>
   );
 }
