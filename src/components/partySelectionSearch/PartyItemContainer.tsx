@@ -34,7 +34,7 @@ export default function PartyItemContainer({
     >
       <PartyAccountItemButton
         partyName={title as string}
-        partyRole={!moreThan3Parties ? (subTitle as string) : undefined}
+        partyRole={subTitle as string}
         image={image}
         selectedItem={moreThan3Parties ? false : selectedItem}
         action={!isDisabled ? action : undefined}
