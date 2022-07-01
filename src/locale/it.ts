@@ -8,7 +8,7 @@ export default {
   partySelection: {
     title: 'Seleziona il tuo ente',
     subTitle:
-      'Se operi per più enti, potrai modificare la tua scelta dopo aver effettuato l’accesso.',
+      'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.',
     partyStatus: 'Da completare',
     continueButton: 'Entra',
     backButton: 'Indietro',
