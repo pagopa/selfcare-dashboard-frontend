@@ -40,6 +40,7 @@ export default function PartyItemContainer({
         action={!isDisabled ? action : undefined}
         disabled={isDisabled}
         endSlot={isDisabled ? <Tag value={chip} color="warning" /> : undefined}
+        maxCharactersNumberMultiLine={20}
       />
     </Grid>
   );

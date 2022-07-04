@@ -83,6 +83,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           );
         }
       }}
+      maxCharactersNumberMultiLineItem={25}
     />
   );
 };
