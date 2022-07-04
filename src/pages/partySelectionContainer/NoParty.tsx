@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { Grid, Button, Typography, Box } from '@mui/material';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { IllusError } from '@pagopa/mui-italia';
 import { ENV } from '../../utils/env';
 
 export default function NoParty() {
   const bodyTitle = 'Il tuo profilo non è associato a nessun Ente.';
   const bodyDescription =
-    'Per accedere, chiedi al Referente incaricato di aggiungerti al portale Self Care del tuo Ente.';
+    'Per accedere all’Area Riservata, chiedi a un Amministratore di aggiungerti nella sezione Utenti.';
 
   useEffect(() => {
     trackEvent('DASHBOARD_ASSOCIATION_FAILURE', { event_name: 'DASHBOARD_ASSOCIATION_FAILURE' });
@@ -14,6 +15,7 @@ export default function NoParty() {
 
   return (
     <React.Fragment>
+      <IllusError size={60} />
       <Grid
         direction="column"
         container
