@@ -19,7 +19,8 @@ export default function PartyAccountItemSelection({ selectedParty, clearField }:
           partyName={selectedParty ? selectedParty.description : ''}
           partyRole={selectedParty ? t(roleLabels[selectedParty.userRole].longLabelKey) : ''}
           image={selectedParty?.urlLogo}
-          maxCharactersNumberMultiLine={25}
+          maxCharactersNumberMultiLine={20}
+          noWrap={false}
         />
       </Box>
       <Box display="flex" alignItems="center">
