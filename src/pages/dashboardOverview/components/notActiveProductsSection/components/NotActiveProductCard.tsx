@@ -1,82 +1,155 @@
-import { Card, Grid, Link } from '@mui/material';
-import { Box } from '@mui/material';
-import { SessionModal } from '@pagopa/selfcare-common-frontend';
-import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { Party } from '../../../../../model/Party';
-import { Product } from '../../../../../model/Product';
-import { ENV } from '../../../../../utils/env';
-import BaseProductCard from '../../productCard/BaseProductCard';
+import {
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  Button,
+  Grid,
+  Link,
+  useTheme,
+  Tooltip,
+} from '@mui/material';
+import CardMedia from '@mui/material/CardMedia';
+import { Trans } from 'react-i18next';
 
 type Props = {
-  party: Party;
-  product: Product;
+  image?: string;
+  urlLogo?: string;
+  description: string;
+  title: string;
+  btnAction?: () => void;
+  disableBtn: boolean;
+  buttonLabel: string;
+  urlPublic?: string;
 };
 
-const goToOnboarding = (product: Product, party: Party): void =>
-  window.location.assign(
-    `${ENV.URL_FE.ONBOARDING}/${product.id}?partyExternalId=${party.externalId}`
-  );
-
-export default function NotActiveProductCard({ party, product }: Props) {
-  const { t } = useTranslation();
-  const [onboardingPendingProduct, setOnboardingPendingProduct] = useState<Product | undefined>();
+export default function NotActiveProductCard({
+  image,
+  urlLogo,
+  description,
+  btnAction,
+  disableBtn,
+  buttonLabel,
+  urlPublic,
+  title,
+}: Props) {
+  const theme = useTheme();
 
   return (
-    <Grid item xs={4} key={product.id}>
-      <Card
-        sx={{ height: '100%', maxHeight: '410px', boxShadow: '0px 0px 80px rgba(0, 43, 85, 0.1)' }}
-      >
-        <Box mx={3} my={4}>
-          <BaseProductCard
-            disableBtn={false}
-            cardTitle={product.title}
-            cardSubTitle={product.description}
-            buttonLabel={t('overview.notActiveProducts.joinButton')}
-            urlLogo={product.logo}
-            tag={product.tag}
-            btnAction={() => {
-              if (product.status === 'PENDING') {
-                setOnboardingPendingProduct(product);
-              } else {
-                goToOnboarding(product, party);
-              }
+    <Grid container>
+      <Card sx={{ height: '100%', borderRadius: '16px', width: '100%' }}>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              width: '100%',
+              height: '191px',
+              position: 'relative',
+              '&::after': { position: 'absolute' },
             }}
-            heightLogo="70px"
-            heightTitle="80px"
-            heightSubTitle="80px"
-            heightButton="45px"
-            titleFontSize="24px"
-            subTitleFontSize="16px"
-          />
-          <Grid container height="30px">
-            <Grid item xs={12} px={2}>
-              <Box mb={3}>
-                {product.urlPublic && (
-                  <Trans i18nKey="discoverMore">
-                    <Link
-                      underline="none"
-                      sx={{ fontSize: '14px', fontWeight: '700', color: '#0073E6' }}
-                      href={product.urlPublic}
-                    >
-                      {'SCOPRI DI PIÙ →'}
-                    </Link>
-                  </Trans>
-                )}
-              </Box>
+          >
+            <CardMedia component="img" height="100%" width="100%" image={image} />
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box
+            mx={3}
+            sx={{
+              width: '88px',
+              height: '88px',
+              borderRadius: theme.shape,
+              backgroundColor: 'background.paper',
+              marginTop: '-3rem',
+              position: 'relative',
+              textAlign: 'center',
+              '&::after': {
+                position: 'absolute',
+                display: 'inline-block',
+                top: '40px',
+                left: '40px',
+              },
+            }}
+            mr={2}
+          >
+            <img src={urlLogo} style={{ paddingTop: '15px' }} />
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <CardContent sx={{ height: '100%' }}>
+            <Grid container width="100%">
+              <Grid item xs={12} mb={1}>
+                <Typography variant="h6">{title}</Typography>
+              </Grid>
+              <Grid item xs={12} height="48px">
+                <Tooltip title={description}>
+                  <Typography
+                    sx={{
+                      fontSize: theme.typography.fontSize,
+                      height: '100%',
+                      width: '100%',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical' as const,
+                    }}
+                  >
+                    {description}
+                  </Typography>
+                </Tooltip>
+              </Grid>
+              <Grid
+                mt={1}
+                height="16px"
+                item
+                xs={12}
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                }}
+              >
+                <Trans i18nKey="discoverMore">
+                  <Link
+                    sx={{
+                      fontSize: 'fontSize',
+                      fontWeight: 'fontWeightBold',
+                      color: 'primary.main',
+                    }}
+                    href={urlPublic}
+                  >
+                    {urlPublic && 'Scopri di più'}
+                  </Link>
+                </Trans>
+              </Grid>
+              <Grid
+                display="flex"
+                alignItems="flex-end"
+                justifyContent="flex-end"
+                item
+                xs={12}
+                sx={{ width: '100%' }}
+                mt={3}
+              >
+                <Button
+                  onClick={btnAction}
+                  disabled={disableBtn}
+                  variant="outlined"
+                  sx={{
+                    height: '40px',
+                    fontWeight: 'bold',
+                    borderWidth: 'medium',
+                    borderColor: '#0073E6',
+                    '&:hover': { borderWidth: 'medium', backgroundColor: 'transparent' },
+                  }}
+                >
+                  {buttonLabel}
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </CardContent>
+        </Grid>
       </Card>
-      <SessionModal
-        open={!!onboardingPendingProduct}
-        handleClose={() => setOnboardingPendingProduct(undefined)}
-        title={t('overview.adhesionPopup.title')}
-        message={t('overview.adhesionPopup.description')}
-        onConfirmLabel={t('overview.adhesionPopup.confirmButton')}
-        onConfirm={() => goToOnboarding(onboardingPendingProduct as Product, party)}
-        onCloseLabel={t('overview.adhesionPopup.closeButton')}
-      />
     </Grid>
   );
 }

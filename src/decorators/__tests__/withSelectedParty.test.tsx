@@ -11,7 +11,7 @@ import { boolean } from 'fp-ts';
 jest.mock('../../services/partyService');
 jest.mock('../../services/productService');
 
-const expectedPartyId: string = '3';
+const expectedPartyId: string = '1';
 
 let fetchPartyDetailsSpy: jest.SpyInstance;
 let fetchPartyProductsSpy: jest.SpyInstance;
@@ -67,7 +67,7 @@ test('Test default behavior when no parties', async () => {
 test('Test party not active', async () => {
   const store = createStore();
   const history = createMemoryHistory();
-  history.push(`/1`);
+  history.push(`/2`);
   await renderApp(false, store, history);
 
   await waitFor(() => expect(store.getState().appState.errors.length).toBe(1));

@@ -6,7 +6,7 @@ type Props = {
 };
 export default function PartySelectionTitle({ bodyTitle, bodyDescription }: Props) {
   return (
-    <Grid display="flex" justifyContent="center" container direction="column">
+    <Grid display="flex" justifyContent="center" alignItems="center" container direction="column">
       <Grid item xs={4}>
         <Box>
           <Typography variant="h3" component="h2">

@@ -17,6 +17,8 @@ export type Party = {
   category?: string;
   urlLogo?: string;
   fiscalCode: string;
+  registeredOffice: string;
+  typology: string;
   institutionType?: string;
 };
 
@@ -37,6 +39,8 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     category: institutionResource.category,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
+    registeredOffice: institutionResource.address,
+    typology: 'TODO', // it will represent the taxonomy of the party
     institutionType: institutionResource.institutionType,
   };
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Paper, useTheme } from '@mui/material';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
@@ -19,8 +19,10 @@ export default function PartySelection({ parties }: Props) {
   const { t } = useTranslation();
   const bodyTitle = t('partySelection.title');
   const bodyDescription = t('partySelection.subTitle');
-
-  const [selectedParty, setSelectedParty] = React.useState<Party | null>();
+  const theme = useTheme();
+  const [selectedParty, setSelectedParty] = React.useState<Party | null>(
+    parties.length === 1 ? parties[0] : null
+  );
   const [disableBtn, setBtnDisable] = React.useState(true);
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -30,6 +32,10 @@ export default function PartySelection({ parties }: Props) {
     dispatch(partiesActions.setPartySelectedProducts(undefined));
   }, []);
 
+  useEffect(() => {
+    setBtnDisable(!selectedParty);
+  }, [selectedParty]);
+
   return (
     <Grid
       direction="column"
@@ -38,7 +44,6 @@ export default function PartySelection({ parties }: Props) {
       justifyContent="center"
       spacing={2}
       my={'auto'}
-      sx={{ textAlign: 'center' }}
     >
       <Grid item container justifyContent="center">
         <Grid item xs={8}>
@@ -47,17 +52,31 @@ export default function PartySelection({ parties }: Props) {
       </Grid>
 
       <Grid item display="flex" justifyContent="center">
-        <Grid container item xs={3} md={4} lg={3}>
-          <PartySelectionSearch
-            parties={parties}
-            onPartySelectionChange={(selectedParty: Party | null) => {
-              setBtnDisable(selectedParty === null);
-              setSelectedParty(selectedParty);
-            }}
-          />
-        </Grid>
+        <Paper
+          elevation={8}
+          sx={{
+            maxWidth: '480px',
+            minWidth: '480px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: theme.spacing(2),
+          }}
+        >
+          <Grid container item xs={3} md={4} lg={3} sx={{ minWidth: '100%', p: 2 }}>
+            <PartySelectionSearch
+              iconColor={'#17324D'}
+              label={t('partySelection.label')}
+              parties={parties}
+              selectedParty={selectedParty}
+              onPartySelectionChange={(selectedParty: Party | null) => {
+                setSelectedParty(selectedParty);
+              }}
+            />
+          </Grid>
+        </Paper>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={2} display="flex" justifyContent="center">
         <Button
           variant="contained"
           disabled={disableBtn}

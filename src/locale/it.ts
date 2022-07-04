@@ -9,9 +9,19 @@ export default {
     title: 'Seleziona il tuo ente',
     subTitle:
       'Se operi per più enti, potrai modificare la tua scelta dopo aver effettuato l’accesso.',
-    searchBar: 'Cerca ente',
     partyStatus: 'Da completare',
-    continueButton: 'Continua',
+    continueButton: 'Entra',
+    backButton: 'Indietro',
+    label: 'Cerca ente',
+  },
+  NoActiveParty: {
+    bodyTitle: 'Non risultano richieste di <1 /> adesione per questo Ente',
+    bodyDescription:
+      "L'adesione potrebbe essere ancora in corso. <1 /> Verifica di aver completato tutti i passaggi richiesti.",
+    backButton: 'Torna alla Home',
+  },
+  activeProductCard: {
+    disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',
   },
   overview: {
     title: 'Panoramica',
@@ -59,8 +69,8 @@ export default {
       closeButton: 'Esci',
     },
     partyLogo: {
-      upload: 'Carica il logo del tuo Ente',
-      modify: 'Modifica Logo',
+      upload: "Carica il logo dell'ente",
+      modify: 'Modifica',
       uploadError: {
         title: 'Caricamento non riuscito',
         description:
@@ -70,16 +80,26 @@ export default {
         title: 'Caricamento non riuscito',
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
-      type: 'formato .png',
-      size: 'dimensione 300x300px',
+      size: 'Dimensione massima 300 x 300px - Formato .png',
+      info: 'Inserisci solo il logo del tuo ente. <1/> Sarai responsabile dell’inserimento di immagini diverse da quella indicata. ',
     },
     partyDetail: {
-      ipaCode: 'Codice IPA',
+      institutionType: 'Tipologia',
+      category: 'Categoria',
+      originId: 'Codice',
       companyName: 'Ragione sociale',
-      fiscalCode: 'Codice fiscale',
-      pec: 'PEC',
+      fiscalCode: 'Codice Fiscale',
+      pec: 'Indirizzo PEC primario',
+      registeredOffice: 'Sede Legale',
+      recipientCode: 'Codice destinatario',
       contactToModify:
         "<0>Vuoi modificare questi dati? <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
+      institutionTypeValue: {
+        GSP: 'Gestore di servizi pubblici',
+        PA: 'Pubblica Amministrazione',
+        PT: 'Società a controllo pubblico',
+        SCP: 'Partner tecnologico',
+      },
     },
   },
   subHeader: {
