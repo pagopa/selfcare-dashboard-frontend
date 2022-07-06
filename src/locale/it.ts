@@ -20,6 +20,12 @@ export default {
       "L'adesione potrebbe essere ancora in corso. <1 /> Verifica di aver completato tutti i passaggi richiesti.",
     backButton: 'Torna alla Home',
   },
+  noParty: {
+    title: 'Il tuo profilo non è associato a nessun ente',
+    description:
+      'Per accedere all’Area Riservata, chiedi a un Amministratore di aggiungerti nella sezione Utenti.',
+    backHome: 'Torna alla home',
+  },
   activeProductCard: {
     disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',
   },
