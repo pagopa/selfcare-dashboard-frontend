@@ -143,7 +143,7 @@ export default function NotActiveProductCard({
             sx={{ width: '100%' }}
             mt={3}
           >
-            <CardActions>
+            <CardActions sx={{ p: 0 }}>
               <Button
                 onClick={btnAction}
                 disabled={disableBtn}

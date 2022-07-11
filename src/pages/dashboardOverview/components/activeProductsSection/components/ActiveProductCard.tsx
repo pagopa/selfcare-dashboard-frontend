@@ -57,9 +57,9 @@ export default function ActiveProductCard({
         height: '200px',
       }}
     >
-      <CardContent sx={{ height: '100%' }}>
-        <Grid container sx={{ height: '100%' }}>
-          <Grid item xs={12} display="flex" alignItems="center">
+      <CardContent sx={{ height: '100%', display: 'flex' }}>
+        <Grid container>
+          <Grid item xs={12} display="flex" alignItems="flex-start">
             <Box display="flex" flexDirection="column" justifyContent="center" mr={2}>
               <img src={urlLogo} />
             </Box>
@@ -97,42 +97,48 @@ export default function ActiveProductCard({
                 ))}
             </Box>
           </Grid>
-          <Grid item xs={12} display="flex">
-            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-              {disableBtn ? (
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="start"
-                  sx={{ color: '#5C6F82', cursor: 'pointer' }}
+          <Grid item xs={12} display="flex" justifyContent="flex-end">
+            {disableBtn ? (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="start"
+                sx={{ color: '#5C6F82', cursor: 'pointer' }}
+              >
+                <Typography sx={{ fontSize: '16px' }}>
+                  <Trans i18nKey="activeProductCard.disableInfo">
+                    Per gestire questo prodotto, chiedi a uno dei suoi
+                    <Link
+                      onClick={() =>
+                        onExit(() => history.push(party.partyId ? usersPath : usersRoute))
+                      }
+                      sx={{ fontWeight: 'fontWeightMedium' }}
+                    >
+                      Amministratori
+                    </Link>
+                  </Trans>
+                </Typography>
+              </Box>
+            ) : (
+              <CardActions
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'flex-end',
+                  p: 0,
+                }}
+              >
+                <Button
+                  onClick={btnAction}
+                  disabled={disableBtn}
+                  variant="contained"
+                  sx={{ height: '40px' }}
                 >
-                  <Typography sx={{ fontSize: '16px' }}>
-                    <Trans i18nKey="activeProductCard.disableInfo">
-                      Per gestire questo prodotto, chiedi a uno dei suoi
-                      <Link
-                        onClick={() =>
-                          onExit(() => history.push(party.partyId ? usersPath : usersRoute))
-                        }
-                        sx={{ fontWeight: 'fontWeightMedium' }}
-                      >
-                        Amministratori
-                      </Link>
-                    </Trans>
-                  </Typography>
-                </Box>
-              ) : (
-                <CardActions sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button
-                    onClick={btnAction}
-                    disabled={disableBtn}
-                    variant="contained"
-                    sx={{ height: '40px' }}
-                  >
-                    {buttonLabel}
-                  </Button>
-                </CardActions>
-              )}
-            </Box>
+                  {buttonLabel}
+                </Button>
+              </CardActions>
+            )}
           </Grid>
         </Grid>
       </CardContent>
