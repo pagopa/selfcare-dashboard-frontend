@@ -63,8 +63,8 @@ export default function NotActiveProductCard({
           <Box
             mx={3}
             sx={{
-              width: '88px',
-              height: '88px',
+              width: '64px',
+              height: '64px',
               borderRadius: theme.shape,
               backgroundColor: 'background.paper',
               marginTop: '-3rem',
@@ -79,7 +79,7 @@ export default function NotActiveProductCard({
             }}
             mr={2}
           >
-            <img src={urlLogo} style={{ paddingTop: '15px' }} />
+            <img src={urlLogo} style={{ width: '100%', height: '100%' }} />
           </Box>
         </Grid>
         <Grid item xs={12}>
