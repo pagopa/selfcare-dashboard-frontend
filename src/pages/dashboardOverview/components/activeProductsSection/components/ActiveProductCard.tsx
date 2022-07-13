@@ -55,13 +55,21 @@ export default function ActiveProductCard({
       raised
       sx={{
         height: '200px',
+        borderRadius: theme.spacing(2),
       }}
     >
       <CardContent sx={{ height: '100%', display: 'flex' }}>
         <Grid container>
           <Grid item xs={12} display="flex" alignItems="flex-start">
-            <Box display="flex" flexDirection="column" justifyContent="center" mr={2}>
-              <img src={urlLogo} />
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              width="64px"
+              height="64px"
+              mr={2}
+            >
+              <img src={urlLogo} style={{ maxWidth: '100%', maxHeight: '100%' }} />
             </Box>
             <Box display="flex" flexDirection="column" justifyContent="center">
               {cardTitle && (
@@ -103,9 +111,9 @@ export default function ActiveProductCard({
                 display="flex"
                 alignItems="center"
                 justifyContent="start"
-                sx={{ color: '#5C6F82', cursor: 'pointer' }}
+                sx={{ color: 'text.secondary', cursor: 'pointer' }}
               >
-                <Typography sx={{ fontSize: '16px' }}>
+                <Typography sx={{ fontSize: 'fontSize' }}>
                   <Trans i18nKey="activeProductCard.disableInfo">
                     Per gestire questo prodotto, chiedi a uno dei suoi
                     <Link

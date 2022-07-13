@@ -46,7 +46,7 @@ export default function NotActiveProductCard({
   };
 
   return (
-    <Card sx={{ height: '100%', borderRadius: '16px', width: '100%' }}>
+    <Card sx={{ height: '100%', borderRadius: theme.spacing(2), width: '100%' }}>
       <Grid item xs={12}>
         <Box
           sx={{
@@ -79,7 +79,7 @@ export default function NotActiveProductCard({
           }}
           mr={2}
         >
-          <img src={urlLogo} style={{ width: '100%', height: '100%' }} />
+          <img src={urlLogo} style={{ maxWidth: '100%', maxHeight: '100%' }} />
         </Box>
       </Grid>
       <Grid item xs={12}>
@@ -150,9 +150,9 @@ export default function NotActiveProductCard({
                 variant="outlined"
                 sx={{
                   height: '40px',
-                  fontWeight: 'bold',
+                  fontWeight: 'fontWeightBold',
                   borderWidth: 'medium',
-                  borderColor: '#0073E6',
+                  borderColor: 'primary.main',
                   '&:hover': { borderWidth: 'medium', backgroundColor: 'transparent' },
                 }}
               >
