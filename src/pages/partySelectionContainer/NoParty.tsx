@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
 import { Grid, Button, Typography, Box } from '@mui/material';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { IllusError } from '@pagopa/mui-italia';
+import { useTranslation } from 'react-i18next';
 import { ENV } from '../../utils/env';
 
 export default function NoParty() {
-  const bodyTitle = 'Il tuo profilo non è associato a nessun Ente.';
-  const bodyDescription =
-    'Per accedere, chiedi al Referente incaricato di aggiungerti al portale Self Care del tuo Ente.';
+  const { t } = useTranslation();
+
+  const bodyTitle = t('noParty.title');
+  const bodyDescription = t('noParty.description');
 
   useEffect(() => {
     trackEvent('DASHBOARD_ASSOCIATION_FAILURE', { event_name: 'DASHBOARD_ASSOCIATION_FAILURE' });
@@ -25,6 +28,9 @@ export default function NoParty() {
       >
         <Grid item container justifyContent="center">
           <Grid item xs={4}>
+            <Grid mb={4}>
+              <IllusError size={70} />
+            </Grid>
             <Box>
               <Typography variant="h3" component="h2">
                 {bodyTitle}
@@ -35,20 +41,22 @@ export default function NoParty() {
         <Grid item container justifyContent="center">
           <Grid item xs={4}>
             <Box>
-              <Typography variant="subtitle2" component="h2">
-                {bodyDescription}
-              </Typography>
+              <Typography variant="body1">{bodyDescription}</Typography>
             </Box>
           </Grid>
         </Grid>
 
-        <Grid item xs={2} mt={4}>
+        <Grid item xs={2} mt={3}>
           <Button
             variant="contained"
-            sx={{ width: '190px', height: '40px' }}
+            sx={{
+              width: '158px',
+              height: '46px',
+              fontSize: 'fontSize',
+            }}
             onClick={() => window.location.assign(ENV.URL_FE.LANDING)}
           >
-            Torna alla Home
+            {t('noParty.backHome')}
           </Button>
         </Grid>
       </Grid>

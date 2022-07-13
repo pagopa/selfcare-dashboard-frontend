@@ -34,6 +34,15 @@ export default function NotActiveProductCard({
   title,
 }: Props) {
   const theme = useTheme();
+  const truncateText = {
+    fontSize: theme.typography.fontSize,
+    height: '100%',
+    width: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitBoxOrient: 'vertical' as const,
+  };
 
   return (
     <Grid container>
@@ -54,8 +63,8 @@ export default function NotActiveProductCard({
           <Box
             mx={3}
             sx={{
-              width: '88px',
-              height: '88px',
+              width: '64px',
+              height: '64px',
               borderRadius: theme.shape,
               backgroundColor: 'background.paper',
               marginTop: '-3rem',
@@ -70,27 +79,31 @@ export default function NotActiveProductCard({
             }}
             mr={2}
           >
-            <img src={urlLogo} style={{ paddingTop: '15px' }} />
+            <img src={urlLogo} style={{ width: '100%', height: '100%' }} />
           </Box>
         </Grid>
         <Grid item xs={12}>
           <CardContent sx={{ height: '100%' }}>
             <Grid container width="100%">
               <Grid item xs={12} mb={1}>
-                <Typography variant="h6">{title}</Typography>
+                <Tooltip title={title.length > 21 ? title : ''}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      ...truncateText,
+                      WebkitLineClamp: 1,
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                </Tooltip>
               </Grid>
               <Grid item xs={12} height="48px">
-                <Tooltip title={description}>
+                <Tooltip title={description.length > 99 ? description : ''}>
                   <Typography
                     sx={{
-                      fontSize: theme.typography.fontSize,
-                      height: '100%',
-                      width: '100%',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
+                      ...truncateText,
                       WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical' as const,
                     }}
                   >
                     {description}

@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
-import { Grid, Button, Paper, useTheme } from '@mui/material';
+import { Grid, Button, Paper, useTheme, Typography } from '@mui/material';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { Party } from '../../../model/Party';
 import PartySelectionSearch from '../../../components/partySelectionSearch/PartySelectionSearch';
 import ROUTES from '../../../routes';
 import { useAppDispatch } from '../../../redux/hooks';
 import { partiesActions } from '../../../redux/slices/partiesSlice';
-import PartySelectionTitle from './components/PartySelectionTitle';
 
 type Props = {
   parties: Array<Party>;
@@ -18,7 +17,6 @@ type Props = {
 export default function PartySelection({ parties }: Props) {
   const { t } = useTranslation();
   const bodyTitle = t('partySelection.title');
-  const bodyDescription = t('partySelection.subTitle');
   const theme = useTheme();
   const [selectedParty, setSelectedParty] = React.useState<Party | null>(
     parties.length === 1 ? parties[0] : null
@@ -45,13 +43,21 @@ export default function PartySelection({ parties }: Props) {
       spacing={2}
       my={'auto'}
     >
-      <Grid item container justifyContent="center">
-        <Grid item xs={8}>
-          <PartySelectionTitle bodyTitle={bodyTitle} bodyDescription={bodyDescription} />
+      <Grid item container mb={3} xs={12}>
+        <Grid item xs={12} mb={1} display="flex" justifyContent="center">
+          <Typography variant="h3">{bodyTitle}</Typography>
+        </Grid>
+        <Grid item xs={18} display="flex" justifyContent="center">
+          <Typography variant="body1" align="center">
+            <Trans i18nKey="partySelection.subTitle">
+              Se operi per più enti, potrai modificare la tua scelta dopo aver <br /> effettuato
+              l’accesso.
+            </Trans>
+          </Typography>
         </Grid>
       </Grid>
 
-      <Grid item display="flex" justifyContent="center">
+      <Grid item display="flex" justifyContent="center" xs={12}>
         <Paper
           elevation={8}
           sx={{
@@ -76,21 +82,23 @@ export default function PartySelection({ parties }: Props) {
           </Grid>
         </Paper>
       </Grid>
-      <Grid item xs={2} display="flex" justifyContent="center">
-        <Button
-          variant="contained"
-          disabled={disableBtn}
-          onClick={() => {
-            trackEvent('DASHBOARD_PARTY_SELECTION', { party_id: selectedParty?.partyId });
-            history.push(
-              resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                partyId: selectedParty?.partyId ?? '',
-              })
-            );
-          }}
-        >
-          {t('partySelection.continueButton')}
-        </Button>
+      <Grid item container xs={12} display="flex" justifyContent="center" mt={4}>
+        <Grid item xs={2} display="flex" justifyContent="center">
+          <Button
+            variant="contained"
+            disabled={disableBtn}
+            onClick={() => {
+              trackEvent('DASHBOARD_PARTY_SELECTION', { party_id: selectedParty?.partyId });
+              history.push(
+                resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
+                  partyId: selectedParty?.partyId ?? '',
+                })
+              );
+            }}
+          >
+            {t('partySelection.continueButton')}
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );

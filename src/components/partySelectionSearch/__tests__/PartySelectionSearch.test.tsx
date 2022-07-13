@@ -164,7 +164,7 @@ test('Test selection when there are > 3 parties', async () => {
       selectedParty={selectedParty}
     />
   );
-  const filterPartyBari = 'Comune di Bari Comune di Bari Da completare';
+  const filterPartyBari = 'Comune di Bari Comune di Bari Amministratore Da completare';
   expect(selectedParty).toBe(null);
   // seleziona su uno dei party Napoli
   const buttonParty = screen.getByRole('button', { name: filterPartyBari });

@@ -8,7 +8,7 @@ export default {
   partySelection: {
     title: 'Seleziona il tuo ente',
     subTitle:
-      'Se operi per più enti, potrai modificare la tua scelta dopo aver effettuato l’accesso.',
+      'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.',
     partyStatus: 'Da completare',
     continueButton: 'Entra',
     backButton: 'Indietro',
@@ -19,6 +19,12 @@ export default {
     bodyDescription:
       "L'adesione potrebbe essere ancora in corso. <1 /> Verifica di aver completato tutti i passaggi richiesti.",
     backButton: 'Torna alla Home',
+  },
+  noParty: {
+    title: 'Il tuo profilo non è associato a nessun ente',
+    description:
+      'Per accedere all’Area Riservata, chiedi a un Amministratore di aggiungerti nella sezione Utenti.',
+    backHome: 'Torna alla home',
   },
   activeProductCard: {
     disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',

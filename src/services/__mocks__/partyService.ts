@@ -97,6 +97,22 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'GSP',
   },
+  {
+    userRole: 'ADMIN',
+    description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
+    urlLogo: 'image',
+    status: 'ACTIVE',
+    partyId: '6',
+    digitalAddress: 'comune.bressanone@pec.it',
+    fiscalCode: 'fiscalCodeBressanone',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Piazza della Scala, 2 - 20121 Milano',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'externalId6',
+    originId: 'originId6',
+    origin: 'IPA',
+    institutionType: 'GSP',
+  },
   // Usable when not mocking the BE
   {
     partyId: 'f572bb09-b689-4785-8ea8-4c7a8b081998',
