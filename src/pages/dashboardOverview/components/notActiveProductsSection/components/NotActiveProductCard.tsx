@@ -9,6 +9,7 @@ import {
   Link,
   useTheme,
   Tooltip,
+  Stack,
 } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import { Trans } from 'react-i18next';
@@ -134,12 +135,11 @@ export default function NotActiveProductCard({
               </Link>
             </Trans>
           </Grid>
-          <Grid
+          <Stack
             display="flex"
             alignItems="flex-end"
             justifyContent="flex-end"
-            item
-            xs={12}
+            direction="row"
             sx={{ width: '100%' }}
             mt={3}
           >
@@ -159,7 +159,7 @@ export default function NotActiveProductCard({
                 {buttonLabel}
               </Button>
             </CardActions>
-          </Grid>
+          </Stack>
         </CardContent>
       </Grid>
     </Card>
