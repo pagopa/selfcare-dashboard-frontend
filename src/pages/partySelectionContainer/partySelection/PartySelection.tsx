@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid, Button, Paper, useTheme, Typography } from '@mui/material';
+import { Grid, Button, Paper, useTheme, Typography, Stack } from '@mui/material';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
@@ -83,7 +83,7 @@ export default function PartySelection({ parties }: Props) {
         </Paper>
       </Grid>
       <Grid item container xs={12} display="flex" justifyContent="center" mt={4}>
-        <Grid item xs={2} display="flex" justifyContent="center">
+        <Stack direction="row" display="flex" justifyContent="center">
           <Button
             variant="contained"
             disabled={disableBtn}
@@ -98,7 +98,7 @@ export default function PartySelection({ parties }: Props) {
           >
             {t('partySelection.continueButton')}
           </Button>
-        </Grid>
+        </Stack>
       </Grid>
     </Grid>
   );
