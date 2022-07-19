@@ -73,7 +73,7 @@ variables:
     react_app_url_api_party_process: '$(PROD_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_dashboard: '$(PROD_REACT_APP_URL_API_DASHBOARD)'
 
-    react_app_enable_assistance: 'false'
+    react_app_enable_assistance: 'true'
 
     react_app_url_storage: '$(PROD_REACT_APP_URL_STORAGE)'
 
