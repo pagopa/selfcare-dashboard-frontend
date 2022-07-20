@@ -20,7 +20,6 @@ import { ProductAvatar } from '@pagopa/mui-italia';
 import { ENV } from '../../../../../utils/env';
 import { Party } from '../../../../../model/Party';
 import { Product, SubProduct } from '../../../../../model/Product';
-import { productColors } from '../../../DashboardOverview';
 
 type Props = {
   cardTitle: string;
@@ -52,7 +51,6 @@ export default function ActiveProductCard({
     () => product.subProducts.filter((p) => p.status === 'ACTIVE') ?? [],
     [product.subProducts]
   );
-  const bgLogoColor = productColors[product.id as keyof typeof productColors].background;
 
   return (
     <Card
@@ -73,7 +71,7 @@ export default function ActiveProductCard({
               height="64px"
               mr={2}
             >
-              <ProductAvatar logoUrl={urlLogo} logoBgColor={bgLogoColor} />
+              <ProductAvatar logoUrl={urlLogo} logoBgColor={product.logoBgColor} />
             </Box>
             <Box display="flex" flexDirection="column" justifyContent="center">
               {cardTitle && (

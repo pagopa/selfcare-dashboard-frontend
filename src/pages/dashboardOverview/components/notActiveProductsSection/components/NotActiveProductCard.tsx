@@ -15,7 +15,6 @@ import CardMedia from '@mui/material/CardMedia';
 import { Trans } from 'react-i18next';
 import { ProductAvatar } from '@pagopa/mui-italia/dist/components/ProductAvatar/ProductAvatar';
 import { Product } from '../../../../../model/Product';
-import { productColors } from '../../../DashboardOverview';
 
 type Props = {
   image?: string;
@@ -51,8 +50,6 @@ export default function NotActiveProductCard({
     WebkitBoxOrient: 'vertical' as const,
   };
 
-  const bgLogoColor = productColors[product.id as keyof typeof productColors].background;
-
   return (
     <Card sx={{ height: '100%', borderRadius: theme.spacing(2), width: '100%' }}>
       <Grid item xs={12}>
@@ -75,7 +72,7 @@ export default function NotActiveProductCard({
           }}
           mr={2}
         >
-          <ProductAvatar logoUrl={urlLogo} logoBgColor={bgLogoColor} />
+          <ProductAvatar logoUrl={urlLogo} logoBgColor={product.logoBgColor} />
         </Box>
       </Grid>
       <Grid item xs={12}>

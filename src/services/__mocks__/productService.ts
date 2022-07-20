@@ -3,7 +3,7 @@ import { ProductRole } from '../../model/ProductRole';
 
 export const mockedPartyProducts: Array<Product> = [
   {
-    logo: 'https://dev.selfcare.pagopa.it/resources/products/prod-io/logo.svg',
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-io/logo.svg',
     title: 'App IO',
     description: 'App IO description',
     id: 'prod-io',
@@ -16,9 +16,10 @@ export const mockedPartyProducts: Array<Product> = [
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [{ id: 'prod-io-premium', title: 'Premium', status: 'ACTIVE' }],
+    logoBgColor: 'primary.main',
   },
   {
-    logo: 'https://dev.selfcare.pagopa.it/resources/products/prod-pn/logo.svg',
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.svg',
     id: 'prod-pn',
     title: 'Piattaforma Notifiche',
     description: 'Piattaforma Notifiche description',
@@ -30,9 +31,10 @@ export const mockedPartyProducts: Array<Product> = [
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
+    logoBgColor: 'pagoPA.main',
   },
   {
-    logo: 'https://dev.selfcare.pagopa.it/resources/products/prod-pagopa/logo.svg',
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.svg',
     id: 'prod-pagopa',
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
@@ -45,9 +47,10 @@ export const mockedPartyProducts: Array<Product> = [
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
+    logoBgColor: 'pagoPA.main',
   },
   {
-    logo: 'https://dev.selfcare.pagopa.it/resources/products/prod-ciban/logo.svg',
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.svg',
     title: 'Check-IBAN',
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: 'prod-ciban',
@@ -58,9 +61,10 @@ export const mockedPartyProducts: Array<Product> = [
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
+    logoBgColor: 'checkIban.main',
   },
   {
-    logo: 'https://dev.selfcare.pagopa.it/resources/products/prod-cgn/logo.png',
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png',
     id: 'prod-cgn',
     title: 'Carta Giovani',
     description: 'Richiedi la convenzione e gestisci i dati e le agevolazioni da offrire.',
@@ -71,9 +75,10 @@ export const mockedPartyProducts: Array<Product> = [
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
+    logoBgColor: undefined,
   },
   {
-    logo: 'https://dev.selfcare.pagopa.it/resources/products/prod-interop/logo.svg',
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
     id: 'prod-interop',
     title: 'PDND',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
@@ -85,6 +90,7 @@ export const mockedPartyProducts: Array<Product> = [
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
+    logoBgColor: undefined,
   },
 ];
 
