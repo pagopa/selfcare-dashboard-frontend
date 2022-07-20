@@ -7,7 +7,7 @@ export type Product = {
   activationDateTime?: Date;
   description: string;
   id: string;
-  logo?: string;
+  logo: string;
   title: string;
   urlBO: string;
   urlPublic?: string;

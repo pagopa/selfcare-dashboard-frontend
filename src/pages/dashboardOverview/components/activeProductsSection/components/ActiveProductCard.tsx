@@ -16,15 +16,17 @@ import { Trans } from 'react-i18next';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { ProductAvatar } from '@pagopa/mui-italia';
 import { ENV } from '../../../../../utils/env';
 import { Party } from '../../../../../model/Party';
 import { Product, SubProduct } from '../../../../../model/Product';
+import { productColors } from '../../../DashboardOverview';
 
 type Props = {
   cardTitle: string;
   buttonLabel: string;
   disableBtn: boolean;
-  urlLogo?: string;
+  urlLogo: string;
   btnAction?: () => void;
   party: Party;
   product: Product;
@@ -50,6 +52,8 @@ export default function ActiveProductCard({
     () => product.subProducts.filter((p) => p.status === 'ACTIVE') ?? [],
     [product.subProducts]
   );
+  const bgLogoColor = productColors[product.id as keyof typeof productColors].background;
+
   return (
     <Card
       raised
@@ -69,7 +73,7 @@ export default function ActiveProductCard({
               height="64px"
               mr={2}
             >
-              <img src={urlLogo} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+              <ProductAvatar logoUrl={urlLogo} logoBgColor={bgLogoColor} />
             </Box>
             <Box display="flex" flexDirection="column" justifyContent="center">
               {cardTitle && (

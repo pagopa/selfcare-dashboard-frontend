@@ -13,6 +13,27 @@ type Props = {
   products: Array<Product>;
 };
 
+export const productColors = {
+  'prod-io': {
+    background: '#0073E6',
+  },
+  'prod-ciban': {
+    background: '#008CA8',
+  },
+  'prod-pn': {
+    background: '#0066CC',
+  },
+  'prod-interop': {
+    background: undefined,
+  },
+  'prod-cgn': {
+    background: undefined,
+  },
+  'prod-pagopa': {
+    background: '#0066CC',
+  },
+};
+
 const DashboardOverview = ({ party, products }: Props) => {
   const canUploadLogo = party.userRole === 'ADMIN';
   return (
