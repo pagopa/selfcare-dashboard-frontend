@@ -44,6 +44,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
         }}
         buttonLabel={t('overview.notActiveProducts.joinButton')}
         urlPublic={product.urlPublic}
+        product={product}
       />
     </Grid>
   );
