@@ -18,6 +18,7 @@ test('Test institutionInfo2Party', () => {
     children: [{ id: 'subProductId', title: 'Premium', status: StatusEnum.ACTIVE }],
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
+    logoBgColor: '#0066CC',
   };
 
   const product = productResource2Product(productResource);
@@ -36,5 +37,6 @@ test('Test institutionInfo2Party', () => {
     subProducts: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE' }],
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
+    logoBgColor: '#0066CC',
   });
 });

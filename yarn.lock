@@ -1898,10 +1898,10 @@
     fp-ts "^2.12.1"
     io-ts "^2.2.16"
 
-"@pagopa/mui-italia@^0.6.32":
-  version "0.6.33"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.33.tgz#b6e12f16be0e7673f7d69873d37e0155ba46a66b"
-  integrity sha512-gzSoN0SqI66iW38zTyc15Jygbsfj/nLWUNCeSFfxJobDwLMddKJy/ALyqOiETbfHIlerMYzBVdPcUBI4kwB8IA==
+"@pagopa/mui-italia@^0.6.35":
+  version "0.6.35"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.35.tgz#c3785d4756cfabb4dbcb3a329142928e6c075f00"
+  integrity sha512-WdvAN+oi99wqE70GZyWIA5ggUw0jJtT4ktYUnWtnqYkzSKX01jOb6EAM9OtHIPGjr81mMBIM4hvb2PpsHJnX5g==
   dependencies:
     "@fontsource/titillium-web" "^4.5.8"
     clsx "^1.1.1"
