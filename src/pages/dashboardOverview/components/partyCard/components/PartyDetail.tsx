@@ -30,7 +30,9 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Tooltip title={party.institutionType ? party.institutionType : ''}>
+          <Tooltip
+            title={party.institutionType ? institutionTypeTransoce(party.institutionType) : ''}
+          >
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {institutionTypeTransoce(party.institutionType)}
             </Typography>
