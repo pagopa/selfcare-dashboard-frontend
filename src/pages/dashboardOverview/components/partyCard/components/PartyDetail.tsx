@@ -111,7 +111,9 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8} sx={{}}>
-          <Tooltip title={party.digitalAddress}>
+          <Tooltip
+            title={party.digitalAddress.length >= showTooltipAfter ? party.digitalAddress : ''}
+          >
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {party.digitalAddress}
             </Typography>
