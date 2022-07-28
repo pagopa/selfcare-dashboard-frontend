@@ -22,7 +22,7 @@ export default function PartyDetail({ party }: Props) {
   const showTooltipAfter = 49;
 
   return (
-    <Grid container alignItems={'flex-start'} sx={{ flexWrap: 'nowrap' }}>
+    <Grid container alignItems={'flex-start'} wrap="nowrap">
       <Grid container item xs={6} alignItems={'flex-start'} spacing={1} pr={2}>
         {/* institutionType */}
         <Grid item xs={4}>
