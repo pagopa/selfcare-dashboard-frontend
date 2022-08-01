@@ -7,13 +7,16 @@
   },
   "servers": [
     {
-      "url": "{basePath}:{port}",
+      "url": "{url}:{port}{basePath}",
       "variables": {
-        "basePath": {
+        "url": {
           "default": "http://localhost"
         },
         "port": {
           "default": "8080"
+        },
+        "basePath": {
+          "default": ""
         }
       }
     }
@@ -2751,6 +2754,11 @@
           "logo": {
             "type": "string",
             "description": "Product's logo"
+          },
+          "logoBgColor": {
+            "pattern": "^#[0-9A-F]{6}$",
+            "type": "string",
+            "description": "Product logo's background color"
           },
           "status": {
             "type": "string",

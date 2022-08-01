@@ -13,16 +13,19 @@ import {
 } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import { Trans } from 'react-i18next';
+import { ProductAvatar } from '@pagopa/mui-italia/dist/components/ProductAvatar/ProductAvatar';
+import { Product } from '../../../../../model/Product';
 
 type Props = {
   image?: string;
-  urlLogo?: string;
+  urlLogo: string;
   description: string;
   title: string;
   btnAction?: () => void;
   disableBtn: boolean;
   buttonLabel: string;
   urlPublic?: string;
+  product: Product;
 };
 
 export default function NotActiveProductCard({
@@ -34,6 +37,7 @@ export default function NotActiveProductCard({
   buttonLabel,
   urlPublic,
   title,
+  product,
 }: Props) {
   const theme = useTheme();
   const truncateText = {
@@ -64,23 +68,11 @@ export default function NotActiveProductCard({
         <Box
           mx={3}
           sx={{
-            width: '64px',
-            height: '64px',
-            borderRadius: theme.shape,
-            backgroundColor: 'background.paper',
-            marginTop: '-3rem',
-            position: 'relative',
-            textAlign: 'center',
-            '&::after': {
-              position: 'absolute',
-              display: 'inline-block',
-              top: '40px',
-              left: '40px',
-            },
+            marginTop: '-2rem',
           }}
           mr={2}
         >
-          <img src={urlLogo} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+          <ProductAvatar logoUrl={urlLogo} logoBgColor={product.logoBgColor} />
         </Box>
       </Grid>
       <Grid item xs={12}>

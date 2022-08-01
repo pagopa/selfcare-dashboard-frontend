@@ -7,7 +7,7 @@ export type Product = {
   activationDateTime?: Date;
   description: string;
   id: string;
-  logo?: string;
+  logo: string;
   title: string;
   urlBO: string;
   urlPublic?: string;
@@ -17,6 +17,7 @@ export type Product = {
   status: ProductStatus;
   imageUrl: string;
   subProducts: Array<SubProduct>;
+  logoBgColor?: string;
 };
 
 export type SubProduct = {
@@ -47,4 +48,5 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   status: resource.status,
   imageUrl: resource.imageUrl,
   subProducts: resource.children?.slice() ?? [],
+  logoBgColor: resource.logoBgColor,
 });

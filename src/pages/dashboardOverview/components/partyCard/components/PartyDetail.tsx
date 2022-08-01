@@ -19,9 +19,10 @@ export default function PartyDetail({ party }: Props) {
 
   const institutionTypeTransoce = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
+  const showTooltipAfter = 49;
 
   return (
-    <Grid container alignItems={'flex-start'}>
+    <Grid container alignItems={'flex-start'} wrap="nowrap">
       <Grid container item xs={6} alignItems={'flex-start'} spacing={1} pr={2}>
         {/* institutionType */}
         <Grid item xs={4}>
@@ -30,7 +31,13 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Tooltip title={party.institutionType ? party.institutionType : ''}>
+          <Tooltip
+            title={
+              institutionTypeTransoce(party.institutionType).length >= showTooltipAfter
+                ? institutionTypeTransoce(party.institutionType)
+                : ''
+            }
+          >
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {institutionTypeTransoce(party.institutionType)}
             </Typography>
@@ -45,7 +52,7 @@ export default function PartyDetail({ party }: Props) {
               </Typography>
             </Grid>
             <Grid item xs={8}>
-              <Tooltip title={party.category}>
+              <Tooltip title={party.category.length >= showTooltipAfter ? party.category : ''}>
                 <Typography
                   sx={{ ...infoStyles, maxWidth: '100% !important' }}
                   className="ShowDots"
@@ -63,7 +70,7 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Tooltip title={party.description}>
+          <Tooltip title={party.description.length >= showTooltipAfter ? party.description : ''}>
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {party.description}
             </Typography>
@@ -76,7 +83,7 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Tooltip title={party.originId}>
+          <Tooltip title={party.originId.length >= showTooltipAfter ? party.originId : ''}>
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {party.originId}
             </Typography>
@@ -91,7 +98,7 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Tooltip title={party.fiscalCode}>
+          <Tooltip title={party.fiscalCode.length >= showTooltipAfter ? party.fiscalCode : ''}>
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {party.fiscalCode}
             </Typography>
@@ -104,7 +111,9 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8} sx={{}}>
-          <Tooltip title={party.digitalAddress}>
+          <Tooltip
+            title={party.digitalAddress.length >= showTooltipAfter ? party.digitalAddress : ''}
+          >
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {party.digitalAddress}
             </Typography>
@@ -117,7 +126,9 @@ export default function PartyDetail({ party }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Tooltip title={party.registeredOffice}>
+          <Tooltip
+            title={party.registeredOffice.length >= showTooltipAfter ? party.registeredOffice : ''}
+          >
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {party.registeredOffice}
             </Typography>
