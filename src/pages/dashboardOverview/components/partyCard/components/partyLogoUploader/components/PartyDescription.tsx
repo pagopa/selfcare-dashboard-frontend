@@ -24,7 +24,7 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
         sx={{ color: 'primary.main' }}
         weight="default"
       >
-        {files && files.length > 0 && files[0].name ? files[0].name : labelLink}
+        {files && files.length > 0 && files[0].name ? labelLink : t('overview.partyLogo.modify')}
       </ButtonNaked>
       <Typography
         mt={1}
