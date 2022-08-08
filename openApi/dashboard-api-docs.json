@@ -1327,6 +1327,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -1590,7 +1600,7 @@
           {
             "name": "page",
             "in": "query",
-            "description": "Results page you want to retrieve (0..N)",
+            "description": "The page number to access (0 indexed, defaults to 0)",
             "required": false,
             "style": "form",
             "allowReserved": true,
@@ -1602,7 +1612,7 @@
           {
             "name": "size",
             "in": "query",
-            "description": "Number of records per page",
+            "description": "Number of records per page (defaults to 20, max 2000)",
             "required": false,
             "style": "form",
             "allowReserved": true,
@@ -1653,10 +1663,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserGroupPlainResource"
-                  }
+                  "$ref": "#/components/schemas/PageOfUserGroupPlainResource"
                 }
               }
             }
@@ -2515,6 +2522,40 @@
           "reason": {
             "type": "string",
             "description": "Invalid parameter reason."
+          }
+        }
+      },
+      "PageOfUserGroupPlainResource": {
+        "title": "PageOfUserGroupPlainResource",
+        "required": ["content", "number", "size", "totalElements", "totalPages"],
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "description": "The page content",
+            "items": {
+              "$ref": "#/components/schemas/UserGroupPlainResource"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "description": "The number of the current page",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "description": "The size of the page",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "The total amount of elements",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "The number of total pages",
+            "format": "int32"
           }
         }
       },
