@@ -13,7 +13,7 @@ type Props = {
   files: Array<File>;
 };
 
-export function PartyDescription({ labelLink, open, loading, files }: Props) {
+export function PartyDescription({ labelLink, open, loading }: Props) {
   const { t } = useTranslation();
   return (
     <Grid container justifyContent={'flex-start'} alignItems={'center'}>
@@ -24,7 +24,7 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
         sx={{ color: 'primary.main' }}
         weight="default"
       >
-        {files && files.length > 0 && files[0].name ? labelLink : t('overview.partyLogo.upload')}
+        {labelLink}
       </ButtonNaked>
       <Typography
         mt={1}
