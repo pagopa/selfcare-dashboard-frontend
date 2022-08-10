@@ -29,7 +29,13 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
         >
           {files && files.length > 0 && files[0].name ? labelLink : t('overview.partyLogo.upload')}
         </ButtonNaked>
-        <Tooltip title={t('overview.partyLogo.size')}>
+        <Tooltip
+          title={
+            <Trans i18nKey={t('overview.partyLogo.size')}>
+              Dimensione massima 300 x <br /> 300px - Formato .png
+            </Trans>
+          }
+        >
           <InfoOutlinedIcon
             sx={{ color: 'text.secondary', cursor: 'pointer', ml: 1 }}
             fontSize="small"
