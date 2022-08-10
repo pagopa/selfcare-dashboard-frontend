@@ -36,7 +36,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
 
   useEffect(() => {
     setTimeout(() => setLabelLink(getLabelLinkText(t)), 400);
-  }, [urlLogo]);
+  }, [urlLogo, partyId]);
 
   const maxLength = 400;
   const minLegth = 300;
