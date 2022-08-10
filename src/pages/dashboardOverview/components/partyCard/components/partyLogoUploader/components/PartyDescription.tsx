@@ -35,6 +35,7 @@ export function PartyDescription({ labelLink, open, loading }: Props) {
               Dimensione massima 300 x <br /> 300px - Formato .png
             </Trans>
           }
+          placement="top"
         >
           <InfoOutlinedIcon
             sx={{ color: 'text.secondary', cursor: 'pointer', ml: 1 }}
