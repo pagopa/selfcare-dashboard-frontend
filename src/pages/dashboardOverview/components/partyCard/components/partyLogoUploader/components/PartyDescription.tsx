@@ -1,8 +1,10 @@
-import { Grid, Typography } from '@mui/material';
+import { Stack, Tooltip, Typography } from '@mui/material';
 import { useTranslation, Trans } from 'react-i18next';
 import EditIcon from '@mui/icons-material/Edit';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { MouseEventHandler } from 'react';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Box } from '@mui/system';
 
 // Utility to wait some time
 
@@ -16,39 +18,42 @@ type Props = {
 export function PartyDescription({ labelLink, open, loading, files }: Props) {
   const { t } = useTranslation();
   return (
-    <Grid container justifyContent={'flex-start'} alignItems={'center'}>
-      <ButtonNaked
-        component="button"
-        onClick={open}
-        startIcon={!loading ? <EditIcon /> : undefined}
-        sx={{ color: 'primary.main' }}
-        weight="default"
-      >
-        {files && files.length > 0 && files[0].name ? labelLink : t('overview.partyLogo.upload')}
-      </ButtonNaked>
-      <Typography
-        mt={1}
-        variant="body2"
-        sx={{
-          color: '#5C6F82',
-          fontWeight: '400',
-          lineHeight: '18px',
-          fontSize: '14px',
-          width: '100%',
-        }}
-      >
-        {t('overview.partyLogo.size')}
-      </Typography>
-      <Typography
-        mt={1}
-        sx={{ fontSize: '12px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
-      >
-        <Trans i18nKey="overview.partyLogo.info">
-          Inserisci solo il logo del tuo ente.
-          <br />
-          Sarai responsabile dell’inserimento di immagini diverse da quella indicata.
-        </Trans>
-      </Typography>
-    </Grid>
+    <Stack>
+      <Box display="flex">
+        <ButtonNaked
+          component="button"
+          onClick={open}
+          startIcon={!loading ? <EditIcon /> : undefined}
+          sx={{ color: 'primary.main' }}
+          weight="default"
+        >
+          {files && files.length > 0 && files[0].name ? labelLink : t('overview.partyLogo.upload')}
+        </ButtonNaked>
+        <Tooltip
+          title={
+            <Trans i18nKey={t('overview.partyLogo.size')}>
+              Dimensione massima 300 x <br /> 300px - Formato .png
+            </Trans>
+          }
+        >
+          <InfoOutlinedIcon
+            sx={{ color: 'text.secondary', cursor: 'pointer', ml: 1 }}
+            fontSize="small"
+          />
+        </Tooltip>
+      </Box>
+      <Box>
+        <Typography
+          mt={1}
+          sx={{ fontSize: '12px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
+        >
+          <Trans i18nKey="overview.partyLogo.info">
+            Inserisci solo il logo del tuo ente.
+            <br />
+            Sarai responsabile dell’inserimento di immagini diverse da quella indicata.
+          </Trans>
+        </Typography>
+      </Box>
+    </Stack>
   );
 }
