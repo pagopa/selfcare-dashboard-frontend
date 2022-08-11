@@ -36,6 +36,7 @@ export function PartyDescription({ labelLink, open, loading }: Props) {
             </Trans>
           }
           placement="top"
+          arrow={true}
         >
           <InfoOutlinedIcon
             sx={{ color: 'text.secondary', cursor: 'pointer', ml: 1 }}
