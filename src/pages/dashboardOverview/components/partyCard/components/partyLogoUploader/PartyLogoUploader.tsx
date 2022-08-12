@@ -30,13 +30,13 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const setUrlLogo = (urlLogo?: string) =>
     dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
-  const [labelLink, setLabelLink] = useState<string>(t('overview.partyLogo.modify') as string);
+  const [labelLink, setLabelLink] = useState<string>(t('overview.partyLogo.upload'));
   const addError = useErrorDispatcher();
   const [uploadedFiles, setUploadedFiles] = useState<Array<File>>([]);
 
   useEffect(() => {
     setTimeout(() => setLabelLink(getLabelLinkText(t)), 400);
-  }, [urlLogo]);
+  }, [urlLogo, partyId]);
 
   const maxLength = 400;
   const minLegth = 300;
@@ -66,7 +66,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
         .then(() => {
           setUrlLogo(urlLogo);
           setLoading(false);
-          setLabelLink(t('overview.partyLogo.modify') as string);
+          setLabelLink(t('overview.partyLogo.modify'));
           trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', {
             party_id: partyId,
             request_id: requestId,
@@ -88,7 +88,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
             toNotify: false,
             onRetry: open,
           });
-          setLabelLink(getLabelLinkText(t));
+          setLabelLink(t('overview.partyLogo.upload'));
         });
     },
     onDropRejected: onFileRejected,

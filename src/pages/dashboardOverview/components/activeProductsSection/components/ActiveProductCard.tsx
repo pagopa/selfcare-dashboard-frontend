@@ -76,7 +76,11 @@ export default function ActiveProductCard({
             <Box display="flex" flexDirection="column" justifyContent="center">
               {cardTitle && (
                 <Box display="flex" alignItems={'center'}>
-                  <Tooltip title={cardTitle.length > 27 ? cardTitle : ''}>
+                  <Tooltip
+                    title={cardTitle.length > 27 ? cardTitle : ''}
+                    placement="top"
+                    arrow={true}
+                  >
                     <Typography
                       variant="h6"
                       sx={{
