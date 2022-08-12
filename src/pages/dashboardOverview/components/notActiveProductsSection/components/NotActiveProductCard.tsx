@@ -78,7 +78,7 @@ export default function NotActiveProductCard({
       <Grid item xs={12}>
         <CardContent sx={{ height: '100%', width: '100%' }}>
           <Grid item xs={12} mb={1}>
-            <Tooltip title={title.length > 21 ? title : ''}>
+            <Tooltip title={title.length > 21 ? title : ''} placement="top" arrow={true}>
               <Typography
                 variant="h6"
                 sx={{
@@ -91,7 +91,11 @@ export default function NotActiveProductCard({
             </Tooltip>
           </Grid>
           <Grid item xs={12} height="48px">
-            <Tooltip title={description.length > 99 ? description : ''}>
+            <Tooltip
+              title={description.length > 99 ? description : ''}
+              placement="top"
+              arrow={true}
+            >
               <Typography
                 sx={{
                   ...truncateText,
