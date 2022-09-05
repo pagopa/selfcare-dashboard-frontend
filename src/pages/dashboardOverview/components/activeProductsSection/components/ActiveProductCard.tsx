@@ -99,16 +99,15 @@ export default function ActiveProductCard({
                   </Tooltip>
                 </Box>
               )}
-              {!disableBtn &&
-                activeSubProducts.map((p) => (
-                  <Chip
-                    key={p.id}
-                    label={p.title}
-                    color="primary"
-                    size="small"
-                    sx={{ borderRadius: theme.shape, mt: 1, width: '80px' }}
-                  />
-                ))}
+              {activeSubProducts.map((p) => (
+                <Chip
+                  key={p.id}
+                  label={p.title}
+                  color="primary"
+                  size="small"
+                  sx={{ borderRadius: theme.shape, mt: 1, width: '80px' }}
+                />
+              ))}
             </Box>
           </Grid>
           <Grid item xs={12} display="flex" justifyContent="flex-end">
