@@ -14,7 +14,7 @@ export const useTokenExchange = () => {
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE);
 
   const invokeProductBo = async (product: Product, selectedParty: Party): Promise<void> => {
-    const result = validateUrlBO(product.urlBO);
+    const result = validateUrlBO(product?.urlBO);
     if (result instanceof Error) {
       addError({
         id: `ValidationUrlError-${product.id}`,
