@@ -113,7 +113,7 @@ export default function PartySelectionSearch({
                 clearField={() => onPartySelectionChange(null)}
               />
             ) : (
-              <CustomBox>
+              <CustomBox sx={{ pointerEvents: parties.length !== 1 ? 'auto' : 'none' }}>
                 {filteredParties &&
                   filteredParties.map((party) => {
                     const isDisabled = party.status === 'PENDING';
@@ -122,7 +122,7 @@ export default function PartySelectionSearch({
                         moreThan3Parties={moreThan3Parties}
                         isDisabled={isDisabled}
                         key={party.partyId}
-                        selectedItem={selectedParty === party}
+                        selectedItem={parties.length !== 1 ? selectedParty === party : false}
                         title={party.description}
                         subTitle={t(roleLabels[party.userRole].longLabelKey)}
                         image={party.urlLogo}
