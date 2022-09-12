@@ -55,7 +55,7 @@ export const useTokenExchange = () => {
 };
 
 export const validateUrlBO = (url: string): string | Error => {
-  if (url.indexOf(tokenPlaceholder) === -1) {
+  if (url?.indexOf(tokenPlaceholder) === -1) {
     return new Error(`URL doesn't contain token placeholder ${tokenPlaceholder}: ${url}`);
   }
 
