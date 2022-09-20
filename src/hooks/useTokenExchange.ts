@@ -17,7 +17,7 @@ export const useTokenExchange = () => {
     const result = validateUrlBO(product?.urlBO);
     if (result instanceof Error) {
       addError({
-        id: `ValidationUrlError-${product.id}`,
+        id: `ValidationUrlError-${product?.id}`,
         blocking: false,
         error: result,
         techDescription: result.message,
