@@ -3,7 +3,7 @@ import { Header } from '@pagopa/selfcare-common-frontend';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
@@ -32,6 +32,13 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     () => products?.filter((p) => p.status === 'ACTIVE' && p.authorized) ?? [],
     [products]
   );
+  const actualActiveProducts = useRef<Array<Product>>([]);
+  const actualSelectedParty = useRef<Party>();
+
+  // eslint-disable-next-line functional/immutable-data
+  actualActiveProducts.current = activeProducts;
+  // eslint-disable-next-line functional/immutable-data
+  actualSelectedParty.current = selectedParty;
 
   const { invokeProductBo } = useTokenExchange();
 
@@ -66,7 +73,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       enableLogin={true}
       onSelectedProduct={(p) =>
         onExit(() =>
-          invokeProductBo(activeProducts.find((ap) => ap.id === p.id) as Product, party as Party)
+          invokeProductBo(
+            actualActiveProducts.current?.find((ap) => ap.id === p.id) as Product,
+            actualSelectedParty.current as Party
+          )
         )
       }
       onSelectedParty={(selectedParty: PartySwitchItem) => {
