@@ -32,13 +32,13 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     () => products?.filter((p) => p.status === 'ACTIVE' && p.authorized) ?? [],
     [products]
   );
-  const previousActiveProducts = useRef<Array<Product>>([]);
-  const previousSelectedParty = useRef<Party>();
+  const actualActiveProducts = useRef<Array<Product>>([]);
+  const actualSelectedParty = useRef<Party>();
 
   // eslint-disable-next-line functional/immutable-data
-  previousActiveProducts.current = activeProducts;
+  actualActiveProducts.current = activeProducts;
   // eslint-disable-next-line functional/immutable-data
-  previousSelectedParty.current = selectedParty;
+  actualSelectedParty.current = selectedParty;
 
   const { invokeProductBo } = useTokenExchange();
 
@@ -74,8 +74,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       onSelectedProduct={(p) =>
         onExit(() =>
           invokeProductBo(
-            previousActiveProducts.current?.find((ap) => ap.id === p.id) as Product,
-            previousSelectedParty.current as Party
+            actualActiveProducts.current?.find((ap) => ap.id === p.id) as Product,
+            actualSelectedParty.current as Party
           )
         )
       }
