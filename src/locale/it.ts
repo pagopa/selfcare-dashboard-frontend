@@ -105,6 +105,7 @@ export default {
         PA: 'Pubblica Amministrazione',
         PT: 'Società a controllo pubblico',
         SCP: 'Partner tecnologico',
+        PSP: 'Prestatori Servizi di Pagamento',
       },
     },
   },
