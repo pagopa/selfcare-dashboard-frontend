@@ -14,10 +14,10 @@ export const useTokenExchange = () => {
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE);
 
   const invokeProductBo = async (product: Product, selectedParty: Party): Promise<void> => {
-    const result = validateUrlBO(product.urlBO);
+    const result = validateUrlBO(product?.urlBO);
     if (result instanceof Error) {
       addError({
-        id: `ValidationUrlError-${product.id}`,
+        id: `ValidationUrlError-${product?.id}`,
         blocking: false,
         error: result,
         techDescription: result.message,
@@ -55,7 +55,7 @@ export const useTokenExchange = () => {
 };
 
 export const validateUrlBO = (url: string): string | Error => {
-  if (url.indexOf(tokenPlaceholder) === -1) {
+  if (url?.indexOf(tokenPlaceholder) === -1) {
     return new Error(`URL doesn't contain token placeholder ${tokenPlaceholder}: ${url}`);
   }
 
