@@ -10,6 +10,7 @@ export type Product = {
   logo: string;
   title: string;
   urlBO: string;
+  urlTest?: string;
   urlPublic?: string;
   tag?: string;
   userRole?: UserRole;
