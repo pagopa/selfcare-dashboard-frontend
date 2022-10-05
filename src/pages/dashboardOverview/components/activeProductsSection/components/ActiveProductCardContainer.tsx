@@ -1,6 +1,8 @@
 import { Grid, Typography } from '@mui/material';
+import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionModal';
 import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
@@ -14,6 +16,7 @@ type Props = {
 export default function ActiveProductCardContainer({ party, product }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
+  const [openChooseEnvModal, setOpenChooseEnvModal] = useState<boolean>(false);
   const isDisabled = product.authorized === false;
   const lastServiceActivationDate = undefined; // actually this info is not available
 
@@ -24,7 +27,9 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
         cardTitle={product.title}
         buttonLabel={t('overview.activeProducts.manageButton')}
         urlLogo={product.logo}
-        btnAction={() => invokeProductBo(product, party)}
+        btnAction={() =>
+          product.urlTest ? setOpenChooseEnvModal(true) : invokeProductBo(product, party)
+        }
         party={party}
         product={product}
       />
@@ -34,6 +39,22 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
             `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
         </Typography>
       )}
+      <SessionModal
+        open={openChooseEnvModal}
+        title={t('overview.activeProducts.activeProductsEnvModal.title')}
+        message={
+          <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
+            L’ambiente di test ti permette di conoscere
+            <strong>{{ productTitle: product.title }}</strong> e fare prove in tutta sicurezza.
+            L’ambiente di produzione è il prodotto vero e proprio.
+          </Trans>
+        }
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.envTestButton')}
+        onConfirm={() => invokeProductBo(product, party)}
+        handleExit={() => setOpenChooseEnvModal(false)}
+        handleClose={() => setOpenChooseEnvModal(false)} // TODO SELC-1600 Button to redirect in BO test enviroment product
+      />
     </Grid>
   );
 }

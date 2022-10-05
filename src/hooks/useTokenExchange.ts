@@ -13,6 +13,9 @@ export const useTokenExchange = () => {
   const addError = useErrorDispatcher();
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE);
 
+  /* TODO SELC-1600 adaptation to changes to the tokenExchange service agreed with the BE 
+  in order to obtain access to test environment when available for the product */
+
   const invokeProductBo = async (product: Product, selectedParty: Party): Promise<void> => {
     const result = validateUrlBO(product?.urlBO);
     if (result instanceof Error) {

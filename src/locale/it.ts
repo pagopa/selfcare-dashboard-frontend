@@ -58,6 +58,13 @@ export default {
       activationOf: 'Attivo dal ',
       active: 'Attivo',
       manageButton: 'Gestisci',
+      activeProductsEnvModal: {
+        title: 'In quale ambiente vuoi entrare?',
+        message:
+          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto vero e proprio.',
+        envProdButton: 'Produzione',
+        envTestButton: 'Test',
+      },
     },
     lastServiceActive: 'Ultimo servizio attivato: ',
     notActiveProductsSection: {

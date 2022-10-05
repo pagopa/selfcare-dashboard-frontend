@@ -80,9 +80,10 @@ export const mockedPartyProducts: Array<Product> = [
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
     id: 'prod-interop',
-    title: 'PDND',
+    title: 'Interoperabilità',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
+    urlTest: '/', // TODO SELC-1600
     authorized: true,
     userRole: 'ADMIN',
     status: 'ACTIVE',
