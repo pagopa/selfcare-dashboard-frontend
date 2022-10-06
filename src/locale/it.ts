@@ -21,10 +21,10 @@ export default {
     backButton: 'Torna alla Home',
   },
   noParty: {
-    title: 'Il tuo profilo non è associato a nessun ente',
+    title: 'Accesso non consentito',
     description:
-      'Per accedere all’Area Riservata, chiedi a un Amministratore di aggiungerti nella sezione Utenti.',
-    backHome: 'Torna alla home',
+      'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> di PagoPA.  Se lavori per un ente, chiedi a un <3 /> Amministratore di aggiungerti nella sezione Utenti.',
+    backHome: 'Chiudi',
   },
   activeProductCard: {
     disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',
