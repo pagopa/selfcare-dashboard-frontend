@@ -2,14 +2,13 @@ import React, { useEffect } from 'react';
 import { Grid, Button, Typography, Box } from '@mui/material';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { IllusError } from '@pagopa/mui-italia';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { ENV } from '../../utils/env';
 
 export default function NoParty() {
   const { t } = useTranslation();
 
   const bodyTitle = t('noParty.title');
-  const bodyDescription = t('noParty.description');
 
   useEffect(() => {
     trackEvent('DASHBOARD_ASSOCIATION_FAILURE', { event_name: 'DASHBOARD_ASSOCIATION_FAILURE' });
@@ -41,7 +40,13 @@ export default function NoParty() {
         <Grid item container justifyContent="center">
           <Grid item xs={4}>
             <Box>
-              <Typography variant="body1">{bodyDescription}</Typography>
+              <Typography variant="body1">
+                <Trans i18nKey="noParty.description">
+                  L’Area Riservata è dedicata agli enti che utilizzano i prodotti <br /> di PagoPA.
+                  Se lavori per un ente, chiedi a un <br /> Amministratore di aggiungerti nella
+                  sezione Utenti.
+                </Trans>
+              </Typography>
             </Box>
           </Grid>
         </Grid>
@@ -50,7 +55,6 @@ export default function NoParty() {
           <Button
             variant="contained"
             sx={{
-              width: '158px',
               height: '46px',
               fontSize: 'fontSize',
             }}
