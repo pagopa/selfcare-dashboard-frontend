@@ -63,7 +63,7 @@ export default {
         message:
           'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto vero e proprio.',
         envProdButton: 'Produzione',
-        envTestButton: 'Test',
+        backButton: 'Annulla',
       },
     },
     lastServiceActive: 'Ultimo servizio attivato: ',
