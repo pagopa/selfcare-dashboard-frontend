@@ -10,7 +10,10 @@ export type Product = {
   logo: string;
   title: string;
   urlBO: string;
-  urlTest?: string;
+  urlTest?: Array<{
+    environment: string;
+    url: string;
+  }>;
   urlPublic?: string;
   tag?: string;
   userRole?: UserRole;

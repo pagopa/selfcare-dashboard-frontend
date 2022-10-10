@@ -83,7 +83,7 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'Interoperabilità',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
-    urlTest: '/', // TODO SELC-1600
+    urlTest: [], // TODO SELC-1600
     authorized: true,
     userRole: 'ADMIN',
     status: 'ACTIVE',
