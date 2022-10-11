@@ -51,9 +51,9 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={() => invokeProductBo(product, party)}
+        onConfirm={(e) => invokeProductBo(product, party, (e.target as HTMLInputElement).value)}
         handleClose={() => setOpenChooseEnvModal(false)}
-        productEnvironments={product?.urlTest} // TODO SELC-1600 Button to redirect in BO test enviroment product
+        productEnvironments={product?.urlTest}
       />
     </Grid>
   );

@@ -13,11 +13,17 @@ export const useTokenExchange = () => {
   const addError = useErrorDispatcher();
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE);
 
-  /* TODO SELC-1600 adaptation to changes to the tokenExchange service agreed with the BE 
-  in order to obtain access to test environment when available for the product */
-
-  const invokeProductBo = async (product: Product, selectedParty: Party): Promise<void> => {
-    const result = validateUrlBO(product?.urlBO);
+  const invokeProductBo = async (
+    product: Product,
+    selectedParty: Party,
+    selectedEnvironment?: string
+  ): Promise<void> => {
+    const selectedEnvironmentUrl = product.urlTest?.find(
+      (p) => p.environment === selectedEnvironment
+    )?.url;
+    const result = selectedEnvironmentUrl
+      ? validateUrlBO(selectedEnvironmentUrl)
+      : validateUrlBO(product?.urlBO);
     if (result instanceof Error) {
       addError({
         id: `ValidationUrlError-${product?.id}`,
@@ -30,7 +36,7 @@ export const useTokenExchange = () => {
     }
 
     setLoading(true);
-    retrieveTokenExchange(selectedParty, product)
+    retrieveTokenExchange(selectedParty, product, selectedEnvironment)
       .then((t) =>
         trackEvent(
           'DASHBOARD_OPEN_PRODUCT',
