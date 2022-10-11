@@ -97,7 +97,7 @@ describe('useTokenExchange', () => {
     await waitFor(() => expect(store.getState().appState.loading.result).toBeFalsy());
 
     expect(retrieveTokenExchangeSpy).toBeCalledTimes(1);
-    expect(retrieveTokenExchangeSpy).toBeCalledWith(expectedParty, expectedProduct);
+    expect(retrieveTokenExchangeSpy).toBeCalledWith(expectedParty, expectedProduct, undefined);
 
     await waitFor(() =>
       expect(mockedLocation.assign).toBeCalledWith('https://hostname/path#DUMMYTOKEN')

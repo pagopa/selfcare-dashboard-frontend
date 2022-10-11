@@ -63,7 +63,7 @@ test('test render and behavior', async () => {
   fireEvent.click(button);
 
   await waitFor(() =>
-    expect(retrieveTokenExchange).toBeCalledWith(mockedParties[0], mockedProduct)
+    expect(retrieveTokenExchange).toBeCalledWith(mockedParties[0], mockedProduct, undefined)
   );
 
   expect(mockedLocation.assign).toBeCalledWith(
