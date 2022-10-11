@@ -10,7 +10,7 @@ export type Product = {
   logo: string;
   title: string;
   urlBO: string;
-  urlTest?: Array<{
+  backOfficeEnvironmentConfigurations?: Array<{
     environment: string;
     url: string;
   }>;
@@ -45,6 +45,7 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   logo: resource.logo,
   title: resource.title,
   urlBO: resource.urlBO,
+  backOfficeEnvironmentConfigurations: resource.backOfficeEnvironmentConfigurations?.slice() ?? [],
   urlPublic: resource.urlPublic,
   tag: undefined,
   userRole: resource.userRole as UserRole,

@@ -83,7 +83,7 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'Interoperabilità',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
-    urlTest: [
+    backOfficeEnvironmentConfigurations: [
       {
         environment: 'test1',
         url: 'www.test1.com',

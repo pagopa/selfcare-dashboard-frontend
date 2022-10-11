@@ -28,7 +28,10 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
         buttonLabel={t('overview.activeProducts.manageButton')}
         urlLogo={product.logo}
         btnAction={() =>
-          product.urlTest ? setOpenChooseEnvModal(true) : invokeProductBo(product, party)
+          product.backOfficeEnvironmentConfigurations &&
+          product.backOfficeEnvironmentConfigurations.length > 1
+            ? setOpenChooseEnvModal(true)
+            : invokeProductBo(product, party)
         }
         party={party}
         product={product}
@@ -53,7 +56,7 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={(e) => invokeProductBo(product, party, (e.target as HTMLInputElement).value)}
         handleClose={() => setOpenChooseEnvModal(false)}
-        productEnvironments={product?.urlTest}
+        productEnvironments={product?.backOfficeEnvironmentConfigurations}
       />
     </Grid>
   );
