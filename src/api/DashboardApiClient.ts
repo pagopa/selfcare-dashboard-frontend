@@ -69,7 +69,7 @@ export const DashboardApi = {
     productId: string,
     environment?: string
   ): Promise<IdentityTokenResource> => {
-    const result = await apiClient.exchangeUsingGET({
+    const result = await apiClient.retrieveProductBackofficeUsingGET({
       productId,
       institutionId,
       environment,
