@@ -80,9 +80,19 @@ export const mockedPartyProducts: Array<Product> = [
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
     id: 'prod-interop',
-    title: 'PDND',
+    title: 'Interoperabilità',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
+    backOfficeEnvironmentConfigurations: [
+      {
+        environment: 'test1',
+        url: 'www.test1.com',
+      },
+      {
+        environment: 'test2',
+        url: 'www.test2.com',
+      },
+    ],
     authorized: true,
     userRole: 'ADMIN',
     status: 'ACTIVE',
