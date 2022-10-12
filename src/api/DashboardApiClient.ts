@@ -7,8 +7,8 @@ import { ENV } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
-import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
+import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -69,7 +69,7 @@ export const DashboardApi = {
     productId: string,
     environment?: string
   ): Promise<IdentityTokenResource> => {
-    const result = await apiClient.retrieveProductBackofficeUsingGET({
+    const result = await apiClient.exchangeUsingGET({
       productId,
       institutionId,
       environment,

@@ -45,7 +45,8 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   logo: resource.logo,
   title: resource.title,
   urlBO: resource.urlBO,
-  backOfficeEnvironmentConfigurations: resource.backOfficeEnvironmentConfigurations?.slice() ?? [],
+  backOfficeEnvironmentConfigurations:
+    resource.backOfficeEnvironmentConfigurations?.slice() ?? undefined,
   urlPublic: resource.urlPublic,
   tag: undefined,
   userRole: resource.userRole as UserRole,

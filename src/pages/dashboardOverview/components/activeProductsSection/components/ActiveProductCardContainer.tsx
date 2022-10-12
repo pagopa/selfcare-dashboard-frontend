@@ -28,8 +28,7 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
         buttonLabel={t('overview.activeProducts.manageButton')}
         urlLogo={product.logo}
         btnAction={() =>
-          product.backOfficeEnvironmentConfigurations &&
-          product.backOfficeEnvironmentConfigurations.length > 1
+          product.backOfficeEnvironmentConfigurations
             ? setOpenChooseEnvModal(true)
             : invokeProductBo(product, party)
         }
