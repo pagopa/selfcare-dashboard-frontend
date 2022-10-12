@@ -172,7 +172,7 @@ test('Test selection when there are > 3 parties', async () => {
   fireEvent.click(buttonParty);
 
   // verifichiamo che al click sia selezionato il pulsante "Napoli"
-  const selectedMoreThen3 = document.getElementById('selectedMoreThen3');
+  const selectedMoreThen3 = document.getElementsByClassName('selectedMoreThen3')[0];
   if (selectedMoreThen3) getByText(selectedMoreThen3, 'Comune di Bari');
 });
 test('Test pending party', () => {
