@@ -61,7 +61,7 @@ export default {
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
         message:
-          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto vero e proprio.',
+          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
         envProdButton: 'Produzione',
         backButton: 'Annulla',
       },
