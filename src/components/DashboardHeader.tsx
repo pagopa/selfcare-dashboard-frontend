@@ -14,6 +14,7 @@ import { Party } from '../model/Party';
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
+import ChooseEnvironmentModal from '../pages/dashboardOverview/components/activeProductsSection/components/ChooseEnvironmentModal';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -22,25 +23,27 @@ type Props = WithPartiesProps & {
 };
 
 const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
+  const { invokeProductBo } = useTokenExchange();
   const { t } = useTranslation();
   const history = useHistory();
+
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
+
+  const actualActiveProducts = useRef<Array<Product>>([]);
+  const actualSelectedParty = useRef<Party>();
+
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
   const activeProducts: Array<Product> = useMemo(
     () => products?.filter((p) => p.status === 'ACTIVE' && p.authorized) ?? [],
     [products]
   );
-  const actualActiveProducts = useRef<Array<Product>>([]);
-  const actualSelectedParty = useRef<Party>();
 
   // eslint-disable-next-line functional/immutable-data
   actualActiveProducts.current = activeProducts;
   // eslint-disable-next-line functional/immutable-data
   actualSelectedParty.current = selectedParty;
-
-  const { invokeProductBo } = useTokenExchange();
 
   return (
     <Header
@@ -71,14 +74,19 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       }
       assistanceEmail={ENV.ASSISTANCE.EMAIL}
       enableLogin={true}
-      onSelectedProduct={(p) =>
-        onExit(() =>
-          invokeProductBo(
-            actualActiveProducts.current?.find((ap) => ap.id === p.id) as Product,
-            actualSelectedParty.current as Party
-          )
-        )
-      }
+      onSelectedProduct={(p) => {
+        onExit(() => {
+          const selectedProduct = actualActiveProducts.current.find((ap) => ap.id === p.id);
+          if (actualSelectedParty.current && selectedProduct?.backOfficeEnvironmentConfigurations) {
+            ChooseEnvironmentModal(true, actualSelectedParty.current, selectedProduct);
+          } else {
+            invokeProductBo(
+              selectedProduct as Product,
+              actualSelectedParty.current as Party
+            ).finally(() => console.log('end'));
+          }
+        });
+      }}
       onSelectedParty={(selectedParty: PartySwitchItem) => {
         if (selectedParty) {
           trackEvent('DASHBOARD_PARTY_SELECTION', {
