@@ -46,9 +46,9 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
-            L’ambiente di test ti permette di conoscere
+            L&apos;ambiente di test ti permette di conoscere
             <strong>{{ productTitle: product.title }}</strong> e fare prove in tutta sicurezza.
-            L’ambiente di produzione è il prodotto vero e proprio.
+            L&apos;ambiente di Produzione è il prodotto in esercizio effettivo.
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
