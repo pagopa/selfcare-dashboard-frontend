@@ -3,7 +3,7 @@ import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorD
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { LOADING_TASK_TOKEN_EXCHANGE } from '../utils/constants';
 import { Product } from '../model/Product';
-import { retrieveTokenExchange } from '../services/tokenExchangeService';
+import { retrieveBackOfficeUrl } from '../services/tokenExchangeService';
 import { Party } from '../model/Party';
 
 const tokenPlaceholder = '<IdentityToken>';
@@ -37,8 +37,8 @@ export const useTokenExchange = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedEnvironment
-      ? retrieveTokenExchange(selectedParty, product, selectedEnvironment)
-          .then((t) => {
+      ? retrieveBackOfficeUrl(selectedParty, product, selectedEnvironment)
+          .then((url) => {
             setLoading(true);
             trackEvent(
               'DASHBOARD_OPEN_PRODUCT',
@@ -48,10 +48,7 @@ export const useTokenExchange = () => {
                 product_role: product.userRole,
                 target: 'prod',
               },
-              () =>
-                selectedEnvironmentUrl
-                  ? window.location.assign(selectedEnvironmentUrl.replace(tokenPlaceholder, t))
-                  : undefined
+              () => (selectedEnvironmentUrl ? window.location.assign(url) : undefined)
             );
           })
           .catch((error) =>
@@ -64,8 +61,8 @@ export const useTokenExchange = () => {
             })
           )
           .finally(() => setLoading(false))
-      : retrieveTokenExchange(selectedParty, product)
-          .then((t) => {
+      : retrieveBackOfficeUrl(selectedParty, product)
+          .then((url) => {
             setLoading(true);
             trackEvent(
               'DASHBOARD_OPEN_PRODUCT',
@@ -75,7 +72,7 @@ export const useTokenExchange = () => {
                 product_role: product.userRole,
                 target: selectedEnvironment,
               },
-              () => window.location.assign(product.urlBO.replace(tokenPlaceholder, t))
+              () => window.location.assign(url)
             );
           })
           .catch((error) =>
