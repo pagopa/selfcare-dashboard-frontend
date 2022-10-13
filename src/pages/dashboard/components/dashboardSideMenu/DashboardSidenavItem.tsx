@@ -1,4 +1,4 @@
-import { ListItemButton, ListItemText, ListItemIcon, Icon } from '@mui/material';
+import { ListItemButton, ListItemText, ListItemIcon, Icon, ListItem } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
 
 type Props = {
@@ -10,20 +10,22 @@ type Props = {
 
 export default function DashboardSidenavItem({ handleClick, title, isSelected, icon }: Props) {
   return (
-    <ListItemButton
-      selected={isSelected}
-      onClick={handleClick}
-      sx={{
-        height: '100%',
-        maxWidth: 360,
-        backgroundColor: 'background.paper',
-      }}
-    >
-      <ListItemIcon>
-        <Icon component={icon} />
-      </ListItemIcon>
+    <ListItem disablePadding>
+      <ListItemButton
+        selected={isSelected}
+        onClick={handleClick}
+        sx={{
+          height: '100%',
+          maxWidth: 360,
+          backgroundColor: 'background.paper',
+        }}
+      >
+        <ListItemIcon>
+          <Icon component={icon} />
+        </ListItemIcon>
 
-      <ListItemText primary={title} />
-    </ListItemButton>
+        <ListItemText primary={title} />
+      </ListItemButton>
+    </ListItem>
   );
 }
