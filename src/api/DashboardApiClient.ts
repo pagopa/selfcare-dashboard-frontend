@@ -8,7 +8,6 @@ import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
-import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -64,12 +63,12 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getTokenExchange: async (
+  getBackOfficeUrl: async (
     institutionId: string,
     productId: string,
     environment?: string
-  ): Promise<IdentityTokenResource> => {
-    const result = await apiClient.exchangeUsingGET({
+  ): Promise<string> => {
+    const result = await apiClient.retrieveProductBackofficeUsingGET({
       productId,
       institutionId,
       environment,
