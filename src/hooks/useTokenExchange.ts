@@ -6,7 +6,6 @@ import { Product } from '../model/Product';
 import { retrieveBackOfficeUrl } from '../services/tokenExchangeService';
 import { Party } from '../model/Party';
 
-const tokenPlaceholder = '<IdentityToken>';
 const hostnameRegexp = /^(?:https?:\/\/)([-.a-zA-Z0-9_]+)/;
 
 export const useTokenExchange = () => {
@@ -91,15 +90,10 @@ export const useTokenExchange = () => {
 };
 
 export const validateUrlBO = (url: string): string | Error => {
-  if (url?.indexOf(tokenPlaceholder) === -1) {
-    return new Error(`URL doesn't contain token placeholder ${tokenPlaceholder}: ${url}`);
-  }
-
   const hostname = hostnameFromUrl(url);
   if (!hostname) {
     return new Error(`Cannot extract hostname from URL: ${url}`);
   }
-
   return hostname;
 };
 
