@@ -890,8 +890,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "uri"
+                  "type": "string"
                 }
               }
             }

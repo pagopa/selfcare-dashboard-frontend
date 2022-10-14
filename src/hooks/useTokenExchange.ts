@@ -48,7 +48,7 @@ export const useTokenExchange = () => {
                 product_role: product.userRole,
                 target: 'prod',
               },
-              () => (selectedEnvironmentUrl ? window.location.assign(url) : undefined)
+              () => window.location.assign(url)
             );
           })
           .catch((error) =>
