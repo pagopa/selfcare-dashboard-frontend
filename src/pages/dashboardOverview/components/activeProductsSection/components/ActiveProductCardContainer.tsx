@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import SessionModal from '@pagopa/selfcare-common-frontend/components/SessionModal';
+import { SessionModal } from '@pagopa/selfcare-common-frontend';
 import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
 import { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
@@ -16,33 +16,37 @@ type Props = {
 export default function ActiveProductCardContainer({ party, product }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
-  const [openChooseEnvModal, setOpenChooseEnvModal] = useState<boolean>(false);
+
+  const [openEnvironmentModal, setOpenEnvironmentModal] = useState<boolean>(false);
+
   const isDisabled = product.authorized === false;
   const lastServiceActivationDate = undefined; // actually this info is not available
 
   return (
-    <Grid item xs={6} lg={4} xl={3}>
-      <ActiveProductCard
-        disableBtn={isDisabled}
-        cardTitle={product.title}
-        buttonLabel={t('overview.activeProducts.manageButton')}
-        urlLogo={product.logo}
-        btnAction={() =>
-          product.backOfficeEnvironmentConfigurations
-            ? setOpenChooseEnvModal(true)
-            : invokeProductBo(product, party)
-        }
-        party={party}
-        product={product}
-      />
-      {lastServiceActivationDate && (
-        <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>
-          {t('overview.lastServiceActive') +
-            `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
-        </Typography>
-      )}
+    <>
+      <Grid item xs={6} lg={4} xl={3}>
+        <ActiveProductCard
+          disableBtn={isDisabled}
+          cardTitle={product.title}
+          buttonLabel={t('overview.activeProducts.manageButton')}
+          urlLogo={product.logo}
+          btnAction={() =>
+            product.backOfficeEnvironmentConfigurations
+              ? setOpenEnvironmentModal(true)
+              : invokeProductBo(product, party)
+          }
+          party={party}
+          product={product}
+        />
+        {lastServiceActivationDate && (
+          <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>
+            {t('overview.lastServiceActive') +
+              `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
+          </Typography>
+        )}
+      </Grid>
       <SessionModal
-        open={openChooseEnvModal}
+        open={openEnvironmentModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
@@ -54,9 +58,11 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={(e) => invokeProductBo(product, party, (e.target as HTMLInputElement).value)}
-        handleClose={() => setOpenChooseEnvModal(false)}
+        handleClose={() => {
+          setOpenEnvironmentModal(false);
+        }}
         productEnvironments={product?.backOfficeEnvironmentConfigurations}
       />
-    </Grid>
+    </>
   );
 }
