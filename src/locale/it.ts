@@ -73,6 +73,7 @@ export default {
     notActiveProducts: {
       joinButton: 'Aderisci',
     },
+    depictOf: 'Rappresentazione di',
     discoverMore: '<0> SCOPRI DI PIÙ → </0>',
     adhesionPopup: {
       title: 'Adesione in corso',

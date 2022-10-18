@@ -71,7 +71,11 @@ export default function ActiveProductCard({
               height="64px"
               mr={2}
             >
-              <ProductAvatar logoUrl={urlLogo} logoBgColor={product.logoBgColor} />
+              <ProductAvatar
+                logoUrl={urlLogo}
+                logoBgColor={product.logoBgColor}
+                logoAltText={`${product.title} logo`}
+              />
             </Box>
             <Box display="flex" flexDirection="column" justifyContent="center">
               {cardTitle && (
