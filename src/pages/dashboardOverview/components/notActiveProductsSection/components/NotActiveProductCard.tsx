@@ -72,7 +72,11 @@ export default function NotActiveProductCard({
           }}
           mr={2}
         >
-          <ProductAvatar logoUrl={urlLogo} logoBgColor={product.logoBgColor} />
+          <ProductAvatar
+            logoUrl={urlLogo}
+            logoBgColor={product.logoBgColor}
+            logoAltText={`${product.title} logo`}
+          />
         </Box>
       </Grid>
       <Grid item xs={12}>
