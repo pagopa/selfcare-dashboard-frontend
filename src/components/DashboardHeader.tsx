@@ -56,7 +56,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           id: p.id,
           title: p.title,
           productUrl: p.urlPublic ?? '',
-          linkType: 'internal',
+          linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
         }))}
         partyList={parties2Show.map((party) => ({
           id: party.partyId,
@@ -128,7 +128,6 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }
         handleClose={() => {
           setOpenEnvironmentModal(false);
-          window.location.reload();
         }}
         productEnvironments={productSelected?.backOfficeEnvironmentConfigurations}
       />
