@@ -44,7 +44,7 @@ export default function ActiveProductCard({
   const usersRoute = ENV.ROUTES.USERS;
   const usersPath = resolvePathVariables(usersRoute, {
     partyId: party.partyId,
-  });
+  }).concat(`#${product.id}`);
   const theme = useTheme();
 
   const activeSubProducts: Array<SubProduct> = useMemo(
