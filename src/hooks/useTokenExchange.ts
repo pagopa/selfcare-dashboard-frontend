@@ -46,7 +46,7 @@ export const useTokenExchange = () => {
                 party_id: selectedParty.partyId,
                 product_id: product.id,
                 product_role: product.userRole,
-                target: 'prod',
+                target: selectedEnvironment,
               },
               () =>
                 selectedEnvironmentUrl
@@ -73,7 +73,7 @@ export const useTokenExchange = () => {
                 party_id: selectedParty.partyId,
                 product_id: product.id,
                 product_role: product.userRole,
-                target: selectedEnvironment,
+                target: 'prod',
               },
               () => window.location.assign(product.urlBO.replace(tokenPlaceholder, t))
             );
@@ -89,7 +89,6 @@ export const useTokenExchange = () => {
           )
           .finally(() => setLoading(false));
   };
-
   return { invokeProductBo };
 };
 

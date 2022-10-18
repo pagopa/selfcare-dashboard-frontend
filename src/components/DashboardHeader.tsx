@@ -1,11 +1,11 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header } from '@pagopa/selfcare-common-frontend';
+import { Header, SessionModal } from '@pagopa/selfcare-common-frontend';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
@@ -14,7 +14,6 @@ import { Party } from '../model/Party';
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
-import ChooseEnvironmentModal from '../pages/dashboardOverview/components/activeProductsSection/components/ChooseEnvironmentModal';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -31,6 +30,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
 
+  const [openEnvironmentModal, setOpenEnvironmentModal] = useState<boolean>(false);
+  const [productSelected, setProductSelected] = useState<Product>();
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
 
@@ -46,49 +47,53 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   actualSelectedParty.current = selectedParty;
 
   return (
-    <Header
-      onExit={onExit}
-      withSecondHeader={!!party}
-      selectedPartyId={selectedParty?.partyId}
-      productsList={activeProducts.map((p) => ({
-        id: p.id,
-        title: p.title,
-        productUrl: p.urlPublic ?? '',
-        linkType: 'internal',
-      }))}
-      partyList={parties2Show.map((party) => ({
-        id: party.partyId,
-        name: party.description,
-        productRole: t(roleLabels[party.userRole].longLabelKey),
-        logoUrl: party.urlLogo,
-      }))}
-      loggedUser={
-        loggedUser
-          ? {
-              id: loggedUser ? loggedUser.uid : '',
-              name: loggedUser?.name,
-              surname: loggedUser?.surname,
-              email: loggedUser?.email,
+    <>
+      <Header
+        onExit={onExit}
+        withSecondHeader={!!party}
+        selectedPartyId={selectedParty?.partyId}
+        productsList={activeProducts.map((p) => ({
+          id: p.id,
+          title: p.title,
+          productUrl: p.urlPublic ?? '',
+          linkType: 'internal',
+        }))}
+        partyList={parties2Show.map((party) => ({
+          id: party.partyId,
+          name: party.description,
+          productRole: t(roleLabels[party.userRole].longLabelKey),
+          logoUrl: party.urlLogo,
+        }))}
+        loggedUser={
+          loggedUser
+            ? {
+                id: loggedUser ? loggedUser.uid : '',
+                name: loggedUser?.name,
+                surname: loggedUser?.surname,
+                email: loggedUser?.email,
+              }
+            : false
+        }
+        assistanceEmail={ENV.ASSISTANCE.EMAIL}
+        enableLogin={true}
+        onSelectedProduct={(p) => {
+          onExit(() => {
+            const selectedProduct = actualActiveProducts.current.find((ap) => ap.id === p.id);
+            setProductSelected(selectedProduct);
+            if (
+              actualSelectedParty.current &&
+              selectedProduct?.backOfficeEnvironmentConfigurations
+            ) {
+              setOpenEnvironmentModal(true);
+            } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
+              void invokeProductBo(
+                selectedProduct as Product,
+                actualSelectedParty.current as Party
+              );
             }
-          : false
-      }
-      assistanceEmail={ENV.ASSISTANCE.EMAIL}
-      enableLogin={true}
-      onSelectedProduct={(p) => {
-        onExit(() => {
-          const selectedProduct = actualActiveProducts.current.find((ap) => ap.id === p.id);
-          if (actualSelectedParty.current && selectedProduct?.backOfficeEnvironmentConfigurations) {
-            ChooseEnvironmentModal(true, actualSelectedParty.current, selectedProduct);
-          } else {
-            invokeProductBo(
-              selectedProduct as Product,
-              actualSelectedParty.current as Party
-            ).finally(() => console.log('end'));
-          }
-        });
-      }}
-      onSelectedParty={(selectedParty: PartySwitchItem) => {
-        if (selectedParty) {
+          });
+        }}
+        onSelectedParty={(selectedParty: PartySwitchItem) => {
           trackEvent('DASHBOARD_PARTY_SELECTION', {
             party_id: selectedParty.id,
           });
@@ -99,10 +104,35 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               })
             )
           );
+        }}
+        maxCharactersNumberMultiLineItem={25}
+      />
+      <SessionModal
+        open={openEnvironmentModal}
+        title={t('overview.activeProducts.activeProductsEnvModal.title')}
+        message={
+          <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
+            L’ambiente di test ti permette di conoscere
+            <strong>{{ productTitle: productSelected?.title }}</strong> e fare prove in tutta
+            sicurezza. L’ambiente di produzione è il prodotto vero e proprio.
+          </Trans>
         }
-      }}
-      maxCharactersNumberMultiLineItem={25}
-    />
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
+        onConfirm={(e) =>
+          invokeProductBo(
+            productSelected as Product,
+            actualSelectedParty.current as Party,
+            (e.target as HTMLInputElement).value
+          )
+        }
+        handleClose={() => {
+          setOpenEnvironmentModal(false);
+          window.location.reload();
+        }}
+        productEnvironments={productSelected?.backOfficeEnvironmentConfigurations}
+      />
+    </>
   );
 };
 export default withParties(DashboardHeader);
