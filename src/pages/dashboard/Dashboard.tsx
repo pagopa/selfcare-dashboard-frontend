@@ -95,13 +95,14 @@ const Dashboard = () => {
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
-      <Grid item xs={2}>
+      <Grid component="nav" item xs={2}>
         <Box>
           <DashboardSideMenu products={products} party={party} />
         </Box>
       </Grid>
       <Grid
         item
+        component="main"
         xs={10}
         sx={{ backgroundColor: '#F5F6F7' }}
         display="flex"
