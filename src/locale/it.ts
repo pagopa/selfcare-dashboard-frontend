@@ -10,7 +10,7 @@ export default {
     subTitle:
       'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.',
     partyStatus: 'Da completare',
-    continueButton: 'Entra',
+    continueButton: 'Accedi',
     backButton: 'Indietro',
     label: 'Cerca ente',
   },
