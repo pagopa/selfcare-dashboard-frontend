@@ -36,7 +36,7 @@ const App = () => {
         <UnloadEventHandler />
 
         <Switch>
-          <Route path={ENV.ROUTES.ADMIN} exact={true}>
+          <Route path={ENV.ROUTES.ADMIN} exact={false}>
             <RemoteRoutingAdmin store={store} theme={theme} i18n={i18n} history={history} />
           </Route>
           {buildRoutes(routes)}
