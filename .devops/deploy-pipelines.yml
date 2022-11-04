@@ -203,6 +203,7 @@ stages:
 
               MICROFRONTEND_URL_USERS: '$(react_app_url_fe_dashboard_users)'
               MICROFRONTEND_URL_GROUPS: '$(react_app_url_fe_dashboard_groups)'
+              MICROFRONTEND_URL_ADMIN: '$(react_app_url_fe_dashboard_admin)'
 
               REACT_APP_URL_API_PARTY_PROCESS: '$(react_app_url_api_party_process)'
               REACT_APP_URL_API_DASHBOARD: '$(react_app_url_api_dashboard)'
