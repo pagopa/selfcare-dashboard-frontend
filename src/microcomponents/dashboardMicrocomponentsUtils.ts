@@ -12,6 +12,6 @@ export type MicroComponentsProps = {
 };
 
 export type DashboardMicrofrontendPageProps = {
-  decorators: DashboardDecoratorsType;
+  decorators?: DashboardDecoratorsType;
 } & DashboardPageProps &
   MicroComponentsProps;
