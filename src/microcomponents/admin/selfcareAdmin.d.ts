@@ -1,7 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="react" />
 
-/*
 type Props = {
   history: any;
   store: any;
@@ -13,7 +12,7 @@ type Props = {
   activeProducts: any;
   productsMap: any;
   CONFIG: any;
-}; */
+};
 
 declare module 'selfcareAdmin/RoutingAdmin' {
   const RoutingAdmin: React.ComponentType<any>;

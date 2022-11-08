@@ -103,8 +103,18 @@ const Dashboard = () => {
       </Grid>
       <Grid item component="main" xs={10} sx={{ backgroundColor: '#F5F6F7' }} display="flex" pb={8}>
         <Switch>
-          <Route path={ENV.ROUTES.ADMIN} exact={true}>
-            <RemoteRoutingAdmin store={store} theme={theme} history={history} i18n={i18n} />
+          <Route path={ENV.ROUTES.ADMIN} exact={false}>
+            <RemoteRoutingAdmin
+              party={party}
+              products={products}
+              activeProducts={activeProducts}
+              productsMap={productsMap}
+              history={history}
+              store={store}
+              theme={theme}
+              i18n={i18n}
+              decorators={decorators}
+            />
           </Route>
           <Route path={ENV.ROUTES.USERS} exact={false}>
             <RemoteRoutingUsers

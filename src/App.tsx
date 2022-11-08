@@ -37,7 +37,28 @@ const App = () => {
 
         <Switch>
           <Route path={ENV.ROUTES.ADMIN} exact={false}>
-            <RemoteRoutingAdmin store={store} theme={theme} i18n={i18n} history={history} />
+            <RemoteRoutingAdmin
+              store={store}
+              theme={theme}
+              i18n={i18n}
+              history={history}
+              party={{
+                partyId: '',
+                externalId: '',
+                originId: '',
+                origin: '',
+                description: '',
+                digitalAddress: '',
+                status: 'ACTIVE',
+                userRole: 'ADMIN', // TODO New "superAdmin" selfcare role
+                fiscalCode: '',
+                registeredOffice: '',
+                typology: '',
+              }}
+              products={[]}
+              activeProducts={[]}
+              productsMap={{}}
+            />
           </Route>
           {buildRoutes(routes)}
 
