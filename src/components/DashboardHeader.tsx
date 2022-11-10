@@ -64,7 +64,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       <Header
         onExit={onExit}
         withSecondHeader={!!party}
-        selectedPartyId={partySelected?.partyId}
+        selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts.map((p) => ({
           id: p.id,
           title: p.title,
