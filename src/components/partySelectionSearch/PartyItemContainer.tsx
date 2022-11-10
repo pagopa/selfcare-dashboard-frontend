@@ -33,7 +33,7 @@ export default function PartyItemContainer({
       data-testid={`PartyItemContainer: ${title}`}
       onKeyDownCapture={(e) => {
         if (action && (e.key === 'Enter' || e.key === ' ')) {
-          action(e as unknown as React.MouseEvent<HTMLDivElement, MouseEvent>);
+          action(e as any);
         }
       }}
     >
