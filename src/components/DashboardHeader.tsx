@@ -32,6 +32,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const [openEnvironmentModal, setOpenEnvironmentModal] = useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<Product>();
+  const [partySelected, setPartySelected] = useState<Party | undefined>(selectedParty);
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
 
@@ -44,14 +45,26 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   // eslint-disable-next-line functional/immutable-data
   actualActiveProducts.current = activeProducts;
   // eslint-disable-next-line functional/immutable-data
-  actualSelectedParty.current = selectedParty;
+  actualSelectedParty.current = partySelected;
 
   return (
-    <>
+    <div
+      tabIndex={0}
+      onKeyDownCapture={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const partySelected = (e as any).target;
+          const selectedParty = parties2Show.find((p) =>
+            partySelected.textContent.includes(p.description)
+          );
+          partySelected.click();
+          setPartySelected(selectedParty);
+        }
+      }}
+    >
       <Header
         onExit={onExit}
         withSecondHeader={!!party}
-        selectedPartyId={selectedParty?.partyId}
+        selectedPartyId={partySelected?.partyId}
         productsList={activeProducts.map((p) => ({
           id: p.id,
           title: p.title,
@@ -131,7 +144,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         productEnvironments={productSelected?.backOfficeEnvironmentConfigurations}
       />
-    </>
+    </div>
   );
 };
 export default withParties(DashboardHeader);

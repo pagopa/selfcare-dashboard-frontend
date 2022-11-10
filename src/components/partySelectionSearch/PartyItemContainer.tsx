@@ -31,6 +31,11 @@ export default function PartyItemContainer({
       direction={'row'}
       role={'Institution'}
       data-testid={`PartyItemContainer: ${title}`}
+      onKeyDownCapture={(e) => {
+        if (action && (e.key === 'Enter' || e.key === ' ')) {
+          action(e as any);
+        }
+      }}
     >
       <PartyAccountItemButton
         partyName={title as string}
