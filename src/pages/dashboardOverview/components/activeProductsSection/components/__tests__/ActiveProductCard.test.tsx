@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createStore } from '../../../../../../redux/store';
-import { retrieveTokenExchange } from '../../../../../../services/tokenExchangeService';
+import { retrieveBackOfficeUrl } from '../../../../../../services/tokenExchangeService';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
 import './../../../../../../locale';
@@ -26,7 +26,7 @@ afterAll(() => {
 jest.mock('../../../../../../services/tokenExchangeService');
 
 beforeEach(() => {
-  jest.spyOn(require('../../../../../../services/tokenExchangeService'), 'retrieveTokenExchange');
+  jest.spyOn(require('../../../../../../services/tokenExchangeService'), 'retrieveBackOfficeUrl');
 });
 
 const mockedProduct = Object.assign({}, mockedPartyProducts[0]);
@@ -63,10 +63,8 @@ test('test render and behavior', async () => {
   fireEvent.click(button);
 
   await waitFor(() =>
-    expect(retrieveTokenExchange).toBeCalledWith(mockedParties[0], mockedProduct)
+    expect(retrieveBackOfficeUrl).toBeCalledWith(mockedParties[0], mockedProduct)
   );
 
-  expect(mockedLocation.assign).toBeCalledWith(
-    'https://io.selfcare.pagopa.it/path/acs?token=DUMMYTOKEN'
-  );
+  expect(mockedLocation.assign).toBeCalledWith('https://hostname/path?id=DUMMYTOKEN');
 });

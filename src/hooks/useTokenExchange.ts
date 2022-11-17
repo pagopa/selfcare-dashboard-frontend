@@ -3,10 +3,9 @@ import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorD
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { LOADING_TASK_TOKEN_EXCHANGE } from '../utils/constants';
 import { Product } from '../model/Product';
-import { retrieveTokenExchange } from '../services/tokenExchangeService';
+import { retrieveBackOfficeUrl } from '../services/tokenExchangeService';
 import { Party } from '../model/Party';
 
-const tokenPlaceholder = '<IdentityToken>';
 const hostnameRegexp = /^(?:https?:\/\/)([-.a-zA-Z0-9_]+)/;
 
 export const useTokenExchange = () => {
@@ -37,8 +36,8 @@ export const useTokenExchange = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedEnvironment
-      ? retrieveTokenExchange(selectedParty, product, selectedEnvironment)
-          .then((t) => {
+      ? retrieveBackOfficeUrl(selectedParty, product, selectedEnvironment)
+          .then((url) => {
             setLoading(true);
             trackEvent(
               'DASHBOARD_OPEN_PRODUCT',
@@ -46,12 +45,9 @@ export const useTokenExchange = () => {
                 party_id: selectedParty.partyId,
                 product_id: product.id,
                 product_role: product.userRole,
-                target: 'prod',
+                target: selectedEnvironment,
               },
-              () =>
-                selectedEnvironmentUrl
-                  ? window.location.assign(selectedEnvironmentUrl.replace(tokenPlaceholder, t))
-                  : undefined
+              () => window.location.assign(url)
             );
           })
           .catch((error) =>
@@ -64,8 +60,8 @@ export const useTokenExchange = () => {
             })
           )
           .finally(() => setLoading(false))
-      : retrieveTokenExchange(selectedParty, product)
-          .then((t) => {
+      : retrieveBackOfficeUrl(selectedParty, product)
+          .then((url) => {
             setLoading(true);
             trackEvent(
               'DASHBOARD_OPEN_PRODUCT',
@@ -73,9 +69,9 @@ export const useTokenExchange = () => {
                 party_id: selectedParty.partyId,
                 product_id: product.id,
                 product_role: product.userRole,
-                target: selectedEnvironment,
+                target: 'prod',
               },
-              () => window.location.assign(product.urlBO.replace(tokenPlaceholder, t))
+              () => window.location.assign(url)
             );
           })
           .catch((error) =>
@@ -89,20 +85,14 @@ export const useTokenExchange = () => {
           )
           .finally(() => setLoading(false));
   };
-
   return { invokeProductBo };
 };
 
 export const validateUrlBO = (url: string): string | Error => {
-  if (url?.indexOf(tokenPlaceholder) === -1) {
-    return new Error(`URL doesn't contain token placeholder ${tokenPlaceholder}: ${url}`);
-  }
-
   const hostname = hostnameFromUrl(url);
   if (!hostname) {
     return new Error(`Cannot extract hostname from URL: ${url}`);
   }
-
   return hostname;
 };
 

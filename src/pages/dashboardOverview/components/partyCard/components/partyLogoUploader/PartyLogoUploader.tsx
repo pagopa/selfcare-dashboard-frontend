@@ -30,12 +30,14 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const setUrlLogo = (urlLogo?: string) =>
     dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
-  const [labelLink, setLabelLink] = useState<string>(t('overview.partyLogo.upload'));
+  const [labelLink, setLabelLink] = useState<string>(getLabelLinkText(t));
   const addError = useErrorDispatcher();
   const [uploadedFiles, setUploadedFiles] = useState<Array<File>>([]);
 
   useEffect(() => {
-    setTimeout(() => setLabelLink(getLabelLinkText(t)), 400);
+    if (urlLogo && partyId) {
+      setTimeout(() => setLabelLink(getLabelLinkText(t)), 600);
+    }
   }, [urlLogo, partyId]);
 
   const maxLength = 400;

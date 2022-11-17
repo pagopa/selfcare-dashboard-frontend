@@ -25,12 +25,17 @@ export default function PartyItemContainer({
 }: Props) {
   return (
     <Grid
-      id={moreThan3Parties ? 'selectedMoreThen3' : 'selectedLessThen3'}
+      className={moreThan3Parties ? 'selectedMoreThen3' : 'selectedLessThen3'}
       container
       my={1}
       direction={'row'}
       role={'Institution'}
       data-testid={`PartyItemContainer: ${title}`}
+      onKeyDownCapture={(e) => {
+        if (action && (e.key === 'Enter' || e.key === ' ')) {
+          action(e as any);
+        }
+      }}
     >
       <PartyAccountItemButton
         partyName={title as string}

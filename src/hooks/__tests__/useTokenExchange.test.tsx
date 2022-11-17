@@ -26,35 +26,29 @@ afterAll(() => {
 
 jest.mock('../../services/tokenExchangeService');
 
-let retrieveTokenExchangeSpy;
+let retrieveBackOfficeUrlSpy;
 
 beforeEach(() => {
-  retrieveTokenExchangeSpy = jest.spyOn(
+  retrieveBackOfficeUrlSpy = jest.spyOn(
     require('../../services/tokenExchangeService'),
-    'retrieveTokenExchange'
+    'retrieveBackOfficeUrl'
   );
 });
 
 test('validateUrlBO', () => {
-  expect(validateUrlBO('https://hostname/path<IdentityToken>')).toBe('hostname');
-  expect(validateUrlBO('http://hostname/path<IdentityToken>')).toBe('hostname');
+  expect(validateUrlBO('https://hostname/path?id=<IdentityToken>')).toBe('hostname');
+  expect(validateUrlBO('http://hostname/path?id=<IdentityToken>')).toBe('hostname');
 
-  const wrongProtocolError = validateUrlBO('wrongprotocolhttp://hostname/path<IdentityToken>');
+  const wrongProtocolError = validateUrlBO('wrongprotocolhttp://hostname/path?id=<IdentityToken>');
   expect(wrongProtocolError instanceof Error).toBeTruthy();
   expect((wrongProtocolError as Error).message).toBe(
-    'Cannot extract hostname from URL: wrongprotocolhttp://hostname/path<IdentityToken>'
+    'Cannot extract hostname from URL: wrongprotocolhttp://hostname/path?id=<IdentityToken>'
   );
 
-  const wrongUrlError = validateUrlBO('wrongUrl/<IdentityToken>');
+  const wrongUrlError = validateUrlBO('wrongUrl/?id=<IdentityToken>');
   expect(wrongUrlError instanceof Error).toBeTruthy();
   expect((wrongUrlError as Error).message).toBe(
-    'Cannot extract hostname from URL: wrongUrl/<IdentityToken>'
-  );
-
-  const missingTokenPlaceholderError = validateUrlBO('https://hostname/path');
-  expect(missingTokenPlaceholderError instanceof Error).toBeTruthy();
-  expect((missingTokenPlaceholderError as Error).message).toBe(
-    "URL doesn't contain token placeholder <IdentityToken>: https://hostname/path"
+    'Cannot extract hostname from URL: wrongUrl/?id=<IdentityToken>'
   );
 });
 
@@ -88,19 +82,19 @@ describe('useTokenExchange', () => {
     expect(store.getState().appState.errors.length).toBe(1);
     expect(store.getState().appState.errors[0].onRetry).toBeUndefined();
 
-    expect(retrieveTokenExchangeSpy).toBeCalledTimes(0);
+    expect(retrieveBackOfficeUrlSpy).toBeCalledTimes(0);
   });
 
   test('test redirect', async () => {
-    const store = renderApp('https://hostname/path#<IdentityToken>');
+    const store = renderApp('https://hostname/path?id=<IdentityToken>');
     expect(store.getState().appState.errors.length).toBe(0);
     await waitFor(() => expect(store.getState().appState.loading.result).toBeFalsy());
 
-    expect(retrieveTokenExchangeSpy).toBeCalledTimes(1);
-    expect(retrieveTokenExchangeSpy).toBeCalledWith(expectedParty, expectedProduct);
+    expect(retrieveBackOfficeUrlSpy).toBeCalledTimes(1);
+    expect(retrieveBackOfficeUrlSpy).toBeCalledWith(expectedParty, expectedProduct);
 
     await waitFor(() =>
-      expect(mockedLocation.assign).toBeCalledWith('https://hostname/path#DUMMYTOKEN')
+      expect(mockedLocation.assign).toBeCalledWith('https://hostname/path?id=DUMMYTOKEN')
     );
   });
 });

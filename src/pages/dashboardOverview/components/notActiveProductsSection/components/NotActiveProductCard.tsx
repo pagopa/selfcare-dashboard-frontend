@@ -12,7 +12,7 @@ import {
   Stack,
 } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { ProductAvatar } from '@pagopa/mui-italia/dist/components/ProductAvatar/ProductAvatar';
 import { Product } from '../../../../../model/Product';
 
@@ -40,6 +40,7 @@ export default function NotActiveProductCard({
   product,
 }: Props) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const truncateText = {
     fontSize: theme.typography.fontSize,
     height: '100%',
@@ -61,7 +62,13 @@ export default function NotActiveProductCard({
             '&::after': { position: 'absolute' },
           }}
         >
-          <CardMedia component="img" height="100%" width="100%" image={image} />
+          <CardMedia
+            component="img"
+            height="100%"
+            width="100%"
+            image={image}
+            alt={`${t('overview.depictOf')} ${product.title}`}
+          />
         </Box>
       </Grid>
       <Grid item xs={12}>
@@ -72,7 +79,11 @@ export default function NotActiveProductCard({
           }}
           mr={2}
         >
-          <ProductAvatar logoUrl={urlLogo} logoBgColor={product.logoBgColor} />
+          <ProductAvatar
+            logoUrl={urlLogo}
+            logoBgColor={product.logoBgColor}
+            logoAltText={`${product.title} logo`}
+          />
         </Box>
       </Grid>
       <Grid item xs={12}>

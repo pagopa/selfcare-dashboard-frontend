@@ -10,7 +10,7 @@ export default {
     subTitle:
       'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.',
     partyStatus: 'Da completare',
-    continueButton: 'Entra',
+    continueButton: 'Accedi',
     backButton: 'Indietro',
     label: 'Cerca ente',
   },
@@ -61,7 +61,7 @@ export default {
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
         message:
-          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto vero e proprio.',
+          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
         envProdButton: 'Produzione',
         backButton: 'Annulla',
       },
@@ -73,6 +73,7 @@ export default {
     notActiveProducts: {
       joinButton: 'Aderisci',
     },
+    depictOf: 'Rappresentazione di',
     discoverMore: '<0> SCOPRI DI PIÙ → </0>',
     adhesionPopup: {
       title: 'Adesione in corso',
