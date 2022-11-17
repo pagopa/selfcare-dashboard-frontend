@@ -18,8 +18,8 @@ export const ENV = {
     GROUPS: `${PUBLIC_URL_INNER}/:partyId/groups`,
     GROUP_DETAIL: `${PUBLIC_URL_INNER}/:partyId/groups/:groupId`,
 
-    ADMIN: `${PUBLIC_URL_INNER}/admin`,
-    ADMIN_PARTY_DETAIL: `${PUBLIC_URL_INNER}/admin/:partyId`,
+    ADMIN: `${PUBLIC_URL_INNER}/admin/onboarding/:tokenId`,
+    ADMIN_PARTY_DETAIL: `${PUBLIC_URL_INNER}/admin/onboarding/:tokenId`,
   },
 
   URL_FE: {
