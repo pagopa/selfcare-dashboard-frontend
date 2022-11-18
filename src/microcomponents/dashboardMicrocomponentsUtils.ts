@@ -11,6 +11,10 @@ export type MicroComponentsProps = {
   i18n: i18n;
 };
 
+export type DashboardAdminMicrofrontendProps = {
+  decorators?: DashboardDecoratorsType;
+} & MicroComponentsProps;
+
 export type DashboardMicrofrontendPageProps = {
   decorators?: DashboardDecoratorsType;
 } & DashboardPageProps &

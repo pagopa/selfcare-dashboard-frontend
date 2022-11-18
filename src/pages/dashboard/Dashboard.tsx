@@ -105,10 +105,6 @@ const Dashboard = () => {
         <Switch>
           <Route path={ENV.ROUTES.ADMIN} exact={false}>
             <RemoteRoutingAdmin
-              party={party}
-              products={products}
-              activeProducts={activeProducts}
-              productsMap={productsMap}
               history={history}
               store={store}
               theme={theme}
