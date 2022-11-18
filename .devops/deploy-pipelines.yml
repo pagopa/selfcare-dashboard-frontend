@@ -36,6 +36,7 @@ variables:
     react_app_url_fe_landing: '$(UAT_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(UAT_REACT_APP_URL_FE_ASSISTANCE)'
 
+    react_app_url_fe_dashboard_admin: '$(UAT_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(UAT_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(UAT_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
 
@@ -67,6 +68,7 @@ variables:
     react_app_url_fe_landing: '$(PROD_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(PROD_REACT_APP_URL_FE_ASSISTANCE)'
 
+    react_app_url_fe_dashboard_admin: '$(PROD_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(PROD_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(PROD_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
 
@@ -100,6 +102,7 @@ variables:
     react_app_url_fe_landing: '$(DEV_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(DEV_REACT_APP_URL_FE_ASSISTANCE)'
 
+    react_app_url_fe_dashboard_admin: '$(DEV_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(DEV_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(DEV_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
 
