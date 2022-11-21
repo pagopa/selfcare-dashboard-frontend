@@ -18,7 +18,6 @@ export type Party = {
   urlLogo?: string;
   fiscalCode: string;
   registeredOffice: string;
-  zipCode: string;
   typology: string;
   institutionType?: string;
 };
@@ -41,7 +40,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
     registeredOffice: institutionResource.address,
-    zipCode: institutionResource.zipCode,
     typology: 'TODO', // it will represent the taxonomy of the party
     institutionType: institutionResource.institutionType,
   };
