@@ -17,7 +17,7 @@ export const mockedPartyProducts: Array<Product> = [
     urlBO: 'https://io.selfcare.pagopa.it/path/acs?token=<IdentityToken>',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
-    subProducts: [{ id: 'prod-io-premium', title: 'Premium', status: StatusEnum.ACTIVE }],
+    subProducts: [{ id: 'prod-io-premium', title: 'Premium', status: StatusEnum.ACTIVE, productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE }],
     logoBgColor: 'primary.main',
   },
   {

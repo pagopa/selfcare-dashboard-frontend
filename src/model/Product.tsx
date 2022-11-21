@@ -33,6 +33,7 @@ export type Product = {
 export type SubProduct = {
   id: string;
   title: string;
+  productOnBoardingStatus: ProductOnBoardingStatusEnum;
   status: StatusEnum;
 };
 export type ProductsMap = { [id: string]: Product };

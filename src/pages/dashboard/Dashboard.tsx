@@ -86,7 +86,8 @@ const Dashboard = () => {
   const { i18n } = useTranslation();
 
   const activeProducts: Array<Product> =
-    useMemo(() => products?.filter((p) => p.status === 'ACTIVE'), [products]) ?? [];
+    useMemo(() => products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE'), [products]) ??
+    [];
 
   const productsMap: ProductsMap =
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
