@@ -1,4 +1,5 @@
 import { ProductsResource, StatusEnum } from '../../api/generated/b4f-dashboard/ProductsResource';
+import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { productResource2Product } from '../Product';
 
 test('Test institutionInfo2Party', () => {
@@ -11,6 +12,7 @@ test('Test institutionInfo2Party', () => {
     description: 'Pagamenti pagoPA description',
     authorized: true,
     status: StatusEnum.ACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo',
     backOfficeEnvironmentConfigurations: undefined,
     activatedAt: date,
@@ -29,6 +31,7 @@ test('Test institutionInfo2Party', () => {
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
     authorized: true,
+    productOnBoardingStatus:'ACTIVE',
     status: 'ACTIVE',
     urlBO: 'http://pagopa/bo',
     backOfficeEnvironmentConfigurations: undefined,
