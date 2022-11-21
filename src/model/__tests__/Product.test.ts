@@ -1,4 +1,5 @@
 import { ProductsResource, StatusEnum } from '../../api/generated/b4f-dashboard/ProductsResource';
+import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { productResource2Product } from '../Product';
 
 test('Test institutionInfo2Party', () => {
@@ -11,12 +12,13 @@ test('Test institutionInfo2Party', () => {
     description: 'Pagamenti pagoPA description',
     authorized: true,
     status: StatusEnum.ACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo',
     backOfficeEnvironmentConfigurations: undefined,
     activatedAt: date,
     urlPublic: 'http://pagopa/public',
     userRole: 'LIMITED',
-    children: [{ id: 'subProductId', title: 'Premium', status: StatusEnum.ACTIVE }],
+    children: [{ id: 'subProductId', title: 'Premium', status: StatusEnum.ACTIVE, productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE }],
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     logoBgColor: '#0066CC',
@@ -29,6 +31,7 @@ test('Test institutionInfo2Party', () => {
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
     authorized: true,
+    productOnBoardingStatus:'ACTIVE',
     status: 'ACTIVE',
     urlBO: 'http://pagopa/bo',
     backOfficeEnvironmentConfigurations: undefined,
@@ -36,7 +39,7 @@ test('Test institutionInfo2Party', () => {
     urlPublic: 'http://pagopa/public',
     tag: undefined,
     userRole: 'LIMITED',
-    subProducts: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE' }],
+    subProducts: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE', productOnBoardingStatus: 'ACTIVE' }],
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     logoBgColor: '#0066CC',
