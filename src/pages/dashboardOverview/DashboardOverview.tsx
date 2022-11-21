@@ -38,9 +38,10 @@ const DashboardOverview = ({ party, products }: Props) => {
       )}
       <Grid item xs={12} mb={2} mt={5}>
         <ActiveProductsSection products={products} party={party} />
-        {products && products.findIndex((product) => product.status !== 'ACTIVE') > -1 && (
-          <NotActiveProductsSection party={party} products={products} />
-        )}
+        {products &&
+          products.findIndex(
+            (product) => product.status === 'ACTIVE' && product.productOnBoardingStatus !== 'ACTIVE'
+          ) > -1 && <NotActiveProductsSection party={party} products={products} />}
       </Grid>
     </Box>
   );
