@@ -17,7 +17,7 @@ export default function PartyDetail({ party }: Props) {
     fontSize: theme.typography.fontSize,
   };
 
-  const institutionTypeTranscode = (institutionType: any) =>
+  const institutionTypeTransoce = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
   const showTooltipAfter = 49;
 
@@ -33,15 +33,15 @@ export default function PartyDetail({ party }: Props) {
         <Grid item xs={8}>
           <Tooltip
             title={
-              institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
-                ? institutionTypeTranscode(party.institutionType)
+              institutionTypeTransoce(party.institutionType).length >= showTooltipAfter
+                ? institutionTypeTransoce(party.institutionType)
                 : ''
             }
             placement="top"
             arrow={true}
           >
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-              {institutionTypeTranscode(party.institutionType)}
+              {institutionTypeTransoce(party.institutionType)}
             </Typography>
           </Tooltip>
         </Grid>
@@ -152,7 +152,7 @@ export default function PartyDetail({ party }: Props) {
             arrow={true}
           >
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-              {party.registeredOffice + ' - ' + party.zipCode}
+              {party.registeredOffice}
             </Typography>
           </Tooltip>
         </Grid>

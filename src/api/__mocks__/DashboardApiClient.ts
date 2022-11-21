@@ -31,8 +31,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
-    address: 'Piazza della Scala, 2',
-    zipCode: '20121',
+    address: 'Piazza della Scala, 2 - 20121 Milano',
   },
   {
     name: 'Comune di Milano',
@@ -46,8 +45,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     userRole: 'ADMIN',
     category: '',
     institutionType: InstitutionTypeEnum.PA,
-    address: 'Piazza della Scala, 2',
-    zipCode: '20121',
+    address: 'Piazza della Scala, 2 - 20121 Milano',
   },
 ];
 
