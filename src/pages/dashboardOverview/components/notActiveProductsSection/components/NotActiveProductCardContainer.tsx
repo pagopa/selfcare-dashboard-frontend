@@ -28,7 +28,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
         description={product.description}
         disableBtn={false}
         btnAction={() => {
-          if (product.status === 'PENDING') {
+          if (product.productOnBoardingStatus === 'PENDING') {
             addNotify({
               component: 'SessionModal',
               id: 'Notify_Example',

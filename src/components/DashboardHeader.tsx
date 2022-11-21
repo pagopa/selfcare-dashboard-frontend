@@ -38,7 +38,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
   const activeProducts: Array<Product> = useMemo(
-    () => products?.filter((p) => p.status === 'ACTIVE' && p.authorized) ?? [],
+    () => products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized) ?? [],
     [products]
   );
 

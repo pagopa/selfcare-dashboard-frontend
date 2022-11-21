@@ -24,7 +24,10 @@ export default function NotActiveProductsSection({ party, products }: Props) {
       <Grid container spacing={3}>
         {products &&
           products
-            .filter((product) => product.status !== 'ACTIVE')
+            .filter(
+              (product) =>
+                product.status === 'ACTIVE' && product.productOnBoardingStatus !== 'ACTIVE'
+            )
             .map((product) => (
               <NotActiveProductCardContainer key={product.id} party={party} product={product} />
             ))}

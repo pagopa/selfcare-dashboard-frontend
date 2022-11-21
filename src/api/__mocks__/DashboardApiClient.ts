@@ -15,6 +15,7 @@ import {
 } from '../generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
+import { ProductOnBoardingStatusEnum } from '../generated/b4f-dashboard/SubProductResource';
 import { UserResource } from '../generated/b4f-dashboard/UserResource';
 
 export const mockedInstitutionResources: Array<InstitutionResource> = [
@@ -30,7 +31,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     fiscalCode: 'fiscalCode',
     userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
-    address: 'Piazza della Scala, 2 - 20121 Milano',
+    address: 'Piazza della Scala, 2',
+    zipCode: '20121',
   },
   {
     name: 'Comune di Milano',
@@ -44,7 +46,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     userRole: 'ADMIN',
     category: '',
     institutionType: InstitutionTypeEnum.PA,
-    address: 'Piazza della Scala, 2 - 20121 Milano',
+    address: 'Piazza della Scala, 2',
+    zipCode: '20121',
   },
 ];
 
@@ -56,6 +59,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '1',
     authorized: true,
     status: StatusEnum.ACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlBO: 'http://appio/bo#<IdentityToken>',
     activatedAt: new Date(2021, 1, 1, 0, 0, 0, 0),
     urlPublic: 'http://appio/public',
@@ -69,6 +73,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Piattaforma Notifiche description',
     authorized: false,
     status: StatusEnum.ACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 2, 0, 0, 0, 0),
     urlPublic: 'http://notifiche/public',
@@ -82,6 +87,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Pagamenti pagoPA description',
     authorized: true,
     status: StatusEnum.ACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 3, 0, 0, 0, 0),
     urlPublic: 'http://pagopa/public',
@@ -94,7 +100,8 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: '4',
     authorized: true,
-    status: StatusEnum.PENDING,
+    status: StatusEnum.ACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
     urlPublic: 'http://www.google.it',
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
     imageUrl:
@@ -107,6 +114,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Richiedi la convenzione e gestisci i dati e le agevolazioni da offrire.',
     authorized: true,
     status: StatusEnum.ACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlPublic: undefined,
     urlBO: 'http://cgn/bo#token=<IdentityToken>',
     imageUrl:
@@ -119,6 +127,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     authorized: true,
     status: StatusEnum.INACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.INACTIVE,
     urlPublic: undefined,
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
     imageUrl:
