@@ -152,7 +152,7 @@ export default function PartyDetail({ party }: Props) {
             arrow={true}
           >
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-              {party.registeredOffice}
+              {party.registeredOffice + ' - ' + party.zipCode}
             </Typography>
           </Tooltip>
         </Grid>
