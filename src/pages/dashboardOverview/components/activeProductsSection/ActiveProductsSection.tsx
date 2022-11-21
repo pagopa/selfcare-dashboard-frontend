@@ -19,7 +19,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
       <Grid container spacing={3}>
         {products &&
           products
-            .filter((p) => p.status === 'ACTIVE')
+            .filter((p) => p.productOnBoardingStatus === 'ACTIVE')
             .map((product) => (
               <ActiveProductCardContainer key={product.id} party={party} product={product} />
             ))}

@@ -1,7 +1,10 @@
 import { ProductsResource } from '../api/generated/b4f-dashboard/ProductsResource';
-import { UserRole } from './Party';
+import {
+  ProductOnBoardingStatusEnum,
+  StatusEnum,
+} from '../api/generated/b4f-dashboard/SubProductResource';
 
-export type ProductStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING';
+import { UserRole } from './Party';
 
 export type Product = {
   activationDateTime?: Date;
@@ -18,7 +21,10 @@ export type Product = {
   tag?: string;
   userRole?: UserRole;
   authorized?: boolean;
-  status: ProductStatus;
+  // onboarding status of product. Products that have, or have not, completed the onboarding process.
+  productOnBoardingStatus: ProductOnBoardingStatusEnum;
+  // product status.The intrinsic state of the product. Product status is unrelated to product onboarding status.
+  status: StatusEnum;
   imageUrl: string;
   subProducts: Array<SubProduct>;
   logoBgColor?: string;
@@ -27,7 +33,7 @@ export type Product = {
 export type SubProduct = {
   id: string;
   title: string;
-  status: ProductStatus;
+  status: StatusEnum;
 };
 export type ProductsMap = { [id: string]: Product };
 
@@ -39,20 +45,21 @@ export const buildProductsMap = (products: Array<Product>): ProductsMap =>
   }, {} as ProductsMap);
 
 export const productResource2Product = (resource: ProductsResource): Product => ({
-  activationDateTime: resource.activatedAt,
+  authorized: resource.authorized,
   description: resource.description,
   id: resource.id,
+  imageUrl: resource.imageUrl,
   logo: resource.logo,
+  activationDateTime: resource.activatedAt,
+  productOnBoardingStatus: resource.productOnBoardingStatus,
+  status: resource.status,
   title: resource.title,
   urlBO: resource.urlBO,
   backOfficeEnvironmentConfigurations:
     resource.backOfficeEnvironmentConfigurations?.slice() ?? undefined,
+  logoBgColor: resource.logoBgColor,
   urlPublic: resource.urlPublic,
   tag: undefined,
   userRole: resource.userRole as UserRole,
-  authorized: resource.authorized,
-  status: resource.status,
-  imageUrl: resource.imageUrl,
   subProducts: resource.children?.slice() ?? [],
-  logoBgColor: resource.logoBgColor,
 });
