@@ -36,7 +36,7 @@ const renderCard = (
   const store = injectedStore ? injectedStore : createStore();
   const history = injectedHistory ? injectedHistory : createMemoryHistory();
 
-  mockedProduct.status = status;
+  mockedProduct.productOnBoardingStatus = status;
   mockedProduct.urlPublic = urlPublic;
   render(
     <Router history={history}>

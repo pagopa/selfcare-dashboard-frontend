@@ -14,7 +14,10 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
 
-  const activeProducts = useMemo(() => products?.filter((p) => p.status === 'ACTIVE'), [products]);
+  const activeProducts = useMemo(
+    () => products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE'),
+    [products]
+  );
 
   const fetchProductRolesNotYetCached = async (): Promise<ProductsRolesMap> => {
     if (!activeProducts) {
