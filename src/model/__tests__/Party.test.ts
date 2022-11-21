@@ -18,6 +18,7 @@ test('Test institutionResource2Party', () => {
     userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
     address: 'address',
+    zipCode: '20121',
   };
 
   const party = institutionResource2Party(institutionResource);
@@ -35,6 +36,7 @@ test('Test institutionResource2Party', () => {
     origin: 'IPA',
     institutionType: 'PA',
     registeredOffice: 'address',
+    zipCode: '20121',
     typology: 'TODO',
   });
 });
