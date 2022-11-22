@@ -13,7 +13,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
-import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
+import RemoteRoutingAdmin from '../../microcomponents/admin/onboarding/RemoteRoutingAdmin';
 import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
 import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
