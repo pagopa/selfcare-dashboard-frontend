@@ -47,7 +47,7 @@ const ROUTES = {
 export const DASHBOARD_ROUTES = {
   OVERVIEW: {
     path: `${BASE_ROUTE}/:partyId`,
-    exact: true,
+    exact: false,
     component: DashboardOverview,
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:partyId`),
