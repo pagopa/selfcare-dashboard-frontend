@@ -7,6 +7,10 @@ type Props = {
   theme: any;
   i18n: any;
   decorators: any;
+  party: any;
+  products: any;
+  activeProducts: any;
+  productsMap: any;
   CONFIG: any;
 };
 

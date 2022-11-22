@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import Layout from './components/Layout/Layout';
 import routes, { RoutesObject } from './routes';
 import { ENV } from './utils/env';
-import RemoteRoutingAdmin from './microcomponents/admin/onboarding/RemoteRoutingAdmin';
+import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
 
 const buildRoutes = (rs: RoutesObject) =>
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
