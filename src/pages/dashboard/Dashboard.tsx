@@ -7,14 +7,15 @@ import withSelectedParty from '../../decorators/withSelectedParty';
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
 import withSelectedProductRoles from '../../decorators/withSelectedPartyProductAndRoles';
-import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
-import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import { Party } from '../../model/Party';
 import { buildProductsMap, Product, ProductsMap } from '../../model/Product';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
+import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
+import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
+import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
@@ -101,16 +102,17 @@ const Dashboard = () => {
           <DashboardSideMenu products={products} party={party} />
         </Box>
       </Grid>
-      <Grid
-        item
-        component="main"
-        xs={10}
-        sx={{ backgroundColor: '#F5F6F7' }}
-        display="flex"
-        justifyContent="center"
-        pb={8}
-      >
+      <Grid item component="main" xs={10} sx={{ backgroundColor: '#F5F6F7' }} display="flex" pb={8}>
         <Switch>
+          <Route path={ENV.ROUTES.ADMIN} exact={false}>
+            <RemoteRoutingAdmin
+              history={history}
+              store={store}
+              theme={theme}
+              i18n={i18n}
+              decorators={decorators}
+            />
+          </Route>
           <Route path={ENV.ROUTES.USERS} exact={false}>
             <RemoteRoutingUsers
               party={party}

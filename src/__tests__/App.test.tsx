@@ -56,7 +56,5 @@ test('Test routing ', async () => {
   history.push('/dashboard/1');
   expect(history.location.pathname).toBe('/dashboard/1');
 
-  history.push('/dashboard/13/2');
-  await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13'));
   verifySelectedPartyMockExecution(store.getState());
 });
