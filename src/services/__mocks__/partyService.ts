@@ -86,11 +86,12 @@ export const mockedParties: Array<Party> = [
     origin: 'MOCK',
     institutionType: 'GSP',
   },
+  // Use case of party with status "TOBEVALIDATED"
   {
     userRole: 'ADMIN',
     description: `Commissario straordinario per la realizzazione di approdi temporanei e di interventi complementari per la salvaguardia di Venezia e della sua laguna e ulteriori interventi per la salvaguardia della laguna di Venezia`,
     urlLogo: 'image',
-    status: 'ACTIVE',
+    status: 'TOBEVALIDATED',
     partyId: '5',
     digitalAddress: 'comune.veneto@pec.it',
     fiscalCode: 'fiscalCodeVeneto',
