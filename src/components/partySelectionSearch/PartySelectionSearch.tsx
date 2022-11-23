@@ -116,7 +116,8 @@ export default function PartySelectionSearch({
               <CustomBox sx={{ pointerEvents: parties.length !== 1 ? 'auto' : 'none' }}>
                 {filteredParties &&
                   filteredParties.map((party) => {
-                    const isDisabled = party.status === 'PENDING';
+                    const isDisabled =
+                      party.status === 'PENDING' || party.status === 'TOBEVALIDATED';
                     return (
                       <PartyItemContainer
                         moreThan3Parties={moreThan3Parties}
@@ -126,7 +127,13 @@ export default function PartySelectionSearch({
                         title={party.description}
                         subTitle={t(roleLabels[party.userRole].longLabelKey)}
                         image={party.urlLogo}
-                        chip={party.status === 'PENDING' ? t('partySelection.partyStatus') : ''}
+                        chip={
+                          party.status === 'PENDING'
+                            ? t('partySelection.partyStatus.pending')
+                            : party.status === 'TOBEVALIDATED'
+                            ? t('partySelection.partyStatus.toBeValidated')
+                            : ''
+                        }
                         action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                           handleListItemClick(event, party)
                         }

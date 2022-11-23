@@ -3,7 +3,7 @@ import { ENV } from '../utils/env';
 
 export type UserRole = 'ADMIN' | 'LIMITED';
 export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
-export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED';
+export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
 
 export type Party = {
   partyId: string;
