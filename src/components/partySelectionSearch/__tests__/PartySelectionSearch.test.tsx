@@ -1,5 +1,6 @@
-import { fireEvent, getByText, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, getByText, render, screen } from '@testing-library/react';
 import { Party } from '../../../model/Party';
+import PartyAccountItemSelection from '../PartyAccountItemSelection';
 import PartySelectionSearch from '../PartySelectionSearch';
 import './../../../locale';
 
@@ -18,6 +19,7 @@ const parties: Array<Party> = [
     externalId: 'externalId1',
     originId: 'originId1',
     registeredOffice: 'registeredOffice',
+    zipCode: '40506',
     typology: 'typology',
   },
   {
@@ -32,6 +34,7 @@ const parties: Array<Party> = [
     externalId: 'externalId2',
     originId: 'originId2',
     registeredOffice: 'registeredOffice',
+    zipCode: '40507',
     typology: 'typology',
   },
   {
@@ -46,6 +49,7 @@ const parties: Array<Party> = [
     externalId: 'externalId3',
     originId: 'originId3',
     registeredOffice: 'registeredOffice',
+    zipCode: '40508',
     typology: 'typology',
   },
   {
@@ -60,6 +64,7 @@ const parties: Array<Party> = [
     externalId: 'externalId4',
     originId: 'originId4',
     registeredOffice: 'registeredOffice',
+    zipCode: '40509',
     typology: 'typology',
   },
 ];
@@ -76,7 +81,7 @@ test('Test rendering', () => {
   );
   const input = document.getElementById('search');
 
-  // search button  "Cerca"
+  // Search button "Cerca"
   expect(input?.tagName).toBe('INPUT');
 
   parties
@@ -85,7 +90,7 @@ test('Test rendering', () => {
       screen.getByText(element);
     });
 
-  // la serach è presente solo se ho più di 3 parties
+  // The search is present only if the loggedUser has more than three entities
   if (parties.length > 3) {
     expect(input?.tagName).toBe('INPUT');
   } else {
@@ -104,7 +109,7 @@ test('Test filter', () => {
   const input = document.getElementById('search');
   const filterNapoli = 'Napoli';
 
-  // modify input field
+  // Modify input field
   if (input) {
     fireEvent.change(input, { target: { value: filterNapoli } });
     expect(input?.getAttribute('value')).toBe(filterNapoli);
@@ -146,7 +151,7 @@ test('Test selection when there are < 3 parties', async () => {
   const filterPartyNapoli = 'Comune di Napoli Comune di Napoli Amministratore';
 
   expect(selectedParty).toBe(null);
-  // seleziona su uno dei party Napoli
+
   const buttonParty = screen.getByRole('button', { name: filterPartyNapoli });
 
   fireEvent.click(buttonParty);
@@ -175,6 +180,16 @@ test('Test selection when there are > 3 parties', async () => {
   const selectedMoreThen3 = document.getElementsByClassName('selectedMoreThen3')[0];
   if (selectedMoreThen3) getByText(selectedMoreThen3, 'Comune di Bari');
 });
+
+test('Select a party, then clear the selection', async () => {
+  render(<PartyAccountItemSelection selectedParty={selectedParty} clearField={() => 'clear'} />);
+
+  const clearSelection = screen.getByTestId('ClearOutlinedIcon');
+  fireEvent.click(clearSelection);
+
+  expect(selectedParty).toBe(null);
+});
+
 test('Test pending party', () => {
   render(
     <PartySelectionSearch
@@ -185,5 +200,18 @@ test('Test pending party', () => {
   );
   if (selectedParty?.status === 'PENDING') {
     screen.getByText('Da completare');
+  }
+});
+
+test('Test TOBEVALIDATED party', () => {
+  render(
+    <PartySelectionSearch
+      parties={parties}
+      onPartySelectionChange={(p) => (selectedParty = p)}
+      selectedParty={selectedParty}
+    />
+  );
+  if (selectedParty?.status === 'TOBEVALIDATED') {
+    screen.getByText('Da validare');
   }
 });
