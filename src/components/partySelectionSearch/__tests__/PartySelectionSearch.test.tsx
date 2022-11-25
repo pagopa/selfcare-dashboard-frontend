@@ -151,12 +151,12 @@ test('Test selection when there are < 3 parties', async () => {
   const filterPartyNapoli = 'Comune di Napoli Comune di Napoli Amministratore';
 
   expect(selectedParty).toBe(null);
-
+  // select the party "Napoli"
   const buttonParty = screen.getByRole('button', { name: filterPartyNapoli });
 
   fireEvent.click(buttonParty);
 
-  // verifichiamo che al click sia selezionato il pulsante "Napoli"
+  // let's check if it is selected
   const selectedLessThen3 = document.getElementById('selectedLessThen3');
   if (selectedLessThen3) getByText(selectedLessThen3, 'Comune di Milano');
 });
