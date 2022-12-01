@@ -32,35 +32,22 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const [openEnvironmentModal, setOpenEnvironmentModal] = useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<Product>();
-  const [partySelected, setPartySelected] = useState<Party | undefined>(selectedParty);
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
   const activeProducts: Array<Product> = useMemo(
-    () => products?.filter((p) => p.status === 'ACTIVE' && p.authorized) ?? [],
+    () => products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized) ?? [],
     [products]
   );
 
   // eslint-disable-next-line functional/immutable-data
   actualActiveProducts.current = activeProducts;
   // eslint-disable-next-line functional/immutable-data
-  actualSelectedParty.current = partySelected;
+  actualSelectedParty.current = selectedParty;
 
   return (
-    <div
-      tabIndex={0}
-      onKeyDownCapture={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          const partySelected = (e as any).target;
-          const selectedParty = parties2Show.find((p) =>
-            partySelected.textContent.includes(p.description)
-          );
-          partySelected.click();
-          setPartySelected(selectedParty);
-        }
-      }}
-    >
+    <div tabIndex={0}>
       <Header
         onExit={onExit}
         withSecondHeader={!!party}

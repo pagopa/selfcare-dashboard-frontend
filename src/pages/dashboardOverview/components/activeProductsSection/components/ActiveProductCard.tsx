@@ -48,7 +48,7 @@ export default function ActiveProductCard({
   const theme = useTheme();
 
   const activeSubProducts: Array<SubProduct> = useMemo(
-    () => product.subProducts.filter((p) => p.status === 'ACTIVE') ?? [],
+    () => product.subProducts.filter((p) => p.productOnBoardingStatus === 'ACTIVE') ?? [],
     [product.subProducts]
   );
 

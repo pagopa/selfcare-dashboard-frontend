@@ -89,7 +89,7 @@ test('Test', async () => {
   await waitFor(() => screen.getByText('RENDERED using withProductsRolesMap'));
 
   await checkProductsRolesMapLength(
-    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
+    mockedPartyProducts.filter((p) => p.productOnBoardingStatus === 'ACTIVE').length,
     store
   );
 
@@ -108,12 +108,12 @@ test('Test', async () => {
   );
 
   await checkProductsRolesMapLength(
-    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
+    mockedPartyProducts.filter((p) => p.productOnBoardingStatus === 'ACTIVE').length,
     store
   );
 
   expect(fetchProductRolesSpy).toBeCalledTimes(
-    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length
+    mockedPartyProducts.filter((p) => p.productOnBoardingStatus === 'ACTIVE').length
   );
 });
 

@@ -9,7 +9,10 @@ export default {
     title: 'Seleziona il tuo ente',
     subTitle:
       'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.',
-    partyStatus: 'Da completare',
+    partyStatus: {
+      pending: 'Da completare',
+      toBeValidated: 'Da validare',
+    },
     continueButton: 'Accedi',
     backButton: 'Indietro',
     label: 'Cerca ente',

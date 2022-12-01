@@ -66,7 +66,13 @@ export default function NoActiveParty({ parties }: Props) {
                         title={party.description}
                         subTitle={t(roleLabels[party.userRole].longLabelKey)}
                         image={party.urlLogo}
-                        chip={party.status === 'PENDING' ? 'Da completare' : ''}
+                        chip={
+                          party.status === 'PENDING'
+                            ? t('partySelection.partyStatus.pending')
+                            : party.status === 'TOBEVALIDATED'
+                            ? t('partySelection.partyStatus.toBeValidated')
+                            : ''
+                        }
                       />
                     );
                   })}

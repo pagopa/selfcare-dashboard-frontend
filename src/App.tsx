@@ -4,10 +4,15 @@ import {
   UnloadEventHandler,
   UserNotifyHandle,
 } from '@pagopa/selfcare-common-frontend';
-import { Redirect, Route, Switch } from 'react-router';
+import { Redirect, Route, Switch, useHistory } from 'react-router';
 import withLogin from '@pagopa/selfcare-common-frontend/decorators/withLogin';
+import { useStore } from 'react-redux';
+import { useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import Layout from './components/Layout/Layout';
 import routes, { RoutesObject } from './routes';
+import { ENV } from './utils/env';
+import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
 
 const buildRoutes = (rs: RoutesObject) =>
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
@@ -17,22 +22,32 @@ const buildRoutes = (rs: RoutesObject) =>
     </Route>
   ));
 
-const App = () => (
-  <ErrorBoundary>
-    <Layout>
-      <LoadingOverlay />
-      <UserNotifyHandle />
-      <UnloadEventHandler />
+const App = () => {
+  const store = useStore();
+  const theme = useTheme();
+  const { i18n } = useTranslation();
+  const history = useHistory();
 
-      <Switch>
-        {buildRoutes(routes)}
+  return (
+    <ErrorBoundary>
+      <Layout>
+        <LoadingOverlay />
+        <UserNotifyHandle />
+        <UnloadEventHandler />
 
-        <Route path="*">
-          <Redirect to={routes.PARTY_SELECTION.path} />
-        </Route>
-      </Switch>
-    </Layout>
-  </ErrorBoundary>
-);
+        <Switch>
+          <Route path={ENV.ROUTES.ADMIN} exact={false}>
+            <RemoteRoutingAdmin store={store} theme={theme} i18n={i18n} history={history} />
+          </Route>
+          {buildRoutes(routes)}
+
+          <Route path="*">
+            <Redirect to={routes.PARTY_SELECTION.path} />
+          </Route>
+        </Switch>
+      </Layout>
+    </ErrorBoundary>
+  );
+};
 
 export default withLogin(App);
