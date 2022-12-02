@@ -35,7 +35,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     origin: institutionResource.origin,
     description: institutionResource.name,
     digitalAddress: institutionResource.mailAddress,
-    status: institutionResource.status as 'ACTIVE' | 'PENDING',
+    status: institutionResource.status as 'ACTIVE' | 'PENDING' | 'TOBEVALIDATED',
     userRole: institutionResource.userRole as UserRole,
     category: institutionResource.category,
     urlLogo,
