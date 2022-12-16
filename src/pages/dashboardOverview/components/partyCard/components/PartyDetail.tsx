@@ -156,19 +156,16 @@ export default function PartyDetail({ party }: Props) {
             </Typography>
           </Tooltip>
         </Grid>
-        {/* TODO  codice destinatario */}
-        {/* <Grid item xs={4}>
+        <Grid item xs={4}>
           <Typography variant="body2" sx={{ ...labelStyles }}>
             {t('overview.partyDetail.recipientCode')}
           </Typography>
         </Grid>
-         <Grid item xs={8}>
-          <Tooltip title="TODO CODICE DESTINATARIO">
-            <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-              TODO CODICE DESTINATARIO
-            </Typography>
-          </Tooltip>
-        </Grid> */}
+        <Grid item xs={8}>
+          <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
+            {party.recipientCode}
+          </Typography>
+        </Grid>
       </Grid>
     </Grid>
   );
