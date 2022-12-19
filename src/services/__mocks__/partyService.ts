@@ -17,6 +17,7 @@ export const mockedParties: Array<Party> = [
     originId: 'originId1',
     origin: 'IPA',
     institutionType: 'PA',
+    recipientCode: 'CGDAS23A',
   },
   {
     userRole: 'ADMIN',
@@ -34,6 +35,7 @@ export const mockedParties: Array<Party> = [
     originId: 'originId2',
     origin: 'IPA',
     institutionType: 'PA',
+    recipientCode: 'CGDAS23B',
   },
   {
     userRole: 'ADMIN',
@@ -51,6 +53,7 @@ export const mockedParties: Array<Party> = [
     originId: 'originId3',
     origin: 'IPA',
     institutionType: 'PA',
+    recipientCode: 'CGDAS23C',
   },
   {
     userRole: 'LIMITED',
@@ -68,6 +71,7 @@ export const mockedParties: Array<Party> = [
     originId: 'originId4',
     origin: 'IPA',
     institutionType: 'PA',
+    recipientCode: 'CGDAS23D',
   },
   {
     userRole: 'ADMIN',
@@ -85,6 +89,7 @@ export const mockedParties: Array<Party> = [
     originId: 'originId5',
     origin: 'MOCK',
     institutionType: 'GSP',
+    recipientCode: 'CGDAS23E',
   },
   // Use case of party with status "TOBEVALIDATED"
   {
@@ -103,6 +108,7 @@ export const mockedParties: Array<Party> = [
     originId: 'originId1',
     origin: 'IPA',
     institutionType: 'GSP',
+    recipientCode: 'CCBV421K',
   },
   {
     userRole: 'ADMIN',
@@ -120,6 +126,7 @@ export const mockedParties: Array<Party> = [
     originId: 'originId6',
     origin: 'IPA',
     institutionType: 'GSP',
+    recipientCode: 'CGDAS23F',
   },
   // Usable when not mocking the BE
   {
@@ -139,6 +146,7 @@ export const mockedParties: Array<Party> = [
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
+    recipientCode: 'CGDAS23G',
   },
   // Usable when not mocking the BE
   {
@@ -158,6 +166,7 @@ export const mockedParties: Array<Party> = [
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
+    recipientCode: 'CGDAS23V',
   },
 ];
 

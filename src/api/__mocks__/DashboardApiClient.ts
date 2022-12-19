@@ -33,6 +33,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     institutionType: InstitutionTypeEnum.PA,
     address: 'Piazza della Scala, 2',
     zipCode: '20121',
+    geographicTaxonomies: [],
+    recipientCode: '4GBCSDA1',
   },
   {
     name: 'Comune di Milano',
@@ -48,6 +50,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     institutionType: InstitutionTypeEnum.PA,
     address: 'Piazza della Scala, 2',
     zipCode: '20121',
+    geographicTaxonomies: [],
+    recipientCode: '4GBCSDA1',
   },
 ];
 

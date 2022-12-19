@@ -21,6 +21,7 @@ export type Party = {
   zipCode: string;
   typology: string;
   institutionType?: string;
+  recipientCode?: string;
 };
 
 const buildUrlLog = (partyId: string) =>
@@ -44,5 +45,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     zipCode: institutionResource.zipCode,
     typology: 'TODO', // it will represent the taxonomy of the party
     institutionType: institutionResource.institutionType,
+    recipientCode: institutionResource.recipientCode,
   };
 };
