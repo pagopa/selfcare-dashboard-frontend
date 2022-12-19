@@ -56,6 +56,7 @@ test('Test institutionResource2Party', () => {
     institutionType: InstitutionTypeEnum.PA,
     address: 'address',
     zipCode: '20121',
+    recipientCode: 'MC45KDSX',
   };
 
   const party = institutionResource2Party(institutionResource);
@@ -75,5 +76,6 @@ test('Test institutionResource2Party', () => {
     registeredOffice: 'address',
     zipCode: '20121',
     typology: 'TODO',
+    recipientCode: 'MC45KDSX',
   });
 });
