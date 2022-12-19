@@ -103,6 +103,7 @@ export default {
     partyDetail: {
       institutionType: 'Tipologia',
       category: 'Categoria',
+      geographicTaxonomy: 'Area di competenza',
       originId: 'Codice',
       companyName: 'Ragione sociale',
       fiscalCode: 'Codice Fiscale',
