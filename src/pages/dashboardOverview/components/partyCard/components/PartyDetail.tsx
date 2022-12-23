@@ -1,22 +1,12 @@
-import {
-  Autocomplete,
-  Box,
-  FormControlLabel,
-  Grid,
-  RadioGroup,
-  TextField,
-  Tooltip,
-  Typography,
-  useTheme,
-  Radio,
-} from '@mui/material';
+import { Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from 'react';
 import { SessionModal } from '@pagopa/selfcare-common-frontend';
-import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
-import { GeographicTaxonomy, Party } from '../../../../../model/Party';
+
+import { Party } from '../../../../../model/Party';
+import GeotaxonomySection from './GeotaxonomySection';
 
 type Props = {
   party: Party;
@@ -28,25 +18,18 @@ const labelStyles = {
 export default function PartyDetail({ party }: Props) {
   const { t } = useTranslation();
   const theme = useTheme();
+  const geographicTaxonomies = party.geographicTaxonomies;
 
   const [openModalGeographicTaxonomies, setOpenModalGeographicTaxonomies] =
     useState<boolean>(false);
 
   // const [options, setOptions] = useState<Array<OnboardingInstitutionInfo>>([]);
-  const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>([
-    { code: '', desc: '' },
-  ]);
-  const [isNationalAreaVisible, setIsNationalAreaVisible] = useState<boolean>(false);
-  const [isLocalAreaVisible, setIsLocalAreaVisible] = useState<boolean>(false);
-  const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
 
   useEffect(() => {
-    if (party.geographicTaxonomies.length === 0) {
+    if (geographicTaxonomies.length === 0) {
       setOpenModalGeographicTaxonomies(true);
     }
   }, []);
-
-  const notValidEntry = false; // input.length >= 3 && options.length === 0;
 
   const infoStyles = {
     fontWeight: theme.typography.fontWeightMedium,
@@ -57,46 +40,10 @@ export default function PartyDetail({ party }: Props) {
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
   const showTooltipAfter = 49;
 
-  const handleRemoveClick = (index: number) => {
-    const list = [...optionsSelected];
-    // eslint-disable-next-line functional/immutable-data
-    list.splice(index, 1);
-    setOptionsSelected(list);
-    setIsAddNewAutocompleteEnabled(true);
-  };
-
-  const handleAddClick = () => {
-    setOptionsSelected([
-      ...optionsSelected,
-      {
-        code: '',
-        desc: '',
-      },
-    ]);
-  };
-
-  const handleChange = (_event: any, value: any, index: number) => {
-    const newValues = optionsSelected;
-    const emptyField = !optionsSelected.find((o) => o?.desc === '');
-
-    // eslint-disable-next-line functional/immutable-data
-    newValues[index] = value;
-    setOptionsSelected(newValues);
-    if (newValues[index]?.desc || emptyField) {
-      setIsAddNewAutocompleteEnabled(true);
-    }
-  };
-
   const handleAddNewTaxonomies = () => {
     // TODO Add the new API for modify/add new taxonomies
     setOpenModalGeographicTaxonomies(false);
   };
-
-  const options = [
-    { code: '323435435', desc: 'Comune di Monza' },
-    { code: '43543546', desc: 'Comune di Napoli' },
-    { code: '65655665', desc: 'Comune di Roma' },
-  ];
 
   return (
     <>
@@ -160,8 +107,8 @@ export default function PartyDetail({ party }: Props) {
               arrow={true}
             >
               <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {party.geographicTaxonomies[0]?.desc}
-                {party.geographicTaxonomies.length > 1 ? (
+                {geographicTaxonomies[0]?.desc ?? '-'}
+                {geographicTaxonomies.length > 1 ? (
                   <>
                     {', '}
                     <ButtonNaked
@@ -172,7 +119,7 @@ export default function PartyDetail({ party }: Props) {
                       weight="default"
                     >
                       {'+'}
-                      {party.geographicTaxonomies.length - 1}
+                      {geographicTaxonomies.length - 1}
                     </ButtonNaked>
                   </>
                 ) : (
@@ -291,118 +238,7 @@ export default function PartyDetail({ party }: Props) {
       <SessionModal
         open={openModalGeographicTaxonomies}
         title={t('overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.title')}
-        message={
-          <>
-            {t('overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.description')}
-            <RadioGroup name="geographicTaxonomy">
-              <Box display="flex" mt={3}>
-                <FormControlLabel
-                  checked={isNationalAreaVisible}
-                  value="national"
-                  control={<Radio disableRipple={true} />}
-                  label={t(
-                    'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.national'
-                  )}
-                  onChange={() => {
-                    setIsNationalAreaVisible(true);
-                    setIsLocalAreaVisible(false);
-                  }}
-                  sx={{ mr: 3, ml: 1 }}
-                />
-                <FormControlLabel
-                  checked={isLocalAreaVisible}
-                  value="local"
-                  control={<Radio disableRipple={true} />}
-                  label={t(
-                    'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.local'
-                  )}
-                  onChange={() => {
-                    setIsNationalAreaVisible(false);
-                    setIsLocalAreaVisible(true);
-                  }}
-                />
-              </Box>
-            </RadioGroup>
-            {isLocalAreaVisible && (
-              <>
-                {optionsSelected.map((val, i) => (
-                  <div key={i}>
-                    <Box display={'flex'} width="100%" mt={2}>
-                      {i !== 0 && (
-                        <Box display="flex" alignItems={'center'}>
-                          <ButtonNaked
-                            component="button"
-                            onClick={() => handleRemoveClick(i)}
-                            startIcon={<RemoveCircleOutlineOutlined />}
-                            sx={{ color: 'error.dark', size: 'medium' }}
-                            weight="default"
-                            size="large"
-                          />
-                        </Box>
-                      )}
-                      <Box width="100%">
-                        <Autocomplete
-                          id="taxonomies"
-                          freeSolo
-                          disablePortal
-                          options={options}
-                          sx={{ width: '100%' }}
-                          onChange={(event: any, value: any) => handleChange(event, value, i)}
-                          value={val?.desc}
-                          renderOption={(props, option) => (
-                            <span {...props}>{option.desc ? option.desc : ''}</span>
-                          )}
-                          renderInput={(params) => (
-                            <TextField
-                              // onChange={handleSearchInput}
-                              {...params}
-                              variant="outlined"
-                              label={
-                                !optionsSelected?.[i]?.desc
-                                  ? t(
-                                      'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.inputLabel'
-                                    )
-                                  : ''
-                              }
-                              error={notValidEntry}
-                            />
-                          )}
-                        />
-                        {notValidEntry && (
-                          <Typography
-                            sx={{ fontSize: 'fontSize', color: 'error.dark' }}
-                            pt={1}
-                            ml={2}
-                          >
-                            {t(
-                              'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.error.notMatchedArea'
-                            )}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Box>
-                    {optionsSelected.length - 1 === i && (
-                      <Box mt={2}>
-                        <ButtonNaked
-                          disabled={!isAddNewAutocompleteEnabled}
-                          component="button"
-                          onClick={handleAddClick}
-                          startIcon={<AddOutlined />}
-                          sx={{ color: 'primary.main' }}
-                          weight="default"
-                        >
-                          {t(
-                            'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.addMoreArea'
-                          )}
-                        </ButtonNaked>
-                      </Box>
-                    )}
-                  </div>
-                ))}
-              </>
-            )}
-          </>
-        }
+        message={<GeotaxonomySection geographicTaxonomies={geographicTaxonomies} />}
         onConfirmLabel={t(
           'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.modify'
         )}

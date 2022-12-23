@@ -18,7 +18,7 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'PA',
     recipientCode: 'CGDAS23A',
-    geographicTaxonomies: [{ code: '12143588', desc: 'Comune di Messina' }], // Use case with one taxonomy
+    geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }], // Use case with one taxonomy
   },
   {
     userRole: 'ADMIN',
@@ -58,8 +58,8 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'CGDAS23C',
     geographicTaxonomies: [
       // Use case with two taxonomies
-      { code: '2356325', desc: 'Comune di Sassuolo' },
-      { code: '6534345', desc: 'Comune di Verona' },
+      { code: '058091', desc: 'Roma - Comune' },
+      { code: '015146', desc: 'Milano - Comune' },
     ],
   },
   {
