@@ -1,34 +1,50 @@
-import { Autocomplete, Box, FormControlLabel, RadioGroup, TextField, Radio } from '@mui/material';
-import { useEffect, useState } from 'react';
+import {
+  Autocomplete,
+  Box,
+  FormControlLabel,
+  RadioGroup,
+  TextField,
+  Radio,
+  debounce,
+} from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { GeographicTaxonomy } from '../../../../../model/Party';
 
-export const options = [
+const retrievedGeographicAreas = [
   { code: '058091', desc: 'Roma - Comune' },
   { code: '015146', desc: 'Milano - Comune' },
 ];
+
 type Props = {
-  geographicTaxonomies: Array<{
-    code: string;
-    desc: string;
-  }>;
+  geographicTaxonomies: Array<GeographicTaxonomy>;
+  notFoundAnyTaxonomies: boolean;
+  setOptionsSelected: (os: Array<GeographicTaxonomy>) => void;
+  setIsAddNewAutocompleteEnabled: (ae: boolean) => void;
+  optionsSelected: Array<GeographicTaxonomy>;
+  isAddNewAutocompleteEnabled: boolean;
 };
 
-export default function GeotaxonomySection({ geographicTaxonomies }: Props) {
-  const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>(
-    geographicTaxonomies ?? { code: '', desc: '' }
-  );
+export default function GeoTaxonomySection({
+  geographicTaxonomies,
+  notFoundAnyTaxonomies,
+  setOptionsSelected,
+  setIsAddNewAutocompleteEnabled,
+  optionsSelected,
+  isAddNewAutocompleteEnabled,
+}: Props) {
+  const { t } = useTranslation();
+
+  const [options, setOptions] = useState<Array<GeographicTaxonomy>>([]);
   const [isNationalAreaVisible, setIsNationalAreaVisible] = useState<boolean>(false);
   const [isLocalAreaVisible, setIsLocalAreaVisible] = useState<boolean>(false);
-  const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
-
   const [input, setInput] = useState<string>('');
-
   const [error, setError] = useState<any>({});
+  const optionsSelectedRef = useRef<Array<GeographicTaxonomy>>();
 
-  const { t } = useTranslation();
+  const emptyField = !optionsSelected.find((o) => o?.desc === '');
 
   const deleteError = (index: number) => {
     const newError = { ...error };
@@ -37,29 +53,32 @@ export default function GeotaxonomySection({ geographicTaxonomies }: Props) {
     setError(newError);
   };
 
-  const findError = (index: number, data: any) => {
-    if (data?.length === 0) {
-      setError((currError: any) => ({ ...currError, [index]: true }));
-    } else {
-      deleteError(index);
-    }
+  const findError = (index: number) => {
+    setError((currError: any) => ({ ...currError, [index]: true }));
+    setIsAddNewAutocompleteEnabled(false);
   };
 
-  console.log(findError); // TODO: remove when real api will be ready
-
-  const handleChange = (_event: any, value: any, index: number) => {
-    const newValues = optionsSelected;
-    const emptyField = !optionsSelected.find((o) => o?.desc === '');
-
-    // eslint-disable-next-line functional/immutable-data
-    newValues[index] = value;
-    setOptionsSelected(newValues);
-    if (newValues[index]?.desc || emptyField) {
+  const handleChange = (_event: Event, value: string, index: number) => {
+    const selectedArea = options.find((o) => o.desc === value);
+    if (selectedArea && isLocalAreaVisible) {
+      const newOccurencesSelected = [
+        ...optionsSelected.filter((os) => os !== selectedArea && os !== optionsSelected[index]),
+        selectedArea,
+      ];
+      setOptionsSelected(newOccurencesSelected);
+      // eslint-disable-next-line functional/immutable-data
+      optionsSelectedRef.current = newOccurencesSelected;
       setIsAddNewAutocompleteEnabled(true);
+    } else {
+      deleteError(index);
+      setIsAddNewAutocompleteEnabled(false);
     }
   };
 
   const handleAddClick = () => {
+    if (emptyField) {
+      setIsAddNewAutocompleteEnabled(false);
+    }
     setOptionsSelected([
       ...optionsSelected,
       {
@@ -77,51 +96,34 @@ export default function GeotaxonomySection({ geographicTaxonomies }: Props) {
     setIsAddNewAutocompleteEnabled(true);
   };
 
-  const handleSearchInput = (event: any, _index: number) => {
-    const value = event.target.value;
-    setInput(value);
-    // if (value.length >= 3) {
-    //   void debounce(handleSearch, 100)(value, index);
-    // } else {
-    //   setOptions([]);
-    // }
+  const handleSearchInput = (event: Event, index: number) => {
+    const typedValue = (event as any)?.target.value;
+    setInput(typedValue);
+    if (typedValue.length >= 3) {
+      void debounce(handleSearch, 100)(typedValue, index);
+    } else {
+      deleteError(index);
+      setIsAddNewAutocompleteEnabled(false);
+    }
   };
 
-  //   const handleSearch = async (query: string, index: number) => {
-  //     setIsLoading(true);
-  //     const searchGeotaxonomy = await fetchWithLogs(
-  //       {
-  //         endpoint: 'ONBOARDING_GET_GEOTAXONOMY',
-  //       },
-  //       {
-  //         method: 'GET',
-  //         params: { limit: ENV.MAX_INSTITUTIONS_FETCH, page: 1, startsWith: query },
-  //       },
-  //       () => setRequiredLogin(true)
-  //     );
-  //     const outcome = getFetchOutcome(searchGeotaxonomy);
+  const handleSearch = async (query: string, index: number) => {
+    const availableGeographicAreas = retrievedGeographicAreas.filter(
+      (ga) => !optionsSelected.find((os) => os.desc === ga.desc)
+    );
+    const matchesWithTyped = availableGeographicAreas.filter((o) =>
+      o.desc.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+    );
 
-  //     if (outcome === 'success') {
-  //       // eslint-disable-next-line functional/no-let
-  //       let data = (searchGeotaxonomy as AxiosResponse).data;
+    setOptions(matchesWithTyped);
 
-  //       data = data.map((value: OnboardingInstitutionInfo) => ({ ...value, label: value.desc }));
-
-  //       if (optionsSelected?.find((os) => os?.desc)) {
-  //         const dataFiltered = data.filter(
-  //           (data: any) => !optionsSelected.find((os) => os?.code === data?.code)
-  //         );
-  //         findError(index, dataFiltered);
-  //         setOptions(dataFiltered);
-  //       } else {
-  //         setOptions(data);
-  //         findError(index, data);
-  //       }
-  //     } else if ((searchGeotaxonomy as AxiosError).response?.status === 404) {
-  //       setOptions([]);
-  //     }
-  //     setIsLoading(false);
-  //   };
+    if (matchesWithTyped.length > 0) {
+      deleteError(index);
+    } else {
+      findError(index);
+      setIsAddNewAutocompleteEnabled(false);
+    }
+  };
 
   useEffect(() => {
     if (geographicTaxonomies && geographicTaxonomies[0]?.code === '100') {
@@ -133,21 +135,37 @@ export default function GeotaxonomySection({ geographicTaxonomies }: Props) {
       setIsAddNewAutocompleteEnabled(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (isLocalAreaVisible && optionsSelected.length === 0) {
+      setOptionsSelected([{ code: '', desc: '' }]);
+      setIsAddNewAutocompleteEnabled(false);
+    } else if (optionsSelectedRef.current) {
+      setOptionsSelected(optionsSelectedRef.current);
+      setIsAddNewAutocompleteEnabled(true);
+    }
+  }, [isLocalAreaVisible]);
+
   return (
     <>
-      {t('overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.description')}
+      {notFoundAnyTaxonomies
+        ? t(
+            'overview.partyDetail.geographicTaxonomies.firstTimeInsertGeographicTaxonomiesModal.description'
+          )
+        : t(
+            'overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.description'
+          )}
       <RadioGroup name="geographicTaxonomy">
-        <Box display="flex">
+        <Box display="flex" mt={4}>
           <FormControlLabel
             checked={isNationalAreaVisible}
-            value={'nationl'}
+            value={'national'}
             control={<Radio disableRipple={true} />}
-            label={t(
-              'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.national'
-            )}
+            label={t('overview.partyDetail.geographicTaxonomies.modalSections.national')}
             onChange={() => {
               setIsNationalAreaVisible(true);
               setIsLocalAreaVisible(false);
+              setIsAddNewAutocompleteEnabled(true);
               setOptionsSelected([{ code: '100', desc: 'ITALIA' }]);
             }}
             sx={{ mr: 3, ml: 1 }}
@@ -157,16 +175,12 @@ export default function GeotaxonomySection({ geographicTaxonomies }: Props) {
             checked={isLocalAreaVisible}
             value={'local'}
             control={<Radio disableRipple={true} />}
-            label={t('overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.local')}
+            label={t('overview.partyDetail.geographicTaxonomies.modalSections.local')}
             onChange={() => {
               setIsNationalAreaVisible(false);
               setIsLocalAreaVisible(true);
-              setOptionsSelected(optionsSelected);
-              if (geographicTaxonomies && geographicTaxonomies[0].code !== '100') {
-                setOptionsSelected(geographicTaxonomies);
-              } else {
-                setOptionsSelected([{ code: '', desc: '' }]);
-              }
+              setIsAddNewAutocompleteEnabled(true);
+              setOptionsSelected(geographicTaxonomies);
             }}
           />
         </Box>
@@ -191,31 +205,31 @@ export default function GeotaxonomySection({ geographicTaxonomies }: Props) {
                 <Box width="100%">
                   <Autocomplete
                     freeSolo
-                    // onOpen={() => setOptions([])}
+                    onOpen={() => setOptions([])}
                     disablePortal
-                    options={input.length >= 3 ? options : []}
+                    options={input.length >= 3 ? options.map((o) => o.desc) : []}
                     sx={{ width: '100%' }}
                     onChange={(event: any, value: any) => handleChange(event, value, i)}
                     value={val?.desc}
-                    renderOption={(props, option) => (
-                      // TODO: customize layout
-                      <span {...props}>{option.desc ? option.desc : ''}</span>
-                    )}
+                    renderOption={(props, option) => <span {...props}>{option ? option : ''}</span>}
                     renderInput={(params) => (
                       <TextField
-                        onChange={(e) => handleSearchInput(e, i)}
+                        onChange={(e: any) => handleSearchInput(e, i)}
                         {...params}
                         variant="outlined"
                         label={
                           !optionsSelected?.[i]?.desc
                             ? t(
-                                'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.inputLabel'
+                                'overview.partyDetail.geographicTaxonomies.modalSections.inputLabel'
                               )
                             : ''
                         }
                         error={error?.[i]}
                         helperText={
-                          error?.[i] && t('onboardingFormData.taxonomySection.error.notMatchedArea')
+                          error?.[i] &&
+                          t(
+                            'overview.partyDetail.geographicTaxonomies.modalSections.error.notMatchedArea'
+                          )
                         }
                       />
                     )}
@@ -232,9 +246,7 @@ export default function GeotaxonomySection({ geographicTaxonomies }: Props) {
                     sx={{ color: 'primary.main' }}
                     weight="default"
                   >
-                    {t(
-                      'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.addMoreArea'
-                    )}
+                    {t('overview.partyDetail.geographicTaxonomies.modalSections.addMoreArea')}
                   </ButtonNaked>
                 </Box>
               )}

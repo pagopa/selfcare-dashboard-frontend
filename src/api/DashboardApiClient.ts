@@ -8,6 +8,7 @@ import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
+import { GeographicTaxonomyResource } from './generated/b4f-dashboard/GeographicTaxonomyResource';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -79,6 +80,17 @@ export const DashboardApi = {
   getProductRoles: async (productId: string): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  updateInstitutionGeographicTaxonomy: async (
+    institutionId: string,
+    geographicTaxonomies: Array<GeographicTaxonomyResource>
+  ): Promise<boolean> => {
+    const result = await apiClient.updateInstitutionGeographicTaxonomyUsingPUT({
+      institutionId,
+      body: { geographicTaxonomyDtoList: geographicTaxonomies },
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

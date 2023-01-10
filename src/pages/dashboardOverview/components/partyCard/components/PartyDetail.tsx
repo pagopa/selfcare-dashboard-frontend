@@ -3,10 +3,12 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from 'react';
-import { SessionModal } from '@pagopa/selfcare-common-frontend';
-
-import { Party } from '../../../../../model/Party';
-import GeotaxonomySection from './GeotaxonomySection';
+import { SessionModal, useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { GeographicTaxonomy, Party } from '../../../../../model/Party';
+import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../../../../utils/constants';
+import { DashboardApi } from '../../../../../api/DashboardApiClient';
+import GeoTaxonomySection from './GeoTaxonomySection';
 
 type Props = {
   party: Party;
@@ -18,18 +20,28 @@ const labelStyles = {
 export default function PartyDetail({ party }: Props) {
   const { t } = useTranslation();
   const theme = useTheme();
+
+  const setLoadingSaveGeotaxonomies = useLoading(LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES);
+  const addError = useErrorDispatcher();
+
   const geographicTaxonomies = party.geographicTaxonomies;
 
-  const [openModalGeographicTaxonomies, setOpenModalGeographicTaxonomies] =
+  const [openModalAddNewGeographicTaxonomies, setOpenModalAddNewGeographicTaxonomies] =
     useState<boolean>(false);
+  const [openModalFirstTimeAddGeographicTaxonomies, setOpenModalFirstTimeAddGeographicTaxonomies] =
+    useState<boolean>(false);
+  const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>(
+    geographicTaxonomies ?? { code: '', desc: '' }
+  );
+  const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
 
-  // const [options, setOptions] = useState<Array<OnboardingInstitutionInfo>>([]);
+  const showGeoTaxonomy = true; // This boolean const is introduced for show/hide the geotaxonomy
 
   useEffect(() => {
-    if (geographicTaxonomies.length === 0) {
-      setOpenModalGeographicTaxonomies(true);
+    if (showGeoTaxonomy && geographicTaxonomies.length === 0) {
+      setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
-  }, []);
+  }, [party]);
 
   const infoStyles = {
     fontWeight: theme.typography.fontWeightMedium,
@@ -41,8 +53,27 @@ export default function PartyDetail({ party }: Props) {
   const showTooltipAfter = 49;
 
   const handleAddNewTaxonomies = () => {
-    // TODO Add the new API for modify/add new taxonomies
-    setOpenModalGeographicTaxonomies(false);
+    setLoadingSaveGeotaxonomies(true);
+    DashboardApi.updateInstitutionGeographicTaxonomy(party.partyId, optionsSelected)
+      .then(() => {
+        trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {
+          geographic_taxonomies: optionsSelected,
+        });
+      })
+      .catch((reason: any) =>
+        addError({
+          id: 'UNSUCCESS_SAVE_TAXONOMIES_INFO',
+          blocking: false,
+          techDescription: `An error occured while saving geotaxonomies info for party id ${party.partyId}`,
+          toNotify: false,
+          error: reason,
+        })
+      )
+      .finally(() => {
+        setLoadingSaveGeotaxonomies(false);
+        setOpenModalAddNewGeographicTaxonomies(false);
+        setOpenModalFirstTimeAddGeographicTaxonomies(false);
+      });
   };
 
   return (
@@ -70,7 +101,7 @@ export default function PartyDetail({ party }: Props) {
               </Typography>
             </Tooltip>
           </Grid>
-          {/* Categoria */}
+          {/* category */}
           {party.category && (
             <>
               <Grid item xs={4}>
@@ -94,47 +125,54 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
             </>
           )}
-          {/* area di competenza */}
-          <Grid item xs={4}>
-            <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t('overview.partyDetail.geographicTaxonomies.label')}
-            </Typography>
-          </Grid>
-          <Grid item xs={8}>
-            <Tooltip
-              title={party.description.length >= showTooltipAfter ? party.description : ''}
-              placement="top"
-              arrow={true}
-            >
-              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {geographicTaxonomies[0]?.desc ?? '-'}
-                {geographicTaxonomies.length > 1 ? (
-                  <>
-                    {', '}
-                    <ButtonNaked
-                      component="button"
-                      onClick={() => setOpenModalGeographicTaxonomies(true)}
-                      endIcon={<EditIcon />}
-                      sx={{ color: 'primary.main', flexDirection: 'row' }}
-                      weight="default"
-                    >
-                      {'+'}
-                      {geographicTaxonomies.length - 1}
-                    </ButtonNaked>
-                  </>
-                ) : (
-                  <ButtonNaked
-                    component="button"
-                    onClick={() => setOpenModalGeographicTaxonomies(true)}
-                    endIcon={<EditIcon />}
-                    sx={{ color: 'primary.main', flexDirection: 'row' }}
-                    weight="default"
-                  />
-                )}
-              </Typography>
-            </Tooltip>
-          </Grid>
-          {/* ragione sociale */}
+          {/* geographicTaxonomy */}
+          {showGeoTaxonomy && (
+            <>
+              <Grid item xs={4}>
+                <Typography variant="body2" sx={{ ...labelStyles }}>
+                  {t('overview.partyDetail.geographicTaxonomies.label')}
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Tooltip
+                  title={party.description.length >= showTooltipAfter ? party.description : ''}
+                  placement="top"
+                  arrow={true}
+                >
+                  <Typography
+                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                    className="ShowDots"
+                  >
+                    {geographicTaxonomies[0]?.desc ?? '-'}
+                    {geographicTaxonomies.length > 1 ? (
+                      <>
+                        {', '}
+                        <ButtonNaked
+                          component="button"
+                          onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
+                          endIcon={<EditIcon />}
+                          sx={{ color: 'primary.main', flexDirection: 'row' }}
+                          weight="default"
+                        >
+                          {'+'}
+                          {geographicTaxonomies.length - 1}
+                        </ButtonNaked>
+                      </>
+                    ) : (
+                      <ButtonNaked
+                        component="button"
+                        onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
+                        endIcon={<EditIcon />}
+                        sx={{ color: 'primary.main', flexDirection: 'row' }}
+                        weight="default"
+                      />
+                    )}
+                  </Typography>
+                </Tooltip>
+              </Grid>
+            </>
+          )}
+          {/* companyName */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.companyName')}
@@ -170,7 +208,7 @@ export default function PartyDetail({ party }: Props) {
           </Grid>
         </Grid>
         <Grid container item xs={6} spacing={1}>
-          {/* codice fiscale */}
+          {/* fiscalCode */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.fiscalCode')}
@@ -187,7 +225,7 @@ export default function PartyDetail({ party }: Props) {
               </Typography>
             </Tooltip>
           </Grid>
-          {/* indirizzo PEC primario */}
+          {/* pecEmail */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.pec')}
@@ -204,7 +242,7 @@ export default function PartyDetail({ party }: Props) {
               </Typography>
             </Tooltip>
           </Grid>
-          {/* sede legale  */}
+          {/* registeredOffice  */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.registeredOffice')}
@@ -223,6 +261,7 @@ export default function PartyDetail({ party }: Props) {
               </Typography>
             </Tooltip>
           </Grid>
+          {/* recipientCode */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.recipientCode')}
@@ -236,16 +275,51 @@ export default function PartyDetail({ party }: Props) {
         </Grid>
       </Grid>
       <SessionModal
-        open={openModalGeographicTaxonomies}
-        title={t('overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.title')}
-        message={<GeotaxonomySection geographicTaxonomies={geographicTaxonomies} />}
-        onConfirmLabel={t(
-          'overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.modify'
+        open={openModalFirstTimeAddGeographicTaxonomies}
+        title={t(
+          'overview.partyDetail.geographicTaxonomies.firstTimeInsertGeographicTaxonomiesModal.title'
         )}
-        onCloseLabel={t('overview.partyDetail.geographicTaxonomies.geographicTaxonomiesModal.back')}
+        message={
+          <GeoTaxonomySection
+            geographicTaxonomies={geographicTaxonomies}
+            notFoundAnyTaxonomies={openModalFirstTimeAddGeographicTaxonomies}
+            setOptionsSelected={setOptionsSelected}
+            setIsAddNewAutocompleteEnabled={setIsAddNewAutocompleteEnabled}
+            optionsSelected={optionsSelected}
+            isAddNewAutocompleteEnabled={isAddNewAutocompleteEnabled}
+          />
+        }
+        onConfirmLabel={t(
+          'overview.partyDetail.geographicTaxonomies.firstTimeInsertGeographicTaxonomiesModal.add'
+        )}
         onConfirm={() => handleAddNewTaxonomies()}
+        onConfirmEnabled={isAddNewAutocompleteEnabled}
+        showCloseButton={false}
+        handleClose={() => {}}
+      />
+      <SessionModal
+        open={openModalAddNewGeographicTaxonomies}
+        title={t('overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.title')}
+        message={
+          <GeoTaxonomySection
+            geographicTaxonomies={geographicTaxonomies}
+            notFoundAnyTaxonomies={openModalFirstTimeAddGeographicTaxonomies}
+            setOptionsSelected={setOptionsSelected}
+            optionsSelected={optionsSelected}
+            setIsAddNewAutocompleteEnabled={setIsAddNewAutocompleteEnabled}
+            isAddNewAutocompleteEnabled={isAddNewAutocompleteEnabled}
+          />
+        }
+        onConfirmLabel={t(
+          'overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.modify'
+        )}
+        onCloseLabel={t(
+          'overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.back'
+        )}
+        onConfirm={() => handleAddNewTaxonomies()}
+        onConfirmEnabled={isAddNewAutocompleteEnabled}
         handleClose={() => {
-          setOpenModalGeographicTaxonomies(false);
+          setOpenModalAddNewGeographicTaxonomies(false);
         }}
       />
     </>
