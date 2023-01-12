@@ -13,6 +13,7 @@ import GeoTaxonomySection from '../components/GeoTaxonomySection';
 type Props = {
   party: Party;
 };
+
 const labelStyles = {
   color: 'text.colorTextPrimary',
 };
