@@ -6,17 +6,15 @@ import {
   TextField,
   Radio,
   debounce,
+  Grid,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
+import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { GeographicTaxonomy } from '../../../../../model/Party';
-
-const retrievedGeographicAreas = [
-  { code: '058091', desc: 'Roma - Comune' },
-  { code: '015146', desc: 'Milano - Comune' },
-];
+import { ENV } from '../../../../../utils/env';
 
 type Props = {
   geographicTaxonomies: Array<GeographicTaxonomy>;
@@ -36,6 +34,7 @@ export default function GeoTaxonomySection({
   isAddNewAutocompleteEnabled,
 }: Props) {
   const { t } = useTranslation();
+  const addError = useErrorDispatcher();
 
   const [options, setOptions] = useState<Array<GeographicTaxonomy>>([]);
   const [isNationalAreaVisible, setIsNationalAreaVisible] = useState<boolean>(false);
@@ -108,21 +107,38 @@ export default function GeoTaxonomySection({
   };
 
   const handleSearch = async (query: string, index: number) => {
-    const availableGeographicAreas = retrievedGeographicAreas.filter(
-      (ga) => !optionsSelected.find((os) => os.desc === ga.desc)
-    );
-    const matchesWithTyped = availableGeographicAreas.filter((o) =>
-      o.desc.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-    );
+    await fetch(ENV.URL_API.API_GEOTAXONOMY)
+      .then((response) => response.json())
+      .then((gt) => {
+        const mappedOccurrences = gt.map((g: GeographicTaxonomy) => ({
+          code: g.code,
+          desc: g.desc,
+        })) as Array<GeographicTaxonomy>;
 
-    setOptions(matchesWithTyped);
+        const availableGeographicAreas = mappedOccurrences.filter(
+          (ga) => !optionsSelected.find((os) => os.desc === ga.desc)
+        );
+        const matchesWithTyped = availableGeographicAreas.filter((o) =>
+          o.desc.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+        );
+        setOptions(matchesWithTyped);
 
-    if (matchesWithTyped.length > 0) {
-      deleteError(index);
-    } else {
-      findError(index);
-      setIsAddNewAutocompleteEnabled(false);
-    }
+        if (matchesWithTyped.length > 0) {
+          deleteError(index);
+        } else {
+          findError(index);
+          setIsAddNewAutocompleteEnabled(false);
+        }
+      })
+      .catch((reason) => {
+        addError({
+          id: 'UNSUCCESS_RETRIEVE_GEOTAXONOMIES',
+          blocking: false,
+          techDescription: `An error occured while retrieving geotaxonomies`,
+          toNotify: false,
+          error: reason,
+        });
+      });
   };
 
   useEffect(() => {
@@ -147,7 +163,7 @@ export default function GeoTaxonomySection({
   }, [isLocalAreaVisible]);
 
   return (
-    <>
+    <Grid>
       {notFoundAnyTaxonomies
         ? t(
             'overview.partyDetail.geographicTaxonomies.firstTimeInsertGeographicTaxonomiesModal.description'
@@ -254,6 +270,6 @@ export default function GeoTaxonomySection({
           ))}
         </>
       )}
-    </>
+    </Grid>
   );
 }

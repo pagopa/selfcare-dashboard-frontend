@@ -129,7 +129,7 @@ export default function PartyDetail({ party }: Props) {
           {showGeoTaxonomy && (
             <>
               <Grid item xs={4}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
+                <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.geographicTaxonomies.label')}
                 </Typography>
               </Grid>
@@ -142,6 +142,7 @@ export default function PartyDetail({ party }: Props) {
                   <Typography
                     sx={{ ...infoStyles, maxWidth: '100% !important' }}
                     className="ShowDots"
+                    component="span"
                   >
                     {geographicTaxonomies[0]?.desc ?? '-'}
                     {geographicTaxonomies.length > 1 ? (

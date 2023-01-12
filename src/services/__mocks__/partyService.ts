@@ -80,9 +80,6 @@ export const mockedParties: Array<Party> = [
     institutionType: 'PA',
     recipientCode: 'CGDAS23D',
     geographicTaxonomies: [
-      // Use case with four taxonomies
-      { code: '2356324', desc: 'Comune di Sassuolo' },
-      { code: '6534345', desc: 'Comune di Verona' },
       { code: '5555678', desc: 'Comune di Milano' },
       { code: '8853441', desc: 'Comune di Roma' },
     ],
