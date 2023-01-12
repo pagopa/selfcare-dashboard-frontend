@@ -52,6 +52,7 @@ test('Test institutionResource2Party', () => {
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
+    geographicTaxonomies: [],
     userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
     address: 'address',
@@ -77,5 +78,6 @@ test('Test institutionResource2Party', () => {
     zipCode: '20121',
     typology: 'TODO',
     recipientCode: 'MC45KDSX',
+    geographicTaxonomies: [],
   });
 });
