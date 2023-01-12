@@ -8,7 +8,7 @@ import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsS
 import { GeographicTaxonomy, Party } from '../../../../../model/Party';
 import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../../../../utils/constants';
 import { DashboardApi } from '../../../../../api/DashboardApiClient';
-import GeoTaxonomySection from '../components/GeoTaxonomySection';
+import GeoTaxonomySection from './_GeoTaxonomySection';
 
 type Props = {
   party: Party;
