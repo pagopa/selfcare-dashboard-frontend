@@ -52,12 +52,12 @@ test('Test institutionResource2Party', () => {
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    geographicTaxonomies: [],
     userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
     address: 'address',
     zipCode: '20121',
     recipientCode: 'MC45KDSX',
+    geographicTaxonomies: [],
   };
 
   const party = institutionResource2Party(institutionResource);
