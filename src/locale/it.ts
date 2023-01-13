@@ -105,6 +105,31 @@ export default {
       category: 'Categoria',
       originId: 'Codice',
       companyName: 'Ragione sociale',
+      geographicTaxonomies: {
+        label: 'Area di competenza',
+        modalSections: {
+          national: 'Nazionale',
+          local: 'Locale',
+          inputLabel: 'Comune, Provincia o Regione',
+          addMoreArea: 'Aggiungi area',
+          error: {
+            notMatchedArea: 'Scegli una località presente nell’elenco',
+          },
+        },
+        firstTimeInsertGeographicTaxonomiesModal: {
+          title: 'Indica l’area geografica',
+          description:
+            'Seleziona il territorio in cui opera il tuo ente. Se locale, puoi scegliere una o più aree di competenza. La scelta verrà applicata a tutti i prodotti PagoPA a cui l’ente aderirà.',
+          add: 'Aggiungi',
+        },
+        addNewGeographicTaxonomiesModal: {
+          title: 'Modifica l’area geografica',
+          description:
+            'Seleziona il territorio in cui opera il tuo ente. Se locale, puoi scegliere una o più aree di competenza. La modifica verrà applicata a tutti i prodotti PagoPA a cui l’ente ha già aderito.',
+          modify: 'Modifica',
+          back: 'Esci',
+        },
+      },
       fiscalCode: 'Codice Fiscale',
       pec: 'Indirizzo PEC primario',
       registeredOffice: 'Sede Legale',

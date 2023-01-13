@@ -1,9 +1,15 @@
+import { GeographicTaxonomyResource } from '../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
 import { ENV } from '../utils/env';
 
 export type UserRole = 'ADMIN' | 'LIMITED';
 export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
+
+export type GeographicTaxonomy = {
+  code: string;
+  desc: string;
+};
 
 export type Party = {
   partyId: string;
@@ -22,6 +28,7 @@ export type Party = {
   typology: string;
   institutionType?: string;
   recipientCode?: string;
+  geographicTaxonomies: Array<GeographicTaxonomyResource>;
 };
 
 const buildUrlLog = (partyId: string) =>
@@ -46,5 +53,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     typology: 'TODO', // it will represent the taxonomy of the party
     institutionType: institutionResource.institutionType,
     recipientCode: institutionResource.recipientCode,
+    geographicTaxonomies:
+      institutionResource.geographicTaxonomies as Array<GeographicTaxonomyResource>,
   };
 };
