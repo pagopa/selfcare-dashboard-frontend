@@ -4,7 +4,7 @@ import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
 import { createClient } from './generated/b4f-geotaxonomy/client';
-import { GeographicTaxonomyArray } from './generated/b4f-geotaxonomy/GeographicTaxonomyArray';
+import { GeographicTaxonomy } from './generated/b4f-geotaxonomy/GeographicTaxonomy';
 
 /*
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
@@ -36,7 +36,7 @@ const onRedirectToLogin = () =>
   );
 
 export const GeoTaxonomyApi = {
-  getTaxonomiesByQuery: async (query: string): Promise<GeographicTaxonomyArray> => {
+  getTaxonomiesByQuery: async (query: string): Promise<Array<GeographicTaxonomy>> => {
     const result = await apiClient.findAllUsingGET({ startsWith: query });
     return extractResponse(result, 200, onRedirectToLogin);
   },
