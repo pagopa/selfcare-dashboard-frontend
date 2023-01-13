@@ -18,6 +18,7 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'PA',
     recipientCode: 'CGDAS23A',
+    geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }], // Use case with one taxonomy
   },
   {
     userRole: 'ADMIN',
@@ -36,6 +37,7 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'PA',
     recipientCode: 'CGDAS23B',
+    geographicTaxonomies: [], // Use case with no taxonomies
   },
   {
     userRole: 'ADMIN',
@@ -54,6 +56,11 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'PA',
     recipientCode: 'CGDAS23C',
+    geographicTaxonomies: [
+      // Use case with two taxonomies
+      { code: '058091', desc: 'Roma - Comune' },
+      { code: '015146', desc: 'Milano - Comune' },
+    ],
   },
   {
     userRole: 'LIMITED',
@@ -72,6 +79,10 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'PA',
     recipientCode: 'CGDAS23D',
+    geographicTaxonomies: [
+      { code: '5555678', desc: 'Comune di Milano' },
+      { code: '8853441', desc: 'Comune di Roma' },
+    ],
   },
   {
     userRole: 'ADMIN',
@@ -90,6 +101,7 @@ export const mockedParties: Array<Party> = [
     origin: 'MOCK',
     institutionType: 'GSP',
     recipientCode: 'CGDAS23E',
+    geographicTaxonomies: [],
   },
   // Use case of party with status "TOBEVALIDATED"
   {
@@ -109,6 +121,7 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'GSP',
     recipientCode: 'CCBV421K',
+    geographicTaxonomies: [],
   },
   {
     userRole: 'ADMIN',
@@ -127,6 +140,7 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'GSP',
     recipientCode: 'CGDAS23F',
+    geographicTaxonomies: [],
   },
   // Usable when not mocking the BE
   {
@@ -147,6 +161,7 @@ export const mockedParties: Array<Party> = [
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
     recipientCode: 'CGDAS23G',
+    geographicTaxonomies: [],
   },
   // Usable when not mocking the BE
   {
@@ -167,6 +182,7 @@ export const mockedParties: Array<Party> = [
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
     recipientCode: 'CGDAS23V',
+    geographicTaxonomies: [],
   },
 ];
 

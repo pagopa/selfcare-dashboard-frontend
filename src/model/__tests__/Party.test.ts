@@ -57,6 +57,7 @@ test('Test institutionResource2Party', () => {
     address: 'address',
     zipCode: '20121',
     recipientCode: 'MC45KDSX',
+    geographicTaxonomies: [],
   };
 
   const party = institutionResource2Party(institutionResource);
@@ -77,5 +78,6 @@ test('Test institutionResource2Party', () => {
     zipCode: '20121',
     typology: 'TODO',
     recipientCode: 'MC45KDSX',
+    geographicTaxonomies: [],
   });
 });
