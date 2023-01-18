@@ -36,7 +36,7 @@ export default function PartyDetail({ party }: Props) {
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
 
-  const showGeoTaxonomy = true; // This boolean const is introduced for show/hide the geotaxonomy
+  const showGeoTaxonomy = false; // This boolean const is introduced for show/hide the geotaxonomy
 
   useEffect(() => {
     if (showGeoTaxonomy && geographicTaxonomies.length === 0) {
