@@ -37,7 +37,7 @@ export const ENV = {
   },
 
   GEOTAXONOMY: {
-    SHOW_GEOTAXONOMY: env.get('REACT_APP_ENABLE_TAXONOMY').default('false').asBool(),
+    SHOW_GEOTAXONOMY: env.get('REACT_APP_ENABLE_GEOTAXONOMY').default('false').asBool(),
   },
 
   API_TIMEOUT_MS: {
