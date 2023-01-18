@@ -36,6 +36,10 @@ export const ENV = {
     API_GEOTAXONOMY: 'https://api.dev.selfcare.pagopa.it/external/geotaxonomy',
   },
 
+  GEOTAXONOMY: {
+    SHOW_GEOTAXONOMY: env.get('REACT_APP_ENABLE_TAXONOMY').default('false').asBool(),
+  },
+
   API_TIMEOUT_MS: {
     DASHBOARD: env.get('REACT_APP_API_DASHBOARD_TIMEOUT_MS').required().asInt(),
   },
