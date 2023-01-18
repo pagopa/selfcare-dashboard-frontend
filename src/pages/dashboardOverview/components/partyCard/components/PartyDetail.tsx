@@ -8,6 +8,7 @@ import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsS
 import { GeographicTaxonomy, Party } from '../../../../../model/Party';
 import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../../../../utils/constants';
 import { DashboardApi } from '../../../../../api/DashboardApiClient';
+import { ENV } from '../../../../../utils/env';
 import GeoTaxonomySection from './GeoTaxonomySection';
 
 type Props = {
@@ -36,10 +37,8 @@ export default function PartyDetail({ party }: Props) {
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
 
-  const showGeoTaxonomy = true; // This boolean const is introduced for show/hide the geotaxonomy
-
   useEffect(() => {
-    if (showGeoTaxonomy && geographicTaxonomies.length === 0) {
+    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && geographicTaxonomies.length === 0) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
   }, [party]);
@@ -127,7 +126,7 @@ export default function PartyDetail({ party }: Props) {
             </>
           )}
           {/* geographicTaxonomy */}
-          {showGeoTaxonomy && (
+          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && (
             <>
               <Grid item xs={4}>
                 <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
