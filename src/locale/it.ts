@@ -5,7 +5,6 @@ export default {
       message: 'Stai per essere rediretto alla pagina di login...',
     },
   },
-
   partySelection: {
     title: 'Seleziona il tuo ente',
     subTitle:
