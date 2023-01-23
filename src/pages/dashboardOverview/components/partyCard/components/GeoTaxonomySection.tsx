@@ -59,15 +59,18 @@ export default function GeoTaxonomySection({
 
   const handleChange = (_event: Event, value: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
-    if (selectedArea && isLocalAreaVisible) {
+    if (isLocalAreaVisible) {
       const newOccurencesSelected = [
-        ...optionsSelected.filter((os) => os !== selectedArea && os !== optionsSelected[index]),
-        selectedArea,
+        ...optionsSelected.filter((os) => os !== optionsSelected[index]),
+        selectedArea ?? { code: '', desc: '' },
       ];
       setOptionsSelected(newOccurencesSelected);
       // eslint-disable-next-line functional/immutable-data
       optionsSelectedRef.current = newOccurencesSelected;
       setIsAddNewAutocompleteEnabled(true);
+      if (emptyField) {
+        setIsAddNewAutocompleteEnabled(false);
+      }
     } else {
       deleteError(index);
       setIsAddNewAutocompleteEnabled(false);
@@ -158,7 +161,7 @@ export default function GeoTaxonomySection({
       setIsAddNewAutocompleteEnabled(false);
     } else if (optionsSelectedRef.current) {
       setOptionsSelected(optionsSelectedRef.current);
-      setIsAddNewAutocompleteEnabled(true);
+      setIsAddNewAutocompleteEnabled(!!emptyField);
     }
   }, [isLocalAreaVisible]);
 
@@ -196,7 +199,7 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(false);
               setIsLocalAreaVisible(true);
               setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected(geographicTaxonomies);
+              setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
             }}
           />
         </Box>
