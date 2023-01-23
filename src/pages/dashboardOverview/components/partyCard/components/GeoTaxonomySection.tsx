@@ -161,7 +161,7 @@ export default function GeoTaxonomySection({
       setIsAddNewAutocompleteEnabled(false);
     } else if (optionsSelectedRef.current) {
       setOptionsSelected(optionsSelectedRef.current);
-      setIsAddNewAutocompleteEnabled(true);
+      setIsAddNewAutocompleteEnabled(!!emptyField);
     }
   }, [isLocalAreaVisible]);
 
@@ -199,7 +199,7 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(false);
               setIsLocalAreaVisible(true);
               setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected(geographicTaxonomies);
+              setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
             }}
           />
         </Box>
