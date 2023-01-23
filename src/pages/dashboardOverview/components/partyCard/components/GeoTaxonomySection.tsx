@@ -59,10 +59,10 @@ export default function GeoTaxonomySection({
 
   const handleChange = (_event: Event, value: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
-    if (selectedArea && isLocalAreaVisible) {
+    if (isLocalAreaVisible) {
       const newOccurencesSelected = [
-        ...optionsSelected.filter((os) => os !== selectedArea && os !== optionsSelected[index]),
-        selectedArea,
+        ...optionsSelected.filter((os) => os !== optionsSelected[index]),
+        selectedArea ?? { code: '', desc: '' },
       ];
       setOptionsSelected(newOccurencesSelected);
       // eslint-disable-next-line functional/immutable-data
