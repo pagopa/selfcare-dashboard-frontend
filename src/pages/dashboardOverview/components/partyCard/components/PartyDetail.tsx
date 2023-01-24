@@ -19,6 +19,7 @@ const labelStyles = {
   color: 'text.colorTextPrimary',
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default function PartyDetail({ party }: Props) {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -26,12 +27,13 @@ export default function PartyDetail({ party }: Props) {
   const setLoadingSaveGeotaxonomies = useLoading(LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES);
   const addError = useErrorDispatcher();
 
-  const geographicTaxonomies = party.geographicTaxonomies;
-
   const [openModalAddNewGeographicTaxonomies, setOpenModalAddNewGeographicTaxonomies] =
     useState<boolean>(false);
   const [openModalFirstTimeAddGeographicTaxonomies, setOpenModalFirstTimeAddGeographicTaxonomies] =
     useState<boolean>(false);
+  const [newGeotaxonomiesSelected, setNewGeotaxonomiesSelected] =
+    useState<Array<GeographicTaxonomy>>();
+  const geographicTaxonomies = newGeotaxonomiesSelected ?? party.geographicTaxonomies;
   const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>(
     geographicTaxonomies ?? { code: '', desc: '' }
   );
@@ -59,6 +61,7 @@ export default function PartyDetail({ party }: Props) {
         trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {
           geographic_taxonomies: optionsSelected,
         });
+        setNewGeotaxonomiesSelected(optionsSelected);
       })
       .catch((reason: any) =>
         addError({
@@ -145,9 +148,9 @@ export default function PartyDetail({ party }: Props) {
                     component="span"
                   >
                     {geographicTaxonomies[0]?.desc ?? '-'}
-                    {geographicTaxonomies.length > 1 ? (
+                    {geographicTaxonomies.length >= 1 && (
                       <>
-                        {', '}
+                        {geographicTaxonomies.length !== 1 ? ', ' : undefined}
                         <ButtonNaked
                           component="button"
                           onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
@@ -155,18 +158,11 @@ export default function PartyDetail({ party }: Props) {
                           sx={{ color: 'primary.main', flexDirection: 'row' }}
                           weight="default"
                         >
-                          {'+'}
-                          {geographicTaxonomies.length - 1}
+                          {geographicTaxonomies.length !== 1
+                            ? '+' + `${geographicTaxonomies.length - 1}`
+                            : undefined}
                         </ButtonNaked>
                       </>
-                    ) : (
-                      <ButtonNaked
-                        component="button"
-                        onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
-                        endIcon={<EditIcon />}
-                        sx={{ color: 'primary.main', flexDirection: 'row' }}
-                        weight="default"
-                      />
                     )}
                   </Typography>
                 </Tooltip>
