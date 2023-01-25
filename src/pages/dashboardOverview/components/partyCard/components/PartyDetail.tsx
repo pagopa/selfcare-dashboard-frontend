@@ -59,7 +59,7 @@ export default function PartyDetail({ party }: Props) {
         trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {
           geographic_taxonomies: optionsSelected,
         });
-        document.location.reload();
+        window.location.reload();
       })
       .catch((reason: any) =>
         addError({
