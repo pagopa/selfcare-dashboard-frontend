@@ -31,9 +31,7 @@ export default function PartyDetail({ party }: Props) {
     useState<boolean>(false);
   const [openModalFirstTimeAddGeographicTaxonomies, setOpenModalFirstTimeAddGeographicTaxonomies] =
     useState<boolean>(false);
-  const [newGeotaxonomiesSelected, setNewGeotaxonomiesSelected] =
-    useState<Array<GeographicTaxonomy>>();
-  const geographicTaxonomies = newGeotaxonomiesSelected ?? party.geographicTaxonomies;
+  const geographicTaxonomies = party.geographicTaxonomies;
   const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>(
     geographicTaxonomies ?? { code: '', desc: '' }
   );
@@ -61,7 +59,7 @@ export default function PartyDetail({ party }: Props) {
         trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {
           geographic_taxonomies: optionsSelected,
         });
-        setNewGeotaxonomiesSelected(optionsSelected);
+        document.location.reload();
       })
       .catch((reason: any) =>
         addError({
