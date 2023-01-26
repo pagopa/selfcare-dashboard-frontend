@@ -113,34 +113,50 @@ export default function PartySelectionSearch({
                 clearField={() => onPartySelectionChange(null)}
               />
             ) : (
-              <CustomBox sx={{ pointerEvents: parties.length !== 1 ? 'auto' : 'none' }}>
-                {filteredParties &&
-                  filteredParties.map((party) => {
-                    const isDisabled =
-                      party.status === 'PENDING' || party.status === 'TOBEVALIDATED';
-                    return (
-                      <PartyItemContainer
-                        moreThan3Parties={moreThan3Parties}
-                        isDisabled={isDisabled}
-                        key={party.partyId}
-                        selectedItem={parties.length !== 1 ? selectedParty === party : false}
-                        title={party.description}
-                        subTitle={t(roleLabels[party.userRole].longLabelKey)}
-                        image={party.urlLogo}
-                        chip={
-                          party.status === 'PENDING'
-                            ? t('partySelection.partyStatus.pending')
-                            : party.status === 'TOBEVALIDATED'
-                            ? t('partySelection.partyStatus.toBeValidated')
-                            : ''
-                        }
-                        action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                          handleListItemClick(event, party)
-                        }
-                      />
-                    );
-                  })}
-              </CustomBox>
+              <>
+                {filteredParties.length === 0 ? (
+                  <Typography
+                    py={2}
+                    sx={{
+                      fontSize: '18px',
+                      fontWeight: 'fontWeightBold',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                    }}
+                  >
+                    {t('partySelection.notFoundResults')}
+                  </Typography>
+                ) : (
+                  <CustomBox sx={{ pointerEvents: parties.length !== 1 ? 'auto' : 'none' }}>
+                    {filteredParties &&
+                      filteredParties.map((party) => {
+                        const isDisabled =
+                          party.status === 'PENDING' || party.status === 'TOBEVALIDATED';
+                        return (
+                          <PartyItemContainer
+                            moreThan3Parties={moreThan3Parties}
+                            isDisabled={isDisabled}
+                            key={party.partyId}
+                            selectedItem={parties.length !== 1 ? selectedParty === party : false}
+                            title={party.description}
+                            subTitle={t(roleLabels[party.userRole].longLabelKey)}
+                            image={party.urlLogo}
+                            chip={
+                              party.status === 'PENDING'
+                                ? t('partySelection.partyStatus.pending')
+                                : party.status === 'TOBEVALIDATED'
+                                ? t('partySelection.partyStatus.toBeValidated')
+                                : ''
+                            }
+                            action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                              handleListItemClick(event, party)
+                            }
+                          />
+                        );
+                      })}
+                  </CustomBox>
+                )}
+              </>
             )}
           </Grid>
         </Grid>
