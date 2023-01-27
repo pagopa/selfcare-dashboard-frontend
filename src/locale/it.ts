@@ -16,6 +16,7 @@ export default {
     continueButton: 'Accedi',
     backButton: 'Indietro',
     label: 'Cerca ente',
+    notFoundResults:'Nessun risultato'
   },
   NoActiveParty: {
     bodyTitle: 'Non risultano richieste di <1 /> adesione per questo Ente',
