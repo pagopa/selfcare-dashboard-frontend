@@ -31,7 +31,7 @@ const DashboardOverview = ({ party, products }: Props) => {
       <Grid item xs={12}>
         <PartyCard party={party} />
       </Grid>
-      {canUploadLogo && (
+      {canUploadLogo && party.institutionType === 'PA' && (
         <Grid item xs={12} mt={2}>
           <DashboardInfoSection />
         </Grid>
