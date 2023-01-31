@@ -140,8 +140,8 @@ export default {
       institutionTypeValue: {
         GSP: 'Gestore di servizi pubblici',
         PA: 'Pubblica Amministrazione',
-        PT: 'Società a controllo pubblico',
-        SCP: 'Partner tecnologico',
+        PT: 'Partner tecnologico',
+        SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
       },
     },
