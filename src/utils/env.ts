@@ -33,7 +33,7 @@ export const ENV = {
   URL_API: {
     API_DASHBOARD: env.get('REACT_APP_URL_API_DASHBOARD').required().asString(),
     // API_GEOTAXONOMY: env.get('REACT_APP_URL_API_GEOTAXONOMY').required().asString(),
-    API_GEOTAXONOMY: 'https://api.dev.selfcare.pagopa.it/external/geotaxonomy',
+    API_GEOTAXONOMY: 'https://api.dev.selfcare.pagopa.it/external/geo-tax/geotaxonomy',
   },
 
   GEOTAXONOMY: {
