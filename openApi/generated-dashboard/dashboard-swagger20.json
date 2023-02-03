@@ -126,6 +126,64 @@
       }
     },
     "/institutions/{institutionId}/geographicTaxonomy": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/GeographicTaxonomyResourceArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "The service retrieve the institution's geographic taxonomy",
+        "operationId": "getInstitutionGeographicTaxonomyUsingGET",
+        "summary": "getInstitutionGeographicTaxonomy"
+      },
       "put": {
         "consumes": [
           "application/json"
@@ -2139,7 +2197,7 @@
       }
     }
   },
-  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
+  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
     "BackOfficeConfigurationsResource": {
       "properties": {
         "environment": {
@@ -2299,7 +2357,7 @@
     "GeographicTaxonomyListDto": {
       "properties": {
         "geographicTaxonomyDtoList": {
-          "description": "List of institution's geographic taxonomies",
+          "description": "List of institution's geographic taxonomies  ",
           "items": {
             "$ref": "#/definitions/GeographicTaxonomyDto"
           },
@@ -2357,13 +2415,6 @@
           "description": "Fiscal code corresponding to the institution",
           "type": "string"
         },
-        "geographicTaxonomies": {
-          "description": "Institution's geographic taxonomy",
-          "items": {
-            "$ref": "#/definitions/GeographicTaxonomyResource"
-          },
-          "type": "array"
-        },
         "id": {
           "description": "Institution's unique internal identifier",
           "type": "string"
@@ -2409,7 +2460,6 @@
       "required": [
         "address",
         "fiscalCode",
-        "geographicTaxonomies",
         "id",
         "institutionType",
         "mailAddress",
@@ -2671,7 +2721,6 @@
         }
       },
       "required": [
-        "admins",
         "institutionInfo",
         "manager",
         "status"

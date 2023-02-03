@@ -16,6 +16,7 @@ export default {
     continueButton: 'Accedi',
     backButton: 'Indietro',
     label: 'Cerca ente',
+    notFoundResults:'Nessun risultato'
   },
   NoActiveParty: {
     bodyTitle: 'Non risultano richieste di <1 /> adesione per questo Ente',
@@ -139,8 +140,8 @@ export default {
       institutionTypeValue: {
         GSP: 'Gestore di servizi pubblici',
         PA: 'Pubblica Amministrazione',
-        PT: 'Società a controllo pubblico',
-        SCP: 'Partner tecnologico',
+        PT: 'Partner tecnologico',
+        SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
       },
     },
