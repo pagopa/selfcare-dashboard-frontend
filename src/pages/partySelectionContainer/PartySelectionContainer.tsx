@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import withParties from '../../decorators/withParties';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
@@ -15,7 +15,7 @@ const PartySelectionContainer = () => {
   return !parties ? (
     <></>
   ) : (
-    <Grid item xs={12} py={11}>
+    <Box py={11} m="auto" width="100%">
       {parties.filter((party) => party.status === 'ACTIVE').length >= 1 ? (
         <PartySelection parties={parties} />
       ) : parties.filter((party) => party.status === 'PENDING').length >= 1 ? (
@@ -23,7 +23,7 @@ const PartySelectionContainer = () => {
       ) : (
         parties.length === 0 && <NoParty />
       )}
-    </Grid>
+    </Box>
   );
 };
 
