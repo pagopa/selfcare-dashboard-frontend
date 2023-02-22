@@ -11,9 +11,10 @@ import ActiveProductCard from './ActiveProductCard';
 type Props = {
   party: Party;
   product: Product;
+  result: boolean;
 };
 
-export default function ActiveProductCardContainer({ party, product }: Props) {
+export default function ActiveProductCardContainer({ party, product, result }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
 
@@ -31,9 +32,7 @@ export default function ActiveProductCardContainer({ party, product }: Props) {
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={product.logo}
           btnAction={() =>
-            product.backOfficeEnvironmentConfigurations
-              ? setOpenEnvironmentModal(true)
-              : invokeProductBo(product, party)
+            result ? setOpenEnvironmentModal(true) : invokeProductBo(product, party)
           }
           party={party}
           product={product}
