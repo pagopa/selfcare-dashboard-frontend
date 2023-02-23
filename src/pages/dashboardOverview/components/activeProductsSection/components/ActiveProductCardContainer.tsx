@@ -11,10 +11,14 @@ import ActiveProductCard from './ActiveProductCard';
 type Props = {
   party: Party;
   product: Product;
-  result: boolean;
+  prodInteropAndProdInteropColl: boolean;
 };
 
-export default function ActiveProductCardContainer({ party, product, result }: Props) {
+export default function ActiveProductCardContainer({
+  party,
+  product,
+  prodInteropAndProdInteropColl,
+}: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
 
@@ -32,7 +36,9 @@ export default function ActiveProductCardContainer({ party, product, result }: P
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={product.logo}
           btnAction={() =>
-            result ? setOpenEnvironmentModal(true) : invokeProductBo(product, party)
+            prodInteropAndProdInteropColl && product.id === 'prod-interop'
+              ? setOpenEnvironmentModal(true)
+              : invokeProductBo(product, party)
           }
           party={party}
           product={product}
@@ -56,11 +62,16 @@ export default function ActiveProductCardContainer({ party, product, result }: P
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={(e) => invokeProductBo(product, party, (e.target as HTMLInputElement).value)}
+        onConfirm={() => invokeProductBo(product, party)}
         handleClose={() => {
           setOpenEnvironmentModal(false);
         }}
-        productEnvironments={product?.backOfficeEnvironmentConfigurations}
+        productEnvironments={[
+          {
+            environment: 'Test',
+            url: (product.id === 'prod-interop-coll' ? product?.urlBO : undefined) as string,
+          },
+        ]}
       />
     </>
   );

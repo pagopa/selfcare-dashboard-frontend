@@ -46,18 +46,28 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   // eslint-disable-next-line functional/immutable-data
   actualSelectedParty.current = selectedParty;
 
+  const prodInteropAndProdInteropColl =
+    activeProducts.find((p) => p.id === 'prod-interop-coll') &&
+    activeProducts.find((p) => p.id === 'prod-interop');
+
   return (
     <div tabIndex={0}>
       <Header
         onExit={onExit}
         withSecondHeader={!!party}
         selectedPartyId={selectedParty?.partyId}
-        productsList={activeProducts.map((p) => ({
-          id: p.id,
-          title: p.title,
-          productUrl: p.urlPublic ?? '',
-          linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
-        }))}
+        productsList={activeProducts
+          .filter((p) =>
+            prodInteropAndProdInteropColl
+              ? p.productOnBoardingStatus === 'ACTIVE' && p.id !== 'prod-interop-coll'
+              : p.productOnBoardingStatus === 'ACTIVE'
+          )
+          .map((p) => ({
+            id: p.id,
+            title: p.title,
+            productUrl: p.urlPublic ?? '',
+            linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
+          }))}
         partyList={parties2Show.map((party) => ({
           id: party.partyId,
           name: party.description,
@@ -82,7 +92,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             setProductSelected(selectedProduct);
             if (
               actualSelectedParty.current &&
-              selectedProduct?.backOfficeEnvironmentConfigurations
+              selectedProduct?.backOfficeEnvironmentConfigurations &&
+              prodInteropAndProdInteropColl &&
+              p.id === 'prod-interop'
             ) {
               setOpenEnvironmentModal(true);
             } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
@@ -119,17 +131,20 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={(e) =>
-          invokeProductBo(
-            productSelected as Product,
-            actualSelectedParty.current as Party,
-            (e.target as HTMLInputElement).value
-          )
+        onConfirm={() =>
+          invokeProductBo(productSelected as Product, actualSelectedParty.current as Party)
         }
         handleClose={() => {
           setOpenEnvironmentModal(false);
         }}
-        productEnvironments={productSelected?.backOfficeEnvironmentConfigurations}
+        productEnvironments={[
+          {
+            environment: 'Test',
+            url: (productSelected?.id === 'prod-interop-coll'
+              ? productSelected?.urlBO
+              : undefined) as string,
+          },
+        ]}
       />
     </div>
   );

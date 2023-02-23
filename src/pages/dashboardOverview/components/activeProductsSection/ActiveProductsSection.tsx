@@ -13,10 +13,10 @@ type Props = {
 
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
-  const value1 = products.filter((p) => p.id === 'prod-interop-coll');
-  const value2 = products.filter((p) => p.id === 'prod-interop');
 
-  const result = value1.length > 0 && value2.length > 0;
+  const prodInteropAndProdInteropColl =
+    products.find((p) => p.id === 'prod-interop-coll') &&
+    products.find((p) => p.id === 'prod-interop');
 
   return (
     <React.Fragment>
@@ -25,7 +25,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
         {products &&
           products
             .filter((p) =>
-              result
+              prodInteropAndProdInteropColl
                 ? p.productOnBoardingStatus === 'ACTIVE' && p.id !== 'prod-interop-coll'
                 : p.productOnBoardingStatus === 'ACTIVE'
             )
@@ -34,7 +34,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
                 key={product.id}
                 party={party}
                 product={product}
-                result={result}
+                prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
               />
             ))}
       </Grid>
