@@ -124,9 +124,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
-            L’ambiente di test ti permette di conoscere
+            Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che
+            l&apos;ambiente di collaudo ti permette di conoscere
             <strong>{{ productTitle: productSelected?.title }}</strong> e fare prove in tutta
-            sicurezza. L’ambiente di produzione è il prodotto vero e proprio.
+            sicurezza. L&apos;ambiente di produzione è il prodotto in esercizio.
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
@@ -139,7 +140,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         productEnvironments={[
           {
-            environment: 'Test',
+            environment: 'Collaudo',
             url: (productSelected?.id === 'prod-interop-coll'
               ? productSelected?.urlBO
               : undefined) as string,

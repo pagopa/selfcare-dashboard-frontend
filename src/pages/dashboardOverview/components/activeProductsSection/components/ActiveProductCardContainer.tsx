@@ -55,9 +55,10 @@ export default function ActiveProductCardContainer({
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
-            L&apos;ambiente di test ti permette di conoscere
+            Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che
+            l&apos;ambiente di collaudo ti permette di conoscere
             <strong>{{ productTitle: product.title }}</strong> e fare prove in tutta sicurezza.
-            L&apos;ambiente di Produzione è il prodotto in esercizio effettivo.
+            L&apos;ambiente di produzione è il prodotto in esercizio.
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
@@ -68,7 +69,7 @@ export default function ActiveProductCardContainer({
         }}
         productEnvironments={[
           {
-            environment: 'Test',
+            environment: 'Collaudo',
             url: (product.id === 'prod-interop-coll' ? product?.urlBO : undefined) as string,
           },
         ]}
