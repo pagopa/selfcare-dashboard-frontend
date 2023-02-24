@@ -29,6 +29,13 @@ export default function ActiveProductsSection({ party, products }: Props) {
                 ? p.productOnBoardingStatus === 'ACTIVE' && p.id !== 'prod-interop-coll'
                 : p.productOnBoardingStatus === 'ACTIVE'
             )
+            .sort((a, b) =>
+              a.authorized === false && b.authorized !== false
+                ? 1
+                : a.authorized === false && b.authorized === false
+                ? 0
+                : -1
+            )
             .map((product) => (
               <ActiveProductCardContainer
                 key={product.id}

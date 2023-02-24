@@ -115,6 +115,10 @@ const renderCardInterop = (authorized: boolean, tag?: string, activationDateTime
 test('test render and behavior', async () => {
   renderCardInterop(true);
   const buttonInterop = document.getElementById('forward_prod-interop');
+  expect(buttonInterop).toBeEnabled;
+
   fireEvent.click(buttonInterop);
-  screen.debug(document, 100000000);
+
+  const modalTitle = screen.queryByText('In quale ambiente vuoi entrare?');
+  expect(modalTitle).toBeNull();
 });
