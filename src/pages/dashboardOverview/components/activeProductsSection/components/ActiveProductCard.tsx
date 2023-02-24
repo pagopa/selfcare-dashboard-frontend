@@ -55,11 +55,11 @@ export default function ActiveProductCard({
       raised
       sx={{
         borderRadius: theme.spacing(2),
-        height: '104px',
-        minWidth: '347px',
+        minHeight: '125px',
+        minWidth: '247px',
       }}
     >
-      <CardContent sx={{ height: '100%', display: 'flex' }}>
+      <CardContent sx={{ display: 'flex' }}>
         {/* Logo */}
         <Grid container>
           <Box display={'flex'} width="100%">
@@ -97,9 +97,10 @@ export default function ActiveProductCard({
                     arrow={true}
                   >
                     <Typography
-                      variant="h6"
+                      // variant="h6"
                       sx={{
-                        fontSize: 'fontSize',
+                        fontSize: '22px',
+                        fontWeight: 'medium',
                         height: '100%',
                         width: '100%',
                         overflow: 'hidden',
