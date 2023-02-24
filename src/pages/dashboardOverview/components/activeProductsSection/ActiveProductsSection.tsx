@@ -42,6 +42,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
                 party={party}
                 product={product}
                 prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
+                products={products}
               />
             ))}
       </Grid>

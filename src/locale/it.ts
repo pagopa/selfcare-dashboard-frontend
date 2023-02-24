@@ -153,4 +153,9 @@ export default {
     },
     backButton: 'Esci',
   },
+  SessionModalTestProduct: {
+    closeButton: 'Annulla',
+    confirmButton: 'Riprova',
+    testLabel: 'Collaudo',
+  },
 };
