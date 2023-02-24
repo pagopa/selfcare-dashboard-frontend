@@ -1,5 +1,5 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header, SessionModal } from '@pagopa/selfcare-common-frontend';
+import { Header } from '@pagopa/selfcare-common-frontend';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
@@ -7,6 +7,7 @@ import { useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import SessionModalInterop from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInterop';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
 import { Product } from '../model/Product';
@@ -119,7 +120,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         maxCharactersNumberMultiLineItem={25}
       />
-      <SessionModal
+      <SessionModalInterop
         open={openEnvironmentModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
@@ -138,14 +139,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         handleClose={() => {
           setOpenEnvironmentModal(false);
         }}
-        productEnvironments={[
-          {
-            environment: 'Collaudo',
-            url: (productSelected?.id === 'prod-interop-coll'
-              ? productSelected?.urlBO
-              : undefined) as string,
-          },
-        ]}
+        prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
+        products={products}
+        party={party}
       />
     </div>
   );

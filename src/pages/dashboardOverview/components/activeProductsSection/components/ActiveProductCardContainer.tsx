@@ -1,22 +1,24 @@
 import { Grid } from '@mui/material';
-import { SessionModal } from '@pagopa/selfcare-common-frontend';
 import { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import ActiveProductCard from './ActiveProductCard';
+import SessionModalInterop from './SessionModalInterop';
 
 type Props = {
   party: Party;
   product: Product;
   prodInteropAndProdInteropColl: boolean;
+  products: Array<Product>;
 };
 
 export default function ActiveProductCardContainer({
   party,
   product,
   prodInteropAndProdInteropColl,
+  products,
 }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
@@ -42,7 +44,7 @@ export default function ActiveProductCardContainer({
           product={product}
         />
       </Grid>
-      <SessionModal
+      <SessionModalInterop
         open={openEnvironmentModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
@@ -59,12 +61,9 @@ export default function ActiveProductCardContainer({
         handleClose={() => {
           setOpenEnvironmentModal(false);
         }}
-        productEnvironments={[
-          {
-            environment: 'Collaudo',
-            url: (product.id === 'prod-interop-coll' ? product?.urlBO : undefined) as string,
-          },
-        ]}
+        prodInteropAndProdInteropColl={prodInteropAndProdInteropColl}
+        products={products}
+        party={party}
       />
     </>
   );
