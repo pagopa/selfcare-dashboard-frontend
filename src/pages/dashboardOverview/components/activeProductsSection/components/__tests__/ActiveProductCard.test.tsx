@@ -1,5 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import {
+  ProductOnBoardingStatusEnum,
+  StatusEnum,
+} from '../../../../../../api/generated/b4f-dashboard/SubProductResource';
+import { Product } from '../../../../../../model/Product';
 import { createStore } from '../../../../../../redux/store';
 import { retrieveBackOfficeUrl } from '../../../../../../services/tokenExchangeService';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
@@ -44,7 +49,7 @@ const renderCard = (authorized: boolean, tag?: string, activationDateTime?: Date
 
 const checkBaseFields = () => {
   screen.getByText(mockedProduct.title);
-  return document.getElementById('forward');
+  return document.getElementById(`forward_${mockedProduct.id}`);
 };
 
 test('test render with optional text', () => {
@@ -67,4 +72,49 @@ test('test render and behavior', async () => {
   );
 
   expect(mockedLocation.assign).toBeCalledWith('https://hostname/path?id=DUMMYTOKEN');
+});
+
+const interopProduct: Product = {
+  logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
+  id: 'prod-interop',
+  title: 'Interoperabilità',
+  description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
+  urlBO: 'http://PDND/bo#token=<IdentityToken>',
+  backOfficeEnvironmentConfigurations: [
+    {
+      environment: 'test1',
+      url: 'www.test1.com',
+    },
+    {
+      environment: 'test2',
+      url: 'www.test2.com',
+    },
+  ],
+  authorized: true,
+  userRole: 'ADMIN',
+  productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+  status: StatusEnum.ACTIVE,
+  urlPublic: undefined,
+  imageUrl:
+    'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
+  subProducts: [],
+  logoBgColor: undefined,
+};
+
+const renderCardInterop = (authorized: boolean, tag?: string, activationDateTime?: Date) => {
+  mockedProduct.authorized = authorized;
+  mockedProduct.tag = tag;
+  mockedProduct.activationDateTime = activationDateTime;
+  render(
+    <Provider store={createStore()}>
+      <ActiveProductCardContainer party={mockedParties[0]} product={interopProduct} />
+    </Provider>
+  );
+};
+
+test('test render and behavior', async () => {
+  renderCardInterop(true);
+  const buttonInterop = document.getElementById('forward_prod-interop');
+  fireEvent.click(buttonInterop);
+  screen.debug(document, 100000000);
 });

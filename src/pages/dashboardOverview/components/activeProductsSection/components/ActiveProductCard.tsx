@@ -52,6 +52,7 @@ export default function ActiveProductCard({
 
   return (
     <Card
+      id={product.id}
       raised
       sx={{
         borderRadius: theme.spacing(2),
@@ -134,7 +135,7 @@ export default function ActiveProductCard({
             )}
             {/* Actions */}
             {!disableBtn && (
-              <IconButton onClick={btnAction} disabled={disableBtn} id="forward">
+              <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`}>
                 <Box
                   sx={{
                     backgroundColor: 'primary.main',
