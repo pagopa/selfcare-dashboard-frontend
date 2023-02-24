@@ -71,7 +71,7 @@ export default function ActiveProductCard({
                 size="default"
               />
             </Grid>
-            {/* Titolo */}
+            {/* Title */}
             {cardTitle && (
               <Grid item width={'100%'} ml={2}>
                 {activeSubProducts.map((p) => (
@@ -134,7 +134,7 @@ export default function ActiveProductCard({
             )}
             {/* Actions */}
             {!disableBtn && (
-              <IconButton onClick={btnAction} disabled={disableBtn}>
+              <IconButton onClick={btnAction} disabled={disableBtn} id="forward">
                 <Box
                   sx={{
                     backgroundColor: 'primary.main',
@@ -146,10 +146,6 @@ export default function ActiveProductCard({
                   <ArrowForward sx={{ m: 1 }} />{' '}
                 </Box>
               </IconButton>
-
-              // <IconButton  sx={{ borderRadius: '48px' }}>
-              //   <ArrowCircleRight fontSize="large" color="primary" />
-              // </IconButton>
             )}
           </Box>
         </Grid>

@@ -44,7 +44,7 @@ const renderCard = (authorized: boolean, tag?: string, activationDateTime?: Date
 
 const checkBaseFields = () => {
   screen.getByText(mockedProduct.title);
-  return screen.getByText('Gestisci');
+  return document.getElementById('forward');
 };
 
 test('test render with optional text', () => {
