@@ -153,7 +153,7 @@ export default {
     },
     backButton: 'Esci',
   },
-  sessionModalInterop: {
+  SessionModalTestProduct: {
     closeButton: 'Annulla',
     confirmButton: 'Riprova',
     testLabel: 'Collaudo',

@@ -5,7 +5,7 @@ import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import ActiveProductCard from './ActiveProductCard';
-import SessionModalInterop from './SessionModalInterop';
+import SessionModalTestProduct from './SessionModalTestProduct';
 
 type Props = {
   party: Party;
@@ -44,7 +44,7 @@ export default function ActiveProductCardContainer({
           product={product}
         />
       </Grid>
-      <SessionModalInterop
+      <SessionModalTestProduct
         open={openEnvironmentModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={

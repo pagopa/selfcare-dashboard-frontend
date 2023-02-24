@@ -7,7 +7,7 @@ import { useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import SessionModalInterop from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInterop';
+import SessionModalTestProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalTestProduct';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
 import { Product } from '../model/Product';
@@ -120,7 +120,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         maxCharactersNumberMultiLineItem={25}
       />
-      <SessionModalInterop
+      <SessionModalTestProduct
         open={openEnvironmentModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
