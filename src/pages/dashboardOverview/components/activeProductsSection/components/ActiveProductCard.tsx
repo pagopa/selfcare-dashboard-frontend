@@ -1,17 +1,17 @@
 import { useMemo } from 'react';
 import {
   Typography,
-  Button,
   Box,
-  Grid,
   CardContent,
   Link,
   Chip,
   Card,
-  CardActions,
   useTheme,
   Tooltip,
+  Grid,
+  IconButton,
 } from '@mui/material';
+import { ArrowForward } from '@mui/icons-material';
 import { Trans } from 'react-i18next';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
 import { useHistory } from 'react-router';
@@ -32,7 +32,6 @@ type Props = {
 };
 export default function ActiveProductCard({
   cardTitle,
-  buttonLabel,
   disableBtn,
   urlLogo,
   btnAction,
@@ -46,7 +45,6 @@ export default function ActiveProductCard({
     partyId: party.partyId,
   }).concat(`#${product.id}`);
   const theme = useTheme();
-
   const activeSubProducts: Array<SubProduct> = useMemo(
     () => product.subProducts.filter((p) => p.productOnBoardingStatus === 'ACTIVE') ?? [],
     [product.subProducts]
@@ -54,41 +52,56 @@ export default function ActiveProductCard({
 
   return (
     <Card
+      id={product.id}
       raised
       sx={{
-        height: '200px',
         borderRadius: theme.spacing(2),
+        minHeight: '125px',
+        minWidth: '247px',
       }}
     >
-      <CardContent sx={{ height: '100%', display: 'flex' }}>
+      <CardContent sx={{ display: 'flex' }}>
+        {/* Logo */}
         <Grid container>
-          <Grid item xs={12} display="flex" alignItems="flex-start">
-            <Box
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-              width="64px"
-              height="64px"
-              mr={2}
-            >
+          <Box display={'flex'} width="100%">
+            <Grid item>
               <ProductAvatar
                 logoUrl={urlLogo}
                 logoBgColor={product.logoBgColor}
                 logoAltText={`${product.title} logo`}
+                size="default"
               />
-            </Box>
-            <Box display="flex" flexDirection="column" justifyContent="center">
-              {cardTitle && (
-                <Box display="flex" alignItems={'center'}>
+            </Grid>
+            {/* Title */}
+            {cardTitle && (
+              <Grid item width={'100%'} ml={2}>
+                {activeSubProducts.map((p) => (
+                  <Chip
+                    key={p.id}
+                    label={p.title}
+                    size="small"
+                    sx={{
+                      display: 'flex',
+                      mb: 1,
+                      borderRadius: theme.shape,
+
+                      width: '80px',
+                      backgroundColor: 'warning.main',
+                      color: 'colorTextPrimary',
+                    }}
+                  />
+                ))}
+                <Box>
                   <Tooltip
                     title={cardTitle.length > 27 ? cardTitle : ''}
                     placement="top"
                     arrow={true}
                   >
                     <Typography
-                      variant="h6"
+                      // variant="h6"
                       sx={{
-                        fontSize: theme.typography.fontSize,
+                        fontSize: '22px',
+                        fontWeight: 'medium',
                         height: '100%',
                         width: '100%',
                         overflow: 'hidden',
@@ -101,62 +114,41 @@ export default function ActiveProductCard({
                       {cardTitle}
                     </Typography>
                   </Tooltip>
+                  {/* info label */}
+                  {disableBtn && (
+                    <Typography sx={{ fontSize: '14px' }}>
+                      <Trans i18nKey="activeProductCard.disableInfo">
+                        Per gestire questo prodotto, chiedi a uno dei suoi
+                        <Link
+                          onClick={() =>
+                            onExit(() => history.push(party.partyId ? usersPath : usersRoute))
+                          }
+                          sx={{ fontWeight: 'fontWeightMedium' }}
+                        >
+                          Amministratori
+                        </Link>
+                      </Trans>
+                    </Typography>
+                  )}
                 </Box>
-              )}
-              {activeSubProducts.map((p) => (
-                <Chip
-                  key={p.id}
-                  label={p.title}
-                  color="primary"
-                  size="small"
-                  sx={{ borderRadius: theme.shape, mt: 1, width: '80px' }}
-                />
-              ))}
-            </Box>
-          </Grid>
-          <Grid item xs={12} display="flex" justifyContent="flex-end">
-            {disableBtn ? (
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="start"
-                sx={{ color: 'text.secondary', cursor: 'pointer' }}
-              >
-                <Typography sx={{ fontSize: 'fontSize' }}>
-                  <Trans i18nKey="activeProductCard.disableInfo">
-                    Per gestire questo prodotto, chiedi a uno dei suoi
-                    <Link
-                      onClick={() =>
-                        onExit(() => history.push(party.partyId ? usersPath : usersRoute))
-                      }
-                      sx={{ fontWeight: 'fontWeightMedium' }}
-                    >
-                      Amministratori
-                    </Link>
-                  </Trans>
-                </Typography>
-              </Box>
-            ) : (
-              <CardActions
-                sx={{
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'flex-end',
-                  p: 0,
-                }}
-              >
-                <Button
-                  onClick={btnAction}
-                  disabled={disableBtn}
-                  variant="contained"
-                  sx={{ height: '40px' }}
-                >
-                  {buttonLabel}
-                </Button>
-              </CardActions>
+              </Grid>
             )}
-          </Grid>
+            {/* Actions */}
+            {!disableBtn && (
+              <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`}>
+                <Box
+                  sx={{
+                    backgroundColor: 'primary.main',
+                    height: '44px',
+                    color: 'white',
+                    borderRadius: '48px',
+                  }}
+                >
+                  <ArrowForward sx={{ m: 1 }} />{' '}
+                </Box>
+              </IconButton>
+            )}
+          </Box>
         </Grid>
       </CardContent>
     </Card>
