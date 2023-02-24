@@ -1,6 +1,5 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { SessionModal } from '@pagopa/selfcare-common-frontend';
-import { formatDateAsLongString } from '@pagopa/selfcare-common-frontend/utils/utils';
 import { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
@@ -25,11 +24,10 @@ export default function ActiveProductCardContainer({
   const [openEnvironmentModal, setOpenEnvironmentModal] = useState<boolean>(false);
 
   const isDisabled = product.authorized === false;
-  const lastServiceActivationDate = undefined; // actually this info is not available
 
   return (
     <>
-      <Grid item xs={6} lg={4} xl={3}>
+      <Grid item xs={6} lg={4}>
         <ActiveProductCard
           disableBtn={isDisabled}
           cardTitle={product.title}
@@ -43,12 +41,6 @@ export default function ActiveProductCardContainer({
           party={party}
           product={product}
         />
-        {lastServiceActivationDate && (
-          <Typography variant="h5" sx={{ fontSize: '16px' }} mx={1}>
-            {t('overview.lastServiceActive') +
-              `${lastServiceActivationDate && formatDateAsLongString(lastServiceActivationDate)}`}
-          </Typography>
-        )}
       </Grid>
       <SessionModal
         open={openEnvironmentModal}
