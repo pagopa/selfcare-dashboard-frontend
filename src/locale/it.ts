@@ -16,7 +16,7 @@ export default {
     continueButton: 'Accedi',
     backButton: 'Indietro',
     label: 'Cerca ente',
-    notFoundResults:'Nessun risultato'
+    notFoundResults: 'Nessun risultato',
   },
   NoActiveParty: {
     bodyTitle: 'Non risultano richieste di <1 /> adesione per questo Ente',
@@ -64,8 +64,8 @@ export default {
       manageButton: 'Gestisci',
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
-        message:
-          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
+        message: `Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`,
+        // 'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
         envProdButton: 'Produzione',
         backButton: 'Annulla',
       },
@@ -152,5 +152,10 @@ export default {
       label: 'I tuoi enti',
     },
     backButton: 'Esci',
+  },
+  SessionModalTestProduct: {
+    closeButton: 'Annulla',
+    confirmButton: 'Riprova',
+    testLabel: 'Collaudo',
   },
 };

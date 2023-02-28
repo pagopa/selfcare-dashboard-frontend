@@ -1,5 +1,5 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header, SessionModal } from '@pagopa/selfcare-common-frontend';
+import { Header } from '@pagopa/selfcare-common-frontend';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
@@ -7,6 +7,7 @@ import { useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import SessionModalTestProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalTestProduct';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
 import { Product } from '../model/Product';
@@ -46,18 +47,28 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   // eslint-disable-next-line functional/immutable-data
   actualSelectedParty.current = selectedParty;
 
+  const prodInteropAndProdInteropColl =
+    activeProducts.find((p) => p.id === 'prod-interop-coll' && p.authorized === true) &&
+    activeProducts.find((p) => p.id === 'prod-interop' && p.authorized === true);
+
   return (
     <div tabIndex={0}>
       <Header
         onExit={onExit}
         withSecondHeader={!!party}
         selectedPartyId={selectedParty?.partyId}
-        productsList={activeProducts.map((p) => ({
-          id: p.id,
-          title: p.title,
-          productUrl: p.urlPublic ?? '',
-          linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
-        }))}
+        productsList={activeProducts
+          .filter((p) =>
+            prodInteropAndProdInteropColl
+              ? p.productOnBoardingStatus === 'ACTIVE' && p.id !== 'prod-interop-coll'
+              : p.productOnBoardingStatus === 'ACTIVE'
+          )
+          .map((p) => ({
+            id: p.id,
+            title: p.title,
+            productUrl: p.urlPublic ?? '',
+            linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
+          }))}
         partyList={parties2Show.map((party) => ({
           id: party.partyId,
           name: party.description,
@@ -82,7 +93,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             setProductSelected(selectedProduct);
             if (
               actualSelectedParty.current &&
-              selectedProduct?.backOfficeEnvironmentConfigurations
+              selectedProduct?.backOfficeEnvironmentConfigurations &&
+              prodInteropAndProdInteropColl &&
+              p.id === 'prod-interop'
             ) {
               setOpenEnvironmentModal(true);
             } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
@@ -107,29 +120,28 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         maxCharactersNumberMultiLineItem={25}
       />
-      <SessionModal
+      <SessionModalTestProduct
         open={openEnvironmentModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
-            L’ambiente di test ti permette di conoscere
+            Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che
+            l&apos;ambiente di collaudo ti permette di conoscere
             <strong>{{ productTitle: productSelected?.title }}</strong> e fare prove in tutta
-            sicurezza. L’ambiente di produzione è il prodotto vero e proprio.
+            sicurezza. L&apos;ambiente di produzione è il prodotto in esercizio.
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={(e) =>
-          invokeProductBo(
-            productSelected as Product,
-            actualSelectedParty.current as Party,
-            (e.target as HTMLInputElement).value
-          )
+        onConfirm={() =>
+          invokeProductBo(productSelected as Product, actualSelectedParty.current as Party)
         }
         handleClose={() => {
           setOpenEnvironmentModal(false);
         }}
-        productEnvironments={productSelected?.backOfficeEnvironmentConfigurations}
+        prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
+        products={products}
+        party={party}
       />
     </div>
   );
