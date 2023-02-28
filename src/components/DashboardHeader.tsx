@@ -48,8 +48,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   actualSelectedParty.current = selectedParty;
 
   const prodInteropAndProdInteropColl =
-    activeProducts.find((p) => p.id === 'prod-interop-coll') &&
-    activeProducts.find((p) => p.id === 'prod-interop');
+    activeProducts.find((p) => p.id === 'prod-interop-coll' && p.authorized === true) &&
+    activeProducts.find((p) => p.id === 'prod-interop' && p.authorized === true);
 
   return (
     <div tabIndex={0}>
