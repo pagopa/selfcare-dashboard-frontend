@@ -81,7 +81,8 @@ test('Test institutionResource2Party', () => {
     typology: 'TODO',
     recipientCode: 'MC45KDSX',
     geographicTaxonomies: [],
-    supportEmail: 'supportEmailTemp',
-    vatNumberGroup: false,
+    supportEmail: undefined,
+    vatNumberGroup: undefined,
+    vatNumber: undefined,
   });
 });
