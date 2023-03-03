@@ -29,6 +29,9 @@ export type Party = {
   institutionType?: string;
   recipientCode?: string;
   geographicTaxonomies: Array<GeographicTaxonomyResource>;
+  vatNumberGroup?: boolean;
+  supportEmail?: string;
+  vatNumber?: string;
 };
 
 const buildUrlLog = (partyId: string) =>
@@ -55,5 +58,8 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     recipientCode: institutionResource.recipientCode,
     geographicTaxonomies:
       institutionResource.geographicTaxonomies as Array<GeographicTaxonomyResource>,
+    vatNumberGroup: institutionResource.vatNumberGroup,
+    supportEmail: institutionResource.supportContact?.supportEmail,
+    vatNumber: institutionResource.vatNumber,
   };
 };

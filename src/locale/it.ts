@@ -144,6 +144,14 @@ export default {
         SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
       },
+      vatNumberGroupValues: {
+        yes: 'Sì',
+        no: 'No',
+      },
+      supportEmail: 'Indirizzo email visibile ai cittadini',
+      vatNumberGroup: 'Paritta IVA di gruppo',
+      isTaxCodeEquals2Piva: 'Codice Fiscale / P.IVA',
+      vatNumber: 'Partita IVA',
     },
   },
   subHeader: {

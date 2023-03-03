@@ -21,6 +21,7 @@ test('Test Party', () => {
     originId: 'originId1',
     origin: 'IPA',
     institutionType: 'PA',
+    supportEmail: 'supportEmail@example.com',
   };
   expect(party).toStrictEqual({
     userRole: 'ADMIN',
@@ -38,6 +39,7 @@ test('Test Party', () => {
     origin: 'IPA',
     institutionType: 'PA',
     fiscalCode: 'fiscalCodeBari',
+    supportEmail: 'supportEmail@example.com',
   });
 });
 
@@ -79,5 +81,8 @@ test('Test institutionResource2Party', () => {
     typology: 'TODO',
     recipientCode: 'MC45KDSX',
     geographicTaxonomies: [],
+    supportEmail: undefined,
+    vatNumberGroup: undefined,
+    vatNumber: undefined,
   });
 });
