@@ -264,7 +264,7 @@ export default function PartyDetail({ party }: Props) {
         </Grid>
         <Grid container item xs={6} spacing={1}>
           {/* fiscalCode */}
-          {isInstitutionTypePA && isTaxCodeEquals2Piva ? (
+          {isInstitutionTypePA && isTaxCodeEquals2Piva && (
             <>
               <Grid item xs={4}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
@@ -288,34 +288,38 @@ export default function PartyDetail({ party }: Props) {
                 </Tooltip>
               </Grid>
             </>
-          ) : (
-            <>
-              {/* vatNumber */}
-              <Grid item xs={4}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.vatNumber')}
-                </Typography>
-              </Grid>
-              <Grid item xs={8}>
-                <Tooltip
-                  title={
-                    party.vatNumber && party.vatNumber.length >= showTooltipAfter
-                      ? party.vatNumber
-                      : ''
-                  }
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.vatNumber}
-                  </Typography>
-                </Tooltip>
-              </Grid>
-            </>
           )}
+          <>
+            {/* vatNumber */}
+            {!isTaxCodeEquals2Piva && (
+              <>
+                <Grid item xs={4}>
+                  <Typography variant="body2" sx={{ ...labelStyles }}>
+                    {t('overview.partyDetail.vatNumber')}
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Tooltip
+                    title={
+                      party.vatNumber && party.vatNumber.length >= showTooltipAfter
+                        ? party.vatNumber
+                        : ''
+                    }
+                    placement="top"
+                    arrow={true}
+                  >
+                    <Typography
+                      sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                      className="ShowDots"
+                    >
+                      {party?.vatNumber}
+                    </Typography>
+                  </Tooltip>
+                </Grid>
+              </>
+            )}
+          </>
+
           {/* pecEmail */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>

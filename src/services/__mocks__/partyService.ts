@@ -19,8 +19,8 @@ export const mockedParties: Array<Party> = [
     institutionType: 'PA',
     recipientCode: 'CGDAS23A',
     geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }], // Use case with one taxonomy
-    vatNumber: '111111111111',
-    supportEmail: 'supportEmail@example.com',
+    vatNumber: '111111111141',
+    supportEmail: '',
   },
   {
     userRole: 'ADMIN',
@@ -64,6 +64,7 @@ export const mockedParties: Array<Party> = [
       { code: '058091', desc: 'Roma - Comune' },
       { code: '015146', desc: 'Milano - Comune' },
     ],
+    vatNumber: '111122211111',
   },
   {
     userRole: 'LIMITED',
@@ -86,6 +87,7 @@ export const mockedParties: Array<Party> = [
       { code: '5555678', desc: 'Comune di Milano' },
       { code: '8853441', desc: 'Comune di Roma' },
     ],
+    vatNumber: '111122211111',
   },
   {
     userRole: 'ADMIN',
@@ -105,6 +107,7 @@ export const mockedParties: Array<Party> = [
     institutionType: 'GSP',
     recipientCode: 'CGDAS23E',
     geographicTaxonomies: [],
+    vatNumber: '111122211111',
   },
   // Use case of party with status "TOBEVALIDATED"
   {
@@ -125,6 +128,7 @@ export const mockedParties: Array<Party> = [
     institutionType: 'GSP',
     recipientCode: 'CCBV421K',
     geographicTaxonomies: [],
+    vatNumber: '111122211111',
   },
   {
     userRole: 'ADMIN',
@@ -133,11 +137,11 @@ export const mockedParties: Array<Party> = [
     status: 'ACTIVE',
     partyId: '6',
     digitalAddress: 'comune.bressanone@pec.it',
-    fiscalCode: 'fiscalCodeBressanone',
+    fiscalCode: '111122211111',
     category: 'Comuni e loro Consorzi e Associazioni',
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
-    typology: 'Pubblica Amministrazione',
+    typology: 'Gestore di servizi pubblici',
     externalId: 'externalId6',
     originId: 'originId6',
     origin: 'IPA',
@@ -188,6 +192,7 @@ export const mockedParties: Array<Party> = [
     typology: 'Pubblica Amministrazione',
     recipientCode: 'CGDAS23V',
     geographicTaxonomies: [],
+    vatNumber: '111122291111',
   },
   // Mock with institutionType = PSP
   {
@@ -209,7 +214,7 @@ export const mockedParties: Array<Party> = [
     typology: 'Prestatore di Servizi a Pagamento',
     recipientCode: 'GGDAS99T',
     geographicTaxonomies: [],
-    vatNumber: '00348170101',
+    vatNumber: '111122211111',
   },
 ];
 
