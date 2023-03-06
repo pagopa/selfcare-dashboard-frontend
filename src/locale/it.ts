@@ -149,7 +149,7 @@ export default {
         no: 'No',
       },
       supportEmail: 'Indirizzo email visibile ai cittadini',
-      vatNumberGroup: 'Paritta IVA di gruppo',
+      vatNumberGroup: 'Partita IVA di gruppo',
       isTaxCodeEquals2Piva: 'Codice Fiscale / P.IVA',
       vatNumber: 'Partita IVA',
     },
