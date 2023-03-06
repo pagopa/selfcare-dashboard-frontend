@@ -21,6 +21,9 @@ test('Test Party', () => {
     originId: 'originId1',
     origin: 'IPA',
     institutionType: 'PA',
+    geographicTaxonomies: [],
+    vatNumberGroup: true,
+    vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
   };
   expect(party).toStrictEqual({
@@ -39,7 +42,10 @@ test('Test Party', () => {
     origin: 'IPA',
     institutionType: 'PA',
     fiscalCode: 'fiscalCodeBari',
+    vatNumberGroup: true,
+    vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
+    geographicTaxonomies: [],
   });
 });
 
@@ -60,6 +66,11 @@ test('Test institutionResource2Party', () => {
     zipCode: '20121',
     recipientCode: 'MC45KDSX',
     geographicTaxonomies: [],
+    supportContact: {
+      supportEmail: 'supportEmail@example.com',
+    },
+    vatNumberGroup: true,
+    vatNumber: '11111111111',
   };
 
   const party = institutionResource2Party(institutionResource);
@@ -81,8 +92,8 @@ test('Test institutionResource2Party', () => {
     typology: 'TODO',
     recipientCode: 'MC45KDSX',
     geographicTaxonomies: [],
-    supportEmail: undefined,
-    vatNumberGroup: undefined,
-    vatNumber: undefined,
+    supportEmail: 'supportEmail@example.com',
+    vatNumberGroup: true,
+    vatNumber: '11111111111',
   });
 });
