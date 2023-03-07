@@ -60,7 +60,6 @@ test('test render component', () => {
   console.log('render component');
   renderCard(mockedPA);
   expect(document.getElementById('partyCard'));
-  screen.debug(document, 100000000);
 });
 
 test('test filelds based on institution type', async () => {
