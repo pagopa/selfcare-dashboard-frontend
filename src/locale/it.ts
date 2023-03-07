@@ -135,6 +135,7 @@ export default {
       pec: 'Indirizzo PEC primario',
       registeredOffice: 'Sede Legale',
       recipientCode: 'Codice destinatario',
+      recipientCodeForPa: 'Codice univoco',
       contactToModify:
         "<0>Vuoi modificare questi dati? <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
       institutionTypeValue: {
