@@ -102,11 +102,7 @@ export default function PartyDetail({ party }: Props) {
               placement="top"
               arrow={true}
             >
-              <Typography
-                sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                className="ShowDots"
-                id={party.institutionType}
-              >
+              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
                 {institutionTypeTranscode(party.institutionType)}
               </Typography>
             </Tooltip>
