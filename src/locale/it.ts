@@ -135,6 +135,7 @@ export default {
       pec: 'Indirizzo PEC primario',
       registeredOffice: 'Sede Legale',
       recipientCode: 'Codice destinatario',
+      recipientCodeForPa: 'Codice univoco',
       contactToModify:
         "<0>Vuoi modificare questi dati? <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
       institutionTypeValue: {
@@ -144,6 +145,14 @@ export default {
         SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
       },
+      vatNumberGroupValues: {
+        yes: 'Sì',
+        no: 'No',
+      },
+      supportEmail: 'Indirizzo email visibile ai cittadini',
+      vatNumberGroup: 'Partita IVA di gruppo',
+      isTaxCodeEquals2Piva: 'Codice Fiscale / P.IVA',
+      vatNumber: 'Partita IVA',
     },
   },
   subHeader: {

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */ // TODO: remove eslint-disable complexity (add sub component)
 import { Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
@@ -53,6 +54,8 @@ export default function PartyDetail({ party }: Props) {
   const institutionTypeTranscode = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
   const showTooltipAfter = 49;
+  const isTaxCodeEquals2Piva = party.vatNumber === party.fiscalCode;
+  const isInstitutionTypePA = party.institutionType === 'PA';
 
   const handleAddNewTaxonomies = () => {
     setLoadingSaveGeotaxonomies(true);
@@ -186,42 +189,137 @@ export default function PartyDetail({ party }: Props) {
               </Typography>
             </Tooltip>
           </Grid>
-          {/* origin */}
-          <Grid item xs={4}>
-            <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t('overview.partyDetail.originId')}&nbsp;{party.origin}
-            </Typography>
-          </Grid>
-          <Grid item xs={8}>
-            <Tooltip
-              title={party.originId.length >= showTooltipAfter ? party.originId : ''}
-              placement="top"
-              arrow={true}
-            >
-              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {party.originId}
-              </Typography>
-            </Tooltip>
-          </Grid>
+          {/* origin (ipa code) */}
+          {isInstitutionTypePA && (
+            <>
+              <Grid item xs={4}>
+                <Typography variant="body2" sx={{ ...labelStyles }}>
+                  {t('overview.partyDetail.originId')}&nbsp;{party.origin}
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Tooltip
+                  title={party.originId.length >= showTooltipAfter ? party.originId : ''}
+                  placement="top"
+                  arrow={true}
+                >
+                  <Typography
+                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                    className="ShowDots"
+                  >
+                    {party.originId}
+                  </Typography>
+                </Tooltip>
+              </Grid>
+            </>
+          )}
+          {(isInstitutionTypePA && !isTaxCodeEquals2Piva) || !isInstitutionTypePA ? (
+            <>
+              {/* fiscalCode */}
+              <Grid item xs={4}>
+                <Typography variant="body2" sx={{ ...labelStyles }}>
+                  {isTaxCodeEquals2Piva
+                    ? t('overview.partyDetail.isTaxCodeEquals2Piva')
+                    : t('overview.partyDetail.fiscalCode')}
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Tooltip
+                  title={party.fiscalCode.length >= showTooltipAfter ? party.fiscalCode : ''}
+                  placement="top"
+                  arrow={true}
+                >
+                  <Typography
+                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                    className="ShowDots"
+                  >
+                    {party.fiscalCode}
+                  </Typography>
+                </Tooltip>
+              </Grid>
+            </>
+          ) : (
+            <></>
+          )}
+          {/* vatNumberGroup */}
+          {party.institutionType === 'PSP' && (
+            <>
+              <Grid item xs={4}>
+                <Typography variant="body2" sx={{ ...labelStyles }}>
+                  {t('overview.partyDetail.vatNumberGroup')}
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography
+                  sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                  className="ShowDots"
+                >
+                  {party.vatNumberGroup === true
+                    ? t('overview.partyDetail.vatNumberGroupValues.yes')
+                    : t('overview.partyDetail.vatNumberGroupValues.no')}
+                </Typography>
+              </Grid>
+            </>
+          )}
         </Grid>
         <Grid container item xs={6} spacing={1}>
           {/* fiscalCode */}
-          <Grid item xs={4}>
-            <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t('overview.partyDetail.fiscalCode')}
-            </Typography>
-          </Grid>
-          <Grid item xs={8}>
-            <Tooltip
-              title={party.fiscalCode.length >= showTooltipAfter ? party.fiscalCode : ''}
-              placement="top"
-              arrow={true}
-            >
-              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {party.fiscalCode}
-              </Typography>
-            </Tooltip>
-          </Grid>
+          {isInstitutionTypePA && isTaxCodeEquals2Piva && (
+            <>
+              <Grid item xs={4}>
+                <Typography variant="body2" sx={{ ...labelStyles }}>
+                  {isTaxCodeEquals2Piva
+                    ? t('overview.partyDetail.isTaxCodeEquals2Piva')
+                    : t('overview.partyDetail.fiscalCode')}
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Tooltip
+                  title={party.fiscalCode.length >= showTooltipAfter ? party.fiscalCode : ''}
+                  placement="top"
+                  arrow={true}
+                >
+                  <Typography
+                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                    className="ShowDots"
+                  >
+                    {party.fiscalCode}
+                  </Typography>
+                </Tooltip>
+              </Grid>
+            </>
+          )}
+          <>
+            {/* vatNumber */}
+            {!isTaxCodeEquals2Piva && (
+              <>
+                <Grid item xs={4}>
+                  <Typography variant="body2" sx={{ ...labelStyles }}>
+                    {t('overview.partyDetail.vatNumber')}
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Tooltip
+                    title={
+                      party.vatNumber && party.vatNumber.length >= showTooltipAfter
+                        ? party.vatNumber
+                        : ''
+                    }
+                    placement="top"
+                    arrow={true}
+                  >
+                    <Typography
+                      sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                      className="ShowDots"
+                    >
+                      {party?.vatNumber}
+                    </Typography>
+                  </Tooltip>
+                </Grid>
+              </>
+            )}
+          </>
+
           {/* pecEmail */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
@@ -261,12 +359,26 @@ export default function PartyDetail({ party }: Props) {
           {/* recipientCode */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t('overview.partyDetail.recipientCode')}
+              {party.institutionType === 'PA'
+                ? t('overview.partyDetail.recipientCodeForPa')
+                : t('overview.partyDetail.recipientCode')}
+              {}
             </Typography>
           </Grid>
           <Grid item xs={8}>
             <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
               {party.recipientCode}
+            </Typography>
+          </Grid>
+          {/* supportEmail */}
+          <Grid item xs={4}>
+            <Typography variant="body2" sx={{ ...labelStyles }}>
+              {t('overview.partyDetail.supportEmail')}
+            </Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
+              {party?.supportEmail ? party.supportEmail : '-'}
             </Typography>
           </Grid>
         </Grid>

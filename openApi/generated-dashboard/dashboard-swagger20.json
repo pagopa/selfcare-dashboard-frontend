@@ -2535,9 +2535,22 @@
           "description": "Institution's status",
           "type": "string"
         },
+        "supportContact": {
+          "$ref": "#/definitions/SupportContactResource",
+          "description": "'Institution's assistance contacts'"
+        },
         "userRole": {
           "description": "Logged user's role",
           "type": "string"
+        },
+        "vatNumber": {
+          "description": "Institution's VAT number",
+          "type": "string"
+        },
+        "vatNumberGroup": {
+          "description": "PSP's Vat Number group",
+          "example": false,
+          "type": "boolean"
         },
         "zipCode": {
           "description": "Institution's zipCode",
@@ -3185,6 +3198,20 @@
         "title"
       ],
       "title": "SubProductResource",
+      "type": "object"
+    },
+    "SupportContactResource": {
+      "properties": {
+        "supportEmail": {
+          "description": "Institution's support email contact",
+          "type": "string"
+        },
+        "supportPhone": {
+          "description": "Institution's support phone contact",
+          "type": "string"
+        }
+      },
+      "title": "SupportContactResource",
       "type": "object"
     },
     "UpdateUserDto": {
