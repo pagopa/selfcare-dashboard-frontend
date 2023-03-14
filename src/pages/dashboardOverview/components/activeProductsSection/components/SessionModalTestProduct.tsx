@@ -129,21 +129,18 @@ function SessionModalTestProduct({
                   {prodInteropAndProdInteropColl &&
                     products
                       ?.filter((p) => p.id === 'prod-interop-coll')
-                      .map((p) => {
-                        console.log('productEnvironments', p);
-                        return (
-                          <Box ml={2} key={p.id}>
-                            <Button
-                              value={'Collaudo'}
-                              color="primary"
-                              variant="contained"
-                              onClick={() => invokeProductBo(p, party as Party)}
-                            >
-                              {t('SessionModalTestProduct.testLabel')}
-                            </Button>
-                          </Box>
-                        );
-                      })}
+                      .map((p) => (
+                        <Box ml={2} key={p.id}>
+                          <Button
+                            value={'Collaudo'}
+                            color="primary"
+                            variant="contained"
+                            onClick={() => invokeProductBo(p, party as Party)}
+                          >
+                            {t('SessionModalTestProduct.testLabel')}
+                          </Button>
+                        </Box>
+                      ))}
                   {productEnvironments &&
                     productEnvironments.map((p) => (
                       <Box ml={2} key={p.environment}>
