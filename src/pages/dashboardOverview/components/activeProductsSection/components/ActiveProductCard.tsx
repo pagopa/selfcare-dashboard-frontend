@@ -56,14 +56,14 @@ export default function ActiveProductCard({
       raised
       sx={{
         borderRadius: theme.spacing(2),
-        minHeight: '125px',
-        minWidth: '247px',
+        height: '176px',
+        minWidth: '347px',
       }}
     >
-      <CardContent sx={{ display: 'flex' }}>
+      <CardContent sx={{ display: 'flex', pb: 2 }}>
         {/* Logo */}
         <Grid container>
-          <Box display={'flex'} width="100%">
+          <Box display={'flex'} width="100%" alignItems="center">
             <Grid item>
               <ProductAvatar
                 logoUrl={urlLogo}
@@ -115,42 +115,45 @@ export default function ActiveProductCard({
                     </Typography>
                   </Tooltip>
                   {/* info label */}
-                  {disableBtn && (
-                    <Typography sx={{ fontSize: '14px' }}>
-                      <Trans i18nKey="activeProductCard.disableInfo">
-                        Per gestire questo prodotto, chiedi a uno dei suoi
-                        <Link
-                          onClick={() =>
-                            onExit(() => history.push(party.partyId ? usersPath : usersRoute))
-                          }
-                          sx={{ fontWeight: 'fontWeightMedium' }}
-                        >
-                          Amministratori
-                        </Link>
-                      </Trans>
-                    </Typography>
-                  )}
                 </Box>
               </Grid>
             )}
             {/* Actions */}
-            {!disableBtn && (
-              <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`}>
-                <Box
-                  sx={{
-                    backgroundColor: 'primary.main',
-                    height: '44px',
-                    color: 'white',
-                    borderRadius: '48px',
-                  }}
-                >
-                  <ArrowForward sx={{ m: 1 }} />{' '}
-                </Box>
-              </IconButton>
-            )}
           </Box>
         </Grid>
       </CardContent>
+      <Box px={3}>
+        {disableBtn ? (
+          <Box display={'flex'} justifyContent={'flex-start'}>
+            <Typography sx={{ fontSize: '14px' }}>
+              <Trans i18nKey="activeProductCard.disableInfo">
+                Per gestire questo prodotto, chiedi a uno dei suoi
+                <Link
+                  onClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
+                  sx={{ fontWeight: 'fontWeightMedium' }}
+                >
+                  Amministratori
+                </Link>
+              </Trans>
+            </Typography>
+          </Box>
+        ) : (
+          <Box display={'flex'} justifyContent={'flex-end'}>
+            <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`}>
+              <Box
+                sx={{
+                  backgroundColor: 'primary.main',
+                  height: '44px',
+                  color: 'white',
+                  borderRadius: '48px',
+                }}
+              >
+                <ArrowForward sx={{ m: 1 }} />{' '}
+              </Box>
+            </IconButton>
+          </Box>
+        )}
+      </Box>
     </Card>
   );
 }
