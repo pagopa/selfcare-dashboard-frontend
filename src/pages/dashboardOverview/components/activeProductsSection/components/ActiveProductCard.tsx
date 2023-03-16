@@ -114,16 +114,15 @@ export default function ActiveProductCard({
                       {cardTitle}
                     </Typography>
                   </Tooltip>
-                  {/* info label */}
                 </Box>
               </Grid>
             )}
-            {/* Actions */}
           </Box>
         </Grid>
       </CardContent>
       <Box px={3}>
         {disableBtn ? (
+          // info label
           <Box display={'flex'} justifyContent={'flex-start'}>
             <Typography sx={{ fontSize: '14px' }}>
               <Trans i18nKey="activeProductCard.disableInfo">
@@ -138,6 +137,7 @@ export default function ActiveProductCard({
             </Typography>
           </Box>
         ) : (
+          //  Action
           <Box display={'flex'} justifyContent={'flex-end'}>
             <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`}>
               <Box
