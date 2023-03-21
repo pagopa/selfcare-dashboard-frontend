@@ -32,11 +32,14 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
 
   const [labelLink, setLabelLink] = useState<string>(getLabelLinkText(t));
   const addError = useErrorDispatcher();
-  const [uploadedFiles, setUploadedFiles] = useState<Array<File>>([]);
+
+  const [isLogoNotPresent, setIsLogoNotPresent] = useState<boolean>();
 
   useEffect(() => {
     if (urlLogo && partyId) {
       setTimeout(() => setLabelLink(getLabelLinkText(t)), 600);
+      const isLogoNotPresent = document.querySelector('#partyLogo')?.children[0].tagName === 'svg';
+      setIsLogoNotPresent(isLogoNotPresent);
     }
   }, [urlLogo, partyId]);
 
@@ -59,7 +62,6 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const { getRootProps, getInputProps, open } = useDropzone({
     onDropAccepted: (files: Array<File>) => {
       setLoading(true);
-      setUploadedFiles(files);
       setLabelLink(files[0].name);
       const requestId = uniqueId();
       trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: partyId, request_id: requestId });
@@ -161,7 +163,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
                 labelLink={labelLink}
                 open={open}
                 loading={loading}
-                files={uploadedFiles}
+                isLogoNotPresent={isLogoNotPresent}
               />
             </Box>
           </>

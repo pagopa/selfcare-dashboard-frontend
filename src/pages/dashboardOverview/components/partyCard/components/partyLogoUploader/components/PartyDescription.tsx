@@ -12,10 +12,10 @@ type Props = {
   labelLink: string;
   open: MouseEventHandler<HTMLButtonElement> | undefined;
   loading: boolean;
-  files: Array<File>;
+  isLogoNotPresent?: boolean;
 };
 
-export function PartyDescription({ labelLink, open, loading, files }: Props) {
+export function PartyDescription({ labelLink, open, loading, isLogoNotPresent }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -25,11 +25,11 @@ export function PartyDescription({ labelLink, open, loading, files }: Props) {
           component="button"
           onClick={open}
           startIcon={
-            !loading && files.length === 0 ? (
+            !loading && isLogoNotPresent ? (
               <UploadIcon sx={{ fontSize: '23px !important' }} />
-            ) : !loading && files.length >= 1 ? (
+            ) : (
               <EditIcon />
-            ) : undefined
+            )
           }
           sx={{ color: 'primary.main' }}
           weight="default"
