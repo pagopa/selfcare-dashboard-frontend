@@ -137,7 +137,7 @@ export default {
       recipientCode: 'Codice destinatario',
       recipientCodeForPa: 'Codice univoco',
       contactToModify:
-        "<0>Vuoi modificare questi dati? <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
+        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
       institutionTypeValue: {
         GSP: 'Gestore di servizi pubblici',
         PA: 'Pubblica Amministrazione',
