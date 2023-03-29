@@ -39,7 +39,7 @@ export function PartyDescription({ labelLink, open, loading, isLogoNotPresent }:
         <Tooltip
           title={
             <Trans i18nKey={t('overview.partyLogo.size')}>
-              Dimensione massima 300 x <br /> 300px - Formato .png
+              Dimensione 300 x <br /> 300px - Formato .png
             </Trans>
           }
           placement="top"
