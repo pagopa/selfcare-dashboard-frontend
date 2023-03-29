@@ -12,11 +12,11 @@ type Props = {
   labelLink: string;
   open: MouseEventHandler<HTMLButtonElement> | undefined;
   loading: boolean;
-  isLogoNotPresent?: boolean;
 };
 
-export function PartyDescription({ labelLink, open, loading, isLogoNotPresent }: Props) {
+export function PartyDescription({ labelLink, open, loading }: Props) {
   const { t } = useTranslation();
+  const isLogoNotPresent = document.querySelector('#partyLogo')?.children[0].tagName === 'svg';
 
   return (
     <Stack>

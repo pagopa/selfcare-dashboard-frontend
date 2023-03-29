@@ -33,13 +33,9 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const [labelLink, setLabelLink] = useState<string>(getLabelLinkText(t));
   const addError = useErrorDispatcher();
 
-  const [isLogoNotPresent, setIsLogoNotPresent] = useState<boolean>();
-
   useEffect(() => {
     if (urlLogo && partyId) {
       setTimeout(() => setLabelLink(getLabelLinkText(t)), 600);
-      const isLogoNotPresent = document.querySelector('#partyLogo')?.children[0].tagName === 'svg';
-      setIsLogoNotPresent(isLogoNotPresent);
     }
   }, [urlLogo, partyId]);
 
@@ -159,12 +155,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
               <PartyLogo loading={loading} urlLogo={urlLogo} />
             </Box>
             <Box>
-              <PartyDescription
-                labelLink={labelLink}
-                open={open}
-                loading={loading}
-                isLogoNotPresent={isLogoNotPresent}
-              />
+              <PartyDescription labelLink={labelLink} open={open} loading={loading} />
             </Box>
           </>
         )}
