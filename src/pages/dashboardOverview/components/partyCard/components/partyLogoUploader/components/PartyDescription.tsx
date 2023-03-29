@@ -5,25 +5,32 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { MouseEventHandler } from 'react';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Box } from '@mui/system';
-
+import UploadIcon from '@mui/icons-material/Upload';
 // Utility to wait some time
 
 type Props = {
   labelLink: string;
   open: MouseEventHandler<HTMLButtonElement> | undefined;
   loading: boolean;
-  files: Array<File>;
+  isLogoNotPresent?: boolean;
 };
 
-export function PartyDescription({ labelLink, open, loading }: Props) {
+export function PartyDescription({ labelLink, open, loading, isLogoNotPresent }: Props) {
   const { t } = useTranslation();
+
   return (
     <Stack>
       <Box display="flex">
         <ButtonNaked
           component="button"
           onClick={open}
-          startIcon={!loading ? <EditIcon /> : undefined}
+          startIcon={
+            !loading && isLogoNotPresent ? (
+              <UploadIcon sx={{ fontSize: '23px !important' }} />
+            ) : (
+              <EditIcon />
+            )
+          }
           sx={{ color: 'primary.main' }}
           weight="default"
         >
