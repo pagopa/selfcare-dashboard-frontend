@@ -32,7 +32,6 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
 
   const [labelLink, setLabelLink] = useState<string>(getLabelLinkText(t));
   const addError = useErrorDispatcher();
-  const [uploadedFiles, setUploadedFiles] = useState<Array<File>>([]);
 
   useEffect(() => {
     if (urlLogo && partyId) {
@@ -59,7 +58,6 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const { getRootProps, getInputProps, open } = useDropzone({
     onDropAccepted: (files: Array<File>) => {
       setLoading(true);
-      setUploadedFiles(files);
       setLabelLink(files[0].name);
       const requestId = uniqueId();
       trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: partyId, request_id: requestId });
@@ -157,12 +155,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
               <PartyLogo loading={loading} urlLogo={urlLogo} />
             </Box>
             <Box>
-              <PartyDescription
-                labelLink={labelLink}
-                open={open}
-                loading={loading}
-                files={uploadedFiles}
-              />
+              <PartyDescription labelLink={labelLink} open={open} loading={loading} />
             </Box>
           </>
         )}

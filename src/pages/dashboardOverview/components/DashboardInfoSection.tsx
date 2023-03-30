@@ -18,7 +18,7 @@ export default function DashboardInfoSection() {
       <InfoOutlined sx={{ width: '20px', height: '20spx', mx: 1, color: '#6BCFFB' }} />
       <Trans i18nKey="overview.partyDetail.contactToModify" shouldUnescape>
         <Typography variant="body2">
-          Vuoi modificare questi dati?
+          Alcuni dati non sono modificabili da questa sezione. Per farlo,
           <Link
             href="https://indicepa.gov.it/ipa-portale/contatti"
             sx={{ textDecoration: 'none !important', fontWeight: 'bold' }}

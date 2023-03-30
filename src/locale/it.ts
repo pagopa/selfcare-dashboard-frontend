@@ -98,7 +98,7 @@ export default {
         title: 'Caricamento non riuscito',
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
-      size: 'Dimensione massima 300 x <1/> 300px - Formato .png',
+      size: 'Dimensione 300 x <1/> 300px - Formato .png',
       info: 'Inserisci solo il logo del tuo ente. <1/> Sarai responsabile dell’inserimento di immagini diverse da quella indicata. ',
     },
     partyDetail: {
@@ -137,7 +137,7 @@ export default {
       recipientCode: 'Codice destinatario',
       recipientCodeForPa: 'Codice univoco',
       contactToModify:
-        "<0>Vuoi modificare questi dati? <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
+        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
       institutionTypeValue: {
         GSP: 'Gestore di servizi pubblici',
         PA: 'Pubblica Amministrazione',
