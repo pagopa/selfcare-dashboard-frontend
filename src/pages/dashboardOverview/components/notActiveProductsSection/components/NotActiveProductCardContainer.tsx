@@ -27,15 +27,19 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
       sp.productOnBoardingStatus !== 'ACTIVE'
   );
 
-  const subProd = `${product?.title} ${prodActiveWithSubProdInactive?.title}`;
-
+  const subProd = (
+    <p style={{ fontWeight: '400', padding: '0px', margin: '0px' }}>
+      <strong style={{ fontWeight: '600' }}>{product?.title}</strong>&nbsp;
+      {prodActiveWithSubProdInactive?.title}
+    </p>
+  );
   return (
     <>
       <Grid item xs={6} lg={4} xl={3} key={product.id}>
         <NotActiveProductCard
           image={product.imageUrl}
           urlLogo={product.logo}
-          title={prodActiveWithSubProdInactive ? subProd : product.title}
+          title={prodActiveWithSubProdInactive ? (subProd as unknown as string) : product.title}
           description={product.description}
           disableBtn={false}
           btnAction={() => {
