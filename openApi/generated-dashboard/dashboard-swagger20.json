@@ -755,7 +755,7 @@
         "tags": [
           "institutions"
         ],
-        "description": "Service to get the users with the given user id related to a specific institution ",
+        "description": "Service to get the users with the given user id related to a specific institution",
         "operationId": "getInstitutionUserUsingGET",
         "summary": "getInstitutionUser"
       }
@@ -927,6 +927,118 @@
         "description": "Service to retrieve a specific onboarding request",
         "operationId": "retrieveOnboardingRequestUsingGET",
         "summary": "retrieveOnboardingRequest"
+      }
+    },
+    "/pnPGInstitutions": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/PnPGInstitutionResourceArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "pnPGInstitutions"
+        ],
+        "description": "Service to get the PG institutions related to selection of logged user",
+        "operationId": "getPnPGInstitutionsUsingGET",
+        "summary": "getPnPGInstitutions"
+      }
+    },
+    "/pnPGInstitutions/{institutionId}/products": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/PartyProductArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "pnPGInstitutions"
+        ],
+        "description": "Service to get all the products related to a specific institution",
+        "operationId": "getPnPGInstitutionProductsUsingGET",
+        "summary": "getPnPGInstitutionProducts"
       }
     },
     "/products/{productId}/back-office": {
@@ -2197,7 +2309,7 @@
       }
     }
   },
-  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
+  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"PnPGInstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/PnPGInstitutionResource"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
     "BackOfficeConfigurationsResource": {
       "properties": {
         "environment": {
@@ -2424,6 +2536,7 @@
           "enum": [
             "GSP",
             "PA",
+            "PG",
             "PSP",
             "PT",
             "SCP"
@@ -2505,6 +2618,7 @@
           "enum": [
             "GSP",
             "PA",
+            "PG",
             "PSP",
             "PT",
             "SCP"
@@ -2620,7 +2734,6 @@
         }
       },
       "required": [
-        "email",
         "fiscalCode",
         "id",
         "name",
@@ -2674,7 +2787,6 @@
         }
       },
       "required": [
-        "email",
         "id",
         "name",
         "products",
@@ -2781,6 +2893,23 @@
       "title": "PageOfUserGroupPlainResource",
       "type": "object"
     },
+    "PartyProduct": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "onBoardingStatus": {
+          "enum": [
+            "ACTIVE",
+            "INACTIVE",
+            "PENDING"
+          ],
+          "type": "string"
+        }
+      },
+      "title": "PartyProduct",
+      "type": "object"
+    },
     "PlainUserResource": {
       "properties": {
         "id": {
@@ -2803,6 +2932,81 @@
         "surname"
       ],
       "title": "PlainUserResource",
+      "type": "object"
+    },
+    "PnPGInstitutionResource": {
+      "properties": {
+        "address": {
+          "description": "Institution's physical address",
+          "type": "string"
+        },
+        "category": {
+          "description": "Institution's category",
+          "type": "string"
+        },
+        "externalId": {
+          "description": "Institution's unique external identifier",
+          "type": "string"
+        },
+        "fiscalCode": {
+          "description": "Fiscal code corresponding to the institution",
+          "type": "string"
+        },
+        "geographicTaxonomies": {
+          "description": "Institution's geographic taxonomy",
+          "items": {
+            "$ref": "#/definitions/GeographicTaxonomyResource"
+          },
+          "type": "array"
+        },
+        "id": {
+          "description": "Institution's unique internal identifier",
+          "type": "string"
+        },
+        "institutionType": {
+          "description": "Institution's type",
+          "type": "string"
+        },
+        "mailAddress": {
+          "description": "Institution's email address",
+          "type": "string"
+        },
+        "name": {
+          "description": "Institution's name",
+          "type": "string"
+        },
+        "origin": {
+          "description": "Institution's data origin",
+          "type": "string"
+        },
+        "originId": {
+          "description": "Institution's identifier related to origin",
+          "type": "string"
+        },
+        "recipientCode": {
+          "description": "Billing recipient code",
+          "type": "string"
+        },
+        "status": {
+          "description": "Institution's status",
+          "type": "string"
+        },
+        "userRole": {
+          "description": "Logged user's role",
+          "type": "string"
+        },
+        "zipCode": {
+          "description": "Institution's zipCode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "externalId",
+        "fiscalCode",
+        "id",
+        "status"
+      ],
+      "title": "PnPGInstitutionResource",
       "type": "object"
     },
     "Problem": {
@@ -3006,7 +3210,6 @@
         }
       },
       "required": [
-        "email",
         "id",
         "name",
         "product",
@@ -3163,8 +3366,25 @@
     },
     "SubProductResource": {
       "properties": {
+        "description": {
+          "description": "Product's description",
+          "type": "string"
+        },
         "id": {
           "description": "Product's unique identifier",
+          "type": "string"
+        },
+        "imageUrl": {
+          "description": "Product's depict image",
+          "type": "string"
+        },
+        "logo": {
+          "description": "Product's logo",
+          "type": "string"
+        },
+        "logoBgColor": {
+          "description": "Product logo's background color",
+          "pattern": "^#[0-9A-F]{6}$",
           "type": "string"
         },
         "productOnBoardingStatus": {
@@ -3188,6 +3408,10 @@
         },
         "title": {
           "description": "Product's title",
+          "type": "string"
+        },
+        "urlPublic": {
+          "description": "URL that redirects to the public information webpage of the product",
           "type": "string"
         }
       },
@@ -3552,6 +3776,10 @@
     {
       "description": "Onboarding operations",
       "name": "onboarding"
+    },
+    {
+      "description": "PN PG Institution operations",
+      "name": "pnPGInstitutions"
     },
     {
       "description": "Products operations",

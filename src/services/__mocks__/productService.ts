@@ -25,7 +25,7 @@ export const mockedPartyProducts: Array<Product> = [
         id: 'prod-io-premium',
         title: 'Premium',
         status: StatusEnum.ACTIVE,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.INACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
     ],
     logoBgColor: 'primary.main',
@@ -36,21 +36,14 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'Piattaforma Notifiche',
     description: 'Piattaforma Notifiche description',
     authorized: false,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.INACTIVE,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     status: StatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
-    subProducts: [
-      {
-        id: 'prod-pn-premium',
-        title: 'Premium',
-        status: StatusEnum.ACTIVE,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.INACTIVE,
-      },
-    ],
+    subProducts: [],
     logoBgColor: 'pagoPA.main',
   },
   {

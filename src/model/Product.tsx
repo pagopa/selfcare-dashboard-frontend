@@ -35,6 +35,11 @@ export type SubProduct = {
   title: string;
   productOnBoardingStatus: ProductOnBoardingStatusEnum;
   status: StatusEnum;
+  description?: string;
+  imageUrl?: string;
+  logo?: string;
+  logoBgColor?: string;
+  urlPublic?: string;
 };
 export type ProductsMap = { [id: string]: Product };
 

@@ -14,7 +14,7 @@ import {
 import CardMedia from '@mui/material/CardMedia';
 import { Trans, useTranslation } from 'react-i18next';
 import { ProductAvatar } from '@pagopa/mui-italia/dist/components/ProductAvatar/ProductAvatar';
-import { Product } from '../../../../../model/Product';
+import { Product, SubProduct } from '../../../../../model/Product';
 
 type Props = {
   image?: string;
@@ -26,6 +26,7 @@ type Props = {
   buttonLabel: string;
   urlPublic?: string;
   product: Product;
+  prodActiveWithSubProdInactive?: SubProduct;
 };
 
 export default function NotActiveProductCard({
@@ -38,6 +39,7 @@ export default function NotActiveProductCard({
   urlPublic,
   title,
   product,
+  prodActiveWithSubProdInactive,
 }: Props) {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -81,7 +83,11 @@ export default function NotActiveProductCard({
         >
           <ProductAvatar
             logoUrl={urlLogo}
-            logoBgColor={product.logoBgColor}
+            logoBgColor={
+              prodActiveWithSubProdInactive
+                ? prodActiveWithSubProdInactive.logoBgColor
+                : product.logoBgColor
+            }
             logoAltText={`${product.title} logo`}
           />
         </Box>
@@ -103,7 +109,7 @@ export default function NotActiveProductCard({
           </Grid>
           <Grid item xs={12} height="48px">
             <Tooltip
-              title={description.length > 99 ? description : ''}
+              title={description && description.length > 99 ? description : ''}
               placement="top"
               arrow={true}
             >

@@ -37,10 +37,22 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     <>
       <Grid item xs={6} lg={4} xl={3} key={product.id}>
         <NotActiveProductCard
-          image={product.imageUrl}
-          urlLogo={product.logo}
+          image={
+            prodActiveWithSubProdInactive
+              ? prodActiveWithSubProdInactive.imageUrl
+              : product.imageUrl
+          }
+          urlLogo={
+            prodActiveWithSubProdInactive
+              ? (prodActiveWithSubProdInactive.logo as string)
+              : product.logo
+          }
           title={prodActiveWithSubProdInactive ? (subProd as unknown as string) : product.title}
-          description={product.description}
+          description={
+            prodActiveWithSubProdInactive
+              ? (prodActiveWithSubProdInactive.description as string)
+              : product.description
+          }
           disableBtn={false}
           btnAction={() => {
             if (product.productOnBoardingStatus === 'PENDING') {
@@ -62,8 +74,13 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
             }
           }}
           buttonLabel={t('overview.notActiveProducts.joinButton')}
-          urlPublic={product.urlPublic}
+          urlPublic={
+            prodActiveWithSubProdInactive
+              ? prodActiveWithSubProdInactive.urlPublic
+              : product.urlPublic
+          }
           product={product}
+          prodActiveWithSubProdInactive={prodActiveWithSubProdInactive}
         />
       </Grid>
     </>
