@@ -95,17 +95,42 @@ export default function NotActiveProductCard({
       <Grid item xs={12}>
         <CardContent sx={{ height: '100%', width: '100%' }}>
           <Grid item xs={12} mb={1}>
-            <Tooltip title={title.length > 21 ? title : ''} placement="top" arrow={true}>
-              <Typography
-                variant="h6"
-                sx={{
-                  ...truncateText,
-                  WebkitLineClamp: 1,
-                }}
+            {prodActiveWithSubProdInactive ? (
+              <Tooltip
+                title={
+                  prodActiveWithSubProdInactive.title.length > 21
+                    ? `${title}  ${prodActiveWithSubProdInactive.title}`
+                    : ''
+                }
+                placement="top"
+                arrow={true}
               >
-                {title}
-              </Typography>
-            </Tooltip>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    ...truncateText,
+                    WebkitLineClamp: 1,
+                  }}
+                >
+                  <p style={{ fontWeight: '400', padding: '0px', margin: '0px' }}>
+                    <strong style={{ fontWeight: '600' }}>{product?.title}</strong>&nbsp;
+                    {prodActiveWithSubProdInactive?.title}
+                  </p>
+                </Typography>
+              </Tooltip>
+            ) : (
+              <Tooltip title={title.length > 21 ? title : ''} placement="top" arrow={true}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    ...truncateText,
+                    WebkitLineClamp: 1,
+                  }}
+                >
+                  {title}
+                </Typography>
+              </Tooltip>
+            )}
           </Grid>
           <Grid item xs={12} height="48px">
             <Tooltip
