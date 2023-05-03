@@ -26,10 +26,10 @@ export default function ActiveProductsSection({ party, products }: Props) {
           products
             .filter((p) =>
               prodInteropAndProdInteropColl
-                ? p.status === 'ACTIVE' &&
+                ? p.status !== 'INACTIVE' &&
                   p.productOnBoardingStatus === 'ACTIVE' &&
                   p.id !== 'prod-interop-coll'
-                : p.status === 'ACTIVE' && p.productOnBoardingStatus === 'ACTIVE'
+                : p.status !== 'INACTIVE' && p.productOnBoardingStatus === 'ACTIVE'
             )
             .sort((a, b) =>
               a.authorized === false && b.authorized !== false
