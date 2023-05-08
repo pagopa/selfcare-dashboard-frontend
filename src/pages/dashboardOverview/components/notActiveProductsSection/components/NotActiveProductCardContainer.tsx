@@ -24,7 +24,8 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     (sp) =>
       product.status === 'ACTIVE' &&
       product.productOnBoardingStatus === 'ACTIVE' &&
-      sp.productOnBoardingStatus !== 'ACTIVE'
+      sp.productOnBoardingStatus !== 'ACTIVE' &&
+      product.authorized
   );
 
   return (
