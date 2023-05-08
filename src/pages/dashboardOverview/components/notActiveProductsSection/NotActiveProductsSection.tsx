@@ -31,7 +31,8 @@ export default function NotActiveProductsSection({ party, products }: Props) {
                 (sp) =>
                   product.status === 'ACTIVE' &&
                   product.productOnBoardingStatus === 'ACTIVE' &&
-                  sp.productOnBoardingStatus !== 'ACTIVE'
+                  sp.productOnBoardingStatus !== 'ACTIVE' &&
+                  product.authorized
               );
               return prodInactive || !!prodActiveWithSubProdInactive;
             })
