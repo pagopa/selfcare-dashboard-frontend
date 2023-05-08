@@ -12,8 +12,17 @@ export const useTokenExchange = () => {
   const addError = useErrorDispatcher();
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE);
 
-  const invokeProductBo = async (product: Product, selectedParty: Party): Promise<void> => {
-    const result = validateUrlBO(product?.urlBO);
+  const invokeProductBo = async (
+    product: Product,
+    selectedParty: Party,
+    selectedEnvironment?: string
+  ): Promise<void> => {
+    const selectedEnvironmentUrl = product.backOfficeEnvironmentConfigurations?.find(
+      (p) => p.environment === selectedEnvironment
+    )?.url;
+    const result = selectedEnvironmentUrl
+      ? validateUrlBO(selectedEnvironmentUrl)
+      : validateUrlBO(product?.urlBO);
     if (result instanceof Error) {
       addError({
         id: `ValidationUrlError-${product?.id}`,
@@ -26,30 +35,55 @@ export const useTokenExchange = () => {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    retrieveBackOfficeUrl(selectedParty, product)
-      .then((url) => {
-        setLoading(true);
-        trackEvent(
-          'DASHBOARD_OPEN_PRODUCT',
-          {
-            party_id: selectedParty.partyId,
-            product_id: product.id,
-            product_role: product.userRole,
-            target: 'prod',
-          },
-          () => window.location.assign(url)
-        );
-      })
-      .catch((error) =>
-        addError({
-          id: `TokenExchangeError-${product.id}`,
-          blocking: false,
-          error,
-          techDescription: `Something gone wrong retrieving token exchange for product ${product.id}`,
-          toNotify: true,
-        })
-      )
-      .finally(() => setLoading(false));
+    selectedEnvironment
+      ? retrieveBackOfficeUrl(selectedParty, product, selectedEnvironment)
+          .then((url) => {
+            setLoading(true);
+            trackEvent(
+              'DASHBOARD_OPEN_PRODUCT',
+              {
+                party_id: selectedParty.partyId,
+                product_id: product.id,
+                product_role: product.userRole,
+                target: selectedEnvironment,
+              },
+              () => window.location.assign(url)
+            );
+          })
+          .catch((error) =>
+            addError({
+              id: `TokenExchangeError-${product.id}`,
+              blocking: false,
+              error,
+              techDescription: `Something gone wrong retrieving token exchange of test environment for product ${product.id}`,
+              toNotify: true,
+            })
+          )
+          .finally(() => setLoading(false))
+      : retrieveBackOfficeUrl(selectedParty, product)
+          .then((url) => {
+            setLoading(true);
+            trackEvent(
+              'DASHBOARD_OPEN_PRODUCT',
+              {
+                party_id: selectedParty.partyId,
+                product_id: product.id,
+                product_role: product.userRole,
+                target: 'prod',
+              },
+              () => window.location.assign(url)
+            );
+          })
+          .catch((error) =>
+            addError({
+              id: `TokenExchangeError-${product.id}`,
+              blocking: false,
+              error,
+              techDescription: `Something gone wrong retrieving token exchange for product ${product.id}`,
+              toNotify: true,
+            })
+          )
+          .finally(() => setLoading(false));
   };
   return { invokeProductBo };
 };

@@ -53,18 +53,18 @@ type Props = {
 };
 
 /** Selfcare's popup */
-function SessionModalTestProduct({
+function SessionModalInteropProduct({
   t,
   open,
   title,
   message,
   onConfirm,
   onConfirmEnabled = true,
-  onConfirmLabel = t('SessionModalTestProduct.confirmButton'),
+  onConfirmLabel = t('SessionModalInteropProduct.confirmButton'),
   prodInteropAndProdInteropColl,
   handleClose,
   handleExit = handleClose,
-  onCloseLabel = t('SessionModalTestProduct.closeButton'),
+  onCloseLabel = t('SessionModalInteropProduct.closeButton'),
   height,
   minHeight,
   width = '33.3em',
@@ -137,7 +137,7 @@ function SessionModalTestProduct({
                             variant="contained"
                             onClick={() => invokeProductBo(p, party as Party)}
                           >
-                            {t('SessionModalTestProduct.testLabel')}
+                            {t('SessionModalInteropProduct.testLabel')}
                           </Button>
                         </Box>
                       ))}
@@ -165,4 +165,4 @@ function SessionModalTestProduct({
     </Dialog>
   );
 }
-export default withTranslation()(SessionModalTestProduct);
+export default withTranslation()(SessionModalInteropProduct);
