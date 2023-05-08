@@ -99,8 +99,9 @@ export default {
         title: 'Caricamento non riuscito',
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
-      size: 'Dimensione 300 x <1/> 300px - Formato .png',
+      size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
       info: 'Inserisci solo il logo del tuo ente. <1/> Sarai responsabile dell’inserimento di immagini diverse da quella indicata. ',
+      infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
     },
     partyDetail: {
       institutionType: 'Tipologia',
