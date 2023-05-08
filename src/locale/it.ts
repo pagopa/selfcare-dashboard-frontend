@@ -65,7 +65,8 @@ export default {
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
         message: `Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`,
-        // 'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
+        messageProduct:
+          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
         envProdButton: 'Produzione',
         backButton: 'Annulla',
       },
@@ -162,7 +163,7 @@ export default {
     },
     backButton: 'Esci',
   },
-  SessionModalTestProduct: {
+  SessionModalInteropProduct: {
     closeButton: 'Annulla',
     confirmButton: 'Riprova',
     testLabel: 'Collaudo',
