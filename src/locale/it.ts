@@ -65,7 +65,8 @@ export default {
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
         message: `Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`,
-        // 'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
+        messageProduct:
+          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
         envProdButton: 'Produzione',
         backButton: 'Annulla',
       },
@@ -98,8 +99,9 @@ export default {
         title: 'Caricamento non riuscito',
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
-      size: 'Dimensione 300 x <1/> 300px - Formato .png',
+      size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
       info: 'Inserisci solo il logo del tuo ente. <1/> Sarai responsabile dell’inserimento di immagini diverse da quella indicata. ',
+      infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
     },
     partyDetail: {
       institutionType: 'Tipologia',
@@ -162,7 +164,7 @@ export default {
     },
     backButton: 'Esci',
   },
-  SessionModalTestProduct: {
+  SessionModalInteropProduct: {
     closeButton: 'Annulla',
     confirmButton: 'Riprova',
     testLabel: 'Collaudo',

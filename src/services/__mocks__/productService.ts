@@ -43,6 +43,16 @@ export const mockedPartyProducts: Array<Product> = [
     urlPublic: 'http://notifiche/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
+    backOfficeEnvironmentConfigurations: [
+      {
+        environment: 'test1',
+        url: 'www.test1.com',
+      },
+      {
+        environment: 'test2',
+        url: 'www.test2.com',
+      },
+    ],
     subProducts: [],
     logoBgColor: 'pagoPA.main',
   },
@@ -62,14 +72,25 @@ export const mockedPartyProducts: Array<Product> = [
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
     logoBgColor: 'pagoPA.main',
+    backOfficeEnvironmentConfigurations: [
+      {
+        environment: 'test1',
+        url: 'www.test1.com',
+      },
+      {
+        environment: 'test2',
+        url: 'www.test2.com',
+      },
+    ],
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.svg',
     title: 'Check-IBAN',
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: 'prod-ciban',
-    authorized: false,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+    userRole: 'ADMIN',
+    authorized: true,
+    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     status: StatusEnum.ACTIVE,
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
     urlPublic: 'http://www.google.it',
@@ -99,16 +120,6 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'Interoperabilità',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
-    backOfficeEnvironmentConfigurations: [
-      {
-        environment: 'test1',
-        url: 'www.test1.com',
-      },
-      {
-        environment: 'test2',
-        url: 'www.test2.com',
-      },
-    ],
     authorized: true,
     userRole: 'ADMIN',
     productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,

@@ -1,11 +1,12 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+import { SessionModal } from '@pagopa/selfcare-common-frontend';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import ActiveProductCard from './ActiveProductCard';
-import SessionModalTestProduct from './SessionModalTestProduct';
+import SessionModalInteropProduct from './SessionModalInteropProduct';
 
 type Props = {
   party: Party;
@@ -23,7 +24,8 @@ export default function ActiveProductCardContainer({
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
 
-  const [openEnvironmentModal, setOpenEnvironmentModal] = useState<boolean>(false);
+  const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
+  const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
 
   const isDisabled = product.authorized === false;
 
@@ -37,15 +39,17 @@ export default function ActiveProductCardContainer({
           urlLogo={product.logo}
           btnAction={() =>
             prodInteropAndProdInteropColl && product.id === 'prod-interop'
-              ? setOpenEnvironmentModal(true)
+              ? setOpenCustomEnvInteropModal(true)
+              : product.backOfficeEnvironmentConfigurations
+              ? setOpenGenericEnvProductModal(true)
               : invokeProductBo(product, party)
           }
           party={party}
           product={product}
         />
       </Grid>
-      <SessionModalTestProduct
-        open={openEnvironmentModal}
+      <SessionModalInteropProduct
+        open={openCustomEnvInteropModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
@@ -59,11 +63,30 @@ export default function ActiveProductCardContainer({
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={() => invokeProductBo(product, party)}
         handleClose={() => {
-          setOpenEnvironmentModal(false);
+          setOpenCustomEnvInteropModal(false);
         }}
         prodInteropAndProdInteropColl={prodInteropAndProdInteropColl}
         products={products}
         party={party}
+      />
+
+      <SessionModal
+        open={openGenericEnvProductModal}
+        title={t('overview.activeProducts.activeProductsEnvModal.title')}
+        message={
+          <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct">
+            L&apos;ambiente di test ti permette di conoscere
+            <strong>{{ productTitle: product.title }}</strong> e fare prove in tutta sicurezza.
+            L&apos;ambiente di Produzione è il prodotto in esercizio effettivo.
+          </Trans>
+        }
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
+        onConfirm={(e) => invokeProductBo(product, party, (e.target as HTMLInputElement).value)}
+        handleClose={() => {
+          setOpenGenericEnvProductModal(false);
+        }}
+        productEnvironments={product?.backOfficeEnvironmentConfigurations}
       />
     </>
   );
