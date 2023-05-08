@@ -24,8 +24,8 @@ export default function ActiveProductCardContainer({
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
 
-  const [openCustomEnvInteropModal, setopenCustomEnvInteropModal] = useState<boolean>(false);
-  const [openGenericEnvProductModal, setopenGenericEnvProductModal] = useState<boolean>(false);
+  const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
+  const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
 
   const isDisabled = product.authorized === false;
 
@@ -39,9 +39,9 @@ export default function ActiveProductCardContainer({
           urlLogo={product.logo}
           btnAction={() =>
             prodInteropAndProdInteropColl && product.id === 'prod-interop'
-              ? setopenCustomEnvInteropModal(true)
+              ? setOpenCustomEnvInteropModal(true)
               : product.backOfficeEnvironmentConfigurations
-              ? setopenGenericEnvProductModal(true)
+              ? setOpenGenericEnvProductModal(true)
               : invokeProductBo(product, party)
           }
           party={party}
@@ -63,7 +63,7 @@ export default function ActiveProductCardContainer({
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={() => invokeProductBo(product, party)}
         handleClose={() => {
-          setopenCustomEnvInteropModal(false);
+          setOpenCustomEnvInteropModal(false);
         }}
         prodInteropAndProdInteropColl={prodInteropAndProdInteropColl}
         products={products}
@@ -84,7 +84,7 @@ export default function ActiveProductCardContainer({
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={(e) => invokeProductBo(product, party, (e.target as HTMLInputElement).value)}
         handleClose={() => {
-          setopenGenericEnvProductModal(false);
+          setOpenGenericEnvProductModal(false);
         }}
         productEnvironments={product?.backOfficeEnvironmentConfigurations}
       />

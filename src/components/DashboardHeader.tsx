@@ -31,7 +31,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
 
-  const [openCustomEnvInteropModal, setopenCustomEnvInteropModal] = useState<boolean>(false);
+  const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
 
   const [productSelected, setProductSelected] = useState<Product>();
@@ -98,7 +98,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               prodInteropAndProdInteropColl &&
               p.id === 'prod-interop'
             ) {
-              setopenCustomEnvInteropModal(true);
+              setOpenCustomEnvInteropModal(true);
             } else if (
               actualSelectedParty.current &&
               selectedProduct?.backOfficeEnvironmentConfigurations
@@ -143,7 +143,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           invokeProductBo(productSelected as Product, actualSelectedParty.current as Party)
         }
         handleClose={() => {
-          setopenCustomEnvInteropModal(false);
+          setOpenCustomEnvInteropModal(false);
         }}
         prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
         products={products}
