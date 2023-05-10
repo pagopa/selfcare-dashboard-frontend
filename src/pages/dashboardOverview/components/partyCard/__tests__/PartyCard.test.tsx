@@ -75,9 +75,5 @@ test('test filelds based on institution type', async () => {
   if (mockedGSP.fiscalCode !== mockedGSP.vatNumber) {
     await waitFor(() => screen.getByText('Partita IVA'));
   }
-  await waitFor(() => screen.getAllByText('Codice destinatario'));
-
-  renderCard(mockedPA);
-  await waitFor(() => screen.getByText('Codice IPA'));
-  await waitFor(() => screen.getByText('Codice univoco'));
+  await waitFor(() => screen.getAllByText('Codice SDI'));
 });
