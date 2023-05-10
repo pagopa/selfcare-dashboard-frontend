@@ -359,10 +359,7 @@ export default function PartyDetail({ party }: Props) {
           {/* recipientCode */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
-              {party.institutionType === 'PA'
-                ? t('overview.partyDetail.recipientCodeForPa')
-                : t('overview.partyDetail.recipientCode')}
-              {}
+              {t('overview.partyDetail.sdiCode')}
             </Typography>
           </Grid>
           <Grid item xs={8}>
