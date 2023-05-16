@@ -16,7 +16,7 @@ const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => 
 }; */
 
 const apiClient = createClient({
-  baseUrl: ENV.URL_API.API_GEOTAXONOMY,
+  baseUrl: ENV.URL_API.PARTY_REGISTRY_PROXY + '/geotaxonomies',
   basePath: '',
   fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.DASHBOARD),
   // withDefaults: withBearerAndPartyId,
