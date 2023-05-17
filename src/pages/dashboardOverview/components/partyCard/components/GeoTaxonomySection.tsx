@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { GeographicTaxonomy } from '../../../../../model/Party';
-import { ENV } from '../../../../../utils/env';
+import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
 
 type Props = {
   geographicTaxonomies: Array<GeographicTaxonomy>;
@@ -108,10 +108,9 @@ export default function GeoTaxonomySection({
       setIsAddNewAutocompleteEnabled(false);
     }
   };
-
   const handleSearch = async (query: string, index: number) => {
-    await fetch(ENV.URL_API.PARTY_REGISTRY_PROXY + '/geotaxonomies?description=' + query)
-      .then((response) => response.json())
+    await retrieveGeotaxonomyFromDescription(query)
+      .then((response) => response)
       .then((gt) => {
         const mappedOccurrences = gt.map((g: GeographicTaxonomy) => ({
           code: g.code,
