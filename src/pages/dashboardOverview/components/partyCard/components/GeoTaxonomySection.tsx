@@ -110,7 +110,7 @@ export default function GeoTaxonomySection({
   };
 
   const handleSearch = async (query: string, index: number) => {
-    await fetch(ENV.URL_API.PARTY_REGISTRY_PROXY + '/ geotaxonomies?description=' + query)
+    await fetch(ENV.URL_API.PARTY_REGISTRY_PROXY + '/geotaxonomies?description=' + query)
       .then((response) => response.json())
       .then((gt) => {
         const mappedOccurrences = gt.map((g: GeographicTaxonomy) => ({
