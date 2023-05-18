@@ -14,7 +14,8 @@ import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { GeographicTaxonomy } from '../../../../../model/Party';
-import { ENV } from '../../../../../utils/env';
+import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
+import { nationalValue } from '../../../../../model/GeographicTaxonomy';
 
 type Props = {
   geographicTaxonomies: Array<GeographicTaxonomy>;
@@ -108,22 +109,17 @@ export default function GeoTaxonomySection({
       setIsAddNewAutocompleteEnabled(false);
     }
   };
-
   const handleSearch = async (query: string, index: number) => {
-    await fetch(ENV.URL_API.API_GEOTAXONOMY)
-      .then((response) => response.json())
+    await retrieveGeotaxonomyFromDescription(query)
+      .then((response) => response)
       .then((gt) => {
-        const mappedOccurrences = gt.map((g: GeographicTaxonomy) => ({
-          code: g.code,
-          desc: g.desc,
-        })) as Array<GeographicTaxonomy>;
-
-        const availableGeographicAreas = mappedOccurrences.filter(
+        const availableGeographicAreas = gt.filter(
           (ga) => !optionsSelected.find((os) => os.desc === ga.desc)
         );
         const matchesWithTyped = availableGeographicAreas.filter((o) =>
-          o.desc.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+          o.desc?.toLocaleLowerCase().includes(query.toLocaleLowerCase())
         );
+
         setOptions(matchesWithTyped);
 
         if (matchesWithTyped.length > 0) {
@@ -145,9 +141,9 @@ export default function GeoTaxonomySection({
   };
 
   useEffect(() => {
-    if (geographicTaxonomies && geographicTaxonomies[0]?.code === '100') {
+    if (geographicTaxonomies && geographicTaxonomies[0]?.code === nationalValue) {
       setIsNationalAreaVisible(true);
-      setOptionsSelected([{ code: '100', desc: 'ITALIA' }]);
+      setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
     } else if (geographicTaxonomies && geographicTaxonomies.length > 0) {
       setIsLocalAreaVisible(true);
       setOptionsSelected(geographicTaxonomies);
@@ -185,7 +181,7 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(true);
               setIsLocalAreaVisible(false);
               setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected([{ code: '100', desc: 'ITALIA' }]);
+              setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
             }}
             sx={{ mr: 3, ml: 1 }}
           />

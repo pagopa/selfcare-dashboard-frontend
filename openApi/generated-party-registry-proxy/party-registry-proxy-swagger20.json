@@ -1,0 +1,1018 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Party Registry Proxy API documentation",
+    "title": "selc-party-registry-proxy",
+    "version": "0.0.1-SNAPSHOT"
+  },
+  "host": "localhost:80",
+  "basePath": "%7BbasePath%7D",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/categories": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Describes which is the source of data",
+            "enum": [
+              "INFOCAMERE",
+              "IPA",
+              "static"
+            ],
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "page",
+            "format": "int32",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "limit",
+            "format": "int32",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CategoriesResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "category"
+        ],
+        "description": "Returns the categories list",
+        "operationId": "findCategoriesUsingGET",
+        "summary": "Get all categories"
+      }
+    },
+    "/geotaxonomies": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "geographic taxonomy description",
+            "in": "query",
+            "name": "description",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "identifies the page 0-based index, default to 0",
+            "format": "int32",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "identifies the number of entries in a page, default to 10",
+            "format": "int32",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/GeographicTaxonomyResourceArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "GeographicTaxonomies"
+        ],
+        "description": "retrieves the geographic taxonomies by description",
+        "operationId": "retrieveGeoTaxonomiesByDescriptionUsingGET",
+        "summary": "retrieves the geographic taxonomies by description"
+      }
+    },
+    "/geotaxonomies/{geotaxId}": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Geographic taxonomy unique identifier ",
+            "in": "path",
+            "name": "geotaxId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GeographicTaxonomyResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "GeographicTaxonomies"
+        ],
+        "description": "retrieves the geographic taxonomy by code",
+        "operationId": "retrieveGeoTaxonomiesByCodeUsingGET",
+        "summary": "retrieves the geographic taxonomy by code"
+      }
+    },
+    "/info-camere/institutions": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/GetInstitutionsByLegalDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BusinessesResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "infocamere"
+        ],
+        "description": "Get the list of companies represented by the tax code of the person (physical or juridical) passed as a parameter",
+        "operationId": "institutionsByLegalTaxIdUsingPOST",
+        "summary": "Get institutions by legal tax id"
+      }
+    },
+    "/institutions": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "if passed, the result is filtered based on the contained value.",
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "page",
+            "format": "int32",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "limit",
+            "format": "int32",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "Filter from origin category",
+            "in": "query",
+            "name": "categories",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/InstitutionsResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institution"
+        ],
+        "description": "Returns a list of Institutions.",
+        "operationId": "searchUsingGET",
+        "summary": "Search institutions"
+      }
+    },
+    "/institutions/{id}": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "The institution ID. It change semantic based on the origin param value (see notes)",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Describes which is the source of data",
+            "enum": [
+              "INFOCAMERE",
+              "IPA",
+              "static"
+            ],
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Filter from origin category",
+            "in": "query",
+            "name": "categories",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/InstitutionResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institution"
+        ],
+        "description": "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution') ",
+        "operationId": "findInstitutionUsingGET",
+        "summary": "Find institution by ID"
+      }
+    },
+    "/national-registries/legal-address": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "taxId",
+            "in": "query",
+            "name": "taxId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/LegalAddressResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "nationalRegistries"
+        ],
+        "description": "Get the legal address of the business",
+        "operationId": "legalAddressUsingGET",
+        "summary": "Retrieve data from AdE and InfoCamere"
+      }
+    },
+    "/national-registries/verify-legal": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "taxId",
+            "in": "query",
+            "name": "taxId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "vatNumber",
+            "in": "query",
+            "name": "vatNumber",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/LegalVerificationResult"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "nationalRegistries"
+        ],
+        "description": "verify if given taxId is legal of given institution identified with vatNumber",
+        "operationId": "verifyLegalUsingGET",
+        "summary": "Retrieve data from AdE and InfoCamere"
+      }
+    },
+    "/origins/{origin}/categories/{code}": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Describes which is the source of data",
+            "enum": [
+              "INFOCAMERE",
+              "IPA",
+              "static"
+            ],
+            "in": "path",
+            "name": "origin",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "code",
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CategoryResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "category"
+        ],
+        "description": "Returns a category",
+        "operationId": "findCategoryUsingGET",
+        "summary": "Get a category"
+      }
+    }
+  },
+  "definitions" : {"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},
+    "BusinessResource": {
+      "properties": {
+        "businessName": {
+          "type": "string"
+        },
+        "businessTaxId": {
+          "type": "string"
+        }
+      },
+      "title": "BusinessResource",
+      "type": "object"
+    },
+    "BusinessesResource": {
+      "properties": {
+        "businesses": {
+          "items": {
+            "$ref": "#/definitions/BusinessResource"
+          },
+          "type": "array"
+        },
+        "legalTaxId": {
+          "type": "string"
+        },
+        "requestDateTime": {
+          "type": "string"
+        }
+      },
+      "title": "BusinessesResource",
+      "type": "object"
+    },
+    "CategoriesResource": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/CategoryResource"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "title": "CategoriesResource",
+      "type": "object"
+    },
+    "CategoryResource": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "origin": {
+          "description": "Describes which is the source of data",
+          "enum": [
+            "INFOCAMERE",
+            "IPA",
+            "static"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "kind",
+        "name",
+        "origin"
+      ],
+      "title": "CategoryResource",
+      "type": "object"
+    },
+    "GeographicTaxonomyResource": {
+      "properties": {
+        "code": {
+          "description": "Geographic taxonomy unique identifier ",
+          "type": "string"
+        },
+        "country": {
+          "description": "Geographic taxonomy country",
+          "type": "string"
+        },
+        "country_abbreviation": {
+          "description": "Geographic taxonomy country abbreviation",
+          "type": "string"
+        },
+        "desc": {
+          "description": "Geographic taxonomy description",
+          "type": "string"
+        },
+        "enabled": {
+          "description": "Geographic taxonomy enabled",
+          "example": false,
+          "type": "boolean"
+        },
+        "istat_code": {
+          "description": "Geographic taxonomy istat code",
+          "type": "string"
+        },
+        "province_abbreviation": {
+          "description": "Geographic taxonomy province abbreviation",
+          "type": "string"
+        },
+        "province_id": {
+          "description": "Geographic taxonomy province unique identifier",
+          "type": "string"
+        },
+        "region_id": {
+          "description": "Geographic taxonomy region unique identifier",
+          "type": "string"
+        }
+      },
+      "title": "GeographicTaxonomyResource",
+      "type": "object"
+    },
+    "GetInstitutionsByLegalDto": {
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/GetInstitutionsByLegalFilterDto"
+        }
+      },
+      "title": "GetInstitutionsByLegalDto",
+      "type": "object"
+    },
+    "GetInstitutionsByLegalFilterDto": {
+      "properties": {
+        "legalTaxId": {
+          "type": "string"
+        }
+      },
+      "title": "GetInstitutionsByLegalFilterDto",
+      "type": "object"
+    },
+    "InstitutionResource": {
+      "properties": {
+        "address": {
+          "description": "Institution address",
+          "type": "string"
+        },
+        "aoo": {
+          "description": "aoo",
+          "type": "string"
+        },
+        "category": {
+          "description": "Institution category",
+          "type": "string"
+        },
+        "description": {
+          "description": "Institution description",
+          "type": "string"
+        },
+        "digitalAddress": {
+          "description": "Digital institution address",
+          "example": "email@example.com",
+          "format": "email",
+          "type": "string"
+        },
+        "id": {
+          "description": "Semantic id to recognize a party between origins (or externalId)",
+          "type": "string"
+        },
+        "istatCode": {
+          "description": "Institution Istat Code",
+          "type": "string"
+        },
+        "o": {
+          "description": "o",
+          "type": "string"
+        },
+        "origin": {
+          "description": "Describes which is the source of data",
+          "enum": [
+            "INFOCAMERE",
+            "IPA",
+            "static"
+          ],
+          "type": "string"
+        },
+        "originId": {
+          "description": "Id of the institution from its origin",
+          "type": "string"
+        },
+        "ou": {
+          "description": "ou",
+          "type": "string"
+        },
+        "taxCode": {
+          "description": "Institution fiscal code",
+          "type": "string"
+        },
+        "zipCode": {
+          "description": "Institution zipCode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "address",
+        "description",
+        "digitalAddress",
+        "id",
+        "origin",
+        "originId",
+        "taxCode",
+        "zipCode"
+      ],
+      "title": "InstitutionResource",
+      "type": "object"
+    },
+    "InstitutionsResource": {
+      "properties": {
+        "count": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/InstitutionResource"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "count",
+        "items"
+      ],
+      "title": "InstitutionsResource",
+      "type": "object"
+    },
+    "InvalidParam": {
+      "properties": {
+        "name": {
+          "description": "Invalid parameter name.",
+          "type": "string"
+        },
+        "reason": {
+          "description": "Invalid parameter reason.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "reason"
+      ],
+      "title": "InvalidParam",
+      "type": "object"
+    },
+    "LegalAddressResponse": {
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "string"
+        }
+      },
+      "title": "LegalAddressResponse",
+      "type": "object"
+    },
+    "LegalVerificationResult": {
+      "properties": {
+        "resultCode": {
+          "type": "string"
+        },
+        "resultDetail": {
+          "type": "string"
+        },
+        "verificationResult": {
+          "type": "boolean"
+        }
+      },
+      "title": "LegalVerificationResult",
+      "type": "object"
+    },
+    "Problem": {
+      "description": "A \"problem detail\" as a way to carry machine-readable details of errors (https://datatracker.ietf.org/doc/html/rfc7807)",
+      "properties": {
+        "detail": {
+          "description": "Human-readable description of this specific problem.",
+          "type": "string"
+        },
+        "instance": {
+          "description": "A URI that describes where the problem occurred.",
+          "type": "string"
+        },
+        "invalidParams": {
+          "description": "A list of invalid parameters details.",
+          "items": {
+            "$ref": "#/definitions/InvalidParam"
+          },
+          "type": "array"
+        },
+        "status": {
+          "description": "The HTTP status code.",
+          "example": 500,
+          "format": "int32",
+          "type": "integer"
+        },
+        "title": {
+          "description": "Short human-readable summary of the problem.",
+          "type": "string"
+        },
+        "type": {
+          "description": "A URL to a page with more details regarding the problem.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "title"
+      ],
+      "title": "Problem",
+      "type": "object"
+    }
+  },
+  "securityDefinitions": {
+    "bearerAuth": {
+      "description": "A bearer token in the format of a JWS and conformed to the specifications included in [RFC8725](https://tools.ietf.org/html/RFC8725)",
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey"
+    }
+  },
+  "tags": [
+    {
+      "description": "Geographic Taxonomies Controller",
+      "name": "GeographicTaxonomies"
+    },
+    {
+      "description": "Category operations",
+      "name": "category"
+    },
+    {
+      "description": "Info Camere Controller",
+      "name": "infocamere"
+    },
+    {
+      "description": "Institution operations",
+      "name": "institution"
+    },
+    {
+      "description": "National Registries Controller",
+      "name": "nationalRegistries"
+    }
+  ],
+  "x-components": {}
+}

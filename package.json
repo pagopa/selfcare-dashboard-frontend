@@ -40,9 +40,9 @@
     "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
     "generate": "npm-run-all generate:*",
     "clean:api-b4f-dashboard": "rimraf src/api/generated/b4f-dashboard && rimraf openApi/generated-dashboard",
-    "clean:api-b4f-geotaxonomy": "rimraf src/api/generated/b4f-taxonomy && rimraf openApi/generated-geotaxonomy",
+    "clean:api-party-registry-proxy": "rimraf src/api/generated/party-registry-proxy && rimraf openApi/generated-party-registry-proxy",
     "generate:api-b4f-dashboard": "yarn run clean:api-b4f-dashboard && mkdirp openApi/generated-dashboard && api-spec-converter --from=openapi_3 --to=swagger_2 openApi/dashboard-api-docs.json > openApi/generated-dashboard/dashboard-swagger20.json && node openApi/scripts/api-b4f-dashboard_fixPreGen.js && node ./node_modules/@pagopa/selfcare-common-frontend/utils/fixSwagger20ArraySchemaDef.js openApi/generated-dashboard/dashboard-swagger20.json && gen-api-models --api-spec openApi/generated-dashboard/dashboard-swagger20.json --out-dir src/api/generated/b4f-dashboard --no-strict --request-types --response-decoders --client && node openApi/scripts/api-b4f-dashboard_fixPostGen.js",
-    "generate:api-b4f-geotaxonomy": "yarn run clean:api-b4f-geotaxonomy && mkdirp openApi/generated-geotaxonomy && gen-api-models --api-spec openApi/geotaxonomy-api-docs.json --out-dir src/api/generated/b4f-geotaxonomy --no-strict --request-types --response-decoders --client && node openApi/scripts/api-b4f-geotaxonomy_fixPostGen.js"
+    "generate:api-party-registry-proxy": "yarn run clean:api-party-registry-proxy && mkdirp openApi/generated-party-registry-proxy && api-spec-converter --from=openapi_3 --to=swagger_2 openApi/party-registry-proxy-api-docs.json > openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json && node openApi/scripts/api-party-registry-proxy_fixPreGen.js && node ./node_modules/@pagopa/selfcare-common-frontend/utils/fixSwagger20ArraySchemaDef.js openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json && gen-api-models --api-spec openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json --out-dir src/api/generated/party-registry-proxy --no-strict --request-types --response-decoders --client && node openApi/scripts/api-party-registry-proxy_fixPostGen.js"
   },
   "eslintConfig": {
     "extends": [
