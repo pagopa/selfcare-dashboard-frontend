@@ -4,14 +4,14 @@ import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend
 import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
-import { GeographicTaxonomyResource } from './generated/b4f-dashboard/GeographicTaxonomyResource';
 import { createClient, WithDefaultsT } from './generated/party-registry-proxy/client';
+import { GeographicTaxonomyResource } from './generated/party-registry-proxy/GeographicTaxonomyResource';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
   return wrappedOperation({
     ...params,
-    bearerAuth: `${token}`,
+    bearerAuth: `Bearer ${token}`,
   });
 };
 
@@ -37,6 +37,7 @@ const onRedirectToLogin = () =>
 
 export const PartyRegistryProxyApi = {
   getTaxonomiesByQuery: async (query: string): Promise<Array<GeographicTaxonomyResource>> => {
+    console.log('xx query', query);
     const result = await apiClient.retrieveGeoTaxonomiesByDescriptionUsingGET({
       description: query,
     });

@@ -232,7 +232,7 @@
         ]
       }
     },
-    "/v1/geotaxonomies": {
+    "/geotaxonomies": {
       "get": {
         "tags": ["GeographicTaxonomies"],
         "summary": "retrieves the geographic taxonomies by description",

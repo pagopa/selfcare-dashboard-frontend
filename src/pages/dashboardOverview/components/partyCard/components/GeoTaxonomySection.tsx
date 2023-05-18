@@ -112,17 +112,13 @@ export default function GeoTaxonomySection({
     await retrieveGeotaxonomyFromDescription(query)
       .then((response) => response)
       .then((gt) => {
-        const mappedOccurrences = gt.map((g: GeographicTaxonomy) => ({
-          code: g.code,
-          desc: g.desc,
-        })) as Array<GeographicTaxonomy>;
-
-        const availableGeographicAreas = mappedOccurrences.filter(
+        const availableGeographicAreas = gt.filter(
           (ga) => !optionsSelected.find((os) => os.desc === ga.desc)
         );
         const matchesWithTyped = availableGeographicAreas.filter((o) =>
-          o.desc.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+          o.desc?.toLocaleLowerCase().includes(query.toLocaleLowerCase())
         );
+
         setOptions(matchesWithTyped);
 
         if (matchesWithTyped.length > 0) {
