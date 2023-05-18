@@ -11,3 +11,5 @@ export const geographicTaxonomyResource2geographicTaxonomy = (
   code: geotax.code ?? '',
   desc: geotax.desc ?? '',
 });
+
+export const nationalValue = '1000';

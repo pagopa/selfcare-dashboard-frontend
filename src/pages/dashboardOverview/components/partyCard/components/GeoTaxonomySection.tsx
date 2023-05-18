@@ -15,6 +15,7 @@ import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { GeographicTaxonomy } from '../../../../../model/Party';
 import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
+import { nationalValue } from '../../../../../model/GeographicTaxonomy';
 
 type Props = {
   geographicTaxonomies: Array<GeographicTaxonomy>;
@@ -140,9 +141,9 @@ export default function GeoTaxonomySection({
   };
 
   useEffect(() => {
-    if (geographicTaxonomies && geographicTaxonomies[0]?.code === '100') {
+    if (geographicTaxonomies && geographicTaxonomies[0]?.code === nationalValue) {
       setIsNationalAreaVisible(true);
-      setOptionsSelected([{ code: '100', desc: 'ITALIA' }]);
+      setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
     } else if (geographicTaxonomies && geographicTaxonomies.length > 0) {
       setIsLocalAreaVisible(true);
       setOptionsSelected(geographicTaxonomies);
@@ -180,7 +181,7 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(true);
               setIsLocalAreaVisible(false);
               setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected([{ code: '100', desc: 'ITALIA' }]);
+              setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
             }}
             sx={{ mr: 3, ml: 1 }}
           />
