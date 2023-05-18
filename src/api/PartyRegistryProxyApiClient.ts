@@ -37,7 +37,6 @@ const onRedirectToLogin = () =>
 
 export const PartyRegistryProxyApi = {
   getTaxonomiesByQuery: async (query: string): Promise<Array<GeographicTaxonomyResource>> => {
-    console.log('xx query', query);
     const result = await apiClient.retrieveGeoTaxonomiesByDescriptionUsingGET({
       description: query,
     });

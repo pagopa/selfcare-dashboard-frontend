@@ -7,15 +7,8 @@ import {
 export const retrieveGeotaxonomyFromDescription = (
   query: string
 ): Promise<Array<GeographicTaxonomyRegistryProxy>> =>
-  PartyRegistryProxyApi.getTaxonomiesByQuery(query).then((geographicTaxonomyResource) => {
-    console.log('xx geographicTaxonomyResource', geographicTaxonomyResource);
-    return geographicTaxonomyResource
+  PartyRegistryProxyApi.getTaxonomiesByQuery(query).then((geographicTaxonomyResource) =>
+    geographicTaxonomyResource
       ? geographicTaxonomyResource.map(geographicTaxonomyResource2geographicTaxonomy)
-      : [];
-  });
-
-/* istanbul ignore if */
-// if (process.env.REACT_APP_ENABLE_GEOTAXONOMY === 'true') {
-//   return getTaxonomiesByQueryMocked(query);
-// } else {
-// }
+      : []
+  );
