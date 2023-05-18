@@ -44,7 +44,7 @@
     }
   ],
   "paths": {
-    "/v1/categories": {
+    "/categories": {
       "get": {
         "tags": ["category"],
         "summary": "Get all categories",
@@ -144,7 +144,7 @@
         ]
       }
     },
-    "/v1/origins/{origin}/categories/{code}": {
+    "/origins/{origin}/categories/{code}": {
       "get": {
         "tags": ["category"],
         "summary": "Get a category",
@@ -334,7 +334,84 @@
         ]
       }
     },
-    "/v1/info-camere/institutions": {
+    "/geotaxonomies/{geotaxId}": {
+      "get": {
+        "tags": ["GeographicTaxonomies"],
+        "summary": "retrieves the geographic taxonomy by code",
+        "description": "retrieves the geographic taxonomy by code",
+        "operationId": "retrieveGeoTaxonomiesByCodeUsingGET",
+        "parameters": [
+          {
+            "name": "geotaxId",
+            "in": "path",
+            "description": "Geographic taxonomy unique identifier ",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeographicTaxonomyResource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
+    },
+    "/info-camere/institutions": {
       "post": {
         "tags": ["infocamere"],
         "summary": "Get institutions by legal tax id",
@@ -398,7 +475,7 @@
         ]
       }
     },
-    "/v1/institutions": {
+    "/institutions": {
       "get": {
         "tags": ["institution"],
         "summary": "Search institutions",
@@ -507,7 +584,7 @@
         ]
       }
     },
-    "/v1/institutions/{id}": {
+    "/institutions/{id}": {
       "get": {
         "tags": ["institution"],
         "summary": "Find institution by ID",
@@ -605,7 +682,7 @@
         ]
       }
     },
-    "/v1/national-registries/legal-address": {
+    "/national-registries/legal-address": {
       "get": {
         "tags": ["nationalRegistries"],
         "summary": "Retrieve data from AdE and InfoCamere",
@@ -682,7 +759,7 @@
         ]
       }
     },
-    "/v1/national-registries/verify-legal": {
+    "/national-registries/verify-legal": {
       "get": {
         "tags": ["nationalRegistries"],
         "summary": "Retrieve data from AdE and InfoCamere",

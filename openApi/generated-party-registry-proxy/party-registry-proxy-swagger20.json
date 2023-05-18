@@ -11,83 +11,7 @@
     "http"
   ],
   "paths": {
-    "/geotaxonomies": {
-      "get": {
-        "produces": [
-          "application/json",
-          "application/problem+json"
-        ],
-        "parameters": [
-          {
-            "description": "geographic taxonomy description",
-            "in": "query",
-            "name": "description",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "identifies the page 0-based index, default to 0",
-            "format": "int32",
-            "in": "query",
-            "name": "offset",
-            "required": false,
-            "type": "integer"
-          },
-          {
-            "description": "identifies the number of entries in a page, default to 10",
-            "format": "int32",
-            "in": "query",
-            "name": "limit",
-            "required": false,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema":{"$ref":"#/definitions/GeographicTaxonomyResourceArray"}
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": [
-              "global"
-            ]
-          }
-        ],
-        "tags": [
-          "GeographicTaxonomies"
-        ],
-        "description": "retrieves the geographic taxonomies by description",
-        "operationId": "retrieveGeoTaxonomiesByDescriptionUsingGET",
-        "summary": "retrieves the geographic taxonomies by description"
-      }
-    },
-    "/v1/categories": {
+    "/categories": {
       "get": {
         "produces": [
           "application/json",
@@ -170,7 +94,145 @@
         "summary": "Get all categories"
       }
     },
-    "/v1/info-camere/institutions": {
+    "/geotaxonomies": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "geographic taxonomy description",
+            "in": "query",
+            "name": "description",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "identifies the page 0-based index, default to 0",
+            "format": "int32",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "identifies the number of entries in a page, default to 10",
+            "format": "int32",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/GeographicTaxonomyResourceArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "GeographicTaxonomies"
+        ],
+        "description": "retrieves the geographic taxonomies by description",
+        "operationId": "retrieveGeoTaxonomiesByDescriptionUsingGET",
+        "summary": "retrieves the geographic taxonomies by description"
+      }
+    },
+    "/geotaxonomies/{geotaxId}": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Geographic taxonomy unique identifier ",
+            "in": "path",
+            "name": "geotaxId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GeographicTaxonomyResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "GeographicTaxonomies"
+        ],
+        "description": "retrieves the geographic taxonomy by code",
+        "operationId": "retrieveGeoTaxonomiesByCodeUsingGET",
+        "summary": "retrieves the geographic taxonomy by code"
+      }
+    },
+    "/info-camere/institutions": {
       "post": {
         "consumes": [
           "application/json"
@@ -229,7 +291,7 @@
         "summary": "Get institutions by legal tax id"
       }
     },
-    "/v1/institutions": {
+    "/institutions": {
       "get": {
         "produces": [
           "application/json",
@@ -314,7 +376,7 @@
         "summary": "Search institutions"
       }
     },
-    "/v1/institutions/{id}": {
+    "/institutions/{id}": {
       "get": {
         "produces": [
           "application/json",
@@ -395,7 +457,7 @@
         "summary": "Find institution by ID"
       }
     },
-    "/v1/national-registries/legal-address": {
+    "/national-registries/legal-address": {
       "get": {
         "produces": [
           "application/json",
@@ -457,7 +519,7 @@
         "summary": "Retrieve data from AdE and InfoCamere"
       }
     },
-    "/v1/national-registries/verify-legal": {
+    "/national-registries/verify-legal": {
       "get": {
         "produces": [
           "application/json",
@@ -526,7 +588,7 @@
         "summary": "Retrieve data from AdE and InfoCamere"
       }
     },
-    "/v1/origins/{origin}/categories/{code}": {
+    "/origins/{origin}/categories/{code}": {
       "get": {
         "produces": [
           "application/json",
