@@ -12,4 +12,4 @@ export const geographicTaxonomyResource2geographicTaxonomy = (
   desc: geotax.desc ?? '',
 });
 
-export const nationalValue = '1000';
+export const nationalValue = 'ITA';
