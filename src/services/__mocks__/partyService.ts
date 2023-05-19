@@ -1,3 +1,4 @@
+import { GeographicTaxonomyRegistryProxy } from '../../model/GeographicTaxonomy';
 import { Party } from '../../model/Party';
 
 export const mockedParties: Array<Party> = [
@@ -215,6 +216,25 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'GGDAS99T',
     geographicTaxonomies: [],
     vatNumber: '111122211111',
+  },
+];
+
+export const mockedGeotaxonomies: Array<GeographicTaxonomyRegistryProxy> = [
+  {
+    desc: 'ROMA - COMUNE',
+    code: '1111',
+  },
+  {
+    desc: 'ROMA - PROVINCIA',
+    code: '1112',
+  },
+  {
+    desc: 'MILANO - COMUNE',
+    code: '2222',
+  },
+  {
+    desc: 'NAPOLI - COMUNE',
+    code: '3333',
   },
 ];
 
