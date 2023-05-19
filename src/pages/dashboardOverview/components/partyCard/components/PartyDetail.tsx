@@ -44,6 +44,9 @@ export default function PartyDetail({ party }: Props) {
     if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && geographicTaxonomies.length === 0) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
+    if (party) {
+      setNewGeotaxonomiesSelected(undefined);
+    }
   }, [party]);
 
   const infoStyles = {

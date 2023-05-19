@@ -111,7 +111,6 @@ export default function GeoTaxonomySection({
   };
   const handleSearch = async (query: string, index: number) => {
     await retrieveGeotaxonomyFromDescription(query)
-      .then((response) => response)
       .then((gt) => {
         const availableGeographicAreas = gt.filter(
           (ga) => !optionsSelected.find((os) => os.desc === ga.desc)
