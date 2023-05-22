@@ -83,7 +83,7 @@ const checkSelectedParty = (state: RootState) => {
 
 const checkMockInvocation = (expectedCallsNumber: number) => {
   expect(fetchPartyDetailsSpy).toBeCalledTimes(expectedCallsNumber);
-  expect(fetchPartyDetailsSpy).toBeCalledWith(expectedPartyId, undefined);
+  expect(fetchPartyDetailsSpy).toBeCalledWith(expectedPartyId);
 
   expect(fetchPartyProductsSpy).toBeCalledTimes(expectedCallsNumber);
   expect(fetchPartyProductsSpy).toBeCalledWith(expectedPartyId);

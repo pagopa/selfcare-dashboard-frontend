@@ -138,7 +138,7 @@ export default {
       registeredOffice: 'Sede Legale',
       sdiCode: 'Codice SDI',
       contactToModify:
-        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, <1>Vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
+        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, <1>vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
       institutionTypeValue: {
         GSP: 'Gestore di servizi pubblici',
         PA: 'Pubblica Amministrazione',
