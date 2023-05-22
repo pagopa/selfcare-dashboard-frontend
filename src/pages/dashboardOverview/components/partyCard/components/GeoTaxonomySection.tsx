@@ -69,7 +69,7 @@ export default function GeoTaxonomySection({
       // eslint-disable-next-line functional/immutable-data
       optionsSelectedRef.current = newOccurencesSelected;
       setIsAddNewAutocompleteEnabled(true);
-      if (emptyField) {
+      if (emptyField && !optionsSelected) {
         setIsAddNewAutocompleteEnabled(false);
       }
     } else {
