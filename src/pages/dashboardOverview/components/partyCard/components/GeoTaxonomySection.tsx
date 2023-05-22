@@ -18,7 +18,7 @@ import { retrieveGeotaxonomyFromDescription } from '../../../../../services/part
 import { nationalValue } from '../../../../../model/GeographicTaxonomy';
 
 type Props = {
-  geographicTaxonomies: Array<GeographicTaxonomy>;
+  geographicTaxonomies?: Array<GeographicTaxonomy>;
   notFoundAnyTaxonomies: boolean;
   setOptionsSelected: (os: Array<GeographicTaxonomy>) => void;
   setIsAddNewAutocompleteEnabled: (ae: boolean) => void;
@@ -61,15 +61,12 @@ export default function GeoTaxonomySection({
   const handleChange = (_event: Event, value: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
     if (isLocalAreaVisible) {
-      const newOccurencesSelected = [
-        ...optionsSelected.filter((os) => os !== optionsSelected[index]),
-        selectedArea ?? { code: '', desc: '' },
-      ];
+      const newOccurencesSelected = optionsSelected.filter((os) => os !== selectedArea);
       setOptionsSelected(newOccurencesSelected);
       // eslint-disable-next-line functional/immutable-data
       optionsSelectedRef.current = newOccurencesSelected;
       setIsAddNewAutocompleteEnabled(true);
-      if (emptyField) {
+      if (emptyField && !optionsSelected) {
         setIsAddNewAutocompleteEnabled(false);
       }
     } else {
@@ -194,7 +191,9 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(false);
               setIsLocalAreaVisible(true);
               setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
+              if (geographicTaxonomies) {
+                setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
+              }
             }}
           />
         </Box>
@@ -231,13 +230,9 @@ export default function GeoTaxonomySection({
                         onChange={(e: any) => handleSearchInput(e, i)}
                         {...params}
                         variant="outlined"
-                        label={
-                          !optionsSelected?.[i]?.desc
-                            ? t(
-                                'overview.partyDetail.geographicTaxonomies.modalSections.inputLabel'
-                              )
-                            : ''
-                        }
+                        label={t(
+                          'overview.partyDetail.geographicTaxonomies.modalSections.inputLabel'
+                        )}
                         error={error?.[i]}
                         helperText={
                           error?.[i] &&
