@@ -61,10 +61,7 @@ export default function GeoTaxonomySection({
   const handleChange = (_event: Event, value: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
     if (isLocalAreaVisible) {
-      const newOccurencesSelected = [
-        ...optionsSelected.filter((os) => os !== optionsSelected[index]),
-        selectedArea ?? { code: '', desc: '' },
-      ];
+      const newOccurencesSelected = optionsSelected.filter((os) => os !== selectedArea);
       setOptionsSelected(newOccurencesSelected);
       // eslint-disable-next-line functional/immutable-data
       optionsSelectedRef.current = newOccurencesSelected;
@@ -233,13 +230,9 @@ export default function GeoTaxonomySection({
                         onChange={(e: any) => handleSearchInput(e, i)}
                         {...params}
                         variant="outlined"
-                        label={
-                          !optionsSelected?.[i]?.desc
-                            ? t(
-                                'overview.partyDetail.geographicTaxonomies.modalSections.inputLabel'
-                              )
-                            : ''
-                        }
+                        label={t(
+                          'overview.partyDetail.geographicTaxonomies.modalSections.inputLabel'
+                        )}
                         error={error?.[i]}
                         helperText={
                           error?.[i] &&
