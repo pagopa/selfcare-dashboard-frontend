@@ -24,7 +24,6 @@ const labelStyles = {
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export default function PartyDetail({ party }: Props) {
-  console.log('xx fuori party', party.geographicTaxonomies);
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -36,27 +35,27 @@ export default function PartyDetail({ party }: Props) {
     useState<boolean>(false);
   const [openModalFirstTimeAddGeographicTaxonomies, setOpenModalFirstTimeAddGeographicTaxonomies] =
     useState<boolean>(false);
-  // const [newGeotaxonomiesSelected, setNewGeotaxonomiesSelected] =
-  //   useState<Array<GeographicTaxonomy>>();
-  // const geographicTaxonomies = newGeotaxonomiesSelected ?? party.geographicTaxonomies;
   const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>(
     party.geographicTaxonomies ?? { code: '', desc: '' }
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
-  const setPartyGeotaxonomy = (partyGeotax: Party) => {
-    console.log('xx fuory party', party.geographicTaxonomies);
-    console.log('xx fuory partyGeotax', partyGeotax);
-    dispatch(
-      partiesActions.setPartySelected({ ...partyGeotax, geographicTaxonomies: optionsSelected })
-    );
+  const setPartyUpdated = (partyUpdated: Party) => {
+    dispatch(partiesActions.setPartySelected(partyUpdated));
   };
 
+  const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
     if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && optionsSelected.length === 0) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
     setOptionsSelected(party.geographicTaxonomies);
   }, [party]);
+
+  useEffect(() => {
+    if (partyUpdated && party.partyId) {
+      setPartyUpdated(partyUpdated);
+    }
+  }, [partyUpdated, party.partyId]);
 
   const infoStyles = {
     fontWeight: theme.typography.fontWeightMedium,
@@ -68,9 +67,7 @@ export default function PartyDetail({ party }: Props) {
   const showTooltipAfter = 49;
   const isTaxCodeEquals2Piva = party.vatNumber === party.fiscalCode;
   const isInstitutionTypePA = party.institutionType === 'PA';
-  const partiesUpdated = useAppSelector(partiesSelectors.selectPartySelected);
 
-  console.log('xx partyUpdated', partiesUpdated);
   const handleAddNewTaxonomies = () => {
     setLoadingSaveGeotaxonomies(true);
     DashboardApi.updateInstitutionGeographicTaxonomy(party.partyId, optionsSelected)
@@ -78,10 +75,7 @@ export default function PartyDetail({ party }: Props) {
         trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {
           geographic_taxonomies: optionsSelected,
         });
-        // setNewGeotaxonomiesSelected(optionsSelected);
-        setPartyGeotaxonomy(party);
-        console.log('xx then party', party.geographicTaxonomies);
-        console.log('xx then optionSelected', optionsSelected);
+        setPartyUpdated({ ...party, geographicTaxonomies: optionsSelected });
       })
       .catch((reason: any) =>
         addError({
@@ -158,7 +152,11 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
               <Grid item xs={8}>
                 <Tooltip
-                  title={party.description.length >= showTooltipAfter ? party.description : ''}
+                  title={
+                    partyUpdated && partyUpdated.description.length >= showTooltipAfter
+                      ? partyUpdated.description
+                      : ''
+                  }
                   placement="top"
                   arrow={true}
                 >
@@ -167,10 +165,10 @@ export default function PartyDetail({ party }: Props) {
                     className="ShowDots"
                     component="span"
                   >
-                    {party.geographicTaxonomies[0]?.desc ?? '-'}
-                    {party.geographicTaxonomies.length >= 1 && (
+                    {partyUpdated?.geographicTaxonomies[0]?.desc ?? '-'}
+                    {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
                       <>
-                        {party.geographicTaxonomies.length !== 1 ? ', ' : undefined}
+                        {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
                         <ButtonNaked
                           component="button"
                           onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
@@ -178,8 +176,8 @@ export default function PartyDetail({ party }: Props) {
                           sx={{ color: 'primary.main', flexDirection: 'row' }}
                           weight="default"
                         >
-                          {party.geographicTaxonomies.length !== 1
-                            ? '+' + `${party.geographicTaxonomies.length - 1}`
+                          {partyUpdated?.geographicTaxonomies.length !== 1
+                            ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
                             : undefined}
                         </ButtonNaked>
                       </>
@@ -404,7 +402,7 @@ export default function PartyDetail({ party }: Props) {
         )}
         message={
           <GeoTaxonomySection
-            geographicTaxonomies={partiesUpdated?.geographicTaxonomies}
+            geographicTaxonomies={partyUpdated?.geographicTaxonomies}
             notFoundAnyTaxonomies={openModalFirstTimeAddGeographicTaxonomies}
             setOptionsSelected={setOptionsSelected}
             setIsAddNewAutocompleteEnabled={setIsAddNewAutocompleteEnabled}
@@ -425,7 +423,7 @@ export default function PartyDetail({ party }: Props) {
         title={t('overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.title')}
         message={
           <GeoTaxonomySection
-            geographicTaxonomies={partiesUpdated?.geographicTaxonomies}
+            geographicTaxonomies={partyUpdated?.geographicTaxonomies}
             notFoundAnyTaxonomies={openModalFirstTimeAddGeographicTaxonomies}
             setOptionsSelected={setOptionsSelected}
             optionsSelected={optionsSelected}

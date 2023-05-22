@@ -53,12 +53,12 @@ describe('Test fetchPartyDetails', () => {
     const party = await fetchPartyDetails(expectedPartyId, parties);
     checkSelectedParty(party);
 
-    checkDashboardInvocation(0);
+    checkDashboardInvocation(1);
 
     const partialParties = parties.filter((p) => p.partyId !== expectedPartyId);
     const party2 = await fetchPartyDetails(expectedPartyId, partialParties);
     expect(party2).toStrictEqual(party);
 
-    checkDashboardInvocation(1);
+    checkDashboardInvocation(2);
   });
 });
