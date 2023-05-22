@@ -8,7 +8,7 @@ import {
   debounce,
   Grid,
 } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
@@ -42,7 +42,6 @@ export default function GeoTaxonomySection({
   const [isLocalAreaVisible, setIsLocalAreaVisible] = useState<boolean>(false);
   const [input, setInput] = useState<string>('');
   const [error, setError] = useState<any>({});
-  const optionsSelectedRef = useRef<Array<GeographicTaxonomy>>();
 
   const emptyField = !optionsSelected.find((o) => o?.desc === '');
 
@@ -61,13 +60,8 @@ export default function GeoTaxonomySection({
   const handleChange = (_event: Event, value: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
     if (isLocalAreaVisible) {
-      const newOccurencesSelected = [
-        ...optionsSelected.filter((os) => os !== optionsSelected[index]),
-        selectedArea ?? { code: '', desc: '' },
-      ];
-      setOptionsSelected(newOccurencesSelected);
       // eslint-disable-next-line functional/immutable-data
-      optionsSelectedRef.current = newOccurencesSelected;
+      optionsSelected.splice(index, 1, selectedArea ?? { code: '', desc: '' });
       setIsAddNewAutocompleteEnabled(true);
       if (emptyField && !optionsSelected) {
         setIsAddNewAutocompleteEnabled(false);
@@ -154,9 +148,6 @@ export default function GeoTaxonomySection({
     if (isLocalAreaVisible && optionsSelected.length === 0) {
       setOptionsSelected([{ code: '', desc: '' }]);
       setIsAddNewAutocompleteEnabled(false);
-    } else if (optionsSelectedRef.current) {
-      setOptionsSelected(optionsSelectedRef.current);
-      setIsAddNewAutocompleteEnabled(!!emptyField);
     }
   }, [isLocalAreaVisible]);
 
@@ -195,7 +186,7 @@ export default function GeoTaxonomySection({
               setIsLocalAreaVisible(true);
               setIsAddNewAutocompleteEnabled(true);
               if (geographicTaxonomies) {
-                setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
+                setOptionsSelected(geographicTaxonomies);
               }
             }}
           />
