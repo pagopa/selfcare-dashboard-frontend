@@ -60,10 +60,12 @@ export default function GeoTaxonomySection({
   const handleChange = (_event: Event, value: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
     if (isLocalAreaVisible) {
-      // eslint-disable-next-line functional/immutable-data
-      optionsSelected.splice(index, 1, selectedArea ?? { code: '', desc: '' });
+      const updatedOptionsSelected = optionsSelected.map((os, currentIndex) =>
+        currentIndex === index ? selectedArea ?? { code: '', desc: '' } : os
+      );
+      setOptionsSelected(updatedOptionsSelected);
       setIsAddNewAutocompleteEnabled(true);
-      if (emptyField && !optionsSelected) {
+      if (emptyField) {
         setIsAddNewAutocompleteEnabled(false);
       }
     } else {
