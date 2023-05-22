@@ -23,7 +23,7 @@ export default function DashboardInfoSection() {
             href="https://indicepa.gov.it/ipa-portale/contatti"
             sx={{ textDecoration: 'none !important', fontWeight: 'bold' }}
           >
-            Vai al sito
+            vai al sito
           </Link>
           dell&apos;Indice della Pubblica Amministrazione (IPA)
         </Typography>
