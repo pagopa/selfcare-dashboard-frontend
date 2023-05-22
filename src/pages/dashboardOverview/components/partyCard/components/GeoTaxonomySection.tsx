@@ -18,7 +18,7 @@ import { retrieveGeotaxonomyFromDescription } from '../../../../../services/part
 import { nationalValue } from '../../../../../model/GeographicTaxonomy';
 
 type Props = {
-  geographicTaxonomies: Array<GeographicTaxonomy>;
+  geographicTaxonomies?: Array<GeographicTaxonomy>;
   notFoundAnyTaxonomies: boolean;
   setOptionsSelected: (os: Array<GeographicTaxonomy>) => void;
   setIsAddNewAutocompleteEnabled: (ae: boolean) => void;
@@ -194,7 +194,9 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(false);
               setIsLocalAreaVisible(true);
               setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
+              if (geographicTaxonomies) {
+                setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
+              }
             }}
           />
         </Box>
