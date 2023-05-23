@@ -8,7 +8,7 @@ import {
   debounce,
   Grid,
 } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
@@ -42,7 +42,6 @@ export default function GeoTaxonomySection({
   const [isLocalAreaVisible, setIsLocalAreaVisible] = useState<boolean>(false);
   const [input, setInput] = useState<string>('');
   const [error, setError] = useState<any>({});
-  const optionsSelectedRef = useRef<Array<GeographicTaxonomy>>();
 
   const emptyField = !optionsSelected.find((o) => o?.desc === '');
 
@@ -61,15 +60,12 @@ export default function GeoTaxonomySection({
   const handleChange = (_event: Event, value: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
     if (isLocalAreaVisible) {
-      const newOccurencesSelected = [
-        ...optionsSelected.filter((os) => os !== optionsSelected[index]),
-        selectedArea ?? { code: '', desc: '' },
-      ];
-      setOptionsSelected(newOccurencesSelected);
-      // eslint-disable-next-line functional/immutable-data
-      optionsSelectedRef.current = newOccurencesSelected;
+      const updatedOptionsSelected = optionsSelected.map((os, currentIndex) =>
+        currentIndex === index ? selectedArea ?? { code: '', desc: '' } : os
+      );
+      setOptionsSelected(updatedOptionsSelected);
       setIsAddNewAutocompleteEnabled(true);
-      if (emptyField && !optionsSelected) {
+      if (emptyField) {
         setIsAddNewAutocompleteEnabled(false);
       }
     } else {
@@ -154,9 +150,6 @@ export default function GeoTaxonomySection({
     if (isLocalAreaVisible && optionsSelected.length === 0) {
       setOptionsSelected([{ code: '', desc: '' }]);
       setIsAddNewAutocompleteEnabled(false);
-    } else if (optionsSelectedRef.current) {
-      setOptionsSelected(optionsSelectedRef.current);
-      setIsAddNewAutocompleteEnabled(!!emptyField);
     }
   }, [isLocalAreaVisible]);
 
@@ -195,7 +188,7 @@ export default function GeoTaxonomySection({
               setIsLocalAreaVisible(true);
               setIsAddNewAutocompleteEnabled(true);
               if (geographicTaxonomies) {
-                setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
+                setOptionsSelected(geographicTaxonomies);
               }
             }}
           />
@@ -224,10 +217,19 @@ export default function GeoTaxonomySection({
                     onOpen={() => setOptions([])}
                     disablePortal
                     options={input.length >= 3 ? options.map((o) => o.desc) : []}
-                    sx={{ width: '100%' }}
+                    sx={{
+                      width: '100%',
+                      '& .MuiAutocomplete-inputRoot .MuiAutocomplete-input': {
+                        textTransform: 'capitalize',
+                      },
+                    }}
                     onChange={(event: any, value: any) => handleChange(event, value, i)}
-                    value={val?.desc}
-                    renderOption={(props, option) => <span {...props}>{option ? option : ''}</span>}
+                    value={val?.desc.toLowerCase()}
+                    renderOption={(props, option: string) => (
+                      <span style={{ textTransform: 'capitalize' }} {...props}>
+                        {option ? option.toLocaleLowerCase() : ''}
+                      </span>
+                    )}
                     renderInput={(params) => (
                       <TextField
                         onChange={(e: any) => handleSearchInput(e, i)}

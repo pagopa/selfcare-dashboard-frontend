@@ -161,11 +161,11 @@ export default function PartyDetail({ party }: Props) {
                   arrow={true}
                 >
                   <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                    sx={{ ...infoStyles, maxWidth: '100% !important', textTransform: 'capitalize' }}
                     className="ShowDots"
                     component="span"
                   >
-                    {partyUpdated?.geographicTaxonomies[0]?.desc ?? '-'}
+                    {partyUpdated?.geographicTaxonomies[0]?.desc.toLocaleLowerCase() ?? '-'}
                     {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
                       <>
                         {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
