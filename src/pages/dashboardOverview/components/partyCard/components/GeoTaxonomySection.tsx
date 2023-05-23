@@ -217,10 +217,19 @@ export default function GeoTaxonomySection({
                     onOpen={() => setOptions([])}
                     disablePortal
                     options={input.length >= 3 ? options.map((o) => o.desc) : []}
-                    sx={{ width: '100%' }}
+                    sx={{
+                      width: '100%',
+                      '& .MuiAutocomplete-inputRoot .MuiAutocomplete-input': {
+                        textTransform: 'capitalize',
+                      },
+                    }}
                     onChange={(event: any, value: any) => handleChange(event, value, i)}
-                    value={val?.desc}
-                    renderOption={(props, option) => <span {...props}>{option ? option : ''}</span>}
+                    value={val?.desc.toLowerCase()}
+                    renderOption={(props, option: string) => (
+                      <span style={{ textTransform: 'capitalize' }} {...props}>
+                        {option ? option.toLocaleLowerCase() : ''}
+                      </span>
+                    )}
                     renderInput={(params) => (
                       <TextField
                         onChange={(e: any) => handleSearchInput(e, i)}
