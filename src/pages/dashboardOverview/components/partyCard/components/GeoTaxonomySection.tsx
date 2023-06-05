@@ -8,16 +8,17 @@ import {
   debounce,
   Grid,
 } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { GeographicTaxonomy } from '../../../../../model/Party';
-import { ENV } from '../../../../../utils/env';
+import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
+import { nationalValue } from '../../../../../model/GeographicTaxonomy';
 
 type Props = {
-  geographicTaxonomies: Array<GeographicTaxonomy>;
+  geographicTaxonomies?: Array<GeographicTaxonomy>;
   notFoundAnyTaxonomies: boolean;
   setOptionsSelected: (os: Array<GeographicTaxonomy>) => void;
   setIsAddNewAutocompleteEnabled: (ae: boolean) => void;
@@ -41,7 +42,6 @@ export default function GeoTaxonomySection({
   const [isLocalAreaVisible, setIsLocalAreaVisible] = useState<boolean>(false);
   const [input, setInput] = useState<string>('');
   const [error, setError] = useState<any>({});
-  const optionsSelectedRef = useRef<Array<GeographicTaxonomy>>();
 
   const emptyField = !optionsSelected.find((o) => o?.desc === '');
 
@@ -60,13 +60,10 @@ export default function GeoTaxonomySection({
   const handleChange = (_event: Event, value: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
     if (isLocalAreaVisible) {
-      const newOccurencesSelected = [
-        ...optionsSelected.filter((os) => os !== optionsSelected[index]),
-        selectedArea ?? { code: '', desc: '' },
-      ];
-      setOptionsSelected(newOccurencesSelected);
-      // eslint-disable-next-line functional/immutable-data
-      optionsSelectedRef.current = newOccurencesSelected;
+      const updatedOptionsSelected = optionsSelected.map((os, currentIndex) =>
+        currentIndex === index ? selectedArea ?? { code: '', desc: '' } : os
+      );
+      setOptionsSelected(updatedOptionsSelected);
       setIsAddNewAutocompleteEnabled(true);
       if (emptyField) {
         setIsAddNewAutocompleteEnabled(false);
@@ -108,22 +105,16 @@ export default function GeoTaxonomySection({
       setIsAddNewAutocompleteEnabled(false);
     }
   };
-
   const handleSearch = async (query: string, index: number) => {
-    await fetch(ENV.URL_API.API_GEOTAXONOMY)
-      .then((response) => response.json())
+    await retrieveGeotaxonomyFromDescription(query)
       .then((gt) => {
-        const mappedOccurrences = gt.map((g: GeographicTaxonomy) => ({
-          code: g.code,
-          desc: g.desc,
-        })) as Array<GeographicTaxonomy>;
-
-        const availableGeographicAreas = mappedOccurrences.filter(
+        const availableGeographicAreas = gt.filter(
           (ga) => !optionsSelected.find((os) => os.desc === ga.desc)
         );
         const matchesWithTyped = availableGeographicAreas.filter((o) =>
-          o.desc.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+          o.desc?.toLocaleLowerCase().includes(query.toLocaleLowerCase())
         );
+
         setOptions(matchesWithTyped);
 
         if (matchesWithTyped.length > 0) {
@@ -145,9 +136,9 @@ export default function GeoTaxonomySection({
   };
 
   useEffect(() => {
-    if (geographicTaxonomies && geographicTaxonomies[0]?.code === '100') {
+    if (geographicTaxonomies && geographicTaxonomies[0]?.code === nationalValue) {
       setIsNationalAreaVisible(true);
-      setOptionsSelected([{ code: '100', desc: 'ITALIA' }]);
+      setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
     } else if (geographicTaxonomies && geographicTaxonomies.length > 0) {
       setIsLocalAreaVisible(true);
       setOptionsSelected(geographicTaxonomies);
@@ -159,9 +150,6 @@ export default function GeoTaxonomySection({
     if (isLocalAreaVisible && optionsSelected.length === 0) {
       setOptionsSelected([{ code: '', desc: '' }]);
       setIsAddNewAutocompleteEnabled(false);
-    } else if (optionsSelectedRef.current) {
-      setOptionsSelected(optionsSelectedRef.current);
-      setIsAddNewAutocompleteEnabled(!!emptyField);
     }
   }, [isLocalAreaVisible]);
 
@@ -185,7 +173,7 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(true);
               setIsLocalAreaVisible(false);
               setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected([{ code: '100', desc: 'ITALIA' }]);
+              setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
             }}
             sx={{ mr: 3, ml: 1 }}
           />
@@ -199,7 +187,9 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(false);
               setIsLocalAreaVisible(true);
               setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected(optionsSelectedRef.current ?? geographicTaxonomies);
+              if (geographicTaxonomies) {
+                setOptionsSelected(geographicTaxonomies);
+              }
             }}
           />
         </Box>
@@ -227,22 +217,27 @@ export default function GeoTaxonomySection({
                     onOpen={() => setOptions([])}
                     disablePortal
                     options={input.length >= 3 ? options.map((o) => o.desc) : []}
-                    sx={{ width: '100%' }}
+                    sx={{
+                      width: '100%',
+                      '& .MuiAutocomplete-inputRoot .MuiAutocomplete-input': {
+                        textTransform: 'capitalize',
+                      },
+                    }}
                     onChange={(event: any, value: any) => handleChange(event, value, i)}
-                    value={val?.desc}
-                    renderOption={(props, option) => <span {...props}>{option ? option : ''}</span>}
+                    value={val?.desc.toLowerCase()}
+                    renderOption={(props, option: string) => (
+                      <span style={{ textTransform: 'capitalize' }} {...props}>
+                        {option ? option.toLocaleLowerCase() : ''}
+                      </span>
+                    )}
                     renderInput={(params) => (
                       <TextField
                         onChange={(e: any) => handleSearchInput(e, i)}
                         {...params}
                         variant="outlined"
-                        label={
-                          !optionsSelected?.[i]?.desc
-                            ? t(
-                                'overview.partyDetail.geographicTaxonomies.modalSections.inputLabel'
-                              )
-                            : ''
-                        }
+                        label={t(
+                          'overview.partyDetail.geographicTaxonomies.modalSections.inputLabel'
+                        )}
                         error={error?.[i]}
                         helperText={
                           error?.[i] &&

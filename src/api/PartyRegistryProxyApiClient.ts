@@ -1,25 +1,25 @@
-import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
-import { createClient } from './generated/b4f-geotaxonomy/client';
-import { GeographicTaxonomy } from './generated/b4f-geotaxonomy/GeographicTaxonomy';
+import { createClient, WithDefaultsT } from './generated/party-registry-proxy/client';
+import { GeographicTaxonomyResource } from './generated/party-registry-proxy/GeographicTaxonomyResource';
 
-/*
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
   return wrappedOperation({
     ...params,
     bearerAuth: `Bearer ${token}`,
   });
-}; */
+};
 
 const apiClient = createClient({
-  baseUrl: ENV.URL_API.API_GEOTAXONOMY,
+  baseUrl: ENV.URL_API.PARTY_REGISTRY_PROXY,
   basePath: '',
   fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.DASHBOARD),
-  // withDefaults: withBearerAndPartyId,
+  withDefaults: withBearerAndPartyId,
 });
 
 const onRedirectToLogin = () =>
@@ -35,9 +35,11 @@ const onRedirectToLogin = () =>
     })
   );
 
-export const GeoTaxonomyApi = {
-  getTaxonomiesByQuery: async (query: string): Promise<Array<GeographicTaxonomy>> => {
-    const result = await apiClient.findAllUsingGET({ startsWith: query });
+export const PartyRegistryProxyApi = {
+  getTaxonomiesByQuery: async (query: string): Promise<Array<GeographicTaxonomyResource>> => {
+    const result = await apiClient.retrieveGeoTaxonomiesByDescriptionUsingGET({
+      description: query,
+    });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 };

@@ -14,7 +14,6 @@ export const useSelectedParty = (): {
   const dispatch = useAppDispatch();
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
   const selectedPartyProducts = useAppSelector(partiesSelectors.selectPartySelectedProducts);
-  const parties = useAppSelector(partiesSelectors.selectPartiesList);
   const setParty = (party?: Party) => dispatch(partiesActions.setPartySelected(party));
   const setPartyProducts = (products?: Array<Product>) =>
     dispatch(partiesActions.setPartySelectedProducts(products));
@@ -23,7 +22,7 @@ export const useSelectedParty = (): {
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
 
   const fetchParty = (partyId: string): Promise<Party | null> =>
-    fetchPartyDetails(partyId, parties).then((party) => {
+    fetchPartyDetails(partyId).then((party) => {
       if (party) {
         if (party.status !== 'ACTIVE') {
           throw new Error(`INVALID_PARTY_STATE_${party.status}`);

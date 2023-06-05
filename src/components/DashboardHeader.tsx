@@ -1,5 +1,5 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header } from '@pagopa/selfcare-common-frontend';
+import { Header, SessionModal } from '@pagopa/selfcare-common-frontend';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
@@ -7,7 +7,7 @@ import { useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import SessionModalTestProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalTestProduct';
+import SessionModalInteropProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInteropProduct';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
 import { Product } from '../model/Product';
@@ -31,7 +31,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
 
-  const [openEnvironmentModal, setOpenEnvironmentModal] = useState<boolean>(false);
+  const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
+  const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
+
   const [productSelected, setProductSelected] = useState<Product>();
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
@@ -93,11 +95,15 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             setProductSelected(selectedProduct);
             if (
               actualSelectedParty.current &&
-              selectedProduct?.backOfficeEnvironmentConfigurations &&
               prodInteropAndProdInteropColl &&
               p.id === 'prod-interop'
             ) {
-              setOpenEnvironmentModal(true);
+              setOpenCustomEnvInteropModal(true);
+            } else if (
+              actualSelectedParty.current &&
+              selectedProduct?.backOfficeEnvironmentConfigurations
+            ) {
+              setOpenGenericEnvProductModal(true);
             } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
               void invokeProductBo(
                 selectedProduct as Product,
@@ -120,8 +126,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         maxCharactersNumberMultiLineItem={25}
       />
-      <SessionModalTestProduct
-        open={openEnvironmentModal}
+      <SessionModalInteropProduct
+        open={openCustomEnvInteropModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
@@ -137,11 +143,35 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           invokeProductBo(productSelected as Product, actualSelectedParty.current as Party)
         }
         handleClose={() => {
-          setOpenEnvironmentModal(false);
+          setOpenCustomEnvInteropModal(false);
         }}
         prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
         products={products}
         party={party}
+      />
+      <SessionModal
+        open={openGenericEnvProductModal}
+        title={t('overview.activeProducts.activeProductsEnvModal.title')}
+        message={
+          <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct">
+            L’ambiente di test ti permette di conoscere
+            <strong>{{ productTitle: productSelected?.title }}</strong> e fare prove in tutta
+            sicurezza. L’ambiente di produzione è il prodotto vero e proprio.
+          </Trans>
+        }
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
+        onConfirm={(e) =>
+          invokeProductBo(
+            productSelected as Product,
+            actualSelectedParty.current as Party,
+            (e.target as HTMLInputElement).value
+          )
+        }
+        handleClose={() => {
+          setOpenGenericEnvProductModal(false);
+        }}
+        productEnvironments={productSelected?.backOfficeEnvironmentConfigurations}
       />
     </div>
   );

@@ -36,31 +36,39 @@ export function PartyDescription({ labelLink, open, loading }: Props) {
         >
           {labelLink}
         </ButtonNaked>
-        <Tooltip
-          title={
-            <Trans i18nKey={t('overview.partyLogo.size')}>
-              Dimensione 300 x <br /> 300px - Formato .png
-            </Trans>
-          }
-          placement="top"
-          arrow={true}
-        >
-          <InfoOutlinedIcon
-            sx={{ color: 'text.secondary', cursor: 'pointer', ml: 1 }}
-            fontSize="small"
-          />
-        </Tooltip>
+        {!loading && isLogoNotPresent && (
+          <Tooltip
+            title={
+              <Trans i18nKey={t('overview.partyLogo.size')}>
+                Dimensione esatta 300 x <br /> 300px - Formato .png
+              </Trans>
+            }
+            placement="top"
+            arrow={true}
+          >
+            <InfoOutlinedIcon
+              sx={{ color: 'text.secondary', cursor: 'pointer', ml: 1 }}
+              fontSize="small"
+            />
+          </Tooltip>
+        )}
       </Box>
       <Box>
         <Typography
           mt={1}
           sx={{ fontSize: '12px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
         >
-          <Trans i18nKey="overview.partyLogo.info">
-            Inserisci solo il logo del tuo ente.
-            <br />
-            Sarai responsabile dell’inserimento di immagini diverse da quella indicata.
-          </Trans>
+          {!loading && isLogoNotPresent ? (
+            <Trans i18nKey="overview.partyLogo.info">
+              Inserisci solo il logo del tuo ente.
+              <br />
+              Sarai responsabile dell’inserimento di immagini diverse da quella indicata.
+            </Trans>
+          ) : (
+            <Trans i18nKey="overview.partyLogo.infoEditLabel">
+              Dimensione esatta 300 x 300px - Formato .jpg o .png
+            </Trans>
+          )}
         </Typography>
       </Box>
     </Stack>

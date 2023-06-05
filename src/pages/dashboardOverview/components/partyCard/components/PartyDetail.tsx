@@ -10,6 +10,8 @@ import { GeographicTaxonomy, Party } from '../../../../../model/Party';
 import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../../../../utils/constants';
 import { DashboardApi } from '../../../../../api/DashboardApiClient';
 import { ENV } from '../../../../../utils/env';
+import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks';
+import { partiesActions, partiesSelectors } from '../../../../../redux/slices/partiesSlice';
 import GeoTaxonomySection from './GeoTaxonomySection';
 
 type Props = {
@@ -27,24 +29,33 @@ export default function PartyDetail({ party }: Props) {
 
   const setLoadingSaveGeotaxonomies = useLoading(LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES);
   const addError = useErrorDispatcher();
+  const dispatch = useAppDispatch();
 
   const [openModalAddNewGeographicTaxonomies, setOpenModalAddNewGeographicTaxonomies] =
     useState<boolean>(false);
   const [openModalFirstTimeAddGeographicTaxonomies, setOpenModalFirstTimeAddGeographicTaxonomies] =
     useState<boolean>(false);
-  const [newGeotaxonomiesSelected, setNewGeotaxonomiesSelected] =
-    useState<Array<GeographicTaxonomy>>();
-  const geographicTaxonomies = newGeotaxonomiesSelected ?? party.geographicTaxonomies;
   const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>(
-    geographicTaxonomies ?? { code: '', desc: '' }
+    party.geographicTaxonomies ?? { code: '', desc: '' }
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
+  const setPartyUpdated = (partyUpdated: Party) => {
+    dispatch(partiesActions.setPartySelected(partyUpdated));
+  };
 
+  const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
-    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && geographicTaxonomies.length === 0) {
+    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && optionsSelected.length === 0) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
+    setOptionsSelected(party.geographicTaxonomies);
   }, [party]);
+
+  useEffect(() => {
+    if (partyUpdated && party.partyId) {
+      setPartyUpdated(partyUpdated);
+    }
+  }, [partyUpdated, party.partyId]);
 
   const infoStyles = {
     fontWeight: theme.typography.fontWeightMedium,
@@ -64,7 +75,7 @@ export default function PartyDetail({ party }: Props) {
         trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {
           geographic_taxonomies: optionsSelected,
         });
-        setNewGeotaxonomiesSelected(optionsSelected);
+        setPartyUpdated({ ...party, geographicTaxonomies: optionsSelected });
       })
       .catch((reason: any) =>
         addError({
@@ -141,19 +152,23 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
               <Grid item xs={8}>
                 <Tooltip
-                  title={party.description.length >= showTooltipAfter ? party.description : ''}
+                  title={
+                    partyUpdated && partyUpdated.description.length >= showTooltipAfter
+                      ? partyUpdated.description
+                      : ''
+                  }
                   placement="top"
                   arrow={true}
                 >
                   <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                    sx={{ ...infoStyles, maxWidth: '100% !important', textTransform: 'capitalize' }}
                     className="ShowDots"
                     component="span"
                   >
-                    {geographicTaxonomies[0]?.desc ?? '-'}
-                    {geographicTaxonomies.length >= 1 && (
+                    {partyUpdated?.geographicTaxonomies[0]?.desc.toLocaleLowerCase() ?? '-'}
+                    {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
                       <>
-                        {geographicTaxonomies.length !== 1 ? ', ' : undefined}
+                        {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
                         <ButtonNaked
                           component="button"
                           onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
@@ -161,8 +176,8 @@ export default function PartyDetail({ party }: Props) {
                           sx={{ color: 'primary.main', flexDirection: 'row' }}
                           weight="default"
                         >
-                          {geographicTaxonomies.length !== 1
-                            ? '+' + `${geographicTaxonomies.length - 1}`
+                          {partyUpdated?.geographicTaxonomies.length !== 1
+                            ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
                             : undefined}
                         </ButtonNaked>
                       </>
@@ -359,10 +374,7 @@ export default function PartyDetail({ party }: Props) {
           {/* recipientCode */}
           <Grid item xs={4}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
-              {party.institutionType === 'PA'
-                ? t('overview.partyDetail.recipientCodeForPa')
-                : t('overview.partyDetail.recipientCode')}
-              {}
+              {t('overview.partyDetail.sdiCode')}
             </Typography>
           </Grid>
           <Grid item xs={8}>
@@ -390,7 +402,7 @@ export default function PartyDetail({ party }: Props) {
         )}
         message={
           <GeoTaxonomySection
-            geographicTaxonomies={geographicTaxonomies}
+            geographicTaxonomies={partyUpdated?.geographicTaxonomies}
             notFoundAnyTaxonomies={openModalFirstTimeAddGeographicTaxonomies}
             setOptionsSelected={setOptionsSelected}
             setIsAddNewAutocompleteEnabled={setIsAddNewAutocompleteEnabled}
@@ -411,7 +423,7 @@ export default function PartyDetail({ party }: Props) {
         title={t('overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.title')}
         message={
           <GeoTaxonomySection
-            geographicTaxonomies={geographicTaxonomies}
+            geographicTaxonomies={partyUpdated?.geographicTaxonomies}
             notFoundAnyTaxonomies={openModalFirstTimeAddGeographicTaxonomies}
             setOptionsSelected={setOptionsSelected}
             optionsSelected={optionsSelected}

@@ -14,7 +14,7 @@ import {
 import CardMedia from '@mui/material/CardMedia';
 import { Trans, useTranslation } from 'react-i18next';
 import { ProductAvatar } from '@pagopa/mui-italia/dist/components/ProductAvatar/ProductAvatar';
-import { Product } from '../../../../../model/Product';
+import { Product, SubProduct } from '../../../../../model/Product';
 
 type Props = {
   image?: string;
@@ -26,6 +26,7 @@ type Props = {
   buttonLabel: string;
   urlPublic?: string;
   product: Product;
+  prodActiveWithSubProdInactive?: SubProduct;
 };
 
 export default function NotActiveProductCard({
@@ -38,6 +39,7 @@ export default function NotActiveProductCard({
   urlPublic,
   title,
   product,
+  prodActiveWithSubProdInactive,
 }: Props) {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -81,7 +83,11 @@ export default function NotActiveProductCard({
         >
           <ProductAvatar
             logoUrl={urlLogo}
-            logoBgColor={product.logoBgColor}
+            logoBgColor={
+              prodActiveWithSubProdInactive
+                ? prodActiveWithSubProdInactive.logoBgColor
+                : product.logoBgColor
+            }
             logoAltText={`${product.title} logo`}
           />
         </Box>
@@ -89,21 +95,46 @@ export default function NotActiveProductCard({
       <Grid item xs={12}>
         <CardContent sx={{ height: '100%', width: '100%' }}>
           <Grid item xs={12} mb={1}>
-            <Tooltip title={title.length > 21 ? title : ''} placement="top" arrow={true}>
-              <Typography
-                variant="h6"
-                sx={{
-                  ...truncateText,
-                  WebkitLineClamp: 1,
-                }}
+            {prodActiveWithSubProdInactive ? (
+              <Tooltip
+                title={
+                  prodActiveWithSubProdInactive.title.length > 21
+                    ? `${title}  ${prodActiveWithSubProdInactive.title}`
+                    : ''
+                }
+                placement="top"
+                arrow={true}
               >
-                {title}
-              </Typography>
-            </Tooltip>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    ...truncateText,
+                    WebkitLineClamp: 1,
+                  }}
+                >
+                  <p style={{ fontWeight: '400', padding: '0px', margin: '0px' }}>
+                    <strong style={{ fontWeight: '600' }}>{product?.title}</strong>&nbsp;
+                    {prodActiveWithSubProdInactive?.title}
+                  </p>
+                </Typography>
+              </Tooltip>
+            ) : (
+              <Tooltip title={title.length > 21 ? title : ''} placement="top" arrow={true}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    ...truncateText,
+                    WebkitLineClamp: 1,
+                  }}
+                >
+                  {title}
+                </Typography>
+              </Tooltip>
+            )}
           </Grid>
           <Grid item xs={12} height="48px">
             <Tooltip
-              title={description.length > 99 ? description : ''}
+              title={description && description.length > 99 ? description : ''}
               placement="top"
               arrow={true}
             >
