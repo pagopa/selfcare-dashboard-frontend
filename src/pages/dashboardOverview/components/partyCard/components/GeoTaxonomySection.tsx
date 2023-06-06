@@ -43,7 +43,15 @@ export default function GeoTaxonomySection({
   const [input, setInput] = useState<string>('');
   const [error, setError] = useState<any>({});
 
-  const emptyField = !optionsSelected.find((o) => o?.desc === '');
+  const [localOptionsSelected, setLocalOptionsSelected] = useState<Array<GeographicTaxonomy>>([
+    { code: '', desc: '' },
+  ]);
+
+  useEffect(() => {
+    const emptyField = !optionsSelected.find((o) => o?.desc === '');
+
+    setIsAddNewAutocompleteEnabled(emptyField);
+  }, [optionsSelected]);
 
   const deleteError = (index: number) => {
     const newError = { ...error };
@@ -65,9 +73,6 @@ export default function GeoTaxonomySection({
       );
       setOptionsSelected(updatedOptionsSelected);
       setIsAddNewAutocompleteEnabled(true);
-      if (emptyField) {
-        setIsAddNewAutocompleteEnabled(false);
-      }
     } else {
       deleteError(index);
       setIsAddNewAutocompleteEnabled(false);
@@ -75,9 +80,6 @@ export default function GeoTaxonomySection({
   };
 
   const handleAddClick = () => {
-    if (emptyField) {
-      setIsAddNewAutocompleteEnabled(false);
-    }
     setOptionsSelected([
       ...optionsSelected,
       {
@@ -173,6 +175,7 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(true);
               setIsLocalAreaVisible(false);
               setIsAddNewAutocompleteEnabled(true);
+              setLocalOptionsSelected(optionsSelected);
               setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
             }}
             sx={{ mr: 3, ml: 1 }}
@@ -187,9 +190,7 @@ export default function GeoTaxonomySection({
               setIsNationalAreaVisible(false);
               setIsLocalAreaVisible(true);
               setIsAddNewAutocompleteEnabled(true);
-              if (geographicTaxonomies) {
-                setOptionsSelected(geographicTaxonomies);
-              }
+              setOptionsSelected(localOptionsSelected);
             }}
           />
         </Box>
