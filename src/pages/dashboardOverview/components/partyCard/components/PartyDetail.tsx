@@ -22,6 +22,8 @@ const labelStyles = {
   color: 'text.colorTextPrimary',
 };
 
+const isAoo = true;
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export default function PartyDetail({ party }: Props) {
   const { t } = useTranslation();
@@ -136,7 +138,7 @@ export default function PartyDetail({ party }: Props) {
                     sx={{ ...infoStyles, maxWidth: '100% !important' }}
                     className="ShowDots"
                   >
-                    {party.category}
+                    {isAoo ? 'Categoria Aoo' : party.category}
                   </Typography>
                 </Tooltip>
               </Grid>
