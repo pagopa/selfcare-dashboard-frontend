@@ -109,7 +109,7 @@ export default {
       originId: 'Codice',
       companyName: 'Ragione sociale',
       geographicTaxonomies: {
-        label: 'Area di competenza',
+        label: 'Area geografica',
         modalSections: {
           national: 'Nazionale',
           local: 'Locale',
