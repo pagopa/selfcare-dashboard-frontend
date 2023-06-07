@@ -36,7 +36,7 @@ export default function PartyDetail({ party }: Props) {
   const [openModalFirstTimeAddGeographicTaxonomies, setOpenModalFirstTimeAddGeographicTaxonomies] =
     useState<boolean>(false);
   const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>(
-    party.geographicTaxonomies ?? { code: '', desc: '' }
+    party.geographicTaxonomies ? party.geographicTaxonomies : [{ code: '', desc: '' }]
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
   const setPartyUpdated = (partyUpdated: Party) => {
@@ -45,12 +45,15 @@ export default function PartyDetail({ party }: Props) {
 
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
-    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && optionsSelected.length === 0) {
+    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && party.geographicTaxonomies.length === 0) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
-    setOptionsSelected(party.geographicTaxonomies);
+    setOptionsSelected(
+      party.geographicTaxonomies.length > 0 ? party.geographicTaxonomies : [{ code: '', desc: '' }]
+    );
   }, [party]);
 
+  useEffect(() => {}, [optionsSelected]);
   useEffect(() => {
     if (partyUpdated && party.partyId) {
       setPartyUpdated(partyUpdated);
