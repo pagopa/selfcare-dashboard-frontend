@@ -108,6 +108,8 @@ export default {
       category: 'Categoria',
       originId: 'Codice',
       companyName: 'Ragione sociale',
+      structure: 'Struttura',
+      uniqueCode: 'Codice Univoco',
       geographicTaxonomies: {
         label: 'Area di competenza',
         modalSections: {
