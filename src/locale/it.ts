@@ -111,7 +111,7 @@ export default {
       structure: 'Struttura',
       uniqueCode: 'Codice Univoco',
       geographicTaxonomies: {
-        label: 'Area di competenza',
+        label: 'Area geografica',
         modalSections: {
           national: 'Nazionale',
           local: 'Locale',
