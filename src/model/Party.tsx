@@ -32,6 +32,9 @@ export type Party = {
   vatNumberGroup?: boolean;
   supportEmail?: string;
   vatNumber?: string;
+  subunitCode?: string;
+  subunitType?: string;
+  aooParentCode?: string;
 };
 
 const buildUrlLog = (partyId: string) =>
@@ -61,5 +64,8 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     vatNumberGroup: institutionResource.vatNumberGroup,
     supportEmail: institutionResource.supportContact?.supportEmail,
     vatNumber: institutionResource.vatNumber,
+    subunitCode: '', // institutionResource.subunitCode TODO
+    subunitType: '', // institutionResource.subunitType TODO
+    aooParentCode: '', // institutionResource.aooReferenceCode TODO
   };
 };
