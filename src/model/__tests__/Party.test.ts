@@ -25,6 +25,8 @@ test('Test Party', () => {
     vatNumberGroup: true,
     vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
+    subunitCode: 'A5D7528',
+    subunitType: 'AO',
   };
   expect(party).toStrictEqual({
     userRole: 'ADMIN',
@@ -46,6 +48,8 @@ test('Test Party', () => {
     vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
     geographicTaxonomies: [],
+    subunitCode: 'A5D7528',
+    subunitType: 'AO',
   });
 });
 
@@ -95,5 +99,8 @@ test('Test institutionResource2Party', () => {
     supportEmail: 'supportEmail@example.com',
     vatNumberGroup: true,
     vatNumber: '11111111111',
+    subunitCode: '',
+    subunitType: '',
+    aooParentCode: '',
   });
 });
