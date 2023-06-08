@@ -100,14 +100,14 @@ export default function PartyDetail({ party }: Props) {
   return (
     <>
       <Grid container alignItems={'flex-start'} wrap="nowrap">
-        <Grid container item xs={6} alignItems={'flex-start'} spacing={1} pr={2}>
+        <Grid container item xs={12} alignItems={'flex-start'} spacing={1} pr={2}>
           {/* institutionType */}
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.institutionType')}
             </Typography>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={4}>
             <Tooltip
               title={
                 institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
@@ -125,12 +125,12 @@ export default function PartyDetail({ party }: Props) {
           {/* category */}
           {party.category && (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.category')}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Tooltip
                   title={party.category.length >= showTooltipAfter ? party.category : ''}
                   placement="top"
@@ -149,12 +149,12 @@ export default function PartyDetail({ party }: Props) {
           {/* {structure} */}
           {isAooUo && (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.structure')}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Tooltip
                   title={
                     institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
@@ -182,12 +182,12 @@ export default function PartyDetail({ party }: Props) {
           {/* geographicTaxonomy */}
           {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.geographicTaxonomies.label')}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Tooltip
                   title={
                     partyUpdated && partyUpdated.description.length >= showTooltipAfter
@@ -229,14 +229,14 @@ export default function PartyDetail({ party }: Props) {
             </>
           )}
           {/* companyName */}
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t(
                 isAooUo ? 'overview.partyDetail.denomination' : 'overview.partyDetail.companyName'
               )}
             </Typography>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={4}>
             <Tooltip
               title={party.description.length >= showTooltipAfter ? party.description : ''}
               placement="top"
@@ -250,12 +250,12 @@ export default function PartyDetail({ party }: Props) {
           {/* origin (ipa code) */}
           {isInstitutionTypePA && !isAooUo ? (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.originId')}&nbsp;{party.origin}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Tooltip
                   title={party.originId.length >= showTooltipAfter ? party.originId : ''}
                   placement="top"
@@ -272,12 +272,12 @@ export default function PartyDetail({ party }: Props) {
             </>
           ) : isAooUo ? (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.uniqueCode')}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Tooltip
                   title={party.originId.length >= showTooltipAfter ? party.originId : ''}
                   placement="top"
@@ -296,14 +296,14 @@ export default function PartyDetail({ party }: Props) {
           {(isInstitutionTypePA && !isTaxCodeEquals2Piva) || !isInstitutionTypePA ? (
             <>
               {/* fiscalCode */}
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {isTaxCodeEquals2Piva
                     ? t('overview.partyDetail.isTaxCodeEquals2Piva')
                     : t('overview.partyDetail.fiscalCode')}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Tooltip
                   title={party.fiscalCode.length >= showTooltipAfter ? party.fiscalCode : ''}
                   placement="top"
@@ -324,12 +324,12 @@ export default function PartyDetail({ party }: Props) {
           {/* vatNumberGroup */}
           {party.institutionType === 'PSP' && (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.vatNumberGroup')}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Typography
                   sx={{ ...infoStyles, maxWidth: '100% !important' }}
                   className="ShowDots"
@@ -341,19 +341,18 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
             </>
           )}
-        </Grid>
-        <Grid container item xs={6} spacing={1}>
+
           {/* fiscalCode */}
           {isInstitutionTypePA && isTaxCodeEquals2Piva && (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {isTaxCodeEquals2Piva
                     ? t('overview.partyDetail.isTaxCodeEquals2Piva')
                     : t('overview.partyDetail.fiscalCode')}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Tooltip
                   title={party.fiscalCode.length >= showTooltipAfter ? party.fiscalCode : ''}
                   placement="top"
@@ -373,12 +372,12 @@ export default function PartyDetail({ party }: Props) {
             {/* vatNumber */}
             {!isTaxCodeEquals2Piva && (
               <>
-                <Grid item xs={4}>
+                <Grid item xs={2}>
                   <Typography variant="body2" sx={{ ...labelStyles }}>
                     {t('overview.partyDetail.vatNumber')}
                   </Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={4}>
                   <Tooltip
                     title={
                       party.vatNumber && party.vatNumber.length >= showTooltipAfter
@@ -401,12 +400,12 @@ export default function PartyDetail({ party }: Props) {
           </>
 
           {/* pecEmail */}
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.pec')}
             </Typography>
           </Grid>
-          <Grid item xs={8} sx={{}}>
+          <Grid item xs={4} sx={{}}>
             <Tooltip
               title={party.digitalAddress.length >= showTooltipAfter ? party.digitalAddress : ''}
               placement="top"
@@ -418,12 +417,12 @@ export default function PartyDetail({ party }: Props) {
             </Tooltip>
           </Grid>
           {/* registeredOffice  */}
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.registeredOffice')}
             </Typography>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={4}>
             <Tooltip
               title={
                 party.registeredOffice.length >= showTooltipAfter ? party.registeredOffice : ''
@@ -439,12 +438,12 @@ export default function PartyDetail({ party }: Props) {
           {/* aooParentCode */}
           {!party.aooParentCode && ( // TODO: change logic if party.aooParentCode is present
             <>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.aooParentCode')}
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={4}>
                 <Typography
                   sx={{ ...infoStyles, maxWidth: '100% !important' }}
                   className="ShowDots"
