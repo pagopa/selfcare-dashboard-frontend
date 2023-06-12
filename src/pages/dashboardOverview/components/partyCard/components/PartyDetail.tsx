@@ -95,7 +95,7 @@ export default function PartyDetail({ party }: Props) {
         setOpenModalFirstTimeAddGeographicTaxonomies(false);
       });
   };
-  const isAooUo = true; // TODO: party.subunitType === 'AOO' || party.subunitType === 'UO';
+  const isAooUo = party.subunitType === 'AOO' || party.subunitType === 'UO';
 
   return (
     <>
@@ -168,12 +168,11 @@ export default function PartyDetail({ party }: Props) {
                     sx={{ ...infoStyles, maxWidth: '100% !important' }}
                     className="ShowDots"
                   >
-                    {/* {party.subunitType === 'AO'
+                    {party.subunitType === 'AOO'
                       ? 'Area Organizzativa Omogenea'
                       : party.subunitType === 'UO'
                       ? 'Unità Organizzativa'
-                      : ''} */}
-                    {'Area Organizzativa Omogenea'}
+                      : ''}
                   </Typography>
                 </Tooltip>
               </Grid>
@@ -287,7 +286,7 @@ export default function PartyDetail({ party }: Props) {
                     sx={{ ...infoStyles, maxWidth: '100% !important' }}
                     className="ShowDots"
                   >
-                    {/* {party.subunitCode} */} {'party.subunitCode'}
+                    {party.subunitCode}
                   </Typography>
                 </Tooltip>
               </Grid>
@@ -436,23 +435,24 @@ export default function PartyDetail({ party }: Props) {
             </Tooltip>
           </Grid>
           {/* aooParentCode */}
-          {!party.aooParentCode && ( // TODO: change logic if party.aooParentCode is present
-            <>
-              <Grid item xs={2}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.aooParentCode')}
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography
-                  sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                  className="ShowDots"
-                >
-                  {/* {party.aooParentCode} */} {'party.aooParentCode'}
-                </Typography>
-              </Grid>
-            </>
-          )}
+          {party.aooParentCode &&
+            party.subunitType === 'UO' && ( // TODO: change logic if party.aooParentCode is present
+              <>
+                <Grid item xs={2}>
+                  <Typography variant="body2" sx={{ ...labelStyles }}>
+                    {t('overview.partyDetail.aooParentCode')}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography
+                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                    className="ShowDots"
+                  >
+                    {/* {party.aooParentCode} */} {'party.aooParentCode'}
+                  </Typography>
+                </Grid>
+              </>
+            )}
         </Grid>
       </Grid>
       <SessionModal

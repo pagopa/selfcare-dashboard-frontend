@@ -54,8 +54,8 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     category: institutionResource.category,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
-    registeredOffice: institutionResource.address,
-    zipCode: institutionResource.zipCode,
+    registeredOffice: institutionResource.address ?? '',
+    zipCode: institutionResource.zipCode ?? '',
     typology: 'TODO', // it will represent the taxonomy of the party
     institutionType: institutionResource.institutionType,
     recipientCode: institutionResource.recipientCode,
@@ -64,8 +64,8 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     vatNumberGroup: institutionResource.vatNumberGroup,
     supportEmail: institutionResource.supportContact?.supportEmail,
     vatNumber: institutionResource.vatNumber,
-    subunitCode: '', // institutionResource.subunitCode TODO
-    subunitType: '', // institutionResource.subunitType TODO
-    aooParentCode: '', // institutionResource.aooReferenceCode TODO
+    subunitCode: institutionResource.subunitCode,
+    subunitType: institutionResource.subunitType,
+    aooParentCode: institutionResource.subunitType,
   };
 };
