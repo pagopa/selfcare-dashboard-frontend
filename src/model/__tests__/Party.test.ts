@@ -99,8 +99,8 @@ test('Test institutionResource2Party', () => {
     supportEmail: 'supportEmail@example.com',
     vatNumberGroup: true,
     vatNumber: '11111111111',
-    subunitCode: '',
-    subunitType: '',
-    aooParentCode: '',
+    subunitCode: undefined,
+    subunitType: undefined,
+    aooParentCode: undefined,
   });
 });
