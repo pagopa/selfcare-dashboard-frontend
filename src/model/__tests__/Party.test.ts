@@ -25,6 +25,9 @@ test('Test Party', () => {
     vatNumberGroup: true,
     vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
+    aooParentCode: undefined,
+    subunitType: 'subunitType',
+    subunitCode: 'subunitCode',
   };
   expect(party).toStrictEqual({
     userRole: 'ADMIN',
@@ -46,6 +49,9 @@ test('Test Party', () => {
     vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
     geographicTaxonomies: [],
+    aooParentCode: undefined,
+    subunitType: 'subunitType',
+    subunitCode: 'subunitCode',
   });
 });
 
@@ -71,6 +77,9 @@ test('Test institutionResource2Party', () => {
     },
     vatNumberGroup: true,
     vatNumber: '11111111111',
+    aooParentCode: undefined,
+    subunitType: 'subunitType',
+    subunitCode: 'subunitCode',
   };
 
   const party = institutionResource2Party(institutionResource);
@@ -95,5 +104,8 @@ test('Test institutionResource2Party', () => {
     supportEmail: 'supportEmail@example.com',
     vatNumberGroup: true,
     vatNumber: '11111111111',
+    aooParentCode: undefined,
+    subunitType: 'subunitType',
+    subunitCode: 'subunitCode',
   });
 });
