@@ -25,7 +25,7 @@ test('Test Party', () => {
     vatNumberGroup: true,
     vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
-    aooParentCode: 'aooParentCode',
+    aooParentCode: undefined,
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
   };
@@ -49,7 +49,7 @@ test('Test Party', () => {
     vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
     geographicTaxonomies: [],
-    aooParentCode: 'aooParentCode',
+    aooParentCode: undefined,
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
   });
@@ -77,7 +77,7 @@ test('Test institutionResource2Party', () => {
     },
     vatNumberGroup: true,
     vatNumber: '11111111111',
-    aooParentCode: 'aooParentCode',
+    aooParentCode: undefined,
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
   };
@@ -90,7 +90,6 @@ test('Test institutionResource2Party', () => {
     partyId: '1',
     fiscalCode: 'fiscalCode',
     digitalAddress: 'address',
-    aooParentCode: 'aooParentCode',
     category: 'Ente locale',
     urlLogo: 'http://checkout.selfcare/institutions/1/logo.png',
     externalId: 'externalId1',
@@ -105,6 +104,7 @@ test('Test institutionResource2Party', () => {
     supportEmail: 'supportEmail@example.com',
     vatNumberGroup: true,
     vatNumber: '11111111111',
+    aooParentCode: undefined,
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
   });
