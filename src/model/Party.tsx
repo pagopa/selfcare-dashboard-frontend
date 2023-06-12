@@ -66,6 +66,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     vatNumber: institutionResource.vatNumber,
     subunitCode: institutionResource.subunitCode,
     subunitType: institutionResource.subunitType,
-    aooParentCode: institutionResource.subunitType,
+    aooParentCode: institutionResource.aooParentCode,
   };
 };
