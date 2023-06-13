@@ -448,7 +448,7 @@ export default function PartyDetail({ party }: Props) {
                     sx={{ ...infoStyles, maxWidth: '100% !important' }}
                     className="ShowDots"
                   >
-                    {/* {party.aooParentCode} */} {'party.aooParentCode'}
+                    {party.aooParentCode}
                   </Typography>
                 </Grid>
               </>
