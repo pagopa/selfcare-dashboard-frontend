@@ -25,7 +25,7 @@ test('Test Party', () => {
     vatNumberGroup: true,
     vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
-    aooParentCode: undefined,
+    aooParentCode: 'aooParentCode',
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
   };
@@ -49,7 +49,7 @@ test('Test Party', () => {
     vatNumber: '11111111111',
     supportEmail: 'supportEmail@example.com',
     geographicTaxonomies: [],
-    aooParentCode: undefined,
+    aooParentCode: 'aooParentCode',
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
   });
@@ -77,7 +77,7 @@ test('Test institutionResource2Party', () => {
     },
     vatNumberGroup: true,
     vatNumber: '11111111111',
-    aooParentCode: undefined,
+    aooParentCode: 'aooParentCode',
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
   };
@@ -104,7 +104,7 @@ test('Test institutionResource2Party', () => {
     supportEmail: 'supportEmail@example.com',
     vatNumberGroup: true,
     vatNumber: '11111111111',
-    aooParentCode: undefined,
+    aooParentCode: 'aooParentCode',
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
   });
