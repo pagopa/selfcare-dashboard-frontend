@@ -123,6 +123,70 @@
         "description": "Service to get a specific institution related to logged user",
         "operationId": "getInstitutionUsingGET",
         "summary": "getInstitution"
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateInstitutionDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Institution"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Update institution description",
+        "operationId": "updateInstitutionDescriptionUsingPUT",
+        "summary": "updateInstitutionDescription"
       }
     },
     "/institutions/{institutionId}/geographicTaxonomy": {
@@ -2310,6 +2374,21 @@
     }
   },
   "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"PnPGInstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/PnPGInstitutionResource"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
+    "Attribute": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        }
+      },
+      "title": "Attribute",
+      "type": "object"
+    },
     "BackOfficeConfigurationsResource": {
       "properties": {
         "environment": {
@@ -2448,6 +2527,18 @@
       "title": "DpoData",
       "type": "object"
     },
+    "GeographicTaxonomy": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        }
+      },
+      "title": "GeographicTaxonomy",
+      "type": "object"
+    },
     "GeographicTaxonomyDto": {
       "properties": {
         "code": {
@@ -2511,6 +2602,62 @@
         "token"
       ],
       "title": "IdentityTokenResource",
+      "type": "object"
+    },
+    "Institution": {
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "attributes": {
+          "items": {
+            "$ref": "#/definitions/Attribute"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "digitalAddress": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "geographicTaxonomies": {
+          "items": {
+            "$ref": "#/definitions/GeographicTaxonomy"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "institutionType": {
+          "enum": [
+            "GSP",
+            "PA",
+            "PG",
+            "PSP",
+            "PT",
+            "SCP"
+          ],
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "originId": {
+          "type": "string"
+        },
+        "taxCode": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "string"
+        }
+      },
+      "title": "Institution",
       "type": "object"
     },
     "InstitutionInfo": {
@@ -2590,6 +2737,10 @@
           "description": "Institution's physical address",
           "type": "string"
         },
+        "aooParentCode": {
+          "description": "UO's parent AOO code",
+          "type": "string"
+        },
         "category": {
           "description": "Institution's category",
           "type": "string"
@@ -2649,6 +2800,14 @@
           "description": "Institution's status",
           "type": "string"
         },
+        "subunitCode": {
+          "description": "AOO o UO unique code",
+          "type": "string"
+        },
+        "subunitType": {
+          "description": "Institution's subunit type",
+          "type": "string"
+        },
         "supportContact": {
           "$ref": "#/definitions/SupportContactResource",
           "description": "'Institution's assistance contacts'"
@@ -2672,7 +2831,6 @@
         }
       },
       "required": [
-        "address",
         "externalId",
         "fiscalCode",
         "geographicTaxonomies",
@@ -2682,8 +2840,7 @@
         "origin",
         "originId",
         "status",
-        "userRole",
-        "zipCode"
+        "userRole"
       ],
       "title": "InstitutionResource",
       "type": "object"
@@ -3438,6 +3595,20 @@
       "title": "SupportContactResource",
       "type": "object"
     },
+    "UpdateInstitutionDto": {
+      "properties": {
+        "description": {
+          "description": "Institution's description",
+          "type": "string"
+        },
+        "digitalAddress": {
+          "description": "Institution's email address",
+          "type": "string"
+        }
+      },
+      "title": "UpdateInstitutionDto",
+      "type": "object"
+    },
     "UpdateUserDto": {
       "properties": {
         "email": {
@@ -3580,6 +3751,7 @@
           "description": "Users group's status",
           "enum": [
             "ACTIVE",
+            "DELETED",
             "SUSPENDED"
           ],
           "type": "string"
@@ -3648,6 +3820,7 @@
           "description": "Users group's status",
           "enum": [
             "ACTIVE",
+            "DELETED",
             "SUSPENDED"
           ],
           "type": "string"
