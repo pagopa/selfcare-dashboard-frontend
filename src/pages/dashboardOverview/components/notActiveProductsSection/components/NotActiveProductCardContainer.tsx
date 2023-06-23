@@ -11,10 +11,14 @@ type Props = {
   product: Product;
 };
 
-const goToOnboarding = (product: Product, party: Party): void =>
+const goToOnboarding = (product: Product, party: Party): void => {
+  const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
+  const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
+
   window.location.assign(
-    `${ENV.URL_FE.ONBOARDING}/${product.id}?partyExternalId=${party.externalId}`
+    `${ENV.URL_FE.ONBOARDING}/${product.id}?partyExternalId=${party.externalId}${subUnitType}${subUnitCode}`
   );
+};
 
 export default function NotActiveProductCardContainer({ party, product }: Props) {
   const { t } = useTranslation();
