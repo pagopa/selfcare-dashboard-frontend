@@ -108,6 +108,9 @@ export default {
       category: 'Categoria',
       originId: 'Codice',
       companyName: 'Ragione sociale',
+      denomination: 'Denominazione',
+      structure: 'Struttura',
+      uniqueCode: 'Codice Univoco',
       geographicTaxonomies: {
         label: 'Area geografica',
         modalSections: {
@@ -137,6 +140,7 @@ export default {
       pec: 'Indirizzo PEC primario',
       registeredOffice: 'Sede Legale',
       sdiCode: 'Codice SDI',
+      aooParentCode: 'AOO di riferimento',
       contactToModify:
         "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, <1>vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
       institutionTypeValue: {

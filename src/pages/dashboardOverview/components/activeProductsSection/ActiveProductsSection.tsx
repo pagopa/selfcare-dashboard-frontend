@@ -14,7 +14,6 @@ type Props = {
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
-  // TODO: capire se anche nei prodotti attivi dobbiamo filtrare per status === 'ACTIVE' oltre che per productOnBoardingStatus === 'ACTIVE'
   const prodInteropAndProdInteropColl =
     products.find((p) => p.id === 'prod-interop-coll' && p.authorized === true) &&
     products.find((p) => p.id === 'prod-interop' && p.authorized === true);
