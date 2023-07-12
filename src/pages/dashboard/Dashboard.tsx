@@ -17,6 +17,7 @@ import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
 import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
 import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
+import DashboardDelegationsPage from '../dashboardsDelegates/DashboardDelegationsPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -151,6 +152,9 @@ const Dashboard = () => {
               i18n={i18n}
               decorators={decorators}
             />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
+            <DashboardDelegationsPage />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>

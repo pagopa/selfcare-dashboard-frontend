@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
@@ -28,6 +29,7 @@ export default function DashboardSideMenu({ party }: Props) {
   const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
   const usersRoute = ENV.ROUTES.USERS;
   const groupsRoute = ENV.ROUTES.GROUPS;
+  const delegatesRoute = DASHBOARD_ROUTES.DELEGATIONS.path;
 
   const overviewPath = resolvePathVariables(overviewRoute, {
     partyId: party.partyId,
@@ -36,6 +38,9 @@ export default function DashboardSideMenu({ party }: Props) {
     partyId: party.partyId,
   });
   const groupsPath = resolvePathVariables(groupsRoute, {
+    partyId: party.partyId,
+  });
+  const delegatesPath = resolvePathVariables(delegatesRoute, {
     partyId: party.partyId,
   });
 
@@ -54,6 +59,12 @@ export default function DashboardSideMenu({ party }: Props) {
             }
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
+            subMenuVisible={true}
+            subMenuIcon={AssignmentIcon}
+            subMenuTitle={'Deleghe'}
+            handleClickSubMenu={() =>
+              onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
+            }
           />
           {canSeeRoles && (
             <DashboardSidenavItem
@@ -61,6 +72,7 @@ export default function DashboardSideMenu({ party }: Props) {
               handleClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
               isSelected={isRoleSelected}
               icon={PeopleAlt}
+              subMenuVisible={false}
             />
           )}
           {canSeeGroups && (
@@ -71,6 +83,7 @@ export default function DashboardSideMenu({ party }: Props) {
               }
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}
+              subMenuVisible={false}
             />
           )}
         </List>
