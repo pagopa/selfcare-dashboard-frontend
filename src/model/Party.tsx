@@ -64,8 +64,8 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     vatNumberGroup: institutionResource.vatNumberGroup,
     supportEmail: institutionResource.supportContact?.supportEmail,
     vatNumber: institutionResource.vatNumber,
-    // subunitCode: institutionResource.subunitCode,
-    // subunitType: institutionResource.subunitType,
-    // aooParentCode: institutionResource.aooParentCode,
+    subunitCode: institutionResource.subunitCode,
+    subunitType: institutionResource.subunitType,
+    aooParentCode: institutionResource.aooParentCode,
   };
 };
