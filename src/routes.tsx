@@ -4,7 +4,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
-import DashboardDelegationsPage from './pages/dashboardsDelegates/DashboardDelegationsPage';
+import DashboardDelegationsPage from './pages/dashboardsDelegations/DashboardDelegationsPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -52,7 +52,7 @@ export const DASHBOARD_ROUTES = {
     component: DashboardOverview,
   },
   DELEGATIONS: {
-    path: `${BASE_ROUTE}/:partyId/delegates`,
+    path: `${BASE_ROUTE}/:partyId/delegations`,
     exact: true,
     component: DashboardDelegationsPage,
   },
