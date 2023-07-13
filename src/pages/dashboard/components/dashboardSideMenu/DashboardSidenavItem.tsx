@@ -1,13 +1,5 @@
-import {
-  ListItemButton,
-  ListItemText,
-  ListItemIcon,
-  Icon,
-  ListItem,
-  Collapse,
-  List,
-} from '@mui/material';
-import { SvgIconComponent } from '@mui/icons-material';
+import { ListItemButton, ListItemText, ListItemIcon, Icon, Collapse, List } from '@mui/material';
+import { ExpandLess, ExpandMore, SvgIconComponent } from '@mui/icons-material';
 import React from 'react';
 
 type Props = {
@@ -39,7 +31,7 @@ export default function DashboardSidenavItem({
 
   const isSubMenuPresent = subMenuVisible && subMenuIcon && handleClickSubMenu;
   return (
-    <ListItem disablePadding>
+    <List disablePadding>
       <ListItemButton
         selected={isSelected}
         onClick={() => {
@@ -57,12 +49,14 @@ export default function DashboardSidenavItem({
         </ListItemIcon>
 
         <ListItemText primary={title} />
+        {isSubMenuPresent && <> {open ? <ExpandLess /> : <ExpandMore />}</>}
       </ListItemButton>
       {isSubMenuPresent && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton
-              sx={{ pl: 4 }}
+              selected={!isSelected}
+              sx={{ pl: 4, height: '100%', maxWidth: 360, backgroundColor: 'background.paper' }}
               onClick={() => {
                 handleClickSubMenu();
               }}
@@ -75,6 +69,6 @@ export default function DashboardSidenavItem({
           </List>
         </Collapse>
       )}
-    </ListItem>
+    </List>
   );
 }
