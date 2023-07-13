@@ -97,8 +97,7 @@ const Dashboard = () => {
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
   const canSeeSection = party?.userRole === 'ADMIN';
   const productsFiltered2Delegates =
-    activeProducts.filter((product) => product.id === 'prod-io' || product.id === 'prod-pagopa') &&
-    canSeeSection;
+    activeProducts.filter((product) => product.id === 'prod-pagopa') && canSeeSection;
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
       <Grid component="nav" item xs={2}>
