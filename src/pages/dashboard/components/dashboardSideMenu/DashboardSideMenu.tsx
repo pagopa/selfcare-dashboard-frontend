@@ -16,15 +16,18 @@ import DashboardSidenavItem from './DashboardSidenavItem';
 type Props = {
   products: Array<Product>;
   party: Party;
+  productsFiltered2Delegations: boolean;
+  canSeeSection: boolean;
 };
 
-export default function DashboardSideMenu({ party }: Props) {
+export default function DashboardSideMenu({
+  party,
+  productsFiltered2Delegations,
+  canSeeSection,
+}: Props) {
   const { t } = useTranslation();
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
-
-  const canSeeRoles = party.userRole === 'ADMIN';
-  const canSeeGroups = party.userRole === 'ADMIN';
 
   const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
   const usersRoute = ENV.ROUTES.USERS;
@@ -59,14 +62,14 @@ export default function DashboardSideMenu({ party }: Props) {
             }
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
-            subMenuVisible={true}
+            subMenuVisible={!!productsFiltered2Delegations}
             subMenuIcon={AssignmentIcon}
             subMenuTitle={'Deleghe'}
             handleClickSubMenu={() =>
               onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
             }
           />
-          {canSeeRoles && (
+          {canSeeSection && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.referents.title')}
               handleClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
@@ -75,7 +78,7 @@ export default function DashboardSideMenu({ party }: Props) {
               subMenuVisible={false}
             />
           )}
-          {canSeeGroups && (
+          {canSeeSection && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.groups.title')}
               handleClick={() =>

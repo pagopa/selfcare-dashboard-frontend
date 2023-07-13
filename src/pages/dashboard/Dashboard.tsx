@@ -17,7 +17,7 @@ import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
 import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
 import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
-import DashboardDelegationsPage from '../dashboardsDelegates/DashboardDelegationsPage';
+import DashboardDelegationsPage from '../dashboardsDelegations/DashboardDelegationsPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -95,12 +95,22 @@ const Dashboard = () => {
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
+  const canSeeSection = party?.userRole === 'ADMIN';
+  const productsFiltered2Delegations =
+    ENV.DELEGATIONS.ENABLE &&
+    activeProducts.filter((product) => product.id === 'prod-pagopa') &&
+    canSeeSection;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
       <Grid component="nav" item xs={2}>
         <Box>
-          <DashboardSideMenu products={products} party={party} />
+          <DashboardSideMenu
+            products={products}
+            party={party}
+            productsFiltered2Delegations={productsFiltered2Delegations}
+            canSeeSection={canSeeSection}
+          />
         </Box>
       </Grid>
       <Grid item component="main" xs={10} sx={{ backgroundColor: '#F5F6F7' }} display="flex" pb={8}>
@@ -154,7 +164,7 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
-            <DashboardDelegationsPage />
+            <DashboardDelegationsPage productsFiltered2Delegations={productsFiltered2Delegations} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>
