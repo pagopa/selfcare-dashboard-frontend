@@ -11,11 +11,11 @@ import { Party } from '../../model/Party';
 import AddDelegationForm from './components/AddDelegationForm';
 
 type Props = {
-  products: Array<Product>;
+  delegateEnabledProducts: Array<Product>;
   party: Party;
 };
 
-export default function AddDelegationPage({ products, party }: Props) {
+export default function AddDelegationPage({ delegateEnabledProducts, party }: Props) {
   const history = useHistory();
   const { t } = useTranslation();
 
@@ -44,7 +44,7 @@ export default function AddDelegationPage({ products, party }: Props) {
         ),
     },
     {
-      description: products[0].title,
+      description: delegateEnabledProducts[0].title,
     },
     {
       description: t('addDelegationPage.navigationBar.addDelegation'),
@@ -75,7 +75,7 @@ export default function AddDelegationPage({ products, party }: Props) {
           />
         </Grid>
         <Grid item xs={11} mb={5}>
-          <AddDelegationForm products={products} />
+          <AddDelegationForm delegateEnabledProducts={delegateEnabledProducts} party={party} />
         </Grid>
       </Grid>
     </Grid>
