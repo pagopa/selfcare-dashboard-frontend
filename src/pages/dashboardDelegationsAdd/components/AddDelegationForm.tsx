@@ -10,23 +10,38 @@ import {
   Typography,
 } from '@mui/material';
 import { TitleBox, useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { Product } from '../../../model/Product';
+import { DASHBOARD_ROUTES } from '../../../routes';
+import { Party } from '../../../model/Party';
 
 type Props = {
-  products: Array<Product>;
+  delegateEnabledProducts: Array<Product>;
+  selectedProduct?: Product;
+  party: Party;
 };
 
-export default function AddDelegationForm({ products }: Props) {
+export default function AddDelegationForm({
+  delegateEnabledProducts,
+  selectedProduct,
+  party,
+}: Props) {
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
   const { t } = useTranslation();
 
   const [productSelected, setProductSelected] = useState<Product>();
   const [techPartnerSelected, setTechPartnerSelected] = useState<any>(); // TODO Fix with the model of Tech Partners
+
+  useEffect(() => {
+    if (delegateEnabledProducts.length === 1) {
+      setProductSelected(delegateEnabledProducts[0]);
+    }
+  }, [delegateEnabledProducts]);
 
   return (
     <>
@@ -48,9 +63,13 @@ export default function AddDelegationForm({ products }: Props) {
             <Select
               id="select-product-choose"
               size="small"
-              disabled={products.length === 0}
+              disabled={delegateEnabledProducts.length === 1 || !!selectedProduct}
               fullWidth
-              value={products.length === 0 ? products[0] : undefined}
+              value={
+                delegateEnabledProducts.length === 1
+                  ? delegateEnabledProducts[0].title
+                  : selectedProduct?.title
+              }
               displayEmpty
               variant="outlined"
               labelId="select-label-products"
@@ -62,7 +81,7 @@ export default function AddDelegationForm({ products }: Props) {
                 </Typography>
               )}
             >
-              {products.map((p: Product, index) => (
+              {delegateEnabledProducts.map((p: Product, index) => (
                 <MenuItem
                   key={index}
                   value={p.title}
@@ -114,7 +133,7 @@ export default function AddDelegationForm({ products }: Props) {
               label={t('addDelegationPage.selectTechPartner.label')}
               input={<OutlinedInput label={t('addDelegationPage.selectTechPartner.label')} />}
             >
-              {products.map(
+              {delegateEnabledProducts.map(
                 (
                   p: Product,
                   index // TODO Map the partners
@@ -138,7 +157,15 @@ export default function AddDelegationForm({ products }: Props) {
           color="primary"
           variant="outlined"
           size="medium"
-          onClick={() => onExit(() => history.goBack())}
+          onClick={() =>
+            onExit(() =>
+              history.push(
+                resolvePathVariables(DASHBOARD_ROUTES.DELEGATIONS.path, {
+                  partyId: party.partyId,
+                })
+              )
+            )
+          }
         >
           {t('addDelegationPage.selectTechPartner.actions.back')}
         </Button>

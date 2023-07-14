@@ -101,7 +101,7 @@ const Dashboard = () => {
     ENV.DELEGATIONS.ENABLE &&
     activeProducts.filter((product) => product.id === 'prod-pagopa') &&
     canSeeSection;
-  const productsDelegate = activeProducts.filter((product) => product.id === 'prod-pagopa');
+  const delegateEnabledProducts = activeProducts.filter((product) => product.id === 'prod-pagopa'); // TODO Right now we will only open for prod-pagopa, an array of products has already been set up to meet future needs
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
@@ -169,7 +169,7 @@ const Dashboard = () => {
             <DashboardDelegationsPage isDelegateSectionVisible={isDelegateSectionVisible} />
           </Route>
           <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
-            <AddDelegationPage products={productsDelegate} party={party} />
+            <AddDelegationPage delegateEnabledProducts={delegateEnabledProducts} party={party} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>
