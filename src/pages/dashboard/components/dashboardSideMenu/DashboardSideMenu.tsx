@@ -16,13 +16,13 @@ import DashboardSidenavItem from './DashboardSidenavItem';
 type Props = {
   products: Array<Product>;
   party: Party;
-  productsFiltered2Delegations: boolean;
+  isDelegateSectionVisible: boolean;
   canSeeSection: boolean;
 };
 
 export default function DashboardSideMenu({
   party,
-  productsFiltered2Delegations,
+  isDelegateSectionVisible,
   canSeeSection,
 }: Props) {
   const { t } = useTranslation();
@@ -62,7 +62,7 @@ export default function DashboardSideMenu({
             }
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
-            subMenuVisible={!!productsFiltered2Delegations}
+            subMenuVisible={!!isDelegateSectionVisible}
             subMenuIcon={AssignmentIcon}
             subMenuTitle={'Deleghe'}
             handleClickSubMenu={() =>
