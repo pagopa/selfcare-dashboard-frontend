@@ -160,6 +160,26 @@ export default {
       vatNumber: 'Partita IVA',
     },
   },
+  addDelegationPage: {
+    title: 'Aggiungi delega',
+    subTitle:
+      "Qui trovi l'elenco dei Partner e degli Intermediari Tecnologici presenti in Area Riservata.",
+    navigationBar: {
+      overview: 'Panoramica',
+      delegations: 'Deleghe',
+      addDelegation: 'Aggiungi delega',
+    },
+    chooseProduct: 'Scegli il prodotto',
+    selectTechPartner: {
+      title: 'Seleziona un Partner Tecnologico',
+      subTitle: 'Digita il nome oppure scegli dalla lista',
+      label: 'Seleziona o scegli dalla lista',
+      actions: {
+        back: 'Indietro',
+        continue: 'Continua',
+      },
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'I tuoi enti',

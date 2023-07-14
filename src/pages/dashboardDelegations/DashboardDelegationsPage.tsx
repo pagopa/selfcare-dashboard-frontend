@@ -2,16 +2,16 @@ import { Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 type Props = {
-  productsFiltered2Delegations?: boolean;
+  isDelegateSectionVisible?: boolean;
 };
 
-export default function DashboardDelegationsPage({ productsFiltered2Delegations }: Props) {
+export default function DashboardDelegationsPage({ isDelegateSectionVisible }: Props) {
   const [isError, setIsError] = useState<boolean>(false);
   useEffect(() => {
-    if (!productsFiltered2Delegations) {
+    if (!isDelegateSectionVisible) {
       setIsError(true);
     }
-  }, [productsFiltered2Delegations]);
+  }, [isDelegateSectionVisible]);
 
   return (
     <>
