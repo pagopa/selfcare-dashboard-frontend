@@ -183,6 +183,13 @@ export default {
         noDelegatesLabel: 'Nessun delegato per questo prodotto. <1>Aggiungi delega</1>',
       },
     },
+    genericError: {
+      title: 'Spiacenti, qualcosa è andato storto.',
+      description: `A causa di un errore del sistema non è possibile completare la procedura.
+      <1/>
+      Ti chiediamo di riprovare più tardi.`,
+      backAction: 'Chiudi',
+    },
   },
   addDelegationPage: {
     title: 'Aggiungi delega',

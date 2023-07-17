@@ -1,15 +1,21 @@
 import { Box, Button, Divider, Grid, Link, Typography } from '@mui/material';
-import { NavigationBar, TitleBox, useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
+import {
+  EndingPage,
+  NavigationBar,
+  TitleBox,
+  useUnloadEventOnExit,
+} from '@pagopa/selfcare-common-frontend';
 import { useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { ProductAvatar } from '@pagopa/mui-italia';
+import { IllusError, ProductAvatar } from '@pagopa/mui-italia';
 import { Party } from '../../model/Party';
 import { DASHBOARD_ROUTES } from '../../routes';
 import { Product } from '../../model/Product';
 import { TechnologyPartner } from '../../model/TechnologyPartner';
+import { ENV } from '../../utils/env';
 
 type Props = {
   isDelegateSectionVisible?: boolean;
@@ -157,7 +163,7 @@ export default function DashboardDelegationsPage({
                           >
                             Nessun delegato per questo prodotto.
                             <Link
-                              onClick={goToAddDelegationsPage} // TODO: add link to redirect in add delegates
+                              onClick={goToAddDelegationsPage}
                               sx={{
                                 fontWeight: 'fontWeightMedium',
                                 ml: 1,
@@ -177,9 +183,22 @@ export default function DashboardDelegationsPage({
           </Grid>
         </Box>
       ) : (
-        <Typography variant="h1" sx={{ fontWeight: '700' }}>
-          NON SEI ABILITATO
-        </Typography>
+        <EndingPage
+          minHeight="52vh"
+          icon={<IllusError size={60} />}
+          variantTitle={'h4'}
+          variantDescription={'body1'}
+          title={<Trans i18nKey="overview.genericError.title" />}
+          description={
+            <Trans i18nKey="overview.genericError.description">
+              A causa di un errore del sistema non è possibile completare la procedura.
+              <br />
+              Ti chiediamo di riprovare più tardi.
+            </Trans>
+          }
+          buttonLabel={<Trans i18nKey="overview.genericError.backAction" />}
+          onButtonClick={() => window.location.assign(ENV.URL_FE.LANDING)}
+        />
       )}
     </>
   );
