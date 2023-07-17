@@ -37,7 +37,7 @@ export default function GeoTaxonomySection({
   const { t } = useTranslation();
   const addError = useErrorDispatcher();
 
-  const [options, setOptions] = useState<Array<GeographicTaxonomy>>([]);
+  const [options, setOptions] = useState<Array<any>>([]);
   const [isNationalAreaVisible, setIsNationalAreaVisible] = useState<boolean>(false);
   const [isLocalAreaVisible, setIsLocalAreaVisible] = useState<boolean>(false);
   const [input, setInput] = useState<string>('');
@@ -217,7 +217,7 @@ export default function GeoTaxonomySection({
                     freeSolo
                     onOpen={() => setOptions([])}
                     disablePortal
-                    options={input.length >= 3 ? options.map((o) => o.desc) : []}
+                    options={input.length >= 3 ? options?.map((o) => o.desc) : []}
                     sx={{
                       width: '100%',
                       '& .MuiAutocomplete-inputRoot .MuiAutocomplete-input': {
@@ -225,7 +225,7 @@ export default function GeoTaxonomySection({
                       },
                     }}
                     onChange={(event: any, value: any) => handleChange(event, value, i)}
-                    value={val?.desc.toLowerCase()}
+                    value={val?.desc?.toLowerCase()}
                     renderOption={(props, option: string) => (
                       <span style={{ textTransform: 'capitalize' }} {...props}>
                         {option ? option.toLocaleLowerCase() : ''}

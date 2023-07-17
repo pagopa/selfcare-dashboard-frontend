@@ -5,10 +5,13 @@ import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
-import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
+import {
+  InstitutionResource,
+  InstitutionTypeEnum,
+} from './generated/b4f-dashboard/InstitutionResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
-import { GeographicTaxonomyResource } from './generated/b4f-dashboard/GeographicTaxonomyResource';
+import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -86,11 +89,22 @@ export const DashboardApi = {
 
   updateInstitutionGeographicTaxonomy: async (
     institutionId: string,
-    geographicTaxonomies: Array<GeographicTaxonomyResource>
+    geographicTaxonomies: Array<{ code: string; desc: string }>
   ): Promise<boolean> => {
     const result = await apiClient.updateInstitutionGeographicTaxonomyUsingPUT({
       institutionId,
       body: { geographicTaxonomyDtoList: geographicTaxonomies },
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getProductBrokers: async (
+    productId: string,
+    institutionType: InstitutionTypeEnum
+  ): Promise<Array<BrokerResource>> => {
+    const result = await apiClient.getProductBrokersUsingGET({
+      productId,
+      institutionType,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

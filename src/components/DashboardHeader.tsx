@@ -171,7 +171,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         handleClose={() => {
           setOpenGenericEnvProductModal(false);
         }}
-        productEnvironments={productSelected?.backOfficeEnvironmentConfigurations}
+        productEnvironments={productSelected?.backOfficeEnvironmentConfigurations as any}
       />
     </div>
   );

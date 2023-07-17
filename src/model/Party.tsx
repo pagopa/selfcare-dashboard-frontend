@@ -7,8 +7,8 @@ export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
 
 export type GeographicTaxonomy = {
-  code: string;
-  desc: string;
+  code?: string;
+  desc?: string;
 };
 
 export type Party = {
@@ -43,17 +43,17 @@ const buildUrlLog = (partyId: string) =>
 export const institutionResource2Party = (institutionResource: InstitutionResource): Party => {
   const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
   return {
-    partyId: institutionResource.id,
-    externalId: institutionResource.externalId,
-    originId: institutionResource.originId,
-    origin: institutionResource.origin,
-    description: institutionResource.name,
-    digitalAddress: institutionResource.mailAddress,
+    partyId: institutionResource.id ?? '',
+    externalId: institutionResource.externalId ?? '',
+    originId: institutionResource.originId ?? '',
+    origin: institutionResource.origin ?? '',
+    description: institutionResource.name ?? '',
+    digitalAddress: institutionResource.mailAddress ?? '',
     status: institutionResource.status as 'ACTIVE' | 'PENDING' | 'TOBEVALIDATED',
     userRole: institutionResource.userRole as UserRole,
     category: institutionResource.category,
     urlLogo,
-    fiscalCode: institutionResource.fiscalCode,
+    fiscalCode: institutionResource.fiscalCode ?? '',
     registeredOffice: institutionResource.address ?? '',
     zipCode: institutionResource.zipCode ?? '',
     typology: 'TODO', // it will represent the taxonomy of the party

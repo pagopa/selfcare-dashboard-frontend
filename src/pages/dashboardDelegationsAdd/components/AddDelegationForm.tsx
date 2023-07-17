@@ -9,7 +9,11 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { TitleBox, useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
+import {
+  TitleBox,
+  useErrorDispatcher,
+  useUnloadEventOnExit,
+} from '@pagopa/selfcare-common-frontend';
 import { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { useHistory } from 'react-router-dom';
@@ -18,6 +22,9 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { Party } from '../../../model/Party';
+import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
+import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
+import { getProductBrokers } from '../../../services/partyService';
 
 type Props = {
   delegateEnabledProducts: Array<Product>;
@@ -33,8 +40,11 @@ export default function AddDelegationForm({
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
   const { t } = useTranslation();
+  const addError = useErrorDispatcher();
 
+  const [_loading, setLoading] = useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<Product>();
+  const [productBrokers, setProductBrokers] = useState<Array<BrokerResource>>();
   const [techPartnerSelected, setTechPartnerSelected] = useState<any>(); // TODO Fix with the model of Tech Partners
 
   useEffect(() => {
@@ -42,6 +52,28 @@ export default function AddDelegationForm({
       setProductSelected(delegateEnabledProducts[0]);
     }
   }, [delegateEnabledProducts]);
+
+  useEffect(() => {
+    if (productSelected) {
+      handleProductBrokers(productSelected.id, 'PT' as InstitutionTypeEnum);
+    }
+  }, [productSelected]);
+
+  const handleProductBrokers = (productId: string, institutionType: InstitutionTypeEnum) => {
+    setLoading(true);
+    getProductBrokers(productId, institutionType)
+      .then((pb) => setProductBrokers(pb))
+      .catch((reason) => {
+        addError({
+          id: 'WRONG_FILE_EXTENSION',
+          blocking: false,
+          toNotify: false,
+          error: reason,
+          techDescription: `Cannot find product brokers for product: ${productId} and institution type: ${institutionType}`,
+        });
+      })
+      .finally(() => setLoading(false));
+  };
 
   return (
     <>
@@ -133,21 +165,16 @@ export default function AddDelegationForm({
               label={t('addDelegationPage.selectTechPartner.label')}
               input={<OutlinedInput label={t('addDelegationPage.selectTechPartner.label')} />}
             >
-              {delegateEnabledProducts.map(
-                (
-                  p: Product,
-                  index // TODO Map the partners
-                ) => (
-                  <MenuItem
-                    key={index}
-                    value={p.title}
-                    sx={{ fontSize: '14px', color: '#000000' }}
-                    onClick={() => setTechPartnerSelected(p)}
-                  >
-                    {p.title + 'PT '}
-                  </MenuItem>
-                )
-              )}
+              {productBrokers?.map((pb: BrokerResource, index) => (
+                <MenuItem
+                  key={index}
+                  value={pb.description}
+                  sx={{ fontSize: '14px', color: '#000000' }}
+                  onClick={() => setTechPartnerSelected(pb)}
+                >
+                  {pb.description}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>

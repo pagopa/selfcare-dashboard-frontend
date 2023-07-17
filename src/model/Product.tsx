@@ -14,8 +14,8 @@ export type Product = {
   title: string;
   urlBO: string;
   backOfficeEnvironmentConfigurations?: Array<{
-    environment: string;
-    url: string;
+    environment?: string;
+    url?: string;
   }>;
   urlPublic?: string;
   tag?: string;
@@ -31,10 +31,10 @@ export type Product = {
 };
 
 export type SubProduct = {
-  id: string;
-  title: string;
-  productOnBoardingStatus: ProductOnBoardingStatusEnum;
-  status: StatusEnum;
+  id?: string;
+  title?: string;
+  productOnBoardingStatus?: ProductOnBoardingStatusEnum;
+  status?: StatusEnum;
   description?: string;
   imageUrl?: string;
   logo?: string;
@@ -52,17 +52,16 @@ export const buildProductsMap = (products: Array<Product>): ProductsMap =>
 
 export const productResource2Product = (resource: ProductsResource): Product => ({
   authorized: resource.authorized,
-  description: resource.description,
-  id: resource.id,
-  imageUrl: resource.imageUrl,
-  logo: resource.logo,
+  description: resource.description ?? '',
+  id: resource.id ?? '',
+  imageUrl: resource.imageUrl ?? '',
+  logo: resource.logo ?? '',
   activationDateTime: resource.activatedAt,
-  productOnBoardingStatus: resource.productOnBoardingStatus,
-  status: resource.status,
-  title: resource.title,
-  urlBO: resource.urlBO,
-  backOfficeEnvironmentConfigurations:
-    resource.backOfficeEnvironmentConfigurations?.slice() ?? undefined,
+  productOnBoardingStatus: resource.productOnBoardingStatus ?? ProductOnBoardingStatusEnum.INACTIVE,
+  status: resource.status ?? StatusEnum.INACTIVE,
+  title: resource.title ?? '',
+  urlBO: resource.urlBO ?? '',
+  backOfficeEnvironmentConfigurations: resource.backOfficeEnvironmentConfigurations?.slice(),
   logoBgColor: resource.logoBgColor,
   urlPublic: resource.urlPublic,
   tag: undefined,

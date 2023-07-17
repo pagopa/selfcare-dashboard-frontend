@@ -1522,6 +1522,97 @@
         ]
       }
     },
+    "/products/{productId}/brokers/{institutionType}": {
+      "get": {
+        "tags": ["products"],
+        "summary": "getProductBrokers",
+        "description": "Service to get list of partners",
+        "operationId": "getProductBrokersUsingGET",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product's unique identifier",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "institutionType",
+            "in": "path",
+            "description": "Institution Type",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "enum": ["GSP", "PA", "PG", "PSP", "PT", "SCP"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BrokerResource"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": ["global"]
+          }
+        ]
+      }
+    },
     "/products/{productId}/roles": {
       "get": {
         "tags": ["products"],
@@ -2966,7 +3057,6 @@
       },
       "BackOfficeConfigurationsResource": {
         "title": "BackOfficeConfigurationsResource",
-        "required": ["environment", "url"],
         "type": "object",
         "properties": {
           "environment": {
@@ -2979,9 +3069,27 @@
           }
         }
       },
+      "BrokerResource": {
+        "title": "BrokerResource",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Partner's code"
+          },
+          "description": {
+            "type": "string",
+            "description": "Partner's description"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Partner's enabling",
+            "example": false
+          }
+        }
+      },
       "CertifiedFieldResourceOfstring": {
         "title": "CertifiedFieldResourceOfstring",
-        "required": ["certified", "value"],
         "type": "object",
         "properties": {
           "certified": {
@@ -3126,7 +3234,6 @@
       },
       "GeographicTaxonomyResource": {
         "title": "GeographicTaxonomyResource",
-        "required": ["code", "desc"],
         "type": "object",
         "properties": {
           "code": {
@@ -3237,9 +3344,7 @@
           },
           "mailAddress": {
             "type": "string",
-            "description": "Institution's email address",
-            "format": "email",
-            "example": "email@example.com"
+            "description": "Institution's email address"
           },
           "name": {
             "type": "string",
@@ -3265,18 +3370,6 @@
       },
       "InstitutionResource": {
         "title": "InstitutionResource",
-        "required": [
-          "externalId",
-          "fiscalCode",
-          "geographicTaxonomies",
-          "id",
-          "mailAddress",
-          "name",
-          "origin",
-          "originId",
-          "status",
-          "userRole"
-        ],
         "type": "object",
         "properties": {
           "address": {
@@ -3372,14 +3465,11 @@
       },
       "InstitutionUserDetailsResource": {
         "title": "InstitutionUserDetailsResource",
-        "required": ["fiscalCode", "id", "name", "products", "role", "status", "surname"],
         "type": "object",
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's personal email",
-            "format": "email",
-            "example": "email@example.com"
+            "description": "User's personal email"
           },
           "fiscalCode": {
             "type": "string",
@@ -3418,14 +3508,11 @@
       },
       "InstitutionUserResource": {
         "title": "InstitutionUserResource",
-        "required": ["id", "name", "products", "role", "status", "surname"],
         "type": "object",
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's personal email",
-            "format": "email",
-            "example": "email@example.com"
+            "description": "User's personal email"
           },
           "id": {
             "type": "string",
@@ -3549,7 +3636,6 @@
       },
       "PlainUserResource": {
         "title": "PlainUserResource",
-        "required": ["id", "name", "surname"],
         "type": "object",
         "properties": {
           "id": {
@@ -3569,7 +3655,6 @@
       },
       "PnPGInstitutionResource": {
         "title": "PnPGInstitutionResource",
-        "required": ["externalId", "fiscalCode", "id", "status"],
         "type": "object",
         "properties": {
           "address": {
@@ -3676,7 +3761,6 @@
       },
       "ProductInfoResource": {
         "title": "ProductInfoResource",
-        "required": ["id", "roleInfos"],
         "type": "object",
         "properties": {
           "id": {
@@ -3698,7 +3782,6 @@
       },
       "ProductRoleInfoResource": {
         "title": "ProductRoleInfoResource",
-        "required": ["relationshipId", "role", "selcRole", "status"],
         "type": "object",
         "properties": {
           "relationshipId": {
@@ -3722,7 +3805,6 @@
       },
       "ProductRoleMappingsResource": {
         "title": "ProductRoleMappingsResource",
-        "required": ["multiroleAllowed", "partyRole", "productRoles", "selcRole"],
         "type": "object",
         "properties": {
           "multiroleAllowed": {
@@ -3751,7 +3833,6 @@
       },
       "ProductRoleResource": {
         "title": "ProductRoleResource",
-        "required": ["code", "description", "label"],
         "type": "object",
         "properties": {
           "code": {
@@ -3770,14 +3851,11 @@
       },
       "ProductUserResource": {
         "title": "ProductUserResource",
-        "required": ["id", "name", "product", "role", "status", "surname"],
         "type": "object",
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's personal email",
-            "format": "email",
-            "example": "email@example.com"
+            "description": "User's personal email"
           },
           "id": {
             "type": "string",
@@ -3809,17 +3887,6 @@
       },
       "ProductsResource": {
         "title": "ProductsResource",
-        "required": [
-          "authorized",
-          "description",
-          "id",
-          "imageUrl",
-          "logo",
-          "productOnBoardingStatus",
-          "status",
-          "title",
-          "urlBO"
-        ],
         "type": "object",
         "properties": {
           "activatedAt": {
@@ -3863,7 +3930,6 @@
             "description": "Product's logo"
           },
           "logoBgColor": {
-            "pattern": "^#[0-9A-F]{6}$",
             "type": "string",
             "description": "Product logo's background color"
           },
@@ -3942,7 +4008,6 @@
       },
       "SubProductResource": {
         "title": "SubProductResource",
-        "required": ["id", "productOnBoardingStatus", "status", "title"],
         "type": "object",
         "properties": {
           "description": {
@@ -3962,7 +4027,6 @@
             "description": "Product's logo"
           },
           "logoBgColor": {
-            "pattern": "^#[0-9A-F]{6}$",
             "type": "string",
             "description": "Product logo's background color"
           },
@@ -4096,15 +4160,6 @@
       },
       "UserGroupPlainResource": {
         "title": "UserGroupPlainResource",
-        "required": [
-          "description",
-          "id",
-          "institutionId",
-          "membersCount",
-          "name",
-          "productId",
-          "status"
-        ],
         "type": "object",
         "properties": {
           "createdAt": {
@@ -4161,15 +4216,6 @@
       },
       "UserGroupResource": {
         "title": "UserGroupResource",
-        "required": [
-          "description",
-          "id",
-          "institutionId",
-          "members",
-          "name",
-          "productId",
-          "status"
-        ],
         "type": "object",
         "properties": {
           "createdAt": {
@@ -4226,7 +4272,6 @@
       },
       "UserIdResource": {
         "title": "UserIdResource",
-        "required": ["id"],
         "type": "object",
         "properties": {
           "id": {
@@ -4243,9 +4288,7 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's institutional email",
-            "format": "email",
-            "example": "email@example.com"
+            "description": "User's institutional email"
           },
           "fiscalCode": {
             "type": "string",
@@ -4281,7 +4324,6 @@
       },
       "UserResource": {
         "title": "UserResource",
-        "required": ["fiscalCode", "id"],
         "type": "object",
         "properties": {
           "email": {

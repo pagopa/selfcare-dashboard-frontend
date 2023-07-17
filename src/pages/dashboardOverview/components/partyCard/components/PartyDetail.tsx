@@ -49,11 +49,12 @@ export default function PartyDetail({ party }: Props) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
     setOptionsSelected(
-      party.geographicTaxonomies.length > 0 ? party.geographicTaxonomies : [{ code: '', desc: '' }]
+      party?.geographicTaxonomies.length > 0
+        ? party?.geographicTaxonomies
+        : [{ code: '', desc: '' }]
     );
   }, [party]);
 
-  useEffect(() => {}, [optionsSelected]);
   useEffect(() => {
     if (partyUpdated && party.partyId) {
       setPartyUpdated(partyUpdated);
@@ -73,7 +74,10 @@ export default function PartyDetail({ party }: Props) {
 
   const handleAddNewTaxonomies = () => {
     setLoadingSaveGeotaxonomies(true);
-    DashboardApi.updateInstitutionGeographicTaxonomy(party.partyId, optionsSelected)
+    DashboardApi.updateInstitutionGeographicTaxonomy(
+      party.partyId,
+      optionsSelected as Array<{ code: ''; desc: '' }>
+    )
       .then(() => {
         trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {
           geographic_taxonomies: optionsSelected,
@@ -205,7 +209,7 @@ export default function PartyDetail({ party }: Props) {
                     className="ShowDots"
                     component="span"
                   >
-                    {partyUpdated?.geographicTaxonomies[0]?.desc.toLocaleLowerCase() ?? '-'}
+                    {partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase() ?? '-'}
                     {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
                       <>
                         {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
