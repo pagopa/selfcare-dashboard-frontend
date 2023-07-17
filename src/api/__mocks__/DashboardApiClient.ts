@@ -272,21 +272,6 @@ export const mockedUserResource: UserResource = {
 
 export const mockedBrokerResource: Array<BrokerResource> = [
   {
-    code: '001',
-    description: 'open door',
-    enabled: true,
-  },
-  {
-    code: '002',
-    description: 'opeb',
-    enabled: true,
-  },
-  {
-    code: '003',
-    description: 'opeuq',
-    enabled: true,
-  },
-  {
     code: '004',
     description: 'broker01',
     enabled: true,
@@ -302,8 +287,18 @@ export const mockedBrokerResource: Array<BrokerResource> = [
     enabled: true,
   },
   {
-    code: '007',
-    description: 'nejk',
+    code: '006',
+    description: 'broker04',
+    enabled: true,
+  },
+  {
+    code: '006',
+    description: 'broker05',
+    enabled: true,
+  },
+  {
+    code: '006',
+    description: 'broker06',
     enabled: true,
   },
 ];

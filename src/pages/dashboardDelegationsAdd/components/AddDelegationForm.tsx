@@ -1,12 +1,16 @@
 import {
+  Autocomplete,
   Button,
   FormControl,
   Grid,
+  InputAdornment,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
   Stack,
+  styled,
+  TextField,
   Typography,
 } from '@mui/material';
 import {
@@ -32,6 +36,21 @@ type Props = {
   party: Party;
 };
 
+const CustomAutocomplete = styled(Autocomplete)({
+  '&::-webkit-scrollbar': {
+    width: 4,
+  },
+  '&::-webkit-scrollbar-track': {
+    boxShadow: `inset 10px 10px  #E6E9F2`,
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#0073E6',
+    borderRadius: '16px',
+  },
+  overflowY: 'auto',
+  height: '100%',
+});
+
 export default function AddDelegationForm({
   delegateEnabledProducts,
   selectedProduct,
@@ -45,7 +64,7 @@ export default function AddDelegationForm({
   const [_loading, setLoading] = useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<Product>();
   const [productBrokers, setProductBrokers] = useState<Array<BrokerResource>>();
-  const [techPartnerSelected, setTechPartnerSelected] = useState<any>(); // TODO Fix with the model of Tech Partners
+  const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
 
   useEffect(() => {
     if (delegateEnabledProducts.length === 1) {
@@ -140,42 +159,42 @@ export default function AddDelegationForm({
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth>
-            <InputLabel
-              id="tech-partner-label"
-              size="normal"
-              sx={{
-                '.MuiInputLabel-root.Mui-focused': {
-                  color: 'text.primary',
-                  fontWeight: 'fontWeightBold',
-                },
-              }}
-            >
-              {t('addDelegationPage.selectTechPartner.label')}
-            </InputLabel>
-            <Select
-              id="tech-partner-select"
-              IconComponent={SearchIcon}
+            <CustomAutocomplete
               size="medium"
-              disabled={false}
-              fullWidth
-              value={undefined}
-              displayEmpty
-              variant="outlined"
-              labelId="select-tech-partner"
-              label={t('addDelegationPage.selectTechPartner.label')}
-              input={<OutlinedInput label={t('addDelegationPage.selectTechPartner.label')} />}
-            >
-              {productBrokers?.map((pb: BrokerResource, index) => (
-                <MenuItem
-                  key={index}
-                  value={pb.description}
-                  sx={{ fontSize: '14px', color: '#000000' }}
-                  onClick={() => setTechPartnerSelected(pb)}
-                >
-                  {pb.description}
-                </MenuItem>
-              ))}
-            </Select>
+              options={productBrokers?.map((pb) => pb.description) ?? []}
+              onChange={(_event, selectedPb: any) => {
+                setTechPartnerSelected(selectedPb);
+              }}
+              clearIcon={<SearchIcon color="error" />}
+              disableClearable
+              sx={{
+                '.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot':
+                  {
+                    paddingRight: '9px',
+                  },
+              }}
+              renderInput={(params) => (
+                <TextField
+                  sx={{
+                    '.MuiInputLabel-root.Mui-focused': {
+                      color: 'text.primary',
+                      fontWeight: 'fontWeightBold',
+                    },
+                  }}
+                  {...params}
+                  placeholder={t('addDelegationPage.selectTechPartner.label')}
+                  InputProps={{
+                    ...params.InputProps,
+                    type: 'search',
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <SearchIcon fontSize="small" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
+            />
           </FormControl>
         </Grid>
       </Grid>
