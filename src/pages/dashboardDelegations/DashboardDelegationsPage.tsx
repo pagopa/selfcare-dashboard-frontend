@@ -133,7 +133,7 @@ export default function DashboardDelegationsPage({
                         />
                       </Box>
                       <Box>
-                        <Typography variant="h6">{product.description}</Typography>
+                        <Typography variant="h6">{product.title}</Typography>
                       </Box>
                     </Box>
 
