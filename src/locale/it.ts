@@ -168,6 +168,21 @@ export default {
       isTaxCodeEquals2Piva: 'Codice Fiscale / P.IVA',
       vatNumber: 'Partita IVA',
     },
+    delegationsPage: {
+      title: 'Deleghe',
+      subTitle: 'Aggiungi o visualizza i delegati per la gestione dei prodotti. ',
+
+      addDelegationsBtn: 'Aggiungi delega',
+      delegationsNavigationBar: {
+        redirectDescription: 'Panoramica',
+        titlePageDescription: 'Deleghe',
+      },
+      productsSection: {
+        title: 'Prodotti',
+        labelDelegates: 'Delegato',
+        noDelegatesLabel: 'Nessun delegato per questo prodotto. <1>Aggiungi delega</1>',
+      },
+    },
   },
   addDelegationPage: {
     title: 'Aggiungi delega',

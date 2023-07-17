@@ -3,7 +3,7 @@ import { Party } from '../../model/Party';
 
 export const mockedParties: Array<Party> = [
   {
-    userRole: 'ADMIN',
+    userRole: 'LIMITED',
     description: 'Comune di Bari',
     urlLogo: 'image',
     status: 'ACTIVE',

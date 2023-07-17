@@ -16,7 +16,7 @@ import DashboardSidenavItem from './DashboardSidenavItem';
 type Props = {
   products: Array<Product>;
   party: Party;
-  isDelegateSectionVisible: boolean;
+  isDelegateSectionVisible?: boolean;
   canSeeSection: boolean;
 };
 

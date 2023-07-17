@@ -19,6 +19,7 @@ import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRouting
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
+import { productsCanSeeDelegation } from '../../utils/constants';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -97,11 +98,18 @@ const Dashboard = () => {
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
   const canSeeSection = party?.userRole === 'ADMIN';
+
+  const delegateEnabledProducts = activeProducts.filter((product) =>
+    productsCanSeeDelegation.find((p) => product.id === p.prodId)
+  );
   const isDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
-    activeProducts.filter((product) => product.id === 'prod-pagopa') &&
+    activeProducts.find((product) =>
+      productsCanSeeDelegation.find((p) => product.id === p.prodId)
+    ) &&
     canSeeSection;
-  const delegateEnabledProducts = activeProducts.filter((product) => product.id === 'prod-pagopa'); // TODO Right now we will only open for prod-pagopa, an array of products has already been set up to meet future needs
+
+  // const delegateEnabledProducts = activeProducts.filter((product) => product.id === 'prod-pagopa'); // TODO Right now we will only open for prod-pagopa, an array of products has already been set up to meet future needs
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
@@ -165,11 +173,13 @@ const Dashboard = () => {
               decorators={decorators}
             />
           </Route>
-          <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
-            <DashboardDelegationsPage isDelegateSectionVisible={isDelegateSectionVisible} />
-          </Route>
           <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
             <AddDelegationPage delegateEnabledProducts={delegateEnabledProducts} party={party} />
+            <DashboardDelegationsPage
+              isDelegateSectionVisible={isDelegateSectionVisible}
+              party={party}
+              delegateEnabledProducts={delegateEnabledProducts}
+            />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>
