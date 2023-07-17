@@ -42,6 +42,9 @@ export default {
         title: 'Gestione Ente',
         overview: {
           title: 'Panoramica',
+          subMenu: {
+            title: 'Deleghe',
+          },
         },
         referents: {
           title: 'Utenti',
@@ -149,6 +152,12 @@ export default {
         PT: 'Partner tecnologico',
         SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
+      },
+      delegationBanner: {
+        title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
+        subTitle:
+          'Se ti avvali di figure come Partner o Intermediari tecnologici, puoi delegare la gestione di alcuni prodotti.',
+        goToButton: 'Vai',
       },
       vatNumberGroupValues: {
         yes: 'Sì',

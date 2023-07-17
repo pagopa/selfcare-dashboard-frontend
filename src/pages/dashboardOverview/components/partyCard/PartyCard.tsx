@@ -14,7 +14,7 @@ export default function PartyCard({ party }: Props) {
       sx={{
         width: '100%',
         py: 3,
-        px: 1,
+        px: 3,
         backgroundColor: '#EEEEEE',
         border: 'none',
       }}
