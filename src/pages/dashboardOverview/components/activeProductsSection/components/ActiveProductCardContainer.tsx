@@ -86,7 +86,7 @@ export default function ActiveProductCardContainer({
         handleClose={() => {
           setOpenGenericEnvProductModal(false);
         }}
-        productEnvironments={product?.backOfficeEnvironmentConfigurations}
+        productEnvironments={product?.backOfficeEnvironmentConfigurations as any}
       />
     </>
   );

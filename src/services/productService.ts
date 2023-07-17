@@ -22,10 +22,10 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
   if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
     return fetchProductRolesMocked(product);
   } else {
-    return DashboardApi.getProductRoles(product.id).then((roles) =>
+    return DashboardApi.getProductRoles(product.id).then((roles: any) =>
       roles
-        .map((pr) =>
-          pr.productRoles.map((r) => ({
+        ?.map((pr: any) =>
+          pr?.productRoles?.map((r: any) => ({
             productId: product.id,
             partyRole: pr.partyRole,
             selcRole: pr.selcRole,
@@ -35,7 +35,7 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
             description: r.description,
           }))
         )
-        .flatMap((x) => x)
+        .flatMap((x: any) => x)
     );
   }
 };
