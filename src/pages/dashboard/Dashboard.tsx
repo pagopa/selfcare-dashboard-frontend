@@ -175,6 +175,8 @@ const Dashboard = () => {
           </Route>
           <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
             <AddDelegationPage delegateEnabledProducts={delegateEnabledProducts} party={party} />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
             <DashboardDelegationsPage
               isDelegateSectionVisible={isDelegateSectionVisible}
               party={party}
