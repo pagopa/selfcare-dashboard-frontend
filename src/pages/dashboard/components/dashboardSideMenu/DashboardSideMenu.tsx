@@ -16,7 +16,7 @@ import DashboardSidenavItem from './DashboardSidenavItem';
 type Props = {
   products: Array<Product>;
   party: Party;
-  productsFiltered2Delegations: boolean;
+  productsFiltered2Delegations?: boolean;
   canSeeSection: boolean;
 };
 

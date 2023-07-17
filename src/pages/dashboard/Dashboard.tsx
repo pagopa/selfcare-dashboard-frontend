@@ -18,6 +18,7 @@ import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
 import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardsDelegations/DashboardDelegationsPage';
+import { productsCanSeeDelegation } from '../../utils/constants';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -96,9 +97,16 @@ const Dashboard = () => {
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
   const canSeeSection = party?.userRole === 'ADMIN';
+
+  const delegationsProducts = activeProducts.filter((product) =>
+    productsCanSeeDelegation.find((p) => product.id === p.prodId)
+  );
+
   const productsFiltered2Delegations =
     ENV.DELEGATIONS.ENABLE &&
-    activeProducts.filter((product) => product.id === 'prod-pagopa') &&
+    activeProducts.find((product) =>
+      productsCanSeeDelegation.find((p) => product.id === p.prodId)
+    ) &&
     canSeeSection;
 
   return party && products ? (
@@ -164,7 +172,11 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
-            <DashboardDelegationsPage productsFiltered2Delegations={productsFiltered2Delegations} />
+            <DashboardDelegationsPage
+              productsFiltered2Delegations={productsFiltered2Delegations}
+              party={party}
+              delegationsProducts={delegationsProducts}
+            />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>
