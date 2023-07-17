@@ -64,7 +64,7 @@ export default function DashboardSideMenu({
             icon={DashboardCustomize}
             subMenuVisible={!!productsFiltered2Delegations}
             subMenuIcon={AssignmentIcon}
-            subMenuTitle={'Deleghe'}
+            subMenuTitle={t('overview.sideMenu.institutionManagement.overview.subMenu.title')}
             handleClickSubMenu={() =>
               onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
             }
