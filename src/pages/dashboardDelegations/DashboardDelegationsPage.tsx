@@ -31,6 +31,14 @@ export default function DashboardDelegationsPage({
     partyId: party.partyId,
   });
 
+  const goToAddDelegationsPage = () =>
+    onExit(() =>
+      history.push(
+        resolvePathVariables(DASHBOARD_ROUTES.ADD_DELEGATE.path, {
+          partyId: party.partyId,
+        })
+      )
+    );
   useEffect(() => {
     if (!isDelegateSectionVisible) {
       setIsError(true);
@@ -95,7 +103,11 @@ export default function DashboardDelegationsPage({
                     </Typography>
                   </Box>
                   <Box>
-                    <Button variant="contained" sx={{ height: '40px' }} onClick={() => ''}>
+                    <Button
+                      variant="contained"
+                      sx={{ height: '40px' }}
+                      onClick={goToAddDelegationsPage}
+                    >
                       {t('overview.delegationsPage.addDelegationsBtn')}
                     </Button>
                   </Box>
@@ -145,7 +157,7 @@ export default function DashboardDelegationsPage({
                           >
                             Nessun delegato per questo prodotto.
                             <Link
-                              onClick={() => onExit(() => '')} // TODO: add link to redirect in add delegates
+                              onClick={goToAddDelegationsPage} // TODO: add link to redirect in add delegates
                               sx={{
                                 fontWeight: 'fontWeightMedium',
                                 ml: 1,
