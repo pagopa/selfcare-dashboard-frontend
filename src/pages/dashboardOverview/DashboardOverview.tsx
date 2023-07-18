@@ -30,8 +30,9 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const productsFiltered2Delegations =
     ENV.DELEGATIONS.ENABLE &&
-    activeProducts.find((product) =>
-      productsCanSeeDelegation.find((p) => product.id === p.prodId)
+    activeProducts.find(
+      (product) =>
+        productsCanSeeDelegation.find((p) => product.id === p.prodId) && product.delegable === true
     ) &&
     canUploadLogo;
 
