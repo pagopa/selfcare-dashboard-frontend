@@ -22,8 +22,11 @@ const DashboardOverview = ({ party, products }: Props) => {
   const canUploadLogo = party.userRole === 'ADMIN';
 
   const activeProducts: Array<Product> =
-    useMemo(() => products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE'), [products]) ??
-    [];
+    useMemo(
+      () =>
+        products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized === true),
+      [products]
+    ) ?? [];
 
   const productsFiltered2Delegations =
     ENV.DELEGATIONS.ENABLE &&
