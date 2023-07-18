@@ -14,7 +14,6 @@ import { IllusError, ProductAvatar } from '@pagopa/mui-italia';
 import { Party } from '../../model/Party';
 import { DASHBOARD_ROUTES } from '../../routes';
 import { Product } from '../../model/Product';
-import { TechnologyPartner } from '../../model/TechnologyPartner';
 import { ENV } from '../../utils/env';
 
 type Props = {
@@ -32,7 +31,6 @@ export default function DashboardDelegationsPage({
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
   const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
-  const [_techPartners, setTechPartners] = useState<Array<TechnologyPartner>>();
   const overviewPath = resolvePathVariables(overviewRoute, {
     partyId: party.partyId,
   });
@@ -66,15 +64,6 @@ export default function DashboardDelegationsPage({
       description: t('overview.delegationsPage.delegationsNavigationBar.titlePageDescription'),
     },
   ];
-
-  useEffect(() => {
-    setTechPartners([
-      {
-        name: 'PT Prova',
-        id: '1',
-      },
-    ]);
-  }, []);
 
   return (
     <>
