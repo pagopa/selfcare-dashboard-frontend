@@ -107,11 +107,11 @@ const Dashboard = () => {
   );
   const isDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
-    activeProducts.find((product) =>
-      productsCanSeeDelegation.find((p) => product.id === p.prodId)
+    activeProducts.find(
+      (product) =>
+        productsCanSeeDelegation.find((p) => product.id === p.prodId) && product.delegable === true
     ) &&
     canSeeSection;
-
   // const delegateEnabledProducts = activeProducts.filter((product) => product.id === 'prod-pagopa'); // TODO Right now we will only open for prod-pagopa, an array of products has already been set up to meet future needs
 
   return party && products ? (
