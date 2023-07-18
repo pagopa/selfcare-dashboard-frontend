@@ -91,7 +91,7 @@ variables:
     react_app_mixpanel_token: '$(PROD_MIXPANEL_TOKEN)'
     react_app_onetrust_domain_id: '$(PROD_ONETRUST_DOMAIN_ID)'
 
-    # react_app_delegations_enabled: '$(PROD_DELEGATIONS_ENABLED)'
+    react_app_delegations_enabled: '$(PROD_DELEGATIONS_ENABLED)'
 
   # every branch different from past will be considered as DEV
   #  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release-dev') }}:
