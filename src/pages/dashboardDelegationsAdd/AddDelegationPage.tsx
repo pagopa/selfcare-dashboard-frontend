@@ -19,11 +19,14 @@ export default function AddDelegationPage({ delegateEnabledProducts, party }: Pr
   const history = useHistory();
   const { t } = useTranslation();
 
+  const productIdByQuery = new URLSearchParams(window.location.search).get('productId');
+  const selectedProductByQuery = delegateEnabledProducts.find((deg) => deg.id === productIdByQuery);
+
   const goBack = () => {
     history.goBack();
   };
 
-  const paths = [
+  const pathsWithProduct = [
     {
       icon: DashboardCustomize,
       description: t('addDelegationPage.navigationBar.overview'),
@@ -44,12 +47,14 @@ export default function AddDelegationPage({ delegateEnabledProducts, party }: Pr
         ),
     },
     {
-      description: delegateEnabledProducts[0].title,
+      description: selectedProductByQuery?.title ?? '',
     },
     {
       description: t('addDelegationPage.navigationBar.addDelegation'),
     },
   ];
+
+  const pathsWithoutProduct = pathsWithProduct.filter((_p, index) => index !== 2);
 
   return (
     <Grid
@@ -61,7 +66,11 @@ export default function AddDelegationPage({ delegateEnabledProducts, party }: Pr
     >
       <Grid container item xs={12} lg={8}>
         <Grid item xs={12}>
-          <ProductNavigationBar paths={paths} showBackComponent={true} goBack={goBack} />
+          <ProductNavigationBar
+            paths={selectedProductByQuery ? pathsWithProduct : pathsWithoutProduct}
+            showBackComponent={true}
+            goBack={goBack}
+          />
         </Grid>
         <Grid item xs={12}>
           <TitleBox
@@ -75,7 +84,11 @@ export default function AddDelegationPage({ delegateEnabledProducts, party }: Pr
           />
         </Grid>
         <Grid item xs={11} mb={5}>
-          <AddDelegationForm delegateEnabledProducts={delegateEnabledProducts} party={party} />
+          <AddDelegationForm
+            delegateEnabledProducts={delegateEnabledProducts}
+            party={party}
+            selectedProductByQuery={selectedProductByQuery}
+          />
         </Grid>
       </Grid>
     </Grid>

@@ -3,13 +3,11 @@ import {
   Button,
   FormControl,
   Grid,
-  InputAdornment,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
   Stack,
-  styled,
   TextField,
   Typography,
 } from '@mui/material';
@@ -32,29 +30,14 @@ import { getProductBrokers } from '../../../services/partyService';
 
 type Props = {
   delegateEnabledProducts: Array<Product>;
-  selectedProduct?: Product;
   party: Party;
+  selectedProductByQuery?: Product;
 };
-
-const CustomAutocomplete = styled(Autocomplete)({
-  '&::-webkit-scrollbar': {
-    width: 4,
-  },
-  '&::-webkit-scrollbar-track': {
-    boxShadow: `inset 10px 10px  #E6E9F2`,
-  },
-  '&::-webkit-scrollbar-thumb': {
-    backgroundColor: '#0073E6',
-    borderRadius: '16px',
-  },
-  overflowY: 'auto',
-  height: '100%',
-});
 
 export default function AddDelegationForm({
   delegateEnabledProducts,
-  selectedProduct,
   party,
+  selectedProductByQuery,
 }: Props) {
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
@@ -73,6 +56,15 @@ export default function AddDelegationForm({
   }, [delegateEnabledProducts]);
 
   useEffect(() => {
+    if (selectedProductByQuery) {
+      const chosenProduct = delegateEnabledProducts.find(
+        (dep) => dep.id === selectedProductByQuery.id
+      );
+      setProductSelected(chosenProduct);
+    }
+  }, [selectedProductByQuery]);
+
+  useEffect(() => {
     if (productSelected) {
       handleProductBrokers(productSelected.id, 'PT' as InstitutionTypeEnum);
     }
@@ -84,7 +76,7 @@ export default function AddDelegationForm({
       .then((pb) => setProductBrokers(pb))
       .catch((reason) => {
         addError({
-          id: 'WRONG_FILE_EXTENSION',
+          id: 'PRODUCT_BROKERS_NOT_FOUND',
           blocking: false,
           toNotify: false,
           error: reason,
@@ -94,6 +86,7 @@ export default function AddDelegationForm({
       .finally(() => setLoading(false));
   };
 
+  console.log(!techPartnerSelected);
   return (
     <>
       <Grid container sx={{ backgroundColor: 'background.paper' }} p={3}>
@@ -114,13 +107,9 @@ export default function AddDelegationForm({
             <Select
               id="select-product-choose"
               size="small"
-              disabled={delegateEnabledProducts.length === 1 || !!selectedProduct}
+              disabled={delegateEnabledProducts.length === 1}
               fullWidth
-              value={
-                delegateEnabledProducts.length === 1
-                  ? delegateEnabledProducts[0].title
-                  : selectedProduct?.title
-              }
+              value={productSelected ? productSelected?.title : ''}
               displayEmpty
               variant="outlined"
               labelId="select-label-products"
@@ -159,40 +148,65 @@ export default function AddDelegationForm({
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth>
-            <CustomAutocomplete
-              size="medium"
+            <Autocomplete
               options={productBrokers?.map((pb) => pb.description) ?? []}
-              onChange={(_event, selectedPb: any) => {
+              clearOnEscape
+              onChange={(_e, selectedPb: any) => {
                 setTechPartnerSelected(selectedPb);
               }}
-              clearIcon={<SearchIcon color="error" />}
-              disableClearable
               sx={{
                 '.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot':
                   {
-                    paddingRight: '9px',
+                    paddingRight: 2,
                   },
+              }}
+              ListboxProps={{
+                style: {
+                  height: '200px',
+                  overflow: 'visible',
+                },
+              }}
+              componentsProps={{
+                paper: {
+                  sx: {
+                    '&::-webkit-scrollbar': {
+                      width: 4,
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      boxShadow: `inset 10px 10px  #E6E9F2`,
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#0073E6',
+                      borderRadius: '16px',
+                    },
+                    overflowY: 'auto',
+                    height: '100%',
+                  },
+                },
               }}
               renderInput={(params) => (
                 <TextField
                   sx={{
                     '.MuiInputLabel-root.Mui-focused': {
-                      color: 'text.primary',
-                      fontWeight: 'fontWeightBold',
+                      color: 'primary.main',
+                      fontWeight: 'fontWeightMedium',
                     },
                   }}
                   {...params}
-                  placeholder={t('addDelegationPage.selectTechPartner.label')}
+                  placeholder={t('addDelegationPage.selectTechPartner.placeholder')}
                   InputProps={{
                     ...params.InputProps,
                     type: 'search',
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <SearchIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
+                    endAdornment: !techPartnerSelected ? (
+                      <SearchIcon fontSize="small" />
+                    ) : undefined,
                   }}
                 />
+              )}
+              renderOption={(props, options: any) => (
+                <MenuItem {...props} sx={{ height: '44px' }}>
+                  {options}
+                </MenuItem>
               )}
             />
           </FormControl>

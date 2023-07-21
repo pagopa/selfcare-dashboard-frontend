@@ -27,13 +27,26 @@ export default function DashboardDelegationsPage({
   party,
   delegateEnabledProducts,
 }: Props) {
-  const [isError, setIsError] = useState<boolean>(false);
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
+  const history = useHistory();
+
+  const [isError, setIsError] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isDelegateSectionVisible) {
+      setIsError(true);
+    }
+  }, [isDelegateSectionVisible]);
+
   const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
   const overviewPath = resolvePathVariables(overviewRoute, {
     partyId: party.partyId,
   });
+
+  const goBack = () => {
+    history.goBack();
+  };
 
   const goToAddDelegationsPage = (product?: any) =>
     onExit(() =>
@@ -43,17 +56,7 @@ export default function DashboardDelegationsPage({
         }).concat(product ? `?productId=${product.id}` : '')
       )
     );
-  useEffect(() => {
-    if (!isDelegateSectionVisible) {
-      setIsError(true);
-    }
-  }, [isDelegateSectionVisible]);
 
-  const history = useHistory();
-
-  const goBack = () => {
-    history.goBack();
-  };
   const paths = [
     {
       description: t('overview.delegationsPage.delegationsNavigationBar.redirectDescription'),
