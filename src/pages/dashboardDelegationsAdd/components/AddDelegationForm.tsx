@@ -25,8 +25,8 @@ import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { Party } from '../../../model/Party';
 import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
-import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
 import { getProductBrokers } from '../../../services/partyService';
+import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
 
 type Props = {
   delegateEnabledProducts: Array<Product>;
@@ -43,6 +43,7 @@ export default function AddDelegationForm({
   const onExit = useUnloadEventOnExit();
   const { t } = useTranslation();
   const addError = useErrorDispatcher();
+  // const addNotify = useUserNotify();  // TODO Uncomment as soon as the openApi includes this call
 
   const [_loading, setLoading] = useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<Product>();
@@ -86,7 +87,39 @@ export default function AddDelegationForm({
       .finally(() => setLoading(false));
   };
 
-  console.log(!techPartnerSelected);
+  // TODO Uncomment as soon as the openApi includes this call
+  /*
+  const handleSubmit = (party: Party, techPartnerId?: string, productSelected?: Product) => {
+    if (productSelected && techPartnerId) {
+      setLoading(true);
+      createDelegation(party, productSelected, techPartnerId)
+        .then(() => {
+          addNotify({
+            component: 'Toast',
+            id: 'DELEGATION_CREATED_SUCCESSFULLY',
+            title: t('addDelegationPage.delegationSuccessfulCreated'),
+            message: '',
+          });
+          history.push(
+            resolvePathVariables(DASHBOARD_ROUTES.DELEGATIONS.path, { partyId: party.partyId })
+          );
+        })
+        .catch((reason: any) => {
+          addError({
+            id: 'DELEGATION_NOT_CREATED',
+            blocking: false,
+            error: reason,
+            techDescription: `An error occurred while creating delegation for ${party.partyId}`,
+            toNotify: true,
+            displayableTitle: t('addDelegationPage.delegationNotCreated'),
+            displayableDescription: '',
+            component: 'Toast',
+          });
+        });
+    }
+  };
+  */
+
   return (
     <>
       <Grid container sx={{ backgroundColor: 'background.paper' }} p={3}>
@@ -231,6 +264,9 @@ export default function AddDelegationForm({
         </Button>
         <Button
           disabled={!productSelected || !techPartnerSelected}
+          onClick={() => {
+            /* handleSubmit(party, techPartnerSelected?.code, productSelected) */
+          }} // TODO Uncomment as soon as the openApi includes this call
           color="primary"
           variant="contained"
           type="submit"
