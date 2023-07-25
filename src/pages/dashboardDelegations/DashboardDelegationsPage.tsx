@@ -57,6 +57,7 @@ export default function DashboardDelegationsPage({
       )
     );
 
+  const delegations = true;
   const paths = [
     {
       description: t('overview.delegationsPage.delegationsNavigationBar.redirectDescription'),
@@ -149,24 +150,28 @@ export default function DashboardDelegationsPage({
                       </Grid>
 
                       <Grid item xs={10}>
-                        <Typography variant="body1" sx={{ fontSize: '16px' }}>
-                          <Trans
-                            i18nKey={'overview.delegationsPage.productsSection.noDelegatesLabel'}
-                          >
-                            Nessun delegato per questo prodotto.
-                            <Link
-                              onClick={() => goToAddDelegationsPage(product)}
-                              sx={{
-                                fontWeight: 'fontWeightMedium',
-                                ml: 1,
-                                textDecoration: 'none',
-                                cursor: 'pointer',
-                              }}
+                        {!delegations ? (
+                          <Typography variant="body1" sx={{ fontSize: '16px' }}>
+                            <Trans
+                              i18nKey={'overview.delegationsPage.productsSection.noDelegatesLabel'}
                             >
-                              Aggiungi delega
-                            </Link>
-                          </Trans>
-                        </Typography>
+                              Nessun delegato per questo prodotto.
+                              <Link
+                                onClick={() => goToAddDelegationsPage(product)}
+                                sx={{
+                                  fontWeight: 'fontWeightMedium',
+                                  ml: 1,
+                                  textDecoration: 'none',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                Aggiungi delega
+                              </Link>
+                            </Trans>
+                          </Typography>
+                        ) : (
+                          <Typography>MAGGIOLI SRL</Typography>
+                        )}
                       </Grid>
                     </Box>
                   </Box>
