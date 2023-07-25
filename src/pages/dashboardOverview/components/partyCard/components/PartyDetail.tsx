@@ -73,7 +73,10 @@ export default function PartyDetail({ party }: Props) {
 
   const handleAddNewTaxonomies = () => {
     setLoadingSaveGeotaxonomies(true);
-    DashboardApi.updateInstitutionGeographicTaxonomy(party.partyId, optionsSelected)
+    DashboardApi.updateInstitutionGeographicTaxonomy(
+      party.partyId as string,
+      optionsSelected as Array<GeographicTaxonomy>
+    )
       .then(() => {
         trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {
           geographic_taxonomies: optionsSelected,
@@ -189,7 +192,7 @@ export default function PartyDetail({ party }: Props) {
               <Grid item xs={4}>
                 <Tooltip
                   title={
-                    partyUpdated && partyUpdated.description.length >= showTooltipAfter
+                    partyUpdated?.description && partyUpdated.description.length >= showTooltipAfter
                       ? partyUpdated.description
                       : ''
                   }
@@ -205,7 +208,7 @@ export default function PartyDetail({ party }: Props) {
                     className="ShowDots"
                     component="span"
                   >
-                    {partyUpdated?.geographicTaxonomies[0]?.desc.toLocaleLowerCase() ?? '-'}
+                    {partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase() ?? '-'}
                     {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
                       <>
                         {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
@@ -237,7 +240,11 @@ export default function PartyDetail({ party }: Props) {
           </Grid>
           <Grid item xs={4}>
             <Tooltip
-              title={party.description.length >= showTooltipAfter ? party.description : ''}
+              title={
+                party.description && party.description.length >= showTooltipAfter
+                  ? party.description
+                  : ''
+              }
               placement="top"
               arrow={true}
             >
@@ -256,7 +263,11 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
               <Grid item xs={4}>
                 <Tooltip
-                  title={party.originId.length >= showTooltipAfter ? party.originId : ''}
+                  title={
+                    party.originId && party.originId.length >= showTooltipAfter
+                      ? party.originId
+                      : ''
+                  }
                   placement="top"
                   arrow={true}
                 >
@@ -278,7 +289,11 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
               <Grid item xs={4}>
                 <Tooltip
-                  title={party.originId.length >= showTooltipAfter ? party.originId : ''}
+                  title={
+                    party.originId && party.originId.length >= showTooltipAfter
+                      ? party.originId
+                      : ''
+                  }
                   placement="top"
                   arrow={true}
                 >
@@ -304,7 +319,11 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
               <Grid item xs={4}>
                 <Tooltip
-                  title={party.fiscalCode.length >= showTooltipAfter ? party.fiscalCode : ''}
+                  title={
+                    party.fiscalCode && party.fiscalCode.length >= showTooltipAfter
+                      ? party.fiscalCode
+                      : ''
+                  }
                   placement="top"
                   arrow={true}
                 >
@@ -353,7 +372,11 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
               <Grid item xs={4}>
                 <Tooltip
-                  title={party.fiscalCode.length >= showTooltipAfter ? party.fiscalCode : ''}
+                  title={
+                    party.fiscalCode && party.fiscalCode.length >= showTooltipAfter
+                      ? party.fiscalCode
+                      : ''
+                  }
                   placement="top"
                   arrow={true}
                 >
@@ -406,7 +429,11 @@ export default function PartyDetail({ party }: Props) {
           </Grid>
           <Grid item xs={4} sx={{}}>
             <Tooltip
-              title={party.digitalAddress.length >= showTooltipAfter ? party.digitalAddress : ''}
+              title={
+                party.digitalAddress && party.digitalAddress.length >= showTooltipAfter
+                  ? party.digitalAddress
+                  : ''
+              }
               placement="top"
               arrow={true}
             >

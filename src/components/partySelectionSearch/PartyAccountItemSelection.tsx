@@ -16,11 +16,14 @@ export default function PartyAccountItemSelection({ selectedParty, clearField }:
     <Box display="flex" p={2}>
       <Box width="100%">
         <PartyAccountItem
-          partyName={selectedParty ? selectedParty.description : ''}
+          partyName={selectedParty && selectedParty.description ? selectedParty.description : ''}
           partyRole={selectedParty ? t(roleLabels[selectedParty.userRole].longLabelKey) : ''}
           image={selectedParty?.urlLogo}
           maxCharactersNumberMultiLine={20}
           noWrap={false}
+          parentPartyName={
+            selectedParty && selectedParty.parentDescription ? selectedParty.parentDescription : ''
+          }
         />
       </Box>
       <Box display="flex" alignItems="center">
