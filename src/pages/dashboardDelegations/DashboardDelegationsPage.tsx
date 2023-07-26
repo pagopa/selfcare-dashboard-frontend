@@ -120,65 +120,67 @@ export default function DashboardDelegationsPage({
                 </Box>
               </Grid>
               {isDelegateSectionVisible &&
-                delegateEnabledProducts.map((product) => (
-                  <Box
-                    key={product.id}
-                    width="100%"
-                    height={'153px'}
-                    sx={{ backgroundColor: 'white' }}
-                    p={3}
-                    mt={2}
-                  >
-                    <Box display={'flex'}>
-                      <Box mr={2}>
-                        <ProductAvatar
-                          logoUrl={product.logo}
-                          logoBgColor={product.logoBgColor}
-                          logoAltText={`${product.title} logo`}
-                          size="small"
-                        />
+                delegateEnabledProducts
+                  .filter((p) => p.delegable === true)
+                  .map((product) => (
+                    <Box
+                      key={product.id}
+                      width="100%"
+                      height={'153px'}
+                      sx={{ backgroundColor: 'white' }}
+                      p={3}
+                      mt={2}
+                    >
+                      <Box display={'flex'}>
+                        <Box mr={2}>
+                          <ProductAvatar
+                            logoUrl={product.logo}
+                            logoBgColor={product.logoBgColor}
+                            logoAltText={`${product.title} logo`}
+                            size="small"
+                          />
+                        </Box>
+                        <Box>
+                          <Typography variant="h6">{product.title}</Typography>
+                        </Box>
                       </Box>
+
                       <Box>
-                        <Typography variant="h6">{product.title}</Typography>
+                        <Grid item xs={12} my={3}>
+                          <Divider sx={{ borderColor: 'background.default' }} />
+                        </Grid>
+                      </Box>
+
+                      <Box display={'flex'}>
+                        <Grid item xs={2}>
+                          <Typography variant="body1" sx={{ fontSize: '16px' }}>
+                            {t('overview.delegationsPage.productsSection.labelDelegates')}
+                          </Typography>
+                        </Grid>
+
+                        <Grid item xs={10}>
+                          <Typography variant="body1" sx={{ fontSize: '16px' }}>
+                            <Trans
+                              i18nKey={'overview.delegationsPage.productsSection.noDelegatesLabel'}
+                            >
+                              Nessun delegato per questo prodotto.
+                              <Link
+                                onClick={goToAddDelegationsPage}
+                                sx={{
+                                  fontWeight: 'fontWeightMedium',
+                                  ml: 1,
+                                  textDecoration: 'none',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                Aggiungi delega
+                              </Link>
+                            </Trans>
+                          </Typography>
+                        </Grid>
                       </Box>
                     </Box>
-
-                    <Box>
-                      <Grid item xs={12} my={3}>
-                        <Divider sx={{ borderColor: 'background.default' }} />
-                      </Grid>
-                    </Box>
-
-                    <Box display={'flex'}>
-                      <Grid item xs={2}>
-                        <Typography variant="body1" sx={{ fontSize: '16px' }}>
-                          {t('overview.delegationsPage.productsSection.labelDelegates')}
-                        </Typography>
-                      </Grid>
-
-                      <Grid item xs={10}>
-                        <Typography variant="body1" sx={{ fontSize: '16px' }}>
-                          <Trans
-                            i18nKey={'overview.delegationsPage.productsSection.noDelegatesLabel'}
-                          >
-                            Nessun delegato per questo prodotto.
-                            <Link
-                              onClick={goToAddDelegationsPage}
-                              sx={{
-                                fontWeight: 'fontWeightMedium',
-                                ml: 1,
-                                textDecoration: 'none',
-                                cursor: 'pointer',
-                              }}
-                            >
-                              Aggiungi delega
-                            </Link>
-                          </Trans>
-                        </Typography>
-                      </Grid>
-                    </Box>
-                  </Box>
-                ))}
+                  ))}
             </Grid>
           </Grid>
         </Box>

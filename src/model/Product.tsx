@@ -68,6 +68,5 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   tag: undefined,
   userRole: resource.userRole as UserRole,
   subProducts: resource.children?.slice() ?? [],
-  delegable: true,
-  // TODO: implement delegable: resource.delegable ?? false when api will be ready,
+  delegable: resource.delegable ?? false,
 });
