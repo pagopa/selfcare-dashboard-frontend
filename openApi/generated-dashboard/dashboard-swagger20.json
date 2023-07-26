@@ -11,13 +11,114 @@
     "http"
   ],
   "paths": {
+    "/delegations": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/DelegationRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/DelegationIdResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "delegations"
+        ],
+        "description": "Service to create association between institution and technical partner",
+        "operationId": "createDelegationUsingPOST",
+        "summary": "createDelegation"
+      }
+    },
     "/institutions": {
       "get": {
         "produces": [
           "application/json",
           "application/problem+json"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "authenticated",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "authorities[0].authority",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "credentials",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "in": "query",
+            "name": "details",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "in": "query",
+            "name": "principal",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "description": "mode",
+            "enum": [
+              "BASE",
+              "FULLY"
+            ],
+            "in": "query",
+            "name": "mode",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -991,58 +1092,6 @@
         "description": "Service to retrieve a specific onboarding request",
         "operationId": "retrieveOnboardingRequestUsingGET",
         "summary": "retrieveOnboardingRequest"
-      }
-    },
-    "/pnPGInstitutions": {
-      "get": {
-        "produces": [
-          "application/json",
-          "application/problem+json"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema":{"$ref":"#/definitions/PnPGInstitutionResourceArray"}
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": [
-              "global"
-            ]
-          }
-        ],
-        "tags": [
-          "pnPGInstitutions"
-        ],
-        "description": "Service to get the PG institutions related to selection of logged user",
-        "operationId": "getPnPGInstitutionsUsingGET",
-        "summary": "getPnPGInstitutions"
       }
     },
     "/pnPGInstitutions/{institutionId}/products": {
@@ -2448,7 +2497,7 @@
       }
     }
   },
-  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"PnPGInstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/PnPGInstitutionResource"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
+  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -2584,6 +2633,54 @@
         "productId"
       ],
       "title": "CreateUserGroupDto",
+      "type": "object"
+    },
+    "DelegationIdResource": {
+      "properties": {
+        "id": {
+          "description": "Delegation's unique identifier",
+          "type": "string"
+        }
+      },
+      "title": "DelegationIdResource",
+      "type": "object"
+    },
+    "DelegationRequestDto": {
+      "properties": {
+        "from": {
+          "description": "Institution's identifier",
+          "type": "string"
+        },
+        "institutionFromName": {
+          "description": "Institution's name",
+          "type": "string"
+        },
+        "productId": {
+          "description": "Product's identifier",
+          "type": "string"
+        },
+        "to": {
+          "description": "Technical partner's identifier",
+          "type": "string"
+        },
+        "type": {
+          "description": "Delegation type",
+          "enum": [
+            "AOO",
+            "PT",
+            "UO"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "institutionFromName",
+        "productId",
+        "to",
+        "type"
+      ],
+      "title": "DelegationRequestDto",
       "type": "object"
     },
     "DpoData": {
@@ -2872,6 +2969,10 @@
           "description": "Institution's identifier related to origin",
           "type": "string"
         },
+        "parentDescription": {
+          "description": "Sub unit institution parent Description",
+          "type": "string"
+        },
         "recipientCode": {
           "description": "Billing recipient code",
           "type": "string"
@@ -3133,75 +3234,6 @@
       "title": "PlainUserResource",
       "type": "object"
     },
-    "PnPGInstitutionResource": {
-      "properties": {
-        "address": {
-          "description": "Institution's physical address",
-          "type": "string"
-        },
-        "category": {
-          "description": "Institution's category",
-          "type": "string"
-        },
-        "externalId": {
-          "description": "Institution's unique external identifier",
-          "type": "string"
-        },
-        "fiscalCode": {
-          "description": "Fiscal code corresponding to the institution",
-          "type": "string"
-        },
-        "geographicTaxonomies": {
-          "description": "Institution's geographic taxonomy",
-          "items": {
-            "$ref": "#/definitions/GeographicTaxonomyResource"
-          },
-          "type": "array"
-        },
-        "id": {
-          "description": "Institution's unique internal identifier",
-          "type": "string"
-        },
-        "institutionType": {
-          "description": "Institution's type",
-          "type": "string"
-        },
-        "mailAddress": {
-          "description": "Institution's email address",
-          "type": "string"
-        },
-        "name": {
-          "description": "Institution's name",
-          "type": "string"
-        },
-        "origin": {
-          "description": "Institution's data origin",
-          "type": "string"
-        },
-        "originId": {
-          "description": "Institution's identifier related to origin",
-          "type": "string"
-        },
-        "recipientCode": {
-          "description": "Billing recipient code",
-          "type": "string"
-        },
-        "status": {
-          "description": "Institution's status",
-          "type": "string"
-        },
-        "userRole": {
-          "description": "Logged user's role",
-          "type": "string"
-        },
-        "zipCode": {
-          "description": "Institution's zipCode",
-          "type": "string"
-        }
-      },
-      "title": "PnPGInstitutionResource",
-      "type": "object"
-    },
     "Problem": {
       "description": "A \"problem detail\" as a way to carry machine-readable details of errors (https://datatracker.ietf.org/doc/html/rfc7807)",
       "properties": {
@@ -3408,6 +3440,11 @@
           },
           "type": "array"
         },
+        "delegable": {
+          "description": "If a product is delegable to a technical partner ",
+          "example": false,
+          "type": "boolean"
+        },
         "description": {
           "description": "Product's description",
           "type": "string"
@@ -3516,6 +3553,11 @@
     },
     "SubProductResource": {
       "properties": {
+        "delegable": {
+          "description": "If a product is delegable to a technical partner ",
+          "example": false,
+          "type": "boolean"
+        },
         "description": {
           "description": "Product's description",
           "type": "string"
@@ -3901,6 +3943,10 @@
     }
   },
   "tags": [
+    {
+      "description": "Delegation Controller",
+      "name": "delegations"
+    },
     {
       "description": "Institution operations",
       "name": "institutions"
