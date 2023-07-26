@@ -107,7 +107,7 @@ export default function AddDelegationForm({
             <Select
               id="select-product-choose"
               size="small"
-              disabled={delegateEnabledProducts.length === 1}
+              disabled={delegateEnabledProducts.length === 1 || !!selectedProductByQuery}
               fullWidth
               value={productSelected ? productSelected?.title : ''}
               displayEmpty
@@ -162,7 +162,6 @@ export default function AddDelegationForm({
               }}
               ListboxProps={{
                 style: {
-                  height: '200px',
                   overflow: 'visible',
                 },
               }}
@@ -174,13 +173,14 @@ export default function AddDelegationForm({
                     },
                     '&::-webkit-scrollbar-track': {
                       boxShadow: `inset 10px 10px  #E6E9F2`,
+                      marginY: '3px',
                     },
                     '&::-webkit-scrollbar-thumb': {
                       backgroundColor: '#0073E6',
                       borderRadius: '16px',
                     },
                     overflowY: 'auto',
-                    height: '100%',
+                    maxHeight: '200px',
                   },
                 },
               }}
@@ -193,13 +193,11 @@ export default function AddDelegationForm({
                     },
                   }}
                   {...params}
-                  placeholder={t('addDelegationPage.selectTechPartner.placeholder')}
+                  label={t('addDelegationPage.selectTechPartner.label')}
                   InputProps={{
                     ...params.InputProps,
                     type: 'search',
-                    endAdornment: !techPartnerSelected ? (
-                      <SearchIcon fontSize="small" />
-                    ) : undefined,
+                    endAdornment: !techPartnerSelected ? <SearchIcon fontSize="small" /> : <></>,
                   }}
                 />
               )}
