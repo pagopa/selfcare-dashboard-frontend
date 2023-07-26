@@ -210,6 +210,8 @@ export default {
         continue: 'Continua',
       },
     },
+    delegationSuccessfulCreated: 'Delega aggiunta correttamente.',
+    delegationNotCreated: 'Non è stato possibile aggiungere la delega. Riprova.',
   },
   subHeader: {
     partySelectionSearch: {

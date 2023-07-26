@@ -4,6 +4,8 @@ import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend
 import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
+// import { Party } from '../model/Party';
+// import { Product } from '../model/Product';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
 import {
   InstitutionResource,
@@ -12,6 +14,8 @@ import {
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
+// import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
+// import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -108,4 +112,22 @@ export const DashboardApi = {
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
+
+  // TODO Uncomment as soon as the openApi includes this call
+  /* createDelegation: async (
+    party: Party,
+    product: Product,
+    techPartnerId: string
+  ): Promise<DelegationIdResource> => {
+    const result = await apiClient.createDelegationUsingPOST({
+      body: {
+        from: party.partyId,
+        institutionFromName: party.description,
+        productId: product.id,
+        to: techPartnerId,
+        type: 'PT' as TypeEnum,
+      },
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  }, */
 };
