@@ -73,6 +73,7 @@ export default function NoActiveParty({ parties }: Props) {
                             ? t('partySelection.partyStatus.toBeValidated')
                             : ''
                         }
+                        parentPartyName={party.parentDescription}
                       />
                     );
                   })}

@@ -151,6 +151,7 @@ export default function PartySelectionSearch({
                             action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                               handleListItemClick(event, party)
                             }
+                            parentPartyName={party.parentDescription}
                           />
                         );
                       })}

@@ -77,6 +77,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             name: party.description ?? '',
             productRole: t(roleLabels[party.userRole].longLabelKey),
             logoUrl: party.urlLogo,
+            parentName: party.parentDescription,
           })) ?? []
         }
         loggedUser={
