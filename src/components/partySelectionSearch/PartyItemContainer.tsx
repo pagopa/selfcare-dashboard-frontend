@@ -12,6 +12,7 @@ type Props = {
   chip: string;
   action?: React.Dispatch<React.MouseEvent<HTMLDivElement, MouseEvent>>;
   moreThan3Parties?: boolean;
+  parentPartyName?: string;
 };
 export default function PartyItemContainer({
   isDisabled,
@@ -22,6 +23,7 @@ export default function PartyItemContainer({
   chip,
   action,
   moreThan3Parties,
+  parentPartyName,
 }: Props) {
   return (
     <Grid
@@ -46,6 +48,7 @@ export default function PartyItemContainer({
         disabled={isDisabled}
         endSlot={isDisabled ? <Tag value={chip} color="warning" /> : undefined}
         maxCharactersNumberMultiLine={20}
+        parentPartyName={parentPartyName as string}
       />
     </Grid>
   );

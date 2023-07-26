@@ -71,12 +71,15 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             productUrl: p.urlPublic ?? '',
             linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
           }))}
-        partyList={parties2Show.map((party) => ({
-          id: party.partyId,
-          name: party.description,
-          productRole: t(roleLabels[party.userRole].longLabelKey),
-          logoUrl: party.urlLogo,
-        }))}
+        partyList={
+          parties2Show.map((party) => ({
+            id: party.partyId ?? '',
+            name: party.description ?? '',
+            productRole: t(roleLabels[party.userRole].longLabelKey),
+            logoUrl: party.urlLogo,
+            parentName: party.parentDescription,
+          })) ?? []
+        }
         loggedUser={
           loggedUser
             ? {
@@ -171,7 +174,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         handleClose={() => {
           setOpenGenericEnvProductModal(false);
         }}
-        productEnvironments={productSelected?.backOfficeEnvironmentConfigurations}
+        productEnvironments={productSelected?.backOfficeEnvironmentConfigurations as Array<any>}
       />
     </div>
   );

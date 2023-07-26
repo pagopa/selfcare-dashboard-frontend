@@ -13,7 +13,7 @@ import { PartyDescription } from './components/PartyDescription';
 import PartyLogo from './components/PartyLogo';
 
 type Props = {
-  partyId: string;
+  partyId?: string;
   canUploadLogo: boolean;
 };
 
@@ -62,7 +62,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
       const requestId = uniqueId();
       trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: partyId, request_id: requestId });
 
-      DashboardApi.uploadLogo(partyId, files[0])
+      DashboardApi.uploadLogo(partyId as string, files[0])
         .then(() => {
           setUrlLogo(urlLogo);
           setLoading(false);
