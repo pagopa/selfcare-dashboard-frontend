@@ -30,13 +30,13 @@ export default function DashboardSideMenu({ party }: Props) {
   const groupsRoute = ENV.ROUTES.GROUPS;
 
   const overviewPath = resolvePathVariables(overviewRoute, {
-    partyId: party.partyId,
+    partyId: party.partyId ?? '',
   });
   const usersPath = resolvePathVariables(usersRoute, {
-    partyId: party.partyId,
+    partyId: party.partyId ?? '',
   });
   const groupsPath = resolvePathVariables(groupsRoute, {
-    partyId: party.partyId,
+    partyId: party.partyId ?? '',
   });
 
   const isOVerviewSelected = window.location.pathname === overviewPath;

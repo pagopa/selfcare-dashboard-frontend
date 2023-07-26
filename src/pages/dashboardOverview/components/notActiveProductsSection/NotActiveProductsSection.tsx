@@ -27,7 +27,7 @@ export default function NotActiveProductsSection({ party, products }: Props) {
             .filter((product) => {
               const prodInactive =
                 product.status === 'ACTIVE' && product.productOnBoardingStatus !== 'ACTIVE';
-              const prodActiveWithSubProdInactive = product.subProducts.find(
+              const prodActiveWithSubProdInactive = product.subProducts?.find(
                 (sp) =>
                   product.status === 'ACTIVE' &&
                   product.productOnBoardingStatus === 'ACTIVE' &&
