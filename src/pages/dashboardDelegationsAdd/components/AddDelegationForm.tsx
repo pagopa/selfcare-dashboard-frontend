@@ -15,6 +15,7 @@ import {
   TitleBox,
   useErrorDispatcher,
   useUnloadEventOnExit,
+  useUserNotify,
 } from '@pagopa/selfcare-common-frontend';
 import { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
@@ -25,7 +26,7 @@ import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { Party } from '../../../model/Party';
 import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
-import { getProductBrokers } from '../../../services/partyService';
+import { createDelegation, getProductBrokers } from '../../../services/partyService';
 import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
 
 type Props = {
@@ -43,7 +44,7 @@ export default function AddDelegationForm({
   const onExit = useUnloadEventOnExit();
   const { t } = useTranslation();
   const addError = useErrorDispatcher();
-  // const addNotify = useUserNotify();  // TODO Uncomment as soon as the openApi includes this call
+  const addNotify = useUserNotify();
 
   const [_loading, setLoading] = useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<Product>();
@@ -87,12 +88,9 @@ export default function AddDelegationForm({
       .finally(() => setLoading(false));
   };
 
-  // TODO Uncomment as soon as the openApi includes this call
-  /*
-  const handleSubmit = (party: Party, techPartnerId?: string, productSelected?: Product) => {
-    if (productSelected && techPartnerId) {
-      setLoading(true);
-      createDelegation(party, productSelected, techPartnerId)
+  const handleSubmit = async () => {
+    if (productSelected && techPartnerSelected?.code) {
+      await createDelegation(party, productSelected, techPartnerSelected.code)
         .then(() => {
           addNotify({
             component: 'Toast',
@@ -104,7 +102,7 @@ export default function AddDelegationForm({
             resolvePathVariables(DASHBOARD_ROUTES.DELEGATIONS.path, { partyId: party.partyId })
           );
         })
-        .catch((reason: any) => {
+        .catch((reason) => {
           addError({
             id: 'DELEGATION_NOT_CREATED',
             blocking: false,
@@ -118,7 +116,6 @@ export default function AddDelegationForm({
         });
     }
   };
-  */
 
   return (
     <>
@@ -184,8 +181,9 @@ export default function AddDelegationForm({
             <Autocomplete
               options={productBrokers?.map((pb) => pb.description) ?? []}
               clearOnEscape
-              onChange={(_e, selectedPb: any) => {
-                setTechPartnerSelected(selectedPb);
+              onChange={(_e, selectedPb: string) => {
+                const chosenBroker = productBrokers?.find((pb) => pb.description === selectedPb);
+                setTechPartnerSelected(chosenBroker);
               }}
               sx={{
                 '.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot':
@@ -262,9 +260,7 @@ export default function AddDelegationForm({
         </Button>
         <Button
           disabled={!productSelected || !techPartnerSelected}
-          onClick={() => {
-            /* handleSubmit(party, techPartnerSelected?.code, productSelected) */
-          }} // TODO Uncomment as soon as the openApi includes this call
+          onClick={() => handleSubmit()}
           color="primary"
           variant="contained"
           type="submit"

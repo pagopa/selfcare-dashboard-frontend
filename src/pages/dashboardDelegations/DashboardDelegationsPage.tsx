@@ -48,12 +48,12 @@ export default function DashboardDelegationsPage({
     history.goBack();
   };
 
-  const goToAddDelegationsPage = (product?: any) =>
+  const goToAddDelegationsPage = (productId?: string) =>
     onExit(() =>
       history.push(
         resolvePathVariables(DASHBOARD_ROUTES.ADD_DELEGATE.path, {
           partyId: party.partyId,
-        }).concat(product ? `?productId=${product.id}` : '')
+        }).concat(productId ? `?productId=${productId}` : '')
       )
     );
 
@@ -157,7 +157,7 @@ export default function DashboardDelegationsPage({
                             >
                               Nessun delegato per questo prodotto.
                               <Link
-                                onClick={goToAddDelegationsPage}
+                                onClick={() => goToAddDelegationsPage(product?.id)}
                                 sx={{
                                   fontWeight: 'fontWeightMedium',
                                   ml: 1,
