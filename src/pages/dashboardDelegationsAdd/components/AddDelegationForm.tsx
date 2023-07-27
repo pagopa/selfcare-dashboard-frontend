@@ -14,6 +14,7 @@ import {
 import {
   TitleBox,
   useErrorDispatcher,
+  useLoading,
   useUnloadEventOnExit,
   useUserNotify,
 } from '@pagopa/selfcare-common-frontend';
@@ -28,6 +29,7 @@ import { Party } from '../../../model/Party';
 import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
 import { createDelegation, getProductBrokers } from '../../../services/partyService';
 import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
+import { LOADING_TASK_DELEGATION_FORM } from '../../../utils/constants';
 
 type Props = {
   delegateEnabledProducts: Array<Product>;
@@ -45,8 +47,8 @@ export default function AddDelegationForm({
   const { t } = useTranslation();
   const addError = useErrorDispatcher();
   const addNotify = useUserNotify();
+  const setLoading = useLoading(LOADING_TASK_DELEGATION_FORM);
 
-  const [_loading, setLoading] = useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<Product>();
   const [productBrokers, setProductBrokers] = useState<Array<BrokerResource>>();
   const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
@@ -90,6 +92,7 @@ export default function AddDelegationForm({
 
   const handleSubmit = async () => {
     if (productSelected && techPartnerSelected?.code) {
+      setLoading(true);
       await createDelegation(party, productSelected, techPartnerSelected.code)
         .then(() => {
           addNotify({
@@ -113,7 +116,8 @@ export default function AddDelegationForm({
             displayableDescription: '',
             component: 'Toast',
           });
-        });
+        })
+        .finally(() => setLoading(false));
     }
   };
 
@@ -237,6 +241,7 @@ export default function AddDelegationForm({
                   {options}
                 </MenuItem>
               )}
+              noOptionsText={t('addDelegationPage.selectTechPartner.notFoundTechPartnerOptions')}
             />
           </FormControl>
         </Grid>
