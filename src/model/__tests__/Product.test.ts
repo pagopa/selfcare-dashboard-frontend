@@ -29,6 +29,7 @@ test('Test institutionInfo2Party', () => {
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     logoBgColor: '#0066CC',
+    delegable: true,
   };
 
   const product = productResource2Product(productResource);
