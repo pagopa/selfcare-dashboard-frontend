@@ -13,19 +13,19 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
-import { GeographicTaxonomy } from '../../../../../model/Party';
 import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
 import {
   GeographicTaxonomyRegistryProxy,
   nationalValue,
 } from '../../../../../model/GeographicTaxonomy';
+import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 
 type Props = {
-  geographicTaxonomies?: Array<GeographicTaxonomy>;
+  geographicTaxonomies?: Array<GeographicTaxonomyResource>;
   notFoundAnyTaxonomies: boolean;
-  setOptionsSelected: (os: Array<GeographicTaxonomy>) => void;
+  setOptionsSelected: (os: Array<GeographicTaxonomyResource>) => void;
   setIsAddNewAutocompleteEnabled: (ae: boolean) => void;
-  optionsSelected: Array<GeographicTaxonomy>;
+  optionsSelected: Array<GeographicTaxonomyResource>;
   isAddNewAutocompleteEnabled: boolean;
 };
 
@@ -46,9 +46,9 @@ export default function GeoTaxonomySection({
   const [input, setInput] = useState<string>('');
   const [error, setError] = useState<any>({});
 
-  const [localOptionsSelected, setLocalOptionsSelected] = useState<Array<GeographicTaxonomy>>([
-    { code: '', desc: '' },
-  ]);
+  const [localOptionsSelected, setLocalOptionsSelected] = useState<
+    Array<GeographicTaxonomyResource>
+  >([{ code: '', desc: '' }]);
 
   useEffect(() => {
     const emptyField = !optionsSelected.find((o) => o?.desc === '');

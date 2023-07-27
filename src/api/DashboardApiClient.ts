@@ -11,11 +11,12 @@ import {
   InstitutionResource,
   InstitutionTypeEnum,
 } from './generated/b4f-dashboard/InstitutionResource';
-import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
-import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
 import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
 import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
+import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
+import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
+import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -93,12 +94,12 @@ export const DashboardApi = {
 
   updateInstitutionGeographicTaxonomy: async (
     institutionId: string,
-    geographicTaxonomies: Array<{ code: string; desc: string }>
+    geographicTaxonomies: ReadonlyArray<GeographicTaxonomyDto>
   ): Promise<boolean> => {
     const result = await apiClient.updateInstitutionGeographicTaxonomyUsingPUT({
       institutionId,
       body: {
-        geographicTaxonomyDtoList: geographicTaxonomies as [{ code: ''; desc: '' }],
+        geographicTaxonomyDtoList: geographicTaxonomies,
       },
     });
     return extractResponse(result, 200, onRedirectToLogin);

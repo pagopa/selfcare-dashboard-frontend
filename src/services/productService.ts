@@ -1,8 +1,10 @@
 import { DashboardApi } from '../api/DashboardApiClient';
+import {
+  PartyRoleEnum,
+  SelcRoleEnum,
+} from '../api/generated/b4f-dashboard/ProductRoleMappingsResource';
 import { Product, productResource2Product } from '../model/Product';
 import { ProductRole } from '../model/ProductRole';
-import { SelcRoleEnum } from '../api/generated/b4f-dashboard/ProductRoleInfoResource';
-import { PartyRoleEnum } from '../api/generated/b4f-dashboard/ProductRoleMappingsResource';
 import {
   mockedPartyProducts,
   fetchProductRoles as fetchProductRolesMocked,

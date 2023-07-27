@@ -6,17 +6,12 @@ export type UserRole = 'ADMIN' | 'LIMITED';
 export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
 
-export type GeographicTaxonomy = {
-  code?: string | undefined;
-  desc?: string | undefined;
-};
-
 export type Party = {
-  partyId?: string;
+  partyId: string;
   externalId?: string;
   originId?: string;
   origin?: string;
-  description?: string;
+  description: string;
   digitalAddress?: string;
   status: UserStatus;
   userRole: UserRole;
@@ -46,15 +41,15 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
   return {
     partyId: institutionResource.id ?? '',
     externalId: institutionResource.externalId ?? '',
-    originId: institutionResource.originId ?? '',
-    origin: institutionResource.origin ?? '',
+    originId: institutionResource?.originId,
+    origin: institutionResource?.origin,
     description: institutionResource.name ?? '',
-    digitalAddress: institutionResource.mailAddress ?? '',
+    digitalAddress: institutionResource.mailAddress,
     status: institutionResource.status as 'ACTIVE' | 'PENDING' | 'TOBEVALIDATED',
     userRole: institutionResource.userRole as UserRole,
     category: institutionResource.category,
     urlLogo,
-    fiscalCode: institutionResource.fiscalCode ?? '',
+    fiscalCode: institutionResource.fiscalCode,
     registeredOffice: institutionResource.address ?? '',
     zipCode: institutionResource.zipCode ?? '',
     typology: 'TODO', // it will represent the taxonomy of the party
