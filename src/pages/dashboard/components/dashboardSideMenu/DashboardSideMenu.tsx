@@ -35,13 +35,13 @@ export default function DashboardSideMenu({
   const delegatesRoute = DASHBOARD_ROUTES.DELEGATIONS.path;
 
   const overviewPath = resolvePathVariables(overviewRoute, {
-    partyId: party.partyId,
+    partyId: party.partyId ?? '',
   });
   const usersPath = resolvePathVariables(usersRoute, {
-    partyId: party.partyId,
+    partyId: party.partyId ?? '',
   });
   const groupsPath = resolvePathVariables(groupsRoute, {
-    partyId: party.partyId,
+    partyId: party.partyId ?? '',
   });
   const delegatesPath = resolvePathVariables(delegatesRoute, {
     partyId: party.partyId,

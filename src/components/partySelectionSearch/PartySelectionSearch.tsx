@@ -19,7 +19,7 @@ type Props = {
 };
 
 const verifyPartyFilter = (party: Party, filter: string) =>
-  party.description.toUpperCase().indexOf(filter.toUpperCase()) >= 0;
+  party?.description && party?.description.toUpperCase().indexOf(filter.toUpperCase()) >= 0;
 const CustomBox = styled(Box)({
   '&::-webkit-scrollbar': {
     width: 4,
@@ -151,6 +151,7 @@ export default function PartySelectionSearch({
                             action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                               handleListItemClick(event, party)
                             }
+                            parentPartyName={party.parentDescription}
                           />
                         );
                       })}

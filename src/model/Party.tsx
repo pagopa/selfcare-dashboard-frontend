@@ -7,22 +7,22 @@ export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
 
 export type GeographicTaxonomy = {
-  code?: string;
-  desc?: string;
+  code?: string | undefined;
+  desc?: string | undefined;
 };
 
 export type Party = {
-  partyId: string;
-  externalId: string;
-  originId: string;
-  origin: string;
-  description: string;
-  digitalAddress: string;
+  partyId?: string;
+  externalId?: string;
+  originId?: string;
+  origin?: string;
+  description?: string;
+  digitalAddress?: string;
   status: UserStatus;
   userRole: UserRole;
   category?: string;
   urlLogo?: string;
-  fiscalCode: string;
+  fiscalCode?: string;
   registeredOffice: string;
   zipCode: string;
   typology: string;
@@ -35,6 +35,7 @@ export type Party = {
   subunitCode?: string;
   subunitType?: string;
   aooParentCode?: string;
+  parentDescription?: string;
 };
 
 const buildUrlLog = (partyId: string) =>
@@ -67,5 +68,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     subunitCode: institutionResource.subunitCode,
     subunitType: institutionResource.subunitType,
     aooParentCode: institutionResource.aooParentCode,
+    parentDescription: institutionResource.parentDescription,
   };
 };

@@ -28,6 +28,7 @@ test('Test Party', () => {
     aooParentCode: 'aooParentCode',
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
+    parentDescription: undefined,
   };
   expect(party).toStrictEqual({
     userRole: 'ADMIN',
@@ -52,6 +53,7 @@ test('Test Party', () => {
     aooParentCode: 'aooParentCode',
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
+    parentDescription: undefined,
   });
 });
 
@@ -107,5 +109,6 @@ test('Test institutionResource2Party', () => {
     aooParentCode: 'aooParentCode',
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
+    parentDescription: undefined,
   });
 });

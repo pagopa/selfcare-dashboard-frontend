@@ -3,8 +3,8 @@ import { GeographicTaxonomyResource } from '../api/generated/party-registry-prox
 export const nationalValue = 'ITA';
 
 export type GeographicTaxonomyRegistryProxy = {
-  code: string;
-  desc: string;
+  code?: string;
+  desc?: string;
 };
 
 export const geographicTaxonomyResource2geographicTaxonomy = (
