@@ -205,6 +205,7 @@ export default {
       title: 'Seleziona un Partner Tecnologico',
       subTitle: 'Digita il nome oppure scegli dalla lista',
       label: 'Seleziona un partner tecnologico',
+      groupByName: 'Nome',
       notFoundTechPartnerOptions: 'Nessun risultato',
       actions: {
         back: 'Indietro',
