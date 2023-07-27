@@ -24,7 +24,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
   const { t } = useTranslation();
   const addNotify = useUserNotify();
 
-  const prodActiveWithSubProdInactive = product.subProducts.find(
+  const prodActiveWithSubProdInactive = product.subProducts?.find(
     (sp) =>
       product.status === 'ACTIVE' &&
       product.productOnBoardingStatus === 'ACTIVE' &&

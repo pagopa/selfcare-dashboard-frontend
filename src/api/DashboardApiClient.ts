@@ -90,7 +90,9 @@ export const DashboardApi = {
   ): Promise<boolean> => {
     const result = await apiClient.updateInstitutionGeographicTaxonomyUsingPUT({
       institutionId,
-      body: { geographicTaxonomyDtoList: geographicTaxonomies },
+      body: {
+        geographicTaxonomyDtoList: geographicTaxonomies as [{ code: ''; desc: '' }],
+      },
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

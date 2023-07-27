@@ -15,7 +15,10 @@ import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { GeographicTaxonomy } from '../../../../../model/Party';
 import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
-import { nationalValue } from '../../../../../model/GeographicTaxonomy';
+import {
+  GeographicTaxonomyRegistryProxy,
+  nationalValue,
+} from '../../../../../model/GeographicTaxonomy';
 
 type Props = {
   geographicTaxonomies?: Array<GeographicTaxonomy>;
@@ -115,7 +118,7 @@ export default function GeoTaxonomySection({
         );
         const matchesWithTyped = availableGeographicAreas.filter((o) =>
           o.desc?.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-        );
+        ) as Array<GeographicTaxonomyRegistryProxy>;
 
         setOptions(matchesWithTyped);
 
@@ -225,10 +228,10 @@ export default function GeoTaxonomySection({
                       },
                     }}
                     onChange={(event: any, value: any) => handleChange(event, value, i)}
-                    value={val?.desc.toLowerCase()}
-                    renderOption={(props, option: string) => (
+                    value={val?.desc && val?.desc.toLowerCase()}
+                    renderOption={(props, option?: string) => (
                       <span style={{ textTransform: 'capitalize' }} {...props}>
-                        {option ? option.toLocaleLowerCase() : ''}
+                        {option ? option.toLocaleLowerCase() : '' || undefined}
                       </span>
                     )}
                     renderInput={(params) => (

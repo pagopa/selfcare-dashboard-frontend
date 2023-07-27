@@ -98,6 +98,7 @@ export default function NotActiveProductCard({
             {prodActiveWithSubProdInactive ? (
               <Tooltip
                 title={
+                  prodActiveWithSubProdInactive.title &&
                   prodActiveWithSubProdInactive.title.length > 21
                     ? `${title}  ${prodActiveWithSubProdInactive.title}`
                     : ''
