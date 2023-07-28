@@ -6,6 +6,7 @@ type Props = {
   handleClick: () => void;
   title: string;
   isSelected?: boolean;
+  isSubMenuSelected?: boolean;
   icon: SvgIconComponent;
   subMenuVisible: boolean;
   subMenuIcon?: SvgIconComponent;
@@ -18,6 +19,7 @@ export default function DashboardSidenavItem({
   handleClickSubMenu,
   title,
   isSelected,
+  isSubMenuSelected,
   icon,
   subMenuVisible,
   subMenuIcon,
@@ -25,7 +27,7 @@ export default function DashboardSidenavItem({
 }: Props) {
   const [open, setOpen] = React.useState(true);
 
-  const handleHopen = () => {
+  const handleOpen = () => {
     setOpen(!open);
   };
 
@@ -36,7 +38,7 @@ export default function DashboardSidenavItem({
         selected={isSelected}
         onClick={() => {
           handleClick();
-          handleHopen();
+          handleOpen();
         }}
         sx={{
           height: '100%',
@@ -55,7 +57,7 @@ export default function DashboardSidenavItem({
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton
-              selected={!isSelected}
+              selected={isSubMenuSelected ?? false}
               sx={{ pl: 4, height: '100%', maxWidth: 360, backgroundColor: 'background.paper' }}
               onClick={() => {
                 handleClickSubMenu();
