@@ -1,4 +1,5 @@
 import { EmailString } from '@pagopa/ts-commons/lib/strings';
+import { BrokerResource } from '../generated/b4f-dashboard/BrokerResource';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import {
   InstitutionResource,
@@ -269,6 +270,39 @@ export const mockedUserResource: UserResource = {
   email: { certified: true, value: 'gigi.v@email.com' },
 };
 
+export const mockedBrokerResource: Array<BrokerResource> = [
+  {
+    code: '004',
+    description: 'broker01',
+    enabled: true,
+  },
+  {
+    code: '005',
+    description: 'broker02',
+    enabled: true,
+  },
+  {
+    code: '006',
+    description: 'broker03',
+    enabled: true,
+  },
+  {
+    code: '006',
+    description: 'broker04',
+    enabled: true,
+  },
+  {
+    code: '006',
+    description: 'broker05',
+    enabled: true,
+  },
+  {
+    code: '006',
+    description: 'broker06',
+    enabled: true,
+  },
+];
+
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
@@ -287,4 +321,9 @@ export const DashboardApi = {
 
   getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
+
+  getProductBrokers: async (
+    _productId: string,
+    _institutionType: InstitutionTypeEnum
+  ): Promise<Array<BrokerResource>> => new Promise((resolve) => resolve(mockedProductRoles)),
 };

@@ -1,15 +1,11 @@
+import { GeographicTaxonomy } from '../api/generated/b4f-dashboard/GeographicTaxonomy';
 import { GeographicTaxonomyResource } from '../api/generated/party-registry-proxy/GeographicTaxonomyResource';
 
 export const nationalValue = 'ITA';
 
-export type GeographicTaxonomyRegistryProxy = {
-  code?: string;
-  desc?: string;
-};
-
 export const geographicTaxonomyResource2geographicTaxonomy = (
-  geotax: GeographicTaxonomyResource
-): GeographicTaxonomyRegistryProxy => ({
-  code: geotax.code ?? '',
-  desc: geotax.desc ?? '',
+  geotax: GeographicTaxonomy
+): GeographicTaxonomyResource => ({
+  code: geotax.code,
+  desc: geotax.desc,
 });

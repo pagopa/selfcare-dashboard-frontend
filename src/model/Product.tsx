@@ -28,6 +28,7 @@ export type Product = {
   imageUrl: string;
   subProducts?: Array<SubProduct>;
   logoBgColor?: string;
+  delegable: boolean;
 };
 
 export type SubProduct = {
@@ -57,15 +58,15 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   imageUrl: resource.imageUrl ?? '',
   logo: resource.logo ?? '',
   activationDateTime: resource.activatedAt,
-  productOnBoardingStatus: resource.productOnBoardingStatus as ProductOnBoardingStatusEnum,
-  status: resource.status as StatusEnum,
+  productOnBoardingStatus: resource.productOnBoardingStatus ?? ProductOnBoardingStatusEnum.INACTIVE,
+  status: resource.status ?? StatusEnum.INACTIVE,
   title: resource.title ?? '',
   urlBO: resource.urlBO ?? '',
-  backOfficeEnvironmentConfigurations:
-    resource.backOfficeEnvironmentConfigurations?.slice() ?? undefined,
+  backOfficeEnvironmentConfigurations: resource.backOfficeEnvironmentConfigurations?.slice(),
   logoBgColor: resource.logoBgColor,
   urlPublic: resource.urlPublic,
   tag: undefined,
   userRole: resource.userRole as UserRole,
   subProducts: resource.children?.slice() ?? [],
+  delegable: resource.delegable ?? false,
 });

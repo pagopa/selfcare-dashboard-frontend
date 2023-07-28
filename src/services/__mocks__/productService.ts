@@ -29,6 +29,7 @@ export const mockedPartyProducts: Array<Product> = [
       },
     ],
     logoBgColor: 'primary.main',
+    delegable: true,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.svg',
@@ -55,6 +56,7 @@ export const mockedPartyProducts: Array<Product> = [
     ],
     subProducts: [],
     logoBgColor: 'pagoPA.main',
+    delegable: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.svg',
@@ -82,6 +84,7 @@ export const mockedPartyProducts: Array<Product> = [
         url: 'www.test2.com',
       },
     ],
+    delegable: true,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.svg',
@@ -98,6 +101,7 @@ export const mockedPartyProducts: Array<Product> = [
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
     logoBgColor: 'checkIban.main',
+    delegable: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-cgn/logo.png',
@@ -113,6 +117,7 @@ export const mockedPartyProducts: Array<Product> = [
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
     logoBgColor: undefined,
+    delegable: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
@@ -129,6 +134,7 @@ export const mockedPartyProducts: Array<Product> = [
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
     logoBgColor: undefined,
+    delegable: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
@@ -155,6 +161,7 @@ export const mockedPartyProducts: Array<Product> = [
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     subProducts: [],
     logoBgColor: undefined,
+    delegable: false,
   },
 ];
 

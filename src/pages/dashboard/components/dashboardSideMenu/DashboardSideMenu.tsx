@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Product } from '../../../../model/Product';
@@ -15,19 +16,23 @@ import DashboardSidenavItem from './DashboardSidenavItem';
 type Props = {
   products: Array<Product>;
   party: Party;
+  isDelegateSectionVisible?: boolean;
+  canSeeSection: boolean;
 };
 
-export default function DashboardSideMenu({ party }: Props) {
+export default function DashboardSideMenu({
+  party,
+  isDelegateSectionVisible,
+  canSeeSection,
+}: Props) {
   const { t } = useTranslation();
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
 
-  const canSeeRoles = party.userRole === 'ADMIN';
-  const canSeeGroups = party.userRole === 'ADMIN';
-
   const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
   const usersRoute = ENV.ROUTES.USERS;
   const groupsRoute = ENV.ROUTES.GROUPS;
+  const delegatesRoute = DASHBOARD_ROUTES.DELEGATIONS.path;
 
   const overviewPath = resolvePathVariables(overviewRoute, {
     partyId: party.partyId ?? '',
@@ -37,6 +42,9 @@ export default function DashboardSideMenu({ party }: Props) {
   });
   const groupsPath = resolvePathVariables(groupsRoute, {
     partyId: party.partyId ?? '',
+  });
+  const delegatesPath = resolvePathVariables(delegatesRoute, {
+    partyId: party.partyId,
   });
 
   const isOVerviewSelected = window.location.pathname === overviewPath;
@@ -54,16 +62,23 @@ export default function DashboardSideMenu({ party }: Props) {
             }
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
+            subMenuVisible={!!isDelegateSectionVisible}
+            subMenuIcon={AssignmentIcon}
+            subMenuTitle={t('overview.sideMenu.institutionManagement.overview.subMenu.title')}
+            handleClickSubMenu={() =>
+              onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
+            }
           />
-          {canSeeRoles && (
+          {canSeeSection && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.referents.title')}
               handleClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
               isSelected={isRoleSelected}
               icon={PeopleAlt}
+              subMenuVisible={false}
             />
           )}
-          {canSeeGroups && (
+          {canSeeSection && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.groups.title')}
               handleClick={() =>
@@ -71,6 +86,7 @@ export default function DashboardSideMenu({ party }: Props) {
               }
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}
+              subMenuVisible={false}
             />
           )}
         </List>
