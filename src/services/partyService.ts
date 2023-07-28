@@ -49,12 +49,12 @@ export const getProductBrokers = (
 export const createDelegation = (
   party: Party,
   product: Product,
-  techPartnerId: string
+  techPartner: BrokerResource
 ): Promise<DelegationIdResource> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
     return new Promise((resolve) => resolve({ id: 'mockRelId' }));
   } else {
-    return DashboardApi.createDelegation(party, product, techPartnerId);
+    return DashboardApi.createDelegation(party, product, techPartner);
   }
 };
