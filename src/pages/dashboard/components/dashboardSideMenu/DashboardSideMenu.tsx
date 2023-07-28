@@ -48,7 +48,8 @@ export default function DashboardSideMenu({
   });
 
   const isOVerviewSelected = window.location.pathname === overviewPath;
-  const isRoleSelected = window.location.pathname.startsWith(usersPath);
+  const isUserSelected = window.location.pathname.startsWith(usersPath);
+  const isDelegateSelected = window.location.pathname.startsWith(delegatesPath);
   const isGroupSelected = window.location.pathname.startsWith(groupsPath);
 
   return (
@@ -61,6 +62,7 @@ export default function DashboardSideMenu({
               onExit(() => history.push(party.partyId ? overviewPath : overviewRoute))
             }
             isSelected={isOVerviewSelected}
+            isSubMenuSelected={isDelegateSelected}
             icon={DashboardCustomize}
             subMenuVisible={!!isDelegateSectionVisible}
             subMenuIcon={AssignmentIcon}
@@ -73,7 +75,7 @@ export default function DashboardSideMenu({
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.referents.title')}
               handleClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
-              isSelected={isRoleSelected}
+              isSelected={isUserSelected}
               icon={PeopleAlt}
               subMenuVisible={false}
             />
