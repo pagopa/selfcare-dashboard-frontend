@@ -1,8 +1,4 @@
 import { DashboardApi } from '../api/DashboardApiClient';
-import {
-  PartyRoleEnum,
-  SelcRoleEnum,
-} from '../api/generated/b4f-dashboard/ProductRoleMappingsResource';
 import { Product, productResource2Product } from '../model/Product';
 import { ProductRole } from '../model/ProductRole';
 import {
@@ -26,20 +22,22 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
   if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
     return fetchProductRolesMocked(product);
   } else {
-    return DashboardApi.getProductRoles(product.id).then((roles: any) =>
-      roles
-        ?.map((pr: any) =>
-          pr?.productRoles?.map((r: any) => ({
-            productId: product.id,
-            partyRole: pr.partyRole as PartyRoleEnum,
-            selcRole: pr.selcRole as SelcRoleEnum,
-            multiroleAllowed: pr.multiroleAllowed as boolean,
-            productRole: r.code ?? '',
-            title: r.label ?? '',
-            description: r.description ?? '',
-          }))
-        )
-        .flatMap((x: any) => x)
-    );
+    return DashboardApi.getProductRoles(product.id)
+      .then((roles) =>
+        roles
+          ?.map((pr) =>
+            pr?.productRoles?.map((r) => ({
+              productId: product.id,
+              partyRole: pr.partyRole,
+              selcRole: pr.selcRole,
+              multiroleAllowed: pr.multiroleAllowed,
+              productRole: r.code ?? '',
+              title: r.label ?? '',
+              description: r.description ?? '',
+            }))
+          )
+          .flatMap((x) => x)
+      )
+      .catch((reason) => reason);
   }
 };

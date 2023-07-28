@@ -1,4 +1,4 @@
-import { GeographicTaxonomyRegistryProxy } from '../../model/GeographicTaxonomy';
+import { GeographicTaxonomy } from '../../api/generated/b4f-dashboard/GeographicTaxonomy';
 import { Party } from '../../model/Party';
 
 export const mockedParties: Array<Party> = [
@@ -219,7 +219,7 @@ export const mockedParties: Array<Party> = [
   },
 ];
 
-export const mockedGeotaxonomies: Array<GeographicTaxonomyRegistryProxy> = [
+export const mockedGeotaxonomies: Array<GeographicTaxonomy> = [
   {
     desc: 'ROMA - COMUNE',
     code: '1111',
