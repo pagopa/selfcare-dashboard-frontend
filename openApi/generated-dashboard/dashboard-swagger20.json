@@ -410,6 +410,73 @@
         "summary": "updateInstitutionGeographicTaxonomy"
       }
     },
+    "/institutions/{institutionId}/institutions": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Technical partner's identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's identifier",
+            "in": "query",
+            "name": "productId",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/DelegationResourceArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Retrieve list of delegation using to",
+        "operationId": "getDelegationsUsingToUsingGET",
+        "summary": "Retrieve list of delegation using to"
+      }
+    },
     "/institutions/{institutionId}/logo": {
       "put": {
         "consumes": [
@@ -476,6 +543,73 @@
         "description": "Service to upload and store the institution's logo",
         "operationId": "saveInstitutionLogoUsingPUT",
         "summary": "saveInstitutionLogo"
+      }
+    },
+    "/institutions/{institutionId}/partners": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's identifier",
+            "in": "query",
+            "name": "productId",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/DelegationResourceArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Retrieve institution's delegations",
+        "operationId": "getDelegationsUsingFromUsingGET",
+        "summary": "Retrieve institution's delegations"
       }
     },
     "/institutions/{institutionId}/products": {
@@ -2497,7 +2631,7 @@
       }
     }
   },
-  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
+  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -2655,6 +2789,10 @@
           "description": "Institution's name",
           "type": "string"
         },
+        "institutionToName": {
+          "description": "Partner's name",
+          "type": "string"
+        },
         "productId": {
           "description": "Product's identifier",
           "type": "string"
@@ -2676,11 +2814,47 @@
       "required": [
         "from",
         "institutionFromName",
+        "institutionToName",
         "productId",
         "to",
         "type"
       ],
       "title": "DelegationRequestDto",
+      "type": "object"
+    },
+    "DelegationResource": {
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "institutionFromRootName": {
+          "type": "string"
+        },
+        "institutionName": {
+          "type": "string"
+        },
+        "partnerName": {
+          "type": "string"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "AOO",
+            "PT",
+            "UO"
+          ],
+          "type": "string"
+        }
+      },
+      "title": "DelegationResource",
       "type": "object"
     },
     "DpoData": {

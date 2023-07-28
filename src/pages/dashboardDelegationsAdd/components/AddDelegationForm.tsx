@@ -91,9 +91,9 @@ export default function AddDelegationForm({
   };
 
   const handleSubmit = async () => {
-    if (productSelected && techPartnerSelected?.code) {
+    if (productSelected && techPartnerSelected) {
       setLoading(true);
-      await createDelegation(party, productSelected, techPartnerSelected.code)
+      await createDelegation(party, productSelected, techPartnerSelected)
         .then(() => {
           addNotify({
             component: 'Toast',

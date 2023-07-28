@@ -119,14 +119,15 @@ export const DashboardApi = {
   createDelegation: async (
     party: Party,
     product: Product,
-    techPartnerId: string
+    techPartner: BrokerResource
   ): Promise<DelegationIdResource> => {
     const result = await apiClient.createDelegationUsingPOST({
       body: {
         from: party.partyId,
         institutionFromName: party.description,
+        institutionToName: techPartner.description ?? '',
+        to: techPartner.code ?? '',
         productId: product.id,
-        to: techPartnerId,
         type: 'PT' as TypeEnum,
       },
     });
