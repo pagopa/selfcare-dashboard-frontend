@@ -171,7 +171,6 @@ export default {
     delegationsPage: {
       title: 'Deleghe',
       subTitle: 'Aggiungi o visualizza i delegati per la gestione dei prodotti. ',
-
       addDelegationsBtn: 'Aggiungi delega',
       delegationsNavigationBar: {
         redirectDescription: 'Panoramica',

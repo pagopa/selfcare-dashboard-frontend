@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ENV } from '../../utils/env';
-import { productsCanSeeDelegation } from '../../utils/constants';
 import DashboardDelegationsBanner from '../dashboardDelegations/DashboardDelegationsBanner';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
@@ -30,10 +29,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const productsFiltered2Delegations =
     ENV.DELEGATIONS.ENABLE &&
-    activeProducts.find(
-      (product) =>
-        productsCanSeeDelegation.find((p) => product.id === p.prodId) && product.delegable === true
-    ) &&
+    activeProducts.find((product) => product.delegable === true) &&
     canUploadLogo;
 
   return (
