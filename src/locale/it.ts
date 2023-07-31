@@ -42,6 +42,9 @@ export default {
         title: 'Gestione Ente',
         overview: {
           title: 'Panoramica',
+          subMenu: {
+            title: 'Deleghe',
+          },
         },
         referents: {
           title: 'Utenti',
@@ -150,6 +153,12 @@ export default {
         SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
       },
+      delegationBanner: {
+        title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
+        subTitle:
+          'Se ti avvali di figure come Partner o Intermediari tecnologici, puoi delegare la gestione di alcuni prodotti.',
+        goToButton: 'Vai',
+      },
       vatNumberGroupValues: {
         yes: 'Sì',
         no: 'No',
@@ -159,6 +168,52 @@ export default {
       isTaxCodeEquals2Piva: 'Codice Fiscale / P.IVA',
       vatNumber: 'Partita IVA',
     },
+    delegationsPage: {
+      title: 'Deleghe',
+      subTitle: 'Aggiungi o visualizza i delegati per la gestione dei prodotti. ',
+
+      addDelegationsBtn: 'Aggiungi delega',
+      delegationsNavigationBar: {
+        redirectDescription: 'Panoramica',
+        titlePageDescription: 'Deleghe',
+      },
+      productsSection: {
+        title: 'Prodotti',
+        labelDelegates: 'Delegato',
+        noDelegatesLabel: 'Nessun delegato per questo prodotto. <1>Aggiungi delega</1>',
+      },
+    },
+    genericError: {
+      title: 'Spiacenti, qualcosa è andato storto.',
+      description: `A causa di un errore del sistema non è possibile completare la procedura.
+      <1/>
+      Ti chiediamo di riprovare più tardi.`,
+      backAction: 'Chiudi',
+    },
+  },
+  addDelegationPage: {
+    title: 'Aggiungi delega',
+    subTitle:
+      "Qui trovi l'elenco dei Partner e degli Intermediari Tecnologici presenti in Area Riservata.",
+    navigationBar: {
+      overview: 'Panoramica',
+      delegations: 'Deleghe',
+      addDelegation: 'Aggiungi delega',
+    },
+    chooseProduct: 'Scegli il prodotto',
+    selectTechPartner: {
+      title: 'Seleziona un Partner Tecnologico',
+      subTitle: 'Digita il nome oppure scegli dalla lista',
+      label: 'Seleziona un partner tecnologico',
+      groupByName: 'Nome',
+      notFoundTechPartnerOptions: 'Nessun risultato',
+      actions: {
+        back: 'Indietro',
+        continue: 'Continua',
+      },
+    },
+    delegationSuccessfulCreated: 'Delega aggiunta correttamente.',
+    delegationNotCreated: 'Non è stato possibile aggiungere la delega. Riprova.',
   },
   subHeader: {
     partySelectionSearch: {

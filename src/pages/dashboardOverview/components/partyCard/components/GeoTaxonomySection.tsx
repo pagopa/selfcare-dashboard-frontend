@@ -13,19 +13,20 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
-import { GeographicTaxonomy } from '../../../../../model/Party';
 import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
-import {
-  GeographicTaxonomyRegistryProxy,
-  nationalValue,
-} from '../../../../../model/GeographicTaxonomy';
+import { nationalValue } from '../../../../../model/GeographicTaxonomy';
+import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
+
+type Error = {
+  [index: number]: boolean;
+};
 
 type Props = {
-  geographicTaxonomies?: Array<GeographicTaxonomy>;
+  geographicTaxonomies?: Array<GeographicTaxonomyResource>;
   notFoundAnyTaxonomies: boolean;
-  setOptionsSelected: (os: Array<GeographicTaxonomy>) => void;
+  setOptionsSelected: (os: Array<GeographicTaxonomyResource>) => void;
   setIsAddNewAutocompleteEnabled: (ae: boolean) => void;
-  optionsSelected: Array<GeographicTaxonomy>;
+  optionsSelected: Array<GeographicTaxonomyResource>;
   isAddNewAutocompleteEnabled: boolean;
 };
 
@@ -40,15 +41,15 @@ export default function GeoTaxonomySection({
   const { t } = useTranslation();
   const addError = useErrorDispatcher();
 
-  const [options, setOptions] = useState<Array<GeographicTaxonomy>>([]);
+  const [options, setOptions] = useState<Array<GeographicTaxonomyResource>>([]);
   const [isNationalAreaVisible, setIsNationalAreaVisible] = useState<boolean>(false);
   const [isLocalAreaVisible, setIsLocalAreaVisible] = useState<boolean>(false);
   const [input, setInput] = useState<string>('');
-  const [error, setError] = useState<any>({});
+  const [error, setError] = useState<Error>();
 
-  const [localOptionsSelected, setLocalOptionsSelected] = useState<Array<GeographicTaxonomy>>([
-    { code: '', desc: '' },
-  ]);
+  const [localOptionsSelected, setLocalOptionsSelected] = useState<
+    Array<GeographicTaxonomyResource>
+  >([{ code: '', desc: '' }]);
 
   useEffect(() => {
     const emptyField = !optionsSelected.find((o) => o?.desc === '');
@@ -57,20 +58,17 @@ export default function GeoTaxonomySection({
   }, [optionsSelected]);
 
   const deleteError = (index: number) => {
-    const newError = { ...error };
-    // eslint-disable-next-line functional/immutable-data
-    delete newError[index];
-    setError(newError);
+    setError((currError) => ({ ...currError, [index]: false }));
   };
 
   const findError = (index: number) => {
-    setError((currError: any) => ({ ...currError, [index]: true }));
+    setError((currError) => ({ ...currError, [index]: true }));
     setIsAddNewAutocompleteEnabled(false);
   };
 
-  const handleChange = (_event: Event, value: string, index: number) => {
+  const handleChange = (_event: Event, value: string, reason: string, index: number) => {
     const selectedArea = options.find((o) => o.desc === value);
-    if (isLocalAreaVisible) {
+    if (isLocalAreaVisible && reason !== 'clear') {
       const updatedOptionsSelected = optionsSelected.map((os, currentIndex) =>
         currentIndex === index ? selectedArea ?? { code: '', desc: '' } : os
       );
@@ -98,6 +96,7 @@ export default function GeoTaxonomySection({
     list.splice(index, 1);
     setOptionsSelected(list);
     setIsAddNewAutocompleteEnabled(true);
+    deleteError(index);
   };
 
   const handleSearchInput = (event: Event, index: number) => {
@@ -118,11 +117,11 @@ export default function GeoTaxonomySection({
         );
         const matchesWithTyped = availableGeographicAreas.filter((o) =>
           o.desc?.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-        ) as Array<GeographicTaxonomyRegistryProxy>;
+        ) as Array<GeographicTaxonomyResource>;
 
         setOptions(matchesWithTyped);
 
-        if (matchesWithTyped.length > 0) {
+        if (matchesWithTyped.length > 0 || query === '') {
           deleteError(index);
         } else {
           findError(index);
@@ -177,6 +176,7 @@ export default function GeoTaxonomySection({
             onChange={() => {
               setIsNationalAreaVisible(true);
               setIsLocalAreaVisible(false);
+              setError(undefined);
               setIsAddNewAutocompleteEnabled(true);
               setLocalOptionsSelected(optionsSelected);
               setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
@@ -220,16 +220,18 @@ export default function GeoTaxonomySection({
                     freeSolo
                     onOpen={() => setOptions([])}
                     disablePortal
-                    options={input.length >= 3 ? options.map((o) => o.desc) : []}
+                    options={input.length >= 3 ? options?.map((o) => o.desc) : []}
                     sx={{
                       width: '100%',
                       '& .MuiAutocomplete-inputRoot .MuiAutocomplete-input': {
                         textTransform: 'capitalize',
                       },
                     }}
-                    onChange={(event: any, value: any) => handleChange(event, value, i)}
-                    value={val?.desc && val?.desc.toLowerCase()}
-                    renderOption={(props, option?: string) => (
+                    onChange={(event: any, value: any, reason) =>
+                      handleChange(event, value, reason, i)
+                    }
+                    value={val?.desc?.toLowerCase()}
+                    renderOption={(props, option) => (
                       <span style={{ textTransform: 'capitalize' }} {...props}>
                         {option ? option.toLocaleLowerCase() : '' || undefined}
                       </span>

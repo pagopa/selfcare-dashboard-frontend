@@ -95,11 +95,10 @@ export default function NotActiveProductCard({
       <Grid item xs={12}>
         <CardContent sx={{ height: '100%', width: '100%' }}>
           <Grid item xs={12} mb={1}>
-            {prodActiveWithSubProdInactive ? (
+            {prodActiveWithSubProdInactive?.title ? (
               <Tooltip
                 title={
-                  prodActiveWithSubProdInactive.title &&
-                  prodActiveWithSubProdInactive.title.length > 21
+                  prodActiveWithSubProdInactive?.title?.length > 21
                     ? `${title}  ${prodActiveWithSubProdInactive.title}`
                     : ''
                 }

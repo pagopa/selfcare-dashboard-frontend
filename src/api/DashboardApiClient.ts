@@ -4,11 +4,19 @@ import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend
 import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
+import { Party } from '../model/Party';
+import { Product } from '../model/Product';
 import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
-import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
+import {
+  InstitutionResource,
+  InstitutionTypeEnum,
+} from './generated/b4f-dashboard/InstitutionResource';
+import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
+import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
+import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
-import { GeographicTaxonomyResource } from './generated/b4f-dashboard/GeographicTaxonomyResource';
+import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -86,14 +94,43 @@ export const DashboardApi = {
 
   updateInstitutionGeographicTaxonomy: async (
     institutionId: string,
-    geographicTaxonomies: Array<GeographicTaxonomyResource>
+    geographicTaxonomies: ReadonlyArray<GeographicTaxonomyDto>
   ): Promise<boolean> => {
     const result = await apiClient.updateInstitutionGeographicTaxonomyUsingPUT({
       institutionId,
       body: {
-        geographicTaxonomyDtoList: geographicTaxonomies as [{ code: ''; desc: '' }],
+        geographicTaxonomyDtoList: geographicTaxonomies,
       },
     });
     return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getProductBrokers: async (
+    productId: string,
+    institutionType: InstitutionTypeEnum
+  ): Promise<Array<BrokerResource>> => {
+    const result = await apiClient.getProductBrokersUsingGET({
+      productId,
+      institutionType,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  createDelegation: async (
+    party: Party,
+    product: Product,
+    techPartner: BrokerResource
+  ): Promise<DelegationIdResource> => {
+    const result = await apiClient.createDelegationUsingPOST({
+      body: {
+        from: party.partyId,
+        institutionFromName: party.description,
+        institutionToName: techPartner.description ?? '',
+        to: techPartner.code ?? '',
+        productId: product.id,
+        type: 'PT' as TypeEnum,
+      },
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
   },
 };
