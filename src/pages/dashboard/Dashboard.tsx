@@ -19,7 +19,6 @@ import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRouting
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
-import { productsCanSeeDelegation } from '../../utils/constants';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -102,15 +101,11 @@ const Dashboard = () => {
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
   const canSeeSection = party?.userRole === 'ADMIN';
 
-  const delegateEnabledProducts = activeProducts.filter((product) =>
-    productsCanSeeDelegation.find((p) => product.id === p.prodId)
-  );
+  const delegateEnabledProducts = activeProducts.filter((product) => product.delegable === true);
+
   const isDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
-    activeProducts.find(
-      (product) =>
-        productsCanSeeDelegation.find((p) => product.id === p.prodId) && product.delegable === true
-    ) &&
+    activeProducts.find((product) => product.delegable === true) &&
     canSeeSection;
 
   return party && products ? (

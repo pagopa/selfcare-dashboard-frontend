@@ -10,9 +10,3 @@ export const LOADING_TASK_TOKEN_EXCHANGE = 'TOKEN_EXCHANGE';
 export const LOADING_TASK_FETCH_PRODUCT_ROLES = 'FETCH_PRODUCT_ROLES';
 export const LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES = 'SAVE_PARTY_GEOTAXONOMIES';
 export const LOADING_TASK_DELEGATION_FORM = 'DELEGATION_FORM';
-
-export const productsCanSeeDelegation = [
-  { prodId: 'prod-io' },
-  { prodId: 'prod-pagopa' },
-  // { prodId: 'prod-pn' },
-];

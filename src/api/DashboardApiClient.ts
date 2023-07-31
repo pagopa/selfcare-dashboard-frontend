@@ -64,6 +64,11 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
+  getDelegations: async (institutionId: string): Promise<Array<ProductsResource>> => {
+    const result = await apiClient.getDelegationsUsingFromUsingGET({ institutionId });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
   uploadLogo: async (institutionId: string, logo: File): Promise<boolean> => {
     const result = await apiClient.saveInstitutionLogoUsingPUT({
       institutionId,
