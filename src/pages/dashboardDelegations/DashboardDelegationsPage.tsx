@@ -41,7 +41,7 @@ export default function DashboardDelegationsPage({
 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const retrieveDelegationsList = () => {
     setLoading(true);
     fetchDelegations(party.partyId)
       .then((r) => {
@@ -58,6 +58,10 @@ export default function DashboardDelegationsPage({
         });
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    retrieveDelegationsList();
   }, []);
 
   useEffect(() => {
