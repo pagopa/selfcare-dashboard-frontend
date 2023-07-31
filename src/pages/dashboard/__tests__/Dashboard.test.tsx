@@ -33,7 +33,7 @@ test('Test routing', async () => {
   const store = createStore();
   const history = createMemoryHistory();
   history.push('/dashboard');
-  renderDashboard(store, history);
+  waitFor(() => renderDashboard(store, history));
 
   history.push('/dashboard/1');
   expect(history.location.pathname).toBe('/dashboard/1');
@@ -46,10 +46,8 @@ test('Test routing', async () => {
   history.push('/dashboard/13/prId/users');
   expect(history.location.pathname).toBe('/dashboard/13/prId/users');
 
-  setTimeout(() => {
-    history.push('/dashboard/3/delegates');
-    expect(history.location.pathname).toBe('/dashboard/3/delegates');
-  }, 1000);
+  history.push('/dashboard/3/delegates');
+  expect(history.location.pathname).toBe('/dashboard/3/delegates');
 
   // history.push('/dashboard/13/prId/users/798');
   // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/prId/users'));
