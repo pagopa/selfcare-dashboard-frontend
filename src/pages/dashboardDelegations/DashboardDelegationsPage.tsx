@@ -36,14 +36,12 @@ export default function DashboardDelegationsPage({
   const addError = useErrorDispatcher();
 
   const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>([]);
-
   const [isError, setIsError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const [loading, setLoading] = useState(false);
-
-  const retrieveDelegationsList = () => {
+  const retrieveDelegationsList = async () => {
     setLoading(true);
-    fetchDelegations(party.partyId)
+    await fetchDelegations(party.partyId)
       .then((r) => {
         setDelegationsList(r);
         setLoading(false);
@@ -56,12 +54,12 @@ export default function DashboardDelegationsPage({
           techDescription: `Something gone wrong while fetching delegations with party id ${party.partyId}`,
           toNotify: true,
         });
-        setLoading(false);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
-    retrieveDelegationsList();
+    void retrieveDelegationsList();
   }, []);
 
   useEffect(() => {
