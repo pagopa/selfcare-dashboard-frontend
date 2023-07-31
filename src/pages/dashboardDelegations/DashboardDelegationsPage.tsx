@@ -6,7 +6,7 @@ import {
   useErrorDispatcher,
   useUnloadEventOnExit,
 } from '@pagopa/selfcare-common-frontend';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -38,13 +38,15 @@ export default function DashboardDelegationsPage({
   const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const isMounted = useRef(true);
 
   const retrieveDelegationsList = async () => {
     setLoading(true);
     await fetchDelegations(party.partyId)
       .then((r) => {
-        setDelegationsList(r);
-        setLoading(false);
+        if (isMounted.current) {
+          setDelegationsList(r);
+        }
       })
       .catch((reason) => {
         addError({
@@ -55,11 +57,21 @@ export default function DashboardDelegationsPage({
           toNotify: true,
         });
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (isMounted.current) {
+          setLoading(false);
+        }
+      });
   };
 
   useEffect(() => {
+    // eslint-disable-next-line functional/immutable-data
+    isMounted.current = true;
     void retrieveDelegationsList();
+    return () => {
+      // eslint-disable-next-line functional/immutable-data
+      isMounted.current = false;
+    };
   }, []);
 
   useEffect(() => {
