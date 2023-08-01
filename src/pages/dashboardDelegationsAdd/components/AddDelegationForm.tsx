@@ -106,13 +106,16 @@ export default function AddDelegationForm({
           );
         })
         .catch((reason) => {
+          const alreadyDelegated = reason.httpStatus === '409';
           addError({
             id: 'DELEGATION_NOT_CREATED',
             blocking: false,
             error: reason,
             techDescription: `An error occurred while creating delegation for ${party.partyId}`,
             toNotify: true,
-            displayableTitle: t('addDelegationPage.delegationNotCreated'),
+            displayableTitle: alreadyDelegated
+              ? t('addDelegationPage.alreadyDelegated')
+              : t('addDelegationPage.delegationNotCreated'),
             displayableDescription: '',
             component: 'Toast',
           });
