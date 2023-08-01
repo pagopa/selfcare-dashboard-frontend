@@ -11,6 +11,7 @@ import { LOADING_TASK_SEARCH_PARTY, LOADING_TASK_SEARCH_PRODUCTS } from '../util
 export const useSelectedParty = (): {
   fetchSelectedParty: (partyId: string) => Promise<[Party | null, Array<Product> | null]>;
 } => {
+  const parties = useAppSelector(partiesSelectors.selectPartiesList);
   const dispatch = useAppDispatch();
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
   const selectedPartyProducts = useAppSelector(partiesSelectors.selectPartySelectedProducts);
@@ -24,7 +25,8 @@ export const useSelectedParty = (): {
   const fetchParty = (partyId: string): Promise<Party | null> =>
     fetchPartyDetails(partyId).then((party) => {
       if (party) {
-        if (party.status !== 'ACTIVE') {
+        const selectedParty = parties?.find((p) => p.partyId === partyId);
+        if (selectedParty?.status !== 'ACTIVE') {
           throw new Error(`INVALID_PARTY_STATE_${party.status}`);
         }
         setParty(party);
