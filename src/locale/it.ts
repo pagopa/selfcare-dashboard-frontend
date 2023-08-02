@@ -203,7 +203,7 @@ export default {
     selectTechPartner: {
       title: 'Seleziona un Partner Tecnologico',
       subTitle: 'Digita il nome oppure scegli dalla lista',
-      label: 'Seleziona un partner tecnologico',
+      label: 'Seleziona o scegli dalla lista',
       groupByName: 'Nome',
       notFoundTechPartnerOptions: 'Nessun risultato',
       actions: {
@@ -213,6 +213,7 @@ export default {
     },
     delegationSuccessfulCreated: 'Delega aggiunta correttamente.',
     delegationNotCreated: 'Non è stato possibile aggiungere la delega. Riprova.',
+    alreadyDelegated: 'Il Partner selezionato risulta già associato all’ente.',
   },
   subHeader: {
     partySelectionSearch: {

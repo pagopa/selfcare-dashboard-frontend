@@ -1655,6 +1655,95 @@
         "summary": "suspendRelationship"
       }
     },
+    "/support": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "authenticated",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "authorities[0].authority",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "credentials",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "in": "query",
+            "name": "details",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "in": "query",
+            "name": "principal",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/SupportRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SupportResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "support"
+        ],
+        "description": "Service to retrieve Support contact's form",
+        "operationId": "sendSupportRequestUsingPOST",
+        "summary": "sendSupportRequest"
+      }
+    },
     "/token/exchange": {
       "get": {
         "produces": [
@@ -2824,25 +2913,25 @@
     },
     "DelegationResource": {
       "properties": {
-        "from": {
+        "brokerId": {
+          "type": "string"
+        },
+        "brokerName": {
           "type": "string"
         },
         "id": {
           "type": "string"
         },
-        "institutionFromRootName": {
+        "institutionId": {
           "type": "string"
         },
         "institutionName": {
           "type": "string"
         },
-        "partnerName": {
+        "institutionRootName": {
           "type": "string"
         },
         "productId": {
-          "type": "string"
-        },
-        "to": {
           "type": "string"
         },
         "type": {
@@ -3797,6 +3886,34 @@
       "title": "SupportContactResource",
       "type": "object"
     },
+    "SupportRequestDto": {
+      "properties": {
+        "email": {
+          "description": "User's email",
+          "example": "email@example.com",
+          "format": "email",
+          "type": "string"
+        },
+        "productId": {
+          "description": "Product's identifier",
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ],
+      "title": "SupportRequestDto",
+      "type": "object"
+    },
+    "SupportResponse": {
+      "properties": {
+        "redirectUrl": {
+          "type": "string"
+        }
+      },
+      "title": "SupportResponse",
+      "type": "object"
+    },
     "UpdateInstitutionDto": {
       "properties": {
         "description": {
@@ -4140,6 +4257,10 @@
     {
       "description": "Relationships operations",
       "name": "relationships"
+    },
+    {
+      "description": "Support Controller",
+      "name": "support"
     },
     {
       "description": "Token operations",
