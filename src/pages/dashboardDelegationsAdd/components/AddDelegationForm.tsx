@@ -32,13 +32,13 @@ import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResou
 import { LOADING_TASK_DELEGATION_FORM } from '../../../utils/constants';
 
 type Props = {
-  delegateEnabledProducts: Array<Product>;
+  delegableProducts: Array<Product>;
   party: Party;
   selectedProductByQuery?: Product;
 };
 
 export default function AddDelegationForm({
-  delegateEnabledProducts,
+  delegableProducts,
   party,
   selectedProductByQuery,
 }: Props) {
@@ -54,15 +54,15 @@ export default function AddDelegationForm({
   const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
 
   useEffect(() => {
-    if (delegateEnabledProducts.length === 1) {
-      setProductSelected(delegateEnabledProducts[0]);
+    if (delegableProducts.length === 1) {
+      setProductSelected(delegableProducts[0]);
     }
-  }, [delegateEnabledProducts]);
+  }, [delegableProducts]);
 
   useEffect(() => {
     if (selectedProductByQuery) {
-      const chosenProduct = delegateEnabledProducts.find(
-        (dep) => dep.id === selectedProductByQuery.id
+      const chosenProduct = delegableProducts.find(
+        (dp) => dp.id === selectedProductByQuery.id
       );
       setProductSelected(chosenProduct);
     }
@@ -144,7 +144,7 @@ export default function AddDelegationForm({
             <Select
               id="select-product-choose"
               size="small"
-              disabled={delegateEnabledProducts.length === 1 || !!selectedProductByQuery}
+              disabled={delegableProducts.length === 1 || !!selectedProductByQuery}
               fullWidth
               value={productSelected ? productSelected?.title : ''}
               displayEmpty
@@ -158,7 +158,7 @@ export default function AddDelegationForm({
                 </Typography>
               )}
             >
-              {delegateEnabledProducts.map((p: Product, index) => (
+              {delegableProducts.map((p: Product, index) => (
                 <MenuItem
                   key={index}
                   value={p.title}
