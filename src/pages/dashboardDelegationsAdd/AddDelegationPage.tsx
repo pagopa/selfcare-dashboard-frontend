@@ -11,16 +11,16 @@ import { Party } from '../../model/Party';
 import AddDelegationForm from './components/AddDelegationForm';
 
 type Props = {
-  delegateEnabledProducts: Array<Product>;
+  delegableProducts: Array<Product>;
   party: Party;
 };
 
-export default function AddDelegationPage({ delegateEnabledProducts, party }: Props) {
+export default function AddDelegationPage({ delegableProducts, party }: Props) {
   const history = useHistory();
   const { t } = useTranslation();
 
   const productIdByQuery = new URLSearchParams(window.location.search).get('productId');
-  const selectedProductByQuery = delegateEnabledProducts.find((deg) => deg.id === productIdByQuery);
+  const selectedProductByQuery = delegableProducts.find((dp) => dp.id === productIdByQuery);
 
   const goBack = () => {
     history.goBack();
@@ -85,7 +85,7 @@ export default function AddDelegationPage({ delegateEnabledProducts, party }: Pr
         </Grid>
         <Grid item xs={11} mb={5}>
           <AddDelegationForm
-            delegateEnabledProducts={delegateEnabledProducts}
+            delegableProducts={delegableProducts}
             party={party}
             selectedProductByQuery={selectedProductByQuery}
           />

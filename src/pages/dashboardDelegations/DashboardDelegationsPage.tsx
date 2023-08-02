@@ -22,13 +22,13 @@ import { fetchDelegations } from '../../services/delegationServices';
 type Props = {
   isDelegateSectionVisible?: boolean;
   party: Party;
-  delegateEnabledProducts: Array<Product>;
+  delegableProducts: Array<Product>;
 };
 
 export default function DashboardDelegationsPage({
   isDelegateSectionVisible,
   party,
-  delegateEnabledProducts,
+  delegableProducts,
 }: Props) {
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
@@ -138,97 +138,98 @@ export default function DashboardDelegationsPage({
                     </Box>
                   </Box>
                 </Grid>
-                {isDelegateSectionVisible &&
-                  delegateEnabledProducts
-                    .filter((p) => p.delegable === true)
-                    .map((product) => (
-                      <Box
-                        key={product.id}
-                        width="100%"
-                        height={'100%'}
-                        sx={{ backgroundColor: 'white' }}
-                        p={3}
-                        mt={2}
-                      >
-                        <Box display={'flex'}>
-                          <Box mr={2}>
-                            <ProductAvatar
-                              logoUrl={product.logo}
-                              logoBgColor={product.logoBgColor}
-                              logoAltText={`${product.title} logo`}
-                              size="small"
-                            />
-                          </Box>
-                          <Box>
-                            <Typography variant="h6">{product.title}</Typography>
-                          </Box>
+                {delegableProducts.map((product) => {
+                  const delegatesByProduct = delegationsList.filter(
+                    (dl) => dl.productId === product.id
+                  );
+                  return (
+                    <Box
+                      key={product.id}
+                      width="100%"
+                      height={'100%'}
+                      sx={{ backgroundColor: 'background.paper' }}
+                      p={3}
+                      mt={2}
+                    >
+                      <Box display={'flex'}>
+                        <Box mr={2}>
+                          <ProductAvatar
+                            logoUrl={product.logo}
+                            logoBgColor={product.logoBgColor}
+                            logoAltText={`${product.title} logo`}
+                            size="small"
+                          />
                         </Box>
-
                         <Box>
-                          <Grid item xs={12} my={3}>
-                            <Divider sx={{ borderColor: 'background.default' }} />
+                          <Typography variant="h6">{product.title}</Typography>
+                        </Box>
+                      </Box>
+
+                      <Box>
+                        <Grid item xs={12} my={3}>
+                          <Divider sx={{ borderColor: 'background.default' }} />
+                        </Grid>
+                      </Box>
+                      {delegatesByProduct.length === 0 ? (
+                        <Box display={'flex'}>
+                          <Grid item xs={3}>
+                            <Typography variant="body1" sx={{ fontSize: '16px' }}>
+                              {t('overview.delegationsPage.productsSection.labelDelegates')}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={9}>
+                            <Typography variant="body1" sx={{ fontSize: '16px' }}>
+                              <Trans
+                                i18nKey={
+                                  'overview.delegationsPage.productsSection.noDelegatesLabel'
+                                }
+                              >
+                                Nessun delegato per questo prodotto.
+                                <Link
+                                  onClick={() => goToAddDelegationsPage(product?.id)}
+                                  sx={{
+                                    fontWeight: 'fontWeightMedium',
+                                    ml: 1,
+                                    textDecoration: 'none',
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  Aggiungi delega
+                                </Link>
+                              </Trans>
+                            </Typography>
                           </Grid>
                         </Box>
-
-                        {delegationsList.length === 0 ? (
-                          <Box display={'flex'}>
-                            <Grid item xs={3}>
-                              <Typography variant="body1" sx={{ fontSize: '16px' }}>
-                                {t('overview.delegationsPage.productsSection.labelDelegates')}
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={9}>
-                              <Typography variant="body1" sx={{ fontSize: '16px' }}>
-                                <Trans
-                                  i18nKey={
-                                    'overview.delegationsPage.productsSection.noDelegatesLabel'
-                                  }
+                      ) : (
+                        delegatesByProduct.map((del, index) => (
+                          <Box key={del.id}>
+                            <Box display={'flex'}>
+                              <Grid item xs={3}>
+                                <Typography variant="body1" sx={{ fontSize: '16px' }}>
+                                  {t('overview.delegationsPage.productsSection.labelDelegates')}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={9}>
+                                <Typography
+                                  sx={{ fontSize: '16px', fontWeight: 'fontWeightMedium' }}
                                 >
-                                  Nessun delegato per questo prodotto.
-                                  <Link
-                                    onClick={() => goToAddDelegationsPage(product?.id)}
-                                    sx={{
-                                      fontWeight: 'fontWeightMedium',
-                                      ml: 1,
-                                      textDecoration: 'none',
-                                      cursor: 'pointer',
-                                    }}
-                                  >
-                                    Aggiungi delega
-                                  </Link>
-                                </Trans>
-                              </Typography>
-                            </Grid>
-                          </Box>
-                        ) : (
-                          delegationsList.map((r, index) => (
-                            <Box key={r.id}>
-                              <Box display={'flex'}>
-                                <Grid item xs={3}>
-                                  <Typography variant="body1" sx={{ fontSize: '16px' }}>
-                                    {t('overview.delegationsPage.productsSection.labelDelegates')}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={9}>
-                                  <Typography
-                                    sx={{ fontSize: '16px', fontWeight: 'fontWeightMedium' }}
-                                  >
-                                    {r.partnerName}
-                                  </Typography>
+                                  {del.brokerName}
+                                </Typography>
+                              </Grid>
+                            </Box>
+                            {delegationsList.length - 1 !== index && (
+                              <Box>
+                                <Grid item xs={12} my={3}>
+                                  <Divider sx={{ borderColor: 'background.default' }} />
                                 </Grid>
                               </Box>
-                              {delegationsList.length - 1 !== index && (
-                                <Box>
-                                  <Grid item xs={12} my={3}>
-                                    <Divider sx={{ borderColor: 'background.default' }} />
-                                  </Grid>
-                                </Box>
-                              )}
-                            </Box>
-                          ))
-                        )}
-                      </Box>
-                    ))}
+                            )}
+                          </Box>
+                        ))
+                      )}
+                    </Box>
+                  );
+                })}
               </Grid>
             </Grid>
           </Box>
