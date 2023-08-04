@@ -61,9 +61,7 @@ export default function AddDelegationForm({
 
   useEffect(() => {
     if (selectedProductByQuery) {
-      const chosenProduct = delegableProducts.find(
-        (dp) => dp.id === selectedProductByQuery.id
-      );
+      const chosenProduct = delegableProducts.find((dp) => dp.id === selectedProductByQuery.id);
       setProductSelected(chosenProduct);
     }
   }, [selectedProductByQuery]);
@@ -106,7 +104,7 @@ export default function AddDelegationForm({
           );
         })
         .catch((reason) => {
-          const alreadyDelegated = reason.httpStatus === '409';
+          const alreadyDelegated = reason.httpStatus === 409;
           addError({
             id: 'DELEGATION_NOT_CREATED',
             blocking: false,
