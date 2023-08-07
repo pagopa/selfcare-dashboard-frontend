@@ -6,7 +6,6 @@ import { verifyFetchPartyDetailsMockExecution } from '../../services/__mocks__/p
 import { verifyFetchPartyProductsMockExecution } from '../../services/__mocks__/productService';
 import { createMemoryHistory } from 'history';
 import { Route, Router, Switch } from 'react-router';
-import { boolean } from 'fp-ts';
 
 jest.mock('../../services/partyService');
 jest.mock('../../services/productService');

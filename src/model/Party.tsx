@@ -1,5 +1,6 @@
 import { GeographicTaxonomyResource } from '../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
+import { OnboardedProduct } from '../api/generated/b4f-dashboard/OnboardedProduct';
 import { ENV } from '../utils/env';
 
 export type UserRole = 'ADMIN' | 'LIMITED';
@@ -31,6 +32,7 @@ export type Party = {
   subunitType?: string;
   aooParentCode?: string;
   parentDescription?: string;
+  products?: Array<OnboardedProduct>;
 };
 
 const buildUrlLog = (partyId: string) =>
@@ -45,7 +47,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     origin: institutionResource?.origin,
     description: institutionResource.name ?? '',
     digitalAddress: institutionResource.mailAddress,
-    status: institutionResource.status as 'ACTIVE' | 'PENDING' | 'TOBEVALIDATED',
+    status: institutionResource.status as UserStatus,
     userRole: institutionResource.userRole as UserRole,
     category: institutionResource.category,
     urlLogo,
@@ -64,5 +66,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     subunitType: institutionResource.subunitType,
     aooParentCode: institutionResource.aooParentCode,
     parentDescription: institutionResource.parentDescription,
+    products: institutionResource.products as Array<OnboardedProduct>,
   };
 };

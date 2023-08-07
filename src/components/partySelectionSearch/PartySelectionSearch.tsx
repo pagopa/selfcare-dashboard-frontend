@@ -139,7 +139,7 @@ export default function PartySelectionSearch({
                             key={party.partyId}
                             selectedItem={parties.length !== 1 ? selectedParty === party : false}
                             title={party.description}
-                            subTitle={t(roleLabels[party.userRole].longLabelKey)}
+                            subTitle={t(roleLabels[party.userRole]?.longLabelKey)}
                             image={party.urlLogo}
                             chip={
                               party.status === 'PENDING'

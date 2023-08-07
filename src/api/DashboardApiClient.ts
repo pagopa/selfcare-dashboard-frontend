@@ -48,7 +48,7 @@ const onRedirectToLogin = () =>
 
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionResource>> => {
-    const result = await apiClient.getInstitutionsUsingGET({});
+    const result = await apiClient.getInstitutionsUsingGET({ mode: 'BASE' });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 

@@ -75,7 +75,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           parties2Show.map((party) => ({
             id: party.partyId ?? '',
             name: party.description ?? '',
-            productRole: t(roleLabels[party.userRole].longLabelKey),
+            productRole: t(roleLabels[party.userRole]?.longLabelKey),
             logoUrl: party.urlLogo,
             parentName: party.parentDescription,
           })) ?? []

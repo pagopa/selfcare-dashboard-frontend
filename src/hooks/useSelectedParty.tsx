@@ -22,7 +22,7 @@ export const useSelectedParty = (): {
   const setLoadingProducts = useLoading(LOADING_TASK_SEARCH_PRODUCTS);
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
 
-  const fetchParty = (partyId: string): Promise<Party | null> =>
+  const fetchParty = async (partyId: string): Promise<Party | null> =>
     fetchPartyDetails(partyId).then((party) => {
       if (party) {
         const selectedParty = parties?.find((p) => p.partyId === partyId);

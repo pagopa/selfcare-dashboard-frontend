@@ -29,6 +29,7 @@ test('Test Party', () => {
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
     parentDescription: undefined,
+    products: undefined,
   };
   expect(party).toStrictEqual({
     userRole: 'ADMIN',
@@ -54,6 +55,7 @@ test('Test Party', () => {
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
     parentDescription: undefined,
+    products: undefined,
   });
 });
 
@@ -110,5 +112,6 @@ test('Test institutionResource2Party', () => {
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
     parentDescription: undefined,
+    products: undefined,
   });
 });
