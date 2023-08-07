@@ -101,12 +101,10 @@ const Dashboard = () => {
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
   const canSeeSection = party?.userRole === 'ADMIN';
 
-  const delegateEnabledProducts = activeProducts.filter((product) => product.delegable === true);
+  const delegableProducts = activeProducts.filter((product) => product.delegable === true);
 
   const isDelegateSectionVisible =
-    ENV.DELEGATIONS.ENABLE &&
-    activeProducts.find((product) => product.delegable === true) &&
-    canSeeSection;
+    ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && canSeeSection;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
@@ -171,13 +169,13 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
-            <AddDelegationPage delegateEnabledProducts={delegateEnabledProducts} party={party} />
+            <AddDelegationPage delegableProducts={delegableProducts} party={party} />
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
             <DashboardDelegationsPage
               isDelegateSectionVisible={isDelegateSectionVisible}
               party={party}
-              delegateEnabledProducts={delegateEnabledProducts}
+              delegableProducts={delegableProducts}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}

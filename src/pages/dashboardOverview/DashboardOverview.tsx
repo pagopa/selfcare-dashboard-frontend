@@ -18,7 +18,7 @@ type Props = {
 };
 
 const DashboardOverview = ({ party, products }: Props) => {
-  const canUploadLogo = party.userRole === 'ADMIN';
+  const isAdmin = party.userRole === 'ADMIN';
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -27,10 +27,12 @@ const DashboardOverview = ({ party, products }: Props) => {
       [products]
     ) ?? [];
 
-  const productsFiltered2Delegations =
+  const delegableProducts =
     ENV.DELEGATIONS.ENABLE &&
     activeProducts.find((product) => product.delegable === true) &&
-    canUploadLogo;
+    isAdmin;
+
+  const paWithDelegableProducts = party.institutionType === 'PA' && delegableProducts;
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
@@ -42,10 +44,10 @@ const DashboardOverview = ({ party, products }: Props) => {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
+          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
         </Grid>
       </Grid>
-      {party.institutionType === 'PA' && productsFiltered2Delegations && (
+      {paWithDelegableProducts && (
         <Grid item xs={12} my={2}>
           <DashboardInfoSection />
         </Grid>
@@ -53,12 +55,10 @@ const DashboardOverview = ({ party, products }: Props) => {
       <Grid item xs={12}>
         <PartyCard party={party} />
       </Grid>
-      {party.institutionType === 'PA' && !productsFiltered2Delegations ? (
+      {paWithDelegableProducts && (
         <Grid item xs={12} mt={2}>
-          <DashboardInfoSection />
+          <DashboardDelegationsBanner party={party} />
         </Grid>
-      ) : (
-        <DashboardDelegationsBanner party={party} />
       )}
       <Grid item xs={12} mb={2} mt={5}>
         <ActiveProductsSection products={products} party={party} />
