@@ -26,8 +26,8 @@ export const useSelectedParty = (): {
     fetchPartyDetails(partyId).then((party) => {
       if (party) {
         const selectedParty = parties?.find((p) => p.partyId === partyId);
-        if (selectedParty?.partyId === party.partyId && selectedParty?.status !== 'ACTIVE') {
-          throw new Error(`INVALID_PARTY_STATE_${selectedParty?.status}`);
+        if (selectedParty && selectedParty.status !== 'ACTIVE') {
+          throw new Error(`INVALID_PARTY_STATE_${selectedParty.status}`);
         }
         setParty(party);
         return party;
