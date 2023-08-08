@@ -15,8 +15,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
   const prodInteropAndProdInteropColl =
-    products.find((p) => p.id === 'prod-interop-coll' && p.authorized === true) &&
-    products.find((p) => p.id === 'prod-interop' && p.authorized === true);
+    products.find((p) => p.id === 'prod-interop-coll') &&
+    products.find((p) => p.id === 'prod-interop');
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
