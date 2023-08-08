@@ -2,11 +2,15 @@ import { render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createStore, RootState } from '../../redux/store';
 import withSelectedParty from '../withSelectedParty';
-import { verifyFetchPartyDetailsMockExecution } from '../../services/__mocks__/partyService';
+import {
+  mockedParties,
+  verifyFetchPartyDetailsMockExecution,
+} from '../../services/__mocks__/partyService';
 import { verifyFetchPartyProductsMockExecution } from '../../services/__mocks__/productService';
 import { createMemoryHistory } from 'history';
 import { Route, Router, Switch } from 'react-router';
 import { boolean } from 'fp-ts';
+import { partiesActions } from '../../redux/slices/partiesSlice';
 
 jest.mock('../../services/partyService');
 jest.mock('../../services/productService');
@@ -67,8 +71,9 @@ test('Test default behavior when no parties', async () => {
 test('Test party not active', async () => {
   const store = createStore();
   const history = createMemoryHistory();
-  history.push(`/2`);
+  await store.dispatch(partiesActions.setPartiesList(mockedParties));
   await renderApp(false, store, history);
+  history.push(`/2`);
 
   await waitFor(() => expect(store.getState().appState.errors.length).toBe(1));
   expect(store.getState().parties.selected).toBeUndefined();

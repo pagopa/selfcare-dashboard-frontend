@@ -64,7 +64,7 @@ export default function NoActiveParty({ parties }: Props) {
                         isDisabled={isDisabled}
                         key={party.partyId}
                         title={party.description}
-                        subTitle={t(roleLabels[party.userRole].longLabelKey)}
+                        subTitle={t(roleLabels[party.userRole]?.longLabelKey)}
                         image={party.urlLogo}
                         chip={
                           party.status === 'PENDING'
