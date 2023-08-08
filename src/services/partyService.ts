@@ -24,15 +24,12 @@ export const fetchPartyDetails = (partyId: string): Promise<Party | null> => {
     return new Promise((resolve) =>
       resolve(mockedParties.find((p) => p.partyId === partyId) ?? null)
     );
+  } else {
+    return DashboardApi.getInstitution(partyId).then((institutionResource) =>
+      institutionResource ? institutionResource2Party(institutionResource) : null
+    );
   }
-
-  return retrieveParty_fetch(partyId);
 };
-
-const retrieveParty_fetch = (partyId: string): Promise<Party | null> =>
-  DashboardApi.getInstitution(partyId).then((institutionResource) =>
-    institutionResource ? institutionResource2Party(institutionResource) : null
-  );
 
 export const getProductBrokers = (
   partyId: string,
