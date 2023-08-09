@@ -58,4 +58,8 @@ export const ENV = {
       .default('https://api-eu.mixpanel.com')
       .asString(),
   },
+
+  DELEGATIONS: {
+    ENABLE: env.get('REACT_APP_DELEGATIONS_ENABLE').default('false').asBool(),
+  },
 };

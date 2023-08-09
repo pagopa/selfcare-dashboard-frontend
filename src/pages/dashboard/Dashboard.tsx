@@ -17,6 +17,8 @@ import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
 import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
 import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
+import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
+import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -87,19 +89,33 @@ const Dashboard = () => {
   const { i18n } = useTranslation();
 
   const activeProducts: Array<Product> =
-    useMemo(() => products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE'), [products]) ??
-    [];
+    useMemo(
+      () =>
+        products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized === true),
+      [products]
+    ) ?? [];
 
   const productsMap: ProductsMap =
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
+  const canSeeSection = party?.userRole === 'ADMIN';
+
+  const delegableProducts = activeProducts.filter((product) => product.delegable === true);
+
+  const isDelegateSectionVisible =
+    ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && canSeeSection;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
       <Grid component="nav" item xs={2}>
         <Box>
-          <DashboardSideMenu products={products} party={party} />
+          <DashboardSideMenu
+            products={products}
+            party={party}
+            isDelegateSectionVisible={isDelegateSectionVisible}
+            canSeeSection={canSeeSection}
+          />
         </Box>
       </Grid>
       <Grid item component="main" xs={10} sx={{ backgroundColor: '#F5F6F7' }} display="flex" pb={8}>
@@ -150,6 +166,16 @@ const Dashboard = () => {
               theme={theme}
               i18n={i18n}
               decorators={decorators}
+            />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
+            <AddDelegationPage delegableProducts={delegableProducts} party={party} />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
+            <DashboardDelegationsPage
+              isDelegateSectionVisible={isDelegateSectionVisible}
+              party={party}
+              delegableProducts={delegableProducts}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}

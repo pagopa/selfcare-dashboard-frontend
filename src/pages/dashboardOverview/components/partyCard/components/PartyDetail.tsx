@@ -6,12 +6,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from 'react';
 import { SessionModal, useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { GeographicTaxonomy, Party } from '../../../../../model/Party';
+import { Party } from '../../../../../model/Party';
 import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../../../../utils/constants';
 import { DashboardApi } from '../../../../../api/DashboardApiClient';
 import { ENV } from '../../../../../utils/env';
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../redux/slices/partiesSlice';
+import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
+import { GeographicTaxonomyDto } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
 import GeoTaxonomySection from './GeoTaxonomySection';
 
 type Props = {
@@ -35,7 +37,7 @@ export default function PartyDetail({ party }: Props) {
     useState<boolean>(false);
   const [openModalFirstTimeAddGeographicTaxonomies, setOpenModalFirstTimeAddGeographicTaxonomies] =
     useState<boolean>(false);
-  const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomy>>(
+  const [optionsSelected, setOptionsSelected] = useState<Array<GeographicTaxonomyResource>>(
     party.geographicTaxonomies ? party.geographicTaxonomies : [{ code: '', desc: '' }]
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
@@ -49,11 +51,12 @@ export default function PartyDetail({ party }: Props) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
     setOptionsSelected(
-      party.geographicTaxonomies.length > 0 ? party.geographicTaxonomies : [{ code: '', desc: '' }]
+      party?.geographicTaxonomies.length > 0
+        ? party?.geographicTaxonomies
+        : [{ code: '', desc: '' }]
     );
   }, [party]);
 
-  useEffect(() => {}, [optionsSelected]);
   useEffect(() => {
     if (partyUpdated && party.partyId) {
       setPartyUpdated(partyUpdated);
@@ -75,7 +78,7 @@ export default function PartyDetail({ party }: Props) {
     setLoadingSaveGeotaxonomies(true);
     DashboardApi.updateInstitutionGeographicTaxonomy(
       party.partyId as string,
-      optionsSelected as Array<GeographicTaxonomy>
+      optionsSelected as ReadonlyArray<GeographicTaxonomyDto>
     )
       .then(() => {
         trackEvent('UPDATE_PARTY_GEOGRAPHIC_TAXONOMIES', {

@@ -55,6 +55,8 @@ variables:
     react_app_mixpanel_token: '$(UAT_MIXPANEL_TOKEN)'
     react_app_onetrust_domain_id: '$(UAT_ONETRUST_DOMAIN_ID)'
 
+    react_app_delegations_enabled: '$(UAT_DELEGATIONS_ENABLED)'
+
   ${{ elseif eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
     environment: 'PROD'
     azure_subscription: $(PROD_AZURE_SUBSCRIPTION)
@@ -88,6 +90,8 @@ variables:
     react_app_analytics_mocked: '$(PROD_ANALYTICS_MOCKED)'
     react_app_mixpanel_token: '$(PROD_MIXPANEL_TOKEN)'
     react_app_onetrust_domain_id: '$(PROD_ONETRUST_DOMAIN_ID)'
+
+    react_app_delegations_enabled: '$(PROD_DELEGATIONS_ENABLED)'
 
   # every branch different from past will be considered as DEV
   #  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release-dev') }}:
@@ -124,6 +128,8 @@ variables:
     react_app_analytics_mocked: '$(DEV_ANALYTICS_MOCKED)'
     react_app_mixpanel_token: '$(DEV_MIXPANEL_TOKEN)'
     react_app_onetrust_domain_id: '$(DEV_ONETRUST_DOMAIN_ID)'
+
+    react_app_delegations_enabled: '$(DEV_DELEGATIONS_ENABLED)'
 
 # Automatically triggered on PR
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#pr-trigger
@@ -229,6 +235,8 @@ stages:
               REACT_APP_MIXPANEL_TOKEN: '$(react_app_mixpanel_token)'
               REACT_APP_ONE_TRUST_BASE_URL: '$(react_app_one_trust_base_url)'
               REACT_APP_ONETRUST_DOMAIN_ID: '$(react_app_onetrust_domain_id)'
+
+              REACT_APP_DELEGATIONS_ENABLE: '$(react_app_delegations_enabled)'
           - bash: |
               printf "$EXECUTION_ID\n$(git name-rev --name-only FETCH_HEAD) $(git rev-parse HEAD)" > $(System.DefaultWorkingDirectory)/build/build.info
             env:

@@ -6,17 +6,12 @@ export type UserRole = 'ADMIN' | 'LIMITED';
 export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
 
-export type GeographicTaxonomy = {
-  code?: string | undefined;
-  desc?: string | undefined;
-};
-
 export type Party = {
-  partyId?: string;
+  partyId: string;
   externalId?: string;
   originId?: string;
   origin?: string;
-  description?: string;
+  description: string;
   digitalAddress?: string;
   status: UserStatus;
   userRole: UserRole;
@@ -44,11 +39,11 @@ const buildUrlLog = (partyId: string) =>
 export const institutionResource2Party = (institutionResource: InstitutionResource): Party => {
   const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
   return {
-    partyId: institutionResource.id,
-    externalId: institutionResource.externalId,
-    originId: institutionResource.originId,
-    origin: institutionResource.origin,
-    description: institutionResource.name,
+    partyId: institutionResource.id ?? '',
+    externalId: institutionResource.externalId ?? '',
+    originId: institutionResource?.originId,
+    origin: institutionResource?.origin,
+    description: institutionResource.name ?? '',
     digitalAddress: institutionResource.mailAddress,
     status: institutionResource.status as 'ACTIVE' | 'PENDING' | 'TOBEVALIDATED',
     userRole: institutionResource.userRole as UserRole,

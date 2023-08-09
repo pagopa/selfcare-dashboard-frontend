@@ -1,6 +1,10 @@
 import { Grid, Box, Typography } from '@mui/material';
+import { useMemo } from 'react';
+
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
+import { ENV } from '../../utils/env';
+import DashboardDelegationsBanner from '../dashboardDelegations/DashboardDelegationsBanner';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
@@ -14,7 +18,22 @@ type Props = {
 };
 
 const DashboardOverview = ({ party, products }: Props) => {
-  const canUploadLogo = party.userRole === 'ADMIN';
+  const isAdmin = party.userRole === 'ADMIN';
+
+  const activeProducts: Array<Product> =
+    useMemo(
+      () =>
+        products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized === true),
+      [products]
+    ) ?? [];
+
+  const delegableProducts =
+    ENV.DELEGATIONS.ENABLE &&
+    activeProducts.find((product) => product.delegable === true) &&
+    isAdmin;
+
+  const paWithDelegableProducts = party.institutionType === 'PA' && delegableProducts;
+
   return (
     <Box p={3} sx={{ width: '100%' }}>
       <WelcomeDashboard />
@@ -25,15 +44,20 @@ const DashboardOverview = ({ party, products }: Props) => {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
+          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
         </Grid>
       </Grid>
+      {paWithDelegableProducts && (
+        <Grid item xs={12} my={2}>
+          <DashboardInfoSection />
+        </Grid>
+      )}
       <Grid item xs={12}>
         <PartyCard party={party} />
       </Grid>
-      {canUploadLogo && party.institutionType === 'PA' && (
+      {paWithDelegableProducts && (
         <Grid item xs={12} mt={2}>
-          <DashboardInfoSection />
+          <DashboardDelegationsBanner party={party} />
         </Grid>
       )}
       <Grid item xs={12} mb={2} mt={5}>
