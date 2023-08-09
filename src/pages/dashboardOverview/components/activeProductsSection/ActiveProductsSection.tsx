@@ -14,9 +14,13 @@ type Props = {
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
+  const notAuthorizedProdInterop = products.find(
+    (p) => p.id === 'prod-interop' && p.authorized === false
+  );
   const prodInteropAndProdInteropColl =
-    products.find((p) => p.id === 'prod-interop-coll') &&
-    products.find((p) => p.id === 'prod-interop');
+    products.find((p) => p.id === 'prod-interop') &&
+    products.find((p) => p.id === 'prod-interop-coll');
+
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
@@ -27,7 +31,9 @@ export default function ActiveProductsSection({ party, products }: Props) {
               prodInteropAndProdInteropColl
                 ? p.status !== 'INACTIVE' &&
                   p.productOnBoardingStatus === 'ACTIVE' &&
-                  p.id !== 'prod-interop-coll'
+                  (notAuthorizedProdInterop
+                    ? p.id !== 'prod-interop'
+                    : p.id !== 'prod-interop-coll')
                 : p.status !== 'INACTIVE' && p.productOnBoardingStatus === 'ACTIVE'
             )
             .sort((a, b) =>

@@ -145,7 +145,7 @@ export const mockedPartyProducts: Array<Product> = [
     authorized: true,
     userRole: 'ADMIN',
     productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-    status: StatusEnum.ACTIVE,
+    status: StatusEnum.TESTING,
     urlPublic: undefined,
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
