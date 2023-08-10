@@ -60,7 +60,6 @@ test('Test Party', () => {
 test('Test institutionResource2Party', () => {
   const institutionResource: InstitutionResource = {
     name: 'Comune di Bari',
-    status: 'PENDING',
     id: '1',
     externalId: 'externalId1',
     originId: 'originId1',
@@ -68,7 +67,6 @@ test('Test institutionResource2Party', () => {
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
     address: 'address',
     zipCode: '20121',
@@ -86,9 +84,7 @@ test('Test institutionResource2Party', () => {
 
   const party = institutionResource2Party(institutionResource);
   expect(party).toStrictEqual({
-    userRole: 'LIMITED',
     description: 'Comune di Bari',
-    status: 'PENDING',
     partyId: '1',
     fiscalCode: 'fiscalCode',
     digitalAddress: 'address',
@@ -110,5 +106,6 @@ test('Test institutionResource2Party', () => {
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
     parentDescription: undefined,
+    products: undefined,
   });
 });

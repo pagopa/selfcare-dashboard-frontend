@@ -1,7 +1,4 @@
-import {
-  ProductOnBoardingStatusEnum,
-  StatusEnum,
-} from '../../api/generated/b4f-dashboard/SubProductResource';
+import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
 
@@ -11,9 +8,6 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'App IO',
     description: 'App IO description',
     id: 'prod-io',
-    authorized: true,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-    userRole: 'ADMIN',
     status: StatusEnum.ACTIVE,
     activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'https://io.italia.it/ ',
@@ -24,8 +18,7 @@ export const mockedPartyProducts: Array<Product> = [
       {
         id: 'prod-io-premium',
         title: 'Premium',
-        status: StatusEnum.ACTIVE,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        status: StatusEnum.PHASE_OUT,
       },
     ],
     logoBgColor: 'primary.main',
@@ -36,8 +29,6 @@ export const mockedPartyProducts: Array<Product> = [
     id: 'prod-pn',
     title: 'Piattaforma Notifiche',
     description: 'Piattaforma Notifiche description',
-    authorized: false,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     status: StatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activationDateTime: new Date(2021, 1, 2),
@@ -63,9 +54,7 @@ export const mockedPartyProducts: Array<Product> = [
     id: 'prod-pagopa',
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
-    authorized: true,
     tag: 'Vecchio Portale',
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     status: StatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
     activationDateTime: new Date(2021, 1, 3),
@@ -91,9 +80,6 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'Check-IBAN',
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: 'prod-ciban',
-    userRole: 'ADMIN',
-    authorized: true,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     status: StatusEnum.ACTIVE,
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
     urlPublic: 'http://www.google.it',
@@ -109,8 +95,6 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'Carta Giovani',
     description: 'Richiedi la convenzione e gestisci i dati e le agevolazioni da offrire.',
     urlBO: 'http://cgn/bo#token=<IdentityToken>',
-    authorized: false,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.INACTIVE,
     status: StatusEnum.ACTIVE,
     urlPublic: undefined,
     imageUrl:
@@ -125,9 +109,6 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'Interoperabilità',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
-    authorized: true,
-    userRole: 'ADMIN',
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     status: StatusEnum.ACTIVE,
     urlPublic: undefined,
     imageUrl:
@@ -142,20 +123,7 @@ export const mockedPartyProducts: Array<Product> = [
     title: 'Interoperabilità Collaudo',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://COLL/bo#token=<IdentityToken>',
-    backOfficeEnvironmentConfigurations: [
-      {
-        environment: 'test1',
-        url: 'www.test1.com',
-      },
-      {
-        environment: 'test2',
-        url: 'www.test2.com',
-      },
-    ],
-    authorized: true,
-    userRole: 'ADMIN',
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-    status: StatusEnum.ACTIVE,
+    status: StatusEnum.TESTING,
     urlPublic: undefined,
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',

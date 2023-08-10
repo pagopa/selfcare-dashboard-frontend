@@ -1,5 +1,7 @@
 import { GeographicTaxonomyResource } from '../api/generated/b4f-dashboard/GeographicTaxonomyResource';
+import { InstitutionBaseResource } from '../api/generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
+import { OnboardedProductResource } from '../api/generated/b4f-dashboard/OnboardedProductResource';
 import { ENV } from '../utils/env';
 
 export type UserRole = 'ADMIN' | 'LIMITED';
@@ -8,13 +10,12 @@ export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
 
 export type Party = {
   partyId: string;
+  products: Array<OnboardedProductResource>;
   externalId?: string;
   originId?: string;
   origin?: string;
   description: string;
   digitalAddress?: string;
-  status: UserStatus;
-  userRole: UserRole;
   category?: string;
   urlLogo?: string;
   fiscalCode?: string;
@@ -33,6 +34,15 @@ export type Party = {
   parentDescription?: string;
 };
 
+export type BaseParty = {
+  partyId: string;
+  description: string;
+  status: UserStatus;
+  userRole: UserRole;
+  urlLogo?: string;
+  parentDescription?: string;
+};
+
 const buildUrlLog = (partyId: string) =>
   `${ENV.URL_INSTITUTION_LOGO.PREFIX}${partyId}${ENV.URL_INSTITUTION_LOGO.SUFFIX}`;
 
@@ -45,8 +55,6 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     origin: institutionResource?.origin,
     description: institutionResource.name ?? '',
     digitalAddress: institutionResource.mailAddress,
-    status: institutionResource.status as UserStatus,
-    userRole: institutionResource.userRole as UserRole,
     category: institutionResource.category,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
@@ -64,5 +72,20 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     subunitType: institutionResource.subunitType,
     aooParentCode: institutionResource.aooParentCode,
     parentDescription: institutionResource.parentDescription,
+    products: institutionResource.products as Array<OnboardedProductResource>,
+  };
+};
+
+export const institutionBaseResource2BaseParty = (
+  institutionResource: InstitutionBaseResource
+): BaseParty => {
+  const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
+  return {
+    partyId: institutionResource.id ?? '',
+    description: institutionResource.name ?? '',
+    status: institutionResource.status as UserStatus,
+    userRole: institutionResource.userRole as UserRole,
+    parentDescription: institutionResource.parentDescription,
+    urlLogo,
   };
 };

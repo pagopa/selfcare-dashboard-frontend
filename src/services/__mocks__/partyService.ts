@@ -1,12 +1,57 @@
 import { GeographicTaxonomy } from '../../api/generated/b4f-dashboard/GeographicTaxonomy';
-import { Party } from '../../model/Party';
+import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
+import { BaseParty, Party } from '../../model/Party';
+
+export const mockedBaseParties: Array<BaseParty> = [
+  {
+    partyId: '1',
+    description: 'Comune di Bari',
+    status: 'ACTIVE',
+    userRole: 'LIMITED',
+  },
+  {
+    partyId: '2',
+    description: 'Comune di Milano',
+    status: 'PENDING',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '3',
+    description: 'Comune di Roma',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '4',
+    description: 'Comune di Napoli',
+    status: 'ACTIVE',
+    userRole: 'LIMITED',
+  },
+  {
+    partyId: 'onboarded',
+    description: 'AGENCY ONBOARDED',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '5',
+    description:
+      'Commissario straordinario per la realizzazione di approdi temporanei e di interventi complementari per la salvaguardia di Venezia e della sua laguna e ulteriori interventi per la salvaguardia della laguna di Venezia',
+    status: 'TOBEVALIDATED',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '6',
+    description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+];
 
 export const mockedParties: Array<Party> = [
   {
-    userRole: 'LIMITED',
     description: 'Comune di Bari',
     urlLogo: 'image',
-    status: 'ACTIVE',
     partyId: '1',
     digitalAddress: 'comune.bari@pec.it',
     fiscalCode: '111111111111',
@@ -22,12 +67,34 @@ export const mockedParties: Array<Party> = [
     geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }], // Use case with one taxonomy
     vatNumber: '111111111141',
     supportEmail: '',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '81001510528',
+          recipientCode: 'FLGKROWP',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '66554328912',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+    ],
   },
   {
-    userRole: 'ADMIN',
     description: 'Comune di Milano',
     urlLogo: 'image',
-    status: 'PENDING',
     partyId: '2',
     digitalAddress: 'comune.milano@pec.it',
     fiscalCode: 'fiscalCodeMilano',
@@ -42,12 +109,34 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'CGDAS23B',
     geographicTaxonomies: [], // Use case with no taxonomies
     vatNumber: '81001510528',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3333',
+          recipientCode: 'dddd',
+          publicServices: true,
+        },
+      },
+    ],
   },
   {
-    userRole: 'ADMIN',
     description: 'Comune di Roma',
     urlLogo: 'image',
-    status: 'ACTIVE',
     partyId: '3',
     digitalAddress: 'comune.roma@pec.it',
     fiscalCode: 'fiscalCodeRoma',
@@ -66,12 +155,79 @@ export const mockedParties: Array<Party> = [
       { code: '015146', desc: 'Milano - Comune' },
     ],
     vatNumber: '111122211111',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '11111111111',
+          recipientCode: 'CH435V',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '22222222222',
+          recipientCode: 'BFDF45G',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '33344455567',
+          recipientCode: 'NBG455F',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-cgn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+      // Use case with prod-interop and prod-interop-coll
+      {
+        productId: 'prod-interop',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-interop-coll',
+        authorized: false,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+    ],
   },
   {
-    userRole: 'LIMITED',
     description: 'Comune di Napoli',
     urlLogo: 'image',
-    status: 'ACTIVE',
     partyId: '4',
     digitalAddress: 'comune.napoli@pec.it',
     fiscalCode: 'fiscalCodeNapoli',
@@ -89,12 +245,12 @@ export const mockedParties: Array<Party> = [
       { code: '8853441', desc: 'Comune di Roma' },
     ],
     vatNumber: '111122211111',
+    // Use case with no onboarded products
+    products: [],
   },
   {
-    userRole: 'ADMIN',
     description: 'AGENCY ONBOARDED',
     urlLogo: 'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/onboarded/logo.png',
-    status: 'ACTIVE',
     partyId: 'onboarded',
     digitalAddress: 'comune.onboarded@pec.it',
     fiscalCode: 'fiscalCodeONBOARDED',
@@ -109,13 +265,35 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'CGDAS23E',
     geographicTaxonomies: [],
     vatNumber: '111122211111',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3333',
+          recipientCode: 'dddd',
+          publicServices: true,
+        },
+      },
+    ],
   },
   // Use case of party with status "TOBEVALIDATED"
   {
-    userRole: 'ADMIN',
     description: `Commissario straordinario per la realizzazione di approdi temporanei e di interventi complementari per la salvaguardia di Venezia e della sua laguna e ulteriori interventi per la salvaguardia della laguna di Venezia`,
     urlLogo: 'image',
-    status: 'TOBEVALIDATED',
     partyId: '5',
     digitalAddress: 'comune.veneto@pec.it',
     fiscalCode: 'fiscalCodeVeneto',
@@ -130,12 +308,34 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'CCBV421K',
     geographicTaxonomies: [],
     vatNumber: '111122211111',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3333',
+          recipientCode: 'dddd',
+          publicServices: true,
+        },
+      },
+    ],
   },
   {
-    userRole: 'ADMIN',
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     urlLogo: 'image',
-    status: 'ACTIVE',
     partyId: '6',
     digitalAddress: 'comune.bressanone@pec.it',
     fiscalCode: '111122211111',
@@ -150,6 +350,30 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'CGDAS23F',
     geographicTaxonomies: [],
     vatNumber: '111122211111',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3333',
+          recipientCode: 'dddd',
+          publicServices: true,
+        },
+      },
+    ],
   },
   // Usable when not mocking the BE
   {
@@ -161,8 +385,6 @@ export const mockedParties: Array<Party> = [
     description: 'Comune di Genova',
     category: 'Comuni e loro Consorzi e Associazioni',
     fiscalCode: '00856930102',
-    userRole: 'ADMIN',
-    status: 'ACTIVE',
     digitalAddress: 'comunegenova@postemailcertificata.it',
     urlLogo:
       'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/f572bb09-b689-4785-8ea8-4c7a8b081998/logo.png',
@@ -172,6 +394,30 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'CGDAS23G',
     geographicTaxonomies: [],
     vatNumber: '222222211111',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3333',
+          recipientCode: 'dddd',
+          publicServices: true,
+        },
+      },
+    ],
   },
   // Usable when not mocking the BE
   {
@@ -183,8 +429,6 @@ export const mockedParties: Array<Party> = [
     description: 'Comune di Varese',
     category: 'Comuni e loro Consorzi e Associazioni',
     fiscalCode: '00441340122',
-    userRole: 'ADMIN',
-    status: 'ACTIVE',
     digitalAddress: 'protocollo@comune.varese.legalmail.it',
     urlLogo:
       'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/7784b9d3-e834-4342-a6ef-d0566b058af2/logo.png',
@@ -194,6 +438,30 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'CGDAS23V',
     geographicTaxonomies: [],
     vatNumber: '111122291111',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3333',
+          recipientCode: 'dddd',
+          publicServices: true,
+        },
+      },
+    ],
   },
   // Mock with institutionType = PSP
   {
@@ -205,8 +473,6 @@ export const mockedParties: Array<Party> = [
     description: 'Unicredit',
     category: 'Intermediario',
     fiscalCode: '00348170101',
-    userRole: 'ADMIN',
-    status: 'ACTIVE',
     digitalAddress: 'protocollo@unicredit.legalmail.it',
     urlLogo:
       'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/7784b9d3-e834-4342-a6ef-d0566b058af2/logo.png',
@@ -216,6 +482,30 @@ export const mockedParties: Array<Party> = [
     recipientCode: 'GGDAS99T',
     geographicTaxonomies: [],
     vatNumber: '111122211111',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3333',
+          recipientCode: 'dddd',
+          publicServices: true,
+        },
+      },
+    ],
   },
 ];
 

@@ -24,12 +24,15 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
   const { t } = useTranslation();
   const addNotify = useUserNotify();
 
-  const prodActiveWithSubProdInactive = product.subProducts?.find(
-    (sp) =>
-      product.status === 'ACTIVE' &&
-      product.productOnBoardingStatus === 'ACTIVE' &&
-      sp.productOnBoardingStatus !== 'ACTIVE' &&
-      product.authorized
+  const prodActiveWithSubProdInactive = product.subProducts?.find((sp) =>
+    party.products.find(
+      (us) =>
+        us.productOnBoardingStatus !== 'ACTIVE' &&
+        product.status === 'ACTIVE' &&
+        sp.id === us.productId &&
+        sp.status === 'ACTIVE' &&
+        us.authorized === true
+    )
   );
 
   return (
@@ -47,14 +50,10 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
               : product.logo
           }
           title={product.title}
-          description={
-            prodActiveWithSubProdInactive
-              ? (prodActiveWithSubProdInactive.description as string)
-              : product.description
-          }
+          description={product.description}
           disableBtn={false}
           btnAction={() => {
-            if (product.productOnBoardingStatus === 'PENDING') {
+            if (prodActiveWithSubProdInactive) {
               addNotify({
                 component: 'SessionModal',
                 id: 'Notify_Example',
@@ -64,22 +63,13 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
                 closeLabel: t('overview.adhesionPopup.closeButton'),
                 onConfirm: () => goToOnboarding(product, party),
               });
-            } else if (prodActiveWithSubProdInactive) {
-              window.location.assign(
-                `${ENV.URL_FE.ONBOARDING}/${product.id}/${product.id}-premium`
-              );
             } else {
               goToOnboarding(product, party);
             }
           }}
           buttonLabel={t('overview.notActiveProducts.joinButton')}
-          urlPublic={
-            prodActiveWithSubProdInactive
-              ? prodActiveWithSubProdInactive.urlPublic
-              : product.urlPublic
-          }
+          urlPublic={product.urlPublic}
           product={product}
-          prodActiveWithSubProdInactive={prodActiveWithSubProdInactive}
         />
       </Grid>
     </>

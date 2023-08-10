@@ -9,12 +9,10 @@ import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
-import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
 import DashboardSidenavItem from './DashboardSidenavItem';
 
 type Props = {
-  products: Array<Product>;
   party: Party;
   isDelegateSectionVisible?: boolean;
   canSeeSection: boolean;

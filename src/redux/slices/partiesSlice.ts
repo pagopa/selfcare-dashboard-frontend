@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
-import { Party } from '../../model/Party';
-import { Product } from '../../model/Product';
+import { BaseParty, Party } from '../../model/Party';
 import { ProductRolesLists, ProductsRolesMap } from '../../model/ProductRole';
+import { Product } from '../../model/Product';
 
 interface PartiesState {
-  list?: Array<Party>;
+  list?: Array<BaseParty>;
   selected?: Party;
   selectedPartyLogoUrl?: string;
   selectedProducts?: Array<Product>;
@@ -19,7 +19,7 @@ export const partiesSlice = createSlice({
   name: 'parties',
   initialState,
   reducers: {
-    setPartiesList: (state, action: PayloadAction<Array<Party>>) => {
+    setPartiesList: (state, action: PayloadAction<Array<BaseParty>>) => {
       state.list = action.payload;
     },
     setPartySelected: (state, action: PayloadAction<Party | undefined>) => {
@@ -28,11 +28,6 @@ export const partiesSlice = createSlice({
     },
     setPartySelectedPartyLogo: (state, action: PayloadAction<string | undefined>) => {
       state.selectedPartyLogoUrl = `${action.payload}?${new Date()}`;
-      if (state.list) {
-        state.list
-          .filter((p) => p.partyId === state.selected?.partyId)
-          .forEach((p) => (p.urlLogo = state.selectedPartyLogoUrl));
-      }
     },
     setPartySelectedProducts: (state, action: PayloadAction<Array<Product> | undefined>) => {
       state.selectedProducts = action.payload;
@@ -53,7 +48,7 @@ export const partiesActions = partiesSlice.actions;
 export const partiesReducer = partiesSlice.reducer;
 
 export const partiesSelectors = {
-  selectPartiesList: (state: RootState): Array<Party> | undefined => state.parties.list,
+  selectPartiesList: (state: RootState): Array<BaseParty> | undefined => state.parties.list,
   selectPartySelected: (state: RootState): Party | undefined => state.parties.selected,
   selectPartySelectedLogo: (state: RootState): string | undefined =>
     state.parties.selectedPartyLogoUrl,

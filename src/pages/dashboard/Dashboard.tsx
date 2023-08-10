@@ -19,6 +19,7 @@ import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRouting
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
+import { OnboardedProduct } from '../../api/generated/b4f-dashboard/OnboardedProduct';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -82,16 +83,25 @@ export const buildRoutes = (
 
 const Dashboard = () => {
   const history = useHistory();
+  const parties = useAppSelector(partiesSelectors.selectPartiesList);
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const store = useStore();
   const theme = useTheme();
   const { i18n } = useTranslation();
 
-  const activeProducts: Array<Product> =
+  const activePartyProducts: Array<OnboardedProduct> =
     useMemo(
       () =>
-        products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized === true),
+        party?.products.filter(
+          (p) => p.productOnBoardingStatus === 'ACTIVE' && p?.authorized === true
+        ),
+      [party?.products]
+    ) ?? [];
+
+  const activeProducts: Array<Product> =
+    useMemo(
+      () => products?.filter((p) => activePartyProducts.map((ap) => ap.productId === p.id)),
       [products]
     ) ?? [];
 
@@ -99,19 +109,18 @@ const Dashboard = () => {
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
-  const canSeeSection = party?.userRole === 'ADMIN';
+  const canSeeSection = parties?.find((p) => p.partyId === party?.partyId)?.userRole === 'ADMIN';
 
-  const delegableProducts = activeProducts.filter((product) => product.delegable === true);
+  const delegableProducts = activeProducts.filter((p) => p.delegable === true);
 
   const isDelegateSectionVisible =
-    ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && canSeeSection;
+    ENV.DELEGATIONS.ENABLE && delegableProducts && delegableProducts.length > 0 && canSeeSection;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
       <Grid component="nav" item xs={2}>
         <Box>
           <DashboardSideMenu
-            products={products}
             party={party}
             isDelegateSectionVisible={isDelegateSectionVisible}
             canSeeSection={canSeeSection}
