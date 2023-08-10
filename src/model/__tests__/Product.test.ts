@@ -28,6 +28,7 @@ test('Test institutionInfo2Party', () => {
   };
 
   const product = productResource2Product(productResource);
+
   expect(product).toStrictEqual({
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
     id: '3',
