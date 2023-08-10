@@ -1,5 +1,9 @@
 import { fetchParties, fetchPartyDetails } from '../partyService';
-import { institutionResource2Party, Party } from '../../model/Party';
+import {
+  institutionBaseResource2BaseParty,
+  institutionResource2Party,
+  Party,
+} from '../../model/Party';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { mockedInstitutionResources } from '../../api/__mocks__/DashboardApiClient';
 
@@ -16,7 +20,7 @@ beforeEach(() => {
 test('Test fetchParties', async () => {
   const parties = await fetchParties();
 
-  expect(parties).toMatchObject(mockedInstitutionResources.map(institutionResource2Party));
+  expect(parties).toMatchObject(mockedInstitutionResources.map(institutionBaseResource2BaseParty));
 
   parties.forEach((p) =>
     expect(p.urlLogo).toBe(`http://checkout.selfcare/institutions/${p.partyId}/logo.png`)

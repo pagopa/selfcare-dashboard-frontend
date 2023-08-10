@@ -7,7 +7,7 @@ import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router';
-import { mockedParties } from '../services/__mocks__/partyService';
+import { mockedBaseParties, mockedParties } from '../services/__mocks__/partyService';
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 
@@ -46,7 +46,7 @@ test('Test rendering dashboard parties loaded', () => {
   const { store } = renderApp(undefined, history);
 
   verifyLoginMockExecution(store.getState());
-  expect(store.getState().parties.list).toBe(mockedParties); // the new UI is always fetching parties list
+  expect(store.getState().parties.list).toBe(mockedBaseParties); // the new UI is always fetching parties list
 });
 
 test('Test routing ', async () => {

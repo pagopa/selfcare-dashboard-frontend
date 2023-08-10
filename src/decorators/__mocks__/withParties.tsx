@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../redux/slices/partiesSlice';
 import { RootState } from '../../redux/store';
-import { mockedBaseParties, mockedParties } from '../../services/__mocks__/partyService';
+import { mockedBaseParties } from '../../services/__mocks__/partyService';
 
 export const verifyMockExecution = (state: RootState) => {
-  expect(state.parties.list).toMatchObject(mockedParties);
+  expect(state.parties.list).toMatchObject(mockedBaseParties);
 };
 
 export default (WrappedComponent: React.ComponentType<any>) => (props: any) => {
