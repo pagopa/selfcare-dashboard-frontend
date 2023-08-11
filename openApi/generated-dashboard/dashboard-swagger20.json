@@ -109,23 +109,12 @@
             "name": "principal",
             "required": false,
             "type": "object"
-          },
-          {
-            "description": "mode",
-            "enum": [
-              "BASE",
-              "FULLY"
-            ],
-            "in": "query",
-            "name": "mode",
-            "required": false,
-            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "schema":{"$ref":"#/definitions/InstitutionResourceArray"}
+            "schema":{"$ref":"#/definitions/InstitutionBaseResourceArray"}
           },
           "400": {
             "description": "Bad Request",
@@ -165,6 +154,58 @@
         "description": "Service to get all the institutions related to logged user",
         "operationId": "getInstitutionsUsingGET",
         "summary": "getInstitutions"
+      }
+    },
+    "/institutions/products": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/ProductsResourceArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to get all the products related to a specific institution",
+        "operationId": "getProductstreeUsingGET",
+        "summary": "getProductstree"
       }
     },
     "/institutions/{institutionId}": {
@@ -670,6 +711,7 @@
         "tags": [
           "institutions"
         ],
+        "deprecated": true,
         "description": "Service to get all the products related to a specific institution",
         "operationId": "getInstitutionProductsUsingGET",
         "summary": "getInstitutionProducts"
@@ -2723,7 +2765,7 @@
       }
     }
   },
-  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionResource"}},
+  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -2751,6 +2793,21 @@
         }
       },
       "title": "BackOfficeConfigurationsResource",
+      "type": "object"
+    },
+    "Billing": {
+      "properties": {
+        "publicServices": {
+          "type": "boolean"
+        },
+        "recipientCode": {
+          "type": "string"
+        },
+        "vatNumber": {
+          "type": "string"
+        }
+      },
+      "title": "Billing",
       "type": "object"
     },
     "BrokerResource": {
@@ -2859,6 +2916,21 @@
         "productId"
       ],
       "title": "CreateUserGroupDto",
+      "type": "object"
+    },
+    "DataProtectionOfficer": {
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "pec": {
+          "type": "string"
+        }
+      },
+      "title": "DataProtectionOfficer",
       "type": "object"
     },
     "DelegationIdResource": {
@@ -3060,6 +3132,15 @@
           },
           "type": "array"
         },
+        "billing": {
+          "$ref": "#/definitions/Billing"
+        },
+        "category": {
+          "type": "string"
+        },
+        "dataProtectionOfficer": {
+          "$ref": "#/definitions/DataProtectionOfficer"
+        },
         "description": {
           "type": "string"
         },
@@ -3089,11 +3170,23 @@
           ],
           "type": "string"
         },
+        "onboarding": {
+          "items": {
+            "$ref": "#/definitions/OnboardedProduct"
+          },
+          "type": "array"
+        },
         "origin": {
           "type": "string"
         },
         "originId": {
           "type": "string"
+        },
+        "paymentServiceProvider": {
+          "$ref": "#/definitions/PaymentServiceProvider"
+        },
+        "supportContact": {
+          "$ref": "#/definitions/SupportContact"
         },
         "taxCode": {
           "type": "string"
@@ -3103,6 +3196,32 @@
         }
       },
       "title": "Institution",
+      "type": "object"
+    },
+    "InstitutionBaseResource": {
+      "properties": {
+        "id": {
+          "description": "Institution's unique internal identifier",
+          "type": "string"
+        },
+        "name": {
+          "description": "Institution's name",
+          "type": "string"
+        },
+        "parentDescription": {
+          "description": "Sub unit institution parent Description",
+          "type": "string"
+        },
+        "status": {
+          "description": "Institution's status",
+          "type": "string"
+        },
+        "userRole": {
+          "description": "Logged user's role",
+          "type": "string"
+        }
+      },
+      "title": "InstitutionBaseResource",
       "type": "object"
     },
     "InstitutionInfo": {
@@ -3239,12 +3358,15 @@
           "description": "Sub unit institution parent Description",
           "type": "string"
         },
+        "products": {
+          "description": "${swagger.dashboard.institutions.model.products}",
+          "items": {
+            "$ref": "#/definitions/OnboardedProductResource"
+          },
+          "type": "array"
+        },
         "recipientCode": {
           "description": "Billing recipient code",
-          "type": "string"
-        },
-        "status": {
-          "description": "Institution's status",
           "type": "string"
         },
         "subunitCode": {
@@ -3258,10 +3380,6 @@
         "supportContact": {
           "$ref": "#/definitions/SupportContactResource",
           "description": "'Institution's assistance contacts'"
-        },
-        "userRole": {
-          "description": "Logged user's role",
-          "type": "string"
         },
         "vatNumber": {
           "description": "Institution's VAT number",
@@ -3386,6 +3504,64 @@
       "title": "InvalidParam",
       "type": "object"
     },
+    "OnboardedProduct": {
+      "properties": {
+        "authorized": {
+          "type": "boolean"
+        },
+        "billing": {
+          "$ref": "#/definitions/Billing"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ACTIVE",
+            "DELETED",
+            "PENDING",
+            "REJECTED",
+            "SUSPENDED",
+            "TOBEVALIDATED"
+          ],
+          "type": "string"
+        },
+        "userRole": {
+          "type": "string"
+        }
+      },
+      "title": "OnboardedProduct",
+      "type": "object"
+    },
+    "OnboardedProductResource": {
+      "properties": {
+        "authorized": {
+          "type": "boolean"
+        },
+        "billing": {
+          "$ref": "#/definitions/Billing"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "productOnBoardingStatus": {
+          "enum": [
+            "ACTIVE",
+            "DELETED",
+            "PENDING",
+            "REJECTED",
+            "SUSPENDED",
+            "TOBEVALIDATED"
+          ],
+          "type": "string"
+        },
+        "userRole": {
+          "type": "string"
+        }
+      },
+      "title": "OnboardedProductResource",
+      "type": "object"
+    },
     "OnboardingRequestResource": {
       "properties": {
         "admins": {
@@ -3479,6 +3655,27 @@
         }
       },
       "title": "PartyProduct",
+      "type": "object"
+    },
+    "PaymentServiceProvider": {
+      "properties": {
+        "abiCode": {
+          "type": "string"
+        },
+        "businessRegisterNumber": {
+          "type": "string"
+        },
+        "legalRegisterName": {
+          "type": "string"
+        },
+        "legalRegisterNumber": {
+          "type": "string"
+        },
+        "vatNumberGroup": {
+          "type": "boolean"
+        }
+      },
+      "title": "PaymentServiceProvider",
       "type": "object"
     },
     "PlainUserResource": {
@@ -3687,11 +3884,6 @@
           "format": "date-time",
           "type": "string"
         },
-        "authorized": {
-          "description": "flag indicating whether the logged user has the authorization to manage the product",
-          "example": false,
-          "type": "boolean"
-        },
         "backOfficeEnvironmentConfigurations": {
           "description": "Environment-specific configurations for back-office redirection with Token Exchange",
           "items": {
@@ -3731,15 +3923,6 @@
           "description": "Product logo's background color",
           "type": "string"
         },
-        "productOnBoardingStatus": {
-          "description": "Product's onBoarding status",
-          "enum": [
-            "ACTIVE",
-            "INACTIVE",
-            "PENDING"
-          ],
-          "type": "string"
-        },
         "status": {
           "description": "Product's status",
           "enum": [
@@ -3760,10 +3943,6 @@
         },
         "urlPublic": {
           "description": "URL that redirects to the public information webpage of the product",
-          "type": "string"
-        },
-        "userRole": {
-          "description": "Logged user's role",
           "type": "string"
         }
       },
@@ -3844,15 +4023,6 @@
           "description": "Product logo's background color",
           "type": "string"
         },
-        "productOnBoardingStatus": {
-          "description": "Product's onBoarding status",
-          "enum": [
-            "ACTIVE",
-            "INACTIVE",
-            "PENDING"
-          ],
-          "type": "string"
-        },
         "status": {
           "description": "Product's status",
           "enum": [
@@ -3873,6 +4043,18 @@
         }
       },
       "title": "SubProductResource",
+      "type": "object"
+    },
+    "SupportContact": {
+      "properties": {
+        "supportEmail": {
+          "type": "string"
+        },
+        "supportPhone": {
+          "type": "string"
+        }
+      },
+      "title": "SupportContact",
       "type": "object"
     },
     "SupportContactResource": {

@@ -3,23 +3,23 @@ import { Grid, Typography, Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import { Party } from '../../model/Party';
+import { BaseParty } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
 import PartyAccountItemSelection from './PartyAccountItemSelection';
 
 type Props = {
-  parties: Array<Party>;
-  selectedParty: Party | null;
-  onPartySelectionChange: (selectedParty: Party | null) => void;
+  parties: Array<BaseParty>;
+  selectedParty: BaseParty | null;
+  onPartySelectionChange: (selectedParty: BaseParty | null) => void;
   label?: string;
   iconColor?: string;
   iconMarginRight?: string;
   partyTitle?: string;
 };
 
-const verifyPartyFilter = (party: Party, filter: string) =>
-  party?.description && party?.description.toUpperCase().indexOf(filter.toUpperCase()) >= 0;
+const verifyPartyFilter = (party: BaseParty, filter: string) =>
+  party.description && party.description.toUpperCase().indexOf(filter.toUpperCase()) >= 0;
 const CustomBox = styled(Box)({
   '&::-webkit-scrollbar': {
     width: 4,
@@ -46,7 +46,7 @@ export default function PartySelectionSearch({
 }: Props) {
   const { t } = useTranslation();
   const [input, setInput] = useState('');
-  const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
+  const [filteredParties, setFilteredParties] = useState<Array<BaseParty>>(parties);
 
   const theme = useTheme();
 
@@ -64,7 +64,7 @@ export default function PartySelectionSearch({
 
   const handleListItemClick = (
     _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    party: Party
+    party: BaseParty
   ) => {
     onPartySelectionChange(party);
   };
@@ -134,13 +134,13 @@ export default function PartySelectionSearch({
                           party.status === 'PENDING' || party.status === 'TOBEVALIDATED';
                         return (
                           <PartyItemContainer
-                            moreThan3Parties={moreThan3Parties}
-                            isDisabled={isDisabled}
                             key={party.partyId}
-                            selectedItem={parties.length !== 1 ? selectedParty === party : false}
+                            image={party.urlLogo}
                             title={party.description}
                             subTitle={t(roleLabels[party.userRole]?.longLabelKey)}
-                            image={party.urlLogo}
+                            moreThan3Parties={moreThan3Parties}
+                            isDisabled={isDisabled}
+                            selectedItem={parties.length !== 1 ? selectedParty === party : false}
                             chip={
                               party.status === 'PENDING'
                                 ? t('partySelection.partyStatus.pending')

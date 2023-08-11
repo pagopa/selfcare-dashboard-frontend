@@ -14,7 +14,8 @@ import {
 import CardMedia from '@mui/material/CardMedia';
 import { Trans, useTranslation } from 'react-i18next';
 import { ProductAvatar } from '@pagopa/mui-italia/dist/components/ProductAvatar/ProductAvatar';
-import { Product, SubProduct } from '../../../../../model/Product';
+import { Product } from '../../../../../model/Product';
+import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 
 type Props = {
   image?: string;
@@ -26,7 +27,7 @@ type Props = {
   buttonLabel: string;
   urlPublic?: string;
   product: Product;
-  prodActiveWithSubProdInactive?: SubProduct;
+  prodActiveWithSubProdInactive?: SubProductResource;
 };
 
 export default function NotActiveProductCard({

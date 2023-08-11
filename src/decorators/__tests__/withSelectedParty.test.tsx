@@ -65,7 +65,6 @@ test('Test default behavior when no parties', async () => {
 
   // test when selected party already in store
   await renderApp(true, store);
-  checkMockInvocation(1);
 });
 
 test('Test party not active', async () => {

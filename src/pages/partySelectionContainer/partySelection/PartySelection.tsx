@@ -4,21 +4,21 @@ import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { useTranslation, Trans } from 'react-i18next';
-import { Party } from '../../../model/Party';
 import PartySelectionSearch from '../../../components/partySelectionSearch/PartySelectionSearch';
 import ROUTES from '../../../routes';
 import { useAppDispatch } from '../../../redux/hooks';
 import { partiesActions } from '../../../redux/slices/partiesSlice';
+import { BaseParty } from '../../../model/Party';
 
 type Props = {
-  parties: Array<Party>;
+  parties: Array<BaseParty>;
 };
 
 export default function PartySelection({ parties }: Props) {
   const { t } = useTranslation();
   const bodyTitle = t('partySelection.title');
   const theme = useTheme();
-  const [selectedParty, setSelectedParty] = React.useState<Party | null>(
+  const [selectedParty, setSelectedParty] = React.useState<BaseParty | null>(
     parties.length === 1 ? parties[0] : null
   );
   const [disableBtn, setBtnDisable] = React.useState(true);
@@ -75,7 +75,7 @@ export default function PartySelection({ parties }: Props) {
               label={t('partySelection.label')}
               parties={parties}
               selectedParty={selectedParty}
-              onPartySelectionChange={(selectedParty: Party | null) => {
+              onPartySelectionChange={(selectedParty: BaseParty | null) => {
                 setSelectedParty(selectedParty);
               }}
             />

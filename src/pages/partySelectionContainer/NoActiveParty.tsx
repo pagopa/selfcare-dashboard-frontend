@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography, Box, Paper, useTheme } from '@mui/material';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Trans, useTranslation } from 'react-i18next';
-import { Party } from '../../model/Party';
 import { ENV } from '../../utils/env';
+import { BaseParty } from '../../model/Party';
 import PartyItemContainer from './../../components/partySelectionSearch/PartyItemContainer';
 
 type Props = {
-  parties: Array<Party>;
+  parties: Array<BaseParty>;
 };
 
 export default function NoActiveParty({ parties }: Props) {
   const { t } = useTranslation();
-  const [filteredParties, setFilteredParties] = useState<Array<Party>>(parties);
+  const [filteredParties, setFilteredParties] = useState<Array<BaseParty>>(parties);
   const theme = useTheme();
 
   useEffect(() => {
@@ -61,11 +61,11 @@ export default function NoActiveParty({ parties }: Props) {
                     const isDisabled = party.status === 'PENDING';
                     return (
                       <PartyItemContainer
-                        isDisabled={isDisabled}
                         key={party.partyId}
+                        image={party.urlLogo}
                         title={party.description}
                         subTitle={t(roleLabels[party.userRole]?.longLabelKey)}
-                        image={party.urlLogo}
+                        isDisabled={isDisabled}
                         chip={
                           party.status === 'PENDING'
                             ? t('partySelection.partyStatus.pending')

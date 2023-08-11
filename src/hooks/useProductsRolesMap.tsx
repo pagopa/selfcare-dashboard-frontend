@@ -11,11 +11,17 @@ import { RootState } from '../redux/store';
 import { fetchProductRoles } from '../services/productService';
 
 export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
+  const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
 
   const activeProducts = useMemo(
-    () => products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE'),
+    () =>
+      products?.filter((p) =>
+        party?.products.map(
+          (us) => us.productId === p.id && us.productOnBoardingStatus === 'ACTIVE'
+        )
+      ),
     [products]
   );
 

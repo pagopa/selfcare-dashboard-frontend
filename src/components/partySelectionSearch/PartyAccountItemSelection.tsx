@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Box, IconButton } from '@mui/material';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { Party } from '../../model/Party';
+import { BaseParty } from '../../model/Party';
 
 type Props = {
-  selectedParty: Party | null;
+  selectedParty: BaseParty | null;
   clearField: () => void;
 };
 
@@ -16,9 +16,11 @@ export default function PartyAccountItemSelection({ selectedParty, clearField }:
     <Box display="flex" p={2}>
       <Box width="100%">
         <PartyAccountItem
-          partyName={selectedParty && selectedParty.description ? selectedParty.description : ''}
-          partyRole={selectedParty ? t(roleLabels[selectedParty.userRole].longLabelKey) : ''}
-          image={selectedParty?.urlLogo}
+          partyName={selectedParty?.description ?? ''}
+          partyRole={
+            selectedParty?.userRole ? t(roleLabels[selectedParty.userRole].longLabelKey) : ''
+          }
+          image={selectedParty?.urlLogo ?? ''}
           maxCharactersNumberMultiLine={20}
           noWrap={false}
           parentPartyName={

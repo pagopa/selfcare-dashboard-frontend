@@ -39,9 +39,15 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const actualSelectedParty = useRef<Party>();
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
+
+  const onboardedPartyProducts = party?.products.filter(
+    (pp) => pp.productOnBoardingStatus === 'ACTIVE' && pp.authorized
+  );
+
   const activeProducts: Array<Product> = useMemo(
-    () => products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized) ?? [],
-    [products]
+    () =>
+      products?.filter((p) => onboardedPartyProducts?.some((op) => op.productId === p.id)) ?? [],
+    [onboardedPartyProducts]
   );
 
   // eslint-disable-next-line functional/immutable-data
@@ -50,8 +56,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   actualSelectedParty.current = selectedParty;
 
   const prodInteropAndProdInteropColl =
-    activeProducts.find((p) => p.id === 'prod-interop-coll' && p.authorized === true) &&
-    activeProducts.find((p) => p.id === 'prod-interop' && p.authorized === true);
+    onboardedPartyProducts?.find(
+      (p) => p.productId === 'prod-interop-coll' && p.authorized === true
+    ) &&
+    onboardedPartyProducts.find((p) => p.productId === 'prod-interop' && p.authorized === true);
 
   return (
     <div tabIndex={0}>
@@ -60,11 +68,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         withSecondHeader={!!party}
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
-          .filter((p) =>
-            prodInteropAndProdInteropColl
-              ? p.productOnBoardingStatus === 'ACTIVE' && p.id !== 'prod-interop-coll'
-              : p.productOnBoardingStatus === 'ACTIVE'
-          )
+          .filter((p) => p.id !== 'prod-interop-coll')
           .map((p) => ({
             id: p.id,
             title: p.title,

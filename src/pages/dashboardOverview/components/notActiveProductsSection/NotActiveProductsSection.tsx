@@ -24,18 +24,19 @@ export default function NotActiveProductsSection({ party, products }: Props) {
       <Grid container spacing={3}>
         {products &&
           products
-            .filter((product) => {
-              const prodInactive =
-                product.status === 'ACTIVE' && product.productOnBoardingStatus !== 'ACTIVE';
-              const prodActiveWithSubProdInactive = product.subProducts?.find(
-                (sp) =>
-                  product.status === 'ACTIVE' &&
-                  product.productOnBoardingStatus === 'ACTIVE' &&
-                  sp.productOnBoardingStatus !== 'ACTIVE' &&
-                  product.authorized
-              );
-              return prodInactive || !!prodActiveWithSubProdInactive;
-            })
+            .filter(
+              (p) =>
+                p.status === 'ACTIVE' &&
+                (!party.products.some(
+                  (us) => us.productId === p.id && us.productOnBoardingStatus !== 'ACTIVE'
+                ) ||
+                  (p.subProducts &&
+                    !p.subProducts.some((sp) =>
+                      party.products.some(
+                        (us) => us.productId === sp.id && us.productOnBoardingStatus !== 'ACTIVE'
+                      )
+                    )))
+            )
             .map((product) => (
               <NotActiveProductCardContainer key={product.id} party={party} product={product} />
             ))}

@@ -6,12 +6,12 @@ import {
   fetchProductRoles as fetchProductRolesMocked,
 } from './__mocks__/productService';
 
-export const fetchProducts = (partyId: string): Promise<Array<Product>> => {
+export const fetchProducts = (): Promise<Array<Product>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
     return new Promise((resolve) => resolve(mockedPartyProducts));
   } else {
-    return DashboardApi.getProducts(partyId).then((productResources) =>
+    return DashboardApi.getProducts().then((productResources) =>
       productResources ? productResources.map(productResource2Product) : []
     );
   }
