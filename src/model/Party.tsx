@@ -32,6 +32,7 @@ export type Party = {
   subunitType?: string;
   aooParentCode?: string;
   parentDescription?: string;
+  userRole?: UserRole;
 };
 
 export type BaseParty = {

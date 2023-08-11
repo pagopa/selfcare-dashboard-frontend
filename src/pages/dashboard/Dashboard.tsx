@@ -1,5 +1,5 @@
 import { Grid, Box, useTheme } from '@mui/material';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Route, Switch, useHistory } from 'react-router';
 import { useStore } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -9,8 +9,8 @@ import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
 import withSelectedProductRoles from '../../decorators/withSelectedPartyProductAndRoles';
 import { Party } from '../../model/Party';
 import { buildProductsMap, Product, ProductsMap } from '../../model/Product';
-import { useAppSelector } from '../../redux/hooks';
-import { partiesSelectors } from '../../redux/slices/partiesSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { partiesActions, partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
 import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
@@ -87,7 +87,15 @@ const Dashboard = () => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const store = useStore();
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const { i18n } = useTranslation();
+
+  useEffect(() => {
+    const selectedPartyUserRole = parties?.find((p) => p.partyId === party?.partyId)?.userRole;
+    if (party && selectedPartyUserRole) {
+      dispatch(partiesActions.setPartySelected({ ...party, userRole: selectedPartyUserRole }));
+    }
+  }, [party]);
 
   const activeProducts: Array<Product> =
     useMemo(
