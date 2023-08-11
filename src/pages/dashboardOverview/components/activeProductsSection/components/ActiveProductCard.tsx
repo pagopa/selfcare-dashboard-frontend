@@ -50,7 +50,9 @@ export default function ActiveProductCard({
   const activeSubProducts: Array<SubProductResource> = useMemo(
     () =>
       product.subProducts?.filter((p) =>
-        party.products.map((us) => us.productId === p.id && us.productOnBoardingStatus === 'ACTIVE')
+        party.products.some(
+          (us) => us.productId === p.id && us.productOnBoardingStatus === 'ACTIVE'
+        )
       ) ?? [],
     [party]
   );

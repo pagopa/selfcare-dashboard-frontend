@@ -20,10 +20,9 @@ export default function ActiveProductsSection({ party, products }: Props) {
   );
 
   const prodInteropAndProdInteropColl =
-    party.products.find((p) => p.productId === 'prod-interop') &&
+    party.products.find((p) => p.productId === 'prod-interop' && p.authorized === true) &&
     party.products.find((p) => p.productId === 'prod-interop-coll');
 
-  // TODO Fix Interop and interop-coll logic when authorized of all are false
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />

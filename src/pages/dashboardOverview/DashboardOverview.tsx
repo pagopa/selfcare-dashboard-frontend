@@ -71,7 +71,6 @@ const DashboardOverview = ({ party, products }: Props) => {
         <ActiveProductsSection products={products} party={party} />
         {products &&
           products.findIndex(
-            // eslint-disable-next-line sonarjs/no-identical-functions
             (product) =>
               product.status === 'ACTIVE' &&
               party.products.map(
