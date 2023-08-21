@@ -12,14 +12,14 @@ import SessionModalInteropProduct from './SessionModalInteropProduct';
 type Props = {
   party: Party;
   product: OnboardedProduct;
-  prodInteropAndProdInteropColl: boolean;
+  haveProdInterop: boolean;
   products: Array<Product>;
 };
 
 export default function ActiveProductCardContainer({
   party,
   product,
-  prodInteropAndProdInteropColl,
+  haveProdInterop,
   products,
 }: Props) {
   const { t } = useTranslation();
@@ -43,9 +43,7 @@ export default function ActiveProductCardContainer({
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
-            prodInteropAndProdInteropColl &&
-            productOnboarded &&
-            productOnboarded.id === 'prod-interop'
+            haveProdInterop && productOnboarded && productOnboarded.id === 'prod-interop'
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations
               ? setOpenGenericEnvProductModal(true)
@@ -72,7 +70,7 @@ export default function ActiveProductCardContainer({
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        prodInteropAndProdInteropColl={prodInteropAndProdInteropColl}
+        prodInteropAndProdInteropColl={haveProdInterop}
         products={products}
         party={party}
       />

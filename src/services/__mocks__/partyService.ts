@@ -91,6 +91,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'Comune di Milano',
@@ -133,6 +135,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'Comune di Roma',
@@ -202,6 +206,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'Comune di Napoli',
@@ -225,6 +231,8 @@ export const mockedParties: Array<Party> = [
     vatNumber: '111122211111',
     // Use case with no onboarded products
     products: [],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'AGENCY ONBOARDED',
@@ -267,6 +275,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   // Use case of party with status "TOBEVALIDATED"
   {
@@ -310,6 +320,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
@@ -352,6 +364,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   // Usable when not mocking the BE
   {
@@ -396,6 +410,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   // Usable when not mocking the BE
   {
@@ -440,6 +456,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   // Mock with institutionType = PSP
   {
@@ -484,6 +502,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
 ];
 
