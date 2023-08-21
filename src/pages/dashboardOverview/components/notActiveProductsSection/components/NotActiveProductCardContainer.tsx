@@ -24,15 +24,16 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
   const { t } = useTranslation();
   const addNotify = useUserNotify();
 
-  const prodActiveWithSubProdInactive = product.subProducts?.find((sp) =>
-    party.products.find(
-      (us) =>
-        us.productOnBoardingStatus !== 'ACTIVE' &&
-        product.status === 'ACTIVE' &&
-        sp.id === us.productId &&
-        sp.status === 'ACTIVE' &&
-        us.authorized === true
-    )
+  const prodActiveWithSubProdInactive = product.subProducts?.find(
+    (sp) =>
+      sp.status === 'ACTIVE' &&
+      product.status === 'ACTIVE' &&
+      party.products.some(
+        (us) =>
+          us.productOnBoardingStatus !== 'ACTIVE' &&
+          us.authorized === true &&
+          sp.id === us.productId
+      )
   );
 
   return (

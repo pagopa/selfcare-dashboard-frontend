@@ -91,6 +91,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'Comune di Milano',
@@ -133,6 +135,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'Comune di Roma',
@@ -168,35 +172,13 @@ export const mockedParties: Array<Party> = [
         },
       },
       {
-        productId: 'prod-pn',
+        productId: 'prod-io-premium',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
         userRole: 'ADMIN',
         billing: {
-          vatNumber: '22222222222',
-          recipientCode: 'BFDF45G',
-          publicServices: true,
-        },
-      },
-      {
-        productId: 'prod-pagopa',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
-        billing: {
-          vatNumber: '33344455567',
-          recipientCode: 'NBG455F',
-          publicServices: true,
-        },
-      },
-      {
-        productId: 'prod-cgn',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
-        billing: {
-          vatNumber: '3395867495',
-          recipientCode: 'NBG455B',
+          vatNumber: '11111111111',
+          recipientCode: 'CH435V',
           publicServices: true,
         },
       },
@@ -214,7 +196,7 @@ export const mockedParties: Array<Party> = [
       },
       {
         productId: 'prod-interop-coll',
-        authorized: false,
+        authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
@@ -224,6 +206,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'Comune di Napoli',
@@ -247,6 +231,8 @@ export const mockedParties: Array<Party> = [
     vatNumber: '111122211111',
     // Use case with no onboarded products
     products: [],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'AGENCY ONBOARDED',
@@ -289,6 +275,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   // Use case of party with status "TOBEVALIDATED"
   {
@@ -332,6 +320,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   {
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
@@ -374,6 +364,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   // Usable when not mocking the BE
   {
@@ -418,6 +410,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   // Usable when not mocking the BE
   {
@@ -462,6 +456,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
   // Mock with institutionType = PSP
   {
@@ -506,6 +502,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    status: undefined,
+    userRole: undefined,
   },
 ];
 

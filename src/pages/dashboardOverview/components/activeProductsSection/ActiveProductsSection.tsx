@@ -15,15 +15,10 @@ type Props = {
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
-  const notAuthorizedProdInterop = party.products.find(
-    (us) => us.productId === 'prod-interop' && us.authorized === false
+  const prodInterop = party.products.find(
+    (p) => p.productId === 'prod-interop' && p.authorized === true
   );
 
-  const prodInteropAndProdInteropColl =
-    party.products.find((p) => p.productId === 'prod-interop') &&
-    party.products.find((p) => p.productId === 'prod-interop-coll');
-
-  // TODO Fix Interop and interop-coll logic when authorized of all are false
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
@@ -32,16 +27,9 @@ export default function ActiveProductsSection({ party, products }: Props) {
           .filter(
             (us) =>
               us.productOnBoardingStatus === 'ACTIVE' &&
-              (notAuthorizedProdInterop
-                ? us.productId !== 'prod-interop'
-                : us.productId !== 'prod-interop-coll') &&
-              products.filter((p) =>
-                prodInteropAndProdInteropColl
-                  ? p.status !== 'INACTIVE' &&
-                    us.productOnBoardingStatus === 'ACTIVE' &&
-                    p.id !== 'prod-interop-coll'
-                  : p.status !== 'INACTIVE' && us.productOnBoardingStatus === 'ACTIVE'
-              )
+              ((us.productId === 'prod-interop-coll' && us.authorized === true && !prodInterop) ||
+                (!prodInterop && us.productId !== 'prod-interop-coll') ||
+                (prodInterop && us.productId !== 'prod-interop-coll'))
           )
           .sort((a, b) =>
             a.authorized === false && b.authorized !== false
@@ -55,7 +43,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
               key={product.productId}
               party={party}
               product={product}
-              prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
+              haveProdInterop={!!prodInterop}
               products={products}
             />
           ))}

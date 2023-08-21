@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-identical-functions */
 import React from 'react';
 import { Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
@@ -27,15 +28,10 @@ export default function NotActiveProductsSection({ party, products }: Props) {
             .filter(
               (p) =>
                 p.status === 'ACTIVE' &&
-                (!party.products.some(
+                (party.products.some(
                   (us) => us.productId === p.id && us.productOnBoardingStatus !== 'ACTIVE'
                 ) ||
-                  (p.subProducts &&
-                    !p.subProducts.some((sp) =>
-                      party.products.some(
-                        (us) => us.productId === sp.id && us.productOnBoardingStatus !== 'ACTIVE'
-                      )
-                    )))
+                  !party.products.some((us) => us.productId === p.id))
             )
             .map((product) => (
               <NotActiveProductCardContainer key={product.id} party={party} product={product} />

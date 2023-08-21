@@ -18,7 +18,7 @@ export const mockedPartyProducts: Array<Product> = [
       {
         id: 'prod-io-premium',
         title: 'Premium',
-        status: StatusEnum.PHASE_OUT,
+        status: StatusEnum.ACTIVE,
       },
     ],
     logoBgColor: 'primary.main',

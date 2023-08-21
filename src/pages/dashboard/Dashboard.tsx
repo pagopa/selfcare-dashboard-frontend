@@ -19,7 +19,6 @@ import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRouting
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
-import { OnboardedProduct } from '../../api/generated/b4f-dashboard/OnboardedProduct';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -90,19 +89,18 @@ const Dashboard = () => {
   const theme = useTheme();
   const { i18n } = useTranslation();
 
-  const activePartyProducts: Array<OnboardedProduct> =
-    useMemo(
-      () =>
-        party?.products.filter(
-          (p) => p.productOnBoardingStatus === 'ACTIVE' && p?.authorized === true
-        ),
-      [party?.products]
-    ) ?? [];
-
   const activeProducts: Array<Product> =
     useMemo(
-      () => products?.filter((p) => activePartyProducts.map((ap) => ap.productId === p.id)),
-      [products]
+      () =>
+        products?.filter((p) =>
+          party?.products.some(
+            (ap) =>
+              ap.productId === p.id &&
+              ap.productOnBoardingStatus === 'ACTIVE' &&
+              ap.authorized === true
+          )
+        ),
+      [products, party]
     ) ?? [];
 
   const productsMap: ProductsMap =

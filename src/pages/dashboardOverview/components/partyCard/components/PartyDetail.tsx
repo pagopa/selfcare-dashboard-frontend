@@ -405,8 +405,9 @@ export default function PartyDetail({ party }: Props) {
                 <Grid item xs={4}>
                   <Tooltip
                     title={
-                      party.vatNumber && party.vatNumber.length >= showTooltipAfter
-                        ? party.vatNumber
+                      party.products[0].billing?.vatNumber &&
+                      party.products[0].billing.vatNumber.length >= showTooltipAfter
+                        ? party.products[0].billing.vatNumber
                         : ''
                     }
                     placement="top"
@@ -416,7 +417,7 @@ export default function PartyDetail({ party }: Props) {
                       sx={{ ...infoStyles, maxWidth: '100% !important' }}
                       className="ShowDots"
                     >
-                      {party?.vatNumber}
+                      {party.products[0].billing?.vatNumber}
                     </Typography>
                   </Tooltip>
                 </Grid>
