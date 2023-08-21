@@ -33,6 +33,7 @@ export type Party = {
   aooParentCode?: string;
   parentDescription?: string;
   userRole?: UserRole;
+  status?: UserStatus;
 };
 
 export type BaseParty = {

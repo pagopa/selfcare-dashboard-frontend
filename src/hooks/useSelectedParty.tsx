@@ -29,7 +29,12 @@ export const useSelectedParty = (): {
         if (selectedParty && selectedParty.status !== 'ACTIVE') {
           throw new Error(`INVALID_PARTY_STATE_${selectedParty.status}`);
         }
-        setParty(party);
+        const partyWithUserRoleAndStatus = {
+          ...party,
+          status: selectedParty?.status,
+          userRole: selectedParty?.userRole,
+        };
+        setParty(partyWithUserRoleAndStatus);
         return party;
       } else {
         throw new Error(`Cannot find partyId ${partyId}`);
