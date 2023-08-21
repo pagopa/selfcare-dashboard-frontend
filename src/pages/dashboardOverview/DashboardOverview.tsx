@@ -37,9 +37,14 @@ const DashboardOverview = ({ party, products }: Props) => {
     [party.products]
   ) ?? [party.products];
 
-  const isDelegable = ENV.DELEGATIONS.ENABLE && activeProducts && isAdmin;
+  const delegableProducts = activeProducts.find(
+    (p) => p.productId === 'prod-io' || p.productId === 'prod-pagopa'
+  );
 
-  const paWithDelegableProducts = party.institutionType === 'PA' && isDelegable;
+  const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin;
+
+  const paWithDelegableProducts =
+    party.institutionType === 'PA' && delegableProducts && isDelegable;
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
