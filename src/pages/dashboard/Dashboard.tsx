@@ -19,7 +19,7 @@ import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRouting
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
-import DashboardTechnologyPartnerPage from '../dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
+import DashboardPTPage from '../dashboardTechnologyPartnerPage/DashboardPTPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -109,6 +109,7 @@ const Dashboard = () => {
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
   const canSeeSection = parties?.find((p) => p.partyId === party?.partyId)?.userRole === 'ADMIN';
+  const isPtSectionVisible = party?.institutionType === 'PT' && canSeeSection;
 
   const delegableProducts = activeProducts.filter((p) => p.delegable === true);
 
@@ -181,16 +182,17 @@ const Dashboard = () => {
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
             <DashboardDelegationsPage
-              isDelegateSectionVisible={isDelegateSectionVisible}
+              isDelegateSectionVisible={isDelegateSectionVisible && !isPtSectionVisible}
               party={party}
               delegableProducts={delegableProducts}
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
-            <DashboardTechnologyPartnerPage
-              isPtSectionVisible={canSeeSection}
+            <DashboardPTPage
+              isPtSectionVisible={isPtSectionVisible}
               party={party}
               ptProducts={activeProducts}
+              isDelegateSectionVisible={isDelegateSectionVisible}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
