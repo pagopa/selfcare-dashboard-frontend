@@ -19,6 +19,7 @@ import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRouting
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
+import DashboardTechnologyPartnerPage from '../dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -183,6 +184,13 @@ const Dashboard = () => {
               isDelegateSectionVisible={isDelegateSectionVisible}
               party={party}
               delegableProducts={delegableProducts}
+            />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
+            <DashboardTechnologyPartnerPage
+              isPtSectionVisible={canSeeSection}
+              party={party}
+              ptProducts={activeProducts}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}

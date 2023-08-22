@@ -31,6 +31,7 @@ export default function DashboardSideMenu({
   const usersRoute = ENV.ROUTES.USERS;
   const groupsRoute = ENV.ROUTES.GROUPS;
   const delegatesRoute = DASHBOARD_ROUTES.DELEGATIONS.path;
+  const ptRoute = DASHBOARD_ROUTES.TECHPARTNER.path;
 
   const overviewPath = resolvePathVariables(overviewRoute, {
     partyId: party.partyId ?? '',
@@ -44,11 +45,15 @@ export default function DashboardSideMenu({
   const delegatesPath = resolvePathVariables(delegatesRoute, {
     partyId: party.partyId,
   });
+  const ptPath = resolvePathVariables(ptRoute, {
+    partyId: party.partyId,
+  });
 
   const isOVerviewSelected = window.location.pathname === overviewPath;
   const isUserSelected = window.location.pathname.startsWith(usersPath);
   const isDelegateSelected = window.location.pathname.startsWith(delegatesPath);
   const isGroupSelected = window.location.pathname.startsWith(groupsPath);
+  const isPtSelected = window.location.pathname.startsWith(ptPath);
 
   return (
     <Grid container item mt={1} width="100%">
@@ -68,6 +73,11 @@ export default function DashboardSideMenu({
             handleClickSubMenu={() =>
               onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
             }
+            isPtPageVisible={party?.institutionType === 'PT'}
+            ptIcon={AssignmentIcon}
+            ptTitle="I tuoi Enti"
+            isPtSelected={isPtSelected}
+            handleClickPtPage={() => onExit(() => history.push(party.partyId ? ptPath : ptRoute))}
           />
           {canSeeSection && (
             <DashboardSidenavItem
@@ -76,6 +86,7 @@ export default function DashboardSideMenu({
               isSelected={isUserSelected}
               icon={PeopleAlt}
               subMenuVisible={false}
+              isPtPageVisible={false}
             />
           )}
           {canSeeSection && (
@@ -87,6 +98,7 @@ export default function DashboardSideMenu({
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}
               subMenuVisible={false}
+              isPtPageVisible={false}
             />
           )}
         </List>

@@ -1,4 +1,13 @@
-import { ListItemButton, ListItemText, ListItemIcon, Icon, Collapse, List } from '@mui/material';
+import {
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
+  Icon,
+  Collapse,
+  List,
+  Divider,
+  Box,
+} from '@mui/material';
 import { ExpandLess, ExpandMore, SvgIconComponent } from '@mui/icons-material';
 import React from 'react';
 
@@ -12,6 +21,11 @@ type Props = {
   subMenuIcon?: SvgIconComponent;
   subMenuTitle?: string;
   handleClickSubMenu?: () => void;
+  handleClickPtPage?: () => void;
+  isPtPageVisible: boolean;
+  ptIcon?: SvgIconComponent;
+  ptTitle?: string;
+  isPtSelected?: boolean;
 };
 
 export default function DashboardSidenavItem({
@@ -24,6 +38,11 @@ export default function DashboardSidenavItem({
   subMenuVisible,
   subMenuIcon,
   subMenuTitle,
+  isPtPageVisible,
+  ptIcon,
+  ptTitle,
+  isPtSelected,
+  handleClickPtPage,
 }: Props) {
   const [open, setOpen] = React.useState(true);
 
@@ -34,11 +53,32 @@ export default function DashboardSidenavItem({
   const isSubMenuPresent = subMenuVisible && subMenuIcon && handleClickSubMenu;
   return (
     <List disablePadding>
+      {isPtPageVisible && ptIcon && handleClickPtPage && (
+        <Box mb={2}>
+          <ListItemButton
+            selected={isPtSelected ?? false}
+            onClick={() => {
+              handleClickPtPage();
+            }}
+            sx={{
+              height: '100%',
+              maxWidth: 360,
+              backgroundColor: 'background.paper',
+            }}
+          >
+            <ListItemIcon>
+              <Icon component={ptIcon} />
+            </ListItemIcon>
+
+            <ListItemText primary={ptTitle} />
+          </ListItemButton>
+          <Divider />
+        </Box>
+      )}
       <ListItemButton
         selected={isSelected}
         onClick={() => {
           handleClick();
-          handleOpen();
         }}
         sx={{
           height: '100%',
@@ -51,9 +91,17 @@ export default function DashboardSidenavItem({
         </ListItemIcon>
 
         <ListItemText primary={title} />
-        {isSubMenuPresent && <> {open ? <ExpandLess /> : <ExpandMore />}</>}
+        {isSubMenuPresent && !isPtPageVisible && (
+          <>
+            {open ? (
+              <ExpandLess onClick={() => handleOpen()} />
+            ) : (
+              <ExpandMore onClick={() => handleOpen()} />
+            )}
+          </>
+        )}
       </ListItemButton>
-      {isSubMenuPresent && (
+      {isSubMenuPresent && !isPtPageVisible && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton
