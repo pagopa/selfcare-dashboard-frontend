@@ -7,6 +7,7 @@ import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import DnsIcon from '@mui/icons-material/Dns';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Party } from '../../../../model/Party';
@@ -74,8 +75,8 @@ export default function DashboardSideMenu({
               onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
             }
             isPtPageVisible={party?.institutionType === 'PT'}
-            ptIcon={AssignmentIcon}
-            ptTitle="I tuoi Enti"
+            ptIcon={DnsIcon}
+            ptTitle={t('overview.ptPage.title')}
             isPtSelected={isPtSelected}
             handleClickPtPage={() => onExit(() => history.push(party.partyId ? ptPath : ptRoute))}
           />
