@@ -9,7 +9,7 @@ import { ENV } from '../../utils/env';
 import TechnologyPartnerTable from './TechnologyPartnerTable';
 
 type Props = {
-  isPtSectionVisible?: boolean;
+  isPtSectionVisible: boolean;
   party: Party;
   ptProducts: Array<Product>;
   isDelegateSectionVisible?: boolean;
@@ -21,7 +21,6 @@ export default function DashboardTechnologyPartnerPage({
   ptProducts,
   isDelegateSectionVisible,
 }: Props) {
-  console.log('pt properties', isPtSectionVisible, party, ptProducts);
   const { t } = useTranslation();
   return isDelegateSectionVisible && !isPtSectionVisible ? (
     <EndingPage
@@ -65,7 +64,7 @@ export default function DashboardTechnologyPartnerPage({
 
           {/* Table */}
           <Grid item xs={12}>
-            <TechnologyPartnerTable />
+            <TechnologyPartnerTable party={party} ptProducts={ptProducts} />
           </Grid>
         </Grid>
       </Grid>
