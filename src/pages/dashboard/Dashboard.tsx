@@ -19,7 +19,7 @@ import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRouting
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
-import DashboardPTPage from '../dashboardTechnologyPartnerPage/DashboardPTPage';
+import DashboardTechnologyPartnerPage from '../dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -188,7 +188,7 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
-            <DashboardPTPage
+            <DashboardTechnologyPartnerPage
               isPtSectionVisible={isPtSectionVisible}
               party={party}
               ptProducts={activeProducts}

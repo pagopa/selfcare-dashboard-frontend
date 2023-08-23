@@ -6,6 +6,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ENV } from '../../utils/env';
+import TechnologyPartnerTable from './TechnologyPartnerTable';
 
 type Props = {
   isPtSectionVisible?: boolean;
@@ -14,7 +15,7 @@ type Props = {
   isDelegateSectionVisible?: boolean;
 };
 
-export default function DashboardPTPage({
+export default function DashboardTechnologyPartnerPage({
   isPtSectionVisible,
   party,
   ptProducts,
@@ -59,7 +60,13 @@ export default function DashboardPTPage({
               mbSubTitle={6}
             />
           </Grid>
+          {/* Filter */}
           <Grid item xs={12}></Grid>
+
+          {/* Table */}
+          <Grid item xs={12}>
+            <TechnologyPartnerTable />
+          </Grid>
         </Grid>
       </Grid>
     </Box>
