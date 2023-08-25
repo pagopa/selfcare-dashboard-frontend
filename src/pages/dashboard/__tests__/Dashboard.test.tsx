@@ -46,6 +46,9 @@ test('Test routing', async () => {
   history.push('/dashboard/13/prId/users');
   expect(history.location.pathname).toBe('/dashboard/13/prId/users');
 
+  history.push('/dashboard/7/ptPage');
+  expect(history.location.pathname).toBe('/dashboard/7/ptPage');
+
   history.push('/dashboard/3/delegates');
   expect(history.location.pathname).toBe('/dashboard/3/delegates');
 
