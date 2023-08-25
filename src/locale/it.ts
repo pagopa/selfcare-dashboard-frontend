@@ -186,6 +186,14 @@ export default {
       title: 'I tuoi enti',
       subTitle:
         'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
+      tableEmptyLabel: 'Non hai ancora nessuna delega dagli enti',
+      headerPtTableLabels: {
+        party: 'Ente',
+        product: 'Prodotto',
+      },
+      bodyPtTable: {
+        showMoreButtonLabel: 'Vedi tutti',
+      },
     },
     genericError: {
       title: 'Spiacenti, qualcosa è andato storto.',

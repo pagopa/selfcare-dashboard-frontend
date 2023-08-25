@@ -41,8 +41,14 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
-    partyId: '6',
+    partyId: '7',
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '8',
+    description: 'Maggioli S.p.A.',
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -339,6 +345,54 @@ export const mockedParties: Array<Party> = [
     institutionType: 'GSP',
     recipientCode: 'CGDAS23F',
     geographicTaxonomies: [],
+    vatNumber: '111122211111',
+    products: [
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3333',
+          recipientCode: 'dddd',
+          publicServices: true,
+        },
+      },
+    ],
+    status: undefined,
+    userRole: undefined,
+  },
+  {
+    description: 'Maggioli S.p.A.',
+    urlLogo: 'image',
+    partyId: '8',
+    digitalAddress: 'maggioli.test@pec.it',
+    fiscalCode: '111122211111',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Piazza della Scala, 2',
+    zipCode: '20121',
+    typology: 'Partner Tecnologico',
+    externalId: 'externalId6',
+    originId: 'originId6',
+    origin: 'IPA',
+    institutionType: 'PT',
+    recipientCode: 'CGDAS23F',
+    geographicTaxonomies: [
+      // Use case with two taxonomies
+      { code: '058091', desc: 'Roma - Comune' },
+      { code: '015146', desc: 'Milano - Comune' },
+    ],
     vatNumber: '111122211111',
     products: [
       {

@@ -6,21 +6,21 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ENV } from '../../utils/env';
+import TechnologyPartnerTable from './TechnologyPartnerTable';
 
 type Props = {
-  isPtSectionVisible?: boolean;
+  isPtSectionVisible: boolean;
   party: Party;
   ptProducts: Array<Product>;
   isDelegateSectionVisible?: boolean;
 };
 
-export default function DashboardPTPage({
+export default function DashboardTechnologyPartnerPage({
   isPtSectionVisible,
   party,
   ptProducts,
   isDelegateSectionVisible,
 }: Props) {
-  console.log('pt properties', isPtSectionVisible, party, ptProducts);
   const { t } = useTranslation();
   return isDelegateSectionVisible && !isPtSectionVisible ? (
     <EndingPage
@@ -59,7 +59,13 @@ export default function DashboardPTPage({
               mbSubTitle={6}
             />
           </Grid>
+          {/* Filter */}
           <Grid item xs={12}></Grid>
+
+          {/* Table */}
+          <Grid item xs={12}>
+            <TechnologyPartnerTable party={party} ptProducts={ptProducts} />
+          </Grid>
         </Grid>
       </Grid>
     </Box>
