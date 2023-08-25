@@ -18,6 +18,7 @@ import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
+import { DelegationResource } from './generated/b4f-dashboard/DelegationResource';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -88,6 +89,11 @@ export const DashboardApi = {
       institutionId,
       environment,
     });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getTechnologyPartnersList: async (institutionId: string): Promise<Array<DelegationResource>> => {
+    const result = await apiClient.getDelegationsUsingToUsingGET({ institutionId });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
