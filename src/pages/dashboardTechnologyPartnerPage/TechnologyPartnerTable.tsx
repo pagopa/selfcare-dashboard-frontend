@@ -18,10 +18,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
-import {
-  fetchTechnologyPartnersList,
-  mockedTechPartner,
-} from '../../services/technologyPartnerService';
+import { fetchTechnologyPartnersList } from '../../services/technologyPartnerService';
 
 type Props = {
   party: Party;
