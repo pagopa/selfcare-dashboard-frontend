@@ -75,7 +75,7 @@ export default function TechnologyPartnerTable({ party }: Props) {
   const retrievePtList = async () => {
     setLoading(true);
     await fetchTechnologyPartnersList(party.partyId)
-      .then(() => setTableList(mockedTechPartner)) // TODO temporaly modified with mock, add r of then
+      .then((r) => setTableList(r)) // TODO temporaly modified with mock, add r of then
       .catch((reason) => {
         addError({
           id: `FETCH_PARTY_PT_ERROR-${party.partyId}`,
