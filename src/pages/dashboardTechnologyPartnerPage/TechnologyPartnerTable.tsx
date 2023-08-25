@@ -146,24 +146,38 @@ export default function TechnologyPartnerTable({ party }: Props) {
                 <TableRow>
                   <TableCell sortDirection={'asc'}>
                     {t('overview.ptPage.headerPtTableLabels.party')}
-                    <IconButton onClick={() => handleSort('institutionName')}>
-                      {orderBy === 'institutionName' &&
-                        (order === 'asc' ? (
+                    <IconButton
+                      style={{ backgroundColor: 'transparent', padding: '0 8px' }}
+                      disableRipple
+                      onClick={() => handleSort('institutionName')}
+                    >
+                      {orderBy === 'institutionName' ? (
+                        order === 'asc' ? (
                           <ArrowUpwardIcon fontSize="small" />
                         ) : (
                           <ArrowDownwardIcon fontSize="small" />
-                        ))}
+                        )
+                      ) : (
+                        <ArrowUpwardIcon fontSize="small" />
+                      )}
                     </IconButton>
                   </TableCell>
                   <TableCell>
                     {t('overview.ptPage.headerPtTableLabels.product')}
-                    <IconButton onClick={() => handleSort('productId')}>
-                      {orderBy === 'productId' &&
-                        (order === 'asc' ? (
+                    <IconButton
+                      style={{ backgroundColor: 'transparent', padding: '0 8px' }}
+                      disableRipple
+                      onClick={() => handleSort('productId')}
+                    >
+                      {orderBy === 'productId' ? (
+                        order === 'asc' ? (
                           <ArrowUpwardIcon fontSize="small" />
                         ) : (
                           <ArrowDownwardIcon fontSize="small" />
-                        ))}
+                        )
+                      ) : (
+                        <ArrowDownwardIcon fontSize="small" />
+                      )}
                     </IconButton>
                   </TableCell>
                   <TableCell></TableCell>
