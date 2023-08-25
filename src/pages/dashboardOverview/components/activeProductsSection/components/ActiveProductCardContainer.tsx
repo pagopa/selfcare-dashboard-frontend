@@ -5,20 +5,21 @@ import { SessionModal } from '@pagopa/selfcare-common-frontend';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
+import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
 import ActiveProductCard from './ActiveProductCard';
 import SessionModalInteropProduct from './SessionModalInteropProduct';
 
 type Props = {
   party: Party;
-  product: Product;
-  prodInteropAndProdInteropColl: boolean;
+  product: OnboardedProduct;
+  haveProdInterop: boolean;
   products: Array<Product>;
 };
 
 export default function ActiveProductCardContainer({
   party,
   product,
-  prodInteropAndProdInteropColl,
+  haveProdInterop,
   products,
 }: Props) {
   const { t } = useTranslation();
@@ -27,25 +28,29 @@ export default function ActiveProductCardContainer({
   const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
 
-  const isDisabled = product.authorized === false;
+  const isDisabled = !!party.products.find(
+    (p) => p.productId === product.productId && p.authorized === false
+  );
 
-  return (
+  const productOnboarded = products.find((p) => p.id === product.productId);
+
+  return productOnboarded ? (
     <>
       <Grid item xs={6} lg={4}>
         <ActiveProductCard
           disableBtn={isDisabled}
-          cardTitle={product.title}
+          cardTitle={productOnboarded?.title ?? ''}
           buttonLabel={t('overview.activeProducts.manageButton')}
-          urlLogo={product.logo}
+          urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
-            prodInteropAndProdInteropColl && product.id === 'prod-interop'
+            haveProdInterop && productOnboarded && productOnboarded.id === 'prod-interop'
               ? setOpenCustomEnvInteropModal(true)
-              : product.backOfficeEnvironmentConfigurations
+              : productOnboarded?.backOfficeEnvironmentConfigurations
               ? setOpenGenericEnvProductModal(true)
-              : invokeProductBo(product, party)
+              : invokeProductBo(productOnboarded, party)
           }
           party={party}
-          product={product}
+          product={productOnboarded}
         />
       </Grid>
       <SessionModalInteropProduct
@@ -55,17 +60,17 @@ export default function ActiveProductCardContainer({
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
             Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che
             l&apos;ambiente di collaudo ti permette di conoscere
-            <strong>{{ productTitle: product.title }}</strong> e fare prove in tutta sicurezza.
-            L&apos;ambiente di produzione è il prodotto in esercizio.
+            <strong>{{ productTitle: productOnboarded.title }}</strong> e fare prove in tutta
+            sicurezza. L&apos;ambiente di produzione è il prodotto in esercizio.
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={() => invokeProductBo(product, party)}
+        onConfirm={() => invokeProductBo(productOnboarded, party)}
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        prodInteropAndProdInteropColl={prodInteropAndProdInteropColl}
+        prodInteropAndProdInteropColl={haveProdInterop}
         products={products}
         party={party}
       />
@@ -76,18 +81,22 @@ export default function ActiveProductCardContainer({
         message={
           <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct">
             L&apos;ambiente di test ti permette di conoscere
-            <strong>{{ productTitle: product.title }}</strong> e fare prove in tutta sicurezza.
-            L&apos;ambiente di Produzione è il prodotto in esercizio effettivo.
+            <strong>{{ productTitle: productOnboarded.title }}</strong> e fare prove in tutta
+            sicurezza. L&apos;ambiente di Produzione è il prodotto in esercizio effettivo.
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={(e) => invokeProductBo(product, party, (e.target as HTMLInputElement).value)}
+        onConfirm={(e) =>
+          invokeProductBo(productOnboarded, party, (e.target as HTMLInputElement).value)
+        }
         handleClose={() => {
           setOpenGenericEnvProductModal(false);
         }}
-        productEnvironments={product?.backOfficeEnvironmentConfigurations as any}
+        productEnvironments={productOnboarded?.backOfficeEnvironmentConfigurations as any}
       />
     </>
+  ) : (
+    <></>
   );
 }

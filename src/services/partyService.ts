@@ -3,17 +3,22 @@ import { BrokerResource } from '../api/generated/b4f-dashboard/BrokerResource';
 import { DelegationIdResource } from '../api/generated/b4f-dashboard/DelegationIdResource';
 import { InstitutionTypeEnum } from '../api/generated/b4f-dashboard/InstitutionResource';
 import { mockedBrokerResource } from '../api/__mocks__/DashboardApiClient';
-import { institutionResource2Party, Party } from '../model/Party';
+import {
+  BaseParty,
+  institutionBaseResource2BaseParty,
+  institutionResource2Party,
+  Party,
+} from '../model/Party';
 import { Product } from '../model/Product';
-import { mockedParties } from './__mocks__/partyService';
+import { mockedBaseParties, mockedParties } from './__mocks__/partyService';
 
-export const fetchParties = (): Promise<Array<Party>> => {
+export const fetchParties = (): Promise<Array<BaseParty>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
-    return new Promise((resolve) => resolve(mockedParties));
+    return new Promise((resolve) => resolve(mockedBaseParties));
   } else {
     return DashboardApi.getInstitutions().then((institutionResources) =>
-      institutionResources ? institutionResources.map(institutionResource2Party) : []
+      institutionResources ? institutionResources.map(institutionBaseResource2BaseParty) : []
     );
   }
 };
@@ -21,18 +26,15 @@ export const fetchParties = (): Promise<Array<Party>> => {
 export const fetchPartyDetails = (partyId: string): Promise<Party | null> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
-    return new Promise((resolve) =>
-      resolve(mockedParties.find((p) => p.partyId === partyId) ?? null)
+    return new Promise((resolve) => {
+      resolve(mockedParties.find((p) => p.partyId === partyId) ?? null);
+    });
+  } else {
+    return DashboardApi.getInstitution(partyId).then((institutionResource) =>
+      institutionResource ? institutionResource2Party(institutionResource) : null
     );
   }
-
-  return retrieveParty_fetch(partyId);
 };
-
-const retrieveParty_fetch = (partyId: string): Promise<Party | null> =>
-  DashboardApi.getInstitution(partyId).then((institutionResource) =>
-    institutionResource ? institutionResource2Party(institutionResource) : null
-  );
 
 export const getProductBrokers = (
   partyId: string,

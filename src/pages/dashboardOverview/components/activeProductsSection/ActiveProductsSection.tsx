@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-identical-functions */
 import React from 'react';
 import { Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
@@ -14,38 +15,38 @@ type Props = {
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
-  const prodInteropAndProdInteropColl =
-    products.find((p) => p.id === 'prod-interop-coll' && p.authorized === true) &&
-    products.find((p) => p.id === 'prod-interop' && p.authorized === true);
+  const prodInterop = party.products.find(
+    (p) => p.productId === 'prod-interop' && p.authorized === true
+  );
+
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
       <Grid container spacing={3}>
-        {products &&
-          products
-            .filter((p) =>
-              prodInteropAndProdInteropColl
-                ? p.status !== 'INACTIVE' &&
-                  p.productOnBoardingStatus === 'ACTIVE' &&
-                  p.id !== 'prod-interop-coll'
-                : p.status !== 'INACTIVE' && p.productOnBoardingStatus === 'ACTIVE'
-            )
-            .sort((a, b) =>
-              a.authorized === false && b.authorized !== false
-                ? 1
-                : a.authorized === false && b.authorized === false
-                ? 0
-                : -1
-            )
-            .map((product) => (
-              <ActiveProductCardContainer
-                key={product.id}
-                party={party}
-                product={product}
-                prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
-                products={products}
-              />
-            ))}
+        {party.products
+          .filter(
+            (us) =>
+              us.productOnBoardingStatus === 'ACTIVE' &&
+              ((us.productId === 'prod-interop-coll' && us.authorized === true && !prodInterop) ||
+                (!prodInterop && us.productId !== 'prod-interop-coll') ||
+                (prodInterop && us.productId !== 'prod-interop-coll'))
+          )
+          .sort((a, b) =>
+            a.authorized === false && b.authorized !== false
+              ? 1
+              : a.authorized === false && b.authorized === false
+              ? 0
+              : -1
+          )
+          .map((product) => (
+            <ActiveProductCardContainer
+              key={product.productId}
+              party={party}
+              product={product}
+              haveProdInterop={!!prodInterop}
+              products={products}
+            />
+          ))}
       </Grid>
     </React.Fragment>
   );

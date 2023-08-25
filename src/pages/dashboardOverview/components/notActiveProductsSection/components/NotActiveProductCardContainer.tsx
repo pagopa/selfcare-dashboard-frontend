@@ -26,10 +26,14 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
 
   const prodActiveWithSubProdInactive = product.subProducts?.find(
     (sp) =>
+      sp.status === 'ACTIVE' &&
       product.status === 'ACTIVE' &&
-      product.productOnBoardingStatus === 'ACTIVE' &&
-      sp.productOnBoardingStatus !== 'ACTIVE' &&
-      product.authorized
+      party.products.some(
+        (us) =>
+          us.productOnBoardingStatus !== 'ACTIVE' &&
+          us.authorized === true &&
+          sp.id === us.productId
+      )
   );
 
   return (
@@ -47,14 +51,10 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
               : product.logo
           }
           title={product.title}
-          description={
-            prodActiveWithSubProdInactive
-              ? (prodActiveWithSubProdInactive.description as string)
-              : product.description
-          }
+          description={product.description}
           disableBtn={false}
           btnAction={() => {
-            if (product.productOnBoardingStatus === 'PENDING') {
+            if (prodActiveWithSubProdInactive) {
               addNotify({
                 component: 'SessionModal',
                 id: 'Notify_Example',
@@ -64,22 +64,13 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
                 closeLabel: t('overview.adhesionPopup.closeButton'),
                 onConfirm: () => goToOnboarding(product, party),
               });
-            } else if (prodActiveWithSubProdInactive) {
-              window.location.assign(
-                `${ENV.URL_FE.ONBOARDING}/${product.id}/${product.id}-premium`
-              );
             } else {
               goToOnboarding(product, party);
             }
           }}
           buttonLabel={t('overview.notActiveProducts.joinButton')}
-          urlPublic={
-            prodActiveWithSubProdInactive
-              ? prodActiveWithSubProdInactive.urlPublic
-              : product.urlPublic
-          }
+          urlPublic={product.urlPublic}
           product={product}
-          prodActiveWithSubProdInactive={prodActiveWithSubProdInactive}
         />
       </Grid>
     </>

@@ -182,6 +182,11 @@ export default {
         noDelegatesLabel: 'Nessun delegato per questo prodotto. <1>Aggiungi delega</1>',
       },
     },
+    ptPage: {
+      title: 'I tuoi enti',
+      subTitle:
+        'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
+    },
     genericError: {
       title: 'Spiacenti, qualcosa è andato storto.',
       description: `A causa di un errore del sistema non è possibile completare la procedura.

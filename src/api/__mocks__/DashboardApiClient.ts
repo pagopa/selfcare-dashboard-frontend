@@ -1,6 +1,7 @@
 import { EmailString } from '@pagopa/ts-commons/lib/strings';
 import { BrokerResource } from '../generated/b4f-dashboard/BrokerResource';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
+import { InstitutionBaseResource } from '../generated/b4f-dashboard/InstitutionBaseResource';
 import {
   InstitutionResource,
   InstitutionTypeEnum,
@@ -16,13 +17,11 @@ import {
 } from '../generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
-import { ProductOnBoardingStatusEnum } from '../generated/b4f-dashboard/SubProductResource';
 import { UserResource } from '../generated/b4f-dashboard/UserResource';
 
 export const mockedInstitutionResources: Array<InstitutionResource> = [
   {
     name: 'Comune di Bari',
-    status: 'ACTIVE',
     id: '1',
     externalId: 'externalId1',
     originId: 'originId1',
@@ -30,7 +29,6 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    userRole: 'LIMITED',
     institutionType: InstitutionTypeEnum.PA,
     address: 'Piazza della Scala, 2',
     zipCode: '20121',
@@ -39,14 +37,12 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
   },
   {
     name: 'Comune di Milano',
-    status: 'PENDING',
     id: '2',
     externalId: 'externalId2',
     originId: 'originId2',
     origin: 'IPA',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    userRole: 'ADMIN',
     category: '',
     institutionType: InstitutionTypeEnum.PA,
     address: 'Piazza della Scala, 2',
@@ -62,9 +58,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     title: 'App IO',
     description: 'App IO description',
     id: '1',
-    authorized: true,
     status: StatusEnum.ACTIVE,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlBO: 'http://appio/bo#<IdentityToken>',
     activatedAt: new Date(2021, 1, 1, 0, 0, 0, 0),
     urlPublic: 'http://appio/public',
@@ -76,9 +70,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '2',
     title: 'Piattaforma Notifiche',
     description: 'Piattaforma Notifiche description',
-    authorized: false,
     status: StatusEnum.ACTIVE,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 2, 0, 0, 0, 0),
     urlPublic: 'http://notifiche/public',
@@ -90,9 +82,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '3',
     title: 'Pagamenti pagoPA',
     description: 'Pagamenti pagoPA description',
-    authorized: true,
     status: StatusEnum.ACTIVE,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
     activatedAt: new Date(2021, 1, 3, 0, 0, 0, 0),
     urlPublic: 'http://pagopa/public',
@@ -104,9 +94,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     title: 'Check-IBAN',
     description: "Verifica l'abbinamento di un IBAN ad un CF di un cittadino o di un'impresa.",
     id: '4',
-    authorized: true,
     status: StatusEnum.ACTIVE,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
     urlPublic: 'http://www.google.it',
     urlBO: 'http://checkiban/bo#token=<IdentityToken>',
     imageUrl:
@@ -117,9 +105,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '5',
     title: 'Carta Giovani',
     description: 'Richiedi la convenzione e gestisci i dati e le agevolazioni da offrire.',
-    authorized: true,
     status: StatusEnum.ACTIVE,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
     urlPublic: undefined,
     urlBO: 'http://cgn/bo#token=<IdentityToken>',
     imageUrl:
@@ -130,9 +116,7 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '6',
     title: 'PDND',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
-    authorized: true,
     status: StatusEnum.INACTIVE,
-    productOnBoardingStatus: ProductOnBoardingStatusEnum.INACTIVE,
     urlPublic: undefined,
     urlBO: 'http://PDND/bo#token=<IdentityToken>',
     imageUrl:
@@ -304,7 +288,7 @@ export const mockedBrokerResource: Array<BrokerResource> = [
 ];
 
 export const DashboardApi = {
-  getInstitutions: async (): Promise<Array<InstitutionResource>> =>
+  getInstitutions: async (): Promise<Array<InstitutionBaseResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
 
   getInstitution: async (_partyId: string): Promise<InstitutionResource> =>
