@@ -47,7 +47,11 @@ export default function PartyDetail({ party }: Props) {
 
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
-    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && party.geographicTaxonomies.length === 0) {
+    if (
+      ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
+      party.geographicTaxonomies.length === 0 &&
+      party.institutionType !== 'PT'
+    ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
     setOptionsSelected(
@@ -185,13 +189,15 @@ export default function PartyDetail({ party }: Props) {
             </>
           )}
           {/* geographicTaxonomy */}
-          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && (
+          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && party.institutionType !== 'PT' && (
             <>
-              <Grid item xs={2}>
-                <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.geographicTaxonomies.label')}
-                </Typography>
-              </Grid>
+              {
+                <Grid item xs={2}>
+                  <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
+                    {t('overview.partyDetail.geographicTaxonomies.label')}
+                  </Typography>
+                </Grid>
+              }
               <Grid item xs={4}>
                 <Tooltip
                   title={
