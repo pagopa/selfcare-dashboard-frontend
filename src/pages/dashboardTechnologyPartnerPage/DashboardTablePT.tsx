@@ -7,6 +7,12 @@ import {
   TableRow,
   Typography,
   IconButton,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
 } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -57,8 +63,46 @@ export default function DashboardTablePT({ filteredArray }: Props) {
       return bValue?.localeCompare(aValue);
     }
   });
+
+  const [institutionName, setInstitutionName] = useState('');
+  const [selectedProductId, setSelectedProductId] = useState('');
+  const [result, setResult] = useState<DelegationResource | null>(null);
+
+  const handleButtonClick = () => {
+    const selectedBroker = filteredArray.find((item) => item.institutionName === institutionName);
+
+    if (selectedBroker) {
+      if (selectedBroker?.productId?.includes(selectedProductId)) {
+        setResult(selectedBroker);
+      } else {
+        setResult(null);
+      }
+    } else {
+      setResult(null);
+    }
+  };
+
   return (
     <>
+      <TextField
+        label="Institution Name"
+        value={institutionName}
+        onChange={(e) => setInstitutionName(e.target.value)}
+      />
+      <FormControl sx={{ width: '200px' }}>
+        <InputLabel>Product ID</InputLabel>
+        <Select
+          value={selectedProductId}
+          label="Product ID"
+          onChange={(e) => setSelectedProductId(e.target.value as string)}
+        >
+          <MenuItem value="prod-io">prod-io</MenuItem>
+          <MenuItem value="prod-pagopa">prod-pagopa</MenuItem>
+        </Select>
+      </FormControl>
+      <Button variant="contained" onClick={handleButtonClick}>
+        Cerca
+      </Button>
       <TableContainer component={Paper} sx={{ height: '100%', overflow: 'hidden' }}>
         <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
           <TableHead>
@@ -105,30 +149,49 @@ export default function DashboardTablePT({ filteredArray }: Props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedData.map((tl, index) => (
-              <TableRow key={index}>
-                <TableCell width={'25%'}>
-                  <Typography
-                    sx={{
-                      fontWeight: 'fontWeightBold',
-                    }}
-                  >
-                    {tl.institutionName}
-                  </Typography>
-                </TableCell>
-                <TableCell width={'25%'}>
-                  <Typography sx={{ cursor: 'pointer' }}>
-                    {codeToLabelProduct(tl.productId as string)}
-                  </Typography>
-                </TableCell>
-                <TableCell width={'25%'}>
-                  <Typography sx={{ cursor: 'pointer' }}>-</Typography>
-                </TableCell>
-                <TableCell width={'25%'}>
-                  <Typography sx={{ cursor: 'pointer' }}>-</Typography>
-                </TableCell>
-              </TableRow>
-            ))}
+            {result ? (
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Institution Name</TableCell>
+                      <TableCell>Product ID</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>{result.institutionName}</TableCell>
+                      <TableCell>{result.productId}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              sortedData.map((tl, index) => (
+                <TableRow key={index}>
+                  <TableCell width={'25%'}>
+                    <Typography
+                      sx={{
+                        fontWeight: 'fontWeightBold',
+                      }}
+                    >
+                      {tl.institutionName}
+                    </Typography>
+                  </TableCell>
+                  <TableCell width={'25%'}>
+                    <Typography sx={{ cursor: 'pointer' }}>
+                      {codeToLabelProduct(tl.productId as string)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell width={'25%'}>
+                    <Typography sx={{ cursor: 'pointer' }}>-</Typography>
+                  </TableCell>
+                  <TableCell width={'25%'}>
+                    <Typography sx={{ cursor: 'pointer' }}>-</Typography>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
