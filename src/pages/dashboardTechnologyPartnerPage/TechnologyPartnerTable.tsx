@@ -6,7 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
-import { fetchTechnologyPartnersList } from '../../services/technologyPartnerService';
+import {
+  fetchTechnologyPartnersList,
+  mockedTechPartner,
+} from '../../services/technologyPartnerService';
 import DashboardTableContainer from './DashboardTableContainer';
 
 type Props = {
@@ -40,7 +43,7 @@ export default function TechnologyPartnerTable({ party }: Props) {
   const retrievePtList = async () => {
     setLoading(true);
     await fetchTechnologyPartnersList(party.partyId)
-      .then((r) => setTableList(r))
+      .then(() => setTableList(mockedTechPartner))
       .catch((reason) => {
         addError({
           id: `FETCH_PARTY_PT_ERROR-${party.partyId}`,

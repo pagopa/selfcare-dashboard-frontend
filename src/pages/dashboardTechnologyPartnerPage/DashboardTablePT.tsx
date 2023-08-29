@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import Paper from '@mui/material/Paper';
+import { Box } from '@mui/system';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 
 type Props = {
@@ -64,45 +65,55 @@ export default function DashboardTablePT({ filteredArray }: Props) {
     }
   });
 
-  const [institutionName, setInstitutionName] = useState('');
-  const [selectedProductId, setSelectedProductId] = useState('');
-  const [result, setResult] = useState<DelegationResource | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState('All');
+  const [searchResults, setSearchResults] = useState(filteredArray);
 
-  const handleButtonClick = () => {
-    const selectedBroker = filteredArray.find((item) => item.institutionName === institutionName);
+  const handleSearch = () => {
+    // eslint-disable-next-line functional/no-let
+    let filteredResults = filteredArray;
 
-    if (selectedBroker) {
-      if (selectedBroker?.productId?.includes(selectedProductId)) {
-        setResult(selectedBroker);
-      } else {
-        setResult(null);
-      }
-    } else {
-      setResult(null);
+    if (selectedProduct !== 'All') {
+      filteredResults = filteredArray.filter(
+        (item) => item.productId && item.productId.includes(selectedProduct)
+      );
     }
+
+    filteredResults = filteredResults.filter(
+      (item) =>
+        item.institutionName &&
+        item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setSearchResults(filteredResults);
   };
 
   return (
     <>
-      <TextField
-        label="Institution Name"
-        value={institutionName}
-        onChange={(e) => setInstitutionName(e.target.value)}
-      />
-      <FormControl sx={{ width: '200px' }}>
-        <InputLabel>Product ID</InputLabel>
-        <Select
-          value={selectedProductId}
-          label="Product ID"
-          onChange={(e) => setSelectedProductId(e.target.value as string)}
-        >
-          <MenuItem value="prod-io">prod-io</MenuItem>
-          <MenuItem value="prod-pagopa">prod-pagopa</MenuItem>
-        </Select>
-      </FormControl>
-      <Button variant="contained" onClick={handleButtonClick}>
-        Cerca
-      </Button>
+      <Box my={2}>
+        <TextField
+          label={t('overview.ptPage.filterTechPartner.textfieldLabel')}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <FormControl>
+          <InputLabel>Select Product</InputLabel>
+          <Select
+            sx={{ width: '200px' }}
+            value={selectedProduct}
+            onChange={(e) => setSelectedProduct(e.target.value as string)}
+          >
+            <MenuItem value="All">All</MenuItem> {/* Imposta "All" come valore predefinito */}
+            <MenuItem value="prod-io">{codeToLabelProduct('prod-io')}</MenuItem>
+            <MenuItem value="prod-pagopa">{codeToLabelProduct('prod-pagopa')}</MenuItem>
+          </Select>
+        </FormControl>
+
+        <Button variant="contained" onClick={handleSearch}>
+          Search
+        </Button>
+      </Box>
       <TableContainer component={Paper} sx={{ height: '100%', overflow: 'hidden' }}>
         <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
           <TableHead>
@@ -149,49 +160,37 @@ export default function DashboardTablePT({ filteredArray }: Props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {result ? (
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Institution Name</TableCell>
-                      <TableCell>Product ID</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>{result.institutionName}</TableCell>
-                      <TableCell>{result.productId}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            ) : (
-              sortedData.map((tl, index) => (
-                <TableRow key={index}>
-                  <TableCell width={'25%'}>
-                    <Typography
-                      sx={{
-                        fontWeight: 'fontWeightBold',
-                      }}
-                    >
-                      {tl.institutionName}
-                    </Typography>
-                  </TableCell>
-                  <TableCell width={'25%'}>
-                    <Typography sx={{ cursor: 'pointer' }}>
-                      {codeToLabelProduct(tl.productId as string)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell width={'25%'}>
-                    <Typography sx={{ cursor: 'pointer' }}>-</Typography>
-                  </TableCell>
-                  <TableCell width={'25%'}>
-                    <Typography sx={{ cursor: 'pointer' }}>-</Typography>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
+            {searchResults
+              ? searchResults.map((item) => (
+                  <TableRow key={item.institutionName}>
+                    <TableCell>{item.institutionName}</TableCell>
+                    <TableCell>{codeToLabelProduct(item.productId as string)}</TableCell>
+                  </TableRow>
+                ))
+              : sortedData.map((tl, index) => (
+                  <TableRow key={index}>
+                    <TableCell width={'25%'}>
+                      <Typography
+                        sx={{
+                          fontWeight: 'fontWeightBold',
+                        }}
+                      >
+                        {tl.institutionName}
+                      </Typography>
+                    </TableCell>
+                    <TableCell width={'25%'}>
+                      <Typography sx={{ cursor: 'pointer' }}>
+                        {codeToLabelProduct(tl.productId as string)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell width={'25%'}>
+                      <Typography sx={{ cursor: 'pointer' }}>-</Typography>
+                    </TableCell>
+                    <TableCell width={'25%'}>
+                      <Typography sx={{ cursor: 'pointer' }}>-</Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
       </TableContainer>
