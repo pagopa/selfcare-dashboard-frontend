@@ -59,9 +59,6 @@ export default function DashboardTechnologyPartnerPage({
               mbSubTitle={6}
             />
           </Grid>
-          {/* Filter */}
-          <Grid item xs={12}></Grid>
-
           {/* Table */}
           <Grid item xs={12}>
             <TechnologyPartnerTable party={party} ptProducts={ptProducts} />

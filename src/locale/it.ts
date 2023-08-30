@@ -197,6 +197,8 @@ export default {
       filterTechPartner: {
         textfieldLabel: 'Cerca per nome',
         productSelectLabel: 'Prodotto',
+        buttonLabel: 'Filtra',
+        allProductsLabel: 'Tutti  i prodotti',
       },
     },
     genericError: {

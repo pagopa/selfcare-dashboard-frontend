@@ -90,28 +90,30 @@ export default function DashboardTablePT({ filteredArray }: Props) {
 
   return (
     <>
+      {/* Filter */}
       <Box my={2}>
         <TextField
           label={t('overview.ptPage.filterTechPartner.textfieldLabel')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-
         <FormControl>
-          <InputLabel>Select Product</InputLabel>
+          <InputLabel> {t('overview.ptPage.filterTechPartner.productSelectLabel')}</InputLabel>
           <Select
             sx={{ width: '200px' }}
             value={selectedProduct}
             onChange={(e) => setSelectedProduct(e.target.value as string)}
           >
-            <MenuItem value="All">All</MenuItem> {/* Imposta "All" come valore predefinito */}
+            <MenuItem value="All">
+              {t('overview.ptPage.filterTechPartner.allProductsLabel')}
+            </MenuItem>
             <MenuItem value="prod-io">{codeToLabelProduct('prod-io')}</MenuItem>
             <MenuItem value="prod-pagopa">{codeToLabelProduct('prod-pagopa')}</MenuItem>
           </Select>
         </FormControl>
 
         <Button variant="contained" onClick={handleSearch}>
-          Search
+          {t('overview.ptPage.filterTechPartner.buttonLabel')}
         </Button>
       </Box>
       <TableContainer component={Paper} sx={{ height: '100%', overflow: 'hidden' }}>
