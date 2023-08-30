@@ -194,6 +194,12 @@ export default {
       bodyPtTable: {
         showMoreButtonLabel: 'Vedi tutti',
       },
+      filterTechPartner: {
+        textfieldLabel: 'Cerca per nome',
+        productSelectLabel: 'Prodotto',
+        buttonLabel: 'Filtra',
+        allProductsLabel: 'Tutti  i prodotti',
+      },
     },
     genericError: {
       title: 'Spiacenti, qualcosa è andato storto.',
