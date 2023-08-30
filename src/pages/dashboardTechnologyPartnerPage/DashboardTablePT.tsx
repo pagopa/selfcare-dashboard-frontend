@@ -91,31 +91,34 @@ export default function DashboardTablePT({ filteredArray }: Props) {
   return (
     <>
       {/* Filter */}
-      <Box my={2}>
-        <TextField
-          label={t('overview.ptPage.filterTechPartner.textfieldLabel')}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <FormControl>
-          <InputLabel> {t('overview.ptPage.filterTechPartner.productSelectLabel')}</InputLabel>
-          <Select
-            sx={{ width: '200px' }}
-            value={selectedProduct}
-            onChange={(e) => setSelectedProduct(e.target.value as string)}
-          >
-            <MenuItem value="All">
-              {t('overview.ptPage.filterTechPartner.allProductsLabel')}
-            </MenuItem>
-            <MenuItem value="prod-io">{codeToLabelProduct('prod-io')}</MenuItem>
-            <MenuItem value="prod-pagopa">{codeToLabelProduct('prod-pagopa')}</MenuItem>
-          </Select>
-        </FormControl>
+      {/* TODO: the filters and the results have been hidden if there are no elements because the layout refactor must be finished. After the refactor show filters disabled if there are no items, as requested. */}
+      {filteredArray && filteredArray.length > 0 && (
+        <Box my={2}>
+          <TextField
+            label={t('overview.ptPage.filterTechPartner.textfieldLabel')}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <FormControl>
+            <InputLabel> {t('overview.ptPage.filterTechPartner.productSelectLabel')}</InputLabel>
+            <Select
+              sx={{ width: '200px' }}
+              value={selectedProduct}
+              onChange={(e) => setSelectedProduct(e.target.value as string)}
+            >
+              <MenuItem value="All">
+                {t('overview.ptPage.filterTechPartner.allProductsLabel')}
+              </MenuItem>
+              <MenuItem value="prod-io">{codeToLabelProduct('prod-io')}</MenuItem>
+              <MenuItem value="prod-pagopa">{codeToLabelProduct('prod-pagopa')}</MenuItem>
+            </Select>
+          </FormControl>
 
-        <Button variant="contained" onClick={handleSearch}>
-          {t('overview.ptPage.filterTechPartner.buttonLabel')}
-        </Button>
-      </Box>
+          <Button variant="contained" onClick={handleSearch}>
+            {t('overview.ptPage.filterTechPartner.buttonLabel')}
+          </Button>
+        </Box>
+      )}
       <TableContainer component={Paper} sx={{ height: '100%', overflow: 'hidden' }}>
         <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
           <TableHead>
@@ -162,7 +165,7 @@ export default function DashboardTablePT({ filteredArray }: Props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {searchResults
+            {searchResults && filteredArray.length > 0
               ? searchResults.map((item) => (
                   <TableRow key={item.institutionName}>
                     <TableCell>{item.institutionName}</TableCell>
