@@ -59,11 +59,9 @@ export default function TechnologyPartnerTable({ party }: Props) {
 
   return !loading ? (
     <>
-      {filteredArray && filteredArray.length > 0 ? (
-        // Table and Filter
-        <DashboardTableContainer filteredArray={filteredArray} />
-      ) : (
-        // empty state
+      <DashboardTableContainer filteredArray={filteredArray} />
+
+      {filteredArray && filteredArray.length === 0 && (
         <Box
           width={'100%'}
           p={2}
