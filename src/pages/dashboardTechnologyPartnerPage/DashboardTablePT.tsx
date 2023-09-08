@@ -1,25 +1,25 @@
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import {
-  TableContainer,
+  Button,
+  FormControl,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  IconButton,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
+  Typography,
 } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import Paper from '@mui/material/Paper';
-import { Box } from '@mui/system';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 
 type Props = {
@@ -88,23 +88,35 @@ export default function DashboardTablePT({ filteredArray }: Props) {
     setSearchResults(filteredResults);
   };
 
+  const hasBeenDelegated = filteredArray && filteredArray.length > 0;
+
+  const handleResetFilter = () => {
+    setSearchTerm('');
+    setSelectedProduct('All');
+    setSearchResults(filteredArray);
+  };
+
   return (
     <>
-      {/* Filter */}
-      {/* TODO: the filters and the results have been hidden if there are no elements because the layout refactor must be finished. After the refactor show filters disabled if there are no items, as requested. */}
-      {filteredArray && filteredArray.length > 0 && (
-        <Box my={2}>
+      <Grid container spacing={1}>
+        <Grid item xs={5}>
           <TextField
             label={t('overview.ptPage.filterTechPartner.textfieldLabel')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            disabled={!hasBeenDelegated}
+            fullWidth
+            size="small"
           />
-          <FormControl>
+        </Grid>
+        <Grid item xs={5}>
+          <FormControl fullWidth={true} size="small">
             <InputLabel> {t('overview.ptPage.filterTechPartner.productSelectLabel')}</InputLabel>
             <Select
-              sx={{ width: '200px' }}
               value={selectedProduct}
               onChange={(e) => setSelectedProduct(e.target.value as string)}
+              disabled={!hasBeenDelegated}
+              label={t('overview.ptPage.filterTechPartner.productSelectLabel')}
             >
               <MenuItem value="All">
                 {t('overview.ptPage.filterTechPartner.allProductsLabel')}
@@ -113,92 +125,106 @@ export default function DashboardTablePT({ filteredArray }: Props) {
               <MenuItem value="prod-pagopa">{codeToLabelProduct('prod-pagopa')}</MenuItem>
             </Select>
           </FormControl>
-
-          <Button variant="contained" onClick={handleSearch}>
+        </Grid>
+        <Grid item xs={1}>
+          <Button
+            variant="outlined"
+            onClick={handleSearch}
+            disabled={!hasBeenDelegated}
+            size="small"
+          >
             {t('overview.ptPage.filterTechPartner.buttonLabel')}
           </Button>
-        </Box>
+        </Grid>
+        <Grid item xs={1}>
+          <ButtonNaked
+            onClick={handleResetFilter}
+            color="primary"
+            variant="text"
+            disabled={!hasBeenDelegated}
+            sx={{ textAlign: 'center' }}
+            component="button"
+          >
+            {t('overview.ptPage.filterTechPartner.resetFilter')}
+          </ButtonNaked>
+        </Grid>
+      </Grid>
+      {!hasBeenDelegated ? null : (
+        <TableContainer sx={{ height: '100%', overflow: 'hidden' }}>
+          <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell sortDirection={'asc'}>
+                  {t('overview.ptPage.headerPtTableLabels.party')}
+                  <IconButton
+                    style={{ backgroundColor: 'transparent', padding: '0 8px' }}
+                    disableRipple
+                    onClick={() => handleSort('institutionName')}
+                  >
+                    {orderBy === 'institutionName' ? (
+                      order === 'asc' ? (
+                        <ArrowUpwardIcon fontSize="small" />
+                      ) : (
+                        <ArrowDownwardIcon fontSize="small" />
+                      )
+                    ) : (
+                      <ArrowUpwardIcon fontSize="small" />
+                    )}
+                  </IconButton>
+                </TableCell>
+                <TableCell>{t('overview.ptPage.headerPtTableLabels.product')}</TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody sx={{ backgroundColor: 'background.paper' }}>
+              {searchResults && filteredArray.length > 0
+                ? searchResults.map((item) => (
+                    <TableRow key={item.institutionName}>
+                      <TableCell>
+                        <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
+                      </TableCell>
+                      <TableCell>{codeToLabelProduct(item.productId as string)}</TableCell>
+                      <TableCell width={'20%'}>
+                        <Typography>-</Typography>
+                      </TableCell>
+                      <TableCell width={'20%'}>
+                        <Typography>-</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography width={'10%'}></Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                : sortedData.map((tl, index) => (
+                    <TableRow key={index}>
+                      <TableCell width={'25%'}>
+                        <Typography
+                          sx={{
+                            fontWeight: 'fontWeightBold',
+                          }}
+                        >
+                          {tl.institutionName}
+                        </Typography>
+                      </TableCell>
+                      <TableCell width={'25%'}>
+                        <Typography sx={{ cursor: 'pointer' }}>
+                          {codeToLabelProduct(tl.productId as string)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell width={'25%'}>
+                        <Typography sx={{ cursor: 'pointer' }}>-</Typography>
+                      </TableCell>
+                      <TableCell width={'25%'}>
+                        <Typography sx={{ cursor: 'pointer' }}>-</Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-      <TableContainer component={Paper} sx={{ height: '100%', overflow: 'hidden' }}>
-        <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell sortDirection={'asc'}>
-                {t('overview.ptPage.headerPtTableLabels.party')}
-                <IconButton
-                  style={{ backgroundColor: 'transparent', padding: '0 8px' }}
-                  disableRipple
-                  onClick={() => handleSort('institutionName')}
-                >
-                  {orderBy === 'institutionName' ? (
-                    order === 'asc' ? (
-                      <ArrowUpwardIcon fontSize="small" />
-                    ) : (
-                      <ArrowDownwardIcon fontSize="small" />
-                    )
-                  ) : (
-                    <ArrowUpwardIcon fontSize="small" />
-                  )}
-                </IconButton>
-              </TableCell>
-              <TableCell>
-                {t('overview.ptPage.headerPtTableLabels.product')}
-                <IconButton
-                  style={{ backgroundColor: 'transparent', padding: '0 8px' }}
-                  disableRipple
-                  onClick={() => handleSort('productId')}
-                >
-                  {orderBy === 'productId' ? (
-                    order === 'asc' ? (
-                      <ArrowUpwardIcon fontSize="small" />
-                    ) : (
-                      <ArrowDownwardIcon fontSize="small" />
-                    )
-                  ) : (
-                    <ArrowDownwardIcon fontSize="small" />
-                  )}
-                </IconButton>
-              </TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {searchResults && filteredArray.length > 0
-              ? searchResults.map((item) => (
-                  <TableRow key={item.institutionName}>
-                    <TableCell>{item.institutionName}</TableCell>
-                    <TableCell>{codeToLabelProduct(item.productId as string)}</TableCell>
-                  </TableRow>
-                ))
-              : sortedData.map((tl, index) => (
-                  <TableRow key={index}>
-                    <TableCell width={'25%'}>
-                      <Typography
-                        sx={{
-                          fontWeight: 'fontWeightBold',
-                        }}
-                      >
-                        {tl.institutionName}
-                      </Typography>
-                    </TableCell>
-                    <TableCell width={'25%'}>
-                      <Typography sx={{ cursor: 'pointer' }}>
-                        {codeToLabelProduct(tl.productId as string)}
-                      </Typography>
-                    </TableCell>
-                    <TableCell width={'25%'}>
-                      <Typography sx={{ cursor: 'pointer' }}>-</Typography>
-                    </TableCell>
-                    <TableCell width={'25%'}>
-                      <Typography sx={{ cursor: 'pointer' }}>-</Typography>
-                    </TableCell>
-                  </TableRow>
-                ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
     </>
   );
 }

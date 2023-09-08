@@ -1,8 +1,8 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Box } from '@mui/system';
+import { Box, Divider } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ButtonNaked } from '@pagopa/mui-italia';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 import DashboardTablePT from './DashboardTablePT';
 
@@ -27,24 +27,20 @@ export default function DashboardTableContainer({ filteredArray }: Props) {
     >
       <DashboardTablePT filteredArray={filteredArray} />
       {!expandMore && areMoreThen5Elemnts && (
-        <Box
-          width={'100%'}
-          sx={{ backgroundColor: 'white' }}
-          mt={'1px'}
-          p={2}
-          display="flex"
-          justifyContent={'center'}
-        >
-          <ButtonNaked
-            onClick={() => setExpandMore(true)}
-            endIcon={<KeyboardArrowDownIcon />}
-            weight="default"
-            size="large"
-            color="primary"
-          >
-            {t('overview.ptPage.bodyPtTable.showMoreButtonLabel')}
-          </ButtonNaked>
-        </Box>
+        <>
+          <Divider color="divider" />
+          <Box sx={{ backgroundColor: 'white' }} p="4px" display="flex" justifyContent="center">
+            <ButtonNaked
+              onClick={() => setExpandMore(true)}
+              endIcon={<KeyboardArrowDownIcon />}
+              weight="default"
+              size="large"
+              color="primary"
+            >
+              {t('overview.ptPage.bodyPtTable.showMoreButtonLabel')}
+            </ButtonNaked>
+          </Box>
+        </>
       )}
     </Box>
   );

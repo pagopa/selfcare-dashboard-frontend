@@ -199,6 +199,7 @@ export default {
         productSelectLabel: 'Prodotto',
         buttonLabel: 'Filtra',
         allProductsLabel: 'Tutti  i prodotti',
+        resetFilter: 'Annulla filtri',
       },
     },
     genericError: {
