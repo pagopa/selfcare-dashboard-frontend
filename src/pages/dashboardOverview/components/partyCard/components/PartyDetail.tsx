@@ -75,7 +75,9 @@ export default function PartyDetail({ party }: Props) {
   const institutionTypeTranscode = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
   const showTooltipAfter = 49;
-  const isTaxCodeEquals2Piva = party.vatNumber === party.fiscalCode;
+  const lastPartyVatNumber = party.products[party.products.length - 1].billing?.vatNumber;
+  const isTaxCodeEquals2Piva = party.fiscalCode === lastPartyVatNumber;
+
   const isInstitutionTypePA = party.institutionType === 'PA';
 
   const handleAddNewTaxonomies = () => {
@@ -411,9 +413,8 @@ export default function PartyDetail({ party }: Props) {
                 <Grid item xs={4}>
                   <Tooltip
                     title={
-                      party.products[0].billing?.vatNumber &&
-                      party.products[0].billing.vatNumber.length >= showTooltipAfter
-                        ? party.products[0].billing.vatNumber
+                      lastPartyVatNumber && lastPartyVatNumber.length >= showTooltipAfter
+                        ? lastPartyVatNumber
                         : ''
                     }
                     placement="top"
@@ -423,7 +424,7 @@ export default function PartyDetail({ party }: Props) {
                       sx={{ ...infoStyles, maxWidth: '100% !important' }}
                       className="ShowDots"
                     >
-                      {party.products[0].billing?.vatNumber}
+                      {lastPartyVatNumber}
                     </Typography>
                   </Tooltip>
                 </Grid>
