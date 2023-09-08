@@ -4,8 +4,6 @@ import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ENV } from '../../utils/env';
 import DashboardDelegationsBanner from '../dashboardDelegations/DashboardDelegationsBanner';
-import { partiesSelectors } from '../../redux/slices/partiesSlice';
-import { useAppSelector } from '../../redux/hooks';
 import { OnboardedProduct } from '../../api/generated/b4f-dashboard/OnboardedProduct';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
@@ -20,13 +18,12 @@ type Props = {
 };
 
 const DashboardOverview = ({ party, products }: Props) => {
-  const parties = useAppSelector(partiesSelectors.selectPartiesList);
-  const isAdmin = parties?.find((p) => p.partyId === party.partyId)?.userRole === 'ADMIN';
+  const isAdmin = party.userRole === 'ADMIN';
 
   const activeProducts: Array<OnboardedProduct> = useMemo(
     () =>
       party.products?.filter((us) =>
-        products.map(
+        products.some(
           (p) =>
             us.productId === p.id &&
             us.productOnBoardingStatus === 'ACTIVE' &&
@@ -74,7 +71,8 @@ const DashboardOverview = ({ party, products }: Props) => {
       )}
       <Grid item xs={12} mb={2} mt={5}>
         <ActiveProductsSection products={products} party={party} />
-        {products &&
+        {isAdmin &&
+          products &&
           products.findIndex(
             (product) =>
               product.status === 'ACTIVE' &&
