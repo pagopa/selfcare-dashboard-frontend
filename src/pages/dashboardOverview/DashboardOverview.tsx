@@ -23,7 +23,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   const activeProducts: Array<OnboardedProduct> = useMemo(
     () =>
       party.products?.filter((us) =>
-        products.map(
+        products.some(
           (p) =>
             us.productId === p.id &&
             us.productOnBoardingStatus === 'ACTIVE' &&

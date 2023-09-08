@@ -18,11 +18,11 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
   const activeProducts = useMemo(
     () =>
       products?.filter((p) =>
-        party?.products.map(
+        party?.products.some(
           (us) => us.productId === p.id && us.productOnBoardingStatus === 'ACTIVE'
         )
       ),
-    [products]
+    [products, party?.products]
   );
 
   const fetchProductRolesNotYetCached = async (): Promise<ProductsRolesMap> => {
