@@ -5,6 +5,7 @@ import {
   FormControl,
   Grid,
   IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -20,6 +21,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import SearchIcon from '@mui/icons-material/Search';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 
 type Props = {
@@ -107,6 +109,13 @@ export default function DashboardTablePT({ filteredArray }: Props) {
             disabled={!hasBeenDelegated}
             fullWidth
             size="small"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={5}>
@@ -130,7 +139,7 @@ export default function DashboardTablePT({ filteredArray }: Props) {
           <Button
             variant="outlined"
             onClick={handleSearch}
-            disabled={!hasBeenDelegated}
+            disabled={!hasBeenDelegated || !searchTerm}
             size="small"
           >
             {t('overview.ptPage.filterTechPartner.buttonLabel')}
@@ -141,7 +150,7 @@ export default function DashboardTablePT({ filteredArray }: Props) {
             onClick={handleResetFilter}
             color="primary"
             variant="text"
-            disabled={!hasBeenDelegated}
+            disabled={!hasBeenDelegated || !searchTerm}
             sx={{ textAlign: 'center' }}
             component="button"
           >
