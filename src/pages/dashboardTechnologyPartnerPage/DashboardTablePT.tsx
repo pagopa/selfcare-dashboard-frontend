@@ -139,7 +139,7 @@ export default function DashboardTablePT({ filteredArray }: Props) {
           <Button
             variant="outlined"
             onClick={handleSearch}
-            disabled={!hasBeenDelegated || !searchTerm}
+            disabled={!hasBeenDelegated}
             size="small"
           >
             {t('overview.ptPage.filterTechPartner.buttonLabel')}
@@ -150,7 +150,7 @@ export default function DashboardTablePT({ filteredArray }: Props) {
             onClick={handleResetFilter}
             color="primary"
             variant="text"
-            disabled={!hasBeenDelegated || !searchTerm}
+            disabled={!hasBeenDelegated || (!searchTerm && selectedProduct === 'All')}
             sx={{ textAlign: 'center' }}
             component="button"
           >
