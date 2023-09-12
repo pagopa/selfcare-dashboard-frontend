@@ -38,7 +38,6 @@ const renderDashboardTablePT = (
 
 test('Test rendering renderDashboardTablePT', () => {
   renderDashboardTablePT();
-  screen.debug();
 });
 
 test('test input field change and filter on click', async () => {
