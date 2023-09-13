@@ -18,7 +18,7 @@ type Props = {
 };
 
 const DashboardOverview = ({ party, products }: Props) => {
-  const isLoginAsAdmin = party.userRole === 'ADMIN';
+  const isAdmin = party.userRole === 'ADMIN';
 
   const activeProducts: Array<OnboardedProduct> = useMemo(
     () =>
@@ -34,24 +34,15 @@ const DashboardOverview = ({ party, products }: Props) => {
     [party.products]
   ) ?? [party.products];
 
-  const hasAdminRoleForSpecificProducts = (activeProducts: Array<OnboardedProduct>): boolean => {
-    const targetProducts = ['prod-io', 'prod-pagopa'];
+  const delegableProducts = activeProducts.find(
+    (p) => p.productId === 'prod-io' || p.productId === 'prod-pagopa'
+  );
 
-    return activeProducts.some(
-      (product: OnboardedProduct) =>
-        targetProducts.includes(product.productId ?? '') &&
-        product.userRole?.toLowerCase() === 'admin'
-    );
-  };
+  const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin;
 
-  const isDelegable = ENV.DELEGATIONS.ENABLE && isLoginAsAdmin;
+  const hasPartyDelegableProducts = delegableProducts &&  party.institutionType !== 'PT' && isDelegable;
 
-  const institutionsThatCanDelegate = ['PA', 'PSP', 'GSP', 'SCP'];
-
-  const paWithDelegableProducts =
-    institutionsThatCanDelegate.includes(party.institutionType ?? '') &&
-    hasAdminRoleForSpecificProducts(activeProducts) &&
-    isDelegable;
+  const showInfoBanner = party.institutionType === 'PA';
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
@@ -63,10 +54,10 @@ const DashboardOverview = ({ party, products }: Props) => {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isLoginAsAdmin} />
+          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
         </Grid>
       </Grid>
-      {paWithDelegableProducts && (
+      {showInfoBanner && (
         <Grid item xs={12} my={2}>
           <DashboardInfoSection />
         </Grid>
@@ -74,14 +65,14 @@ const DashboardOverview = ({ party, products }: Props) => {
       <Grid item xs={12}>
         <PartyCard party={party} />
       </Grid>
-      {paWithDelegableProducts && (
+      {hasPartyDelegableProducts && (
         <Grid item xs={12} mt={2}>
           <DashboardDelegationsBanner party={party} />
         </Grid>
       )}
       <Grid item xs={12} mb={2} mt={5}>
         <ActiveProductsSection products={products} party={party} />
-        {isLoginAsAdmin &&
+        {isAdmin &&
           products &&
           products.findIndex(
             (product) =>
