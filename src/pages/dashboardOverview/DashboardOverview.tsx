@@ -33,7 +33,7 @@ const DashboardOverview = ({ party, products }: Props) => {
       ),
     [party.products]
   ) ?? [party.products];
- 
+
   const hasAdminRoleForSpecificProducts = (activeProducts: Array<OnboardedProduct>): boolean => {
     const targetProducts = ['prod-io', 'prod-pagopa'];
 
@@ -46,10 +46,10 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const isDelegable = ENV.DELEGATIONS.ENABLE && isLoginAsAdmin;
 
-  const institutionsThaCanDelegate = ['PA', 'PSP'];
+  const institutionsThatCanDelegate = ['PA', 'PSP', 'GSP', 'SCP'];
 
   const paWithDelegableProducts =
-    institutionsThaCanDelegate.includes(party.institutionType ?? '') &&
+    institutionsThatCanDelegate.includes(party.institutionType ?? '') &&
     hasAdminRoleForSpecificProducts(activeProducts) &&
     isDelegable;
 
