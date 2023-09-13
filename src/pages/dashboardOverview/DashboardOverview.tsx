@@ -18,7 +18,7 @@ type Props = {
 };
 
 const DashboardOverview = ({ party, products }: Props) => {
-  const isAdmin = party.userRole === 'ADMIN';
+  const isLoginAsAdmin = party.userRole === 'ADMIN';
 
   const activeProducts: Array<OnboardedProduct> = useMemo(
     () =>
@@ -33,15 +33,25 @@ const DashboardOverview = ({ party, products }: Props) => {
       ),
     [party.products]
   ) ?? [party.products];
+ 
+  const hasAdminRoleForSpecificProducts = (activeProducts: Array<OnboardedProduct>): boolean => {
+    const targetProducts = ['prod-io', 'prod-pagopa'];
 
-  const delegableProducts = activeProducts.find(
-    (p) => p.productId === 'prod-io' || p.productId === 'prod-pagopa'
-  );
+    return activeProducts.some(
+      (product: OnboardedProduct) =>
+        targetProducts.includes(product.productId ?? '') &&
+        product.userRole?.toLowerCase() === 'admin'
+    );
+  };
 
-  const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin;
+  const isDelegable = ENV.DELEGATIONS.ENABLE && isLoginAsAdmin;
+
+  const institutionsThaCanDelegate = ['PA', 'PSP'];
 
   const paWithDelegableProducts =
-    party.institutionType === 'PA' && delegableProducts && isDelegable;
+    institutionsThaCanDelegate.includes(party.institutionType ?? '') &&
+    hasAdminRoleForSpecificProducts(activeProducts) &&
+    isDelegable;
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
@@ -53,7 +63,7 @@ const DashboardOverview = ({ party, products }: Props) => {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
+          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isLoginAsAdmin} />
         </Grid>
       </Grid>
       {paWithDelegableProducts && (
@@ -71,7 +81,7 @@ const DashboardOverview = ({ party, products }: Props) => {
       )}
       <Grid item xs={12} mb={2} mt={5}>
         <ActiveProductsSection products={products} party={party} />
-        {isAdmin &&
+        {isLoginAsAdmin &&
           products &&
           products.findIndex(
             (product) =>
