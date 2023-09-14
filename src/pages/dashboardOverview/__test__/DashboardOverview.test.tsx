@@ -3,6 +3,10 @@ import { mockedPartyProducts } from '../../../services/__mocks__/productService'
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardOverview from '../DashboardOverview';
 
+beforeEach(() => {
+  jest.spyOn(console, 'warn').mockImplementation(() => {});
+});
+
 test('should render component DashboardOverview with empty party', () => {
   renderWithProviders(
     <DashboardOverview
@@ -38,8 +42,14 @@ test('should render component DashboardOverview with empty party', () => {
   );
 });
 
-test('should render component DashboardOverview with populated props', async () => {
+test('should render component DashboardOverview with populated props and product prod-pagopa', async () => {
   renderWithProviders(
     <DashboardOverview party={mockedParties[0]} products={mockedPartyProducts} />
+  );
+});
+
+test('should render component DashboardOverview with populated props and product prod-io', async () => {
+  renderWithProviders(
+    <DashboardOverview party={mockedParties[1]} products={mockedPartyProducts} />
   );
 });
