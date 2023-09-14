@@ -75,7 +75,7 @@ export default function PartyDetail({ party }: Props) {
   const institutionTypeTranscode = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
   const showTooltipAfter = 49;
-  const lastPartyVatNumber = party.products[party.products.length - 1].billing?.vatNumber;
+  const lastPartyVatNumber = party.products[party.products.length - 1]?.billing?.vatNumber;
   const isTaxCodeEquals2Piva = party.fiscalCode === lastPartyVatNumber;
 
   const isInstitutionTypePA = party.institutionType === 'PA';

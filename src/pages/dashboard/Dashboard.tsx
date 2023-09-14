@@ -95,8 +95,17 @@ const Dashboard = () => {
       () =>
         products?.filter((p) =>
           party?.products.some(
-            (ap) => ap.productId === p.id && ap.productOnBoardingStatus === 'ACTIVE'
+            (ap) => ap.productId === p.id && ap.productOnBoardingStatus === 'ACTIVE' && ap.authorized
           )
+        ),
+      [products, party]
+    ) ?? [];
+
+  const authorizedProducts: Array<Product> =
+    useMemo(
+      () =>
+        products?.filter((p) =>
+          party?.products.some((ap) => ap.productId === p.id && ap.authorized)
         ),
       [products, party]
     ) ?? [];
@@ -111,7 +120,7 @@ const Dashboard = () => {
   const delegableProducts = activeProducts.filter((p) => p.delegable === true);
 
   const isDelegateSectionVisible =
-    ENV.DELEGATIONS.ENABLE && delegableProducts && delegableProducts.length > 0 && canSeeSection;
+    ENV.DELEGATIONS.ENABLE && delegableProducts && delegableProducts.length > 0 && canSeeSection && authorizedProducts.length > 0;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>

@@ -52,6 +52,18 @@ export const mockedBaseParties: Array<BaseParty> = [
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
+  {
+    partyId: '9',
+    description: 'Test GSP 9',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '10',
+    description: 'Test PSP 10',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
 ];
 
 export const mockedParties: Array<Party> = [
@@ -558,6 +570,97 @@ export const mockedParties: Array<Party> = [
     ],
     status: undefined,
     userRole: undefined,
+  },
+  // Mock with institutionType = GSP and prod-pagopa
+  {
+    description: 'Test GSP 9',
+    urlLogo: 'image',
+    partyId: '9',
+    digitalAddress: 'comune.bari@pec.it',
+    fiscalCode: '111111111111',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Piazza della Scala, 2',
+    zipCode: '20121',
+    typology: 'Gestore Servizi Pagamenti',
+    externalId: 'externalId1GSP',
+    originId: 'originId1GSP',
+    origin: 'IPA',
+    institutionType: 'GSP',
+    recipientCode: 'CGDAS23A',
+    geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }], // Use case with one taxonomy
+    vatNumber: '111111111141',
+    supportEmail: '',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '81001510528',
+          recipientCode: 'FLGKROWP',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '66554328912',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+    ],
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    description: 'Test PSP 10',
+    urlLogo: 'image',
+    partyId: '10',
+    digitalAddress: 'comune.bari@pec.it',
+    fiscalCode: '111111111111',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Piazza della Scala, 2',
+    zipCode: '20121',
+    typology: 'Prestatore Servizi Pagamento',
+    externalId: 'externalId1PSP',
+    originId: 'originId1PSP',
+    origin: 'IPA',
+    institutionType: 'PSP',
+    recipientCode: 'CGDAS23A',
+    geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }], // Use case with one taxonomy
+    vatNumber: '111111111141',
+    supportEmail: '',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '81001510528',
+          recipientCode: 'FLGKROWP',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '66554328912',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+      },
+    ],
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
   },
 ];
 

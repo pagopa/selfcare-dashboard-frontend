@@ -40,8 +40,9 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin;
 
-  const paWithDelegableProducts =
-    party.institutionType === 'PA' && delegableProducts && isDelegable;
+  const hasPartyDelegableProducts = delegableProducts &&  party.institutionType !== 'PT' && isDelegable;
+
+  const showInfoBanner = party.institutionType === 'PA';
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
@@ -56,7 +57,7 @@ const DashboardOverview = ({ party, products }: Props) => {
           <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
         </Grid>
       </Grid>
-      {paWithDelegableProducts && (
+      {showInfoBanner && (
         <Grid item xs={12} my={2}>
           <DashboardInfoSection />
         </Grid>
@@ -64,7 +65,7 @@ const DashboardOverview = ({ party, products }: Props) => {
       <Grid item xs={12}>
         <PartyCard party={party} />
       </Grid>
-      {paWithDelegableProducts && (
+      {hasPartyDelegableProducts && (
         <Grid item xs={12} mt={2}>
           <DashboardDelegationsBanner party={party} />
         </Grid>
