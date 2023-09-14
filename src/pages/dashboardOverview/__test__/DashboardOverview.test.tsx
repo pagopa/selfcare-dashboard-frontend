@@ -1,13 +1,15 @@
+import { fireEvent, screen } from '@testing-library/react';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardOverview from '../DashboardOverview';
+import '../../../locale';
 
 beforeEach(() => {
   jest.spyOn(console, 'warn').mockImplementation(() => {});
 });
 
-test('should render component DashboardOverview with empty party', () => {
+test('should render component DashboardOverview with empty party', async () => {
   renderWithProviders(
     <DashboardOverview
       party={{
@@ -40,16 +42,30 @@ test('should render component DashboardOverview with empty party', () => {
       products={[]}
     />
   );
+
+  // info section is not visible
+  expect(screen.queryByTestId('InfoOutlinedIcon')).not.toBeInTheDocument();
 });
 
-test('should render component DashboardOverview with populated props and product prod-pagopa', async () => {
-  renderWithProviders(
-    <DashboardOverview party={mockedParties[0]} products={mockedPartyProducts} />
-  );
+test('should render component DashboardOverview with populated props and product prod-pagopa and institutionType GSP', async () => {
+  const mockedGsp = mockedParties[11];
+  const { history } = renderWithProviders(<DashboardOverview party={mockedGsp} products={mockedPartyProducts} />);
+
+  const delegationBanner = await screen.findByText('Delega la gestione dei prodotti a un Partner o a un Intermediario');
+  expect(delegationBanner).toBeInTheDocument();
+
+  fireEvent.click(await screen.findByText('Vai'));
+
+  expect(history.location.pathname).toBe(`/dashboard/9/delegations`);
+
+  // info section is not visible
+  expect(screen.queryByTestId('InfoOutlinedIcon')).not.toBeInTheDocument();
 });
 
-test('should render component DashboardOverview with populated props and product prod-io', async () => {
-  renderWithProviders(
-    <DashboardOverview party={mockedParties[1]} products={mockedPartyProducts} />
-  );
+test('should render component DashboardOverview with populated props and product prod-io and institutionType PA', async () => {
+  const mockedPa = mockedParties[1];
+  renderWithProviders(<DashboardOverview party={mockedPa} products={mockedPartyProducts} />);
+
+  // info section is visible for PA
+  expect(await screen.findByTestId('InfoOutlinedIcon')).toBeInTheDocument();
 });
