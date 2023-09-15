@@ -45,7 +45,7 @@ test('test input field change and filter on click', async () => {
 
   // Find the input field by its label
   const inputField = screen.getByLabelText(
-    'overview.ptPage.filterTechPartner.textfieldLabel'
+    'Cerca per nome'
   ) as HTMLInputElement;
 
   // Simulate user typing "Broker 1"
@@ -55,7 +55,7 @@ test('test input field change and filter on click', async () => {
   expect(inputField.value).toBe('Broker 1');
 
   // Find and click the button
-  const FilterButton = screen.getByText('overview.ptPage.filterTechPartner.buttonLabel');
+  const FilterButton = screen.getByText('Filtra');
   fireEvent.click(FilterButton);
 
 });
