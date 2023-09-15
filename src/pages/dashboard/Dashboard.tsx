@@ -95,7 +95,7 @@ const Dashboard = () => {
       () =>
         products?.filter((p) =>
           party?.products.some(
-            (ap) => ap.productId === p.id && ap.productOnBoardingStatus === 'ACTIVE' && ap.authorized
+            (ap) => ap.productId === p.id && ap.productOnBoardingStatus === 'ACTIVE'
           )
         ),
       [products, party]
