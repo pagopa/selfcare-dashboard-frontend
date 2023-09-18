@@ -34,14 +34,14 @@ const DashboardOverview = ({ party, products }: Props) => {
     [party.products]
   ) ?? [party.products];
 
-  const delegableProducts = activeProducts.find(
+  const delegableProduct = activeProducts.find(
     (p) => (p.productId === 'prod-io' || p.productId === 'prod-pagopa') && p.userRole === 'ADMIN'
   );
 
   const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin;
 
   const hasPartyDelegableProducts =
-    delegableProducts && party.institutionType !== 'PT' && isDelegable;
+    delegableProduct && party.institutionType !== 'PT' && isDelegable;
 
   const showInfoBanner = party.institutionType === 'PA';
 
