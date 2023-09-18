@@ -110,6 +110,16 @@ const Dashboard = () => {
       [products, party]
     ) ?? [];
 
+  const isAdminOnProduct =
+    useMemo(
+      () =>
+        party?.products.some(
+          (p) =>
+            (p.productId === 'prod-io' || p.productId === 'prod-pagopa') && p.userRole === 'ADMIN'
+        ),
+      [products, party]
+    ) ?? false;
+
   const productsMap: ProductsMap =
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
 
@@ -120,7 +130,12 @@ const Dashboard = () => {
   const delegableProducts = activeProducts.filter((p) => p.delegable === true);
 
   const isDelegateSectionVisible =
-    ENV.DELEGATIONS.ENABLE && delegableProducts && delegableProducts.length > 0 && canSeeSection && authorizedProducts.length > 0;
+    ENV.DELEGATIONS.ENABLE &&
+    delegableProducts &&
+    delegableProducts.length > 0 &&
+    canSeeSection &&
+    authorizedProducts.length > 0 &&
+    isAdminOnProduct;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
