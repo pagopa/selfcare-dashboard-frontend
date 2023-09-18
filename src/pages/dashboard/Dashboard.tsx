@@ -101,24 +101,20 @@ const Dashboard = () => {
       [products, party]
     ) ?? [];
 
-  const authorizedProducts: Array<Product> =
+  const isAuthorizedAndAdminProducts: Array<Product> =
     useMemo(
       () =>
         products?.filter((p) =>
-          party?.products.some((ap) => ap.productId === p.id && ap.authorized)
+          party?.products.some(
+            (partyProduct) =>
+              partyProduct.productId === p.id &&
+              partyProduct.authorized &&
+              (partyProduct.productId === 'prod-io' || partyProduct.productId === 'prod-pagopa') &&
+              partyProduct.userRole === 'ADMIN'
+          )
         ),
       [products, party]
     ) ?? [];
-
-  const isAdminOnProduct =
-    useMemo(
-      () =>
-        party?.products.some(
-          (p) =>
-            (p.productId === 'prod-io' || p.productId === 'prod-pagopa') && p.userRole === 'ADMIN'
-        ),
-      [products, party]
-    ) ?? false;
 
   const productsMap: ProductsMap =
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
@@ -134,8 +130,7 @@ const Dashboard = () => {
     delegableProducts &&
     delegableProducts.length > 0 &&
     canSeeSection &&
-    authorizedProducts.length > 0 &&
-    isAdminOnProduct;
+    isAuthorizedAndAdminProducts.length > 0;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
