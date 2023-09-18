@@ -44,6 +44,9 @@ describe('DashboardDelegationsPage', () => {
     );
     const ErrorMessage = await screen.findByText('Errore');
     expect(ErrorMessage).toBeInTheDocument();
+    
+    const closeBtn = screen.getByText('Chiudi');
+    fireEvent.click(closeBtn);
   });
 
   test('Should render component DashboardDelegationsPage with populated props and isDelegateSectionVisible is true', async () => {
@@ -55,7 +58,7 @@ describe('DashboardDelegationsPage', () => {
         isDelegateSectionVisible
       />
     );
-      // test back button
+    // test back button
     const backBtn = await screen.findByText('Indietro');
     const goBackMock = jest.spyOn(history, 'goBack');
 
