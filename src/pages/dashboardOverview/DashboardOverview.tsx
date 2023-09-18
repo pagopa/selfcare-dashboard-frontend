@@ -20,7 +20,7 @@ type Props = {
 const DashboardOverview = ({ party, products }: Props) => {
   const isAdmin = party.userRole === 'ADMIN';
 
-  const activeProducts: Array<OnboardedProduct> = useMemo(
+  const manageablePartyProducts: Array<OnboardedProduct> = useMemo(
     () =>
       party.products?.filter((us) =>
         products.some(
@@ -28,20 +28,20 @@ const DashboardOverview = ({ party, products }: Props) => {
             us.productId === p.id &&
             us.productOnBoardingStatus === 'ACTIVE' &&
             us.authorized === true &&
+            us.userRole === 'ADMIN' &&
             p.delegable
         )
       ),
     [party.products]
   ) ?? [party.products];
 
-  const delegableProduct = activeProducts.find(
-    (p) => (p.productId === 'prod-io' || p.productId === 'prod-pagopa') && p.userRole === 'ADMIN'
+  const delegableProduct = manageablePartyProducts.find(
+    (p) => p.productId === 'prod-io' || p.productId === 'prod-pagopa'
   );
 
-  const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin;
+  const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin && delegableProduct;
 
-  const hasPartyDelegableProducts =
-    delegableProduct && party.institutionType !== 'PT' && isDelegable;
+  const hasPartyDelegableProducts = party.institutionType !== 'PT' && isDelegable;
 
   const showInfoBanner = party.institutionType === 'PA';
 
