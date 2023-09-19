@@ -22,6 +22,8 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
+import { Trans } from 'react-i18next';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 
 type Props = {
@@ -55,17 +57,6 @@ export default function DashboardTablePT({ filteredArray }: Props) {
       setOrder('asc');
     }
   };
-
-  const sortedData = [...filteredArray].sort((a: any, b: any) => {
-    const aValue = orderBy === 'institutionName' ? a.institutionName : a.productId;
-    const bValue = orderBy === 'institutionName' ? b.institutionName : b.productId;
-
-    if (order === 'asc') {
-      return aValue?.localeCompare(bValue);
-    } else {
-      return bValue?.localeCompare(aValue);
-    }
-  });
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState('All');
@@ -158,7 +149,7 @@ export default function DashboardTablePT({ filteredArray }: Props) {
           </ButtonNaked>
         </Grid>
       </Grid>
-      {!hasBeenDelegated ? null : (
+      {!hasBeenDelegated ? null : searchResults.length > 0 ? (
         <TableContainer sx={{ height: '100%', overflow: 'hidden' }}>
           <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
             <TableHead>
@@ -188,51 +179,50 @@ export default function DashboardTablePT({ filteredArray }: Props) {
               </TableRow>
             </TableHead>
             <TableBody sx={{ backgroundColor: 'background.paper' }}>
-              {searchResults && filteredArray.length > 0
-                ? searchResults.map((item) => (
-                    <TableRow key={item.institutionName}>
-                      <TableCell>
-                        <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
-                      </TableCell>
-                      <TableCell>{codeToLabelProduct(item.productId as string)}</TableCell>
-                      <TableCell width={'20%'}>
-                        <Typography>-</Typography>
-                      </TableCell>
-                      <TableCell width={'20%'}>
-                        <Typography>-</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography width={'10%'}></Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                : sortedData.map((tl, index) => (
-                    <TableRow key={index}>
-                      <TableCell width={'25%'}>
-                        <Typography
-                          sx={{
-                            fontWeight: 'fontWeightBold',
-                          }}
-                        >
-                          {tl.institutionName}
-                        </Typography>
-                      </TableCell>
-                      <TableCell width={'25%'}>
-                        <Typography sx={{ cursor: 'pointer' }}>
-                          {codeToLabelProduct(tl.productId as string)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell width={'25%'}>
-                        <Typography sx={{ cursor: 'pointer' }}>-</Typography>
-                      </TableCell>
-                      <TableCell width={'25%'}>
-                        <Typography sx={{ cursor: 'pointer' }}>-</Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+              {searchResults.map((item) => (
+                <TableRow key={item.institutionName}>
+                  <TableCell>
+                    <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
+                  </TableCell>
+                  <TableCell>{codeToLabelProduct(item.productId as string)}</TableCell>
+                  <TableCell width={'20%'}>
+                    <Typography>-</Typography>
+                  </TableCell>
+                  <TableCell width={'20%'}>
+                    <Typography>-</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography width={'10%'}></Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
+      ) : (
+        <Grid
+          width={'100%'}
+          xs={12}
+          mt={5}
+          sx={{
+            display: 'flex',
+            padding: '16px',
+            backgroundColor: 'background.paper',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '16px',
+          }}
+        >
+          <SentimentDissatisfiedIcon />
+          <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Trans i18nKey="overview.ptPage.filterTechPartner.emptyFilterResult">
+              I filtri che hai applicato non hanno dato nessun risultato.
+              <ButtonNaked color="primary" onClick={handleResetFilter} sx={{ ml: '4px' }} size="medium">
+                Rimuovi filtri
+              </ButtonNaked>
+            </Trans>
+          </Typography>
+        </Grid>
       )}
     </>
   );
