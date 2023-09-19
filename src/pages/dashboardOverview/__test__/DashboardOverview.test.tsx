@@ -1,13 +1,10 @@
 import { fireEvent, screen } from '@testing-library/react';
+import '../../../locale';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardOverview from '../DashboardOverview';
-import '../../../locale';
 
-beforeEach(() => {
-  jest.spyOn(console, 'warn').mockImplementation(() => {});
-});
 
 test('should render component DashboardOverview with empty party', async () => {
   renderWithProviders(
