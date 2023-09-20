@@ -200,6 +200,8 @@ export default {
         buttonLabel: 'Filtra',
         allProductsLabel: 'Tutti  i prodotti',
         resetFilter: 'Annulla filtri',
+        emptyFilterResult:
+          'I filtri che hai applicato non hanno dato nessun risultato. <1>Rimuovi filtri</1>',
       },
     },
     genericError: {
