@@ -45,6 +45,8 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const showInfoBanner = party.institutionType === 'PA';
 
+  const isPt = party.institutionType === 'PT';
+
   return (
     <Box p={3} sx={{ width: '100%' }}>
       <WelcomeDashboard />
@@ -74,6 +76,7 @@ const DashboardOverview = ({ party, products }: Props) => {
       <Grid item xs={12} mb={2} mt={5}>
         <ActiveProductsSection products={products} party={party} />
         {isAdmin &&
+          !isPt &&
           products &&
           products.findIndex(
             (product) =>

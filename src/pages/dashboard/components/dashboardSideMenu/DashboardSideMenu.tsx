@@ -55,6 +55,7 @@ export default function DashboardSideMenu({
   const isDelegateSelected = window.location.pathname.startsWith(delegatesPath);
   const isGroupSelected = window.location.pathname.startsWith(groupsPath);
   const isPtSelected = window.location.pathname.startsWith(ptPath);
+  const isPt = party.institutionType === 'PT';
 
   return (
     <Grid container item mt={1} width="100%">
@@ -93,7 +94,7 @@ export default function DashboardSideMenu({
               isPtPageVisible={false}
             />
           )}
-          {canSeeSection && (
+          {canSeeSection && !isPt && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.groups.title')}
               handleClick={() =>
