@@ -66,27 +66,30 @@ export default function DashboardSideMenu({
               onExit(() => history.push(party.partyId ? overviewPath : overviewRoute))
             }
             isSelected={isOVerviewSelected}
-            isSubMenuSelected={isDelegateSelected}
             icon={DashboardCustomize}
-            subMenuVisible={!!isDelegateSectionVisible}
-            subMenuIcon={AssignmentIcon}
-            subMenuTitle={t('overview.sideMenu.institutionManagement.overview.subMenu.title')}
-            handleClickSubMenu={() =>
-              onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
-            }
             isPtPageVisible={party?.institutionType === 'PT'}
             ptIcon={DnsIcon}
             ptTitle={t('overview.ptPage.title')}
             isPtSelected={isPtSelected}
             handleClickPtPage={() => onExit(() => history.push(party.partyId ? ptPath : ptRoute))}
           />
+          {isDelegateSectionVisible && (
+            <DashboardSidenavItem
+              title={t('overview.sideMenu.institutionManagement.overview.subMenu.title')}
+              handleClick={() =>
+                onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
+              }
+              isSelected={isDelegateSelected}
+              icon={AssignmentIcon}
+              isPtPageVisible={false}
+            />
+          )}
           {canSeeSection && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.referents.title')}
               handleClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
               isSelected={isUserSelected}
               icon={PeopleAlt}
-              subMenuVisible={false}
               isPtPageVisible={false}
             />
           )}
@@ -98,7 +101,6 @@ export default function DashboardSideMenu({
               }
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}
-              subMenuVisible={false}
               isPtPageVisible={false}
             />
           )}
