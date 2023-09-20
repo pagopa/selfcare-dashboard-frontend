@@ -65,8 +65,14 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
+    partyId: '11',
+    description: 'Comune di Cernusco sul Naviglio',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
     partyId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
-    description: 'Test PT 11',
+    description: 'Test PT 12',
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -184,6 +190,7 @@ export const mockedParties: Array<Party> = [
     ],
     vatNumber: '111122211111',
     products: [
+      // Use case with one delegable product
       {
         productId: 'prod-io',
         authorized: true,
@@ -664,6 +671,80 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
+      // Use case with only prod-interop
+      {
+        productId: 'prod-interop',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+    ],
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    description: 'Comune di Cernusco sul Naviglio',
+    urlLogo: 'image',
+    partyId: '11',
+    digitalAddress: 'comune.cernusco@pec.it',
+    fiscalCode: '76859430212',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Piazza della Scala, 2',
+    zipCode: '20121',
+    typology: 'Pubblica Amministrazione',
+    externalId: '36',
+    originId: '46',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'CGDDS33A',
+    geographicTaxonomies: [
+      { code: '32356', desc: 'Milano - Comune' },
+      { code: '456723', desc: 'Carugate - Comune' },
+      { code: '665543', desc: 'Cernusco sul Naviglio - Comune' },
+    ], // Use case with three taxonomy
+    vatNumber: '34434356575',
+    supportEmail: '',
+    products: [
+      // Use case with two delegable products
+      {
+        productId: 'prod-io',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '81001510528',
+          recipientCode: 'BBGG34D',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3334546566',
+          recipientCode: 'PBC945',
+          publicServices: true,
+        },
+      },
+      // Use case with only prod-interop-coll
+      {
+        productId: 'prod-interop-coll',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
     ],
     status: 'ACTIVE',
     userRole: 'ADMIN',
@@ -675,7 +756,7 @@ export const mockedParties: Array<Party> = [
     originId: 'PT_94287592749',
     origin: 'SELC',
     institutionType: 'PT',
-    typology: 'Partener tecnologico',
+    typology: 'Partner tecnologico',
     description: 'Prova PT ',
     fiscalCode: '94287592749',
     digitalAddress: 'pectest@pec.test.it',
