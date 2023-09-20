@@ -781,17 +781,6 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
       {
-        productId: 'prod-pagopa',
-        userRole: 'ADMIN',
-        authorized: true,
-        billing: {
-          vatNumber: '94287592749',
-          recipientCode: 'c_b988',
-          publicServices: false,
-        },
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-      },
-      {
         productId: 'prod-io-premium',
         authorized: false,
         billing: {
