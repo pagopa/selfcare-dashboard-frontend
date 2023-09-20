@@ -15,9 +15,10 @@ type Props = {
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
-  const prodInterop = party.products.find(
-    (p) => p.productId === 'prod-interop' && p.authorized === true
-  );
+  const prodInterop = party.products.find((p) => p.productId === 'prod-interop' && p.authorized);
+
+  const haveProdInteropAndEnvProduct =
+    prodInterop && party.products.find((p) => p.productId === 'prod-interop-coll' && p.authorized);
 
   return (
     <React.Fragment>
@@ -43,7 +44,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
               key={product.productId}
               party={party}
               product={product}
-              haveProdInterop={!!prodInterop}
+              haveProdInteropAndEnvProduct={!!haveProdInteropAndEnvProduct}
               products={products}
             />
           ))}
