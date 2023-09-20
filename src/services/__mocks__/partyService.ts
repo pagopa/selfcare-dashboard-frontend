@@ -70,6 +70,12 @@ export const mockedBaseParties: Array<BaseParty> = [
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
+  {
+    partyId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
+    description: 'Test PT 12',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
 ];
 
 export const mockedParties: Array<Party> = [
@@ -742,6 +748,49 @@ export const mockedParties: Array<Party> = [
     ],
     status: 'ACTIVE',
     userRole: 'ADMIN',
+  },
+  // Test PT with multiple products delegated
+  {
+    partyId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
+    externalId: '94287592749',
+    originId: 'PT_94287592749',
+    origin: 'SELC',
+    institutionType: 'PT',
+    typology: 'Partner tecnologico',
+    description: 'Prova PT ',
+    fiscalCode: '94287592749',
+    digitalAddress: 'pectest@pec.test.it',
+    registeredOffice: 'Milano',
+    zipCode: '48294',
+    geographicTaxonomies: [
+      {
+        code: '058091',
+        desc: 'Roma - Comune',
+      },
+    ],
+    products: [
+      {
+        productId: 'prod-io',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '94287592749',
+          recipientCode: 'c_b988',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-io-premium',
+        authorized: false,
+        billing: {
+          vatNumber: '94287592749',
+          recipientCode: 'c_b988',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.TOBEVALIDATED,
+      },
+    ],
   },
 ];
 
