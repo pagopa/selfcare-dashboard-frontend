@@ -29,7 +29,11 @@ const renderDashboardTablePT = (
   render(
     <Router history={history}>
       <Provider store={store}>
-        <DashboardTablePT filteredArray={mockedDelegation} />
+        <DashboardTablePT
+          filteredArray={mockedDelegation}
+          searchResults={[]}
+          setSearchResults={jest.fn()}
+        />
       </Provider>
     </Router>
   );
@@ -44,9 +48,7 @@ test('test input field change and filter on click', async () => {
   renderDashboardTablePT();
 
   // Find the input field by its label
-  const inputField = screen.getByLabelText(
-    'Cerca per nome'
-  ) as HTMLInputElement;
+  const inputField = screen.getByLabelText('Cerca per nome') as HTMLInputElement;
 
   // Simulate user typing "Broker 1"
   fireEvent.change(inputField, { target: { value: 'Broker 1' } });
@@ -57,5 +59,4 @@ test('test input field change and filter on click', async () => {
   // Find and click the button
   const FilterButton = screen.getByText('Filtra');
   fireEvent.click(FilterButton);
-
 });

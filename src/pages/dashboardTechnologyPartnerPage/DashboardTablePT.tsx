@@ -28,9 +28,15 @@ import { DelegationResource } from '../../api/generated/b4f-dashboard/Delegation
 
 type Props = {
   filteredArray: Array<DelegationResource>;
+  searchResults: Array<DelegationResource>;
+  setSearchResults: React.Dispatch<React.SetStateAction<Array<DelegationResource>>>;
 };
 
-export default function DashboardTablePT({ filteredArray }: Props) {
+export default function DashboardTablePT({
+  filteredArray,
+  searchResults,
+  setSearchResults,
+}: Props) {
   const { t } = useTranslation();
   const [orderBy, setOrderBy] = useState<'institutionName' | 'productId'>('institutionName');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
@@ -60,7 +66,6 @@ export default function DashboardTablePT({ filteredArray }: Props) {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState('All');
-  const [searchResults, setSearchResults] = useState(filteredArray);
 
   const handleSearch = () => {
     // eslint-disable-next-line functional/no-let
@@ -217,7 +222,12 @@ export default function DashboardTablePT({ filteredArray }: Props) {
           <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center' }}>
             <Trans i18nKey="overview.ptPage.filterTechPartner.emptyFilterResult">
               I filtri che hai applicato non hanno dato nessun risultato.
-              <ButtonNaked color="primary" onClick={handleResetFilter} sx={{ ml: '4px' }} size="medium">
+              <ButtonNaked
+                color="primary"
+                onClick={handleResetFilter}
+                sx={{ ml: '4px' }}
+                size="medium"
+              >
                 Rimuovi filtri
               </ButtonNaked>
             </Trans>
