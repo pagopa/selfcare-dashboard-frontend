@@ -12,12 +12,17 @@ type Props = {
 export default function DashboardTableContainer({ filteredArray }: Props) {
   const { t } = useTranslation();
   const [expandMore, setExpandMore] = useState<boolean>(false);
-  const [areMoreThen5Elemnts, setAreMoreThen5Elemnts] = useState<boolean>();
+  const [areMoreThen5Elemnts, setAreMoreThen5Elemnts] = useState<boolean>(false);
+  const [searchResults, setSearchResults] = useState(filteredArray);
+  
   useEffect(() => {
-    if (filteredArray.length > 5) {
+    if (searchResults.length > 5) {
       setAreMoreThen5Elemnts(true);
+    } else {
+      setAreMoreThen5Elemnts(false);
     }
-  }, [filteredArray]);
+  }, [searchResults]);
+
   return (
     <Box
       sx={{
@@ -25,7 +30,11 @@ export default function DashboardTableContainer({ filteredArray }: Props) {
           expandMore && areMoreThen5Elemnts ? '100%' : !areMoreThen5Elemnts ? '100%' : '360px',
       }}
     >
-      <DashboardTablePT filteredArray={filteredArray} />
+      <DashboardTablePT
+        filteredArray={filteredArray}
+        searchResults={searchResults}
+        setSearchResults={setSearchResults}
+      />
       {!expandMore && areMoreThen5Elemnts && (
         <>
           <Divider color="divider" />
