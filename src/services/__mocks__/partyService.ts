@@ -683,10 +683,10 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
-      // Use case with only prod-interop
+      // Use case with only prod-interop with authorized false
       {
         productId: 'prod-interop',
-        authorized: false,
+        authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {

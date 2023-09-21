@@ -26,8 +26,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
         {party.products
           .filter((us) =>
             us.productOnBoardingStatus === 'ACTIVE' &&
-            ((prodInterop?.authorized && prodInteropColl?.authorized) ||
-              (prodInterop?.authorized && prodInteropColl?.authorized === false) ||
+            (prodInterop?.authorized ||
+              prodInteropColl?.authorized === false ||
               (prodInterop?.authorized === false && !prodInteropColl))
               ? us.productId !== 'prod-interop-coll'
               : us.productId !== 'prod-interop'
