@@ -76,7 +76,7 @@ export default function DashboardSideMenu({
           />
           {isDelegateSectionVisible && (
             <DashboardSidenavItem
-              title={t('overview.sideMenu.institutionManagement.overview.subMenu.title')}
+              title={t('overview.sideMenu.institutionManagement.delegations.title')}
               handleClick={() =>
                 onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
               }
