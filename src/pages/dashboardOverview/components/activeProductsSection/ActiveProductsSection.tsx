@@ -15,22 +15,22 @@ type Props = {
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
-  const prodInterop = party.products.find((p) => p.productId === 'prod-interop' && p.authorized);
+  const prodInterop = party.products.find((p) => p.productId === 'prod-interop');
 
-  const haveProdInteropAndEnvProduct =
-    prodInterop && party.products.find((p) => p.productId === 'prod-interop-coll' && p.authorized);
+  const prodInteropColl = party.products.find((p) => p.productId === 'prod-interop-coll');
 
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
       <Grid container spacing={3}>
         {party.products
-          .filter(
-            (us) =>
-              us.productOnBoardingStatus === 'ACTIVE' &&
-              ((us.productId === 'prod-interop-coll' && us.authorized === true && !prodInterop) ||
-                (!prodInterop && us.productId !== 'prod-interop-coll') ||
-                (prodInterop && us.productId !== 'prod-interop-coll'))
+          .filter((us) =>
+            us.productOnBoardingStatus === 'ACTIVE' &&
+            ((prodInterop?.authorized && prodInteropColl?.authorized) ||
+              (prodInterop?.authorized && prodInteropColl?.authorized === false) ||
+              (prodInterop?.authorized === false && !prodInteropColl))
+              ? us.productId !== 'prod-interop-coll'
+              : us.productId !== 'prod-interop'
           )
           .sort((a, b) =>
             a.authorized === false && b.authorized !== false
@@ -44,7 +44,9 @@ export default function ActiveProductsSection({ party, products }: Props) {
               key={product.productId}
               party={party}
               product={product}
-              haveProdInteropAndEnvProduct={!!haveProdInteropAndEnvProduct}
+              haveProdInteropAndEnvProduct={
+                !!(prodInterop?.authorized && prodInteropColl?.authorized)
+              }
               products={products}
             />
           ))}
