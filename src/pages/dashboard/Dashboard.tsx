@@ -119,10 +119,10 @@ const Dashboard = () => {
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
   const canSeeSection = parties?.find((p) => p.partyId === party?.partyId)?.userRole === 'ADMIN';
-  const isPtSectionVisible = party?.institutionType === 'PT' && canSeeSection;
+  const isPt = party?.institutionType === 'PT';
+  const isPtSectionVisible = isPt && canSeeSection;
 
-  const isDelegateSectionVisible =
-    ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && canSeeSection;
+  const isDelegateSectionVisible = ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && !isPt;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
