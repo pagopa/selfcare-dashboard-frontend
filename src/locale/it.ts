@@ -42,9 +42,9 @@ export default {
         title: 'Gestione Ente',
         overview: {
           title: 'Panoramica',
-          subMenu: {
-            title: 'Deleghe',
-          },
+        },
+        delegations: {
+          title: 'Deleghe',
         },
         referents: {
           title: 'Utenti',
