@@ -60,7 +60,7 @@ export const mockedBaseParties: Array<BaseParty> = [
   },
   {
     partyId: '10',
-    description: 'Test PSP 10',
+    description: 'Comune di Viterbo',
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -73,6 +73,18 @@ export const mockedBaseParties: Array<BaseParty> = [
   {
     partyId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
     description: 'Test PT 12',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '28',
+    description: 'Comune di Cagliari',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '29',
+    description: 'Comune di Carbonia',
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -631,7 +643,7 @@ export const mockedParties: Array<Party> = [
     userRole: 'ADMIN',
   },
   {
-    description: 'Test PSP 10',
+    description: 'Comune di Viterbo',
     urlLogo: 'image',
     partyId: '10',
     digitalAddress: 'comune.bari@pec.it',
@@ -671,7 +683,7 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
-      // Use case with only prod-interop
+      // Use case with only prod-interop with authorized false
       {
         productId: 'prod-interop',
         authorized: true,
@@ -748,6 +760,102 @@ export const mockedParties: Array<Party> = [
     ],
     status: 'ACTIVE',
     userRole: 'ADMIN',
+  },
+  {
+    description: 'Comune di Cagliari',
+    urlLogo: 'image',
+    partyId: '28',
+    digitalAddress: 'comune.cagliari@pec.it',
+    fiscalCode: 'fiscalCodeCagliari',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Via Luigi Crespellani',
+    zipCode: '20121',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'externalId28',
+    originId: 'originId28',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'CGBBS23C',
+    geographicTaxonomies: [
+      // Use case with one taxonomy
+      { code: '077091', desc: 'Cagliari - Comune' },
+    ],
+    vatNumber: '87485839212',
+    products: [
+      // Use case with prod-interop with authorized false and prod-interop-coll with authorized true
+      {
+        productId: 'prod-interop',
+        authorized: false,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-interop-coll',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+    ],
+    status: undefined,
+    userRole: undefined,
+  },
+  {
+    description: 'Comune di Carbonia',
+    urlLogo: 'image',
+    partyId: '29',
+    digitalAddress: 'comune.carbonia@pec.it',
+    fiscalCode: 'fiscalCodeCarbonia',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Via Luigi Crespellani',
+    zipCode: '20334',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'externalId29',
+    originId: 'originId29',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'CEDBS23C',
+    geographicTaxonomies: [
+      // Use case with one taxonomy
+      { code: '938465', desc: 'Cagliari - Comune' },
+    ],
+    vatNumber: '87659012374',
+    products: [
+      // Use case with prod-interop with authorized true and prod-interop-coll with authorized false
+      {
+        productId: 'prod-interop',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-interop-coll',
+        authorized: false,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+    ],
+    status: undefined,
+    userRole: undefined,
   },
   // Test PT with multiple products delegated
   {
