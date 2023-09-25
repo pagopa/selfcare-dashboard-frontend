@@ -42,9 +42,9 @@ export default {
         title: 'Gestione Ente',
         overview: {
           title: 'Panoramica',
-          subMenu: {
-            title: 'Deleghe',
-          },
+        },
+        delegations: {
+          title: 'Deleghe',
         },
         referents: {
           title: 'Utenti',
@@ -180,6 +180,28 @@ export default {
         title: 'Prodotti',
         labelDelegates: 'Delegato',
         noDelegatesLabel: 'Nessun delegato per questo prodotto. <1>Aggiungi delega</1>',
+      },
+    },
+    ptPage: {
+      title: 'I tuoi enti',
+      subTitle:
+        'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
+      tableEmptyLabel: 'Non hai ancora nessuna delega dagli enti',
+      headerPtTableLabels: {
+        party: 'Ente',
+        product: 'Prodotto',
+      },
+      bodyPtTable: {
+        showMoreButtonLabel: 'Vedi tutti',
+      },
+      filterTechPartner: {
+        textfieldLabel: 'Cerca per nome',
+        productSelectLabel: 'Prodotto',
+        buttonLabel: 'Filtra',
+        allProductsLabel: 'Tutti  i prodotti',
+        resetFilter: 'Annulla filtri',
+        emptyFilterResult:
+          'I filtri che hai applicato non hanno dato nessun risultato. <1>Rimuovi filtri</1>',
       },
     },
     genericError: {

@@ -47,7 +47,11 @@ export default function PartyDetail({ party }: Props) {
 
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
-    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && party.geographicTaxonomies.length === 0) {
+    if (
+      ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
+      party.geographicTaxonomies.length === 0 &&
+      party.institutionType !== 'PT'
+    ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
     setOptionsSelected(
@@ -71,7 +75,9 @@ export default function PartyDetail({ party }: Props) {
   const institutionTypeTranscode = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
   const showTooltipAfter = 49;
-  const isTaxCodeEquals2Piva = party.vatNumber === party.fiscalCode;
+  const lastPartyVatNumber = party.products[party.products.length - 1]?.billing?.vatNumber;
+  const isTaxCodeEquals2Piva = party.fiscalCode === lastPartyVatNumber;
+
   const isInstitutionTypePA = party.institutionType === 'PA';
 
   const handleAddNewTaxonomies = () => {
@@ -185,13 +191,15 @@ export default function PartyDetail({ party }: Props) {
             </>
           )}
           {/* geographicTaxonomy */}
-          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && (
+          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && party.institutionType !== 'PT' && (
             <>
-              <Grid item xs={2}>
-                <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.geographicTaxonomies.label')}
-                </Typography>
-              </Grid>
+              {
+                <Grid item xs={2}>
+                  <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
+                    {t('overview.partyDetail.geographicTaxonomies.label')}
+                  </Typography>
+                </Grid>
+              }
               <Grid item xs={4}>
                 <Tooltip
                   title={
@@ -405,8 +413,8 @@ export default function PartyDetail({ party }: Props) {
                 <Grid item xs={4}>
                   <Tooltip
                     title={
-                      party.vatNumber && party.vatNumber.length >= showTooltipAfter
-                        ? party.vatNumber
+                      lastPartyVatNumber && lastPartyVatNumber.length >= showTooltipAfter
+                        ? lastPartyVatNumber
                         : ''
                     }
                     placement="top"
@@ -416,7 +424,7 @@ export default function PartyDetail({ party }: Props) {
                       sx={{ ...infoStyles, maxWidth: '100% !important' }}
                       className="ShowDots"
                     >
-                      {party?.vatNumber}
+                      {lastPartyVatNumber}
                     </Typography>
                   </Tooltip>
                 </Grid>

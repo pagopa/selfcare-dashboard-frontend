@@ -1,10 +1,10 @@
 import { Grid, Box, Typography } from '@mui/material';
 import { useMemo } from 'react';
-
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ENV } from '../../utils/env';
 import DashboardDelegationsBanner from '../dashboardDelegations/DashboardDelegationsBanner';
+import { OnboardedProduct } from '../../api/generated/b4f-dashboard/OnboardedProduct';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
@@ -20,19 +20,32 @@ type Props = {
 const DashboardOverview = ({ party, products }: Props) => {
   const isAdmin = party.userRole === 'ADMIN';
 
-  const activeProducts: Array<Product> =
-    useMemo(
-      () =>
-        products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized === true),
-      [products]
-    ) ?? [];
+  const manageablePartyProducts: Array<OnboardedProduct> = useMemo(
+    () =>
+      party.products?.filter((us) =>
+        products.some(
+          (p) =>
+            us.productId === p.id &&
+            us.productOnBoardingStatus === 'ACTIVE' &&
+            us.authorized === true &&
+            us.userRole === 'ADMIN' &&
+            p.delegable
+        )
+      ),
+    [party.products]
+  ) ?? [party.products];
 
-  const delegableProducts =
-    ENV.DELEGATIONS.ENABLE &&
-    activeProducts.find((product) => product.delegable === true) &&
-    isAdmin;
+  const delegableProduct = manageablePartyProducts.find(
+    (p) => p.productId === 'prod-io' || p.productId === 'prod-pagopa'
+  );
 
-  const paWithDelegableProducts = party.institutionType === 'PA' && delegableProducts;
+  const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin && delegableProduct;
+
+  const hasPartyDelegableProducts = party.institutionType !== 'PT' && isDelegable;
+
+  const showInfoBanner = party.institutionType === 'PA';
+
+  const isPt = party.institutionType === 'PT';
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
@@ -47,7 +60,7 @@ const DashboardOverview = ({ party, products }: Props) => {
           <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
         </Grid>
       </Grid>
-      {paWithDelegableProducts && (
+      {showInfoBanner && (
         <Grid item xs={12} my={2}>
           <DashboardInfoSection />
         </Grid>
@@ -55,16 +68,22 @@ const DashboardOverview = ({ party, products }: Props) => {
       <Grid item xs={12}>
         <PartyCard party={party} />
       </Grid>
-      {paWithDelegableProducts && (
+      {hasPartyDelegableProducts && (
         <Grid item xs={12} mt={2}>
           <DashboardDelegationsBanner party={party} />
         </Grid>
       )}
       <Grid item xs={12} mb={2} mt={5}>
         <ActiveProductsSection products={products} party={party} />
-        {products &&
+        {isAdmin &&
+          !isPt &&
+          products &&
           products.findIndex(
-            (product) => product.status === 'ACTIVE' && product.productOnBoardingStatus !== 'ACTIVE'
+            (product) =>
+              product.status === 'ACTIVE' &&
+              party.products.map(
+                (us) => us.productId === product.id && us.productOnBoardingStatus !== 'ACTIVE'
+              )
           ) > -1 && <NotActiveProductsSection party={party} products={products} />}
       </Grid>
     </Box>

@@ -19,7 +19,8 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/rou
 import { ProductAvatar } from '@pagopa/mui-italia';
 import { ENV } from '../../../../../utils/env';
 import { Party } from '../../../../../model/Party';
-import { Product, SubProduct } from '../../../../../model/Product';
+import { Product } from '../../../../../model/Product';
+import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 
 type Props = {
   cardTitle: string;
@@ -45,9 +46,15 @@ export default function ActiveProductCard({
     partyId: party.partyId ?? '',
   }).concat(`#${product.id}`);
   const theme = useTheme();
-  const activeSubProducts: Array<SubProduct> = useMemo(
-    () => product.subProducts?.filter((p) => p.productOnBoardingStatus === 'ACTIVE') ?? [],
-    [product.subProducts]
+
+  const activeSubProducts: Array<SubProductResource> = useMemo(
+    () =>
+      product.subProducts?.filter((p) =>
+        party.products.some(
+          (us) => us.productId === p.id && us.productOnBoardingStatus === 'ACTIVE'
+        )
+      ) ?? [],
+    [party]
   );
 
   return (
@@ -98,7 +105,6 @@ export default function ActiveProductCard({
                     arrow={true}
                   >
                     <Typography
-                      // variant="h6"
                       sx={{
                         fontSize: '22px',
                         fontWeight: 'medium',

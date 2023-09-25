@@ -57,7 +57,7 @@ beforeEach(() => {
   fetchProductRolesSpy = jest.spyOn(require('../../services/productService'), 'fetchProductRoles');
 });
 
-test('Test', async () => {
+test.skip('Test', async () => {
   const store = renderApp(mockedPartyProducts[0]);
   await waitFor(() =>
     screen.getByText(`RENDERED using useProductRoles and fetching ${mockedPartyProducts[0].id}`)

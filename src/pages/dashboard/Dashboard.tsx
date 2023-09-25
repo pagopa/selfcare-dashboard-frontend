@@ -19,6 +19,7 @@ import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRouting
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
+import DashboardTechnologyPartnerPage from '../dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -82,6 +83,7 @@ export const buildRoutes = (
 
 const Dashboard = () => {
   const history = useHistory();
+  const parties = useAppSelector(partiesSelectors.selectPartiesList);
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const store = useStore();
@@ -91,27 +93,42 @@ const Dashboard = () => {
   const activeProducts: Array<Product> =
     useMemo(
       () =>
-        products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE' && p.authorized === true),
-      [products]
+        products?.filter((p) =>
+          party?.products.some(
+            (ap) =>
+              ap.productId === p.id &&
+              ap.productOnBoardingStatus === 'ACTIVE' &&
+              p.status !== 'INACTIVE'
+          )
+        ),
+      [products, party]
     ) ?? [];
+
+  const delegableProducts: Array<Product> = activeProducts.filter((p) =>
+    party?.products.some(
+      (partyProduct) =>
+        partyProduct.authorized &&
+        (partyProduct.productId === 'prod-io' || partyProduct.productId === 'prod-pagopa') &&
+        partyProduct.userRole === 'ADMIN' &&
+        p.delegable
+    )
+  );
 
   const productsMap: ProductsMap =
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
-  const canSeeSection = party?.userRole === 'ADMIN';
+  const canSeeSection = parties?.find((p) => p.partyId === party?.partyId)?.userRole === 'ADMIN';
+  const isPt = party?.institutionType === 'PT';
+  const isPtSectionVisible = isPt && canSeeSection;
 
-  const delegableProducts = activeProducts.filter((product) => product.delegable === true);
-
-  const isDelegateSectionVisible =
-    ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && canSeeSection;
+  const isDelegateSectionVisible = ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && !isPt;
 
   return party && products ? (
     <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
       <Grid component="nav" item xs={2}>
         <Box>
           <DashboardSideMenu
-            products={products}
             party={party}
             isDelegateSectionVisible={isDelegateSectionVisible}
             canSeeSection={canSeeSection}
@@ -173,9 +190,17 @@ const Dashboard = () => {
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
             <DashboardDelegationsPage
-              isDelegateSectionVisible={isDelegateSectionVisible}
+              isDelegateSectionVisible={isDelegateSectionVisible && !isPtSectionVisible}
               party={party}
               delegableProducts={delegableProducts}
+            />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
+            <DashboardTechnologyPartnerPage
+              isPtSectionVisible={isPtSectionVisible}
+              party={party}
+              ptProducts={activeProducts}
+              isDelegateSectionVisible={isDelegateSectionVisible}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}

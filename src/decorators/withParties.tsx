@@ -1,9 +1,9 @@
 import withRetrievedValue from '@pagopa/selfcare-common-frontend/decorators/withRetrievedValue';
 import { useParties } from '../hooks/useParties';
-import { Party } from '../model/Party';
+import { BaseParty } from '../model/Party';
 
 export type WithPartiesProps = {
-  parties: Array<Party>;
+  parties: Array<BaseParty>;
 };
 
 export default function withParties<T extends WithPartiesProps>(

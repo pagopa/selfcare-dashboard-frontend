@@ -44,7 +44,7 @@ export const useTokenExchange = () => {
               {
                 party_id: selectedParty.partyId,
                 product_id: product.id,
-                product_role: product.userRole,
+                product_role: selectedParty.userRole,
                 target: selectedEnvironment,
               },
               () => window.location.assign(url)
@@ -68,7 +68,7 @@ export const useTokenExchange = () => {
               {
                 party_id: selectedParty.partyId,
                 product_id: product.id,
-                product_role: product.userRole,
+                // product_role: product.userRole, TODO
                 target: 'prod',
               },
               () => window.location.assign(url)

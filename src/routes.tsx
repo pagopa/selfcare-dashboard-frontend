@@ -5,6 +5,8 @@ import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
 import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
+import AddDelegationPage from './pages/dashboardDelegationsAdd/AddDelegationPage';
+import DashboardTechnologyPartnerPage from './pages/dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -56,10 +58,15 @@ export const DASHBOARD_ROUTES = {
     exact: true,
     component: DashboardDelegationsPage,
   },
+  TECHPARTNER: {
+    path: `${BASE_ROUTE}/:partyId/ptPage`,
+    exact: true,
+    component: DashboardTechnologyPartnerPage,
+  },
   ADD_DELEGATE: {
     path: `${BASE_ROUTE}/:partyId/delegations/add`,
     exact: true,
-    component: DashboardDelegationsPage,
+    component: AddDelegationPage,
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:partyId`),
 };
