@@ -12,7 +12,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
 import { useHistory } from 'react-router';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
@@ -41,6 +41,7 @@ export default function ActiveProductCard({
 }: Props) {
   const onExit = useUnloadEventOnExit();
   const history = useHistory();
+  const { t } = useTranslation();
   const usersRoute = ENV.ROUTES.USERS;
   const usersPath = resolvePathVariables(usersRoute, {
     partyId: party.partyId ?? '',
@@ -85,13 +86,12 @@ export default function ActiveProductCard({
                 {activeSubProducts.map((p) => (
                   <Chip
                     key={p.id}
-                    label={p.title}
+                    label={t('overview.activeProducts.premiumProduct')}
                     size="small"
                     sx={{
                       display: 'flex',
                       mb: 1,
                       borderRadius: theme.shape,
-
                       width: '80px',
                       backgroundColor: 'warning.main',
                       color: 'colorTextPrimary',

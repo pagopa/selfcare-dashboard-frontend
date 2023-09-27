@@ -64,6 +64,7 @@ export default {
     activeProducts: {
       activationOf: 'Attivo dal ',
       active: 'Attivo',
+      premiumProduct: 'Premium',
       manageButton: 'Gestisci',
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',

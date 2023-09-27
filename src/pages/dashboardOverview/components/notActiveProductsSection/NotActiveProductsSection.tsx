@@ -23,19 +23,23 @@ export default function NotActiveProductsSection({ party, products }: Props) {
         variantTitle="h5"
       />
       <Grid container spacing={3}>
-        {products &&
-          products
-            .filter(
-              (p) =>
-                p.status === 'ACTIVE' &&
-                (party.products.some(
-                  (us) => us.productId === p.id && us.productOnBoardingStatus !== 'ACTIVE'
-                ) ||
-                  !party.products.some((us) => us.productId === p.id))
-            )
-            .map((product) => (
-              <NotActiveProductCardContainer key={product.id} party={party} product={product} />
-            ))}
+        {products
+          .filter(
+            (p) =>
+              p.status === 'ACTIVE' &&
+              (party.products.some(
+                (us) => us.productId === p.id && us.productOnBoardingStatus !== 'ACTIVE'
+              ) ||
+                !party.products.some((us) => us.productId === p.id) ||
+                (p.subProducts &&
+                  party.products.find((pp) => pp.productId === p.id && pp.authorized) &&
+                  p.subProducts.some(
+                    (subProduct) => !party.products.some((us) => us.productId === subProduct.id)
+                  )))
+          )
+          .map((product) => (
+            <NotActiveProductCardContainer key={product.id} party={party} product={product} />
+          ))}
       </Grid>
     </React.Fragment>
   );
