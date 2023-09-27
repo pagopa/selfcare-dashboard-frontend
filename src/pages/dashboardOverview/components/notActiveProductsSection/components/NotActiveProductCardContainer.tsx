@@ -24,37 +24,52 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
   const { t } = useTranslation();
   const addNotify = useUserNotify();
 
-  const prodActiveWithSubProdInactive = product.subProducts?.find(
-    (sp) =>
-      sp.status === 'ACTIVE' &&
-      product.status === 'ACTIVE' &&
-      party.products.some(
-        (us) =>
-          us.productOnBoardingStatus !== 'ACTIVE' &&
-          us.authorized === true &&
-          sp.id === us.productId
-      )
+  const existingSubProductNotOnboarded = product.subProducts?.find((sp) =>
+    party.products.map(
+      (us) =>
+        sp.id !== us.productId && us.productOnBoardingStatus !== 'ACTIVE' && sp.status === 'ACTIVE'
+    )
   );
+
+  const baseProductWithExistingSubProductNotOnboarded =
+    existingSubProductNotOnboarded &&
+    product.subProducts &&
+    party.products.find((pp) => pp.productId === product.id);
 
   return (
     <>
       <Grid item xs={6} lg={4} xl={3} key={product.id}>
         <NotActiveProductCard
           image={
-            prodActiveWithSubProdInactive
-              ? prodActiveWithSubProdInactive.imageUrl
+            baseProductWithExistingSubProductNotOnboarded
+              ? existingSubProductNotOnboarded.imageUrl
               : product.imageUrl
           }
           urlLogo={
-            prodActiveWithSubProdInactive
-              ? (prodActiveWithSubProdInactive.logo as string)
+            baseProductWithExistingSubProductNotOnboarded
+              ? (existingSubProductNotOnboarded.logo as string)
               : product.logo
           }
-          title={product.title}
-          description={product.description}
+          title={
+            baseProductWithExistingSubProductNotOnboarded && existingSubProductNotOnboarded.title
+              ? existingSubProductNotOnboarded.title
+              : product.title
+          }
+          description={
+            baseProductWithExistingSubProductNotOnboarded &&
+            existingSubProductNotOnboarded.description
+              ? existingSubProductNotOnboarded.description
+              : product.description
+          }
           disableBtn={false}
           btnAction={() => {
-            if (prodActiveWithSubProdInactive) {
+            const isOnboardingNotCompletedYet = !!party.products.find(
+              (pp) =>
+                pp.productId === product.id &&
+                (pp.productOnBoardingStatus === 'TOBEVALIDATED' ||
+                  pp.productOnBoardingStatus === 'PENDING')
+            );
+            if (isOnboardingNotCompletedYet) {
               addNotify({
                 component: 'SessionModal',
                 id: 'Notify_Example',
