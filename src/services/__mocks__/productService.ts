@@ -17,8 +17,15 @@ export const mockedPartyProducts: Array<Product> = [
     subProducts: [
       {
         id: 'prod-io-premium',
-        title: 'Premium',
+        title: 'App IO Premium',
         status: StatusEnum.ACTIVE,
+        delegable: false,
+        imageUrl:
+          'https://selcucheckoutsa.z6.web.core.windows.net/resources/products/prod-io-premium/depict-image.jpeg',
+        logo: 'https://selcucheckoutsa.z6.web.core.windows.net/resources/products/prod-io-premium/logo.svg',
+        logoBgColor: '#0073E6',
+        description: "Accedi alle funzionalità avanzate per i messaggi dell'app IO",
+        urlPublic: 'https://io.italia.it/',
       },
     ],
     logoBgColor: 'primary.main',
