@@ -32,10 +32,8 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
 
     window.location.assign(
-      `${ENV.URL_FE.ONBOARDING}/${
-        baseProductWithExistingSubProductNotOnboarded
-          ? existingSubProductNotOnboarded.id
-          : product.id
+      `${ENV.URL_FE.ONBOARDING}/${product.id}${
+        baseProductWithExistingSubProductNotOnboarded ? `/${existingSubProductNotOnboarded.id}` : ''
       }?partyExternalId=${party.externalId}${subUnitType}${subUnitCode}`
     );
   };
