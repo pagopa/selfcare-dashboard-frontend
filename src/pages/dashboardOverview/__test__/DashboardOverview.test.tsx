@@ -53,7 +53,7 @@ test('should render component DashboardOverview with populated props and product
 
   fireEvent.click(await screen.findByText('Vai'));
 
-  expect(history.location.pathname).toBe(`/dashboard/9/delegations`);
+  expect(history.location.pathname).toBe(`/dashboard/13/delegations`);
 
   // info section is not visible
   expect(screen.queryByTestId('InfoOutlinedIcon')).not.toBeInTheDocument();
