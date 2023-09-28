@@ -77,6 +77,12 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
+    partyId: '133',
+    description: 'Prova SA',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
     partyId: '28',
     description: 'Comune di Cagliari',
     status: 'ACTIVE',
@@ -615,7 +621,7 @@ export const mockedParties: Array<Party> = [
   {
     description: 'Test GSP 9',
     urlLogo: 'image',
-    partyId: '9',
+    partyId: '13',
     digitalAddress: 'comune.bari@pec.it',
     fiscalCode: '111111111111',
     category: 'Comuni e loro Consorzi e Associazioni',
@@ -946,6 +952,49 @@ export const mockedParties: Array<Party> = [
           publicServices: false,
         },
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+    ],
+  },
+  // Test SA with multiple products delegated
+  {
+    partyId: '133',
+    externalId: '94287592722',
+    originId: 'SA_94287592722',
+    origin: 'ANAC',
+    institutionType: 'SA',
+    typology: 'Gestore privato di piattaforma e-procurement',
+    description: 'Prova SA',
+    fiscalCode: '94287592722',
+    digitalAddress: 'pectest@pec.test.it',
+    registeredOffice: 'Milano',
+    zipCode: '48294',
+    geographicTaxonomies: [
+      {
+        code: '058091',
+        desc: 'Roma - Comune',
+      },
+    ],
+    products: [
+      {
+        productId: 'prod-io',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '94287592722',
+          recipientCode: 'c_b988',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-io-premium',
+        authorized: false,
+        billing: {
+          vatNumber: '94287592722',
+          recipientCode: 'c_b988',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.TOBEVALIDATED,
       },
     ],
   },
