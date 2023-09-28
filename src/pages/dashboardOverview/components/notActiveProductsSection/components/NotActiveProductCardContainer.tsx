@@ -22,21 +22,23 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     )
   );
 
+  const baseProductWithExistingSubProductNotOnboarded =
+    existingSubProductNotOnboarded &&
+    product.subProducts &&
+    party.products.find((pp) => pp.productId === product.id);
+
   const goToOnboarding = (product: Product, party: Party): void => {
     const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
 
     window.location.assign(
       `${ENV.URL_FE.ONBOARDING}/${
-        existingSubProductNotOnboarded ? existingSubProductNotOnboarded.id : product.id
+        baseProductWithExistingSubProductNotOnboarded
+          ? existingSubProductNotOnboarded.id
+          : product.id
       }?partyExternalId=${party.externalId}${subUnitType}${subUnitCode}`
     );
   };
-
-  const baseProductWithExistingSubProductNotOnboarded =
-    existingSubProductNotOnboarded &&
-    product.subProducts &&
-    party.products.find((pp) => pp.productId === product.id);
 
   return (
     <>
