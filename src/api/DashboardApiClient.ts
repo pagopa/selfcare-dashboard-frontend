@@ -62,7 +62,7 @@ export const DashboardApi = {
   },
 
   getProducts: async (): Promise<Array<ProductsResource>> => {
-    const result = await apiClient.getProductstreeUsingGET({});
+    const result = await apiClient.getProductsTreeUsingGET({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
