@@ -153,6 +153,7 @@ export default {
         PT: 'Partner tecnologico',
         SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
+        SA: 'Gestore privato di piattaforma e-procurement',
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
