@@ -249,9 +249,9 @@
     "/institutions/products": {
       "get": {
         "tags": ["institutions"],
-        "summary": "getProductstree",
+        "summary": "getProductsTree",
         "description": "Service to get all the products related to a specific institution",
-        "operationId": "getProductstreeUsingGET",
+        "operationId": "getProductsTreeUsingGET",
         "responses": {
           "200": {
             "description": "OK",
@@ -1850,7 +1850,7 @@
             "style": "simple",
             "schema": {
               "type": "string",
-              "enum": ["GSP", "PA", "PG", "PSP", "PT", "SCP"]
+              "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP"]
             }
           }
         ],
@@ -3781,6 +3781,9 @@
           "address": {
             "type": "string"
           },
+          "aooParentCode": {
+            "type": "string"
+          },
           "attributes": {
             "type": "array",
             "items": {
@@ -3816,7 +3819,7 @@
           },
           "institutionType": {
             "type": "string",
-            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SCP"]
+            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP"]
           },
           "onboarding": {
             "type": "array",
@@ -3832,6 +3835,15 @@
           },
           "paymentServiceProvider": {
             "$ref": "#/components/schemas/PaymentServiceProvider"
+          },
+          "rootParent": {
+            "$ref": "#/components/schemas/RootParentResponse"
+          },
+          "subunitCode": {
+            "type": "string"
+          },
+          "subunitType": {
+            "type": "string"
           },
           "supportContact": {
             "$ref": "#/components/schemas/SupportContact"
@@ -3904,7 +3916,7 @@
           "institutionType": {
             "type": "string",
             "description": "Institution's type",
-            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SCP"]
+            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP"]
           },
           "mailAddress": {
             "type": "string",
@@ -3970,7 +3982,7 @@
           "institutionType": {
             "type": "string",
             "description": "Institution's type",
-            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SCP"]
+            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP"]
           },
           "mailAddress": {
             "type": "string",
@@ -4003,6 +4015,10 @@
             "type": "string",
             "description": "Billing recipient code"
           },
+          "status": {
+            "type": "string",
+            "description": "Institution's status"
+          },
           "subunitCode": {
             "type": "string",
             "description": "AOO o UO unique code"
@@ -4014,6 +4030,10 @@
           "supportContact": {
             "description": "'Institution's assistance contacts'",
             "$ref": "#/components/schemas/SupportContactResource"
+          },
+          "userRole": {
+            "type": "string",
+            "description": "Logged user's role"
           },
           "vatNumber": {
             "type": "string",
@@ -4457,6 +4477,11 @@
             "description": "Date the products was activated",
             "format": "date-time"
           },
+          "authorized": {
+            "type": "boolean",
+            "description": "flag indicating whether the logged user has the authorization to manage the product",
+            "example": false
+          },
           "backOfficeEnvironmentConfigurations": {
             "type": "array",
             "description": "Environment-specific configurations for back-office redirection with Token Exchange",
@@ -4496,6 +4521,11 @@
             "type": "string",
             "description": "Product logo's background color"
           },
+          "productOnBoardingStatus": {
+            "type": "string",
+            "description": "Product's onBoarding status",
+            "enum": ["ACTIVE", "INACTIVE", "PENDING"]
+          },
           "status": {
             "type": "string",
             "description": "Product's status",
@@ -4512,6 +4542,10 @@
           "urlPublic": {
             "type": "string",
             "description": "URL that redirects to the public information webpage of the product"
+          },
+          "userRole": {
+            "type": "string",
+            "description": "Logged user's role"
           }
         }
       },
@@ -4546,6 +4580,18 @@
             "type": "boolean",
             "description": "PSP's Vat Number group",
             "example": false
+          }
+        }
+      },
+      "RootParentResponse": {
+        "title": "RootParentResponse",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
           }
         }
       },
@@ -4588,6 +4634,11 @@
           "logoBgColor": {
             "type": "string",
             "description": "Product logo's background color"
+          },
+          "productOnBoardingStatus": {
+            "type": "string",
+            "description": "Product's onBoarding status",
+            "enum": ["ACTIVE", "INACTIVE", "PENDING"]
           },
           "status": {
             "type": "string",
