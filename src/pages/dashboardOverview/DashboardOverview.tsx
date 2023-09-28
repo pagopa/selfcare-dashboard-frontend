@@ -45,7 +45,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const showInfoBanner = party.institutionType === 'PA';
 
-  const isPtOrSa = party.institutionType === 'PT' || 'SA';
+  const isPtOrSa = party.institutionType === 'PT' || party.institutionType === 'SA';
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
