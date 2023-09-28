@@ -11,15 +11,6 @@ type Props = {
   product: Product;
 };
 
-const goToOnboarding = (product: Product, party: Party): void => {
-  const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
-  const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
-
-  window.location.assign(
-    `${ENV.URL_FE.ONBOARDING}/${product.id}?partyExternalId=${party.externalId}${subUnitType}${subUnitCode}`
-  );
-};
-
 export default function NotActiveProductCardContainer({ party, product }: Props) {
   const { t } = useTranslation();
   const addNotify = useUserNotify();
@@ -35,6 +26,19 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     existingSubProductNotOnboarded &&
     product.subProducts &&
     party.products.find((pp) => pp.productId === product.id);
+
+  const goToOnboarding = (product: Product, party: Party): void => {
+    const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
+    const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
+
+    window.location.assign(
+      `${ENV.URL_FE.ONBOARDING}/${
+        baseProductWithExistingSubProductNotOnboarded
+          ? existingSubProductNotOnboarded.id
+          : product.id
+      }?partyExternalId=${party.externalId}${subUnitType}${subUnitCode}`
+    );
+  };
 
   return (
     <>
