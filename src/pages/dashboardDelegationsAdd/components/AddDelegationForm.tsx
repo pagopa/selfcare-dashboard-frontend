@@ -68,7 +68,7 @@ export default function AddDelegationForm({
 
   useEffect(() => {
     if (productSelected) {
-      handleProductBrokers(productSelected.id, 'PT' as InstitutionTypeEnum);
+      handleProductBrokers(productSelected.id, party.institutionType as InstitutionTypeEnum);
     }
   }, [productSelected]);
 
