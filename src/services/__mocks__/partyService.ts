@@ -969,14 +969,10 @@ export const mockedParties: Array<Party> = [
     registeredOffice: 'Milano',
     zipCode: '48294',
     geographicTaxonomies: [
-      {
-        code: '058091',
-        desc: 'Roma - Comune',
-      },
     ],
     products: [
       {
-        productId: 'prod-io',
+        productId: 'prod-interop',
         userRole: 'ADMIN',
         authorized: true,
         billing: {
@@ -985,16 +981,6 @@ export const mockedParties: Array<Party> = [
           publicServices: false,
         },
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-      },
-      {
-        productId: 'prod-io-premium',
-        authorized: false,
-        billing: {
-          vatNumber: '94287592722',
-          recipientCode: 'c_b988',
-          publicServices: false,
-        },
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.TOBEVALIDATED,
       },
     ],
   },
