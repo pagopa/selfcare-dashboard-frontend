@@ -96,6 +96,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               }
             : false
         }
+        enableAssistanceButton={ENV.ENV !== 'UAT'}
         assistanceEmail={ENV.ASSISTANCE.EMAIL}
         enableLogin={true}
         onSelectedProduct={(p) => {
