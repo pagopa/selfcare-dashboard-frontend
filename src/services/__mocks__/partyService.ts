@@ -233,8 +233,19 @@ export const mockedParties: Array<Party> = [
         },
       },
       {
+        productId: 'prod-pagopa',
+        authorized: false,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '11111111111',
+          recipientCode: 'CH435V',
+          publicServices: true,
+        },
+      },
+      {
         productId: 'prod-io-premium',
-        authorized: true,
+        authorized: false,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
@@ -246,6 +257,17 @@ export const mockedParties: Array<Party> = [
       // Use case with prod-interop and prod-interop-coll
       {
         productId: 'prod-interop',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
