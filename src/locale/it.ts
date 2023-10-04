@@ -64,6 +64,7 @@ export default {
     activeProducts: {
       activationOf: 'Attivo dal ',
       active: 'Attivo',
+      premiumProduct: 'Premium',
       manageButton: 'Gestisci',
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
@@ -152,6 +153,7 @@ export default {
         PT: 'Partner tecnologico',
         SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
+        SA: 'Gestore privato di piattaforma e-procurement',
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',

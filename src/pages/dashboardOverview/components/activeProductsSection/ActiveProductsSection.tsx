@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-identical-functions */
 import React from 'react';
 import { Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
@@ -24,13 +23,14 @@ export default function ActiveProductsSection({ party, products }: Props) {
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
       <Grid container spacing={3}>
         {party.products
-          .filter((us) =>
-            us.productOnBoardingStatus === 'ACTIVE' &&
-            (prodInterop?.authorized ||
+          .filter(
+            (us) =>
+              us.productOnBoardingStatus === 'ACTIVE' &&
+              (prodInterop?.authorized ||
               prodInteropColl?.authorized === false ||
-              (prodInterop?.authorized === false && !prodInteropColl))
-              ? us.productId !== 'prod-interop-coll'
-              : us.productId !== 'prod-interop'
+              (prodInterop?.authorized === false && !prodInteropColl)
+                ? us.productId !== 'prod-interop-coll'
+                : us.productId !== 'prod-interop')
           )
           .sort((a, b) =>
             a.authorized === false && b.authorized !== false

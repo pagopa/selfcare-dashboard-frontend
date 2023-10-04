@@ -204,8 +204,8 @@
           "institutions"
         ],
         "description": "Service to get all the products related to a specific institution",
-        "operationId": "getProductstreeUsingGET",
-        "summary": "getProductstree"
+        "operationId": "getProductsTreeUsingGET",
+        "summary": "getProductsTree"
       }
     },
     "/institutions/{institutionId}": {
@@ -1431,6 +1431,7 @@
               "PG",
               "PSP",
               "PT",
+              "SA",
               "SCP"
             ],
             "in": "path",
@@ -3126,6 +3127,9 @@
         "address": {
           "type": "string"
         },
+        "aooParentCode": {
+          "type": "string"
+        },
         "attributes": {
           "items": {
             "$ref": "#/definitions/Attribute"
@@ -3166,6 +3170,7 @@
             "PG",
             "PSP",
             "PT",
+            "SA",
             "SCP"
           ],
           "type": "string"
@@ -3184,6 +3189,15 @@
         },
         "paymentServiceProvider": {
           "$ref": "#/definitions/PaymentServiceProvider"
+        },
+        "rootParent": {
+          "$ref": "#/definitions/RootParentResponse"
+        },
+        "subunitCode": {
+          "type": "string"
+        },
+        "subunitType": {
+          "type": "string"
         },
         "supportContact": {
           "$ref": "#/definitions/SupportContact"
@@ -3250,6 +3264,7 @@
             "PG",
             "PSP",
             "PT",
+            "SA",
             "SCP"
           ],
           "type": "string"
@@ -3334,6 +3349,7 @@
             "PG",
             "PSP",
             "PT",
+            "SA",
             "SCP"
           ],
           "type": "string"
@@ -3369,6 +3385,10 @@
           "description": "Billing recipient code",
           "type": "string"
         },
+        "status": {
+          "description": "Institution's status",
+          "type": "string"
+        },
         "subunitCode": {
           "description": "AOO o UO unique code",
           "type": "string"
@@ -3380,6 +3400,10 @@
         "supportContact": {
           "$ref": "#/definitions/SupportContactResource",
           "description": "'Institution's assistance contacts'"
+        },
+        "userRole": {
+          "description": "Logged user's role",
+          "type": "string"
         },
         "vatNumber": {
           "description": "Institution's VAT number",
@@ -3884,6 +3908,11 @@
           "format": "date-time",
           "type": "string"
         },
+        "authorized": {
+          "description": "flag indicating whether the logged user has the authorization to manage the product",
+          "example": false,
+          "type": "boolean"
+        },
         "backOfficeEnvironmentConfigurations": {
           "description": "Environment-specific configurations for back-office redirection with Token Exchange",
           "items": {
@@ -3923,6 +3952,15 @@
           "description": "Product logo's background color",
           "type": "string"
         },
+        "productOnBoardingStatus": {
+          "description": "Product's onBoarding status",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE",
+            "PENDING"
+          ],
+          "type": "string"
+        },
         "status": {
           "description": "Product's status",
           "enum": [
@@ -3943,6 +3981,10 @@
         },
         "urlPublic": {
           "description": "URL that redirects to the public information webpage of the product",
+          "type": "string"
+        },
+        "userRole": {
+          "description": "Logged user's role",
           "type": "string"
         }
       },
@@ -3983,6 +4025,18 @@
       "title": "PspData",
       "type": "object"
     },
+    "RootParentResponse": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "title": "RootParentResponse",
+      "type": "object"
+    },
     "SearchUserDto": {
       "properties": {
         "fiscalCode": {
@@ -4021,6 +4075,15 @@
         },
         "logoBgColor": {
           "description": "Product logo's background color",
+          "type": "string"
+        },
+        "productOnBoardingStatus": {
+          "description": "Product's onBoarding status",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE",
+            "PENDING"
+          ],
           "type": "string"
         },
         "status": {
