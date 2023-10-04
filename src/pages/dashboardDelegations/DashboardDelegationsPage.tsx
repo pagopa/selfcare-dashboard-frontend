@@ -90,6 +90,13 @@ export default function DashboardDelegationsPage({ party, delegableProducts }: P
     },
   ];
 
+  const filteredDelegableProducts = delegableProducts.filter((delegableProduct) =>
+    party?.products.some(
+      (partyProduct) =>
+        partyProduct.productId === delegableProduct.id && partyProduct.authorized === true
+    )
+  );
+
   return (
     <>
       {!loading ? (
@@ -133,7 +140,7 @@ export default function DashboardDelegationsPage({ party, delegableProducts }: P
                   </Box>
                 </Box>
               </Grid>
-              {delegableProducts.map((product) => {
+              {filteredDelegableProducts.map((product) => {
                 const delegatesByProduct = delegationsList.filter(
                   (dl) => dl.productId === product.id
                 );
