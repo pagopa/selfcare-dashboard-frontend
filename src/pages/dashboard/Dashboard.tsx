@@ -96,7 +96,6 @@ const Dashboard = () => {
         products?.filter((p) =>
           party?.products.some(
             (ap) =>
-              ap.authorized &&
               ap.productId === p.id &&
               ap.productOnBoardingStatus === 'ACTIVE' &&
               p.status !== 'INACTIVE'
@@ -105,12 +104,10 @@ const Dashboard = () => {
       [products, party]
     ) ?? [];
 
-  const isAuthorized = party?.products.some((ap) => ap.authorized);
-
   const delegableProducts: Array<Product> = activeProducts.filter((p) =>
     party?.products.some(
       (partyProduct) =>
-        isAuthorized &&
+        partyProduct.authorized &&
         (partyProduct.productId === 'prod-io' || partyProduct.productId === 'prod-pagopa') &&
         partyProduct.userRole === 'ADMIN' &&
         p.delegable
