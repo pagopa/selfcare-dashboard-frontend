@@ -32,13 +32,13 @@ import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResou
 import { LOADING_TASK_DELEGATION_FORM } from '../../../utils/constants';
 
 type Props = {
-  delegableProducts: Array<Product>;
+  authorizedDelegableProducts: Array<Product>;
   party: Party;
   selectedProductByQuery?: Product;
 };
 
 export default function AddDelegationForm({
-  delegableProducts,
+  authorizedDelegableProducts,
   party,
   selectedProductByQuery,
 }: Props) {
@@ -54,14 +54,14 @@ export default function AddDelegationForm({
   const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
 
   useEffect(() => {
-    if (delegableProducts.length === 1) {
-      setProductSelected(delegableProducts[0]);
+    if (authorizedDelegableProducts.length === 1) {
+      setProductSelected(authorizedDelegableProducts[0]);
     }
-  }, [delegableProducts]);
+  }, [authorizedDelegableProducts]);
 
   useEffect(() => {
     if (selectedProductByQuery) {
-      const chosenProduct = delegableProducts.find((dp) => dp.id === selectedProductByQuery.id);
+      const chosenProduct = authorizedDelegableProducts.find((dp) => dp.id === selectedProductByQuery.id);
       setProductSelected(chosenProduct);
     }
   }, [selectedProductByQuery]);
@@ -142,7 +142,7 @@ export default function AddDelegationForm({
             <Select
               id="select-product-choose"
               size="small"
-              disabled={delegableProducts.length === 1 || !!selectedProductByQuery}
+              disabled={authorizedDelegableProducts.length === 1 || !!selectedProductByQuery}
               fullWidth
               value={productSelected ? productSelected?.title : ''}
               displayEmpty
@@ -156,7 +156,7 @@ export default function AddDelegationForm({
                 </Typography>
               )}
             >
-              {delegableProducts.map((p: Product, index) => (
+              {authorizedDelegableProducts.map((p: Product, index) => (
                 <MenuItem
                   key={index}
                   value={p.title}

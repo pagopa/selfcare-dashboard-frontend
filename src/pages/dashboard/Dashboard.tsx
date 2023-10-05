@@ -114,6 +114,13 @@ const Dashboard = () => {
     )
   );
 
+  const authorizedDelegableProducts = delegableProducts.filter((delegableProduct) =>
+    party?.products.some(
+      (partyProduct) =>
+        partyProduct.productId === delegableProduct.id && partyProduct.authorized === true
+    )
+  );
+
   const productsMap: ProductsMap =
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
 
@@ -186,13 +193,13 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
-            <AddDelegationPage delegableProducts={delegableProducts} party={party} />
+            <AddDelegationPage authorizedDelegableProducts={authorizedDelegableProducts} party={party} />
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
             <DashboardDelegationsPage
               isDelegateSectionVisible={isDelegateSectionVisible && !isPtSectionVisible}
               party={party}
-              delegableProducts={delegableProducts}
+              authorizedDelegableProducts={authorizedDelegableProducts}
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
