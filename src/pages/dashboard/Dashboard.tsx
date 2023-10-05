@@ -117,7 +117,9 @@ const Dashboard = () => {
   const authorizedDelegableProducts = delegableProducts.filter((delegableProduct) =>
     party?.products.some(
       (partyProduct) =>
-        partyProduct.productId === delegableProduct.id && partyProduct.authorized === true
+        partyProduct.productId === delegableProduct.id &&
+        partyProduct.authorized === true &&
+        partyProduct.userRole === 'ADMIN'
     )
   );
 
@@ -193,7 +195,10 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
-            <AddDelegationPage authorizedDelegableProducts={authorizedDelegableProducts} party={party} />
+            <AddDelegationPage
+              authorizedDelegableProducts={authorizedDelegableProducts}
+              party={party}
+            />
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
             <DashboardDelegationsPage
