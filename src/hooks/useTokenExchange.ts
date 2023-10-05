@@ -36,9 +36,9 @@ export const useTokenExchange = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedEnvironment
-      ? retrieveBackOfficeUrl(selectedParty, product, selectedEnvironment)
+      ? (setLoading(true),
+        retrieveBackOfficeUrl(selectedParty, product, selectedEnvironment)
           .then((url) => {
-            setLoading(true);
             trackEvent(
               'DASHBOARD_OPEN_PRODUCT',
               {
@@ -59,10 +59,10 @@ export const useTokenExchange = () => {
               toNotify: true,
             })
           )
-          .finally(() => setLoading(false))
-      : retrieveBackOfficeUrl(selectedParty, product)
+          .finally(() => setLoading(false)))
+      : (setLoading(true),
+        retrieveBackOfficeUrl(selectedParty, product)
           .then((url) => {
-            setLoading(true);
             trackEvent(
               'DASHBOARD_OPEN_PRODUCT',
               {
@@ -83,7 +83,7 @@ export const useTokenExchange = () => {
               toNotify: true,
             })
           )
-          .finally(() => setLoading(false));
+          .finally(() => setLoading(false)));
   };
   return { invokeProductBo };
 };
