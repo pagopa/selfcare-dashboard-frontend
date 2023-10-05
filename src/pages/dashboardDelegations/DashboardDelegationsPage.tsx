@@ -20,10 +20,10 @@ import { fetchDelegations } from '../../services/delegationServices';
 type Props = {
   isDelegateSectionVisible?: boolean;
   party: Party;
-  delegableProducts: Array<Product>;
+  filteredAuthorizedProducts: Array<Product>;
 };
 
-export default function DashboardDelegationsPage({ party, delegableProducts }: Props) {
+export default function DashboardDelegationsPage({ party, filteredAuthorizedProducts }: Props) {
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
   const history = useHistory();
@@ -90,12 +90,6 @@ export default function DashboardDelegationsPage({ party, delegableProducts }: P
     },
   ];
 
-  const filteredDelegableProducts = delegableProducts.filter((delegableProduct) =>
-    party?.products.some(
-      (partyProduct) =>
-        partyProduct.productId === delegableProduct.id && partyProduct.authorized === true
-    )
-  );
 
   return (
     <>
@@ -140,7 +134,7 @@ export default function DashboardDelegationsPage({ party, delegableProducts }: P
                   </Box>
                 </Box>
               </Grid>
-              {filteredDelegableProducts.map((product) => {
+              {filteredAuthorizedProducts.map((product) => {
                 const delegatesByProduct = delegationsList.filter(
                   (dl) => dl.productId === product.id
                 );

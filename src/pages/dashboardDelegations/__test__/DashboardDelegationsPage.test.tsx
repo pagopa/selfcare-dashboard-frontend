@@ -13,7 +13,7 @@ test('Should render component DashboardDelegationsPage with populated props and 
   const { history } = renderWithProviders(
     <DashboardDelegationsPage
       party={mockedGsp}
-      delegableProducts={mockedPartyProducts}
+      filteredAuthorizedProducts={mockedPartyProducts}
       isDelegateSectionVisible
     />
   );
