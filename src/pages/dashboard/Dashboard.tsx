@@ -114,7 +114,7 @@ const Dashboard = () => {
     )
   );
 
-  const filteredAuthorizedProducts = delegableProducts.filter((delegableProduct) =>
+  const authorizedDelegableProducts = delegableProducts.filter((delegableProduct) =>
     party?.products.some(
       (partyProduct) =>
         partyProduct.productId === delegableProduct.id && partyProduct.authorized === true
@@ -193,13 +193,13 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
-            <AddDelegationPage filteredAuthorizedProducts={filteredAuthorizedProducts} party={party} />
+            <AddDelegationPage authorizedDelegableProducts={authorizedDelegableProducts} party={party} />
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
             <DashboardDelegationsPage
               isDelegateSectionVisible={isDelegateSectionVisible && !isPtSectionVisible}
               party={party}
-              filteredAuthorizedProducts={filteredAuthorizedProducts}
+              authorizedDelegableProducts={authorizedDelegableProducts}
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
