@@ -9,6 +9,7 @@ type Props = {
   paths: Array<NavigationPath>;
   showBackComponent?: boolean;
   goBack?: () => void;
+  backLabel?: string;
 };
 
 export default function ProductNavigationBar({
@@ -16,11 +17,12 @@ export default function ProductNavigationBar({
   paths,
   showBackComponent,
   goBack,
+  backLabel,
 }: Props) {
   const innerPaths = useMemo(
     () => (selectedProduct ? [{ description: selectedProduct.title }].concat(paths) : paths),
     [selectedProduct, paths]
   );
 
-  return <NavigationBar paths={innerPaths} showBackComponent={showBackComponent} goBack={goBack} />;
+  return <NavigationBar paths={innerPaths} showBackComponent={showBackComponent} goBack={goBack} backLabel={backLabel} />;
 }

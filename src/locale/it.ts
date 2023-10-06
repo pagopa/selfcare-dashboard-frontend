@@ -236,6 +236,8 @@ export default {
       actions: {
         back: 'Indietro',
         continue: 'Continua',
+        exit: 'Esci',
+        confirm: 'Conferma',
       },
     },
     delegationSuccessfulCreated: 'Delega aggiunta correttamente.',

@@ -280,7 +280,7 @@ export default function AddDelegationForm({
             )
           }
         >
-          {t('addDelegationPage.selectTechPartner.actions.back')}
+          {t('addDelegationPage.selectTechPartner.actions.exit')}
         </Button>
         <Button
           disabled={!productSelected || !techPartnerSelected}
@@ -290,7 +290,7 @@ export default function AddDelegationForm({
           type="submit"
           size="medium"
         >
-          {t('addDelegationPage.selectTechPartner.actions.continue')}
+          {t('addDelegationPage.selectTechPartner.actions.confirm')}
         </Button>
       </Stack>
     </>
