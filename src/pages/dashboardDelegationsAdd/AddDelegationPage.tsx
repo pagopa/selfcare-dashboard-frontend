@@ -60,6 +60,7 @@ export default function AddDelegationPage({ authorizedDelegableProducts, party }
     <Grid
       container
       alignItems={'center'}
+      justifyContent={'center'}
       px={3}
       mt={3}
       sx={{ width: '100%', backgroundColor: 'transparent !important' }}
