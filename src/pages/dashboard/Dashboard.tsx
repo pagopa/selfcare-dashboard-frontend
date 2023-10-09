@@ -1,8 +1,9 @@
 import { Grid, Box, useTheme } from '@mui/material';
 import { useMemo } from 'react';
-import { Route, Switch, useHistory } from 'react-router';
+import { Route, Switch, useHistory, matchPath } from 'react-router';
 import { useStore } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
@@ -81,6 +82,7 @@ export const buildRoutes = (
     );
   });
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const Dashboard = () => {
   const history = useHistory();
   const parties = useAppSelector(partiesSelectors.selectPartiesList);
@@ -133,18 +135,47 @@ const Dashboard = () => {
 
   const isDelegateSectionVisible = ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && !isPt;
 
+  const location = useLocation();
+
+  // Check if the current route matches ADD_DELEGATE
+  const match = matchPath(location.pathname, {
+    path: [DASHBOARD_ROUTES.ADD_DELEGATE.path],
+    exact: true,
+    strict: false,
+  });
+
+  console.log('isCurrentRouteAddDelegate', match, 'location.pathname', location.pathname);
+
   return party && products ? (
-    <Grid container item xs={12} sx={{ backgroundColor: 'background.paper' }}>
-      <Grid component="nav" item xs={2}>
-        <Box>
-          <DashboardSideMenu
-            party={party}
-            isDelegateSectionVisible={isDelegateSectionVisible}
-            canSeeSection={canSeeSection}
-          />
-        </Box>
-      </Grid>
-      <Grid item component="main" xs={10} sx={{ backgroundColor: '#F5F6F7' }} display="flex" pb={8}>
+    <Grid
+      container
+      item
+      xs={12}
+      sx={{
+        backgroundColor: match ? 'background.default' : 'background.paper',
+        justifyContent: match && 'center',
+      }}
+    >
+      {!match && (
+        <Grid component="nav" item xs={2}>
+          <Box>
+            <DashboardSideMenu
+              party={party}
+              isDelegateSectionVisible={isDelegateSectionVisible}
+              canSeeSection={canSeeSection}
+            />
+          </Box>
+        </Grid>
+      )}
+
+      <Grid
+        item
+        component="main"
+        xs={10}
+        sx={{ backgroundColor: 'background.default' }}
+        display="flex"
+        pb={8}
+      >
         <Switch>
           <Route path={ENV.ROUTES.ADMIN} exact={false}>
             <RemoteRoutingAdmin

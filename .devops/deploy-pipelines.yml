@@ -40,6 +40,9 @@ variables:
     react_app_url_fe_dashboard_users: '$(UAT_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(UAT_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
 
+    react_app_url_privacy_disclaimer: '$(UAT_REACT_APP_URL_PRIVACY_DISCLAIMER)'
+    react_app_url_terms_and_conditions: '$(UAT_REACT_APP_URL_TERMS_AND_CONDITIONS)'
+
     react_app_url_api_party_process: '$(UAT_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_party_registry_proxy: '$(UAT_REACT_APP_URL_API_PARTY_REGISTRY_PROXY)'
     react_app_url_api_dashboard: '$(UAT_REACT_APP_URL_API_DASHBOARD)'
@@ -75,6 +78,9 @@ variables:
     react_app_url_fe_dashboard_admin: '$(PROD_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(PROD_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(PROD_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
+
+    react_app_url_privacy_disclaimer: '$(PROD_REACT_APP_URL_PRIVACY_DISCLAIMER)'
+    react_app_url_terms_and_conditions: '$(PROD_REACT_APP_URL_TERMS_AND_CONDITIONS)'
 
     react_app_url_api_party_process: '$(PROD_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_party_registry_proxy: '$(PROD_REACT_APP_URL_API_PARTY_REGISTRY_PROXY)'
@@ -113,6 +119,9 @@ variables:
     react_app_url_fe_dashboard_admin: '$(DEV_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(DEV_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(DEV_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
+
+    react_app_url_privacy_disclaimer: '$(DEV_REACT_APP_URL_PRIVACY_DISCLAIMER)'
+    react_app_url_terms_and_conditions: '$(DEV_REACT_APP_URL_TERMS_AND_CONDITIONS)'
 
     react_app_url_api_party_process: '$(DEV_REACT_APP_URL_API_PARTY_PROCESS)'
     react_app_url_api_party_registry_proxy: '$(DEV_REACT_APP_URL_API_PARTY_REGISTRY_PROXY)'
@@ -223,6 +232,9 @@ stages:
               REACT_APP_URL_API_PARTY_PROCESS: '$(react_app_url_api_party_process)'
               REACT_APP_URL_API_PARTY_REGISTRY_PROXY: '$(react_app_url_api_party_registry_proxy)'
               REACT_APP_URL_API_DASHBOARD: '$(react_app_url_api_dashboard)'
+
+              REACT_APP_URL_PRIVACY_DISCLAIMER: '$(react_app_url_privacy_disclaimer)'
+              REACT_APP_URL_TERMS_AND_CONDITIONS: '$(react_app_url_terms_and_conditions)'
 
               REACT_APP_ENABLE_ASSISTANCE: '$(react_app_enable_assistance)'
               REACT_APP_PAGOPA_HELP_EMAIL: '$(react_app_pagopa_help_email)'

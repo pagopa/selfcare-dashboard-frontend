@@ -212,6 +212,6 @@ test('Test TOBEVALIDATED party', () => {
     />
   );
   if (selectedParty?.status === 'TOBEVALIDATED') {
-    screen.getByText('Da validare');
+    screen.getByText('In attesa');
   }
 });
