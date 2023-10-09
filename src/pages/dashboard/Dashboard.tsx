@@ -144,8 +144,6 @@ const Dashboard = () => {
     strict: false,
   });
 
-  console.log('isCurrentRouteAddDelegate', match, 'location.pathname', location.pathname);
-
   return party && products ? (
     <Grid
       container
