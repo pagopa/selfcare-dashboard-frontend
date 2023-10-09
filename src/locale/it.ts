@@ -230,6 +230,9 @@ export default {
       delegations: 'Deleghe',
       addDelegation: 'Aggiungi delega',
     },
+    addOneDelegation: 'Aggiungi una delega',
+    formSubTitle: 'Scegli il prodotto per il quale vuoi aggiungere una delega',
+    findOutMore: 'Dubbi? Vai al manuale',
     chooseProduct: 'Scegli il prodotto',
     selectTechPartner: {
       title: 'Seleziona un Partner Tecnologico',
@@ -240,6 +243,8 @@ export default {
       actions: {
         back: 'Indietro',
         continue: 'Continua',
+        exit: 'Esci',
+        confirm: 'Conferma',
       },
     },
     delegationSuccessfulCreated: 'Delega aggiunta correttamente.',
