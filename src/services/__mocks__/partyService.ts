@@ -990,8 +990,7 @@ export const mockedParties: Array<Party> = [
     digitalAddress: 'pectest@pec.test.it',
     registeredOffice: 'Milano',
     zipCode: '48294',
-    geographicTaxonomies: [
-    ],
+    geographicTaxonomies: [],
     products: [
       {
         productId: 'prod-interop',
