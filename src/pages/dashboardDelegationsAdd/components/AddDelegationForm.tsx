@@ -140,7 +140,7 @@ export default function AddDelegationForm({
           */}
         </Grid>
         <Grid item xs={6} mb={3}>
-          <Typography variant="subtitle1" mb={2}>
+          <Typography variant="subtitle1" fontSize={'16px'} mb={2}>
             {t('addDelegationPage.chooseProduct')}
           </Typography>
           <FormControl fullWidth>
