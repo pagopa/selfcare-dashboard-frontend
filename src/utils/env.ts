@@ -10,6 +10,8 @@ export const ENV = {
     EMAIL: env.get('REACT_APP_PAGOPA_HELP_EMAIL').required().asString(),
   },
 
+  URL_DOCUMENTATION: 'https://docs.pagopa.it/area-riservata/',
+
   ROUTES: {
     OVERVIEW: `${PUBLIC_URL_INNER}/:partyId`,
     USERS: `${PUBLIC_URL_INNER}/:partyId/users`,
