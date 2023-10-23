@@ -45,13 +45,14 @@ export default function PartyDetail({ party }: Props) {
     dispatch(partiesActions.setPartySelected(partyUpdated));
   };
 
+  const avoidGeoTax = !party.institutionType || !['PT', 'SA', 'AS'].includes(party.institutionType);
+
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
     if (
       ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
       party.geographicTaxonomies.length === 0 &&
-      party.institutionType !== 'PT' &&
-      party.institutionType !== 'SA'
+      avoidGeoTax
     ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }

@@ -1432,7 +1432,8 @@
               "PSP",
               "PT",
               "SA",
-              "SCP"
+              "SCP",
+              "AS"
             ],
             "in": "path",
             "name": "institutionType",
@@ -3171,7 +3172,8 @@
             "PSP",
             "PT",
             "SA",
-            "SCP"
+            "SCP",
+            "AS"
           ],
           "type": "string"
         },
@@ -3265,7 +3267,8 @@
             "PSP",
             "PT",
             "SA",
-            "SCP"
+            "SCP",
+            "AS"
           ],
           "type": "string"
         },
@@ -3350,7 +3353,8 @@
             "PSP",
             "PT",
             "SA",
-            "SCP"
+            "SCP",
+            "AS"
           ],
           "type": "string"
         },
