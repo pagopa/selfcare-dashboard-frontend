@@ -83,6 +83,12 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
+    partyId: '134',
+    description: 'Prova AS',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
     partyId: '28',
     description: 'Comune di Cagliari',
     status: 'ACTIVE',
@@ -984,6 +990,34 @@ export const mockedParties: Array<Party> = [
     originId: 'SA_94287592722',
     origin: 'ANAC',
     institutionType: 'SA',
+    typology: 'Gestore privato di piattaforma e-procurement',
+    description: 'Prova SA',
+    fiscalCode: '94287592722',
+    digitalAddress: 'pectest@pec.test.it',
+    registeredOffice: 'Milano',
+    zipCode: '48294',
+    geographicTaxonomies: [],
+    products: [
+      {
+        productId: 'prod-interop',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '94287592722',
+          recipientCode: 'c_b988',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+    ],
+  },
+  // Test AS insurance company
+  {
+    partyId: '134',
+    externalId: '94287592722',
+    originId: 'IVASS',
+    origin: 'IVASS',
+    institutionType: 'AS',
     typology: 'Gestore privato di piattaforma e-procurement',
     description: 'Prova SA',
     fiscalCode: '94287592722',
