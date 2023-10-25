@@ -1850,7 +1850,7 @@
             "style": "simple",
             "schema": {
               "type": "string",
-              "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP"]
+              "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP", "AS"]
             }
           }
         ],
@@ -3819,7 +3819,7 @@
           },
           "institutionType": {
             "type": "string",
-            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP"]
+            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP", "AS"]
           },
           "onboarding": {
             "type": "array",
@@ -3916,7 +3916,7 @@
           "institutionType": {
             "type": "string",
             "description": "Institution's type",
-            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP"]
+            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP", "AS"]
           },
           "mailAddress": {
             "type": "string",
@@ -3982,7 +3982,7 @@
           "institutionType": {
             "type": "string",
             "description": "Institution's type",
-            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP"]
+            "enum": ["GSP", "PA", "PG", "PSP", "PT", "SA", "SCP", "AS"]
           },
           "mailAddress": {
             "type": "string",
