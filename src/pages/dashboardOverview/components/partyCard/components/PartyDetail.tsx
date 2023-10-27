@@ -45,14 +45,14 @@ export default function PartyDetail({ party }: Props) {
     dispatch(partiesActions.setPartySelected(partyUpdated));
   };
 
-  const shoowGeoTax = party.institutionType && !['PT', 'SA', 'AS'].includes(party.institutionType);
+  const showGeoTax = party.institutionType && !['PT', 'SA', 'AS'].includes(party.institutionType);
 
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
     if (
       ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
       party.geographicTaxonomies.length === 0 &&
-      shoowGeoTax
+      showGeoTax
     ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
@@ -193,7 +193,7 @@ export default function PartyDetail({ party }: Props) {
             </>
           )}
           {/* geographicTaxonomy */}
-          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && shoowGeoTax && (
+          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && showGeoTax && (
             <>
               {
                 <Grid item xs={2}>
