@@ -220,22 +220,23 @@ export default function PartyDetail({ party }: Props) {
                     {partyUpdated?.geographicTaxonomies
                       ? partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase()
                       : '-'}
-                    {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
-                      <>
-                        {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
-                        <ButtonNaked
-                          component="button"
-                          onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
-                          endIcon={<EditIcon />}
-                          sx={{ color: 'primary.main', flexDirection: 'row' }}
-                          weight="default"
-                        >
-                          {partyUpdated?.geographicTaxonomies.length !== 1
-                            ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
-                            : undefined}
-                        </ButtonNaked>
-                      </>
-                    )}
+                    {partyUpdated?.geographicTaxonomies &&
+                      partyUpdated.geographicTaxonomies.length >= 1 && (
+                        <>
+                          {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
+                          <ButtonNaked
+                            component="button"
+                            onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
+                            endIcon={<EditIcon />}
+                            sx={{ color: 'primary.main', flexDirection: 'row' }}
+                            weight="default"
+                          >
+                            {partyUpdated?.geographicTaxonomies.length !== 1
+                              ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
+                              : undefined}
+                          </ButtonNaked>
+                        </>
+                      )}
                   </Typography>
                 </Tooltip>
               </Grid>
