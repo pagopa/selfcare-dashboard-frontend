@@ -49,7 +49,11 @@ export default function PartyDetail({ party }: Props) {
 
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
-    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && party.geographicTaxonomies.length === 0 && showGeoTax) {
+    if (
+      ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
+      (!party.geographicTaxonomies || party?.geographicTaxonomies?.length === 0) &&
+      showGeoTax
+    ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
     setOptionsSelected(
