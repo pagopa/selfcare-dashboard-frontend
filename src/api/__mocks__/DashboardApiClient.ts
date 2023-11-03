@@ -32,7 +32,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     institutionType: InstitutionTypeEnum.PA,
     address: 'Piazza della Scala, 2',
     zipCode: '20121',
-    geographicTaxonomies: [],
+    geographicTaxonomies: undefined,
     recipientCode: '4GBCSDA1',
   },
   {
