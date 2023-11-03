@@ -55,12 +55,11 @@ export default function PartyDetail({ party }: Props) {
       showGeoTax
     ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
+    } else if (party.geographicTaxonomies && party?.geographicTaxonomies?.length > 0) {
+      setOptionsSelected(party?.geographicTaxonomies);
+    } else {
+      setOptionsSelected([{ code: '', desc: '' }]);
     }
-    setOptionsSelected(
-      party?.geographicTaxonomies.length > 0
-        ? party?.geographicTaxonomies
-        : [{ code: '', desc: '' }]
-    );
   }, [party]);
 
   useEffect(() => {
