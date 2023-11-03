@@ -49,11 +49,7 @@ export default function PartyDetail({ party }: Props) {
 
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
-    if (
-      ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
-      party.geographicTaxonomies.length === 0 &&
-      showGeoTax
-    ) {
+    if (ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && party.geographicTaxonomies.length === 0 && showGeoTax) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
     setOptionsSelected(
@@ -221,7 +217,9 @@ export default function PartyDetail({ party }: Props) {
                     className="ShowDots"
                     component="span"
                   >
-                    {partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase() ?? '-'}
+                    {partyUpdated?.geographicTaxonomies
+                      ? partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase()
+                      : '-'}
                     {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
                       <>
                         {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
