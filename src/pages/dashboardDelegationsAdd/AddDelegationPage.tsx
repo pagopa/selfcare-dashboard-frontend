@@ -1,42 +1,33 @@
 import { Grid } from '@mui/material';
 import { TitleBox } from '@pagopa/selfcare-common-frontend';
-import { useHistory } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
+import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { DASHBOARD_ROUTES } from '../../routes';
-import { Party } from '../../model/Party';
 import AddDelegationForm from './components/AddDelegationForm';
 
 type Props = {
-  delegableProducts: Array<Product>;
+  authorizedDelegableProducts: Array<Product>;
   party: Party;
 };
 
-export default function AddDelegationPage({ delegableProducts, party }: Props) {
+export default function AddDelegationPage({ authorizedDelegableProducts, party }: Props) {
   const history = useHistory();
   const { t } = useTranslation();
 
   const productIdByQuery = new URLSearchParams(window.location.search).get('productId');
-  const selectedProductByQuery = delegableProducts.find((dp) => dp.id === productIdByQuery);
+  const selectedProductByQuery = authorizedDelegableProducts.find(
+    (dp) => dp.id === productIdByQuery
+  );
 
   const goBack = () => {
     history.goBack();
   };
 
   const pathsWithProduct = [
-    {
-      icon: DashboardCustomize,
-      description: t('addDelegationPage.navigationBar.overview'),
-      onClick: () =>
-        history.push(
-          resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, {
-            partyId: party.partyId,
-          })
-        ),
-    },
     {
       description: t('addDelegationPage.navigationBar.delegations'),
       onClick: () =>
@@ -54,12 +45,13 @@ export default function AddDelegationPage({ delegableProducts, party }: Props) {
     },
   ];
 
-  const pathsWithoutProduct = pathsWithProduct.filter((_p, index) => index !== 2);
+  const pathsWithoutProduct = pathsWithProduct.filter((_p, index) => index !== 1);
 
   return (
     <Grid
       container
       alignItems={'center'}
+      justifyContent={'center'}
       px={3}
       mt={3}
       sx={{ width: '100%', backgroundColor: 'transparent !important' }}
@@ -70,6 +62,7 @@ export default function AddDelegationPage({ delegableProducts, party }: Props) {
             paths={selectedProductByQuery ? pathsWithProduct : pathsWithoutProduct}
             showBackComponent={true}
             goBack={goBack}
+            backLabel={t('addDelegationPage.selectTechPartner.actions.exit')}
           />
         </Grid>
         <Grid item xs={12}>
@@ -85,7 +78,7 @@ export default function AddDelegationPage({ delegableProducts, party }: Props) {
         </Grid>
         <Grid item xs={11} mb={5}>
           <AddDelegationForm
-            delegableProducts={delegableProducts}
+            authorizedDelegableProducts={authorizedDelegableProducts}
             party={party}
             selectedProductByQuery={selectedProductByQuery}
           />

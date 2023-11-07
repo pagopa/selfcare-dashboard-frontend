@@ -69,3 +69,13 @@ test('should render component DashboardOverview with institutionType SA and Prod
   // Avaible products section is not visible for SA
   expect(screen.queryByText('Prodotti disponibili')).not.toBeInTheDocument();
 });
+
+test('should render component DashboardOverview with institutionType AS and Product Available section should not be visible', async () => {
+  const mockedInsuranceCompany = mockedParties[18];
+  renderWithProviders(
+    <DashboardOverview party={mockedInsuranceCompany} products={mockedPartyProducts} />
+  );
+
+  // Avaible products section is not visible for AS
+  expect(screen.queryByText('Prodotti disponibili')).not.toBeInTheDocument();
+});

@@ -1,3 +1,4 @@
+import SearchIcon from '@mui/icons-material/Search';
 import {
   Autocomplete,
   Button,
@@ -18,27 +19,26 @@ import {
   useUnloadEventOnExit,
   useUserNotify,
 } from '@pagopa/selfcare-common-frontend';
-import { useEffect, useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import { useHistory } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
+import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
+import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
-import { Party } from '../../../model/Party';
-import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
 import { createDelegation, getProductBrokers } from '../../../services/partyService';
-import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
 import { LOADING_TASK_DELEGATION_FORM } from '../../../utils/constants';
 
 type Props = {
-  delegableProducts: Array<Product>;
+  authorizedDelegableProducts: Array<Product>;
   party: Party;
   selectedProductByQuery?: Product;
 };
 
 export default function AddDelegationForm({
-  delegableProducts,
+  authorizedDelegableProducts,
   party,
   selectedProductByQuery,
 }: Props) {
@@ -54,14 +54,16 @@ export default function AddDelegationForm({
   const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
 
   useEffect(() => {
-    if (delegableProducts.length === 1) {
-      setProductSelected(delegableProducts[0]);
+    if (authorizedDelegableProducts.length === 1) {
+      setProductSelected(authorizedDelegableProducts[0]);
     }
-  }, [delegableProducts]);
+  }, [authorizedDelegableProducts]);
 
   useEffect(() => {
     if (selectedProductByQuery) {
-      const chosenProduct = delegableProducts.find((dp) => dp.id === selectedProductByQuery.id);
+      const chosenProduct = authorizedDelegableProducts.find(
+        (dp) => dp.id === selectedProductByQuery.id
+      );
       setProductSelected(chosenProduct);
     }
   }, [selectedProductByQuery]);
@@ -125,7 +127,22 @@ export default function AddDelegationForm({
   return (
     <>
       <Grid container sx={{ backgroundColor: 'background.paper' }} p={3}>
-        <Grid item xs={12} mb={4}>
+        <Grid item xs={12} mb={3}>
+          <Typography variant="h6" sx={{ fontWeight: 'fontWeightBold' }} mb={2}>
+            {t('addDelegationPage.addOneDelegation')}
+          </Typography>
+          <Typography variant="body1">{t('addDelegationPage.formSubTitle')}</Typography>
+          {/*
+          TODO hide MUI Link until href for link is avaible
+          <Link href={'#'} sx={{ fontWeight: 'bold' }} mt={1}>
+            {t('addDelegationPage.findOutMore')}
+          </Link>
+          */}
+        </Grid>
+        <Grid item xs={6} mb={3}>
+          <Typography variant="subtitle1" fontSize={'16px'} mb={2}>
+            {t('addDelegationPage.chooseProduct')}
+          </Typography>
           <FormControl fullWidth>
             <InputLabel
               id="select-product-label"
@@ -142,7 +159,7 @@ export default function AddDelegationForm({
             <Select
               id="select-product-choose"
               size="small"
-              disabled={delegableProducts.length === 1 || !!selectedProductByQuery}
+              disabled={authorizedDelegableProducts.length === 1 || !!selectedProductByQuery}
               fullWidth
               value={productSelected ? productSelected?.title : ''}
               displayEmpty
@@ -156,7 +173,7 @@ export default function AddDelegationForm({
                 </Typography>
               )}
             >
-              {delegableProducts.map((p: Product, index) => (
+              {authorizedDelegableProducts.map((p: Product, index) => (
                 <MenuItem
                   key={index}
                   value={p.title}
@@ -174,7 +191,7 @@ export default function AddDelegationForm({
             title={t('addDelegationPage.selectTechPartner.title')}
             subTitle={t('addDelegationPage.selectTechPartner.subTitle')}
             mbTitle={1}
-            mbSubTitle={4}
+            mbSubTitle={3}
             titleFontSize="16px"
             subTitleFontSize="16px"
             variantTitle="subtitle1"
@@ -263,7 +280,7 @@ export default function AddDelegationForm({
             )
           }
         >
-          {t('addDelegationPage.selectTechPartner.actions.back')}
+          {t('addDelegationPage.selectTechPartner.actions.exit')}
         </Button>
         <Button
           disabled={!productSelected || !techPartnerSelected}
@@ -273,7 +290,7 @@ export default function AddDelegationForm({
           type="submit"
           size="medium"
         >
-          {t('addDelegationPage.selectTechPartner.actions.continue')}
+          {t('addDelegationPage.selectTechPartner.actions.confirm')}
         </Button>
       </Stack>
     </>

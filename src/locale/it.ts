@@ -11,18 +11,25 @@ export default {
       'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.',
     partyStatus: {
       pending: 'Da completare',
-      toBeValidated: 'Da validare',
+      toBeValidated: 'In attesa',
     },
     continueButton: 'Accedi',
     backButton: 'Indietro',
     label: 'Cerca ente',
     notFoundResults: 'Nessun risultato',
   },
-  NoActiveParty: {
-    bodyTitle: 'Non risultano richieste di <1 /> adesione per questo Ente',
-    bodyDescription:
-      "L'adesione potrebbe essere ancora in corso. <1 /> Verifica di aver completato tutti i passaggi richiesti.",
-    backButton: 'Torna alla Home',
+  noActiveParty: {
+    pending: {
+      title: 'Non risultano richieste di <1 /> adesione per questo ente',
+      description:
+        "L'adesione potrebbe essere ancora in corso. <1 /> Verifica che tutti i passaggi richiesti siano stati completati.",
+    },
+    toBeValidated: {
+      title: 'La richiesta di registrazione è <1 />in attesa di validazione',
+      description:
+        'La richiesta di registrazione per l’ente {{partyName}} deve <3 />essere ancora confermata. Per accedere, attendi la conferma <5 />che arriverà all’indirizzo PEC dell’ente.',
+    },
+    close: 'Chiudi',
   },
   noParty: {
     title: 'Accesso non consentito',
@@ -154,6 +161,7 @@ export default {
         SCP: 'Società a controllo pubblico',
         PSP: 'Prestatori Servizi di Pagamento',
         SA: 'Gestore privato di piattaforma e-procurement',
+        AS: 'Società di assicurazione',
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
@@ -223,6 +231,9 @@ export default {
       delegations: 'Deleghe',
       addDelegation: 'Aggiungi delega',
     },
+    addOneDelegation: 'Aggiungi una delega',
+    formSubTitle: 'Scegli il prodotto per il quale vuoi aggiungere una delega',
+    findOutMore: 'Dubbi? Vai al manuale',
     chooseProduct: 'Scegli il prodotto',
     selectTechPartner: {
       title: 'Seleziona un Partner Tecnologico',
@@ -233,6 +244,8 @@ export default {
       actions: {
         back: 'Indietro',
         continue: 'Continua',
+        exit: 'Esci',
+        confirm: 'Conferma',
       },
     },
     delegationSuccessfulCreated: 'Delega aggiunta correttamente.',

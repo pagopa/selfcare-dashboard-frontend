@@ -45,13 +45,14 @@ export default function PartyDetail({ party }: Props) {
     dispatch(partiesActions.setPartySelected(partyUpdated));
   };
 
+  const showGeoTax = party.institutionType && !['PT', 'SA', 'AS'].includes(party.institutionType);
+
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
   useEffect(() => {
     if (
       ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
       party.geographicTaxonomies.length === 0 &&
-      party.institutionType !== 'PT' &&
-      party.institutionType !== 'SA'
+      showGeoTax
     ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     }
@@ -192,59 +193,56 @@ export default function PartyDetail({ party }: Props) {
             </>
           )}
           {/* geographicTaxonomy */}
-          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
-            party.institutionType !== 'PT' &&
-            party.institutionType !== 'SA' && (
-              <>
-                {
-                  <Grid item xs={2}>
-                    <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
-                      {t('overview.partyDetail.geographicTaxonomies.label')}
-                    </Typography>
-                  </Grid>
-                }
-                <Grid item xs={4}>
-                  <Tooltip
-                    title={
-                      partyUpdated?.description &&
-                      partyUpdated.description.length >= showTooltipAfter
-                        ? partyUpdated.description
-                        : ''
-                    }
-                    placement="top"
-                    arrow={true}
-                  >
-                    <Typography
-                      sx={{
-                        ...infoStyles,
-                        maxWidth: '100% !important',
-                        textTransform: 'capitalize',
-                      }}
-                      className="ShowDots"
-                      component="span"
-                    >
-                      {partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase() ?? '-'}
-                      {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
-                        <>
-                          {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
-                          <ButtonNaked
-                            component="button"
-                            onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
-                            endIcon={<EditIcon />}
-                            sx={{ color: 'primary.main', flexDirection: 'row' }}
-                            weight="default"
-                          >
-                            {partyUpdated?.geographicTaxonomies.length !== 1
-                              ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
-                              : undefined}
-                          </ButtonNaked>
-                        </>
-                      )}
-                    </Typography>
-                  </Tooltip>
+          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && showGeoTax && (
+            <>
+              {
+                <Grid item xs={2}>
+                  <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
+                    {t('overview.partyDetail.geographicTaxonomies.label')}
+                  </Typography>
                 </Grid>
-              </>
-            )}
+              }
+              <Grid item xs={4}>
+                <Tooltip
+                  title={
+                    partyUpdated?.description && partyUpdated.description.length >= showTooltipAfter
+                      ? partyUpdated.description
+                      : ''
+                  }
+                  placement="top"
+                  arrow={true}
+                >
+                  <Typography
+                    sx={{
+                      ...infoStyles,
+                      maxWidth: '100% !important',
+                      textTransform: 'capitalize',
+                    }}
+                    className="ShowDots"
+                    component="span"
+                  >
+                    {partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase() ?? '-'}
+                    {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
+                      <>
+                        {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
+                        <ButtonNaked
+                          component="button"
+                          onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
+                          endIcon={<EditIcon />}
+                          sx={{ color: 'primary.main', flexDirection: 'row' }}
+                          weight="default"
+                        >
+                          {partyUpdated?.geographicTaxonomies.length !== 1
+                            ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
+                            : undefined}
+                        </ButtonNaked>
+                      </>
+                    )}
+                  </Typography>
+                </Tooltip>
+              </Grid>
+            </>
+          )}
           {/* companyName */}
           <Grid item xs={2}>
             <Typography variant="body2" sx={{ ...labelStyles }}>

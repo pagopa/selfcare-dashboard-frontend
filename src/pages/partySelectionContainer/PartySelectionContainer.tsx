@@ -18,7 +18,8 @@ const PartySelectionContainer = () => {
     <Box py={11} m="auto" width="100%">
       {parties.filter((party) => party.status === 'ACTIVE').length >= 1 ? (
         <PartySelection parties={parties} />
-      ) : parties.filter((party) => party.status === 'PENDING').length >= 1 ? (
+      ) : parties.filter((party) => party.status === 'PENDING' || party.status === 'TOBEVALIDATED')
+          .length >= 1 ? (
         <NoActiveParty parties={parties} />
       ) : (
         parties.length === 0 && <NoParty />

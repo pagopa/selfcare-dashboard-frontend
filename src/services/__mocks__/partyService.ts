@@ -83,6 +83,12 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
+    partyId: '134',
+    description: 'Prova AS',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
     partyId: '28',
     description: 'Comune di Cagliari',
     status: 'ACTIVE',
@@ -233,8 +239,19 @@ export const mockedParties: Array<Party> = [
         },
       },
       {
+        productId: 'prod-pagopa',
+        authorized: false,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '11111111111',
+          recipientCode: 'CH435V',
+          publicServices: true,
+        },
+      },
+      {
         productId: 'prod-io-premium',
-        authorized: true,
+        authorized: false,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
@@ -246,6 +263,17 @@ export const mockedParties: Array<Party> = [
       // Use case with prod-interop and prod-interop-coll
       {
         productId: 'prod-interop',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
@@ -968,8 +996,35 @@ export const mockedParties: Array<Party> = [
     digitalAddress: 'pectest@pec.test.it',
     registeredOffice: 'Milano',
     zipCode: '48294',
-    geographicTaxonomies: [
+    geographicTaxonomies: [],
+    products: [
+      {
+        productId: 'prod-interop',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '94287592722',
+          recipientCode: 'c_b988',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
     ],
+  },
+  // Test AS insurance company
+  {
+    partyId: '134',
+    externalId: '94287592722',
+    originId: 'IVASS',
+    origin: 'IVASS',
+    institutionType: 'AS',
+    typology: 'Società di assicurazione',
+    description: 'Prova AS',
+    fiscalCode: '94287592722',
+    digitalAddress: 'pectest@pec.test.it',
+    registeredOffice: 'Milano',
+    zipCode: '48294',
+    geographicTaxonomies: [],
     products: [
       {
         productId: 'prod-interop',
