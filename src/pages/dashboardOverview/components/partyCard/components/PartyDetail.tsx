@@ -51,16 +51,15 @@ export default function PartyDetail({ party }: Props) {
   useEffect(() => {
     if (
       ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
-      party.geographicTaxonomies.length === 0 &&
+      (!party.geographicTaxonomies || party?.geographicTaxonomies?.length === 0) &&
       showGeoTax
     ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
+    } else if (party.geographicTaxonomies && party?.geographicTaxonomies?.length > 0) {
+      setOptionsSelected(party?.geographicTaxonomies);
+    } else {
+      setOptionsSelected([{ code: '', desc: '' }]);
     }
-    setOptionsSelected(
-      party?.geographicTaxonomies.length > 0
-        ? party?.geographicTaxonomies
-        : [{ code: '', desc: '' }]
-    );
   }, [party]);
 
   useEffect(() => {
@@ -221,23 +220,26 @@ export default function PartyDetail({ party }: Props) {
                     className="ShowDots"
                     component="span"
                   >
-                    {partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase() ?? '-'}
-                    {partyUpdated && partyUpdated.geographicTaxonomies.length >= 1 && (
-                      <>
-                        {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
-                        <ButtonNaked
-                          component="button"
-                          onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
-                          endIcon={<EditIcon />}
-                          sx={{ color: 'primary.main', flexDirection: 'row' }}
-                          weight="default"
-                        >
-                          {partyUpdated?.geographicTaxonomies.length !== 1
-                            ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
-                            : undefined}
-                        </ButtonNaked>
-                      </>
-                    )}
+                    {partyUpdated?.geographicTaxonomies
+                      ? partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase()
+                      : '-'}
+                    {partyUpdated?.geographicTaxonomies &&
+                      partyUpdated.geographicTaxonomies.length >= 1 && (
+                        <>
+                          {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
+                          <ButtonNaked
+                            component="button"
+                            onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
+                            endIcon={<EditIcon />}
+                            sx={{ color: 'primary.main', flexDirection: 'row' }}
+                            weight="default"
+                          >
+                            {partyUpdated?.geographicTaxonomies.length !== 1
+                              ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
+                              : undefined}
+                          </ButtonNaked>
+                        </>
+                      )}
                   </Typography>
                 </Tooltip>
               </Grid>

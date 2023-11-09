@@ -24,7 +24,7 @@ export type Party = {
   typology: string;
   institutionType?: string;
   recipientCode?: string;
-  geographicTaxonomies: Array<GeographicTaxonomyResource>;
+  geographicTaxonomies?: Array<GeographicTaxonomyResource>;
   vatNumberGroup?: boolean;
   supportEmail?: string;
   vatNumber?: string;
