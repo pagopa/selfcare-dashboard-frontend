@@ -130,7 +130,7 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'PA',
     recipientCode: 'CGDAS23A',
-    geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }], // Use case with one taxonomy
+    geographicTaxonomies: undefined,
     vatNumber: '111111111141',
     supportEmail: '',
     products: [
