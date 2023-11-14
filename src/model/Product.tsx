@@ -20,6 +20,7 @@ export type Product = {
   subProducts?: Array<SubProductResource>;
   logoBgColor?: string;
   delegable: boolean;
+  invoiceable?: boolean;
 };
 
 export type ProductsMap = { [id: string]: Product };
