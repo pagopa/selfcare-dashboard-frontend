@@ -307,7 +307,6 @@ export const mockedParties: Array<Party> = [
       { code: '8853441', desc: 'Comune di Roma' },
     ],
     vatNumber: '111122211111',
-    // Use case with no onboarded products
     products: [
       {
         productId: 'prod-pn',

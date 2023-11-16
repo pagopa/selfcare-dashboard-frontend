@@ -59,6 +59,9 @@ export default {
         groups: {
           title: 'Gruppi',
         },
+        invoices: {
+          title: 'Fatturazione',
+        }
       },
       product: {
         overview: 'Panoramica',

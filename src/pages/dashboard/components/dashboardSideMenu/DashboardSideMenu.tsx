@@ -112,7 +112,7 @@ export default function DashboardSideMenu({
           )}
           {isInvoiceSectionVisible && (
             <DashboardSidenavItem
-              title={'Fatturazione'}
+              title={t('overview.sideMenu.institutionManagement.invoices.title')}
               // TODO add tokenExchange Call on click
               handleClick={() => {
                 setIsInvoiceSelected(true);
