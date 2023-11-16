@@ -8,6 +8,8 @@ import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DnsIcon from '@mui/icons-material/Dns';
+import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
+import { useState } from 'react';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ENV } from '../../../../utils/env';
 import { Party } from '../../../../model/Party';
@@ -17,16 +19,19 @@ type Props = {
   party: Party;
   isDelegateSectionVisible?: boolean;
   canSeeSection: boolean;
+  isInvoiceSectionVisible: boolean;
 };
 
 export default function DashboardSideMenu({
   party,
   isDelegateSectionVisible,
   canSeeSection,
+  isInvoiceSectionVisible,
 }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
+  const [isInvoiceSelected, setIsInvoiceSelected] = useState(false);
 
   const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
   const usersRoute = ENV.ROUTES.USERS;
@@ -102,6 +107,19 @@ export default function DashboardSideMenu({
               }
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}
+              isPtPageVisible={false}
+            />
+          )}
+          {isInvoiceSectionVisible && (
+            <DashboardSidenavItem
+              title={t('overview.sideMenu.institutionManagement.invoices.title')}
+              // TODO add tokenExchange Call on click
+              handleClick={() => {
+                setIsInvoiceSelected(true);
+                onExit(() => console.log('Fatturazione'));
+              }}
+              isSelected={isInvoiceSelected}
+              icon={EuroSymbolIcon}
               isPtPageVisible={false}
             />
           )}

@@ -1426,14 +1426,14 @@
           {
             "description": "Institution Type",
             "enum": [
+              "AS",
               "GSP",
               "PA",
               "PG",
               "PSP",
               "PT",
               "SA",
-              "SCP",
-              "AS"
+              "SCP"
             ],
             "in": "path",
             "name": "institutionType",
@@ -3143,6 +3143,15 @@
         "category": {
           "type": "string"
         },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
         "dataProtectionOfficer": {
           "$ref": "#/definitions/DataProtectionOfficer"
         },
@@ -3166,14 +3175,14 @@
         },
         "institutionType": {
           "enum": [
+            "AS",
             "GSP",
             "PA",
             "PG",
             "PSP",
             "PT",
             "SA",
-            "SCP",
-            "AS"
+            "SCP"
           ],
           "type": "string"
         },
@@ -3246,6 +3255,18 @@
           "description": "Institution's physical address",
           "type": "string"
         },
+        "city": {
+          "description": "Institution's city",
+          "type": "string"
+        },
+        "country": {
+          "description": "Institution's country",
+          "type": "string"
+        },
+        "county": {
+          "description": "Institution's county",
+          "type": "string"
+        },
         "dpoData": {
           "$ref": "#/definitions/DpoData",
           "description": "Data Protection Officer (DPO) specific data"
@@ -3261,14 +3282,14 @@
         "institutionType": {
           "description": "Institution's type",
           "enum": [
+            "AS",
             "GSP",
             "PA",
             "PG",
             "PSP",
             "PT",
             "SA",
-            "SCP",
-            "AS"
+            "SCP"
           ],
           "type": "string"
         },
@@ -3325,6 +3346,18 @@
           "description": "Institution's category",
           "type": "string"
         },
+        "city": {
+          "description": "Institution's city",
+          "type": "string"
+        },
+        "country": {
+          "description": "Institution's country",
+          "type": "string"
+        },
+        "county": {
+          "description": "Institution's county",
+          "type": "string"
+        },
         "externalId": {
           "description": "Institution's unique external identifier",
           "type": "string"
@@ -3347,14 +3380,14 @@
         "institutionType": {
           "description": "Institution's type",
           "enum": [
+            "AS",
             "GSP",
             "PA",
             "PG",
             "PSP",
             "PT",
             "SA",
-            "SCP",
-            "AS"
+            "SCP"
           ],
           "type": "string"
         },
@@ -3605,7 +3638,7 @@
         },
         "manager": {
           "$ref": "#/definitions/UserInfo",
-          "description": "Manager specific data"
+          "description": "Manager specific data. It's required when institutionType is not PT"
         },
         "status": {
           "description": "Onboarding request's status",
@@ -3932,7 +3965,7 @@
           "type": "array"
         },
         "delegable": {
-          "description": "If a product is delegable to a technical partner ",
+          "description": "If a product is delegable to a technical partner",
           "example": false,
           "type": "boolean"
         },
@@ -3947,6 +3980,11 @@
         "imageUrl": {
           "description": "Product's depict image",
           "type": "string"
+        },
+        "invoiceable": {
+          "description": "If a product is invoiceable",
+          "example": false,
+          "type": "boolean"
         },
         "logo": {
           "description": "Product's logo",
@@ -4057,7 +4095,7 @@
     "SubProductResource": {
       "properties": {
         "delegable": {
-          "description": "If a product is delegable to a technical partner ",
+          "description": "If a product is delegable to a technical partner",
           "example": false,
           "type": "boolean"
         },
@@ -4072,6 +4110,11 @@
         "imageUrl": {
           "description": "Product's depict image",
           "type": "string"
+        },
+        "invoiceable": {
+          "description": "If a product is invoiceable",
+          "example": false,
+          "type": "boolean"
         },
         "logo": {
           "description": "Product's logo",

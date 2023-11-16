@@ -20,6 +20,7 @@ export type Product = {
   subProducts?: Array<SubProductResource>;
   logoBgColor?: string;
   delegable: boolean;
+  invoiceable?: boolean;
 };
 
 export type ProductsMap = { [id: string]: Product };
@@ -46,4 +47,5 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   tag: undefined,
   subProducts: resource.children as Array<SubProductResource>,
   delegable: resource.delegable ?? false,
+  invoiceable: resource.invoiceable ?? false,
 });
