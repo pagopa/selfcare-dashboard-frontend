@@ -47,4 +47,5 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   tag: undefined,
   subProducts: resource.children as Array<SubProductResource>,
   delegable: resource.delegable ?? false,
+  invoiceable: resource.invoiceable ?? false,
 });
