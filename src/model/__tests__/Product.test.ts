@@ -45,5 +45,6 @@ test('Test institutionInfo2Party', () => {
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     logoBgColor: '#0066CC',
     delegable: true,
+    invoiceable: false,
   });
 });
