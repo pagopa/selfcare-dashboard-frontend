@@ -1,4 +1,5 @@
-import { render, waitFor } from '@testing-library/react';
+import React from 'react';
+import { render, waitFor, screen } from '@testing-library/react';
 import Dashboard from '../Dashboard';
 import { Provider } from 'react-redux';
 import { createStore } from '../../../redux/store';
@@ -48,6 +49,14 @@ test('Test routing', async () => {
 
   history.push('/dashboard/3/delegates');
   expect(history.location.pathname).toBe('/dashboard/3/delegates');
+
+  // Operator with user role in prod-pn see Invoice
+  history.push('/dashboard/4');
+  expect(screen.getByText('Fatturazione')).toBeInTheDocument();
+
+  // Admin with user role in prod-pn see Invoice
+  history.push('/dashboard/3');
+  expect(screen.getByText('Fatturazione')).toBeInTheDocument();
 
   // history.push('/dashboard/13/prId/users/798');
   // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/prId/users'));

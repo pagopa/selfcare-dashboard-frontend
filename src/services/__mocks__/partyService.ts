@@ -189,17 +189,6 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
-      {
-        productId: 'prod-pn',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
-        billing: {
-          vatNumber: '3333',
-          recipientCode: 'dddd',
-          publicServices: true,
-        },
-      },
     ],
     status: undefined,
     userRole: undefined,
@@ -318,8 +307,19 @@ export const mockedParties: Array<Party> = [
       { code: '8853441', desc: 'Comune di Roma' },
     ],
     vatNumber: '111122211111',
-    // Use case with no onboarded products
-    products: [],
+    products: [
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+    ],
     status: undefined,
     userRole: undefined,
   },
@@ -494,7 +494,6 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-pn',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
         billing: {
           vatNumber: '3333',
           recipientCode: 'dddd',

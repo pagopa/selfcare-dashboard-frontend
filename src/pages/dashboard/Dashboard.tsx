@@ -1,23 +1,23 @@
-import { Grid, Box, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { useMemo } from 'react';
-import { Route, Switch, useHistory, matchPath } from 'react-router';
-import { useStore } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useStore } from 'react-redux';
+import { Route, Switch, matchPath, useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
-import withSelectedParty from '../../decorators/withSelectedParty';
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
+import withSelectedParty from '../../decorators/withSelectedParty';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
 import withSelectedProductRoles from '../../decorators/withSelectedPartyProductAndRoles';
+import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
+import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
+import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
+import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
 import { Party } from '../../model/Party';
-import { buildProductsMap, Product, ProductsMap } from '../../model/Product';
+import { Product, ProductsMap, buildProductsMap } from '../../model/Product';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
-import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
-import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
-import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
-import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
 import DashboardTechnologyPartnerPage from '../dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
@@ -125,6 +125,12 @@ const Dashboard = () => {
     )
   );
 
+  const isInvoiceSectionVisible = !!products?.some(
+    (prod) =>
+      prod.invoiceable &&
+      party?.products.some((partyProd) => partyProd.productId === prod.id && partyProd.userRole)
+  );
+
   const productsMap: ProductsMap =
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
 
@@ -161,6 +167,7 @@ const Dashboard = () => {
               party={party}
               isDelegateSectionVisible={isDelegateSectionVisible}
               canSeeSection={canSeeSection}
+              isInvoiceSectionVisible={isInvoiceSectionVisible}
             />
           </Box>
         </Grid>
