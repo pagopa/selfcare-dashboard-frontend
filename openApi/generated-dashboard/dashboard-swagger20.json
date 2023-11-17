@@ -1867,6 +1867,75 @@
         "summary": "exchange"
       }
     },
+    "/token/exchange/fatturazione": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "query",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Back Office environment",
+            "in": "query",
+            "name": "environment",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/IdentityTokenResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "token"
+        ],
+        "description": "Service to create a 'Billing Token' based on a Self Care session token",
+        "operationId": "billingTokenUsingGET",
+        "summary": "billingToken"
+      }
+    },
     "/user-groups": {
       "get": {
         "produces": [
@@ -2767,7 +2836,7 @@
       }
     }
   },
-  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},
+  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -3965,7 +4034,7 @@
           "type": "array"
         },
         "delegable": {
-          "description": "If a product is delegable to a technical partner",
+          "description": "If a product is delegable to a technical partner ",
           "example": false,
           "type": "boolean"
         },
@@ -3982,7 +4051,7 @@
           "type": "string"
         },
         "invoiceable": {
-          "description": "If a product is invoiceable",
+          "description": "${swagger.dashboard.products.model.invoiceable}",
           "example": false,
           "type": "boolean"
         },
@@ -4095,7 +4164,7 @@
     "SubProductResource": {
       "properties": {
         "delegable": {
-          "description": "If a product is delegable to a technical partner",
+          "description": "If a product is delegable to a technical partner ",
           "example": false,
           "type": "boolean"
         },
@@ -4112,7 +4181,7 @@
           "type": "string"
         },
         "invoiceable": {
-          "description": "If a product is invoiceable",
+          "description": "${swagger.dashboard.products.model.invoiceable}",
           "example": false,
           "type": "boolean"
         },

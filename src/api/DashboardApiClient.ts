@@ -19,6 +19,7 @@ import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRo
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import { DelegationResource } from './generated/b4f-dashboard/DelegationResource';
+import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -86,6 +87,17 @@ export const DashboardApi = {
   ): Promise<string> => {
     const result = await apiClient.retrieveProductBackofficeUsingGET({
       productId,
+      institutionId,
+      environment,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getBillingToken: async (
+    institutionId: string,
+    environment?: string
+  ): Promise<IdentityTokenResource> => {
+    const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,
     });
