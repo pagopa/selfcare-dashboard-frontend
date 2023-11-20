@@ -22,7 +22,7 @@ test('Test retrieveTokenExchange', async () => {
 test('getBillingToken', async () => {
   const url = await getBillingToken(mockedParties[0].partyId);
 
-  expect(url).toMatchObject({ token: 'DUMMYTOKEN' });
+  expect(url).toBe('DUMMYTOKEN');
 
   expect(getBillingToken).toBeCalledTimes(1);
 });
