@@ -72,7 +72,7 @@ export default function DashboardSideMenu({
 
     getBillingToken(party.partyId)
       .then((result) => {
-        window.location.assign(result.token);
+        window.location.assign(result);
       })
       .catch((error) => {
         addError({

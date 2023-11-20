@@ -1893,7 +1893,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/IdentityTokenResource"
+              "$ref": "#/definitions/STRINGWrapper"
             }
           },
           "400": {
@@ -2836,7 +2836,7 @@
       }
     }
   },
-  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},
+  "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -4034,7 +4034,7 @@
           "type": "array"
         },
         "delegable": {
-          "description": "If a product is delegable to a technical partner ",
+          "description": "If a product is delegable to a technical partner",
           "example": false,
           "type": "boolean"
         },
@@ -4051,7 +4051,7 @@
           "type": "string"
         },
         "invoiceable": {
-          "description": "${swagger.dashboard.products.model.invoiceable}",
+          "description": "If a product is invoiceable",
           "example": false,
           "type": "boolean"
         },
@@ -4164,7 +4164,7 @@
     "SubProductResource": {
       "properties": {
         "delegable": {
-          "description": "If a product is delegable to a technical partner ",
+          "description": "If a product is delegable to a technical partner",
           "example": false,
           "type": "boolean"
         },
@@ -4181,7 +4181,7 @@
           "type": "string"
         },
         "invoiceable": {
-          "description": "${swagger.dashboard.products.model.invoiceable}",
+          "description": "If a product is invoiceable",
           "example": false,
           "type": "boolean"
         },

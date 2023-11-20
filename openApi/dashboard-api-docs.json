@@ -2269,7 +2269,8 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/IdentityTokenResource"
+                  "type" : "string",
+                  "format" : "uri"
                 }
               }
             }
@@ -4393,7 +4394,7 @@
           },
           "delegable" : {
             "type" : "boolean",
-            "description" : "If a product is delegable to a technical partner ",
+            "description" : "If a product is delegable to a technical partner",
             "example" : false
           },
           "description" : {
@@ -4410,7 +4411,7 @@
           },
           "invoiceable" : {
             "type" : "boolean",
-            "description" : "${swagger.dashboard.products.model.invoiceable}",
+            "description" : "If a product is invoiceable",
             "example" : false
           },
           "logo" : {
@@ -4506,7 +4507,7 @@
         "properties" : {
           "delegable" : {
             "type" : "boolean",
-            "description" : "If a product is delegable to a technical partner ",
+            "description" : "If a product is delegable to a technical partner",
             "example" : false
           },
           "description" : {
@@ -4523,7 +4524,7 @@
           },
           "invoiceable" : {
             "type" : "boolean",
-            "description" : "${swagger.dashboard.products.model.invoiceable}",
+            "description" : "If a product is invoiceable",
             "example" : false
           },
           "logo" : {

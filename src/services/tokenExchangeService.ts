@@ -1,5 +1,4 @@
 import { DashboardApi } from '../api/DashboardApiClient';
-import { IdentityTokenResource } from '../api/generated/b4f-dashboard/IdentityTokenResource';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 
@@ -10,12 +9,9 @@ export const retrieveBackOfficeUrl = (
 ): Promise<string> =>
   DashboardApi.getBackOfficeUrl(selectedParty?.partyId ?? '', product?.id ?? '', environment);
 
-export const getBillingToken = (
-  partyId: string,
-  environment?: string
-): Promise<IdentityTokenResource> => {
+export const getBillingToken = (partyId: string, environment?: string): Promise<string> => {
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
-    return new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' }));
+    return new Promise((resolve) => resolve('DUMMYTOKEN'));
   } else {
     return DashboardApi.getBillingToken(partyId, environment);
   }

@@ -1,25 +1,24 @@
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
-import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
-import { store } from '../redux/store';
-import { ENV } from '../utils/env';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
-import { createClient, WithDefaultsT } from './generated/b4f-dashboard/client';
+import { store } from '../redux/store';
+import { ENV } from '../utils/env';
+import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
+import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
+import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
+import { DelegationResource } from './generated/b4f-dashboard/DelegationResource';
+import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
+import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import {
   InstitutionResource,
   InstitutionTypeEnum,
 } from './generated/b4f-dashboard/InstitutionResource';
-import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
-import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
-import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
-import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
-import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
-import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
-import { DelegationResource } from './generated/b4f-dashboard/DelegationResource';
-import { IdentityTokenResource } from './generated/b4f-dashboard/IdentityTokenResource';
+import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
+import { WithDefaultsT, createClient } from './generated/b4f-dashboard/client';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -96,7 +95,7 @@ export const DashboardApi = {
   getBillingToken: async (
     institutionId: string,
     environment?: string
-  ): Promise<IdentityTokenResource> => {
+  ): Promise<string> => {
     const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,
