@@ -303,6 +303,11 @@ export const DashboardApi = {
     _environment?: string
   ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
+  getBillingToken: async (
+    _partyId: string,
+    _environment?: string
+  ): Promise<string> => new Promise((resolve) => resolve('DUMMYTOKEN')),
+
   getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
 

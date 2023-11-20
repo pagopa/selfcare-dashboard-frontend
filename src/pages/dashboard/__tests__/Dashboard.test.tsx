@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import Dashboard from '../Dashboard';
 import { Provider } from 'react-redux';
 import { createStore } from '../../../redux/store';
@@ -8,6 +8,22 @@ import { createMemoryHistory } from 'history';
 import { Router } from 'react-router';
 
 jest.mock('../../../decorators/withSelectedParty');
+
+const oldWindowLocation = global.window.location;
+const mockedLocation = {
+  assign: jest.fn(),
+  pathname: '',
+  origin: 'MOCKED_ORIGIN',
+  search: '',
+  hash: '',
+};
+
+beforeAll(() => {
+  Object.defineProperty(window, 'location', { value: mockedLocation });
+});
+afterAll(() => {
+  Object.defineProperty(window, 'location', { value: oldWindowLocation });
+});
 
 const renderDashboard = (
   injectedStore?: ReturnType<typeof createStore>,
@@ -50,13 +66,17 @@ test('Test routing', async () => {
   history.push('/dashboard/3/delegates');
   expect(history.location.pathname).toBe('/dashboard/3/delegates');
 
+  const InvoiceBtn = screen.getByText('Fatturazione');
+
   // Operator with user role in prod-pn see Invoice
   history.push('/dashboard/4');
-  expect(screen.getByText('Fatturazione')).toBeInTheDocument();
+  expect(InvoiceBtn).toBeInTheDocument();
 
   // Admin with user role in prod-pn see Invoice
   history.push('/dashboard/3');
-  expect(screen.getByText('Fatturazione')).toBeInTheDocument();
+  expect(InvoiceBtn).toBeInTheDocument();
+
+  await waitFor(() => fireEvent.click(InvoiceBtn));
 
   // history.push('/dashboard/13/prId/users/798');
   // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/prId/users'));
