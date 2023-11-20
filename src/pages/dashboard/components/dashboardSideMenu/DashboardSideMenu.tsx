@@ -1,18 +1,21 @@
-import { List, Grid } from '@mui/material';
-import { useHistory } from 'react-router';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
-import { useTranslation } from 'react-i18next';
-import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
-import PeopleAlt from '@mui/icons-material/PeopleAlt';
-import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
 import DnsIcon from '@mui/icons-material/Dns';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
+import PeopleAlt from '@mui/icons-material/PeopleAlt';
+import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
+import { Grid, List } from '@mui/material';
+import { useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useState } from 'react';
-import { DASHBOARD_ROUTES } from '../../../../routes';
-import { ENV } from '../../../../utils/env';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 import { Party } from '../../../../model/Party';
+import { DASHBOARD_ROUTES } from '../../../../routes';
+import { getBillingToken } from '../../../../services/tokenExchangeService';
+import { ENV } from '../../../../utils/env';
+import { LOADING_TASK_TOKEN_EXCHANGE_INVOICE } from '../../../../utils/constants';
 import DashboardSidenavItem from './DashboardSidenavItem';
 
 type Props = {
@@ -32,6 +35,8 @@ export default function DashboardSideMenu({
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
   const [isInvoiceSelected, setIsInvoiceSelected] = useState(false);
+  const addError = useErrorDispatcher();
+  const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE_INVOICE);
 
   const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
   const usersRoute = ENV.ROUTES.USERS;
@@ -61,6 +66,27 @@ export default function DashboardSideMenu({
   const isGroupSelected = window.location.pathname.startsWith(groupsPath);
   const isPtSelected = window.location.pathname.startsWith(ptPath);
   const isPt = party.institutionType === 'PT';
+
+  const getToken = async () => {
+    setLoading(true);
+
+    getBillingToken(party.partyId)
+      .then((result) => {
+        window.location.assign(result);
+      })
+      .catch((error) => {
+        addError({
+          id: `TokenExchangeInvoiceError-${party.partyId}`,
+          blocking: false,
+          error,
+          techDescription: `Something gone wrong retrieving token exchange on click of invoice button ${party.partyId}`,
+          toNotify: true,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <Grid container item mt={1} width="100%">
@@ -116,7 +142,7 @@ export default function DashboardSideMenu({
               // TODO add tokenExchange Call on click
               handleClick={() => {
                 setIsInvoiceSelected(true);
-                onExit(() => console.log('Fatturazione'));
+                onExit(() => getToken());
               }}
               isSelected={isInvoiceSelected}
               icon={EuroSymbolIcon}
