@@ -1,5 +1,7 @@
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import SearchIcon from '@mui/icons-material/Search';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import {
   Button,
   FormControl,
@@ -19,11 +21,8 @@ import {
   Typography,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import SearchIcon from '@mui/icons-material/Search';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import { Trans } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 
 type Props = {
@@ -41,6 +40,15 @@ export default function DashboardTablePT({
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState('All');
+  const [initialSortDone, setInitialSortDone] = useState(false);
+
+  useEffect(() => {
+    if (!initialSortDone) {
+      setOrder('asc');
+      handleSort(order);
+      setInitialSortDone(true);
+    }
+  }, [initialSortDone]);
 
   const codeToLabelProduct = (code: string) => {
     switch (code) {
@@ -75,6 +83,10 @@ export default function DashboardTablePT({
     setSearchResults(filteredResults);
   };
 
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm, selectedProduct, filteredArray]);
+
   const hasBeenDelegated = filteredArray && filteredArray.length > 0;
 
   const handleResetFilter = () => {
@@ -82,18 +94,24 @@ export default function DashboardTablePT({
     setSelectedProduct('All');
     setSearchResults(filteredArray);
   };
+  const handleSort = (newOrder?: 'asc' | 'desc') => {
+    const currentOrder = newOrder || (order === 'asc' ? 'desc' : 'asc');
+    setOrder(currentOrder);
 
-  const customSort = (a: DelegationResource, b: DelegationResource) => {
-    const aValue = a.institutionName;
-    const bValue = b.institutionName;
-
-    if (typeof aValue === 'string' && typeof bValue === 'string') {
-      const compareResult = aValue.localeCompare(bValue, undefined, { sensitivity: 'base' });
-      return order === 'asc' ? compareResult : -compareResult;
-    }
-    // Default to no sorting
-    return 0;
+    const sortedResult = [...searchResults].sort((a: DelegationResource, b: DelegationResource) => {
+      const firstValue = a.institutionName;
+      const secondValue = b.institutionName;
+      if (firstValue && secondValue) {
+        return order === 'asc'
+          ? firstValue.localeCompare(secondValue)
+          : secondValue.localeCompare(firstValue);
+      } else {
+        return order === 'asc' ? -1 : 1;
+      }
+    });
+    setSearchResults(sortedResult);
   };
+  
 
   return (
     <>
@@ -165,7 +183,7 @@ export default function DashboardTablePT({
                   <IconButton
                     style={{ backgroundColor: 'transparent', padding: '0 8px' }}
                     disableRipple
-                    onClick={() => setOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'))}
+                    onClick={() => handleSort()}
                   >
                     {order === 'asc' ? (
                       <ArrowUpwardIcon fontSize="small" />
@@ -181,7 +199,7 @@ export default function DashboardTablePT({
               </TableRow>
             </TableHead>
             <TableBody sx={{ backgroundColor: 'background.paper' }}>
-              {[...searchResults].sort(customSort).map((item) => (
+              {searchResults.map((item) => (
                 <TableRow key={item.institutionName}>
                   <TableCell>
                     <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
