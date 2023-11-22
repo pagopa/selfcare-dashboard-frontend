@@ -38,8 +38,9 @@ export default function DashboardTablePT({
   setSearchResults,
 }: Props) {
   const { t } = useTranslation();
-  const [orderBy, setOrderBy] = useState<'institutionName' | 'productId'>('institutionName');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState('All');
 
   const codeToLabelProduct = (code: string) => {
     switch (code) {
@@ -54,18 +55,6 @@ export default function DashboardTablePT({
         return '';
     }
   };
-
-  const handleSort = (field: 'institutionName' | 'productId') => {
-    if (field === orderBy) {
-      setOrder(order === 'asc' ? 'desc' : 'asc');
-    } else {
-      setOrderBy(field);
-      setOrder('asc');
-    }
-  };
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState('All');
 
   const handleSearch = () => {
     // eslint-disable-next-line functional/no-let
@@ -95,18 +84,16 @@ export default function DashboardTablePT({
   };
 
   const customSort = (a: DelegationResource, b: DelegationResource) => {
-    const aValue = a[orderBy];
-    const bValue = b[orderBy];
-  
-    if (orderBy === 'institutionName' && typeof aValue === 'string' && typeof bValue === 'string') {
+    const aValue = a.institutionName;
+    const bValue = b.institutionName;
+
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
       const compareResult = aValue.localeCompare(bValue, undefined, { sensitivity: 'base' });
       return order === 'asc' ? compareResult : -compareResult;
     }
-  
     // Default to no sorting
     return 0;
   };
-  
 
   return (
     <>
@@ -178,16 +165,12 @@ export default function DashboardTablePT({
                   <IconButton
                     style={{ backgroundColor: 'transparent', padding: '0 8px' }}
                     disableRipple
-                    onClick={() => handleSort('institutionName')}
+                    onClick={() => setOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'))}
                   >
-                    {orderBy === 'institutionName' ? (
-                      order === 'asc' ? (
-                        <ArrowUpwardIcon fontSize="small" />
-                      ) : (
-                        <ArrowDownwardIcon fontSize="small" />
-                      )
-                    ) : (
+                    {order === 'asc' ? (
                       <ArrowUpwardIcon fontSize="small" />
+                    ) : (
+                      <ArrowDownwardIcon fontSize="small" />
                     )}
                   </IconButton>
                 </TableCell>
