@@ -94,6 +94,20 @@ export default function DashboardTablePT({
     setSearchResults(filteredArray);
   };
 
+  const customSort = (a: DelegationResource, b: DelegationResource) => {
+    const aValue = a[orderBy];
+    const bValue = b[orderBy];
+  
+    if (orderBy === 'institutionName' && typeof aValue === 'string' && typeof bValue === 'string') {
+      const compareResult = aValue.localeCompare(bValue, undefined, { sensitivity: 'base' });
+      return order === 'asc' ? compareResult : -compareResult;
+    }
+  
+    // Default to no sorting
+    return 0;
+  };
+  
+
   return (
     <>
       <Grid container spacing={1}>
@@ -184,7 +198,7 @@ export default function DashboardTablePT({
               </TableRow>
             </TableHead>
             <TableBody sx={{ backgroundColor: 'background.paper' }}>
-              {searchResults.map((item) => (
+              {[...searchResults].sort(customSort).map((item) => (
                 <TableRow key={item.institutionName}>
                   <TableCell>
                     <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
