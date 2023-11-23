@@ -1,5 +1,7 @@
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import SearchIcon from '@mui/icons-material/Search';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import {
   Button,
   FormControl,
@@ -19,11 +21,8 @@ import {
   Typography,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import SearchIcon from '@mui/icons-material/Search';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import { Trans } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 
 type Props = {
@@ -38,8 +37,10 @@ export default function DashboardTablePT({
   setSearchResults,
 }: Props) {
   const { t } = useTranslation();
-  const [orderBy, setOrderBy] = useState<'institutionName' | 'productId'>('institutionName');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState('All');
+  const [initialSortDone, setInitialSortDone] = useState(false);
 
   const codeToLabelProduct = (code: string) => {
     switch (code) {
@@ -54,18 +55,6 @@ export default function DashboardTablePT({
         return '';
     }
   };
-
-  const handleSort = (field: 'institutionName' | 'productId') => {
-    if (field === orderBy) {
-      setOrder(order === 'asc' ? 'desc' : 'asc');
-    } else {
-      setOrderBy(field);
-      setOrder('asc');
-    }
-  };
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState('All');
 
   const handleSearch = () => {
     // eslint-disable-next-line functional/no-let
@@ -86,6 +75,10 @@ export default function DashboardTablePT({
     setSearchResults(filteredResults);
   };
 
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm, selectedProduct, filteredArray]);
+
   const hasBeenDelegated = filteredArray && filteredArray.length > 0;
 
   const handleResetFilter = () => {
@@ -93,6 +86,34 @@ export default function DashboardTablePT({
     setSelectedProduct('All');
     setSearchResults(filteredArray);
   };
+  const handleSort = (newOrder?: 'asc' | 'desc') => {
+    const currentOrder = newOrder || (order === 'asc' ? 'desc' : 'asc');
+    setOrder(currentOrder);
+
+    const sortedResult = [...searchResults].sort((a: DelegationResource, b: DelegationResource) => {
+      const firstValue = a.institutionName;
+      const secondValue = b.institutionName;
+      if (firstValue && secondValue) {
+        return currentOrder === 'asc'
+          ? firstValue.localeCompare(secondValue)
+          : secondValue.localeCompare(firstValue);
+      } else {
+        return currentOrder === 'asc' ? -1 : 1;
+      }
+    });
+    setSearchResults(sortedResult);
+  };
+
+  useEffect(() => {
+    if (!initialSortDone) {
+      handleSort('asc');
+      setInitialSortDone(true);
+    }
+  }, [initialSortDone]);
+
+  useEffect(() => {
+    handleSort(order);
+  }, [JSON.stringify(searchResults)]);
 
   return (
     <>
@@ -164,16 +185,12 @@ export default function DashboardTablePT({
                   <IconButton
                     style={{ backgroundColor: 'transparent', padding: '0 8px' }}
                     disableRipple
-                    onClick={() => handleSort('institutionName')}
+                    onClick={() => handleSort()}
                   >
-                    {orderBy === 'institutionName' ? (
-                      order === 'asc' ? (
-                        <ArrowUpwardIcon fontSize="small" />
-                      ) : (
-                        <ArrowDownwardIcon fontSize="small" />
-                      )
-                    ) : (
+                    {order === 'asc' ? (
                       <ArrowUpwardIcon fontSize="small" />
+                    ) : (
+                      <ArrowDownwardIcon fontSize="small" />
                     )}
                   </IconButton>
                 </TableCell>
