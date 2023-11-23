@@ -57,13 +57,20 @@ export default function DashboardTablePT({
   };
 
   const handleSearch = () => {
-    const filteredResults = filteredArray
-      .filter((item) => selectedProduct === 'All' || item?.productId?.includes(selectedProduct))
-      .filter(
-        (item) =>
-          item.institutionName &&
-          item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
+    // eslint-disable-next-line functional/no-let
+    let filteredResults = filteredArray;
+
+    if (selectedProduct !== 'All') {
+      filteredResults = filteredArray.filter(
+        (item) => item.productId && item.productId.includes(selectedProduct)
       );
+    }
+
+    filteredResults = filteredResults.filter(
+      (item) =>
+        item.institutionName &&
+        item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     setSearchResults(filteredResults);
   };
