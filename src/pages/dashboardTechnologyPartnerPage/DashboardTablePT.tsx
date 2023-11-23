@@ -42,14 +42,6 @@ export default function DashboardTablePT({
   const [selectedProduct, setSelectedProduct] = useState('All');
   const [initialSortDone, setInitialSortDone] = useState(false);
 
-  useEffect(() => {
-    if (!initialSortDone) {
-      setOrder('asc');
-      handleSort(order);
-      setInitialSortDone(true);
-    }
-  }, [initialSortDone]);
-
   const codeToLabelProduct = (code: string) => {
     switch (code) {
       case 'prod-io':
@@ -65,20 +57,13 @@ export default function DashboardTablePT({
   };
 
   const handleSearch = () => {
-    // eslint-disable-next-line functional/no-let
-    let filteredResults = filteredArray;
-
-    if (selectedProduct !== 'All') {
-      filteredResults = filteredArray.filter(
-        (item) => item.productId && item.productId.includes(selectedProduct)
+    const filteredResults = filteredArray
+      .filter((item) => selectedProduct === 'All' || item?.productId?.includes(selectedProduct))
+      .filter(
+        (item) =>
+          item.institutionName &&
+          item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
       );
-    }
-
-    filteredResults = filteredResults.filter(
-      (item) =>
-        item.institutionName &&
-        item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     setSearchResults(filteredResults);
   };
@@ -102,16 +87,26 @@ export default function DashboardTablePT({
       const firstValue = a.institutionName;
       const secondValue = b.institutionName;
       if (firstValue && secondValue) {
-        return order === 'asc'
+        return currentOrder === 'asc'
           ? firstValue.localeCompare(secondValue)
           : secondValue.localeCompare(firstValue);
       } else {
-        return order === 'asc' ? -1 : 1;
+        return currentOrder === 'asc' ? -1 : 1;
       }
     });
     setSearchResults(sortedResult);
   };
-  
+
+  useEffect(() => {
+    if (!initialSortDone) {
+      handleSort('asc');
+      setInitialSortDone(true);
+    }
+  }, [initialSortDone]);
+
+  useEffect(() => {
+    handleSort(order);
+  }, [JSON.stringify(searchResults)]);
 
   return (
     <>
