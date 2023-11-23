@@ -75,10 +75,6 @@ export default function DashboardTablePT({
     setSearchResults(filteredResults);
   };
 
-  useEffect(() => {
-    handleSearch();
-  }, [searchTerm, selectedProduct, filteredArray]);
-
   const hasBeenDelegated = filteredArray && filteredArray.length > 0;
 
   const handleResetFilter = () => {
@@ -110,10 +106,6 @@ export default function DashboardTablePT({
       setInitialSortDone(true);
     }
   }, [initialSortDone]);
-
-  useEffect(() => {
-    handleSort(order);
-  }, [JSON.stringify(searchResults)]);
 
   return (
     <>
