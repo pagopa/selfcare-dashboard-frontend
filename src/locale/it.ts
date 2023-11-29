@@ -239,7 +239,7 @@ export default {
     findOutMore: 'Dubbi? Vai al manuale',
     chooseProduct: 'Scegli il prodotto',
     selectTechPartner: {
-      title: 'Seleziona un Partner Tecnologico',
+      title: 'Seleziona un Partner Tecnologico o Intermediario',
       subTitle: 'Digita il nome oppure scegli dalla lista',
       label: 'Seleziona o scegli dalla lista',
       groupByName: 'Nome',
