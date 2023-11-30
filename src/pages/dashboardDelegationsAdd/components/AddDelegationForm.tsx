@@ -77,7 +77,20 @@ export default function AddDelegationForm({
   const handleProductBrokers = (productId: string, institutionType: InstitutionTypeEnum) => {
     setLoading(true);
     getProductBrokers(productId, institutionType)
-      .then((pb) => setProductBrokers(pb))
+      .then((pb) => {
+        const orderedProductBrokers = [...pb].sort(
+          (firstBroker: BrokerResource, secondBroker: BrokerResource) => {
+            const firstBrokerName = firstBroker.description;
+            const secondBrokerName = secondBroker.description;
+            if (firstBrokerName && secondBrokerName) {
+              return firstBrokerName.localeCompare(secondBrokerName);
+            } else {
+              return 0;
+            }
+          }
+        );
+        setProductBrokers(orderedProductBrokers);
+      })
       .catch((reason) => {
         addError({
           id: 'PRODUCT_BROKERS_NOT_FOUND',

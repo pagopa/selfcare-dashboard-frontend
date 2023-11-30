@@ -257,32 +257,32 @@ export const mockedUserResource: UserResource = {
 export const mockedBrokerResource: Array<BrokerResource> = [
   {
     code: '004',
-    description: 'broker01',
+    description: 'A_broker01',
     enabled: true,
   },
   {
     code: '005',
-    description: 'broker02',
+    description: 'C_broker02',
     enabled: true,
   },
   {
     code: '006',
-    description: 'broker03',
+    description: 'F_broker03',
     enabled: true,
   },
   {
     code: '006',
-    description: 'broker04',
+    description: 'E_broker04',
     enabled: true,
   },
   {
     code: '006',
-    description: 'broker05',
+    description: 'B_broker05',
     enabled: true,
   },
   {
     code: '006',
-    description: 'broker06',
+    description: 'D_broker06',
     enabled: true,
   },
 ];
@@ -303,10 +303,8 @@ export const DashboardApi = {
     _environment?: string
   ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
-  getBillingToken: async (
-    _partyId: string,
-    _environment?: string
-  ): Promise<string> => new Promise((resolve) => resolve('DUMMYTOKEN')),
+  getBillingToken: async (_partyId: string, _environment?: string): Promise<string> =>
+    new Promise((resolve) => resolve('DUMMYTOKEN')),
 
   getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
