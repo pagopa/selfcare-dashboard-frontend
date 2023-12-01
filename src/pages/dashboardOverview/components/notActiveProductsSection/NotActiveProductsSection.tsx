@@ -17,9 +17,9 @@ export default function NotActiveProductsSection({ party, products }: Props) {
 
   const isOnboardingAllowedInProdPN = (category?: string): boolean => {
     const allowedCategories = [
-      'Comuni e loro Consorzi e Associazioni',
-      'Regioni, Province Autonome e loro Consorzi e Associazioni',
-      "Citta' Metropolitane",
+      'Regioni, Province Autonome e loro Consorzi e Associazioni', // L4
+      'Comuni e loro Consorzi e Associazioni', // L6
+      "Citta' Metropolitane", // L45
     ];
 
     return category !== undefined && allowedCategories.includes(category);
