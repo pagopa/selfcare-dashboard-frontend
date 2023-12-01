@@ -59,7 +59,7 @@ export const DASHBOARD_ROUTES = {
     component: DashboardDelegationsPage,
   },
   TECHPARTNER: {
-    path: `${BASE_ROUTE}/:partyId/ptPage`,
+    path: `${BASE_ROUTE}/:partyId/delegate`,
     exact: true,
     component: DashboardTechnologyPartnerPage,
   },
