@@ -80,8 +80,9 @@ export default function AddDelegationForm({
       .then((pb) => {
         const orderedProductBrokers = [...pb].sort(
           (firstBroker: BrokerResource, secondBroker: BrokerResource) => {
-            const firstBrokerName = firstBroker.description?.replace(/^[_"'.,;-]+$/, '');
-            const secondBrokerName = secondBroker.description?.replace(/^[_"'.,;-]+$/, '');
+            const regexp = /[_"'.,;-]+/g;
+            const firstBrokerName = firstBroker.description?.replace(regexp, '');
+            const secondBrokerName = secondBroker.description?.replace(regexp, '');
             if (firstBrokerName && secondBrokerName) {
               return firstBrokerName.localeCompare(secondBrokerName);
             } else {

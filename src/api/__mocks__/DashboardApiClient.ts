@@ -257,7 +257,7 @@ export const mockedUserResource: UserResource = {
 export const mockedBrokerResource: Array<BrokerResource> = [
   {
     code: '004',
-    description: 'A_brok.er01',
+    description: 'A.S.S.A.P er01',
     enabled: true,
   },
   {
@@ -272,7 +272,7 @@ export const mockedBrokerResource: Array<BrokerResource> = [
   },
   {
     code: '006',
-    description: 'B_bro__ker05',
+    description: 'agenzia er01',
     enabled: true,
   },
   {
