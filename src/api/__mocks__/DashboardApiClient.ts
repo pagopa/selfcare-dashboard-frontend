@@ -271,18 +271,28 @@ export const mockedBrokerResource: Array<BrokerResource> = [
     enabled: true,
   },
   {
-    code: '006',
+    code: '007',
     description: 'agenzia er01',
     enabled: true,
   },
   {
-    code: '006',
+    code: '008',
     description: 'D_bro.k.er06',
     enabled: true,
   },
   {
-    code: '006',
+    code: '009',
     description: 'F_broker03',
+    enabled: true,
+  },
+  {
+    code: '010',
+    description: 'S_broker03',
+    enabled: true,
+  },
+  {
+    code: '011',
+    description: 'K_broker03',
     enabled: true,
   },
 ];
