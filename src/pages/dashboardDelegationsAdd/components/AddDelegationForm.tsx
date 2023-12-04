@@ -20,8 +20,8 @@ import {
   useUserNotify,
 } from '@pagopa/selfcare-common-frontend';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
 import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
@@ -30,6 +30,8 @@ import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { createDelegation, getProductBrokers } from '../../../services/partyService';
 import { LOADING_TASK_DELEGATION_FORM } from '../../../utils/constants';
+import { fetchDelegations } from '../../../services/delegationServices';
+import { DelegationResource } from '../../../api/generated/b4f-dashboard/DelegationResource';
 
 type Props = {
   authorizedDelegableProducts: Array<Product>;
@@ -52,6 +54,8 @@ export default function AddDelegationForm({
   const [productSelected, setProductSelected] = useState<Product>();
   const [productBrokers, setProductBrokers] = useState<Array<BrokerResource>>();
   const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
+  const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>();
+  const delegationsListRef = useRef(delegationsList);
 
   useEffect(() => {
     if (authorizedDelegableProducts.length === 1) {
@@ -68,8 +72,41 @@ export default function AddDelegationForm({
     }
   }, [selectedProductByQuery]);
 
+  const retrieveDelegationsList = async () => {
+    setLoading(true);
+    await fetchDelegations(party.partyId)
+      .then((r) => {
+        setDelegationsList(r);
+        /* eslint-disable functional/immutable-data */
+        delegationsListRef.current = r;
+      })
+      .catch((reason) => {
+        addError({
+          id: `FETCH_PARTY_DELEGATIONS_ERROR-${party.partyId}`,
+          blocking: true,
+          component: 'SessionModal',
+          error: reason,
+          techDescription: `Something gone wrong while fetching delegations with party id ${party.partyId}`,
+          displayableTitle: t('overview.genericError.title'),
+          displayableDescription: (
+            <Trans i18nKey="overview.genericError.description">
+              A causa di un errore del sistema non è possibile completare la procedura.
+              <br />
+              Ti chiediamo di riprovare più tardi.
+            </Trans>
+          ),
+          toNotify: true,
+        });
+      })
+      .finally(() => setLoading(false));
+  };
+
   useEffect(() => {
-    if (productSelected) {
+    void retrieveDelegationsList();
+  }, []);
+
+  useEffect(() => {
+    if (productSelected && delegationsListRef) {
       handleProductBrokers(productSelected.id, party.institutionType as InstitutionTypeEnum);
     }
   }, [productSelected]);
@@ -90,7 +127,14 @@ export default function AddDelegationForm({
             }
           }
         );
-        setProductBrokers(orderedProductBrokers);
+        const delegable4ProductBrokers = orderedProductBrokers.filter(
+          (ob) =>
+            !delegationsListRef?.current?.some(
+              (dl) => dl.productId === productId && dl.brokerId === ob.code
+            )
+        );
+
+        setProductBrokers(delegable4ProductBrokers);
       })
       .catch((reason) => {
         addError({
