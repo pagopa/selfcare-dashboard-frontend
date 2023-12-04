@@ -14,6 +14,17 @@ type Props = {
 
 export default function NotActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
+
+  const isOnboardingAllowedInProdPN = (category?: string): boolean => {
+    const allowedCategories = [
+      'Regioni, Province Autonome e loro Consorzi e Associazioni', // L4
+      'Comuni e loro Consorzi e Associazioni', // L6
+      "Citta' Metropolitane", // L45
+    ];
+
+    return category !== undefined && allowedCategories.includes(category);
+  };
+
   return (
     <React.Fragment>
       <TitleBox
@@ -37,6 +48,7 @@ export default function NotActiveProductsSection({ party, products }: Props) {
                     (subProduct) => !party.products.some((us) => us.productId === subProduct.id)
                   )))
           )
+          .filter((p) => p.id !== 'prod-pn' || isOnboardingAllowedInProdPN(party?.category))
           .map((product) => (
             <NotActiveProductCardContainer key={product.id} party={party} product={product} />
           ))}
