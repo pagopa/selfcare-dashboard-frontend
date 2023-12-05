@@ -106,13 +106,9 @@ const Dashboard = () => {
       [products, party]
     ) ?? [];
 
-  const authorizedDelegableProducts: Array<Product> = activeProducts.filter((activeProduct) =>
+  const authorizedDelegableProducts: Array<Product> = activeProducts.filter((ap) =>
     party?.products.some(
-      (partyProduct) =>
-        partyProduct.productId === activeProduct.id &&
-        partyProduct.authorized &&
-        partyProduct.userRole === 'ADMIN' &&
-        activeProduct.delegable
+      (p) => p.productId === ap.id && p.authorized && p.userRole === 'ADMIN' && ap.delegable
     )
   );
 
