@@ -79,3 +79,16 @@ test('should render component DashboardOverview with institutionType AS and Prod
   // Avaible products section is not visible for AS
   expect(screen.queryByText('Prodotti disponibili')).not.toBeInTheDocument();
 });
+
+test('should render component DashboardOverview with no geoTaxonomy', async () => {
+  const mockedPAWithNoGeoTax = mockedParties[0];
+  renderWithProviders(
+    <DashboardOverview party={mockedPAWithNoGeoTax} products={mockedPartyProducts} />
+  );
+
+  // geo tax modal is visile bc mockedPAWithNoGeoTax has no geoTaxonomies
+  const geoTaxLocalBtn = await screen.findByText('Locale');
+
+  fireEvent.click(geoTaxLocalBtn);
+
+});

@@ -106,22 +106,9 @@ const Dashboard = () => {
       [products, party]
     ) ?? [];
 
-  const delegableProducts: Array<Product> = activeProducts.filter((p) =>
+  const authorizedDelegableProducts: Array<Product> = activeProducts.filter((ap) =>
     party?.products.some(
-      (partyProduct) =>
-        partyProduct.authorized &&
-        (partyProduct.productId === 'prod-io' || partyProduct.productId === 'prod-pagopa') &&
-        partyProduct.userRole === 'ADMIN' &&
-        p.delegable
-    )
-  );
-
-  const authorizedDelegableProducts = delegableProducts.filter((delegableProduct) =>
-    party?.products.some(
-      (partyProduct) =>
-        partyProduct.productId === delegableProduct.id &&
-        partyProduct.authorized === true &&
-        partyProduct.userRole === 'ADMIN'
+      (p) => p.productId === ap.id && p.authorized && p.userRole === 'ADMIN' && ap.delegable
     )
   );
 
@@ -139,7 +126,8 @@ const Dashboard = () => {
   const isPt = party?.institutionType === 'PT';
   const isPtSectionVisible = isPt && canSeeSection;
 
-  const isDelegateSectionVisible = ENV.DELEGATIONS.ENABLE && delegableProducts.length > 0 && !isPt;
+  const isDelegateSectionVisible =
+    ENV.DELEGATIONS.ENABLE && authorizedDelegableProducts.length > 0 && !isPt;
 
   const location = useLocation();
 
