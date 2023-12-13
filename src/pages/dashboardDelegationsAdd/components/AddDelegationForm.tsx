@@ -130,7 +130,7 @@ export default function AddDelegationForm({
         const delegable4ProductBrokers = orderedProductBrokers.filter(
           (ob) =>
             !delegationsListRef?.current?.some(
-              (dl) => dl.productId === productId && dl.brokerId === ob.code
+              (dl) => dl.productId === productId && dl.brokerName === ob.description
             )
         );
 
