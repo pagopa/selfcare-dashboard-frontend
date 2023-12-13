@@ -130,6 +130,12 @@ export const mockedBaseParties: Array<BaseParty> = [
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
+  {
+    partyId: '9999b9b9-e111-2222-b1bb-d0566b058af2',
+    description: 'Credit payment',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
 ];
 
 export const mockedParties: Array<Party> = [
@@ -623,17 +629,17 @@ export const mockedParties: Array<Party> = [
     originId: 'c_9999',
     origin: 'SELC',
     institutionType: 'PSP',
-    description: 'Unicredit',
+    description: 'Credit payment',
     category: 'Intermediario',
     fiscalCode: '00348170101',
-    digitalAddress: 'protocollo@unicredit.legalmail.it',
+    digitalAddress: 'creditpayment@mockmail.com',
     urlLogo:
       'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/7784b9d3-e834-4342-a6ef-d0566b058af2/logo.png',
     registeredOffice: 'Piazza Gae Aulenti, 3 - Tower A',
     zipCode: '20154',
-    typology: 'Prestatore di Servizi a Pagamento',
+    typology: 'Prestatore Servizi Pagamento',
     recipientCode: 'GGDAS99T',
-    geographicTaxonomies: [],
+    geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }],
     vatNumber: '111122211111',
     products: [
       {
@@ -644,17 +650,6 @@ export const mockedParties: Array<Party> = [
         billing: {
           vatNumber: '2222',
           recipientCode: 'cccc',
-          publicServices: true,
-        },
-      },
-      {
-        productId: 'prod-pn',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
-        billing: {
-          vatNumber: '3333',
-          recipientCode: 'dddd',
           publicServices: true,
         },
       },
@@ -797,17 +792,6 @@ export const mockedParties: Array<Party> = [
         billing: {
           vatNumber: '81001510528',
           recipientCode: 'BBGG34D',
-          publicServices: true,
-        },
-      },
-      {
-        productId: 'prod-pagopa',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
-        billing: {
-          vatNumber: '3334546566',
-          recipientCode: 'PBC945',
           publicServices: true,
         },
       },
