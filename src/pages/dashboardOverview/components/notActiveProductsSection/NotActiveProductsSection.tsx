@@ -48,7 +48,11 @@ export default function NotActiveProductsSection({ party, products }: Props) {
                     (subProduct) => !party.products.some((us) => us.productId === subProduct.id)
                   )))
           )
-          .filter((p) => p.id !== 'prod-pn' || isOnboardingAllowedInProdPN(party?.category))
+          .filter(
+            (p) =>
+              (party.institutionType === 'PSP' ? p.id !== 'prod-pagopa' : p.id) &&
+              (p.id !== 'prod-pn' || isOnboardingAllowedInProdPN(party?.category))
+          )
           .map((product) => (
             <NotActiveProductCardContainer key={product.id} party={party} product={product} />
           ))}
