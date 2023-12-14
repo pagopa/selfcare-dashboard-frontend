@@ -112,6 +112,30 @@ export const mockedBaseParties: Array<BaseParty> = [
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
+  {
+    partyId: '5dbec5e1-4262-4d00-a493-916e6171856a',
+    description: 'Asea Azienda Speciale',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '2222222',
+    description: 'Test Metropolitane',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '3333333',
+    description: 'Test Province Autonome',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '9999b9b9-e111-2222-b1bb-d0566b058af2',
+    description: 'Credit payment',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
 ];
 
 export const mockedParties: Array<Party> = [
@@ -605,17 +629,17 @@ export const mockedParties: Array<Party> = [
     originId: 'c_9999',
     origin: 'SELC',
     institutionType: 'PSP',
-    description: 'Unicredit',
+    description: 'Credit payment',
     category: 'Intermediario',
     fiscalCode: '00348170101',
-    digitalAddress: 'protocollo@unicredit.legalmail.it',
+    digitalAddress: 'creditpayment@mockmail.com',
     urlLogo:
       'https://selcdcheckoutsa.z6.web.core.windows.net/institutions/7784b9d3-e834-4342-a6ef-d0566b058af2/logo.png',
     registeredOffice: 'Piazza Gae Aulenti, 3 - Tower A',
     zipCode: '20154',
-    typology: 'Prestatore di Servizi a Pagamento',
+    typology: 'Prestatore Servizi Pagamento',
     recipientCode: 'GGDAS99T',
-    geographicTaxonomies: [],
+    geographicTaxonomies: [{ code: '058091', desc: 'Roma - Comune' }],
     vatNumber: '111122211111',
     products: [
       {
@@ -626,17 +650,6 @@ export const mockedParties: Array<Party> = [
         billing: {
           vatNumber: '2222',
           recipientCode: 'cccc',
-          publicServices: true,
-        },
-      },
-      {
-        productId: 'prod-pn',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
-        billing: {
-          vatNumber: '3333',
-          recipientCode: 'dddd',
           publicServices: true,
         },
       },
@@ -782,17 +795,6 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
-      {
-        productId: 'prod-pagopa',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
-        billing: {
-          vatNumber: '3334546566',
-          recipientCode: 'PBC945',
-          publicServices: true,
-        },
-      },
       // Use case with only prod-interop-coll
       {
         productId: 'prod-interop-coll',
@@ -853,28 +855,76 @@ export const mockedParties: Array<Party> = [
     ],
     vatNumber: '87485839212',
     products: [
-      // Use case with prod-interop with authorized false and prod-interop-coll with authorized true
       {
         productId: 'prod-interop',
         authorized: false,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
         billing: {
-          vatNumber: '3395867495',
-          recipientCode: 'NBG455B',
-          publicServices: true,
+          vatNumber: '00471320184',
+          recipientCode: 'g_43c42',
+          publicServices: false,
         },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.DELETED,
       },
       {
-        productId: 'prod-interop-coll',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
+        productId: 'prod-pagopa',
+        authorized: false,
         billing: {
-          vatNumber: '3395867495',
-          recipientCode: 'NBG455B',
-          publicServices: true,
+          vatNumber: '00471320184',
+          recipientCode: 'SDISDI',
+          publicServices: false,
         },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop',
+        authorized: false,
+        billing: {
+          vatNumber: '00471320184',
+          recipientCode: 'g_43c42',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
+      },
+      {
+        productId: 'prod-pn',
+        authorized: false,
+        billing: {
+          vatNumber: '00471320184',
+          recipientCode: 'CODSDI',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
+      },
+      {
+        productId: 'prod-io',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '00471320184',
+          recipientCode: 'ber4',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-pn',
+        authorized: false,
+        billing: {
+          vatNumber: '00471320184',
+          recipientCode: 'CODSDI',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-io-premium',
+        authorized: false,
+        billing: {
+          vatNumber: '00471320184',
+          recipientCode: 'ber4',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
     ],
     status: undefined,
@@ -1032,6 +1082,138 @@ export const mockedParties: Array<Party> = [
         billing: {
           vatNumber: '94287592722',
           recipientCode: 'c_b988',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+    ],
+  },
+  {
+    partyId: '5dbec5e1-4262-4d00-a493-916e6171856a',
+    externalId: '01378640625',
+    originId: 'aasp',
+    origin: 'IPA',
+    institutionType: 'GSP',
+    description: 'Asea Azienda Speciale',
+    typology: 'Gestore di Pubblici Servizi',
+    category: 'Gestori di Pubblici Servizi',
+    fiscalCode: '01378640625',
+    digitalAddress: 'infoasea@legalmail.it',
+    registeredOffice: 'Rocca Dei Rettori, p.zza Castello',
+    zipCode: '82100',
+    geographicTaxonomies: [
+      {
+        code: 'ITA',
+        desc: 'ITALIA',
+      },
+    ],
+    products: [
+      {
+        productId: 'prod-interop',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '01378640625',
+          recipientCode: 'codsdi',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop-coll',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '01378640625',
+          recipientCode: 'codsdi',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+    ],
+  },
+  {
+    partyId: '2222222',
+    externalId: '01378640625',
+    originId: 'aasp',
+    origin: 'IPA',
+    institutionType: 'PA',
+    description: 'Test Province Autonome',
+    typology: 'Publica Amministrazione',
+    category: 'Regioni, Province Autonome e loro Consorzi e Associazioni',
+    fiscalCode: '01378640625',
+    digitalAddress: 'infoasea@legalmail.it',
+    registeredOffice: 'Rocca Dei Rettori, p.zza Castello',
+    zipCode: '82100',
+    geographicTaxonomies: [
+      {
+        code: 'ITA',
+        desc: 'ITALIA',
+      },
+    ],
+    products: [
+      {
+        productId: 'prod-interop',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '01378640625',
+          recipientCode: 'codsdi',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop-coll',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '01378640625',
+          recipientCode: 'codsdi',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+    ],
+  },
+  {
+    partyId: '3333333',
+    externalId: '01378640625',
+    originId: 'aasp',
+    origin: 'IPA',
+    institutionType: 'PA',
+    description: 'Test Metropolitane',
+    typology: 'Publica Amministrazione',
+    category: "Citta' Metropolitane",
+    fiscalCode: '01378640625',
+    digitalAddress: 'infoasea@legalmail.it',
+    registeredOffice: 'Rocca Dei Rettori, p.zza Castello',
+    zipCode: '82100',
+    geographicTaxonomies: [
+      {
+        code: 'ITA',
+        desc: 'ITALIA',
+      },
+    ],
+    products: [
+      {
+        productId: 'prod-interop',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '01378640625',
+          recipientCode: 'codsdi',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop-coll',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          vatNumber: '01378640625',
+          recipientCode: 'codsdi',
           publicServices: false,
         },
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
