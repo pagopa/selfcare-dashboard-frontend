@@ -230,7 +230,7 @@ export const mockedParties: Array<Party> = [
     externalId: 'externalId3',
     originId: 'originId3',
     origin: 'IPA',
-    institutionType: 'PA',
+    institutionType: 'PG',
     recipientCode: 'CGDAS23C',
     geographicTaxonomies: [
       // Use case with two taxonomies
