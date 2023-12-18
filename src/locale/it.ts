@@ -165,6 +165,7 @@ export default {
         PSP: 'Prestatori Servizi di Pagamento',
         SA: 'Gestore privato di piattaforma e-procurement',
         AS: 'Società di assicurazione',
+        PG: 'Azienda'
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
