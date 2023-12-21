@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 import { PartyAvatar } from '@pagopa/mui-italia/dist/components/PartyAvatar';
+
 type Props = {
   loading: boolean;
   urlLogo?: string;

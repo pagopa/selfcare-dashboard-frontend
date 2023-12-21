@@ -146,11 +146,14 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         open={openCustomEnvInteropModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
-          <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
+          <Trans
+            i18nKey="overview.activeProducts.activeProductsEnvModal.message"
+            value={{ productTitle: productSelected?.title }}
+          >
             Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che
             l&apos;ambiente di collaudo ti permette di conoscere
-            <strong>{{ productTitle: productSelected?.title }}</strong> e fare prove in tutta
-            sicurezza. L&apos;ambiente di produzione è il prodotto in esercizio.
+            <strong>{productSelected?.title}</strong> e fare prove in tutta sicurezza.
+            L&apos;ambiente di produzione è il prodotto in esercizio.
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
@@ -169,10 +172,13 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         open={openGenericEnvProductModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
-          <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct">
+          <Trans
+            i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct"
+            value={{ productTitle: productSelected?.title }}
+          >
             L’ambiente di test ti permette di conoscere
-            <strong>{{ productTitle: productSelected?.title }}</strong> e fare prove in tutta
-            sicurezza. L’ambiente di produzione è il prodotto vero e proprio.
+            <strong>{productSelected?.title}</strong> e fare prove in tutta sicurezza. L’ambiente di
+            produzione è il prodotto vero e proprio.
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}

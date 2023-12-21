@@ -14,7 +14,7 @@ export const createStore = () =>
       user: userReducer,
       appState: appStateReducer,
     },
-    middleware: (getDefaultMiddleware) =>
+    middleware: (getDefaultMiddleware: any) =>
       additionalMiddlewares.reduce(
         (array, middleware) => (middleware ? array.concat(middleware) : array),
         getDefaultMiddleware({ serializableCheck: false })
