@@ -98,7 +98,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }
         enableAssistanceButton={ENV.ENV !== 'UAT'}
         assistanceEmail={ENV.ASSISTANCE.EMAIL}
-        onDocumentationClick={() => window.open(ENV.URL_DOCUMENTATION, '_blank')}
+        onDocumentationClick={() => {
+          trackEvent('OPEN_OPERATIVE_MANUAL', {
+            from: 'dashboard',
+          });
+          window.open(ENV.URL_DOCUMENTATION, '_blank');
+        }}
         enableLogin={true}
         onSelectedProduct={(p) => {
           onExit(() => {
