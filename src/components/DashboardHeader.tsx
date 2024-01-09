@@ -148,12 +148,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
-            value={{ productTitle: productSelected?.title }}
+            values={{ productTitle: productSelected?.title }}
+            components={{ 1: <strong /> }}
           >
-            Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che
-            l&apos;ambiente di collaudo ti permette di conoscere
-            <strong>{productSelected?.title}</strong> e fare prove in tutta sicurezza.
-            L&apos;ambiente di produzione è il prodotto in esercizio.
+            {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
@@ -174,11 +172,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct"
-            value={{ productTitle: productSelected?.title }}
+            values={{ productTitle: productSelected?.title }}
+            components={{ 1: <strong /> }}
           >
-            L’ambiente di test ti permette di conoscere
-            <strong>{productSelected?.title}</strong> e fare prove in tutta sicurezza. L’ambiente di
-            produzione è il prodotto vero e proprio.
+            {`L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.`}
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
