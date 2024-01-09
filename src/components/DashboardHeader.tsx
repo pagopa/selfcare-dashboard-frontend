@@ -146,11 +146,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         open={openCustomEnvInteropModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
-          <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.message">
-            Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che
-            l&apos;ambiente di collaudo ti permette di conoscere
-            <strong>{{ productTitle: productSelected?.title }}</strong> e fare prove in tutta
-            sicurezza. L&apos;ambiente di produzione è il prodotto in esercizio.
+          <Trans
+            i18nKey="overview.activeProducts.activeProductsEnvModal.message"
+            values={{ productTitle: productSelected?.title }}
+            components={{ 1: <strong /> }}
+          >
+            {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
@@ -169,10 +170,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         open={openGenericEnvProductModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
-          <Trans i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct">
-            L’ambiente di test ti permette di conoscere
-            <strong>{{ productTitle: productSelected?.title }}</strong> e fare prove in tutta
-            sicurezza. L’ambiente di produzione è il prodotto vero e proprio.
+          <Trans
+            i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct"
+            values={{ productTitle: productSelected?.title }}
+            components={{ 1: <strong /> }}
+          >
+            {`L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.`}
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
