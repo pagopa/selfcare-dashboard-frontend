@@ -45,7 +45,7 @@ export default function withSelectedParty<T>(
     useEffect(() => {
       doFetch();
     }, [partyId]);
-    return <WrappedComponent {...props} />;
+    return <WrappedComponent {...(props as any)} />;
   };
 
   // eslint-disable-next-line functional/immutable-data
