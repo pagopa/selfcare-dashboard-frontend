@@ -308,8 +308,8 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
-    status: undefined,
-    userRole: undefined,
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
   },
   {
     description: 'Comune di Napoli',
