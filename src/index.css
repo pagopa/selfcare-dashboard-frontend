@@ -18,3 +18,7 @@
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
+
+#onetrust-consent-sdk {
+  font-family: 'Titillium Web', sans-serif !important;
+}
