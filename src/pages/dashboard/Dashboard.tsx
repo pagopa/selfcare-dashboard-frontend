@@ -139,14 +139,6 @@ const Dashboard = () => {
     strict: false,
   });
 
-  useEffect(() => {
-    const routePath =
-      party && party.institutionType === 'PT'
-        ? DASHBOARD_ROUTES.TECHPARTNER.path
-        : DASHBOARD_ROUTES.OVERVIEW.path;
-    history.push(resolvePathVariables(routePath, { partyId: party?.partyId ?? '' }));
-  }, [party]);
-
   return party && products ? (
     <Grid
       container
