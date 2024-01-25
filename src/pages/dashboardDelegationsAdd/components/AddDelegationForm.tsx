@@ -259,7 +259,8 @@ export default function AddDelegationForm({
         <Grid item xs={12}>
           <FormControl fullWidth>
             <Autocomplete
-              groupBy={() => t('addDelegationPage.selectTechPartner.groupByName')}
+              // TODO 'NAME' label hidden until Intermediated entities data is avaible
+              // groupBy={() => t('addDelegationPage.selectTechPartner.groupByName')}
               options={productBrokers?.map((pb) => pb.description) ?? []}
               clearOnEscape
               onChange={(_e, selectedPb: string) => {
