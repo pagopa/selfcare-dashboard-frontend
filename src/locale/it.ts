@@ -61,7 +61,7 @@ export default {
         },
         invoices: {
           title: 'Fatturazione',
-        }
+        },
       },
       product: {
         overview: 'Panoramica',
@@ -165,7 +165,9 @@ export default {
         PSP: 'Prestatori Servizi di Pagamento',
         SA: 'Gestore privato di piattaforma e-procurement',
         AS: 'Società di assicurazione',
-        PG: 'Azienda'
+        PG: 'Azienda',
+        REC: 'Recapitista',
+        CON: 'Consolidatore',
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
