@@ -32,7 +32,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
 
-    if (product.id === 'prod-io-premium') {
+    if (baseProductWithExistingSubProductNotOnboarded && existingSubProductNotOnboarded.id === 'prod-io-premium') {
       trackEvent('PREMIUM_CTA_JOIN', {
         cta_referral: window.location.href,
         ctaId: t('overview.notActiveProducts.joinButton'),
