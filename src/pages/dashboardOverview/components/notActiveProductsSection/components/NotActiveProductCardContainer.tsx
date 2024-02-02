@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { useUserNotify } from '@pagopa/selfcare-common-frontend';
 import { useTranslation } from 'react-i18next';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { ENV } from '../../../../../utils/env';
@@ -30,6 +31,13 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
   const goToOnboarding = (product: Product, party: Party): void => {
     const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
+
+    if (baseProductWithExistingSubProductNotOnboarded && existingSubProductNotOnboarded.id === 'prod-io-premium') {
+      trackEvent('PREMIUM_CTA_JOIN', {
+        cta_referral: window.location.href,
+        ctaId: t('overview.notActiveProducts.joinButton'),
+      });
+    }
 
     window.location.assign(
       `${ENV.URL_FE.ONBOARDING}/${product.id}${
