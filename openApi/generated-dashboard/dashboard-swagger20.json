@@ -1427,11 +1427,13 @@
             "description": "Institution Type",
             "enum": [
               "AS",
+              "CON",
               "GSP",
               "PA",
               "PG",
               "PSP",
               "PT",
+              "REC",
               "SA",
               "SCP"
             ],
@@ -1784,7 +1786,7 @@
           }
         ],
         "tags": [
-          "support"
+          "external-v2"
         ],
         "description": "Service to retrieve Support contact's form",
         "operationId": "sendSupportRequestUsingPOST",
@@ -2837,6 +2839,52 @@
     }
   },
   "definitions" : {"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"PartyProductArray":{"type": "array", "items": {"$ref": "#/definitions/PartyProduct"}},"InstitutionUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionUserResource"}},"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},
+    "AdditionalInformations": {
+      "properties": {
+        "agentOfPublicService": {
+          "description": "The institution is an agent of a public service",
+          "example": false,
+          "type": "boolean"
+        },
+        "agentOfPublicServiceNote": {
+          "description": "agentOfPublicService Note",
+          "type": "string"
+        },
+        "belongRegulatedMarket": {
+          "description": "The institution belongs to a regulated market",
+          "example": false,
+          "type": "boolean"
+        },
+        "establishedByRegulatoryProvision": {
+          "description": "The institution is a company established by a regulatory provision",
+          "example": false,
+          "type": "boolean"
+        },
+        "establishedByRegulatoryProvisionNote": {
+          "description": "establishedByRegulatoryProvision Note",
+          "type": "string"
+        },
+        "ipa": {
+          "description": "The institution is registered on IPA",
+          "example": false,
+          "type": "boolean"
+        },
+        "ipaCode": {
+          "description": "IPA code",
+          "type": "string"
+        },
+        "otherNote": {
+          "description": "Other note",
+          "type": "string"
+        },
+        "regulatedMarketNote": {
+          "description": "regulatedMarket Note",
+          "type": "string"
+        }
+      },
+      "title": "AdditionalInformations",
+      "type": "object"
+    },
     "Attribute": {
       "properties": {
         "code": {
@@ -3245,11 +3293,13 @@
         "institutionType": {
           "enum": [
             "AS",
+            "CON",
             "GSP",
             "PA",
             "PG",
             "PSP",
             "PT",
+            "REC",
             "SA",
             "SCP"
           ],
@@ -3320,6 +3370,10 @@
     },
     "InstitutionInfo": {
       "properties": {
+        "additionalInformations": {
+          "$ref": "#/definitions/AdditionalInformations",
+          "description": "Institution's additional informations"
+        },
         "address": {
           "description": "Institution's physical address",
           "type": "string"
@@ -3352,11 +3406,13 @@
           "description": "Institution's type",
           "enum": [
             "AS",
+            "CON",
             "GSP",
             "PA",
             "PG",
             "PSP",
             "PT",
+            "REC",
             "SA",
             "SCP"
           ],
@@ -3450,11 +3506,13 @@
           "description": "Institution's type",
           "enum": [
             "AS",
+            "CON",
             "GSP",
             "PA",
             "PG",
             "PSP",
             "PT",
+            "REC",
             "SA",
             "SCP"
           ],
@@ -3708,6 +3766,10 @@
         "manager": {
           "$ref": "#/definitions/UserInfo",
           "description": "Manager specific data. It's required when institutionType is not PT"
+        },
+        "productId": {
+          "description": "Product's identifier",
+          "type": "string"
         },
         "status": {
           "description": "Onboarding request's status",
