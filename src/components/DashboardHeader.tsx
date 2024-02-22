@@ -14,7 +14,7 @@ import { Product } from '../model/Product';
 import { Party } from '../model/Party';
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
-import ROUTES from '../routes';
+import ROUTES, { DASHBOARD_ROUTES } from '../routes';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -132,13 +132,16 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           trackEvent('DASHBOARD_PARTY_SELECTION', {
             party_id: selectedParty.id,
           });
-          onExit(() =>
+          onExit(() => {
+            const redirectRoute = party?.delegation
+              ? DASHBOARD_ROUTES.TECHPARTNER.path
+              : ROUTES.PARTY_DASHBOARD.path;
             history.push(
-              resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
+              resolvePathVariables(redirectRoute, {
                 partyId: selectedParty.id,
               })
-            )
-          );
+            );
+          });
         }}
         maxCharactersNumberMultiLineItem={25}
       />
