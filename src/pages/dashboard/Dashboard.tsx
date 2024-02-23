@@ -126,7 +126,9 @@ const Dashboard = () => {
   const canSeeSection = parties?.find((p) => p.partyId === party?.partyId)?.userRole === 'ADMIN';
 
   const isDelegateSectionVisible =
-    ENV.DELEGATIONS.ENABLE && authorizedDelegableProducts.length > 0 && party?.delegation;
+    ENV.DELEGATIONS.ENABLE &&
+    authorizedDelegableProducts.length > 0 &&
+    party?.institutionType !== 'PT';
 
   const location = useLocation();
 
