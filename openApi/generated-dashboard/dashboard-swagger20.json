@@ -3552,6 +3552,9 @@
         "dataProtectionOfficer": {
           "$ref": "#/definitions/DataProtectionOfficer"
         },
+        "delegation": {
+          "type": "boolean"
+        },
         "description": {
           "type": "string"
         },
@@ -3760,6 +3763,11 @@
         "county": {
           "description": "Institution's county",
           "type": "string"
+        },
+        "delegation": {
+          "description": "Institution's delegation presence",
+          "example": false,
+          "type": "boolean"
         },
         "externalId": {
           "description": "Institution's unique external identifier",
