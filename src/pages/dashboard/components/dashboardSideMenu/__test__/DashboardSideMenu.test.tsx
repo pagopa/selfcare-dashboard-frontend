@@ -3,7 +3,7 @@ import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import DashboardSideMenu from '../DashboardSideMenu';
 
-test('on click of side menu items', async () => {
+test('Test: Access to the dashboard side menu voices', async () => {
   const { history } = renderWithProviders(
     <DashboardSideMenu
       party={mockedParties[2]}
@@ -24,20 +24,20 @@ test('on click of side menu items', async () => {
   expect(groupsBtn).toBeInTheDocument();
 
   fireEvent.click(overviewBtn);
-  expect(history.location.pathname).toBe('/dashboard/3');
+  expect(history.location.pathname).toBe(`/dashboard/${mockedParties[2].partyId}`);
 
   fireEvent.click(delegationBtn);
-  expect(history.location.pathname).toBe('/dashboard/3/delegations');
+  expect(history.location.pathname).toBe(`/dashboard/${mockedParties[2].partyId}/delegations`);
 
   fireEvent.click(referentsBtn);
-  expect(history.location.pathname).toBe('/dashboard/3/users');
+  expect(history.location.pathname).toBe(`/dashboard/${mockedParties[2].partyId}/users`);
 
   fireEvent.click(groupsBtn);
-  expect(history.location.pathname).toBe('/dashboard/3/groups');
+  expect(history.location.pathname).toBe(`/dashboard/${mockedParties[2].partyId}/groups`);
 });
 
-test('on click of side menu items for PT page', async () => {
-  const { history } = renderWithProviders(
+test('Test: The techpartner has not been delegated by any body, will not see the menu section and will not be able to access it', async () => {
+  renderWithProviders(
     <DashboardSideMenu
       party={mockedParties[7]}
       canSeeSection={false}
@@ -45,11 +45,25 @@ test('on click of side menu items for PT page', async () => {
       isDelegateSectionVisible={false}
     />
   );
+  const institutionsListVoice = screen.queryByText('I tuoi enti');
 
-  const institutionsListBtn = screen.getAllByText('I tuoi enti')[0];
+  expect(institutionsListVoice).not.toBeInTheDocument();
+});
 
-  expect(institutionsListBtn).toBeInTheDocument();
+test('Test: The techpartner has not been delegated by any body, he will see the menu section and will be able to access it', async () => {
+  const { history } = renderWithProviders(
+    <DashboardSideMenu
+      party={mockedParties[16]}
+      canSeeSection={false}
+      isInvoiceSectionVisible={false}
+      isDelegateSectionVisible={false}
+    />
+  );
 
-  fireEvent.click(institutionsListBtn);
-  expect(history.location.pathname).toBe('/dashboard/8/delegate');
+  const institutionsListVoice = screen.getByText('I tuoi enti');
+
+  expect(institutionsListVoice).toBeInTheDocument();
+
+  fireEvent.click(institutionsListVoice);
+  expect(history.location.pathname).toBe(`/dashboard/${mockedParties[16].partyId}/delegate`);
 });
