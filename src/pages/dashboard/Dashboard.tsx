@@ -124,11 +124,11 @@ const Dashboard = () => {
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
   const canSeeSection = parties?.find((p) => p.partyId === party?.partyId)?.userRole === 'ADMIN';
-  const isPt = party?.institutionType === 'PT';
-  const isPtSectionVisible = isPt && canSeeSection;
 
   const isDelegateSectionVisible =
-    ENV.DELEGATIONS.ENABLE && authorizedDelegableProducts.length > 0 && !isPt;
+    ENV.DELEGATIONS.ENABLE &&
+    authorizedDelegableProducts.length > 0 &&
+    party?.institutionType !== 'PT';
 
   const location = useLocation();
 
@@ -141,13 +141,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (party) {
-      const routePath =
-        party.institutionType === 'PT'
-          ? DASHBOARD_ROUTES.TECHPARTNER.path
-          : DASHBOARD_ROUTES.OVERVIEW.path;
-      history.push(resolvePathVariables(routePath, { partyId: party?.partyId ?? '' }));
+      const redirectPath = party.delegation
+        ? DASHBOARD_ROUTES.TECHPARTNER.path
+        : DASHBOARD_ROUTES.OVERVIEW.path;
+      history.push(resolvePathVariables(redirectPath, { partyId: party?.partyId ?? '' }));
     }
-  }, [party]);
+  }, [party?.partyId]);
 
   return party && products ? (
     <Grid
@@ -237,14 +236,13 @@ const Dashboard = () => {
           </Route>
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
             <DashboardDelegationsPage
-              isDelegateSectionVisible={isDelegateSectionVisible && !isPtSectionVisible}
               party={party}
               authorizedDelegableProducts={authorizedDelegableProducts}
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
             <DashboardTechnologyPartnerPage
-              isPtSectionVisible={isPtSectionVisible}
+              canSeeSection={canSeeSection}
               party={party}
               ptProducts={activeProducts}
               isDelegateSectionVisible={isDelegateSectionVisible}

@@ -11,11 +11,7 @@ afterEach(() => {
 test('Should render component DashboardDelegationsPage with populated props and isDelegateSectionVisible is true', async () => {
   const mockedGsp = mockedParties[11];
   const { history } = renderWithProviders(
-    <DashboardDelegationsPage
-      party={mockedGsp}
-      authorizedDelegableProducts={mockedPartyProducts}
-      isDelegateSectionVisible
-    />
+    <DashboardDelegationsPage party={mockedGsp} authorizedDelegableProducts={mockedPartyProducts} />
   );
   // test back button
   const backBtn = await screen.findByText('Indietro');

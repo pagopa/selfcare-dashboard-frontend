@@ -15,7 +15,7 @@ type Props = {
   isSelected?: boolean;
   icon: SvgIconComponent;
   handleClickPtPage?: () => void;
-  isPtPageVisible: boolean;
+  isPtPageVisible?: boolean;
   ptIcon?: SvgIconComponent;
   ptTitle?: string;
   isPtSelected?: boolean;
