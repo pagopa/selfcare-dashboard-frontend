@@ -309,6 +309,17 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
+      {
+        productId: 'prod-interop-att',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
     ],
     delegation: false,
     status: 'ACTIVE',

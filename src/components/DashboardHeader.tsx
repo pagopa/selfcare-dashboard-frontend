@@ -61,6 +61,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     ) &&
     onboardedPartyProducts.find((p) => p.productId === 'prod-interop' && p.authorized === true);
 
+  const prodInteropAndProdInteropAts =
+    onboardedPartyProducts?.find(
+      (p) => p.productId === 'prod-interop-att' && p.authorized === true
+    ) &&
+    onboardedPartyProducts.find((p) => p.productId === 'prod-interop' && p.authorized === true);
+
   return (
     <div tabIndex={0}>
       <Header
@@ -69,7 +75,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
-            prodInteropAndProdInteropColl ? p.id !== 'prod-interop-coll' : 'prod-interop'
+            prodInteropAndProdInteropColl
+              ? p.id !== 'prod-interop-coll'
+              : prodInteropAndProdInteropAts
+              ? p.id !== 'prod-interop-att'
+              : 'prod-interop'
           )
           .map((p) => ({
             id: p.id,
@@ -111,7 +121,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             setProductSelected(selectedProduct);
             if (
               actualSelectedParty.current &&
-              prodInteropAndProdInteropColl &&
+              (prodInteropAndProdInteropColl || prodInteropAndProdInteropAts) &&
               p.id === 'prod-interop'
             ) {
               setOpenCustomEnvInteropModal(true);
@@ -157,7 +167,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={() =>
           invokeProductBo(productSelected as Product, actualSelectedParty.current as Party)
@@ -166,6 +176,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           setOpenCustomEnvInteropModal(false);
         }}
         prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
+        prodInteropAndProdInteropAtt={!!prodInteropAndProdInteropAts}
         products={products}
         party={party}
       />

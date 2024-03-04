@@ -145,6 +145,21 @@ export const mockedPartyProducts: Array<Product> = [
     delegable: false,
     invoiceable: false,
   },
+  {
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
+    id: 'prod-interop-att',
+    title: 'Interoperabilità Collaudo',
+    description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
+    urlBO: 'http://ATT/bo#token=<IdentityToken>',
+    status: StatusEnum.TESTING,
+    urlPublic: undefined,
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
+    subProducts: [],
+    logoBgColor: undefined,
+    delegable: false,
+    invoiceable: false,
+  },
 ];
 
 export const mockedProductRoles: Array<ProductRole> = [

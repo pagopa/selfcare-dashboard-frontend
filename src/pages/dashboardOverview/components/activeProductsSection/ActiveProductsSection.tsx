@@ -18,19 +18,25 @@ export default function ActiveProductsSection({ party, products }: Props) {
 
   const prodInteropColl = party.products.find((p) => p.productId === 'prod-interop-coll');
 
+  const prodInteropAtt = party.products.find((p) => p.productId === 'prod-interop-att');
+
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
       <Grid container spacing={3}>
         {party.products
-          .filter(
-            (us) =>
-              us.productOnBoardingStatus === 'ACTIVE' &&
-              (prodInterop?.authorized ||
+          .filter((us) =>
+            us.productOnBoardingStatus === 'ACTIVE' &&
+            (prodInterop?.authorized ||
               prodInteropColl?.authorized === false ||
-              (prodInterop?.authorized === false && !prodInteropColl)
-                ? us.productId !== 'prod-interop-coll'
-                : us.productId !== 'prod-interop')
+              (prodInterop?.authorized === false && !prodInteropColl))
+              ? us.productId !== 'prod-interop-coll'
+              : us.productOnBoardingStatus === 'ACTIVE' &&
+                (prodInterop?.authorized ||
+                  prodInteropAtt?.authorized === false ||
+                  (prodInterop?.authorized === false && !prodInteropAtt))
+              ? us.productId !== 'prod-interop-att'
+              : us.productId !== 'prod-interop'
           )
           .sort((a, b) =>
             a.authorized === false && b.authorized !== false
@@ -44,8 +50,11 @@ export default function ActiveProductsSection({ party, products }: Props) {
               key={product.productId}
               party={party}
               product={product}
-              haveProdInteropAndEnvProduct={
+              prodInteropAndProdInteropColl={
                 !!(prodInterop?.authorized && prodInteropColl?.authorized)
+              }
+              prodInteropAndProdInteropAtt={
+                !!(prodInterop?.authorized && prodInteropAtt?.authorized)
               }
               products={products}
             />

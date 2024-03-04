@@ -12,14 +12,16 @@ import SessionModalInteropProduct from './SessionModalInteropProduct';
 type Props = {
   party: Party;
   product: OnboardedProduct;
-  haveProdInteropAndEnvProduct: boolean;
+  prodInteropAndProdInteropColl: boolean;
+  prodInteropAndProdInteropAtt: boolean;
   products: Array<Product>;
 };
 
 export default function ActiveProductCardContainer({
   party,
   product,
-  haveProdInteropAndEnvProduct,
+  prodInteropAndProdInteropColl,
+  prodInteropAndProdInteropAtt,
   products,
 }: Props) {
   const { t } = useTranslation();
@@ -43,7 +45,8 @@ export default function ActiveProductCardContainer({
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
-            haveProdInteropAndEnvProduct && productOnboarded.id === 'prod-interop'
+            (prodInteropAndProdInteropColl && productOnboarded.id === 'prod-interop') ||
+            (prodInteropAndProdInteropAtt && productOnboarded.id === 'prod-interop')
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
                 productOnboarded.id !== 'prod-interop'
@@ -63,16 +66,17 @@ export default function ActiveProductCardContainer({
             values={{ productTitle: productOnboarded.title }}
             components={{ 1: <strong /> }}
           >
-            {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
+            {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={() => invokeProductBo(productOnboarded, party)}
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        prodInteropAndProdInteropColl={haveProdInteropAndEnvProduct}
+        prodInteropAndProdInteropColl={prodInteropAndProdInteropColl}
+        prodInteropAndProdInteropAtt={prodInteropAndProdInteropAtt}
         products={products}
         party={party}
       />
