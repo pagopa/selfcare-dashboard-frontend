@@ -18,7 +18,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
 
   const prodInteropColl = party.products.find((p) => p.productId === 'prod-interop-coll');
 
-  const prodInteropAtt = party.products.find((p) => p.productId === 'prod-interop-att');
+  const prodInteropAtt = party.products.find((p) => p.productId === 'prod-interop-atst');
 
   return (
     <React.Fragment>
@@ -35,7 +35,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
                 (prodInterop?.authorized ||
                   prodInteropAtt?.authorized === false ||
                   (prodInterop?.authorized === false && !prodInteropAtt))
-              ? us.productId !== 'prod-interop-att'
+              ? us.productId !== 'prod-interop-atst'
               : us.productId !== 'prod-interop'
           )
           .sort((a, b) =>

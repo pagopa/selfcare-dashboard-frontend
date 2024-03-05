@@ -1,17 +1,18 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header, SessionModal } from '@pagopa/selfcare-common-frontend';
+import { Header } from '@pagopa/selfcare-common-frontend';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useMemo, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { useTranslation, Trans } from 'react-i18next';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import SessionModalInteropProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInteropProduct';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
-import { Product } from '../model/Product';
 import { Party } from '../model/Party';
+import { Product } from '../model/Product';
+import GenericEnvProductModal from '../pages/dashboardOverview/components/activeProductsSection/components/GenericEnvProductModal';
+import SessionModalInteropProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInteropProduct';
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES, { DASHBOARD_ROUTES } from '../routes';
@@ -63,7 +64,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const prodInteropAndProdInteropAts =
     onboardedPartyProducts?.find(
-      (p) => p.productId === 'prod-interop-att' && p.authorized === true
+      (p) => p.productId === 'prod-interop-atst' && p.authorized === true
     ) &&
     onboardedPartyProducts.find((p) => p.productId === 'prod-interop' && p.authorized === true);
 
@@ -78,7 +79,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             prodInteropAndProdInteropColl
               ? p.id !== 'prod-interop-coll'
               : prodInteropAndProdInteropAts
-              ? p.id !== 'prod-interop-att'
+              ? p.id !== 'prod-interop-atst'
               : 'prod-interop'
           )
           .map((p) => ({
@@ -180,19 +181,19 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         products={products}
         party={party}
       />
-      <SessionModal
+      <GenericEnvProductModal
         open={openGenericEnvProductModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans
-            i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct"
+            i18nKey="overview.activeProducts.activeProductsEnvModal.message"
             values={{ productTitle: productSelected?.title }}
             components={{ 1: <strong /> }}
           >
-            {`L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.`}
+            {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={(e) =>
           invokeProductBo(

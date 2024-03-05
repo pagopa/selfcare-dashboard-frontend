@@ -79,15 +79,14 @@ export default {
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
         message: `Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`,
-        /*
         messageProduct:
           'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
-          */
         devEnviromentMessage:
           'Ti permettere di conoscere il prodotto e fare prove in tutta sicurezza',
         uatEnviromentMessage: 'Ti permette di esplorare il prodotto',
         prodEnviromentMessage: 'Prodotto in uso',
         envDevButton: 'Ambiente di Collaudo',
+        envLocalButton: 'Ambiente Locale',
         envUatButton: 'Ambiente di Attestazione',
         envProdButton: 'Ambiente di Produzione',
         enterButton: 'Entra',

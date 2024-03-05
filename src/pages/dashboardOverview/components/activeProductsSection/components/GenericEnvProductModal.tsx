@@ -1,23 +1,20 @@
-import * as React from 'react';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import {
-  Typography,
   Box,
   Button,
+  FormControlLabel,
   Grid,
   IconButton,
-  RadioGroup,
   Radio,
-  FormControlLabel,
+  RadioGroup,
+  Typography,
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { withTranslation } from 'react-i18next';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { TFunction } from 'i18next';
-import { Product } from '../../../../../model/Product';
-import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
-import { Party } from '../../../../../model/Party';
+import * as React from 'react';
+import { withTranslation } from 'react-i18next';
 
 type Props = {
   /** If this component should be displayed or not */
@@ -30,10 +27,11 @@ type Props = {
   onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   /** The confirm label text */
   onConfirmLabel?: string;
-  /** indicates if pary has prod-interop and prod-interop-coll */
-  prodInteropAndProdInteropColl?: boolean;
-  /** indicates if pary has prod-interop and prod-interop-atst */
-  prodInteropAndProdInteropAtt?: boolean;
+  /** Introduced to manage the presence of test environments in the products, if defined, it will render as many buttons as there are test environments for the product */
+  productEnvironments?: Array<{
+    environment: string;
+    url: string;
+  }>;
   /** The function invoked when clicking on close button or in the showed X icon */
   handleClose: () => void | undefined;
   /** If defined, it allow to set a different behavior when clicking on X icon */
@@ -51,22 +49,16 @@ type Props = {
   showCloseIcon?: boolean;
   /** If false not show the close button, default true */
   showCloseButton?: boolean;
-  /** party products */
-  products?: Array<Product>;
-  /** party list */
-  party?: Party;
 };
 
 /** Selfcare's popup */
-function SessionModalInteropProduct({
+function GenericEnvProductModal({
   t,
   open,
   title,
   message,
   onConfirm,
   onConfirmLabel = t('SessionModalInteropProduct.confirmButton'),
-  prodInteropAndProdInteropColl,
-  prodInteropAndProdInteropAtt,
   handleClose,
   handleExit = handleClose,
   onCloseLabel = t('SessionModalInteropProduct.closeButton'),
@@ -75,29 +67,53 @@ function SessionModalInteropProduct({
   width = '33.3em',
   showCloseIcon = false,
   showCloseButton = true,
-  products,
-  party,
+  productEnvironments,
 }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const [selectedEnviroment, setSelectedEnviroment] = React.useState<string>('');
-  const { invokeProductBo } = useTokenExchange();
 
-  const handeTokenExchange = async (prodEnv: string): Promise<void> => {
-    if (products && party) {
-      if (prodEnv === 'Collaudo') {
-        const product = products.find((p) => p.id === 'prod-interop-coll');
-        if (product) {
-          return invokeProductBo(product, party);
-        }
-      }
+  const renderMessage = (productEnvironment: string): React.ReactElement | void => {
+    const enviromentName = productEnvironment
+      .toLowerCase()
+      .replace(/\b[a-z]/g, productEnvironment.charAt(0).toUpperCase());
 
-      if (prodEnv === 'Attestazione') {
-        const product2 = products.find((p) => p.id === 'prod-interop-atst');
-        if (product2) {
-          return invokeProductBo(product2, party);
-        }
-      }
+    if (enviromentName === 'Collaudo') {
+      return (
+        <>
+          <Typography>
+            {t('overview.activeProducts.activeProductsEnvModal.envDevButton')}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            {t('overview.activeProducts.activeProductsEnvModal.devEnviromentMessage')}
+          </Typography>
+        </>
+      );
+    } else if (enviromentName === 'Locale') {
+      return (
+        <>
+          <Typography>
+            {t('overview.activeProducts.activeProductsEnvModal.envLocalButton')}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            {t('overview.activeProducts.activeProductsEnvModal.devEnviromentMessage')}
+          </Typography>
+        </>
+      );
+    } else if (enviromentName === 'Attestazione') {
+      return (
+        <>
+          <Typography>
+            {t('overview.activeProducts.activeProductsEnvModal.envUatButton')}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            {t('overview.activeProducts.activeProductsEnvModal.uatEnviromentMessage')}
+          </Typography>
+        </>
+      );
+      // default case for unknown or new enviroment added
+    } else if (enviromentName) {
+      return <Typography>{enviromentName}</Typography>;
     }
   };
 
@@ -128,43 +144,23 @@ function SessionModalInteropProduct({
 
           <Grid item xs={12}>
             <RadioGroup>
-              {prodInteropAndProdInteropAtt && (
-                <FormControlLabel
-                  value="Attestazione"
-                  onClick={() => setSelectedEnviroment('Attestazione')}
-                  control={<Radio />}
-                  label={
-                    <>
-                      <Typography>
-                        {t('overview.activeProducts.activeProductsEnvModal.envUatButton')}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {t('overview.activeProducts.activeProductsEnvModal.uatEnviromentMessage')}
-                      </Typography>
-                    </>
-                  }
-                  sx={{ mb: 1 }}
-                />
-              )}
-
-              {prodInteropAndProdInteropColl && (
-                <FormControlLabel
-                  value="Collaudo"
-                  onClick={() => setSelectedEnviroment('Collaudo')}
-                  control={<Radio />}
-                  label={
-                    <>
-                      <Typography>
-                        {t('overview.activeProducts.activeProductsEnvModal.envDevButton')}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {t('overview.activeProducts.activeProductsEnvModal.devEnviromentMessage')}
-                      </Typography>
-                    </>
-                  }
-                  sx={{ mb: 1 }}
-                />
-              )}
+              {productEnvironments &&
+                productEnvironments.map((p) => (
+                  <FormControlLabel
+                    key={p.environment}
+                    value={p.environment}
+                    onClick={() =>
+                      setSelectedEnviroment(
+                        p.environment
+                          .toLowerCase()
+                          .replace(/\b[a-z]/g, p.environment.charAt(0).toUpperCase())
+                      )
+                    }
+                    control={<Radio />}
+                    label={<>{renderMessage(p.environment)}</>}
+                    sx={{ mb: 1 }}
+                  />
+                ))}
               {onConfirm && (
                 <FormControlLabel
                   value={'Produzione'}
@@ -208,11 +204,7 @@ function SessionModalInteropProduct({
                     sx={{ marginLeft: 2 }}
                     color="primary"
                     variant="contained"
-                    onClick={(e) =>
-                      selectedEnviroment === 'Produzione'
-                        ? onConfirm(e)
-                        : handeTokenExchange(selectedEnviroment)
-                    }
+                    onClick={(e) => onConfirm(e)}
                     disabled={selectedEnviroment.length < 1}
                   >
                     {onConfirmLabel}
@@ -226,4 +218,4 @@ function SessionModalInteropProduct({
     </Dialog>
   );
 }
-export default withTranslation()(SessionModalInteropProduct);
+export default withTranslation()(GenericEnvProductModal);
