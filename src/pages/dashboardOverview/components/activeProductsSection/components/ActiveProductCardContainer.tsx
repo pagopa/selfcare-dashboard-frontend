@@ -13,7 +13,7 @@ type Props = {
   party: Party;
   product: OnboardedProduct;
   prodInteropAndProdInteropColl: boolean;
-  prodInteropAndProdInteropAtt: boolean;
+  prodInteropAndProdInteropAtst: boolean;
   products: Array<Product>;
 };
 
@@ -21,7 +21,7 @@ export default function ActiveProductCardContainer({
   party,
   product,
   prodInteropAndProdInteropColl,
-  prodInteropAndProdInteropAtt,
+  prodInteropAndProdInteropAtst,
   products,
 }: Props) {
   const { t } = useTranslation();
@@ -46,7 +46,7 @@ export default function ActiveProductCardContainer({
           urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
             (prodInteropAndProdInteropColl && productOnboarded.id === 'prod-interop') ||
-            (prodInteropAndProdInteropAtt && productOnboarded.id === 'prod-interop')
+            (prodInteropAndProdInteropAtst && productOnboarded.id === 'prod-interop')
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
                 productOnboarded.id !== 'prod-interop'
@@ -76,7 +76,7 @@ export default function ActiveProductCardContainer({
           setOpenCustomEnvInteropModal(false);
         }}
         prodInteropAndProdInteropColl={prodInteropAndProdInteropColl}
-        prodInteropAndProdInteropAtt={prodInteropAndProdInteropAtt}
+        prodInteropAndProdInteropAtst={prodInteropAndProdInteropAtst}
         products={products}
         party={party}
       />

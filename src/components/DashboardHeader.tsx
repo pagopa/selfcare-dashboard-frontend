@@ -62,7 +62,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     ) &&
     onboardedPartyProducts.find((p) => p.productId === 'prod-interop' && p.authorized === true);
 
-  const prodInteropAndProdInteropAts =
+  const prodInteropAndProdInteropAtst =
     onboardedPartyProducts?.find(
       (p) => p.productId === 'prod-interop-atst' && p.authorized === true
     ) &&
@@ -78,7 +78,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           .filter((p) =>
             prodInteropAndProdInteropColl
               ? p.id !== 'prod-interop-coll'
-              : prodInteropAndProdInteropAts
+              : prodInteropAndProdInteropAtst
               ? p.id !== 'prod-interop-atst'
               : 'prod-interop'
           )
@@ -122,7 +122,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             setProductSelected(selectedProduct);
             if (
               actualSelectedParty.current &&
-              (prodInteropAndProdInteropColl || prodInteropAndProdInteropAts) &&
+              (prodInteropAndProdInteropColl || prodInteropAndProdInteropAtst) &&
               p.id === 'prod-interop'
             ) {
               setOpenCustomEnvInteropModal(true);
@@ -177,7 +177,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           setOpenCustomEnvInteropModal(false);
         }}
         prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
-        prodInteropAndProdInteropAtt={!!prodInteropAndProdInteropAts}
+        prodInteropAndProdInteropAtst={!!prodInteropAndProdInteropAtst}
         products={products}
         party={party}
       />

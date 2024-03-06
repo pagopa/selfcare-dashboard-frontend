@@ -18,7 +18,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
 
   const prodInteropColl = party.products.find((p) => p.productId === 'prod-interop-coll');
 
-  const prodInteropAtt = party.products.find((p) => p.productId === 'prod-interop-atst');
+  const prodInteropAtst = party.products.find((p) => p.productId === 'prod-interop-atst');
 
   return (
     <React.Fragment>
@@ -33,8 +33,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
               ? us.productId !== 'prod-interop-coll'
               : us.productOnBoardingStatus === 'ACTIVE' &&
                 (prodInterop?.authorized ||
-                  prodInteropAtt?.authorized === false ||
-                  (prodInterop?.authorized === false && !prodInteropAtt))
+                  prodInteropAtst?.authorized === false ||
+                  (prodInterop?.authorized === false && !prodInteropAtst))
               ? us.productId !== 'prod-interop-atst'
               : us.productId !== 'prod-interop'
           )
@@ -53,8 +53,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
               prodInteropAndProdInteropColl={
                 !!(prodInterop?.authorized && prodInteropColl?.authorized)
               }
-              prodInteropAndProdInteropAtt={
-                !!(prodInterop?.authorized && prodInteropAtt?.authorized)
+              prodInteropAndProdInteropAtst={
+                !!(prodInterop?.authorized && prodInteropAtst?.authorized)
               }
               products={products}
             />

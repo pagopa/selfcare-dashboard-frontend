@@ -33,7 +33,7 @@ type Props = {
   /** indicates if pary has prod-interop and prod-interop-coll */
   prodInteropAndProdInteropColl?: boolean;
   /** indicates if pary has prod-interop and prod-interop-atst */
-  prodInteropAndProdInteropAtt?: boolean;
+  prodInteropAndProdInteropAtst?: boolean;
   /** The function invoked when clicking on close button or in the showed X icon */
   handleClose: () => void | undefined;
   /** If defined, it allow to set a different behavior when clicking on X icon */
@@ -66,7 +66,7 @@ function SessionModalInteropProduct({
   onConfirm,
   onConfirmLabel = t('SessionModalInteropProduct.confirmButton'),
   prodInteropAndProdInteropColl,
-  prodInteropAndProdInteropAtt,
+  prodInteropAndProdInteropAtst,
   handleClose,
   handleExit = handleClose,
   onCloseLabel = t('SessionModalInteropProduct.closeButton'),
@@ -128,7 +128,7 @@ function SessionModalInteropProduct({
 
           <Grid item xs={12}>
             <RadioGroup>
-              {prodInteropAndProdInteropAtt && (
+              {prodInteropAndProdInteropAtst && (
                 <FormControlLabel
                   value="Attestazione"
                   onClick={() => setSelectedEnviroment('Attestazione')}
