@@ -148,7 +148,7 @@ export const mockedPartyProducts: Array<Product> = [
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
     id: 'prod-interop-atst',
-    title: 'Interoperabilità Collaudo',
+    title: 'Interoperabilità Attestazioni',
     description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
     urlBO: 'http://ATT/bo#token=<IdentityToken>',
     status: StatusEnum.TESTING,

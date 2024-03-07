@@ -203,6 +203,7 @@ function GenericEnvProductModal({
                   <Button
                     sx={{ marginLeft: 2 }}
                     color="primary"
+                    value={selectedEnviroment !== 'Produzione' ? selectedEnviroment : undefined}
                     variant="contained"
                     onClick={(e) => onConfirm(e)}
                     disabled={selectedEnviroment.length < 1}

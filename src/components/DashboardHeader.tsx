@@ -76,11 +76,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
-            prodInteropAndProdInteropColl
-              ? p.id !== 'prod-interop-coll'
-              : prodInteropAndProdInteropAtst
-              ? p.id !== 'prod-interop-atst'
-              : 'prod-interop'
+            prodInteropAndProdInteropColl || prodInteropAndProdInteropAtst
+              ? p.id !== 'prod-interop-coll' && p.id !== 'prod-interop-atst'
+              : p.id !== 'prod-interop'
           )
           .map((p) => ({
             id: p.id,
