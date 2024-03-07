@@ -86,16 +86,16 @@ function SessionModalInteropProduct({
   const handleTokenExchange = async (prodEnv: string): Promise<void> => {
     if (products && party) {
       if (prodEnv === 'Collaudo') {
-        const product = products.find((p) => p.id === 'prod-interop-coll');
-        if (product) {
-          return invokeProductBo(product, party);
+        const productInteropColl = products.find((p) => p.id === 'prod-interop-coll');
+        if (productInteropColl) {
+          return invokeProductBo(productInteropColl, party);
         }
       }
 
       if (prodEnv === 'Attestazione') {
-        const product2 = products.find((p) => p.id === 'prod-interop-atst');
-        if (product2) {
-          return invokeProductBo(product2, party);
+        const productInteropAtst = products.find((p) => p.id === 'prod-interop-atst');
+        if (productInteropAtst) {
+          return invokeProductBo(productInteropAtst, party);
         }
       }
     }
