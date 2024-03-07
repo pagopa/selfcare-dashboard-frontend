@@ -90,9 +90,7 @@ function SessionModalInteropProduct({
         if (productInteropColl) {
           return invokeProductBo(productInteropColl, party);
         }
-      }
-
-      if (prodEnv === 'Attestazione') {
+      } else {
         const productInteropAtst = products.find((p) => p.id === 'prod-interop-atst');
         if (productInteropAtst) {
           return invokeProductBo(productInteropAtst, party);
