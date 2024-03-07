@@ -83,7 +83,7 @@ function SessionModalInteropProduct({
   const [selectedEnviroment, setSelectedEnviroment] = React.useState<string>('');
   const { invokeProductBo } = useTokenExchange();
 
-  const handeTokenExchange = async (prodEnv: string): Promise<void> => {
+  const handleTokenExchange = async (prodEnv: string): Promise<void> => {
     if (products && party) {
       if (prodEnv === 'Collaudo') {
         const product = products.find((p) => p.id === 'prod-interop-coll');
@@ -211,7 +211,7 @@ function SessionModalInteropProduct({
                     onClick={(e) =>
                       selectedEnviroment === 'Produzione'
                         ? onConfirm(e)
-                        : handeTokenExchange(selectedEnviroment)
+                        : handleTokenExchange(selectedEnviroment)
                     }
                     disabled={selectedEnviroment.length < 1}
                   >
