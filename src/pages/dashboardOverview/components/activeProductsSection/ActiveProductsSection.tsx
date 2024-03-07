@@ -1,9 +1,9 @@
-import React from 'react';
 import { Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
+import { Product } from '../../../../model/Product';
 import ActiveProductCardContainer from './components/ActiveProductCardContainer';
 
 type Props = {
@@ -18,6 +18,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
 
   const prodInteropColl = party.products.find((p) => p.productId === 'prod-interop-coll');
 
+  const prodInteropAtst = party.products.find((p) => p.productId === 'prod-interop-atst');
+
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
@@ -26,10 +28,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
           .filter(
             (us) =>
               us.productOnBoardingStatus === 'ACTIVE' &&
-              (prodInterop?.authorized ||
-              prodInteropColl?.authorized === false ||
-              (prodInterop?.authorized === false && !prodInteropColl)
-                ? us.productId !== 'prod-interop-coll'
+              (prodInterop?.authorized
+                ? us.productId !== 'prod-interop-coll' && us.productId !== 'prod-interop-atst'
                 : us.productId !== 'prod-interop')
           )
           .sort((a, b) =>
@@ -44,8 +44,11 @@ export default function ActiveProductsSection({ party, products }: Props) {
               key={product.productId}
               party={party}
               product={product}
-              haveProdInteropAndEnvProduct={
+              prodInteropAndProdInteropColl={
                 !!(prodInterop?.authorized && prodInteropColl?.authorized)
+              }
+              prodInteropAndProdInteropAtst={
+                !!(prodInterop?.authorized && prodInteropAtst?.authorized)
               }
               products={products}
             />

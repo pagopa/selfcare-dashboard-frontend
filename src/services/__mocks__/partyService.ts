@@ -255,7 +255,7 @@ export const mockedParties: Array<Party> = [
       },
       {
         productId: 'prod-pagopa',
-        authorized: false,
+        authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
@@ -288,6 +288,28 @@ export const mockedParties: Array<Party> = [
         },
       },
       {
+        productId: 'prod-interop-coll',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-interop-atst',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+      },
+      {
         productId: 'prod-pn',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
@@ -299,7 +321,7 @@ export const mockedParties: Array<Party> = [
         },
       },
       {
-        productId: 'prod-interop-coll',
+        productId: 'prod-pn-dev',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
