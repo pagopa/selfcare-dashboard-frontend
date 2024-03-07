@@ -25,6 +25,7 @@ export type Party = {
   institutionType?: string;
   recipientCode?: string;
   geographicTaxonomies?: Array<GeographicTaxonomyResource>;
+  delegation?: boolean;
   vatNumberGroup?: boolean;
   supportEmail?: string;
   vatNumber?: string;
@@ -67,6 +68,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     recipientCode: institutionResource.recipientCode,
     geographicTaxonomies:
       institutionResource.geographicTaxonomies as Array<GeographicTaxonomyResource>,
+    delegation: institutionResource.delegation,
     vatNumberGroup: institutionResource.vatNumberGroup,
     supportEmail: institutionResource.supportContact?.supportEmail,
     vatNumber: institutionResource.vatNumber,

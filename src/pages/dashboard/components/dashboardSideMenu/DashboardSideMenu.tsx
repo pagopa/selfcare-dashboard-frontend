@@ -99,7 +99,7 @@ export default function DashboardSideMenu({
             }
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
-            isPtPageVisible={party?.institutionType === 'PT'}
+            isPtPageVisible={party?.delegation}
             ptIcon={DnsIcon}
             ptTitle={t('overview.ptPage.title')}
             isPtSelected={isPtSelected}

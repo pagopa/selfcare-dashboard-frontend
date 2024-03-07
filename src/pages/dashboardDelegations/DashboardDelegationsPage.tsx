@@ -18,7 +18,6 @@ import { DelegationResource } from '../../api/generated/b4f-dashboard/Delegation
 import { fetchDelegations } from '../../services/delegationServices';
 
 type Props = {
-  isDelegateSectionVisible?: boolean;
   party: Party;
   authorizedDelegableProducts: Array<Product>;
 };
@@ -89,7 +88,6 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
       description: t('overview.delegationsPage.delegationsNavigationBar.titlePageDescription'),
     },
   ];
-
 
   return (
     <>

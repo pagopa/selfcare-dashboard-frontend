@@ -9,20 +9,20 @@ import { ENV } from '../../utils/env';
 import TechnologyPartnerTable from './TechnologyPartnerTable';
 
 type Props = {
-  isPtSectionVisible: boolean;
+  canSeeSection: boolean;
   party: Party;
   ptProducts: Array<Product>;
   isDelegateSectionVisible?: boolean;
 };
 
 export default function DashboardTechnologyPartnerPage({
-  isPtSectionVisible,
+  canSeeSection,
   party,
   ptProducts,
   isDelegateSectionVisible,
 }: Props) {
   const { t } = useTranslation();
-  return isDelegateSectionVisible && !isPtSectionVisible ? (
+  return isDelegateSectionVisible && !canSeeSection ? (
     <EndingPage
       minHeight="52vh"
       icon={<IllusError size={60} />}
