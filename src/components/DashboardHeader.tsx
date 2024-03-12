@@ -78,7 +78,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           .filter((p) =>
             prodInteropAndProdInteropColl || prodInteropAndProdInteropAtst
               ? p.id !== 'prod-interop-coll' && p.id !== 'prod-interop-atst'
-              : p.id !== 'prod-interop'
+              : true
           )
           .map((p) => ({
             id: p.id,
