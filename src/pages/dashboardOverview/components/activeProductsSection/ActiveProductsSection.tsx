@@ -14,11 +14,25 @@ type Props = {
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
-  const prodInterop = party.products.find((p) => p.productId === 'prod-interop');
+  const authorizedProdInterop = party.products.find(
+    (p) => p.productId === 'prod-interop' && p.authorized === true
+  );
 
-  const prodInteropColl = party.products.find((p) => p.productId === 'prod-interop-coll');
+  const authorizedProdAtst = party.products.find(
+    (p) => p.productId === 'prod-interop-atst' && p.authorized === true
+  );
 
-  const prodInteropAtst = party.products.find((p) => p.productId === 'prod-interop-atst');
+  const authorizedProdColl = party.products.find(
+    (p) => p.productId === 'prod-interop-coll' && p.authorized === true
+  );
+
+  const authorizedInteropProducts = [
+    authorizedProdInterop,
+    authorizedProdAtst,
+    authorizedProdColl,
+  ].filter((product) => product);
+
+  const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
   return (
     <React.Fragment>
@@ -28,9 +42,16 @@ export default function ActiveProductsSection({ party, products }: Props) {
           .filter(
             (us) =>
               us.productOnBoardingStatus === 'ACTIVE' &&
-              (prodInterop?.authorized
+              (hasMoreThanOneInteropEnv
                 ? us.productId !== 'prod-interop-coll' && us.productId !== 'prod-interop-atst'
-                : us.productId !== 'prod-interop')
+                : true) &&
+              (!authorizedProdColl ? us.productId !== 'prod-interop-coll' : true) &&
+              (!authorizedProdAtst ? us.productId !== 'prod-interop-atst' : true) &&
+              (authorizedInteropProducts.length === 0
+                ? true
+                : !authorizedProdInterop && !hasMoreThanOneInteropEnv
+                ? us.productId !== 'prod-interop'
+                : true)
           )
           .sort((a, b) =>
             a.authorized === false && b.authorized !== false
@@ -44,12 +65,10 @@ export default function ActiveProductsSection({ party, products }: Props) {
               key={product.productId}
               party={party}
               product={product}
-              prodInteropAndProdInteropColl={
-                !!(prodInterop?.authorized && prodInteropColl?.authorized)
-              }
-              prodInteropAndProdInteropAtst={
-                !!(prodInterop?.authorized && prodInteropAtst?.authorized)
-              }
+              authorizedProdColl={!!authorizedProdColl}
+              authorizedProdAtst={!!authorizedProdAtst}
+              authorizedProdInterop={!!authorizedProdInterop}
+              hasMoreThanOneInteropEnv={hasMoreThanOneInteropEnv}
               products={products}
             />
           ))}
