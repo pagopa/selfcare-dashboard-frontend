@@ -1,25 +1,31 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
-import { SessionModal } from '@pagopa/selfcare-common-frontend';
+import { Trans, useTranslation } from 'react-i18next';
+import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
 import ActiveProductCard from './ActiveProductCard';
+import GenericEnvProductModal from './GenericEnvProductModal';
 import SessionModalInteropProduct from './SessionModalInteropProduct';
 
 type Props = {
   party: Party;
   product: OnboardedProduct;
-  haveProdInteropAndEnvProduct: boolean;
+  authorizedProdColl: boolean;
+  authorizedProdAtst: boolean;
+  authorizedProdInterop: boolean;
+  hasMoreThanOneInteropEnv: boolean;
   products: Array<Product>;
 };
 
 export default function ActiveProductCardContainer({
   party,
   product,
-  haveProdInteropAndEnvProduct,
+  authorizedProdColl,
+  authorizedProdAtst,
+  authorizedProdInterop,
+  hasMoreThanOneInteropEnv,
   products,
 }: Props) {
   const { t } = useTranslation();
@@ -38,12 +44,12 @@ export default function ActiveProductCardContainer({
     <>
       <Grid item xs={6} lg={4}>
         <ActiveProductCard
-          disableBtn={isDisabled}
+          disableBtn={isDisabled && !hasMoreThanOneInteropEnv}
           cardTitle={productOnboarded?.title ?? ''}
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
-            haveProdInteropAndEnvProduct && productOnboarded.id === 'prod-interop'
+            hasMoreThanOneInteropEnv && productOnboarded.id.startsWith('prod-interop')
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
                 productOnboarded.id !== 'prod-interop'
@@ -63,33 +69,35 @@ export default function ActiveProductCardContainer({
             values={{ productTitle: productOnboarded.title }}
             components={{ 1: <strong /> }}
           >
-            {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
+            {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={() => invokeProductBo(productOnboarded, party)}
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        prodInteropAndProdInteropColl={haveProdInteropAndEnvProduct}
+        authorizedProdColl={authorizedProdColl}
+        authorizedProdAtst={authorizedProdAtst}
+        authorizedProdInterop={authorizedProdInterop}
         products={products}
         party={party}
       />
 
-      <SessionModal
+      <GenericEnvProductModal
         open={openGenericEnvProductModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans
-            i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct"
+            i18nKey="overview.activeProducts.activeProductsEnvModal.message"
             values={{ productTitle: productOnboarded.title }}
             components={{ 1: <strong /> }}
           >
-            {`L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.`}
+            {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={(e) =>
           invokeProductBo(productOnboarded, party, (e.target as HTMLInputElement).value)
