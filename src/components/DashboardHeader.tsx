@@ -53,11 +53,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     (p) => p.productId === 'prod-interop-coll' && p.authorized === true
   );
 
-  const authorizedProducts = [authorizedProdInterop, authorizedProdAtst, authorizedProdColl].filter(
+  const authorizedInteropProducts = [authorizedProdInterop, authorizedProdAtst, authorizedProdColl].filter(
     (product) => product
   );
 
-  const hasMoreThanOneInteropEnv = authorizedProducts.length > 1;
+  const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
   const onboardedPartyProducts = party?.products.filter(
     (pp) =>
@@ -128,7 +128,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             setProductSelected(selectedProduct);
             if (
               actualSelectedParty.current &&
-              !!hasMoreThanOneInteropEnv &&
+              hasMoreThanOneInteropEnv &&
               p.id.startsWith('prod-interop')
             ) {
               setOpenCustomEnvInteropModal(true);
