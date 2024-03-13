@@ -41,8 +41,28 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
 
+  const authorizedProdInterop = party?.products.find(
+    (p) => p.productId === 'prod-interop' && p.authorized === true
+  );
+
+  const authorizedProdAtst = party?.products?.find(
+    (p) => p.productId === 'prod-interop-atst' && p.authorized === true
+  );
+
+  const authorizedProdColl = party?.products?.find(
+    (p) => p.productId === 'prod-interop-coll' && p.authorized === true
+  );
+
+  const authorizedInteropProducts = [authorizedProdInterop, authorizedProdAtst, authorizedProdColl].filter(
+    (product) => product
+  );
+
+  const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
+
   const onboardedPartyProducts = party?.products.filter(
-    (pp) => pp.productOnBoardingStatus === 'ACTIVE' && pp.authorized
+    (pp) =>
+      pp.productOnBoardingStatus === 'ACTIVE' &&
+      (pp.authorized || (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop'))
   );
 
   const activeProducts: Array<Product> = useMemo(
@@ -56,18 +76,6 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   // eslint-disable-next-line functional/immutable-data
   actualSelectedParty.current = selectedParty;
 
-  const prodInteropAndProdInteropColl =
-    onboardedPartyProducts?.find(
-      (p) => p.productId === 'prod-interop-coll' && p.authorized === true
-    ) &&
-    onboardedPartyProducts.find((p) => p.productId === 'prod-interop' && p.authorized === true);
-
-  const prodInteropAndProdInteropAtst =
-    onboardedPartyProducts?.find(
-      (p) => p.productId === 'prod-interop-atst' && p.authorized === true
-    ) &&
-    onboardedPartyProducts.find((p) => p.productId === 'prod-interop' && p.authorized === true);
-
   return (
     <div tabIndex={0}>
       <Header
@@ -76,7 +84,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
-            prodInteropAndProdInteropColl || prodInteropAndProdInteropAtst
+            hasMoreThanOneInteropEnv
               ? p.id !== 'prod-interop-coll' && p.id !== 'prod-interop-atst'
               : true
           )
@@ -120,8 +128,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             setProductSelected(selectedProduct);
             if (
               actualSelectedParty.current &&
-              (prodInteropAndProdInteropColl || prodInteropAndProdInteropAtst) &&
-              p.id === 'prod-interop'
+              hasMoreThanOneInteropEnv &&
+              p.id.startsWith('prod-interop')
             ) {
               setOpenCustomEnvInteropModal(true);
             } else if (
@@ -174,8 +182,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
-        prodInteropAndProdInteropAtst={!!prodInteropAndProdInteropAtst}
+        authorizedProdInterop={!!authorizedProdInterop}
+        authorizedProdColl={!!authorizedProdColl}
+        authorizedProdAtst={!!authorizedProdAtst}
         products={products}
         party={party}
       />
