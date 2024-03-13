@@ -1,23 +1,23 @@
-import * as React from 'react';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import {
-  Typography,
   Box,
   Button,
+  FormControlLabel,
   Grid,
   IconButton,
-  RadioGroup,
   Radio,
-  FormControlLabel,
+  RadioGroup,
+  Typography,
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { withTranslation } from 'react-i18next';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { TFunction } from 'i18next';
-import { Product } from '../../../../../model/Product';
+import * as React from 'react';
+import { withTranslation } from 'react-i18next';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
+import { Product } from '../../../../../model/Product';
 
 type Props = {
   /** If this component should be displayed or not */
@@ -30,10 +30,12 @@ type Props = {
   onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   /** The confirm label text */
   onConfirmLabel?: string;
-  /** indicates if pary has prod-interop and prod-interop-coll */
-  prodInteropAndProdInteropColl?: boolean;
-  /** indicates if pary has prod-interop and prod-interop-atst */
-  prodInteropAndProdInteropAtst?: boolean;
+  /** indicates if pary is authorized for prod-interopl */
+  authorizedProdInterop?: boolean;
+  /** indicates if pary is authorized for prod-interop-coll */
+  authorizedProdColl?: boolean;
+  /** indicates if pary is authorized for prod-interop-atst */
+  authorizedProdAtst?: boolean;
   /** The function invoked when clicking on close button or in the showed X icon */
   handleClose: () => void | undefined;
   /** If defined, it allow to set a different behavior when clicking on X icon */
@@ -65,8 +67,9 @@ function SessionModalInteropProduct({
   message,
   onConfirm,
   onConfirmLabel = t('SessionModalInteropProduct.confirmButton'),
-  prodInteropAndProdInteropColl,
-  prodInteropAndProdInteropAtst,
+  authorizedProdInterop,
+  authorizedProdAtst,
+  authorizedProdColl,
   handleClose,
   handleExit = handleClose,
   onCloseLabel = t('SessionModalInteropProduct.closeButton'),
@@ -126,7 +129,7 @@ function SessionModalInteropProduct({
 
           <Grid item xs={12}>
             <RadioGroup>
-              {prodInteropAndProdInteropAtst && (
+              {authorizedProdAtst && (
                 <FormControlLabel
                   value="Attestazione"
                   onClick={() => setSelectedEnviroment('Attestazione')}
@@ -145,7 +148,7 @@ function SessionModalInteropProduct({
                 />
               )}
 
-              {prodInteropAndProdInteropColl && (
+              {authorizedProdColl && (
                 <FormControlLabel
                   value="Collaudo"
                   onClick={() => setSelectedEnviroment('Collaudo')}
@@ -163,7 +166,7 @@ function SessionModalInteropProduct({
                   sx={{ mb: 1 }}
                 />
               )}
-              {onConfirm && (
+              {authorizedProdInterop && (
                 <FormControlLabel
                   value={'Produzione'}
                   onClick={() => setSelectedEnviroment('Produzione')}

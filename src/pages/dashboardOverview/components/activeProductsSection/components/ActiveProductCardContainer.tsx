@@ -12,16 +12,20 @@ import SessionModalInteropProduct from './SessionModalInteropProduct';
 type Props = {
   party: Party;
   product: OnboardedProduct;
-  prodInteropAndProdInteropColl: boolean;
-  prodInteropAndProdInteropAtst: boolean;
+  authorizedProdColl: boolean;
+  authorizedProdAtst: boolean;
+  authorizedProdInterop: boolean;
+  hasMoreThanOneInteropEnv: boolean;
   products: Array<Product>;
 };
 
 export default function ActiveProductCardContainer({
   party,
   product,
-  prodInteropAndProdInteropColl,
-  prodInteropAndProdInteropAtst,
+  authorizedProdColl,
+  authorizedProdAtst,
+  authorizedProdInterop,
+  hasMoreThanOneInteropEnv,
   products,
 }: Props) {
   const { t } = useTranslation();
@@ -40,13 +44,12 @@ export default function ActiveProductCardContainer({
     <>
       <Grid item xs={6} lg={4}>
         <ActiveProductCard
-          disableBtn={isDisabled}
+          disableBtn={isDisabled && !hasMoreThanOneInteropEnv}
           cardTitle={productOnboarded?.title ?? ''}
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
-            (prodInteropAndProdInteropColl && productOnboarded.id === 'prod-interop') ||
-            (prodInteropAndProdInteropAtst && productOnboarded.id === 'prod-interop')
+            hasMoreThanOneInteropEnv && productOnboarded.id.startsWith('prod-interop')
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
                 productOnboarded.id !== 'prod-interop'
@@ -75,8 +78,9 @@ export default function ActiveProductCardContainer({
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        prodInteropAndProdInteropColl={prodInteropAndProdInteropColl}
-        prodInteropAndProdInteropAtst={prodInteropAndProdInteropAtst}
+        authorizedProdColl={authorizedProdColl}
+        authorizedProdAtst={authorizedProdAtst}
+        authorizedProdInterop={authorizedProdInterop}
         products={products}
         party={party}
       />
