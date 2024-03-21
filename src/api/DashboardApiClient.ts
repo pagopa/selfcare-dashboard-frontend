@@ -49,8 +49,14 @@ const onRedirectToLogin = () =>
   );
 
 export const DashboardApi = {
+  // TODO getInstitutions to be replaced by getInstitutionsV2 once BE development of USER is done
   getInstitutions: async (): Promise<Array<InstitutionBaseResource>> => {
     const result = await apiClient.getInstitutionsUsingGET({});
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getInstitutionsV2: async (): Promise<Array<InstitutionBaseResource>> => {
+    const result = await apiClient.getInstitutionsUsingGET_1({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
