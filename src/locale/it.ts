@@ -82,7 +82,7 @@ export default {
         messageProduct:
           'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
         devEnviromentMessage:
-          'Ti permettere di conoscere il prodotto e fare prove in tutta sicurezza',
+          'Ti permette di conoscere il prodotto e fare prove in tutta sicurezza',
         uatEnviromentMessage: 'Ti permette di esplorare il prodotto',
         prodEnviromentMessage: 'Prodotto in uso',
         envDevButton: 'Ambiente di Collaudo',
