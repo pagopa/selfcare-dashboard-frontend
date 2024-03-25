@@ -5,6 +5,7 @@ import { useStore } from 'react-redux';
 import { Route, Switch, matchPath, useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
@@ -22,6 +23,7 @@ import { ENV } from '../../utils/env';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
 import DashboardTechnologyPartnerPage from '../dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
+import { LOADING_TASK_TECH_PARTNER_DASHBOARD } from '../../utils/constants';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -92,6 +94,7 @@ const Dashboard = () => {
   const store = useStore();
   const theme = useTheme();
   const { i18n } = useTranslation();
+  const setLoading = useLoading(LOADING_TASK_TECH_PARTNER_DASHBOARD);
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -132,7 +135,6 @@ const Dashboard = () => {
 
   const location = useLocation();
 
-  // Check if the current route matches ADD_DELEGATE
   const match = matchPath(location.pathname, {
     path: [DASHBOARD_ROUTES.ADD_DELEGATE.path],
     exact: true,
@@ -140,11 +142,12 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    if (party) {
-      const redirectPath = party.delegation
-        ? DASHBOARD_ROUTES.TECHPARTNER.path
-        : DASHBOARD_ROUTES.OVERVIEW.path;
-      history.push(resolvePathVariables(redirectPath, { partyId: party?.partyId ?? '' }));
+    if (party?.partyId && party?.delegation) {
+      setLoading(true);
+      history.push(
+        resolvePathVariables(DASHBOARD_ROUTES.TECHPARTNER.path, { partyId: party.partyId })
+      );
+      setLoading(false);
     }
   }, [party?.partyId]);
 
