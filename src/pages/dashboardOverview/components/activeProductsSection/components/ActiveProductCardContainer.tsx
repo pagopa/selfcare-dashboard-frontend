@@ -19,6 +19,7 @@ type Props = {
   products: Array<Product>;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default function ActiveProductCardContainer({
   party,
   product,
@@ -44,7 +45,11 @@ export default function ActiveProductCardContainer({
     <>
       <Grid item xs={6} lg={4}>
         <ActiveProductCard
-          disableBtn={isDisabled && !hasMoreThanOneInteropEnv}
+          disableBtn={
+            productOnboarded.id?.startsWith('prod-interop') && hasMoreThanOneInteropEnv
+              ? false
+              : isDisabled
+          }
           cardTitle={productOnboarded?.title ?? ''}
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}

@@ -54,8 +54,20 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
+  getInstitutionsV2: async (): Promise<Array<InstitutionBaseResource>> => {
+    const result = await apiClient.getInstitutionsUsingGET_1({});
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
   getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
     const result = await apiClient.getInstitutionUsingGET({
+      institutionId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getInstitutionV2: async (institutionId: string): Promise<InstitutionResource> => {
+    const result = await apiClient.getInstitutionUsingGET_1({
       institutionId,
     });
     return extractResponse(result, 200, onRedirectToLogin);
@@ -94,6 +106,14 @@ export const DashboardApi = {
 
   getBillingToken: async (institutionId: string, environment?: string): Promise<string> => {
     const result = await apiClient.billingTokenUsingGET({
+      institutionId,
+      environment,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getBillingTokenV2: async (institutionId: string, environment?: string): Promise<string> => {
+    const result = await apiClient.billingTokenUsingGET_1({
       institutionId,
       environment,
     });
