@@ -1099,6 +1099,7 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
     ],
+    delegation: true,
   },
   // Test AS insurance company
   {
