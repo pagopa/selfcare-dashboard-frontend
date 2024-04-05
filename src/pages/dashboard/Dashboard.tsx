@@ -143,14 +143,22 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    if (party?.partyId) {
-      setLoading(true);
-      const redirectPath = party.delegation
-        ? DASHBOARD_ROUTES.TECHPARTNER.path
-        : window.location.pathname;
-      history.push(resolvePathVariables(redirectPath, { partyId: party?.partyId ?? '' }));
-      setLoading(false);
+    const notOverview =
+      window.location.pathname.endsWith('users') ||
+      window.location.pathname.endsWith('groups') ||
+      window.location.pathname.endsWith('admin');
+
+    setLoading(true);
+
+    if (party?.partyId && !notOverview) {
+      const route = party?.delegation
+        ? resolvePathVariables(DASHBOARD_ROUTES.TECHPARTNER.path, { partyId: party?.partyId ?? '' })
+        : resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, { partyId: party?.partyId ?? '' });
+
+      history.push(route);
     }
+
+    setLoading(false);
   }, [party?.partyId]);
 
   return party && products ? (
