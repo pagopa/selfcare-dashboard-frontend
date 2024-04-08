@@ -20,7 +20,7 @@ export type Party = {
   urlLogo?: string;
   fiscalCode?: string;
   registeredOffice: string;
-  zipCode: string;
+  zipCode?: string;
   typology: string;
   institutionType?: string;
   recipientCode?: string;
