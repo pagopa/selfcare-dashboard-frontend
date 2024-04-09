@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Grid } from '@mui/material';
 import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
 import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
@@ -25,6 +25,8 @@ export default function PartyItemContainer({
   moreThan3Parties,
   parentPartyName,
 }: Props) {
+  // Memoize the rendering of the logo image based on its URL
+  const logoImageUrl = useMemo(() => image, [image]);
   return (
     <Grid
       className={moreThan3Parties ? 'selectedMoreThen3' : 'selectedLessThen3'}
@@ -42,7 +44,7 @@ export default function PartyItemContainer({
       <PartyAccountItemButton
         partyName={title as string}
         partyRole={subTitle as string}
-        image={image}
+        image={logoImageUrl}
         selectedItem={moreThan3Parties ? false : selectedItem}
         action={!isDisabled ? action : undefined}
         disabled={isDisabled}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Grid, Typography, Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
@@ -45,22 +45,69 @@ export default function PartySelectionSearch({
   partyTitle,
 }: Props) {
   const { t } = useTranslation();
-  const [input, setInput] = useState('');
-  const [filteredParties, setFilteredParties] = useState<Array<BaseParty>>(parties);
-
   const theme = useTheme();
+  const [visibleParties, setVisibleParties] = useState<Array<BaseParty>>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    // Initially, show the first batch of parties
+    setVisibleParties(parties.slice(0, 50));
+  }, [parties]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        containerRef.current &&
+        containerRef.current.scrollHeight - containerRef.current.scrollTop ===
+          containerRef.current.clientHeight
+      ) {
+        // User has scrolled to the bottom, load more parties
+        loadMoreParties();
+      }
+    };
+
+    containerRef.current?.addEventListener('scroll', handleScroll);
+
+    return () => {
+      containerRef.current?.removeEventListener('scroll', handleScroll);
+    };
+  }, [visibleParties]); // Re-run effect when visibleParties change
+
+  useEffect(() => {
+    console.log('containerRef.current', containerRef.current);
+  }, [containerRef.current]);
+
+  const loadMoreParties = () => {
+    if (!isLoading) {
+      setIsLoading(true);
+      setTimeout(() => {
+        const remainingParties = parties.slice(visibleParties.length); // Get remaining parties
+        const nextBatch = remainingParties.slice(0, 50); // Load next batch from remaining parties
+        setVisibleParties(prevParties => [...prevParties, ...nextBatch]);
+        setIsLoading(false);
+      }, 500);
+    }
+  };
+  
 
   const onFilterChange = (value: string) => {
-    setInput(value);
+    setSearchQuery(value);
     if (!value) {
-      setFilteredParties(parties);
+      setVisibleParties(parties.slice(0, 50));
     } else {
-      setFilteredParties(parties?.filter((e) => verifyPartyFilter(e, value)));
+      const filteredParties = parties.filter(party =>
+        verifyPartyFilter(party, value)
+      );
+      setVisibleParties(filteredParties.slice(0, 50));
     }
     if (value && selectedParty && !verifyPartyFilter(selectedParty, value)) {
       onPartySelectionChange(null);
     }
   };
+  
+  
 
   const handleListItemClick = (
     _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -82,7 +129,7 @@ export default function PartySelectionSearch({
                   label={label}
                   iconMarginRight={iconMarginRight}
                   onChange={(e) => onFilterChange(e.target.value)}
-                  input={input}
+                  input={searchQuery}
                   clearField={() => onFilterChange('')}
                   iconColor={iconColor}
                 />
@@ -114,7 +161,7 @@ export default function PartySelectionSearch({
               />
             ) : (
               <>
-                {filteredParties.length === 0 ? (
+                {visibleParties.length === 0 ? (
                   <Typography
                     py={2}
                     sx={{
@@ -127,9 +174,12 @@ export default function PartySelectionSearch({
                     {t('partySelection.notFoundResults')}
                   </Typography>
                 ) : (
-                  <CustomBox sx={{ pointerEvents: parties.length !== 1 ? 'auto' : 'none' }}>
-                    {filteredParties &&
-                      filteredParties.map((party) => {
+                  <CustomBox
+                    ref={containerRef}
+                    sx={{ pointerEvents: parties.length !== 1 ? 'auto' : 'none' }}
+                  >
+                    {visibleParties &&
+                      visibleParties.map((party) => {
                         const isDisabled =
                           party.status === 'PENDING' || party.status === 'TOBEVALIDATED';
                         return (
