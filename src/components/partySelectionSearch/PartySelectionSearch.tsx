@@ -47,21 +47,22 @@ export default function PartySelectionSearch({
   const { t } = useTranslation();
   const theme = useTheme();
   const [visibleParties, setVisibleParties] = useState<Array<BaseParty>>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [filteredParties, setFilteredParties] = useState<Array<BaseParty>>(parties);
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     // Initially, show the first batch of parties
-    setVisibleParties(parties.slice(0, 50));
-  }, [parties]);
+    setVisibleParties(filteredParties.slice(0, 50));
+  }, [filteredParties]);
 
   useEffect(() => {
     const handleScroll = () => {
       if (
         containerRef.current &&
-        containerRef.current.scrollHeight - containerRef.current.scrollTop ===
-          containerRef.current.clientHeight
+        containerRef.current.scrollHeight - containerRef.current.scrollTop <=
+          containerRef.current.clientHeight + 20 &&
+        filteredParties.length > visibleParties.length
       ) {
         // User has scrolled to the bottom, load more parties
         loadMoreParties();
@@ -73,41 +74,25 @@ export default function PartySelectionSearch({
     return () => {
       containerRef.current?.removeEventListener('scroll', handleScroll);
     };
-  }, [visibleParties]); // Re-run effect when visibleParties change
-
-  useEffect(() => {
-    console.log('containerRef.current', containerRef.current);
-  }, [containerRef.current]);
+  }, [visibleParties, filteredParties, selectedParty]); // Re-run effect when visibleParties change
 
   const loadMoreParties = () => {
-    if (!isLoading) {
-      setIsLoading(true);
-      setTimeout(() => {
-        const remainingParties = parties.slice(visibleParties.length); // Get remaining parties
-        const nextBatch = remainingParties.slice(0, 50); // Load next batch from remaining parties
-        setVisibleParties(prevParties => [...prevParties, ...nextBatch]);
-        setIsLoading(false);
-      }, 500);
-    }
+    const remainingParties = filteredParties.slice(visibleParties.length); // Get remaining parties
+    const nextBatch = remainingParties.slice(0, 50); // Load next batch from remaining parties
+    setVisibleParties((prevParties) => [...prevParties, ...nextBatch]);
   };
-  
 
   const onFilterChange = (value: string) => {
     setSearchQuery(value);
     if (!value) {
-      setVisibleParties(parties.slice(0, 50));
+      setFilteredParties(parties);
     } else {
-      const filteredParties = parties.filter(party =>
-        verifyPartyFilter(party, value)
-      );
-      setVisibleParties(filteredParties.slice(0, 50));
+      setFilteredParties(parties?.filter((e) => verifyPartyFilter(e, value)));
     }
     if (value && selectedParty && !verifyPartyFilter(selectedParty, value)) {
       onPartySelectionChange(null);
     }
   };
-  
-  
 
   const handleListItemClick = (
     _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
