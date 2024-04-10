@@ -73,10 +73,10 @@ export default function PartySelectionSearch({
     return () => {
       containerRef.current?.removeEventListener('scroll', handleScroll);
     };
-  }, [visibleParties, filteredParties, selectedParty]); 
+  }, [visibleParties, filteredParties, selectedParty]);
 
   const loadMoreParties = () => {
-    const remainingParties = filteredParties.slice(visibleParties.length); 
+    const remainingParties = filteredParties.slice(visibleParties.length);
     const nextBatch = remainingParties.slice(0, 50);
     setVisibleParties((prevParties) => [...prevParties, ...nextBatch]);
   };
@@ -145,7 +145,7 @@ export default function PartySelectionSearch({
               />
             ) : (
               <>
-                {visibleParties.length === 0 ? (
+                {filteredParties.length === 0 ? (
                   <Typography
                     py={2}
                     sx={{
