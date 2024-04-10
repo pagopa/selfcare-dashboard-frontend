@@ -52,7 +52,6 @@ export default function PartySelectionSearch({
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    // Initially, show the first batch of parties
     setVisibleParties(filteredParties.slice(0, 50));
   }, [filteredParties]);
 
@@ -74,11 +73,11 @@ export default function PartySelectionSearch({
     return () => {
       containerRef.current?.removeEventListener('scroll', handleScroll);
     };
-  }, [visibleParties, filteredParties, selectedParty]); // Re-run effect when visibleParties change
+  }, [visibleParties, filteredParties, selectedParty]); 
 
   const loadMoreParties = () => {
-    const remainingParties = filteredParties.slice(visibleParties.length); // Get remaining parties
-    const nextBatch = remainingParties.slice(0, 50); // Load next batch from remaining parties
+    const remainingParties = filteredParties.slice(visibleParties.length); 
+    const nextBatch = remainingParties.slice(0, 50);
     setVisibleParties((prevParties) => [...prevParties, ...nextBatch]);
   };
 
