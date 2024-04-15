@@ -7,8 +7,16 @@ export const retrieveBackOfficeUrl = (
   selectedParty?: Party,
   product?: Product,
   environment?: string
-): Promise<string> =>
-  DashboardApi.getBackOfficeUrl(selectedParty?.partyId ?? '', product?.id ?? '', environment);
+): Promise<string> => {
+  if (ENV.USER.ENABLE_USER_V2) {
+    return DashboardApi.getBackOfficeUrlV2(
+      selectedParty?.partyId ?? '',
+      product?.id ?? '',
+      environment
+    );
+  }
+  return DashboardApi.getBackOfficeUrl(selectedParty?.partyId ?? '', product?.id ?? '');
+};
 
 export const getBillingToken = (partyId: string, environment?: string): Promise<string> => {
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
