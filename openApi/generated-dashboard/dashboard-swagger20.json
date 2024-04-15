@@ -2944,7 +2944,7 @@
           "institutions"
         ],
         "description": "Service to get all the institutions related to logged user",
-        "operationId": "getInstitutionsUsingGET_1",
+        "operationId": "v2RetrieveUserInstitutions",
         "summary": "getInstitutions"
       }
     },
@@ -3006,8 +3006,157 @@
           "institutions"
         ],
         "description": "Service to get a specific institution related to logged user",
-        "operationId": "getInstitutionUsingGET_1",
-        "summary": "getInstitution"
+        "operationId": "v2GetInstitution",
+        "summary": "Service to get a specific institution related to logged user"
+      }
+    },
+    "/v2/institutions/{institutionId}/products/{productId}/users": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateUserDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/UserIdResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to Create a user related to a specific pair of institution-product",
+        "operationId": "v2PostCreateInstitutionProductUser",
+        "summary": "createInstitutionProductUser"
+      }
+    },
+    "/v2/institutions/{institutionId}/products/{productId}/users/{userId}": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "User's unique identifier",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/UserProductRoles"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to add a new role/product to a specific user",
+        "operationId": "v2AddUserProductRole",
+        "summary": "addUserProductRoles"
       }
     },
     "/v2/institutions/{institutionId}/users/{userId}": {
@@ -3105,7 +3254,7 @@
           "institutions"
         ],
         "description": "Service to get the users with the given user id related to a specific institution",
-        "operationId": "getInstitutionUserUsingGET_1",
+        "operationId": "v2RetrieveInstitutionUser",
         "summary": "getInstitutionUser"
       }
     },
@@ -3181,8 +3330,8 @@
           "products"
         ],
         "description": "Service to trigger token exchange and redirect to product's back office URL",
-        "operationId": "retrieveProductBackofficeUsingGET_1",
-        "summary": "retrieveProductBackoffice"
+        "operationId": "v2RetrieveProductBackofficeUsingGET",
+        "summary": "Service to trigger token exchange and redirect to product's back office URL"
       }
     },
     "/v2/token/exchange": {
@@ -3257,8 +3406,8 @@
           "token"
         ],
         "description": "Service create an 'Identity Token' based on a Self Care session token",
-        "operationId": "exchangeUsingGET_1",
-        "summary": "exchange"
+        "operationId": "v2Exchange",
+        "summary": "Service create an 'Identity Token' based on a Self Care session token"
       }
     },
     "/v2/token/exchange/fatturazione": {
@@ -3988,6 +4137,13 @@
             "name": "productId",
             "required": false,
             "type": "string"
+          },
+          {
+            "description": "productRoles",
+            "in": "query",
+            "name": "productRoles",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -4031,7 +4187,7 @@
           "user"
         ],
         "description": "Service to get all the users related to a specific institution",
-        "operationId": "getUsersUsingGET",
+        "operationId": "v2GetUsersUsingGET",
         "summary": "getUsers"
       }
     },
@@ -4045,6 +4201,13 @@
           "application/problem+json"
         ],
         "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "query",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
           {
             "in": "body",
             "name": "body",
@@ -4096,7 +4259,7 @@
           "user"
         ],
         "description": "Retrieve the user for a given fiscal code",
-        "operationId": "searchUsingPOST_1",
+        "operationId": "v2SearchUserByFiscalCodeUsingPOST",
         "summary": "search"
       }
     },
@@ -4112,6 +4275,20 @@
             "in": "path",
             "name": "id",
             "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "query",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Fields to retrieve from pdv when searching for user",
+            "in": "query",
+            "name": "fields",
+            "required": false,
             "type": "string"
           }
         ],
@@ -4158,7 +4335,7 @@
           "user"
         ],
         "description": "Retrieve the user by internal id",
-        "operationId": "getUserByIdUsingGET",
+        "operationId": "v2GetUserByIdUsingGET",
         "summary": "getUserById"
       },
       "put": {
@@ -4225,7 +4402,7 @@
           "user"
         ],
         "description": "Update previously added user",
-        "operationId": "updateUserUsingPUT_1",
+        "operationId": "v2UpdateUserUsingPUT",
         "summary": "updateUser"
       }
     },
@@ -4291,7 +4468,7 @@
           "user"
         ],
         "description": "Delete the relationship",
-        "operationId": "deleteRelationshipByIdUsingDELETE_1",
+        "operationId": "v2DeleteRelationshipByIdUsingDELETE",
         "summary": "deleteRelationshipById"
       }
     },
@@ -4357,7 +4534,7 @@
           "user"
         ],
         "description": "Activate the relationship",
-        "operationId": "activateRelationshipUsingPOST_1",
+        "operationId": "v2ActivateRelationshipUsingPOST",
         "summary": "activateRelationship"
       }
     },
@@ -4423,7 +4600,7 @@
           "user"
         ],
         "description": "Suspend the relationship",
-        "operationId": "suspendRelationshipUsingPOST_1",
+        "operationId": "v2SuspendRelationshipUsingPOST",
         "summary": "suspendRelationship"
       }
     }
