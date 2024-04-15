@@ -55,7 +55,7 @@ export const DashboardApi = {
   },
 
   getInstitutionsV2: async (): Promise<Array<InstitutionBaseResource>> => {
-    const result = await apiClient.getInstitutionsUsingGET_1({});
+    const result = await apiClient.v2RetrieveUserInstitutions({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
@@ -67,7 +67,7 @@ export const DashboardApi = {
   },
 
   getInstitutionV2: async (institutionId: string): Promise<InstitutionResource> => {
-    const result = await apiClient.getInstitutionUsingGET_1({
+    const result = await apiClient.v2GetInstitution({
       institutionId,
     });
     return extractResponse(result, 200, onRedirectToLogin);
