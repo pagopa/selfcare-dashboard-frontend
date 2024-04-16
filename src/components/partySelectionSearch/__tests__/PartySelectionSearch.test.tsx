@@ -1,10 +1,13 @@
-import { fireEvent, getByText, render, screen } from '@testing-library/react';
-import { Party } from '../../../model/Party';
+import { fireEvent, getByText, render, screen, waitFor } from '@testing-library/react';
+import { BaseParty, Party } from '../../../model/Party';
 import PartyAccountItemSelection from '../PartyAccountItemSelection';
 import PartySelectionSearch from '../PartySelectionSearch';
 import './../../../locale';
+import { mockedBaseParties } from '../../../services/__mocks__/partyService';
+import React from 'react';
+import { renderWithProviders } from '../../../utils/test-utils';
 
-let selectedParty: Party | null = null;
+let selectedParty: BaseParty | null = null;
 
 const parties: Array<Party> = [
   {
@@ -214,4 +217,40 @@ test('Test TOBEVALIDATED party', () => {
   if (selectedParty?.status === 'TOBEVALIDATED') {
     screen.getByText('In attesa');
   }
+});
+
+test('Test disabled party', async () => {
+  const generateMockedParties = (N: number): Array<BaseParty> =>
+    Array.from({ length: N }, (_, index) => {
+      const partyId = `party-${index}`;
+      return {
+        partyId,
+        description: `Party ${index}`,
+        status: index % 2 === 0 ? 'ACTIVE' : 'PENDING',
+        userRole: index % 2 === 0 ? 'ADMIN' : 'LIMITED',
+      };
+    });
+
+  const mockedBaseParties = generateMockedParties(60);
+  renderWithProviders(
+    <PartySelectionSearch
+      parties={mockedBaseParties}
+      onPartySelectionChange={(p) => (selectedParty = p)}
+      selectedParty={selectedParty}
+    />
+  );
+
+  const party40 = screen.getByText('Party 40');
+  expect(party40).toBeInTheDocument();
+
+  const party52 = screen.queryByText('Party 52');
+  expect(party52).not.toBeInTheDocument();
+
+  const input = document.getElementById('search') as HTMLInputElement;
+  fireEvent.change(input, { target: { value: 'Party 5' } });
+  expect(input.getAttribute('value')).toBe('Party 5');
+
+  expect(party40).not.toBeInTheDocument();
+
+  await waitFor(() => expect(screen.getByText('Party 52')).toBeInTheDocument());
 });
