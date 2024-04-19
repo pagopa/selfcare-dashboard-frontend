@@ -322,39 +322,6 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
             </>
           ) : undefined}
-          {(isInstitutionTypePA && !isTaxCodeEquals2Piva && party.fiscalCode) ||
-          !isInstitutionTypePA ? (
-            <>
-              {/* fiscalCode */}
-              <Grid item xs={2}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {isTaxCodeEquals2Piva
-                    ? t('overview.partyDetail.isTaxCodeEquals2Piva')
-                    : t('overview.partyDetail.fiscalCode')}
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Tooltip
-                  title={
-                    party.fiscalCode && party.fiscalCode.length >= showTooltipAfter
-                      ? party.fiscalCode
-                      : ''
-                  }
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.fiscalCode}
-                  </Typography>
-                </Tooltip>
-              </Grid>
-            </>
-          ) : (
-            <></>
-          )}
           {/* vatNumberGroup */}
           {party.institutionType === 'PSP' && (
             <>

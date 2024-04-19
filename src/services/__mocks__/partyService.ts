@@ -1007,7 +1007,6 @@ export const mockedParties: Array<Party> = [
     urlLogo: 'image',
     partyId: '29',
     digitalAddress: 'comune.carbonia@pec.it',
-    fiscalCode: 'fiscalCodeCarbonia',
     category: 'Comuni e loro Consorzi e Associazioni',
     registeredOffice: 'Via Luigi Crespellani',
     zipCode: '20334',
@@ -1021,7 +1020,6 @@ export const mockedParties: Array<Party> = [
       // Use case with one taxonomy
       { code: '938465', desc: 'Cagliari - Comune' },
     ],
-    vatNumber: '87659012374',
     products: [
       // Use case with prod-interop with authorized true and prod-interop-coll with authorized false
       {
@@ -1030,7 +1028,6 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
-          vatNumber: '3395867495',
           recipientCode: 'NBG455B',
           publicServices: true,
         },
@@ -1041,7 +1038,6 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
-          vatNumber: '3395867495',
           recipientCode: 'NBG455B',
           publicServices: true,
         },
@@ -1051,7 +1047,6 @@ export const mockedParties: Array<Party> = [
         userRole: 'ADMIN',
         authorized: false,
         billing: {
-          vatNumber: '94287592749',
           recipientCode: 'c_b988',
           publicServices: false,
         },
