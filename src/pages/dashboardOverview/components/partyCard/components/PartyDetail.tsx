@@ -322,8 +322,7 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
             </>
           ) : undefined}
-          {(isInstitutionTypePA && !isTaxCodeEquals2Piva && party.fiscalCode) ||
-          !isInstitutionTypePA ? (
+          {!isInstitutionTypePA && party.fiscalCode ? (
             <>
               {/* fiscalCode */}
               <Grid item xs={2}>
@@ -377,7 +376,7 @@ export default function PartyDetail({ party }: Props) {
           )}
 
           {/* fiscalCode */}
-          {isInstitutionTypePA && isTaxCodeEquals2Piva && party.fiscalCode && (
+          {isInstitutionTypePA && party.fiscalCode && (
             <>
               <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
