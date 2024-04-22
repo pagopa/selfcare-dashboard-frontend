@@ -322,7 +322,7 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
             </>
           ) : undefined}
-          {(isInstitutionTypePA && !isTaxCodeEquals2Piva) || !isInstitutionTypePA ? (
+          {!isInstitutionTypePA && party.fiscalCode ? (
             <>
               {/* fiscalCode */}
               <Grid item xs={2}>
@@ -376,7 +376,7 @@ export default function PartyDetail({ party }: Props) {
           )}
 
           {/* fiscalCode */}
-          {isInstitutionTypePA && isTaxCodeEquals2Piva && (
+          {isInstitutionTypePA && party.fiscalCode && (
             <>
               <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
@@ -407,7 +407,7 @@ export default function PartyDetail({ party }: Props) {
           )}
           <>
             {/* vatNumber */}
-            {!isTaxCodeEquals2Piva && (
+            {!isTaxCodeEquals2Piva && lastPartyVatNumber && (
               <>
                 <Grid item xs={2}>
                   <Typography variant="body2" sx={{ ...labelStyles }}>
@@ -472,7 +472,9 @@ export default function PartyDetail({ party }: Props) {
               arrow={true}
             >
               <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {party.registeredOffice + ' - ' + party.zipCode}
+                {party.zipCode
+                  ? party.registeredOffice + ' - ' + party.zipCode
+                  : party.registeredOffice}
               </Typography>
             </Tooltip>
           </Grid>

@@ -1,10 +1,11 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
 import { Header } from '@pagopa/selfcare-common-frontend';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
@@ -15,7 +16,7 @@ import GenericEnvProductModal from '../pages/dashboardOverview/components/active
 import SessionModalInteropProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInteropProduct';
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
-import ROUTES, { DASHBOARD_ROUTES } from '../routes';
+import ROUTES from '../routes';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -38,6 +39,15 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const [productSelected, setProductSelected] = useState<Product>();
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
+  const [showDocBtn, setShowDocBtn] = useState(false);
+
+  useEffect(() => {
+    if (i18n.language === 'it') {
+      setShowDocBtn(true);
+    } else {
+      setShowDocBtn(false);
+    }
+  }, [i18n.language]);
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
 
@@ -53,9 +63,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     (p) => p.productId === 'prod-interop-coll' && p.authorized === true
   );
 
-  const authorizedInteropProducts = [authorizedProdInterop, authorizedProdAtst, authorizedProdColl].filter(
-    (product) => product
-  );
+  const authorizedInteropProducts = [
+    authorizedProdInterop,
+    authorizedProdAtst,
+    authorizedProdColl,
+  ].filter((product) => product);
 
   const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
@@ -115,12 +127,16 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }
         enableAssistanceButton={ENV.ENV !== 'UAT'}
         assistanceEmail={ENV.ASSISTANCE.EMAIL}
-        onDocumentationClick={() => {
-          trackEvent('OPEN_OPERATIVE_MANUAL', {
-            from: 'dashboard',
-          });
-          window.open(ENV.URL_DOCUMENTATION, '_blank');
-        }}
+        onDocumentationClick={
+          showDocBtn
+            ? () => {
+                trackEvent('OPEN_OPERATIVE_MANUAL', {
+                  from: 'dashboard',
+                });
+                window.open(ENV.URL_DOCUMENTATION, '_blank');
+              }
+            : undefined
+        }
         enableLogin={true}
         onSelectedProduct={(p) => {
           onExit(() => {
@@ -150,11 +166,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             party_id: selectedParty.id,
           });
           onExit(() => {
-            const redirectRoute = party?.delegation
-              ? DASHBOARD_ROUTES.TECHPARTNER.path
-              : ROUTES.PARTY_DASHBOARD.path;
             history.push(
-              resolvePathVariables(redirectRoute, {
+              resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
                 partyId: selectedParty.id,
               })
             );
