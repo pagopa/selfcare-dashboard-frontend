@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 import { CONFIG } from '@pagopa/selfcare-common-frontend/config/env';
+import LoadingOverlay from '@pagopa/selfcare-common-frontend/components/Loading/LoadingOverlay';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './redux/store';
@@ -34,6 +35,7 @@ root.render(
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <App />
+          <LoadingOverlay />
         </ThemeProvider>
       </BrowserRouter>
     </Provider>
