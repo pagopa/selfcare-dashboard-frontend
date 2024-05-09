@@ -238,8 +238,7 @@ export default {
   },
   addDelegationPage: {
     title: 'Aggiungi delega',
-    subTitle:
-      "Scegli il prodotto e indica chi potrà gestirlo per conto del tuo ente.",
+    subTitle: 'Scegli il prodotto e indica chi potrà gestirlo per conto del tuo ente.',
     navigationBar: {
       overview: 'Panoramica',
       delegations: 'Deleghe',
@@ -252,7 +251,10 @@ export default {
     selectTechPartner: {
       title: 'Scegli chi gestirà il prodotto',
       subTitle: 'Cerca utilizzando la ragione sociale o il Codice Fiscale dell’ente',
-      label: 'Inserisci la ragione sociale',
+      radioName: 'Ragione sociale',
+      radioFiscalCode: 'Codice Fiscale ente',
+      labelName: 'Inserisci la ragione sociale',
+      labelFiscalCode: 'Inserisci il Codice Fiscale',
       groupByName: 'Nome',
       notFoundTechPartnerOptions: 'Nessun risultato',
       actions: {

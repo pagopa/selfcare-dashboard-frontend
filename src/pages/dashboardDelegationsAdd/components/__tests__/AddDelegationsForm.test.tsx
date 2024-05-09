@@ -24,6 +24,12 @@ test('render the form correctly and name header should not be visible in pt list
   const ptListComboBox = screen.getByLabelText('Inserisci la ragione sociale');
   expect(ptListComboBox).toBeInTheDocument();
 
+  const searchByFiscalCodeRadio = screen.getByLabelText('Codice Fiscale ente');
+  expect(searchByFiscalCodeRadio).toBeInTheDocument();
+
+  fireEvent.click(searchByFiscalCodeRadio);
+  expect(searchByFiscalCodeRadio).toBeChecked();
+
   fireEvent.click(ptListComboBox);
   // TODO the name should be visible once intermediate enteties data is available
   expect(screen.queryByText('Nome')).not.toBeInTheDocument();
@@ -44,6 +50,7 @@ test('should display documentation link with correct href and text content', asy
   renderWithProviders(
     <AddDelegationForm authorizedDelegableProducts={mockedPartyProducts} party={mockedParties[0]} />
   );
+
   const href =
     'https://docs.pagopa.it/area-riservata/area-riservata/come-funziona/come-delegare-la-gestione';
   const linkElement = screen.getByText('Dubbi? Vai al manuale');

@@ -3,11 +3,14 @@ import {
   Autocomplete,
   Button,
   FormControl,
+  FormControlLabel,
   Grid,
   InputLabel,
   Link,
   MenuItem,
   OutlinedInput,
+  Radio,
+  RadioGroup,
   Select,
   Stack,
   TextField,
@@ -56,6 +59,7 @@ export default function AddDelegationForm({
   const [productBrokers, setProductBrokers] = useState<Array<BrokerResource>>();
   const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
   const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>();
+  const [selectedRadioValue, setSelectedRadioValue] = useState<string>('');
   const delegationsListRef = useRef(delegationsList);
 
   useEffect(() => {
@@ -263,6 +267,28 @@ export default function AddDelegationForm({
             variantSubTitle="body2"
           />
         </Grid>
+        <Grid>
+          <RadioGroup
+            row
+            name="techPartnerRadio"
+            value={techPartnerSelected?.description}
+            onChange={(_e, selectedValue: string) => {
+              setSelectedRadioValue(selectedValue);
+            }}
+            sx={{ marginBottom: 1 }}
+          >
+            <FormControlLabel
+              control={<Radio />}
+              label={t('addDelegationPage.selectTechPartner.radioName')}
+              value={'instituionName'}
+            ></FormControlLabel>
+            <FormControlLabel
+              control={<Radio />}
+              label={t('addDelegationPage.selectTechPartner.radioFiscalCode')}
+              value={'fiscalCode'}
+            ></FormControlLabel>
+          </RadioGroup>
+        </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth>
             <Autocomplete
@@ -313,7 +339,11 @@ export default function AddDelegationForm({
                     },
                   }}
                   {...params}
-                  label={t('addDelegationPage.selectTechPartner.label')}
+                  label={
+                    selectedRadioValue === 'fiscalCode'
+                      ? t('addDelegationPage.selectTechPartner.labelFiscalCode')
+                      : t('addDelegationPage.selectTechPartner.labelName')
+                  }
                   InputProps={{
                     ...params.InputProps,
                     type: 'search',
