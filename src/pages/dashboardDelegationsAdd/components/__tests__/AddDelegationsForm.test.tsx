@@ -39,3 +39,21 @@ test('should display the choose product autocomplete input empty if there are no
 
   expect(screen.queryByText('App IO')).not.toBeInTheDocument();
 });
+
+test('should display documentation link with correct href and text content', async () => {
+  renderWithProviders(
+    <AddDelegationForm authorizedDelegableProducts={mockedPartyProducts} party={mockedParties[0]} />
+  );
+  const href =
+    'https://docs.pagopa.it/area-riservata/area-riservata/come-funziona/come-delegare-la-gestione';
+  const linkElement = screen.getByText('Dubbi? Vai al manuale');
+
+  expect(linkElement).toHaveAttribute('href', href);
+
+  expect(linkElement).toHaveStyle(`
+    font-weight: 700;
+    font-size: 14px;
+  `);
+
+  fireEvent.click(linkElement);
+});
