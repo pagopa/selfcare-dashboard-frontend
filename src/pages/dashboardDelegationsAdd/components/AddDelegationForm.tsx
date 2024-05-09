@@ -5,6 +5,7 @@ import {
   FormControl,
   Grid,
   InputLabel,
+  Link,
   MenuItem,
   OutlinedInput,
   Select,
@@ -190,12 +191,18 @@ export default function AddDelegationForm({
             {t('addDelegationPage.addOneDelegation')}
           </Typography>
           <Typography variant="body1">{t('addDelegationPage.formSubTitle')}</Typography>
-          {/*
-          TODO hide MUI Link until href for link is avaible
-          <Link href={'#'} sx={{ fontWeight: 'bold' }} mt={1}>
-            {t('addDelegationPage.findOutMore')}
-          </Link>
-          */}
+          {
+            <Link
+              href={
+                'https://docs.pagopa.it/area-riservata/area-riservata/come-funziona/come-delegare-la-gestione'
+              }
+              target="_blank"
+              sx={{ fontWeight: 'bold', color: 'primary.main', fontSize: '14px' }}
+              mt={1}
+            >
+              {t('addDelegationPage.findOutMore')}
+            </Link>
+          }
         </Grid>
         <Grid item xs={6} mb={3}>
           <Typography variant="subtitle1" fontSize={'16px'} mb={2}>
