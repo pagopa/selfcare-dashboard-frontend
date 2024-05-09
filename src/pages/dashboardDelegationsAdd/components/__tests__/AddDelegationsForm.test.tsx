@@ -21,7 +21,7 @@ test('render the form correctly and name header should not be visible in pt list
   );
 
   expect(screen.getByText('App IO')).toBeInTheDocument();
-  const ptListComboBox = screen.getByLabelText('Seleziona o scegli dalla lista');
+  const ptListComboBox = screen.getByLabelText('Inserisci la ragione sociale');
   expect(ptListComboBox).toBeInTheDocument();
 
   fireEvent.click(ptListComboBox);
