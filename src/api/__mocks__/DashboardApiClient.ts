@@ -258,42 +258,42 @@ export const mockedUserResource: UserResource = {
 
 export const mockedBrokerResource: Array<BrokerResource> = [
   {
-    code: '004',
-    description: 'A.S.S.A.P er01',
+    code: '12345678914',
+    description: 'Agenzia per La Rappresentanza Negoziale della Regione Siciliana',
     enabled: true,
   },
   {
-    code: '005',
-    description: 'C_br..oker02',
+    code: '12345678915',
+    description: 'Maggioli S.p.A.',
     enabled: true,
   },
   {
-    code: '006',
+    code: '12345678916',
     description: 'E_broke--r04',
     enabled: true,
   },
   {
-    code: '007',
+    code: '12345678917',
     description: 'agenzia er01',
     enabled: true,
   },
   {
-    code: '008',
+    code: '12345678918',
     description: 'D_bro.k.er06',
     enabled: true,
   },
   {
-    code: '009',
+    code: '12345678919',
     description: 'F_broker03',
     enabled: true,
   },
   {
-    code: '010',
+    code: '12345678910',
     description: 'S_broker03',
     enabled: true,
   },
   {
-    code: '011',
+    code: '12345678911',
     description: 'K_broker03',
     enabled: true,
   },

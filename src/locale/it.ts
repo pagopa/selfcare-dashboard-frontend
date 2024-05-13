@@ -255,7 +255,8 @@ export default {
       radioFiscalCode: 'Codice Fiscale ente',
       labelName: 'Inserisci la ragione sociale',
       labelFiscalCode: 'Inserisci il Codice Fiscale',
-      groupByName: 'Nome',
+      groupByName: 'Ragione sociale',
+      groupByFiscalCode: 'Codice Fiscale',
       notFoundTechPartnerOptions: 'Nessun risultato',
       actions: {
         back: 'Indietro',
