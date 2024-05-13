@@ -25,17 +25,18 @@ import {
 } from '@pagopa/selfcare-common-frontend';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
+import { DelegationResource } from '../../../api/generated/b4f-dashboard/DelegationResource';
 import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
+import { fetchDelegations } from '../../../services/delegationServices';
 import { createDelegation, getProductBrokers } from '../../../services/partyService';
 import { LOADING_TASK_DELEGATION_FORM } from '../../../utils/constants';
-import { fetchDelegations } from '../../../services/delegationServices';
-import { DelegationResource } from '../../../api/generated/b4f-dashboard/DelegationResource';
+import CustomListBoxComponent from './CustomListBoxComponent';
 
 type Props = {
   authorizedDelegableProducts: Array<Product>;
@@ -59,7 +60,7 @@ export default function AddDelegationForm({
   const [productBrokers, setProductBrokers] = useState<Array<BrokerResource>>();
   const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
   const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>();
-  const [selectedRadioValue, setSelectedRadioValue] = useState<string>('');
+  const [selectedRadioValue, setSelectedRadioValue] = useState<string>('institutionName');
   const delegationsListRef = useRef(delegationsList);
 
   useEffect(() => {
@@ -260,7 +261,7 @@ export default function AddDelegationForm({
             title={t('addDelegationPage.selectTechPartner.title')}
             subTitle={t('addDelegationPage.selectTechPartner.subTitle')}
             mbTitle={1}
-            mbSubTitle={3}
+            mbSubTitle={2}
             titleFontSize="16px"
             subTitleFontSize="16px"
             variantTitle="subtitle1"
@@ -271,16 +272,17 @@ export default function AddDelegationForm({
           <RadioGroup
             row
             name="techPartnerRadio"
-            value={techPartnerSelected?.description}
+            value={selectedRadioValue}
             onChange={(_e, selectedValue: string) => {
               setSelectedRadioValue(selectedValue);
             }}
             sx={{ marginBottom: 1 }}
+            defaultValue={selectedRadioValue}
           >
             <FormControlLabel
               control={<Radio />}
               label={t('addDelegationPage.selectTechPartner.radioName')}
-              value={'instituionName'}
+              value={'institutionName'}
             ></FormControlLabel>
             <FormControlLabel
               control={<Radio />}
@@ -292,13 +294,12 @@ export default function AddDelegationForm({
         <Grid item xs={12}>
           <FormControl fullWidth>
             <Autocomplete
-              // TODO 'NAME' label hidden until Intermediated entities data is avaible
-              // groupBy={() => t('addDelegationPage.selectTechPartner.groupByName')}
-              options={productBrokers?.map((pb) => pb.description) ?? []}
+              // TODO 'NAME' label hidden for searchbyname until Intermediated entities data is avaible
+              options={productBrokers ?? []}
+              getOptionLabel={(option) => option.description ?? ''}
               clearOnEscape
-              onChange={(_e, selectedPb: string) => {
-                const chosenBroker = productBrokers?.find((pb) => pb.description === selectedPb);
-                setTechPartnerSelected(chosenBroker);
+              onChange={(_e, selectedPb: any) => {
+                setTechPartnerSelected(selectedPb);
               }}
               sx={{
                 '.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot':
@@ -310,6 +311,17 @@ export default function AddDelegationForm({
                 style: {
                   overflow: 'visible',
                 },
+              }}
+              filterOptions={(productBrokers, { inputValue }) => {
+                if (selectedRadioValue === 'fiscalCode') {
+                  return productBrokers.filter((productBrokers) =>
+                    productBrokers?.code?.toLowerCase().includes(inputValue.toLowerCase())
+                  );
+                } else {
+                  return productBrokers.filter((productBrokers) =>
+                    productBrokers?.description?.toLowerCase().includes(inputValue.toLowerCase())
+                  );
+                }
               }}
               componentsProps={{
                 paper: {
@@ -351,9 +363,34 @@ export default function AddDelegationForm({
                   }}
                 />
               )}
-              renderOption={(props, options: any) => (
-                <MenuItem {...props} sx={{ height: '44px' }}>
-                  {options}
+              ListboxComponent={
+                selectedRadioValue === 'fiscalCode' ? CustomListBoxComponent : undefined
+              }
+              renderOption={(props, option: BrokerResource) => (
+                <MenuItem
+                  {...props}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: '44px',
+                  }}
+                  key={`${option.code}-${option.description}`}
+                >
+                  {selectedRadioValue === 'institutionName' ? null : (
+                    <span style={{ flex: '0 0 40%' }}>{option.code}</span>
+                  )}
+                  <span
+                    style={{
+                      textAlign: 'start',
+                      flex: 1,
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {option.description}
+                  </span>
                 </MenuItem>
               )}
               noOptionsText={t('addDelegationPage.selectTechPartner.notFoundTechPartnerOptions')}
