@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, screen } from '@testing-library/react';
+import { cleanup, screen } from '@testing-library/react';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
@@ -10,19 +10,11 @@ afterEach(() => {
 
 test('Should render component DashboardDelegationsPage with populated props and isDelegateSectionVisible is true', async () => {
   const mockedGsp = mockedParties[11];
-  const { history } = renderWithProviders(
+  renderWithProviders(
     <DashboardDelegationsPage party={mockedGsp} authorizedDelegableProducts={mockedPartyProducts} />
   );
   // test back button
-  const backBtn = await screen.findByText('Indietro');
-  const goBackMock = jest.spyOn(history, 'goBack');
+  const backBtn = screen.queryByText('Indietro');
 
-  await act(async () => {
-    fireEvent.click(backBtn);
-  });
-
-  // Assert that history.goBack() was called
-  expect(goBackMock).toHaveBeenCalled();
-
-  goBackMock.mockRestore();
+  expect(backBtn).not.toBeInTheDocument();
 });
