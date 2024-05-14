@@ -61,6 +61,7 @@ export default function AddDelegationForm({
   const [techPartnerSelected, setTechPartnerSelected] = useState<BrokerResource>();
   const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>();
   const [selectedRadioValue, setSelectedRadioValue] = useState<string>('institutionName');
+  const [inputValue, setInputValue] = useState<string>('');
   const delegationsListRef = useRef(delegationsList);
 
   useEffect(() => {
@@ -301,6 +302,9 @@ export default function AddDelegationForm({
               onChange={(_e, selectedPb: any) => {
                 setTechPartnerSelected(selectedPb);
               }}
+              onInputChange={(_e, inputValue) => {
+                setInputValue(inputValue);
+              }}
               sx={{
                 '.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot':
                   {
@@ -313,14 +317,16 @@ export default function AddDelegationForm({
                 },
               }}
               filterOptions={(productBrokers, { inputValue }) => {
-                if (selectedRadioValue === 'fiscalCode') {
+                if (selectedRadioValue === 'fiscalCode' && inputValue.length === 11) {
                   return productBrokers.filter((productBrokers) =>
                     productBrokers?.code?.toLowerCase().includes(inputValue.toLowerCase())
                   );
-                } else {
+                } else if (selectedRadioValue === 'institutionName') {
                   return productBrokers.filter((productBrokers) =>
                     productBrokers?.description?.toLowerCase().includes(inputValue.toLowerCase())
                   );
+                } else {
+                  return [];
                 }
               }}
               componentsProps={{
@@ -339,6 +345,13 @@ export default function AddDelegationForm({
                     },
                     overflowY: 'auto',
                     maxHeight: '200px',
+                    '.MuiAutocomplete-noOptions': () => ({
+                      display:
+                        (selectedRadioValue === 'fiscalCode' && !inputValue.length) ||
+                        techPartnerSelected
+                          ? 'none'
+                          : 'block',
+                    }),
                   },
                 },
               }}
