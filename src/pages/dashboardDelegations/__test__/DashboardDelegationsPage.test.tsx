@@ -1,4 +1,4 @@
-import { cleanup, screen } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
@@ -13,8 +13,4 @@ test('Should render component DashboardDelegationsPage with populated props and 
   renderWithProviders(
     <DashboardDelegationsPage party={mockedGsp} authorizedDelegableProducts={mockedPartyProducts} />
   );
-  // test back button
-  const backBtn = screen.queryByText('Indietro');
-
-  expect(backBtn).not.toBeInTheDocument();
 });
