@@ -5183,6 +5183,15 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "productRole",
+          "in" : "query",
+          "description" : "productRole",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "204" : {
@@ -5257,6 +5266,15 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "productRole",
+          "in" : "query",
+          "description" : "productRole",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "204" : {
@@ -5327,6 +5345,15 @@
           "in" : "query",
           "description" : "productId",
           "required" : true,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "productRole",
+          "in" : "query",
+          "description" : "productRole",
+          "required" : false,
           "style" : "form",
           "schema" : {
             "type" : "string"

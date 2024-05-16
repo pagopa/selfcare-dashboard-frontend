@@ -1,6 +1,5 @@
 import { Box, Button, CircularProgress, Divider, Grid, Link, Typography } from '@mui/material';
 import {
-  NavigationBar,
   TitleBox,
   useErrorDispatcher,
   useUnloadEventOnExit,
@@ -8,7 +7,6 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { ProductAvatar } from '@pagopa/mui-italia';
 import { Party } from '../../model/Party';
@@ -60,15 +58,6 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
     void retrieveDelegationsList();
   }, []);
 
-  const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
-  const overviewPath = resolvePathVariables(overviewRoute, {
-    partyId: party.partyId,
-  });
-
-  const goBack = () => {
-    history.goBack();
-  };
-
   const goToAddDelegationsPage = (productId?: string) =>
     onExit(() =>
       history.push(
@@ -77,17 +66,6 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
         }).concat(productId ? `?productId=${productId}` : '')
       )
     );
-
-  const paths = [
-    {
-      description: t('overview.delegationsPage.delegationsNavigationBar.redirectDescription'),
-      icon: AssignmentIcon,
-      onClick: () => onExit(() => history.push(party.partyId ? overviewPath : overviewRoute)),
-    },
-    {
-      description: t('overview.delegationsPage.delegationsNavigationBar.titlePageDescription'),
-    },
-  ];
 
   return (
     <>
@@ -101,9 +79,6 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
             sx={{ width: '100%', backgroundColor: 'transparent !important' }}
           >
             <Grid container item xs={12}>
-              <Grid item xs={12} mb={3}>
-                <NavigationBar showBackComponent={true} goBack={goBack} paths={paths} />
-              </Grid>
               <Grid item xs={12}>
                 <TitleBox
                   variantTitle="h4"
