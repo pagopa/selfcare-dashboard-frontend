@@ -36,6 +36,8 @@ variables:
     react_app_url_fe_landing: '$(UAT_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(UAT_REACT_APP_URL_FE_ASSISTANCE)'
 
+    react_app_country_data: '$(UAT_REACT_APP_COUNTRY_DATA)'
+
     react_app_url_fe_dashboard_admin: '$(UAT_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(UAT_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(UAT_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
@@ -75,6 +77,8 @@ variables:
     react_app_url_fe_onboarding: '$(PROD_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_landing: '$(PROD_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(PROD_REACT_APP_URL_FE_ASSISTANCE)'
+
+    react_app_country_data: '$(PROD_REACT_APP_COUNTRY_DATA)'
 
     react_app_url_fe_dashboard_admin: '$(PROD_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(PROD_REACT_APP_URL_FE_DASHBOARD_USERS)'
@@ -118,6 +122,8 @@ variables:
     react_app_url_fe_onboarding: '$(DEV_REACT_APP_URL_FE_ONBOARDING)'
     react_app_url_fe_landing: '$(DEV_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(DEV_REACT_APP_URL_FE_ASSISTANCE)'
+
+    react_app_country_data: '$(DEV_REACT_APP_COUNTRY_DATA)'
 
     react_app_url_fe_dashboard_admin: '$(DEV_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(DEV_REACT_APP_URL_FE_DASHBOARD_USERS)'
@@ -228,6 +234,8 @@ stages:
               REACT_APP_URL_FE_ONBOARDING: '$(react_app_url_fe_onboarding)'
               REACT_APP_URL_FE_LANDING: '$(react_app_url_fe_landing)'
               REACT_APP_URL_FE_ASSISTANCE: '$(react_app_url_fe_assistance)'
+
+              REACT_APP_COUNTRY_DATA: '$(react_app_country_data)'
 
               MICROFRONTEND_URL_USERS: '$(react_app_url_fe_dashboard_users)'
               MICROFRONTEND_URL_GROUPS: '$(react_app_url_fe_dashboard_groups)'
