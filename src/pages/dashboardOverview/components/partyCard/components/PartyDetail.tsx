@@ -112,8 +112,11 @@ export default function PartyDetail({ party }: Props) {
   };
   const isAooUo = party.subunitType === 'AOO' || party.subunitType === 'UO';
 
-  const isForeignInsurence =
-    party.institutionType === 'AS' && party.country && party.country !== 'IT';
+  const isForeignInsurence = !!(
+    party.institutionType === 'AS' &&
+    party.country &&
+    party.country !== 'IT'
+  );
 
   const getCountriesJSON = async () => {
     const countries = await fetch(ENV.JSON_URL.COUNTRIES);
@@ -140,14 +143,24 @@ export default function PartyDetail({ party }: Props) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  const formattedAddress = isForeignInsurence
-    ? `${party.registeredOffice}, ${capitalizeFirstLetter(party.city)} ${getCountryNameByAlpha2(
-        countries,
-        party.country
-      )}`
-    : party.zipCode
-    ? `${party.registeredOffice} - ${party.zipCode}`
-    : party.registeredOffice;
+  const formattedForeignAddress = `${party.registeredOffice}, ${capitalizeFirstLetter(
+    party.city
+  )} ${getCountryNameByAlpha2(countries, party.country)}`;
+
+  const getTooltipText = (
+    isForeignInsurence: boolean,
+    formattedForeignAddress: string,
+    registeredOffice: string,
+    showTooltipAfter: number
+  ): string | undefined => {
+    if (isForeignInsurence && formattedForeignAddress.length >= showTooltipAfter) {
+      return formattedForeignAddress;
+    } else if (registeredOffice.length >= showTooltipAfter) {
+      return registeredOffice;
+    } else {
+      return '';
+    }
+  };
 
   return (
     <>
@@ -504,14 +517,21 @@ export default function PartyDetail({ party }: Props) {
           </Grid>
           <Grid item xs={4}>
             <Tooltip
-              title={
-                party.registeredOffice.length >= showTooltipAfter ? party.registeredOffice : ''
-              }
+              title={getTooltipText(
+                isForeignInsurence,
+                formattedForeignAddress,
+                party.registeredOffice,
+                showTooltipAfter
+              )}
               placement="top"
               arrow={true}
             >
               <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {formattedAddress}
+                {isForeignInsurence
+                  ? formattedForeignAddress
+                  : party.zipCode
+                  ? `${party.registeredOffice} - ${party.zipCode}`
+                  : party.registeredOffice}
               </Typography>
             </Tooltip>
           </Grid>
