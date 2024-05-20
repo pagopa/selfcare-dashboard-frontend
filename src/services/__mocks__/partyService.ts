@@ -172,6 +172,13 @@ export const mockedBaseParties: Array<BaseParty> = [
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
+
+  {
+    partyId: '431',
+    description: 'ARCA VITA INTERNATIONAL DESIGNATED ACTIVITY COMPANY',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
 ];
 
 export const mockedParties: Array<Party> = [
@@ -1502,6 +1509,50 @@ export const mockedParties: Array<Party> = [
     delegation: false,
     status: 'ACTIVE',
     userRole: 'ADMIN',
+  },
+  {
+    partyId: '431',
+    externalId: '20128',
+    originId: '20128',
+    origin: 'IVASS',
+    institutionType: 'AS',
+    typology: 'Società di assicurazione',
+    description: 'ARCA VITA INTERNATIONAL DESIGNATED ACTIVITY COMPANY',
+    digitalAddress: 'arcavitaintl@pec.unipol.it',
+    registeredOffice: 'street 12',
+    geographicTaxonomies: [],
+    products: [
+      {
+        productId: 'prod-interop',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop-atst',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop-coll',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+    ],
+    city: 'london',
+    country: 'GB',
+    delegation: false,
   },
 ];
 
