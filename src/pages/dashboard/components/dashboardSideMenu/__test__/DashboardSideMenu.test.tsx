@@ -45,7 +45,7 @@ test('Test: The techpartner has not been delegated by any body, will not see the
       isDelegateSectionVisible={false}
     />
   );
-  const institutionsListVoice = screen.queryByText('I tuoi enti');
+  const institutionsListVoice = screen.queryByText('Enti gestiti');
 
   expect(institutionsListVoice).not.toBeInTheDocument();
 });
@@ -60,7 +60,7 @@ test('Test: The techpartner has not been delegated by any body, he will see the 
     />
   );
 
-  const institutionsListVoice = screen.getByText('I tuoi enti');
+  const institutionsListVoice = screen.getByText('Enti gestiti');
 
   expect(institutionsListVoice).toBeInTheDocument();
 

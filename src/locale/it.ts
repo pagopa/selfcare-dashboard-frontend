@@ -207,7 +207,7 @@ export default {
       },
     },
     ptPage: {
-      title: 'I tuoi enti',
+      title: 'Enti gestiti',
       subTitle:
         'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
       tableEmptyLabel: 'Non hai ancora nessuna delega dagli enti',
@@ -271,8 +271,8 @@ export default {
   },
   subHeader: {
     partySelectionSearch: {
-      title: 'I tuoi enti',
-      label: 'I tuoi enti',
+      title: 'Enti gestiti',
+      label: 'Enti gestiti',
     },
     backButton: 'Esci',
   },
