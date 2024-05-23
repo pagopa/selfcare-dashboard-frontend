@@ -4,24 +4,26 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
+import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import DashboardTablePT from './DashboardTablePT';
 
 type Props = {
-  filteredArray: Array<DelegationResource>;
+  tableList: Array<DelegationResource>;
+  setTableData: React.Dispatch<React.SetStateAction<Array<DelegationWithInfo>>>;
+  retrieveDelegationsList: () => Promise<void>;
 };
-export default function DashboardTableContainer({ filteredArray }: Props) {
+export default function DashboardTableContainer({ tableList, setTableData, retrieveDelegationsList }: Props) {
   const { t } = useTranslation();
   const [expandMore, setExpandMore] = useState<boolean>(false);
   const [areMoreThen5Elements, setAreMoreThen5Elements] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState(filteredArray);
-  
+
   useEffect(() => {
-    if (searchResults.length > 5) {
+    if (tableList.length > 5) {
       setAreMoreThen5Elements(true);
     } else {
       setAreMoreThen5Elements(false);
     }
-  }, [searchResults]);
+  }, [tableList]);
 
   return (
     <Box
@@ -31,9 +33,9 @@ export default function DashboardTableContainer({ filteredArray }: Props) {
       }}
     >
       <DashboardTablePT
-        filteredArray={filteredArray}
-        searchResults={searchResults}
-        setSearchResults={setSearchResults}
+        tableList={tableList}
+        setTableData={setTableData}
+        retrieveDelegationsList={retrieveDelegationsList}
       />
       {!expandMore && areMoreThen5Elements && (
         <>

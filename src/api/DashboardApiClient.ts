@@ -9,7 +9,7 @@ import { ENV } from '../utils/env';
 import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
 import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
 import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
-import { DelegationResource } from './generated/b4f-dashboard/DelegationResource';
+import { DelegationWithPagination } from './generated/b4f-dashboard/DelegationWithPagination';
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import {
@@ -49,20 +49,8 @@ const onRedirectToLogin = () =>
   );
 
 export const DashboardApi = {
-  getInstitutions: async (): Promise<Array<InstitutionBaseResource>> => {
-    const result = await apiClient.getInstitutionsUsingGET({});
-    return extractResponse(result, 200, onRedirectToLogin);
-  },
-
   getInstitutionsV2: async (): Promise<Array<InstitutionBaseResource>> => {
     const result = await apiClient.v2RetrieveUserInstitutions({});
-    return extractResponse(result, 200, onRedirectToLogin);
-  },
-
-  getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
-    const result = await apiClient.getInstitutionUsingGET({
-      institutionId,
-    });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
@@ -91,19 +79,6 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getBackOfficeUrl: async (
-    institutionId: string,
-    productId: string,
-    environment?: string
-  ): Promise<string> => {
-    const result = await apiClient.retrieveProductBackofficeUsingGET({
-      productId,
-      institutionId,
-      environment,
-    });
-    return extractResponse(result, 200, onRedirectToLogin);
-  },
-
   getBackOfficeUrlV2: async (
     institutionId: string,
     productId: string,
@@ -117,7 +92,7 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getBillingToken: async (institutionId: string, environment?: string): Promise<string> => {
+  getBillingTokenV2: async (institutionId: string, environment?: string): Promise<string> => {
     const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,
@@ -125,16 +100,8 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getBillingTokenV2: async (institutionId: string, environment?: string): Promise<string> => {
-    const result = await apiClient.billingTokenUsingGET_1({
-      institutionId,
-      environment,
-    });
-    return extractResponse(result, 200, onRedirectToLogin);
-  },
-
-  getTechnologyPartnersList: async (institutionId: string): Promise<Array<DelegationResource>> => {
-    const result = await apiClient.getDelegationsUsingToUsingGET({ institutionId });
+  getDelegatingInstitutions: async (institutionId: string): Promise<DelegationWithPagination> => {
+    const result = await apiClient.getDelegationsUsingToUsingGET_1({ institutionId });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 

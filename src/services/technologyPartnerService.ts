@@ -1,8 +1,9 @@
 import { DashboardApi } from '../api/DashboardApiClient';
 import { TypeEnum } from '../api/generated/b4f-dashboard/DelegationRequestDto';
-import { DelegationResource } from '../api/generated/b4f-dashboard/DelegationResource';
+import { DelegationWithInfo } from '../api/generated/b4f-dashboard/DelegationWithInfo';
+import { DelegationWithPagination } from '../api/generated/b4f-dashboard/DelegationWithPagination';
 
-export const mockedTechPartner: Array<DelegationResource> = [
+export const mockedTechPartner: Array<DelegationWithInfo> = [
   {
     // id partner delegato
     brokerId: '07f05ae5-dfac-4e67-9c06-82c0d2a89fd3',
@@ -198,7 +199,7 @@ export const mockedTechPartner: Array<DelegationResource> = [
     // id oggetto delega (?)
     id: '8aaff6e3-f0f7-4eb3-b584-3886ccd3b0att',
     // id dell'ente delegante
-    institutionId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
+    institutionId: '98123',
     // nome ente delegante
     institutionName: 'Comune di Livorno',
     // nome dell'ente centrale se fosse gestita la relazione con aoo/uo (?)
@@ -215,7 +216,7 @@ export const mockedTechPartner: Array<DelegationResource> = [
     // id oggetto delega (?)
     id: '8aaff6e3-f0f7-4eb3-b584-3886ccd3b0au',
     // id dell'ente delegante
-    institutionId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
+    institutionId: '98123',
     // nome ente delegante
     institutionName: 'Comune di Viterbo',
     // nome dell'ente centrale se fosse gestita la relazione con aoo/uo (?)
@@ -226,16 +227,24 @@ export const mockedTechPartner: Array<DelegationResource> = [
   },
 ];
 
-export const fetchTechnologyPartnersList = (
-  partyId: string
-): Promise<Array<DelegationResource>> => {
+export const mockedDelegationsWithPagination: DelegationWithPagination = {
+  delegations: mockedTechPartner,
+  pageInfo: {
+    pageNo: 0,
+    pageSize: 10,
+    totalElements: 4,
+    totalPages: 1,
+  },
+};
+
+export const getDelegatingInstitutions = (partyId: string): Promise<DelegationWithPagination> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
-    return new Promise((resolve) =>
-      resolve(mockedTechPartner.filter((d) => d.institutionId === partyId))
-    );
+    return new Promise((resolve) => {
+      resolve(mockedDelegationsWithPagination);
+    });
   } else {
-    return DashboardApi.getTechnologyPartnersList(partyId).then(
+    return DashboardApi.getDelegatingInstitutions(partyId).then(
       (delegationsResource) => delegationsResource
     );
   }

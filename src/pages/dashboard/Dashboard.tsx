@@ -235,7 +235,6 @@ const Dashboard = () => {
               canSeeSection={canSeeSection}
               party={party}
               ptProducts={activeProducts}
-              isDelegateSectionVisible={isDelegateSectionVisible}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
