@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { TypeEnum } from '../../../api/generated/b4f-dashboard/DelegationResource';
 import { createStore } from '../../../redux/store';
-import DashboardTablePT from '../DashboardTablePT';
+import TechPartnersTable from '../TechPartnersTable';
 import { DelegationWithPagination } from '../../../api/generated/b4f-dashboard/DelegationWithPagination';
 import { DelegationWithInfo } from '../../../api/generated/b4f-dashboard/DelegationWithInfo';
 
@@ -39,7 +39,7 @@ const renderDashboardTablePT = (
   render(
     <Router history={history}>
       <Provider store={store}>
-        <DashboardTablePT
+        <TechPartnersTable
           delegationsWithoutDuplicates={mockedDelegation.delegations as Array<DelegationWithInfo>}
         />
       </Provider>

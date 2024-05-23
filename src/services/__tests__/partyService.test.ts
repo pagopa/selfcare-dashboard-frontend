@@ -13,8 +13,8 @@ let dashboardApiGetInstitutionSpy;
 let dashboardApiGetInstitutionsSpy;
 
 beforeEach(() => {
-  dashboardApiGetInstitutionSpy = jest.spyOn(DashboardApi, 'getInstitutionV2');
-  dashboardApiGetInstitutionsSpy = jest.spyOn(DashboardApi, 'getInstitutionsV2');
+  dashboardApiGetInstitutionSpy = jest.spyOn(DashboardApi, 'getInstitution');
+  dashboardApiGetInstitutionsSpy = jest.spyOn(DashboardApi, 'getInstitutions');
 });
 
 test('Test fetchParties', async () => {
@@ -39,9 +39,9 @@ describe('Test fetchPartyDetails', () => {
   };
 
   const checkDashboardInvocation = (expectedCallsNumber: number) => {
-    expect(DashboardApi.getInstitutionV2).toBeCalledTimes(expectedCallsNumber);
+    expect(DashboardApi.getInstitution).toBeCalledTimes(expectedCallsNumber);
     if (expectedCallsNumber > 0) {
-      expect(DashboardApi.getInstitutionV2).toBeCalledWith(expectedPartyId);
+      expect(DashboardApi.getInstitution).toBeCalledWith(expectedPartyId);
     }
   };
 

@@ -49,12 +49,12 @@ const onRedirectToLogin = () =>
   );
 
 export const DashboardApi = {
-  getInstitutionsV2: async (): Promise<Array<InstitutionBaseResource>> => {
+  getInstitutions: async (): Promise<Array<InstitutionBaseResource>> => {
     const result = await apiClient.v2RetrieveUserInstitutions({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getInstitutionV2: async (institutionId: string): Promise<InstitutionResource> => {
+  getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
     const result = await apiClient.v2GetInstitution({
       institutionId,
     });
@@ -79,7 +79,7 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getBackOfficeUrlV2: async (
+  getBackOfficeUrl: async (
     institutionId: string,
     productId: string,
     environment?: string
@@ -92,7 +92,7 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getBillingTokenV2: async (institutionId: string, environment?: string): Promise<string> => {
+  getBillingToken: async (institutionId: string, environment?: string): Promise<string> => {
     const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,

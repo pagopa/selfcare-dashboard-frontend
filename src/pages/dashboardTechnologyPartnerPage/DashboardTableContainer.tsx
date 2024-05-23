@@ -4,7 +4,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
-import DashboardTablePT from './DashboardTablePT';
+import TechPartnersTable from './TechPartnersTable';
 
 type Props = {
   delegationsWithoutDuplicates: Array<DelegationWithInfo>;
@@ -29,7 +29,7 @@ export default function DashboardTableContainer({ delegationsWithoutDuplicates }
           expandMore && areMoreThen5Elements ? '100%' : !areMoreThen5Elements ? '100%' : '360px',
       }}
     >
-      <DashboardTablePT
+      <TechPartnersTable
         delegationsWithoutDuplicates={delegationsWithoutDuplicates}
       />
       {!expandMore && areMoreThen5Elements && (

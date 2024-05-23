@@ -17,7 +17,7 @@ export const fetchParties = (): Promise<Array<BaseParty>> => {
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
     return new Promise((resolve) => resolve(mockedBaseParties));
   } else {
-    return DashboardApi.getInstitutionsV2().then((institutionResources) =>
+    return DashboardApi.getInstitutions().then((institutionResources) =>
       institutionResources ? institutionResources.map(institutionBaseResource2BaseParty) : []
     );
   }
@@ -30,7 +30,7 @@ export const fetchPartyDetails = (partyId: string): Promise<Party | null> => {
       resolve(mockedParties.find((p) => p.partyId === partyId) ?? null);
     });
   } else {
-    return DashboardApi.getInstitutionV2(partyId).then((institutionResource) =>
+    return DashboardApi.getInstitution(partyId).then((institutionResource) =>
       institutionResource ? institutionResource2Party(institutionResource) : null
     );
   }

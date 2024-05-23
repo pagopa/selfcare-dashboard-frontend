@@ -30,7 +30,7 @@ type Props = {
   delegationsWithoutDuplicates: Array<DelegationWithInfo>;
 };
 
-export default function DashboardTablePT({ delegationsWithoutDuplicates }: Props) {
+export default function TechPartnersTable({ delegationsWithoutDuplicates }: Props) {
   const { t } = useTranslation();
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [filterBy, setFilterBy] = useState<string>('');
