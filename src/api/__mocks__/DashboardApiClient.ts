@@ -297,10 +297,10 @@ export const mockedBrokerResource: Array<BrokerResource> = [
 ];
 
 export const DashboardApi = {
-  getInstitutions: async (): Promise<Array<InstitutionBaseResource>> =>
+  getInstitutionsV2: async (): Promise<Array<InstitutionBaseResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
 
-  getInstitution: async (_partyId: string): Promise<InstitutionResource> =>
+  getInstitutionV2: async (_partyId: string): Promise<InstitutionResource> =>
     new Promise((resolve) => resolve(mockedInstitutionResources[0])),
 
   getProducts: async (): Promise<Array<ProductsResource>> =>

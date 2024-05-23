@@ -13,8 +13,8 @@ let dashboardApiGetInstitutionSpy;
 let dashboardApiGetInstitutionsSpy;
 
 beforeEach(() => {
-  dashboardApiGetInstitutionSpy = jest.spyOn(DashboardApi, 'getInstitution');
-  dashboardApiGetInstitutionsSpy = jest.spyOn(DashboardApi, 'getInstitutions');
+  dashboardApiGetInstitutionSpy = jest.spyOn(DashboardApi, 'getInstitutionV2');
+  dashboardApiGetInstitutionsSpy = jest.spyOn(DashboardApi, 'getInstitutionsV2');
 });
 
 test('Test fetchParties', async () => {
@@ -39,9 +39,9 @@ describe('Test fetchPartyDetails', () => {
   };
 
   const checkDashboardInvocation = (expectedCallsNumber: number) => {
-    expect(DashboardApi.getInstitution).toBeCalledTimes(expectedCallsNumber);
+    expect(DashboardApi.getInstitutionV2).toBeCalledTimes(expectedCallsNumber);
     if (expectedCallsNumber > 0) {
-      expect(DashboardApi.getInstitution).toBeCalledWith(expectedPartyId);
+      expect(DashboardApi.getInstitutionV2).toBeCalledWith(expectedPartyId);
     }
   };
 
@@ -54,13 +54,13 @@ describe('Test fetchPartyDetails', () => {
 
   test('Test parties as cache', async () => {
     const parties = mockedInstitutionResources.map(institutionResource2Party);
-    const party = await fetchPartyDetails(expectedPartyId, parties);
+    const party = await fetchPartyDetails(expectedPartyId);
     checkSelectedParty(party);
 
     checkDashboardInvocation(1);
 
     const partialParties = parties.filter((p) => p.partyId !== expectedPartyId);
-    const party2 = await fetchPartyDetails(expectedPartyId, partialParties);
+    const party2 = await fetchPartyDetails(expectedPartyId);
     expect(party2).toStrictEqual(party);
 
     checkDashboardInvocation(2);

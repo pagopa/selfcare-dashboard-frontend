@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -6,19 +6,29 @@ import { Router } from 'react-router';
 import { TypeEnum } from '../../../api/generated/b4f-dashboard/DelegationResource';
 import { createStore } from '../../../redux/store';
 import DashboardTablePT from '../DashboardTablePT';
+import { DelegationWithPagination } from '../../../api/generated/b4f-dashboard/DelegationWithPagination';
+import { DelegationWithInfo } from '../../../api/generated/b4f-dashboard/DelegationWithInfo';
 
-const mockedDelegation = [
-  {
-    brokerId: '123',
-    brokerName: 'Broker 1',
-    id: '456',
-    institutionId: '789',
-    institutionName: 'Institution 1',
-    institutionRootName: 'Root Institution',
-    productId: '7890',
-    type: TypeEnum.AOO,
+const mockedDelegation: DelegationWithPagination = {
+  delegations: [
+    {
+      brokerId: '123',
+      brokerName: 'Broker 1',
+      id: '456',
+      institutionId: '789',
+      institutionName: 'Institution 1',
+      institutionRootName: 'Root Institution',
+      productId: '7890',
+      type: TypeEnum.AOO,
+    },
+  ],
+  pageInfo: {
+    pageSize: 0,
+    pageNo: 0,
+    totalPages: 0,
+    totalElements: 0,
   },
-];
+};
 
 const renderDashboardTablePT = (
   injectedStore?: ReturnType<typeof createStore>,
@@ -30,9 +40,9 @@ const renderDashboardTablePT = (
     <Router history={history}>
       <Provider store={store}>
         <DashboardTablePT
-          filteredArray={mockedDelegation}
-          searchResults={[]}
-          setSearchResults={jest.fn()}
+          tableList={mockedDelegation.delegations as Array<DelegationWithInfo>}
+          setTableData={jest.fn()}
+          retrieveDelegationsList={jest.fn()}
         />
       </Provider>
     </Router>
@@ -47,16 +57,16 @@ test('Test rendering renderDashboardTablePT', () => {
 test('test input field change and filter on click', async () => {
   renderDashboardTablePT();
 
-  // Find the input field by its label
-  const inputField = screen.getByLabelText('Cerca per nome') as HTMLInputElement;
+  const select = screen.getByLabelText('Cerca per');
 
-  // Simulate user typing "Broker 1"
+  expect(select).toBeInTheDocument();
+
+  const inputField = screen.getByLabelText('Inserisci') as HTMLInputElement;
+
   fireEvent.change(inputField, { target: { value: 'Broker 1' } });
 
-  // Expectation: Check that the input field value has been updated
   expect(inputField.value).toBe('Broker 1');
 
-  // Find and click the button
   const FilterButton = screen.getByText('Filtra');
   fireEvent.click(FilterButton);
 });

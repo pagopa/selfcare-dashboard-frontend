@@ -123,8 +123,11 @@ export default function DashboardTablePT({
       <Grid container spacing={1}>
         <Grid item xs={5}>
           <FormControl fullWidth={true} size="small">
-            <InputLabel>{t('overview.ptPage.filterTechPartner.searchBy')}</InputLabel>
+            <InputLabel id="select-search-by">
+              {t('overview.ptPage.filterTechPartner.searchBy')}
+            </InputLabel>
             <Select
+              id="select-search-by"
               value={filterBy}
               label={t('overview.ptPage.filterTechPartner.searchBy')}
               onChange={(e) => handleSearchBy(e.target.value as string)}
