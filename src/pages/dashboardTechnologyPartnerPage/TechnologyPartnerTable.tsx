@@ -15,6 +15,7 @@ type Props = {
 };
 export default function TechnologyPartnerTable({ party }: Props) {
   const [tableList, setTableList] = useState<Array<DelegationWithInfo>>([]);
+  const [hasDelegations, setHasDelegations] = useState<boolean>(false);
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(false);
   const addError = useErrorDispatcher();
@@ -23,7 +24,8 @@ export default function TechnologyPartnerTable({ party }: Props) {
     setLoading(true);
     await getDelegatingInstitutions(party.partyId)
       .then((r) => {
-        if (r && r.delegations) {
+        if (r && r.delegations && r.delegations?.length > 0) {
+          setHasDelegations(true);
           const filteredArray: Array<DelegationWithInfo> = r.delegations.reduce(
             (result: Array<DelegationWithInfo>, current: DelegationWithInfo) => {
               const existingItem = result.find(
@@ -49,6 +51,7 @@ export default function TechnologyPartnerTable({ party }: Props) {
         }
       })
       .catch((reason) => {
+        setHasDelegations(false);
         addError({
           id: `FETCH_PARTY_PT_ERROR-${party.partyId}`,
           blocking: false,
@@ -66,14 +69,14 @@ export default function TechnologyPartnerTable({ party }: Props) {
 
   return !loading ? (
     <>
-      {party.delegation && (
+      {party.delegation && hasDelegations && (
         <DashboardTableContainer
           tableList={tableList}
           setTableData={setTableList}
           retrieveDelegationsList={retrieveDelegationsList}
         />
       )}
-      {!party.delegation && (
+      {!party.delegation && !hasDelegations && (
         <Box
           width={'100%'}
           p={2}
