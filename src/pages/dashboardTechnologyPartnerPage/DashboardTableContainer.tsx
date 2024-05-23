@@ -3,25 +3,24 @@ import { Box, Divider } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
-import DashboardTablePT from './DashboardTablePT';
+import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
+import TechPartnersTable from './TechPartnersTable';
 
 type Props = {
-  filteredArray: Array<DelegationResource>;
+  delegationsWithoutDuplicates: Array<DelegationWithInfo>;
 };
-export default function DashboardTableContainer({ filteredArray }: Props) {
+export default function DashboardTableContainer({ delegationsWithoutDuplicates }: Props) {
   const { t } = useTranslation();
   const [expandMore, setExpandMore] = useState<boolean>(false);
   const [areMoreThen5Elements, setAreMoreThen5Elements] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState(filteredArray);
-  
+
   useEffect(() => {
-    if (searchResults.length > 5) {
+    if (delegationsWithoutDuplicates.length > 5) {
       setAreMoreThen5Elements(true);
     } else {
       setAreMoreThen5Elements(false);
     }
-  }, [searchResults]);
+  }, [delegationsWithoutDuplicates]);
 
   return (
     <Box
@@ -30,10 +29,8 @@ export default function DashboardTableContainer({ filteredArray }: Props) {
           expandMore && areMoreThen5Elements ? '100%' : !areMoreThen5Elements ? '100%' : '360px',
       }}
     >
-      <DashboardTablePT
-        filteredArray={filteredArray}
-        searchResults={searchResults}
-        setSearchResults={setSearchResults}
+      <TechPartnersTable
+        delegationsWithoutDuplicates={delegationsWithoutDuplicates}
       />
       {!expandMore && areMoreThen5Elements && (
         <>

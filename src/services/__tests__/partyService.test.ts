@@ -54,13 +54,13 @@ describe('Test fetchPartyDetails', () => {
 
   test('Test parties as cache', async () => {
     const parties = mockedInstitutionResources.map(institutionResource2Party);
-    const party = await fetchPartyDetails(expectedPartyId, parties);
+    const party = await fetchPartyDetails(expectedPartyId);
     checkSelectedParty(party);
 
     checkDashboardInvocation(1);
 
     const partialParties = parties.filter((p) => p.partyId !== expectedPartyId);
-    const party2 = await fetchPartyDetails(expectedPartyId, partialParties);
+    const party2 = await fetchPartyDetails(expectedPartyId);
     expect(party2).toStrictEqual(party);
 
     checkDashboardInvocation(2);

@@ -12,7 +12,6 @@ test('Test institutionInfo2Party', () => {
     status: StatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo',
     backOfficeEnvironmentConfigurations: undefined,
-    activatedAt: date,
     urlPublic: 'http://pagopa/public',
     children: [
       {
@@ -37,7 +36,6 @@ test('Test institutionInfo2Party', () => {
     status: 'ACTIVE',
     urlBO: 'http://pagopa/bo',
     backOfficeEnvironmentConfigurations: undefined,
-    activationDateTime: date,
     urlPublic: 'http://pagopa/public',
     tag: undefined,
     subProducts: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE' }],

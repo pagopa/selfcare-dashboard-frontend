@@ -6,10 +6,6 @@ import {
   InstitutionResource,
   InstitutionTypeEnum,
 } from '../generated/b4f-dashboard/InstitutionResource';
-import {
-  InstitutionUserResource,
-  RoleEnum,
-} from '../generated/b4f-dashboard/InstitutionUserResource';
 import { SelcRoleEnum } from '../generated/b4f-dashboard/ProductRoleInfoResource';
 import {
   PartyRoleEnum,
@@ -18,6 +14,10 @@ import {
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
 import { UserResource } from '../generated/b4f-dashboard/UserResource';
+import {
+  InstitutionUserDetailsResource,
+  RoleEnum,
+} from '../generated/b4f-dashboard/InstitutionUserDetailsResource';
 
 export const mockedInstitutionResources: Array<InstitutionResource> = [
   {
@@ -62,7 +62,6 @@ export const mockedProductResources: Array<ProductsResource> = [
     id: '1',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://appio/bo#<IdentityToken>',
-    activatedAt: new Date(2021, 1, 1, 0, 0, 0, 0),
     urlPublic: 'http://appio/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -74,7 +73,6 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Piattaforma Notifiche description',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
-    activatedAt: new Date(2021, 1, 2, 0, 0, 0, 0),
     urlPublic: 'http://notifiche/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -86,7 +84,6 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Pagamenti pagoPA description',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
-    activatedAt: new Date(2021, 1, 3, 0, 0, 0, 0),
     urlPublic: 'http://pagopa/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -126,7 +123,7 @@ export const mockedProductResources: Array<ProductsResource> = [
   },
 ];
 
-export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
+export const mockedInstitutionUserResource: Array<InstitutionUserDetailsResource> = [
   {
     id: '1',
     name: 'Name',

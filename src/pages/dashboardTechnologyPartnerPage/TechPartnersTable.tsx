@@ -1,7 +1,6 @@
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import SearchIcon from '@mui/icons-material/Search';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import {
   Button,
   FormControl,
@@ -21,26 +20,24 @@ import {
   Typography,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
+import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
+import EmptyFilterResults from './components/EmptyFilterResults';
 
 type Props = {
-  filteredArray: Array<DelegationResource>;
-  searchResults: Array<DelegationResource>;
-  setSearchResults: React.Dispatch<React.SetStateAction<Array<DelegationResource>>>;
+  delegationsWithoutDuplicates: Array<DelegationWithInfo>;
 };
 
-export default function DashboardTablePT({
-  filteredArray,
-  searchResults,
-  setSearchResults,
-}: Props) {
+export default function TechPartnersTable({ delegationsWithoutDuplicates }: Props) {
   const { t } = useTranslation();
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+  const [filterBy, setFilterBy] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState('All');
-  const [initialSortDone, setInitialSortDone] = useState(false);
+  const [tableData, setTableData] = useState<Array<DelegationWithInfo>>(
+    delegationsWithoutDuplicates
+  );
 
   const codeToLabelProduct = (code: string) => {
     switch (code) {
@@ -58,35 +55,35 @@ export default function DashboardTablePT({
 
   const handleSearch = () => {
     // eslint-disable-next-line functional/no-let
-    let filteredResults = filteredArray;
+    let filteredResults = delegationsWithoutDuplicates;
 
-    if (selectedProduct !== 'All') {
-      filteredResults = filteredArray.filter(
-        (item) => item.productId && item.productId.includes(selectedProduct)
+    if (filterBy === 'name') {
+      filteredResults = filteredResults.filter(
+        (item) =>
+          item.institutionName &&
+          item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    filteredResults = filteredResults.filter(
-      (item) =>
-        item.institutionName &&
-        item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    if (filterBy === 'fiscalCode') {
+      filteredResults = filteredResults.filter(
+        (item) => item.taxCode && item.taxCode.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-    setSearchResults(filteredResults);
+    setTableData(filteredResults);
   };
 
-  const hasBeenDelegated = filteredArray && filteredArray.length > 0;
-
-  const handleResetFilter = () => {
+  const handleResetFilter = async () => {
     setSearchTerm('');
-    setSelectedProduct('All');
-    setSearchResults(filteredArray);
+    setFilterBy('');
+    setTableData(delegationsWithoutDuplicates);
   };
   const handleSort = (newOrder?: 'asc' | 'desc') => {
     const currentOrder = newOrder || (order === 'asc' ? 'desc' : 'asc');
     setOrder(currentOrder);
 
-    const sortedResult = [...searchResults].sort((a: DelegationResource, b: DelegationResource) => {
+    const sortedResult = [...tableData].sort((a: DelegationResource, b: DelegationResource) => {
       const firstValue = a.institutionName;
       const secondValue = b.institutionName;
       if (firstValue && secondValue) {
@@ -97,27 +94,57 @@ export default function DashboardTablePT({
         return currentOrder === 'asc' ? -1 : 1;
       }
     });
-    setSearchResults(sortedResult);
+    setTableData(sortedResult);
   };
 
-  useEffect(() => {
-    if (!initialSortDone) {
-      handleSort('asc');
-      setInitialSortDone(true);
+  const renderInputLabel = () => {
+    if (filterBy === 'name') {
+      return t('overview.ptPage.filterTechPartner.name');
+    } else if (filterBy === 'fiscalCode') {
+      return t('overview.ptPage.filterTechPartner.taxCode');
+    } else {
+      return t('overview.ptPage.filterTechPartner.insert');
     }
-  }, [initialSortDone]);
+  };
+
+  const handleSearchBy = (value: string) => {
+    setSearchTerm('');
+    setFilterBy(value);
+  };
+  const enableFilterButton =
+    (filterBy === 'name' && searchTerm.length >= 3) ||
+    (filterBy === 'fiscalCode' && searchTerm.length === 11);
 
   return (
     <>
       <Grid container spacing={1}>
         <Grid item xs={5}>
+          <FormControl fullWidth={true} size="small">
+            <InputLabel id="select-search-by">
+              {t('overview.ptPage.filterTechPartner.searchBy')}
+            </InputLabel>
+            <Select
+              id="select-search-by"
+              value={filterBy}
+              label={t('overview.ptPage.filterTechPartner.searchBy')}
+              onChange={(e) => handleSearchBy(e.target.value as string)}
+            >
+              <MenuItem value="name">{t('overview.ptPage.filterTechPartner.name')}</MenuItem>
+              <MenuItem value="fiscalCode">
+                {t('overview.ptPage.filterTechPartner.taxCode')}
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={5}>
           <TextField
-            label={t('overview.ptPage.filterTechPartner.textfieldLabel')}
+            label={renderInputLabel()}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            disabled={!hasBeenDelegated}
+            disabled={filterBy === ''}
             fullWidth
             size="small"
+            inputProps={{ maxLength: filterBy === 'fiscalCode' ? 11 : null }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -127,28 +154,12 @@ export default function DashboardTablePT({
             }}
           />
         </Grid>
-        <Grid item xs={5}>
-          <FormControl fullWidth={true} size="small">
-            <InputLabel> {t('overview.ptPage.filterTechPartner.productSelectLabel')}</InputLabel>
-            <Select
-              value={selectedProduct}
-              onChange={(e) => setSelectedProduct(e.target.value as string)}
-              disabled={!hasBeenDelegated}
-              label={t('overview.ptPage.filterTechPartner.productSelectLabel')}
-            >
-              <MenuItem value="All">
-                {t('overview.ptPage.filterTechPartner.allProductsLabel')}
-              </MenuItem>
-              <MenuItem value="prod-io">{codeToLabelProduct('prod-io')}</MenuItem>
-              <MenuItem value="prod-pagopa">{codeToLabelProduct('prod-pagopa')}</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
+
         <Grid item xs={1}>
           <Button
             variant="outlined"
             onClick={handleSearch}
-            disabled={!hasBeenDelegated}
+            disabled={!enableFilterButton}
             size="small"
           >
             {t('overview.ptPage.filterTechPartner.buttonLabel')}
@@ -159,7 +170,7 @@ export default function DashboardTablePT({
             onClick={handleResetFilter}
             color="primary"
             variant="text"
-            disabled={!hasBeenDelegated || (!searchTerm && selectedProduct === 'All')}
+            disabled={filterBy === '' && !searchTerm}
             sx={{ textAlign: 'center' }}
             component="button"
           >
@@ -167,7 +178,7 @@ export default function DashboardTablePT({
           </ButtonNaked>
         </Grid>
       </Grid>
-      {!hasBeenDelegated ? null : searchResults.length > 0 ? (
+      {tableData.length > 0 ? (
         <TableContainer sx={{ height: '100%', overflow: 'hidden' }}>
           <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
             <TableHead>
@@ -193,7 +204,7 @@ export default function DashboardTablePT({
               </TableRow>
             </TableHead>
             <TableBody sx={{ backgroundColor: 'background.paper' }}>
-              {searchResults.map((item) => (
+              {tableData.map((item) => (
                 <TableRow key={item.institutionName}>
                   <TableCell>
                     <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
@@ -214,34 +225,7 @@ export default function DashboardTablePT({
           </Table>
         </TableContainer>
       ) : (
-        <Grid
-          width={'100%'}
-          xs={12}
-          mt={5}
-          sx={{
-            display: 'flex',
-            padding: '16px',
-            backgroundColor: 'background.paper',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '16px',
-          }}
-        >
-          <SentimentDissatisfiedIcon />
-          <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center' }}>
-            <Trans i18nKey="overview.ptPage.filterTechPartner.emptyFilterResult">
-              I filtri che hai applicato non hanno dato nessun risultato.
-              <ButtonNaked
-                color="primary"
-                onClick={handleResetFilter}
-                sx={{ ml: '4px' }}
-                size="medium"
-              >
-                Rimuovi filtri
-              </ButtonNaked>
-            </Trans>
-          </Typography>
-        </Grid>
+        <EmptyFilterResults handleResetFilter={handleResetFilter} />
       )}
     </>
   );

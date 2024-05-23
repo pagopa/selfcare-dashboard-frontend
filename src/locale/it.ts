@@ -219,11 +219,15 @@ export default {
         showMoreButtonLabel: 'Vedi tutti',
       },
       filterTechPartner: {
+        searchBy: 'Cerca per',
+        insert: 'Inserisci',
+        name: 'Nome',
+        taxCode: 'Codice fiscale',
         textfieldLabel: 'Cerca per nome',
         productSelectLabel: 'Prodotto',
         buttonLabel: 'Filtra',
         allProductsLabel: 'Tutti  i prodotti',
-        resetFilter: 'Annulla filtri',
+        resetFilter: 'Rimuovi filtri',
         emptyFilterResult:
           'I filtri che hai applicato non hanno dato nessun risultato. <1>Rimuovi filtri</1>',
       },

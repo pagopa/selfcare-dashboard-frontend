@@ -12,17 +12,15 @@ type Props = {
   canSeeSection: boolean;
   party: Party;
   ptProducts: Array<Product>;
-  isDelegateSectionVisible?: boolean;
 };
 
 export default function DashboardTechnologyPartnerPage({
   canSeeSection,
   party,
   ptProducts,
-  isDelegateSectionVisible,
 }: Props) {
   const { t } = useTranslation();
-  return isDelegateSectionVisible && !canSeeSection ? (
+  return !canSeeSection ? (
     <EndingPage
       minHeight="52vh"
       icon={<IllusError size={60} />}

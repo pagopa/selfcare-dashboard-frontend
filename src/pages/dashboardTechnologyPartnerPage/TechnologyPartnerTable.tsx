@@ -3,10 +3,10 @@ import { Box } from '@mui/system';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
+import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
-import { fetchTechnologyPartnersList } from '../../services/technologyPartnerService';
+import { getDelegatingInstitutions } from '../../services/technologyPartnerService';
 import DashboardTableContainer from './DashboardTableContainer';
 
 type Props = {
@@ -14,34 +14,44 @@ type Props = {
   ptProducts: Array<Product>;
 };
 export default function TechnologyPartnerTable({ party }: Props) {
-  const [tableList, setTableList] = useState<Array<DelegationResource>>([]);
+  const [delegationsWithoutDuplicates, setDelegationsWithoutDuplicates] = useState<
+    Array<DelegationWithInfo>
+  >([]);
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(false);
   const addError = useErrorDispatcher();
 
-  const filteredArray: Array<DelegationResource> = tableList.reduce(
-    (result: Array<DelegationResource>, current: DelegationResource) => {
-      const existingItem = result.find(
-        (item) =>
-          item.brokerId === current.brokerId && item.institutionName === current.institutionName
-      );
-      if (existingItem) {
-        // eslint-disable-next-line functional/immutable-data
-        existingItem.productId += `, ${current.productId}`;
-      } else {
-        // eslint-disable-next-line functional/immutable-data
-        result.push({ ...current });
-      }
-      return result;
-    },
-    []
-  );
-
-  const retrievePtList = async () => {
+  const retrieveDelegationsList = async () => {
     setLoading(true);
-    await fetchTechnologyPartnersList(party.partyId)
-      .then((r) => setTableList(r))
+    await getDelegatingInstitutions(party.partyId)
+      .then((r) => {
+        if (r && r.delegations && r.delegations?.length > 0) {
+          const filteredArray: Array<DelegationWithInfo> = r.delegations.reduce(
+            (result: Array<DelegationWithInfo>, current: DelegationWithInfo) => {
+              const existingItem = result.find(
+                (item) =>
+                  item.brokerId === current.brokerId &&
+                  item.institutionName === current.institutionName
+              );
+              if (existingItem) {
+                // eslint-disable-next-line functional/immutable-data
+                existingItem.productId += `, ${current.productId}`;
+              } else {
+                // eslint-disable-next-line functional/immutable-data
+                result.push({ ...current });
+              }
+              return result;
+            },
+            []
+          );
+
+          setDelegationsWithoutDuplicates(filteredArray as Array<DelegationWithInfo>);
+        } else {
+          setDelegationsWithoutDuplicates([]);
+        }
+      })
       .catch((reason) => {
+        setDelegationsWithoutDuplicates([]);
         addError({
           id: `FETCH_PARTY_PT_ERROR-${party.partyId}`,
           blocking: false,
@@ -54,14 +64,15 @@ export default function TechnologyPartnerTable({ party }: Props) {
   };
 
   useEffect(() => {
-    void retrievePtList();
+    void retrieveDelegationsList();
   }, []);
 
   return !loading ? (
     <>
-      <DashboardTableContainer filteredArray={filteredArray} />
-
-      {filteredArray && filteredArray.length === 0 && (
+      {party.delegation && delegationsWithoutDuplicates.length > 0 && (
+        <DashboardTableContainer delegationsWithoutDuplicates={delegationsWithoutDuplicates} />
+      )}
+      {!party.delegation && delegationsWithoutDuplicates.length === 0 && (
         <Box
           width={'100%'}
           p={2}
