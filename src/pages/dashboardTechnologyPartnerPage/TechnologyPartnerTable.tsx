@@ -14,8 +14,9 @@ type Props = {
   ptProducts: Array<Product>;
 };
 export default function TechnologyPartnerTable({ party }: Props) {
-  const [tableList, setTableList] = useState<Array<DelegationWithInfo>>([]);
-  const [hasDelegations, setHasDelegations] = useState<boolean>(false);
+  const [delegationsWithoutDuplicates, setDelegationsWithoutDuplicates] = useState<
+    Array<DelegationWithInfo>
+  >([]);
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(false);
   const addError = useErrorDispatcher();
@@ -25,7 +26,6 @@ export default function TechnologyPartnerTable({ party }: Props) {
     await getDelegatingInstitutions(party.partyId)
       .then((r) => {
         if (r && r.delegations && r.delegations?.length > 0) {
-          setHasDelegations(true);
           const filteredArray: Array<DelegationWithInfo> = r.delegations.reduce(
             (result: Array<DelegationWithInfo>, current: DelegationWithInfo) => {
               const existingItem = result.find(
@@ -45,13 +45,13 @@ export default function TechnologyPartnerTable({ party }: Props) {
             []
           );
 
-          setTableList(filteredArray as Array<DelegationWithInfo>);
+          setDelegationsWithoutDuplicates(filteredArray as Array<DelegationWithInfo>);
         } else {
-          setTableList([]);
+          setDelegationsWithoutDuplicates([]);
         }
       })
       .catch((reason) => {
-        setHasDelegations(false);
+        setDelegationsWithoutDuplicates([]);
         addError({
           id: `FETCH_PARTY_PT_ERROR-${party.partyId}`,
           blocking: false,
@@ -69,14 +69,10 @@ export default function TechnologyPartnerTable({ party }: Props) {
 
   return !loading ? (
     <>
-      {party.delegation && hasDelegations && (
-        <DashboardTableContainer
-          tableList={tableList}
-          setTableData={setTableList}
-          retrieveDelegationsList={retrieveDelegationsList}
-        />
+      {party.delegation && delegationsWithoutDuplicates.length > 0 && (
+        <DashboardTableContainer delegationsWithoutDuplicates={delegationsWithoutDuplicates} />
       )}
-      {!party.delegation && !hasDelegations && (
+      {!party.delegation && delegationsWithoutDuplicates.length === 0 && (
         <Box
           width={'100%'}
           p={2}

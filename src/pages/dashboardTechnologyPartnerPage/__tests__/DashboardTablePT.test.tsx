@@ -40,9 +40,7 @@ const renderDashboardTablePT = (
     <Router history={history}>
       <Provider store={store}>
         <DashboardTablePT
-          tableList={mockedDelegation.delegations as Array<DelegationWithInfo>}
-          setTableData={jest.fn()}
-          retrieveDelegationsList={jest.fn()}
+          delegationsWithoutDuplicates={mockedDelegation.delegations as Array<DelegationWithInfo>}
         />
       </Provider>
     </Router>

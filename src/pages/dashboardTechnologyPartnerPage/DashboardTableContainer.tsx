@@ -3,27 +3,24 @@ import { Box, Divider } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import DashboardTablePT from './DashboardTablePT';
 
 type Props = {
-  tableList: Array<DelegationResource>;
-  setTableData: React.Dispatch<React.SetStateAction<Array<DelegationWithInfo>>>;
-  retrieveDelegationsList: () => Promise<void>;
+  delegationsWithoutDuplicates: Array<DelegationWithInfo>;
 };
-export default function DashboardTableContainer({ tableList, setTableData, retrieveDelegationsList }: Props) {
+export default function DashboardTableContainer({ delegationsWithoutDuplicates }: Props) {
   const { t } = useTranslation();
   const [expandMore, setExpandMore] = useState<boolean>(false);
   const [areMoreThen5Elements, setAreMoreThen5Elements] = useState<boolean>(false);
 
   useEffect(() => {
-    if (tableList.length > 5) {
+    if (delegationsWithoutDuplicates.length > 5) {
       setAreMoreThen5Elements(true);
     } else {
       setAreMoreThen5Elements(false);
     }
-  }, [tableList]);
+  }, [delegationsWithoutDuplicates]);
 
   return (
     <Box
@@ -33,9 +30,7 @@ export default function DashboardTableContainer({ tableList, setTableData, retri
       }}
     >
       <DashboardTablePT
-        tableList={tableList}
-        setTableData={setTableData}
-        retrieveDelegationsList={retrieveDelegationsList}
+        delegationsWithoutDuplicates={delegationsWithoutDuplicates}
       />
       {!expandMore && areMoreThen5Elements && (
         <>

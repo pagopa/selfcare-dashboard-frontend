@@ -27,20 +27,17 @@ import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/Delegation
 import EmptyFilterResults from './components/EmptyFilterResults';
 
 type Props = {
-  tableList: Array<DelegationWithInfo>;
-  setTableData: React.Dispatch<React.SetStateAction<Array<DelegationWithInfo>>>;
-  retrieveDelegationsList: () => Promise<void>;
+  delegationsWithoutDuplicates: Array<DelegationWithInfo>;
 };
 
-export default function DashboardTablePT({
-  tableList,
-  setTableData,
-  retrieveDelegationsList,
-}: Props) {
+export default function DashboardTablePT({ delegationsWithoutDuplicates }: Props) {
   const { t } = useTranslation();
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [filterBy, setFilterBy] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [tableData, setTableData] = useState<Array<DelegationWithInfo>>(
+    delegationsWithoutDuplicates
+  );
 
   const codeToLabelProduct = (code: string) => {
     switch (code) {
@@ -58,7 +55,7 @@ export default function DashboardTablePT({
 
   const handleSearch = () => {
     // eslint-disable-next-line functional/no-let
-    let filteredResults = tableList;
+    let filteredResults = delegationsWithoutDuplicates;
 
     if (filterBy === 'name') {
       filteredResults = filteredResults.filter(
@@ -80,13 +77,13 @@ export default function DashboardTablePT({
   const handleResetFilter = async () => {
     setSearchTerm('');
     setFilterBy('');
-    await retrieveDelegationsList();
+    setTableData(delegationsWithoutDuplicates);
   };
   const handleSort = (newOrder?: 'asc' | 'desc') => {
     const currentOrder = newOrder || (order === 'asc' ? 'desc' : 'asc');
     setOrder(currentOrder);
 
-    const sortedResult = [...tableList].sort((a: DelegationResource, b: DelegationResource) => {
+    const sortedResult = [...tableData].sort((a: DelegationResource, b: DelegationResource) => {
       const firstValue = a.institutionName;
       const secondValue = b.institutionName;
       if (firstValue && secondValue) {
@@ -181,7 +178,7 @@ export default function DashboardTablePT({
           </ButtonNaked>
         </Grid>
       </Grid>
-      {tableList.length > 0 ? (
+      {tableData.length > 0 ? (
         <TableContainer sx={{ height: '100%', overflow: 'hidden' }}>
           <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
             <TableHead>
@@ -207,7 +204,7 @@ export default function DashboardTablePT({
               </TableRow>
             </TableHead>
             <TableBody sx={{ backgroundColor: 'background.paper' }}>
-              {tableList.map((item) => (
+              {tableData.map((item) => (
                 <TableRow key={item.institutionName}>
                   <TableCell>
                     <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
