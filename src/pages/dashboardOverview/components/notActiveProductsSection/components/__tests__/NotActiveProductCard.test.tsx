@@ -80,7 +80,7 @@ describe('test onboarding', () => {
     fireEvent.click(button);
 
     expect(mockedLocation.assign).toBeCalledWith(
-      `http://selfcare/onboarding/${mockedProduct.id}?partyId=${mockedParties[0].partyId}`
+      `http://selfcare/onboarding/${mockedProduct.id}?partyId=${mockedParties[0].externalId}`
     );
   });
 
