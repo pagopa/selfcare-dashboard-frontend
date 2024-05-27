@@ -111,5 +111,7 @@ test('Test institutionResource2Party', () => {
     subunitCode: 'subunitCode',
     parentDescription: undefined,
     products: undefined,
+    city: '',
+    country: '',
   });
 });

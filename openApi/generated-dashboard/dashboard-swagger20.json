@@ -4432,6 +4432,13 @@
             "name": "productId",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "productRole",
+            "in": "query",
+            "name": "productRole",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -4498,6 +4505,13 @@
             "name": "productId",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "productRole",
+            "in": "query",
+            "name": "productRole",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -4563,6 +4577,13 @@
             "in": "query",
             "name": "productId",
             "required": true,
+            "type": "string"
+          },
+          {
+            "description": "productRole",
+            "in": "query",
+            "name": "productRole",
+            "required": false,
             "type": "string"
           }
         ],

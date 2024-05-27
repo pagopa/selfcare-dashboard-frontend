@@ -35,6 +35,8 @@ export type Party = {
   parentDescription?: string;
   userRole?: UserRole;
   status?: UserStatus;
+  city?: string;
+  country?: string;
 };
 
 export type BaseParty = {
@@ -63,6 +65,8 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     fiscalCode: institutionResource.fiscalCode,
     registeredOffice: institutionResource.address ?? '',
     zipCode: institutionResource.zipCode ?? '',
+    city: institutionResource.city ?? '',
+    country: institutionResource.country ?? '',
     typology: 'TODO', // it will represent the taxonomy of the party
     institutionType: institutionResource.institutionType,
     recipientCode: institutionResource.recipientCode,
