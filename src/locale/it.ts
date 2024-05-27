@@ -213,7 +213,9 @@ export default {
       tableEmptyLabel: 'Non hai ancora nessuna delega dagli enti',
       headerPtTableLabels: {
         party: 'Ente',
+        taxCode: 'Codice fiscale',
         product: 'Prodotto',
+        createdAt: 'Delegato il'
       },
       bodyPtTable: {
         showMoreButtonLabel: 'Vedi tutti',

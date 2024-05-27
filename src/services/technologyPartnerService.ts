@@ -1,7 +1,53 @@
+/* eslint-disable functional/no-let */
+/* eslint-disable functional/immutable-data */
 import { DashboardApi } from '../api/DashboardApiClient';
 import { TypeEnum } from '../api/generated/b4f-dashboard/DelegationRequestDto';
 import { DelegationWithInfo } from '../api/generated/b4f-dashboard/DelegationWithInfo';
 import { DelegationWithPagination } from '../api/generated/b4f-dashboard/DelegationWithPagination';
+
+function generateTechPartners(numPartners: number) {
+  const usedIds = new Set(); // Track used IDs for uniqueness
+  const usedBrokerIds = new Set(); // Track used broker IDs for uniqueness
+
+  const techPartners = [];
+  for (let i = 0; i < numPartners; i++) {
+    let uniqueId = generateUniqueString(10); // Generate unique ID
+    while (usedIds.has(uniqueId)) {
+      uniqueId = generateUniqueString(10); // Re-generate if used
+    }
+    usedIds.add(uniqueId);
+
+    let uniqueBrokerId = generateUniqueString(10); // Generate unique broker ID
+    while (usedBrokerIds.has(uniqueBrokerId)) {
+      uniqueBrokerId = generateUniqueString(10); // Re-generate if used
+    }
+    usedBrokerIds.add(uniqueBrokerId);
+
+    techPartners.push({
+      brokerId: uniqueBrokerId,
+      brokerName: `Comune di City-${i + 1}`,
+      id: uniqueId,
+      institutionId: 'placeholder-institutionId',
+      institutionName: `Comune di ${i + 1}`,
+      institutionRootName: '',
+      productId: Math.random() > 0.5 ? 'prod-io' : 'prod-pagopa',
+      type: 'PT' as TypeEnum,
+      taxCode: `IT${generateUniqueString(11)}`,
+      createdAt: new Date(),
+    });
+  }
+
+  return techPartners;
+}
+
+function generateUniqueString(length: number) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
 
 export const mockedTechPartner: Array<DelegationWithInfo> = [
   {
@@ -228,7 +274,7 @@ export const mockedTechPartner: Array<DelegationWithInfo> = [
 ];
 
 export const mockedDelegationsWithPagination: DelegationWithPagination = {
-  delegations: mockedTechPartner,
+  delegations: generateTechPartners(50),
   pageInfo: {
     pageNo: 0,
     pageSize: 10,
