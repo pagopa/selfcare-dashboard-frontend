@@ -1,30 +1,31 @@
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import SearchIcon from '@mui/icons-material/Search';
 import {
   Button,
+  Divider,
   FormControl,
   Grid,
-  IconButton,
   InputAdornment,
   InputLabel,
   MenuItem,
+  Pagination,
+  PaginationItem,
   Select,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
   TableRow,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import EmptyFilterResults from './components/EmptyFilterResults';
+import EnhancedTableHeader from './components/EnhanchedTableHeader';
+import TableCellWithTooltip from './components/TableCellWithTooltip';
+import { codeToLabelProduct, compareDates, compareStrings } from './utils';
 
 type Props = {
   delegationsWithoutDuplicates: Array<DelegationWithInfo>;
@@ -38,66 +39,16 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
   const [tableData, setTableData] = useState<Array<DelegationWithInfo>>(
     delegationsWithoutDuplicates
   );
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [orderBy, setOrderBy] = useState('institutionName');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(Math.ceil(tableData.length / itemsPerPage));
 
-  const codeToLabelProduct = (code: string) => {
-    switch (code) {
-      case 'prod-io':
-        return 'App Io';
-      case 'prod-pagopa':
-        return 'Piattaforma pagoPA';
-      case 'prod-io, prod-pagopa':
-        return 'App Io, Piattaforma pagoPA';
+  useEffect(() => {
+    setTotalPages(Math.ceil(tableData.length / itemsPerPage));
+  }, [tableData, itemsPerPage]);
 
-      default:
-        return '';
-    }
-  };
-
-  const handleSearch = () => {
-    // eslint-disable-next-line functional/no-let
-    let filteredResults = delegationsWithoutDuplicates;
-
-    if (filterBy === 'name') {
-      filteredResults = filteredResults.filter(
-        (item) =>
-          item.institutionName &&
-          item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (filterBy === 'fiscalCode') {
-      filteredResults = filteredResults.filter(
-        (item) => item.taxCode && item.taxCode.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    setTableData(filteredResults);
-  };
-
-  const handleResetFilter = async () => {
-    setSearchTerm('');
-    setFilterBy('');
-    setTableData(delegationsWithoutDuplicates);
-  };
-  const handleSort = (newOrder?: 'asc' | 'desc') => {
-    const currentOrder = newOrder || (order === 'asc' ? 'desc' : 'asc');
-    setOrder(currentOrder);
-
-    const sortedResult = [...tableData].sort((a: DelegationResource, b: DelegationResource) => {
-      const firstValue = a.institutionName;
-      const secondValue = b.institutionName;
-      if (firstValue && secondValue) {
-        return currentOrder === 'asc'
-          ? firstValue.localeCompare(secondValue)
-          : secondValue.localeCompare(firstValue);
-      } else {
-        return currentOrder === 'asc' ? -1 : 1;
-      }
-    });
-    setTableData(sortedResult);
-  };
-
-  const renderInputLabel = () => {
+  const renderInputLabel = (filterBy: string) => {
     if (filterBy === 'name') {
       return t('overview.ptPage.filterTechPartner.name');
     } else if (filterBy === 'fiscalCode') {
@@ -107,18 +58,76 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
     }
   };
 
+  const handleResetFilter = async () => {
+    setSearchTerm('');
+    setFilterBy('');
+    setTableData(delegationsWithoutDuplicates);
+  };
+
   const handleSearchBy = (value: string) => {
     setSearchTerm('');
     setFilterBy(value);
   };
+
   const enableFilterButton =
     (filterBy === 'name' && searchTerm.length >= 3) ||
     (filterBy === 'fiscalCode' && searchTerm.length === 11);
 
+  const getVisibleData = (data: Array<typeof tableData[number]>): Array<typeof tableData[number]> =>
+    data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).sort((a, b) => {
+      if (orderBy === 'institutionName') {
+        return compareStrings(a.institutionName || '', b.institutionName || '', order);
+      }
+
+      if (orderBy === 'createdAt') {
+        return compareDates(a.createdAt, b.createdAt, order);
+      }
+
+      return 0;
+    });
+
+  const handleSort = (_event: React.MouseEvent<unknown>, newOrderBy: keyof DelegationWithInfo) => {
+    const isAsc = orderBy === newOrderBy && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(newOrderBy);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleSearch = () => {
+    // eslint-disable-next-line functional/no-let
+    let filteredResults = [...delegationsWithoutDuplicates];
+
+    if (searchTerm) {
+      const searchTermLower = searchTerm.toLowerCase();
+      if (filterBy === 'name') {
+        filteredResults = filteredResults.filter((item) =>
+          item.institutionName?.toLowerCase().includes(searchTermLower)
+        );
+      } else if (filterBy === 'fiscalCode') {
+        filteredResults = filteredResults.filter((item) =>
+          item.taxCode?.toLowerCase().includes(searchTermLower)
+        );
+      }
+    }
+
+    const visibleData = getVisibleData(filteredResults);
+    setTableData(visibleData);
+  };
+
   return (
-    <>
-      <Grid container spacing={1}>
-        <Grid item xs={5}>
+    <Grid width={'100%'} height={'100%'}>
+      <Grid
+        container
+        gap={2}
+        width={'100%'}
+        display={'grid'}
+        gridTemplateColumns={'repeat(12, 1fr)'}
+        alignItems={'center'}
+      >
+        <Grid item sx={{ gridColumn: 'span 5' }}>
           <FormControl fullWidth={true} size="small">
             <InputLabel id="select-search-by">
               {t('overview.ptPage.filterTechPartner.searchBy')}
@@ -136,9 +145,9 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item sx={{ gridColumn: 'span 5' }}>
           <TextField
-            label={renderInputLabel()}
+            label={renderInputLabel(filterBy)}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={filterBy === ''}
@@ -178,55 +187,73 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
           </ButtonNaked>
         </Grid>
       </Grid>
+
       {tableData.length > 0 ? (
-        <TableContainer sx={{ height: '100%', overflow: 'hidden' }}>
-          <Table sx={{ minWidth: 'auto', height: '100%' }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell sortDirection={'asc'}>
-                  {t('overview.ptPage.headerPtTableLabels.party')}
-                  <IconButton
-                    style={{ backgroundColor: 'transparent', padding: '0 8px' }}
-                    disableRipple
-                    onClick={() => handleSort()}
-                  >
-                    {order === 'asc' ? (
-                      <ArrowUpwardIcon fontSize="small" />
-                    ) : (
-                      <ArrowDownwardIcon fontSize="small" />
-                    )}
-                  </IconButton>
-                </TableCell>
-                <TableCell>{t('overview.ptPage.headerPtTableLabels.product')}</TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody sx={{ backgroundColor: 'background.paper' }}>
-              {tableData.map((item) => (
-                <TableRow key={item.institutionName}>
-                  <TableCell>
-                    <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
-                  </TableCell>
-                  <TableCell>{codeToLabelProduct(item.productId as string)}</TableCell>
-                  <TableCell width={'20%'}>
-                    <Typography>-</Typography>
-                  </TableCell>
-                  <TableCell width={'20%'}>
-                    <Typography>-</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography width={'10%'}></Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Grid sx={{ backgroundColor: grey[200] }} mt={3} p={'0 16px 16px 16px'}>
+          <Grid sx={{ width: '100%', height: '100%' }}>
+            <Table aria-label="simple table">
+              <EnhancedTableHeader order={order} orderBy={orderBy} onRequestSort={handleSort} />
+              <TableBody sx={{ backgroundColor: 'background.paper' }}>
+                {getVisibleData(tableData).map((item, _index) => (
+                  <>
+                    <TableRow key={item.id}>
+                      <TableCellWithTooltip text={item.institutionName ?? '-'} />
+                      <TableCell>
+                        <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
+                          {item.taxCode?.toUpperCase() ?? '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>{codeToLabelProduct(item.productId as string) ?? '-'}</TableCell>
+                      <TableCell>
+                        <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
+                      </TableCell>
+                    </TableRow>
+                    <Divider />
+                  </>
+                ))}
+              </TableBody>
+            </Table>
+          </Grid>
+
+          <Grid container mt={2}>
+            {delegationsWithoutDuplicates.length > 10 && (
+              <Grid item xs={6} display="flex" justifyContent="start" alignItems={'center'}>
+                <Select
+                  size="small"
+                  value={itemsPerPage}
+                  defaultValue={10}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                >
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={70}>70</MenuItem>
+                </Select>
+              </Grid>
+            )}
+            {totalPages > 1 && tableData.length > itemsPerPage && (
+              <Grid item xs={6} display="flex" justifyContent="end" alignItems={'center'}>
+                <Pagination
+                  sx={{ display: 'flex', mt: 1, alignItems: 'center' }}
+                  color="primary"
+                  hidePrevButton={currentPage === 1}
+                  hideNextButton={currentPage === totalPages}
+                  page={currentPage}
+                  count={totalPages}
+                  renderItem={(props2) => (
+                    <PaginationItem {...props2} sx={{ border: 'none' }} variant="outlined" />
+                  )}
+                  onChange={(_event: React.ChangeEvent<unknown>, value: number) =>
+                    handlePageChange(value)
+                  }
+                />
+              </Grid>
+            )}
+          </Grid>
+        </Grid>
       ) : (
         <EmptyFilterResults handleResetFilter={handleResetFilter} />
       )}
-    </>
+    </Grid>
   );
 }

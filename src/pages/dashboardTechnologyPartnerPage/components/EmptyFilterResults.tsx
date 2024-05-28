@@ -9,6 +9,7 @@ type Props = {
 
 const EmptyFilterResults = ({ handleResetFilter }: Props): JSX.Element => (
   <Grid
+    item
     width={'100%'}
     xs={12}
     mt={5}
