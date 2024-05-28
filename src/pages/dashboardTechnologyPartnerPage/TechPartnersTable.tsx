@@ -13,10 +13,9 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableRow,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -25,6 +24,8 @@ import { useTranslation } from 'react-i18next';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import EmptyFilterResults from './components/EmptyFilterResults';
 import EnhancedTableHeader from './components/EnhanchedTableHeader';
+import TableCellWithTooltip from './components/TableCellWithTooltip';
+import { codeToLabelProduct, compareDates, compareStrings } from './utils';
 
 type Props = {
   delegationsWithoutDuplicates: Array<DelegationWithInfo>;
@@ -43,48 +44,11 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(Math.ceil(tableData.length / itemsPerPage));
 
-  const codeToLabelProduct = (code: string) => {
-    switch (code) {
-      case 'prod-io':
-        return 'App Io';
-      case 'prod-pagopa':
-        return 'Piattaforma pagoPA';
-      case 'prod-io, prod-pagopa':
-        return 'App Io, Piattaforma pagoPA';
+  useEffect(() => {
+    setTotalPages(Math.ceil(tableData.length / itemsPerPage));
+  }, [tableData, itemsPerPage]);
 
-      default:
-        return '';
-    }
-  };
-
-  const handleSearch = () => {
-    // eslint-disable-next-line functional/no-let
-    let filteredResults = delegationsWithoutDuplicates;
-
-    if (filterBy === 'name') {
-      filteredResults = filteredResults.filter(
-        (item) =>
-          item.institutionName &&
-          item.institutionName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (filterBy === 'fiscalCode') {
-      filteredResults = filteredResults.filter(
-        (item) => item.taxCode && item.taxCode.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    setTableData(filteredResults);
-  };
-
-  const handleResetFilter = async () => {
-    setSearchTerm('');
-    setFilterBy('');
-    setTableData(delegationsWithoutDuplicates);
-  };
-
-  const renderInputLabel = () => {
+  const renderInputLabel = (filterBy: string) => {
     if (filterBy === 'name') {
       return t('overview.ptPage.filterTechPartner.name');
     } else if (filterBy === 'fiscalCode') {
@@ -92,6 +56,12 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
     } else {
       return t('overview.ptPage.filterTechPartner.insert');
     }
+  };
+
+  const handleResetFilter = async () => {
+    setSearchTerm('');
+    setFilterBy('');
+    setTableData(delegationsWithoutDuplicates);
   };
 
   const handleSearchBy = (value: string) => {
@@ -103,9 +73,18 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
     (filterBy === 'name' && searchTerm.length >= 3) ||
     (filterBy === 'fiscalCode' && searchTerm.length === 11);
 
-  useEffect(() => {
-    setTotalPages(Math.ceil(delegationsWithoutDuplicates.length / itemsPerPage));
-  }, [delegationsWithoutDuplicates]);
+  const getVisibleData = (data: Array<typeof tableData[number]>): Array<typeof tableData[number]> =>
+    data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).sort((a, b) => {
+      if (orderBy === 'institutionName') {
+        return compareStrings(a.institutionName || '', b.institutionName || '', order);
+      }
+
+      if (orderBy === 'createdAt') {
+        return compareDates(a.createdAt, b.createdAt, order);
+      }
+
+      return 0;
+    });
 
   const handleSort = (_event: React.MouseEvent<unknown>, newOrderBy: keyof DelegationWithInfo) => {
     const isAsc = orderBy === newOrderBy && order === 'asc';
@@ -117,44 +96,36 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
     setCurrentPage(page);
   };
 
-  const getVisibleData = (): Array<typeof tableData[number]> => {
-    const unsortedVisibleData = tableData.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
-    );
-    // eslint-disable-next-line functional/immutable-data
-    return unsortedVisibleData.sort(
-      (a: typeof tableData[number] | undefined, b: typeof tableData[number] | undefined) => {
-        if (!a || !b) {
-          return 0;
-        }
+  const handleSearch = () => {
+    // eslint-disable-next-line functional/no-let
+    let filteredResults = [...delegationsWithoutDuplicates];
 
-        if (orderBy === 'institutionName') {
-          return order === 'asc'
-            ? (a.institutionName as string).localeCompare(b.institutionName as string)
-            : (b.institutionName as string).localeCompare(a.institutionName as string);
-        }
-        if (orderBy === 'createdAt' && a.createdAt && b.createdAt) {
-          return order === 'asc'
-            ? a.createdAt.getTime() - b.createdAt.getTime()
-            : b.createdAt.getTime() - a.createdAt.getTime();
-        }
-
-        return 0;
+    if (searchTerm) {
+      const searchTermLower = searchTerm.toLowerCase();
+      if (filterBy === 'name') {
+        filteredResults = filteredResults.filter((item) =>
+          item.institutionName?.toLowerCase().includes(searchTermLower)
+        );
+      } else if (filterBy === 'fiscalCode') {
+        filteredResults = filteredResults.filter((item) =>
+          item.taxCode?.toLowerCase().includes(searchTermLower)
+        );
       }
-    );
+    }
+
+    const visibleData = getVisibleData(filteredResults);
+    setTableData(visibleData);
   };
 
-  const visibleData = getVisibleData();
-
   return (
-    <>
+    <Grid width={'100%'} height={'100%'}>
       <Grid
         container
         gap={2}
         width={'100%'}
         display={'grid'}
         gridTemplateColumns={'repeat(12, 1fr)'}
+        alignItems={'center'}
       >
         <Grid item sx={{ gridColumn: 'span 5' }}>
           <FormControl fullWidth={true} size="small">
@@ -176,7 +147,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
         </Grid>
         <Grid item sx={{ gridColumn: 'span 5' }}>
           <TextField
-            label={renderInputLabel()}
+            label={renderInputLabel(filterBy)}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={filterBy === ''}
@@ -217,75 +188,72 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
         </Grid>
       </Grid>
 
-      {visibleData.length > 0 ? (
+      {tableData.length > 0 ? (
         <Grid sx={{ backgroundColor: grey[200] }} mt={3} p={'0 16px 16px 16px'}>
-          <TableContainer sx={{ display: 'grid', gridColumn: 'span 12', height: '100%', mb: 2 }}>
-            <Table
-              sx={{ width: '100%', minWidth: 'auto', height: '100%' }}
-              aria-label="simple table"
-            >
+          <Grid sx={{ width: '100%', height: '100%' }}>
+            <Table aria-label="simple table">
               <EnhancedTableHeader order={order} orderBy={orderBy} onRequestSort={handleSort} />
               <TableBody sx={{ backgroundColor: 'background.paper' }}>
-                {visibleData.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <Typography sx={{ fontWeight: '700' }}>{item.institutionName}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography sx={{ fontWeight: '700' }}>{item.taxCode}</Typography>
-                    </TableCell>
-                    <TableCell>{codeToLabelProduct(item.productId as string)}</TableCell>
-                    <TableCell>
-                      <Typography>{item.createdAt?.toLocaleDateString()}</Typography>
-                    </TableCell>
-
-                    <TableCell>
-                      <Typography>-</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography width={'8.3%'}></Typography>
-                    </TableCell>
+                {getVisibleData(tableData).map((item, _index) => (
+                  <>
+                    <TableRow key={item.id}>
+                      <TableCellWithTooltip text={item.institutionName ?? '-'} />
+                      <TableCell>
+                        <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
+                          {item.taxCode?.toUpperCase() ?? '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>{codeToLabelProduct(item.productId as string) ?? '-'}</TableCell>
+                      <TableCell>
+                        <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
+                      </TableCell>
+                    </TableRow>
                     <Divider />
-                  </TableRow>
+                  </>
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
-          <Grid container>
-            <Grid item xs={6} display="flex" justifyContent="start" alignItems={'center'}>
-              <Select
-                size="small"
-                value={itemsPerPage}
-                defaultValue={10}
-                onChange={(e) => setItemsPerPage(Number(e.target.value))}
-              >
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={20}>20</MenuItem>
-                <MenuItem value={50}>50</MenuItem>
-                <MenuItem value={70}>70</MenuItem>
-              </Select>
-            </Grid>
-            <Grid item xs={6} display="flex" justifyContent="end" alignItems={'center'}>
-              <Pagination
-                sx={{ display: 'flex', mt: 1 }}
-                color="primary"
-                shape="rounded"
-                page={currentPage}
-                count={totalPages}
-                boundaryCount={3}
-                renderItem={(props2) => (
-                  <PaginationItem {...props2} sx={{ border: 'none' }} variant="outlined" />
-                )}
-                onChange={(_event: React.ChangeEvent<unknown>, value: number) => (
-                  handlePageChange(value), window.scrollTo(0, 0)
-                )}
-              />
-            </Grid>
+          </Grid>
+
+          <Grid container mt={2}>
+            {delegationsWithoutDuplicates.length > 10 && (
+              <Grid item xs={6} display="flex" justifyContent="start" alignItems={'center'}>
+                <Select
+                  size="small"
+                  value={itemsPerPage}
+                  defaultValue={10}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                >
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={70}>70</MenuItem>
+                </Select>
+              </Grid>
+            )}
+            {totalPages > 1 && tableData.length > itemsPerPage && (
+              <Grid item xs={6} display="flex" justifyContent="end" alignItems={'center'}>
+                <Pagination
+                  sx={{ display: 'flex', mt: 1, alignItems: 'center' }}
+                  color="primary"
+                  hidePrevButton={currentPage === 1}
+                  hideNextButton={currentPage === totalPages}
+                  page={currentPage}
+                  count={totalPages}
+                  renderItem={(props2) => (
+                    <PaginationItem {...props2} sx={{ border: 'none' }} variant="outlined" />
+                  )}
+                  onChange={(_event: React.ChangeEvent<unknown>, value: number) =>
+                    handlePageChange(value)
+                  }
+                />
+              </Grid>
+            )}
           </Grid>
         </Grid>
       ) : (
         <EmptyFilterResults handleResetFilter={handleResetFilter} />
       )}
-    </>
+    </Grid>
   );
 }

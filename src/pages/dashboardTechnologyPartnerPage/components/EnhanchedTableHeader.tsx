@@ -52,7 +52,7 @@ const EnhancedTableHeader = ({ order, orderBy, onRequestSort }: EnhancedTableHea
         {headerData.map((item) => (
           <TableCell
             key={item.id}
-            width={item.width}
+            sx={{ width: item.width }}
             sortDirection={orderBy === item.id ? order : 'asc'}
           >
             <TableSortLabel

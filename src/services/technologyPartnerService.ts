@@ -2,51 +2,47 @@
 /* eslint-disable functional/immutable-data */
 import { DashboardApi } from '../api/DashboardApiClient';
 import { TypeEnum } from '../api/generated/b4f-dashboard/DelegationRequestDto';
-import { DelegationWithInfo } from '../api/generated/b4f-dashboard/DelegationWithInfo';
+import {
+  DelegationWithInfo,
+  InstitutionTypeEnum,
+} from '../api/generated/b4f-dashboard/DelegationWithInfo';
 import { DelegationWithPagination } from '../api/generated/b4f-dashboard/DelegationWithPagination';
 
-function generateTechPartners(numPartners: number) {
-  const usedIds = new Set(); // Track used IDs for uniqueness
-  const usedBrokerIds = new Set(); // Track used broker IDs for uniqueness
+function generateDelegationWithInfoArray(n: number): Array<DelegationWithInfo> {
+  const delegationArray: Array<DelegationWithInfo> = [];
+  let currentDate = new Date();
 
-  const techPartners = [];
-  for (let i = 0; i < numPartners; i++) {
-    let uniqueId = generateUniqueString(10); // Generate unique ID
-    while (usedIds.has(uniqueId)) {
-      uniqueId = generateUniqueString(10); // Re-generate if used
-    }
-    usedIds.add(uniqueId);
+  for (let i = 0; i < n; i++) {
+    const createdAt = new Date(currentDate);
+    createdAt.setDate(currentDate.getDate() - i);
 
-    let uniqueBrokerId = generateUniqueString(10); // Generate unique broker ID
-    while (usedBrokerIds.has(uniqueBrokerId)) {
-      uniqueBrokerId = generateUniqueString(10); // Re-generate if used
-    }
-    usedBrokerIds.add(uniqueBrokerId);
+    const updatedAt = new Date(createdAt);
+    updatedAt.setDate(createdAt.getDate() + 1);
 
-    techPartners.push({
-      brokerId: uniqueBrokerId,
-      brokerName: `Comune di City-${i + 1}`,
-      id: uniqueId,
-      institutionId: 'placeholder-institutionId',
-      institutionName: `Comune di ${i + 1}`,
-      institutionRootName: '',
-      productId: Math.random() > 0.5 ? 'prod-io' : 'prod-pagopa',
-      type: 'PT' as TypeEnum,
-      taxCode: `IT${generateUniqueString(11)}`,
-      createdAt: new Date(),
-    });
+    const delegation: DelegationWithInfo = {
+      brokerId: `brokerId${i}`,
+      brokerName: `Broker Name ${i}`,
+      brokerTaxCode: `BrokerTaxCode${i}`,
+      brokerType: `BrokerType${i}`,
+      createdAt,
+      id: `id${i}`,
+      institutionId: `institutionId${i}`,
+      institutionName: `Institution Name ${i}`,
+      institutionRootName: `Institution Root Name ${i}`,
+      institutionType: InstitutionTypeEnum.PA,
+      productId: `prod-pagopa`,
+      status: `Status${i}`,
+      taxCode: `TaxCode${i}`,
+      type: TypeEnum.AOO,
+      updatedAt,
+    };
+
+    delegationArray.push(delegation);
+
+    currentDate = createdAt;
   }
 
-  return techPartners;
-}
-
-function generateUniqueString(length: number) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
+  return delegationArray;
 }
 
 export const mockedTechPartner: Array<DelegationWithInfo> = [
@@ -274,7 +270,7 @@ export const mockedTechPartner: Array<DelegationWithInfo> = [
 ];
 
 export const mockedDelegationsWithPagination: DelegationWithPagination = {
-  delegations: generateTechPartners(50),
+  delegations: generateDelegationWithInfoArray(51),
   pageInfo: {
     pageNo: 0,
     pageSize: 10,
