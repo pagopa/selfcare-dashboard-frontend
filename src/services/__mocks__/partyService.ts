@@ -861,49 +861,86 @@ export const mockedParties: Array<Party> = [
     vatNumber: '76859430212',
     supportEmail: '',
     products: [
-      // Use case with two delegable products
+      {
+        productId: 'prod-io-sign',
+        authorized: false,
+        billing: {
+          vatNumber: '00000777111',
+          recipientCode: 'GI786GG',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
       {
         productId: 'prod-io',
+        userRole: 'LIMITED',
         authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         billing: {
-          vatNumber: '76859430212',
-          recipientCode: 'BBGG34D',
-          publicServices: true,
+          vatNumber: '00296900798',
+          recipientCode: 'c_b988',
+          publicServices: false,
         },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
-      // Use case with only prod-interop-coll
+      {
+        productId: 'prod-io-premium',
+        authorized: false,
+        billing: {
+          vatNumber: '00296900798',
+          recipientCode: 'c_b988',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-idpay',
+        authorized: false,
+        billing: {
+          vatNumber: '63926599999',
+          recipientCode: 'AAASS122',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop',
+        authorized: false,
+        billing: {
+          vatNumber: '00296900798',
+          recipientCode: 'UNIVOCO',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
       {
         productId: 'prod-interop-coll',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        authorized: false,
         billing: {
-          vatNumber: '3395867495',
-          recipientCode: 'NBG455B',
-          publicServices: true,
+          vatNumber: '00296900798',
+          recipientCode: 'UNIVOCO',
+          publicServices: false,
         },
-      },
-      // Use case with same product but one in onboardingStatus REJECTED and one in onboardingStatus ACTIVE
-      {
-        productId: 'prod-ciban',
-        authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        billing: {
-          vatNumber: '81001510528',
-          recipientCode: 'DDFFRT',
-          publicServices: true,
-        },
       },
       {
-        productId: 'prod-ciban',
-        authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
-        userRole: 'ADMIN',
+        productId: 'prod-pn',
+        authorized: false,
         billing: {
-          vatNumber: '76859430212',
-          recipientCode: 'DDFFRT',
-          publicServices: true,
+          vatNumber: '00296900798',
+          recipientCode: 'c_b988',
+          publicServices: false,
         },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop-atst',
+        authorized: false,
+        billing: {
+          vatNumber: '00296900798',
+          recipientCode: 'UNIVOCO',
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
     ],
     status: 'ACTIVE',

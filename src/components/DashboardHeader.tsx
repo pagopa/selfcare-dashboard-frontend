@@ -69,8 +69,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const onboardedPartyProducts = party?.products.filter(
     (pp) =>
       pp.productOnBoardingStatus === 'ACTIVE' &&
-      (pp.authorized || (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop')) &&
-      !(party?.userRole === 'LIMITED' && !pp.userRole)
+      (pp.authorized || (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop'))
   );
 
   const activeProducts: Array<Product> = useMemo(
