@@ -1,4 +1,4 @@
-# selfcare-dashboard-frontend
+# selfcare-dashboard-frontend 
 SelfCare's application which allows users to see the parties to which belongs and their configured products:
 * Admin users can list, add and edit other users.
 * Admin users can list, add and edit groups of users.
