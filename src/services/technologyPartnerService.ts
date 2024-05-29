@@ -270,7 +270,7 @@ export const mockedTechPartner: Array<DelegationWithInfo> = [
 ];
 
 export const mockedDelegationsWithPagination: DelegationWithPagination = {
-  delegations: generateDelegationWithInfoArray(51),
+  delegations: generateDelegationWithInfoArray(101),
   pageInfo: {
     pageNo: 0,
     pageSize: 10,

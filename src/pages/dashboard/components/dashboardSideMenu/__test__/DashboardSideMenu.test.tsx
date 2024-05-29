@@ -10,6 +10,7 @@ test('Test: Access to the dashboard side menu voices', async () => {
       canSeeSection={true}
       isInvoiceSectionVisible={true}
       isDelegateSectionVisible={true}
+      isPtSectionVisible={false}
     />
   );
 
@@ -43,6 +44,7 @@ test('Test: The techpartner has not been delegated by any body, will not see the
       canSeeSection={false}
       isInvoiceSectionVisible={false}
       isDelegateSectionVisible={false}
+      isPtSectionVisible={false}
     />
   );
   const institutionsListVoice = screen.queryByText('Enti gestiti');
@@ -51,14 +53,18 @@ test('Test: The techpartner has not been delegated by any body, will not see the
 });
 
 test('Test: The techpartner has not been delegated by any body, he will see the menu section and will be able to access it', async () => {
+  console.log('mockedParties[16]', mockedParties[16]);
   const { history } = renderWithProviders(
     <DashboardSideMenu
       party={mockedParties[16]}
       canSeeSection={false}
       isInvoiceSectionVisible={false}
       isDelegateSectionVisible={false}
+      isPtSectionVisible={true}
     />
   );
+
+  
 
   const institutionsListVoice = screen.getByText('Enti gestiti');
 

@@ -73,8 +73,8 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
     (filterBy === 'name' && searchTerm.length >= 3) ||
     (filterBy === 'fiscalCode' && searchTerm.length === 11);
 
-  const getVisibleData = (data: Array<typeof tableData[number]>): Array<typeof tableData[number]> =>
-    data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).sort((a, b) => {
+  const getSortedData = (data: Array<typeof tableData[number]>): Array<typeof tableData[number]> =>
+    [...data].sort((a, b) => {
       if (orderBy === 'institutionName') {
         return compareStrings(a.institutionName || '', b.institutionName || '', order);
       }
@@ -113,8 +113,9 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
       }
     }
 
-    const visibleData = getVisibleData(filteredResults);
+    const visibleData = getSortedData(filteredResults);
     setTableData(visibleData);
+    setCurrentPage(1);
   };
 
   return (
@@ -194,23 +195,25 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
             <Table aria-label="simple table">
               <EnhancedTableHeader order={order} orderBy={orderBy} onRequestSort={handleSort} />
               <TableBody sx={{ backgroundColor: 'background.paper' }}>
-                {getVisibleData(tableData).map((item, _index) => (
-                  <>
-                    <TableRow key={item.id}>
-                      <TableCellWithTooltip text={item.institutionName ?? '-'} />
-                      <TableCell>
-                        <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
-                          {item.taxCode?.toUpperCase() ?? '-'}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>{codeToLabelProduct(item.productId as string) ?? '-'}</TableCell>
-                      <TableCell>
-                        <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <Divider />
-                  </>
-                ))}
+                {getSortedData(tableData)
+                  .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                  .map((item, _index) => (
+                    <>
+                      <TableRow key={item.id}>
+                        <TableCellWithTooltip text={item.institutionName ?? '-'} />
+                        <TableCell>
+                          <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
+                            {item.taxCode?.toUpperCase() ?? '-'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>{codeToLabelProduct(item.productId as string) ?? '-'}</TableCell>
+                        <TableCell>
+                          <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
+                        </TableCell>
+                      </TableRow>
+                      <Divider />
+                    </>
+                  ))}
               </TableBody>
             </Table>
           </Grid>
