@@ -1,4 +1,4 @@
-import { compareDates, compareStrings, codeToLabelProduct } from '../utils'; 
+import { compareDates, compareStrings, codeToLabelProduct } from '../../../utils/helperFunctions';
 
 describe('compareDates', () => {
   it('should return 0 when both dates are undefined', () => {

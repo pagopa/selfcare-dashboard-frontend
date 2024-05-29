@@ -41,7 +41,9 @@ export default function ActiveProductCardContainer({
 
   const productOnboarded = products.find((p) => p.id === product.productId);
 
-  return productOnboarded ? (
+  const isOperatorWithNoProduct = party.userRole === 'LIMITED' && !product.userRole;
+
+  return productOnboarded && !isOperatorWithNoProduct ? (
     <>
       <Grid item xs={6} lg={4}>
         <ActiveProductCard

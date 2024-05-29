@@ -51,17 +51,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
 
-  const authorizedProdInterop = party?.products.find(
-    (p) => p.productId === 'prod-interop' && p.authorized === true
-  );
+  const findAuthorizedProduct = (productId: string) =>
+    party?.products.find((p) => p.productId === productId && p.authorized);
 
-  const authorizedProdAtst = party?.products?.find(
-    (p) => p.productId === 'prod-interop-atst' && p.authorized === true
-  );
-
-  const authorizedProdColl = party?.products?.find(
-    (p) => p.productId === 'prod-interop-coll' && p.authorized === true
-  );
+  const authorizedProdInterop = findAuthorizedProduct('prod-interop');
+  const authorizedProdAtst = findAuthorizedProduct('prod-interop-atst');
+  const authorizedProdColl = findAuthorizedProduct('prod-interop-coll');
 
   const authorizedInteropProducts = [
     authorizedProdInterop,
@@ -74,7 +69,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const onboardedPartyProducts = party?.products.filter(
     (pp) =>
       pp.productOnBoardingStatus === 'ACTIVE' &&
-      (pp.authorized || (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop'))
+      (pp.authorized || (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop')) &&
+      !(party?.userRole === 'LIMITED' && !pp.userRole)
   );
 
   const activeProducts: Array<Product> = useMemo(

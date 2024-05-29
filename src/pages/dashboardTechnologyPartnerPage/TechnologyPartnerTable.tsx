@@ -72,7 +72,7 @@ export default function TechnologyPartnerTable({ party }: Props) {
       {party.delegation && delegationsWithoutDuplicates.length > 0 && (
         <DashboardTableContainer delegationsWithoutDuplicates={delegationsWithoutDuplicates} />
       )}
-      {!party.delegation && delegationsWithoutDuplicates.length === 0 && (
+      {delegationsWithoutDuplicates.length === 0 && (
         <Box
           width={'100%'}
           p={2}

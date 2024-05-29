@@ -14,17 +14,12 @@ type Props = {
 export default function ActiveProductsSection({ party, products }: Props) {
   const { t } = useTranslation();
 
-  const authorizedProdInterop = party.products.find(
-    (p) => p.productId === 'prod-interop' && p.authorized === true
-  );
+  const findAuthorizedProduct = (productId: string) =>
+    party.products.find((p) => p.productId === productId && p.authorized);
 
-  const authorizedProdAtst = party.products.find(
-    (p) => p.productId === 'prod-interop-atst' && p.authorized === true
-  );
-
-  const authorizedProdColl = party.products.find(
-    (p) => p.productId === 'prod-interop-coll' && p.authorized === true
-  );
+  const authorizedProdInterop = findAuthorizedProduct('prod-interop');
+  const authorizedProdAtst = findAuthorizedProduct('prod-interop-atst');
+  const authorizedProdColl = findAuthorizedProduct('prod-interop-coll');
 
   const authorizedInteropProducts = [
     authorizedProdInterop,
@@ -34,6 +29,18 @@ export default function ActiveProductsSection({ party, products }: Props) {
 
   const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
+  const handleInteropEnviroments = (productId?: string) =>
+    (hasMoreThanOneInteropEnv
+      ? productId !== 'prod-interop-coll' && productId !== 'prod-interop-atst'
+      : true) &&
+    (!authorizedProdColl ? productId !== 'prod-interop-coll' : true) &&
+    (!authorizedProdAtst ? productId !== 'prod-interop-atst' : true) &&
+    (authorizedInteropProducts.length === 0
+      ? true
+      : !authorizedProdInterop && !hasMoreThanOneInteropEnv
+      ? productId !== 'prod-interop'
+      : true);
+
   return (
     <React.Fragment>
       <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
@@ -41,17 +48,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
         {party.products
           .filter(
             (us) =>
-              us.productOnBoardingStatus === 'ACTIVE' &&
-              (hasMoreThanOneInteropEnv
-                ? us.productId !== 'prod-interop-coll' && us.productId !== 'prod-interop-atst'
-                : true) &&
-              (!authorizedProdColl ? us.productId !== 'prod-interop-coll' : true) &&
-              (!authorizedProdAtst ? us.productId !== 'prod-interop-atst' : true) &&
-              (authorizedInteropProducts.length === 0
-                ? true
-                : !authorizedProdInterop && !hasMoreThanOneInteropEnv
-                ? us.productId !== 'prod-interop'
-                : true)
+              us.productOnBoardingStatus === 'ACTIVE' && handleInteropEnviroments(us?.productId)
           )
           .sort((a, b) =>
             a.authorized === false && b.authorized !== false

@@ -15,17 +15,17 @@ import {
   TableCell,
   TableRow,
   TextField,
-  Typography
+  Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
+import { codeToLabelProduct, compareDates, compareStrings } from '../../utils/helperFunctions';
 import EmptyFilterResults from './components/EmptyFilterResults';
 import EnhancedTableHeader from './components/EnhanchedTableHeader';
 import TableCellWithTooltip from './components/TableCellWithTooltip';
-import { codeToLabelProduct, compareDates, compareStrings } from './utils';
 
 type Props = {
   delegationsWithoutDuplicates: Array<DelegationWithInfo>;
