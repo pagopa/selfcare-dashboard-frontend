@@ -400,24 +400,6 @@
             "type": "string"
           },
           {
-            "description": "Institution's tax code",
-            "in": "query",
-            "name": "taxCode",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "description": "Mode (full or normal) to retrieve institution's delegations",
-            "enum": [
-              "FULL",
-              "NORMAL"
-            ],
-            "in": "query",
-            "name": "mode",
-            "required": false,
-            "type": "string"
-          },
-          {
             "description": "Order to show response NONE, ASC, DESC",
             "enum": [
               "ASC",
@@ -1025,24 +1007,6 @@
             "description": "Institution's name to search",
             "in": "query",
             "name": "search",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "description": "Institution's tax code",
-            "in": "query",
-            "name": "taxCode",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "description": "Mode (full or normal) to retrieve institution's delegations",
-            "enum": [
-              "FULL",
-              "NORMAL"
-            ],
-            "in": "query",
-            "name": "mode",
             "required": false,
             "type": "string"
           },
