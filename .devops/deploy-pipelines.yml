@@ -36,6 +36,8 @@ variables:
     react_app_url_fe_landing: '$(UAT_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(UAT_REACT_APP_URL_FE_ASSISTANCE)'
 
+    react_app_country_data: '$(UAT_REACT_APP_COUNTRY_DATA)'
+
     react_app_url_fe_dashboard_admin: '$(UAT_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(UAT_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(UAT_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
@@ -48,6 +50,7 @@ variables:
     react_app_url_api_dashboard: '$(UAT_REACT_APP_URL_API_DASHBOARD)'
 
     react_app_enable_assistance: 'true'
+    react_app_enable_user_v2: '$(UAT_REACT_APP_ENABLE_USER_V2)'
 
     react_app_url_storage: '$(UAT_REACT_APP_URL_STORAGE)'
 
@@ -75,6 +78,8 @@ variables:
     react_app_url_fe_landing: '$(PROD_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(PROD_REACT_APP_URL_FE_ASSISTANCE)'
 
+    react_app_country_data: '$(PROD_REACT_APP_COUNTRY_DATA)'
+
     react_app_url_fe_dashboard_admin: '$(PROD_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(PROD_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(PROD_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
@@ -86,7 +91,9 @@ variables:
     react_app_url_api_party_registry_proxy: '$(PROD_REACT_APP_URL_API_PARTY_REGISTRY_PROXY)'
     react_app_url_api_dashboard: '$(PROD_REACT_APP_URL_API_DASHBOARD)'
 
+    
     react_app_enable_assistance: 'true'
+    react_app_enable_user_v2: '$(PROD_REACT_APP_ENABLE_USER_V2)'
 
     react_app_url_storage: '$(PROD_REACT_APP_URL_STORAGE)'
 
@@ -116,6 +123,8 @@ variables:
     react_app_url_fe_landing: '$(DEV_REACT_APP_URL_FE_LANDING)'
     react_app_url_fe_assistance: '$(DEV_REACT_APP_URL_FE_ASSISTANCE)'
 
+    react_app_country_data: '$(DEV_REACT_APP_COUNTRY_DATA)'
+
     react_app_url_fe_dashboard_admin: '$(DEV_REACT_APP_URL_FE_DASHBOARD_ADMIN)'
     react_app_url_fe_dashboard_users: '$(DEV_REACT_APP_URL_FE_DASHBOARD_USERS)'
     react_app_url_fe_dashboard_groups: '$(DEV_REACT_APP_URL_FE_DASHBOARD_GROUPS)'
@@ -128,6 +137,7 @@ variables:
     react_app_url_api_dashboard: '$(DEV_REACT_APP_URL_API_DASHBOARD)'
 
     react_app_enable_assistance: 'true'
+    react_app_enable_user_v2: '$(DEV_REACT_APP_ENABLE_USER_V2)'
 
     react_app_url_storage: '$(DEV_REACT_APP_URL_STORAGE)'
 
@@ -225,6 +235,8 @@ stages:
               REACT_APP_URL_FE_LANDING: '$(react_app_url_fe_landing)'
               REACT_APP_URL_FE_ASSISTANCE: '$(react_app_url_fe_assistance)'
 
+              REACT_APP_COUNTRY_DATA: '$(react_app_country_data)'
+
               MICROFRONTEND_URL_USERS: '$(react_app_url_fe_dashboard_users)'
               MICROFRONTEND_URL_GROUPS: '$(react_app_url_fe_dashboard_groups)'
               MICROFRONTEND_URL_ADMIN: '$(react_app_url_fe_dashboard_admin)'
@@ -241,6 +253,7 @@ stages:
 
               REACT_APP_URL_INSTITUTION_LOGO_PREFIX: '$(react_app_url_storage)/institutions/'
 
+              REACT_APP_ENABLE_USER_V2": '$(react_app_enable_user_v2)'
               REACT_APP_ANALYTICS_ENABLE: '$(react_app_analytics_enabled)'
               REACT_APP_ENABLE_GEOTAXONOMY: '$(react_app_enable_geotaxonomy)'
               REACT_APP_ANALYTICS_MOCK: '$(react_app_analytics_mocked)'

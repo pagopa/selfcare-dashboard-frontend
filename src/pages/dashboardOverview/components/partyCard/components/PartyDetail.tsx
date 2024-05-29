@@ -1,19 +1,20 @@
 /* eslint-disable complexity */ // TODO: remove eslint-disable complexity (add sub component)
+import EditIcon from '@mui/icons-material/Edit';
 import { Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useTranslation } from 'react-i18next';
-import EditIcon from '@mui/icons-material/Edit';
-import { useEffect, useState } from 'react';
 import { SessionModal, useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { Party } from '../../../../../model/Party';
-import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../../../../utils/constants';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../api/DashboardApiClient';
-import { ENV } from '../../../../../utils/env';
+import { GeographicTaxonomyDto } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
+import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
+import { CountryResource } from '../../../../../model/CountryResource';
+import { Party } from '../../../../../model/Party';
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../redux/slices/partiesSlice';
-import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
-import { GeographicTaxonomyDto } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
+import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../../../../utils/constants';
+import { ENV } from '../../../../../utils/env';
 import GeoTaxonomySection from './GeoTaxonomySection';
 
 type Props = {
@@ -41,6 +42,7 @@ export default function PartyDetail({ party }: Props) {
     party.geographicTaxonomies ? party.geographicTaxonomies : [{ code: '', desc: '' }]
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
+  const [countries, setCountries] = useState<Array<CountryResource>>([]);
   const setPartyUpdated = (partyUpdated: Party) => {
     dispatch(partiesActions.setPartySelected(partyUpdated));
   };
@@ -109,6 +111,56 @@ export default function PartyDetail({ party }: Props) {
       });
   };
   const isAooUo = party.subunitType === 'AOO' || party.subunitType === 'UO';
+
+  const isForeignInsurence = !!(
+    party.institutionType === 'AS' &&
+    party.country &&
+    party.country !== 'IT'
+  );
+
+  const getCountriesJSON = async () => {
+    const countries = await fetch(ENV.JSON_URL.COUNTRIES);
+    setCountries(await countries.json());
+  };
+  useEffect(() => {
+    if (isForeignInsurence && countries.length === 0) {
+      void getCountriesJSON();
+    }
+  }, [isForeignInsurence]);
+
+  const getCountryNameByAlpha2 = (
+    countries: Array<CountryResource>,
+    alpha2?: string
+  ): string | undefined => {
+    const matchingCountry = countries.find((country) => country.alpha_2 === alpha2);
+    return matchingCountry?.name ? `- ${matchingCountry.name}` : '';
+  };
+
+  function capitalizeFirstLetter(str?: string): string | undefined {
+    if (!str) {
+      return undefined;
+    }
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  const formattedForeignAddress = `${party.registeredOffice}, ${capitalizeFirstLetter(
+    party.city
+  )} ${getCountryNameByAlpha2(countries, party.country)}`;
+
+  const getTooltipText = (
+    isForeignInsurence: boolean,
+    formattedForeignAddress: string,
+    registeredOffice: string,
+    showTooltipAfter: number
+  ): string | undefined => {
+    if (isForeignInsurence && formattedForeignAddress.length >= showTooltipAfter) {
+      return formattedForeignAddress;
+    } else if (registeredOffice.length >= showTooltipAfter) {
+      return registeredOffice;
+    } else {
+      return '';
+    }
+  };
 
   return (
     <>
@@ -322,7 +374,7 @@ export default function PartyDetail({ party }: Props) {
               </Grid>
             </>
           ) : undefined}
-          {(isInstitutionTypePA && !isTaxCodeEquals2Piva) || !isInstitutionTypePA ? (
+          {!isInstitutionTypePA && party.fiscalCode ? (
             <>
               {/* fiscalCode */}
               <Grid item xs={2}>
@@ -376,7 +428,7 @@ export default function PartyDetail({ party }: Props) {
           )}
 
           {/* fiscalCode */}
-          {isInstitutionTypePA && isTaxCodeEquals2Piva && (
+          {isInstitutionTypePA && party.fiscalCode && (
             <>
               <Grid item xs={2}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
@@ -407,7 +459,7 @@ export default function PartyDetail({ party }: Props) {
           )}
           <>
             {/* vatNumber */}
-            {!isTaxCodeEquals2Piva && (
+            {!isTaxCodeEquals2Piva && lastPartyVatNumber && (
               <>
                 <Grid item xs={2}>
                   <Typography variant="body2" sx={{ ...labelStyles }}>
@@ -465,14 +517,21 @@ export default function PartyDetail({ party }: Props) {
           </Grid>
           <Grid item xs={4}>
             <Tooltip
-              title={
-                party.registeredOffice.length >= showTooltipAfter ? party.registeredOffice : ''
-              }
+              title={getTooltipText(
+                isForeignInsurence,
+                formattedForeignAddress,
+                party.registeredOffice,
+                showTooltipAfter
+              )}
               placement="top"
               arrow={true}
             >
               <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {party.registeredOffice + ' - ' + party.zipCode}
+                {isForeignInsurence
+                  ? formattedForeignAddress
+                  : party.zipCode
+                  ? `${party.registeredOffice} - ${party.zipCode}`
+                  : party.registeredOffice}
               </Typography>
             </Tooltip>
           </Grid>

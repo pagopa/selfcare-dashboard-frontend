@@ -1,10 +1,9 @@
 import { Box, Grid, useTheme } from '@mui/material';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
 import { Route, Switch, matchPath, useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
@@ -139,15 +138,6 @@ const Dashboard = () => {
     strict: false,
   });
 
-  useEffect(() => {
-    if (party) {
-      const redirectPath = party.delegation
-        ? DASHBOARD_ROUTES.TECHPARTNER.path
-        : DASHBOARD_ROUTES.OVERVIEW.path;
-      history.push(resolvePathVariables(redirectPath, { partyId: party?.partyId ?? '' }));
-    }
-  }, [party?.partyId]);
-
   return party && products ? (
     <Grid
       container
@@ -245,7 +235,6 @@ const Dashboard = () => {
               canSeeSection={canSeeSection}
               party={party}
               ptProducts={activeProducts}
-              isDelegateSectionVisible={isDelegateSectionVisible}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}

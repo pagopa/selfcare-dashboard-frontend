@@ -9,7 +9,7 @@ import { ENV } from '../utils/env';
 import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
 import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
 import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
-import { DelegationResource } from './generated/b4f-dashboard/DelegationResource';
+import { DelegationWithPagination } from './generated/b4f-dashboard/DelegationWithPagination';
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import {
@@ -50,12 +50,12 @@ const onRedirectToLogin = () =>
 
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionBaseResource>> => {
-    const result = await apiClient.getInstitutionsUsingGET({});
+    const result = await apiClient.v2RetrieveUserInstitutions({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
   getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
-    const result = await apiClient.getInstitutionUsingGET({
+    const result = await apiClient.v2GetInstitution({
       institutionId,
     });
     return extractResponse(result, 200, onRedirectToLogin);
@@ -84,7 +84,7 @@ export const DashboardApi = {
     productId: string,
     environment?: string
   ): Promise<string> => {
-    const result = await apiClient.retrieveProductBackofficeUsingGET({
+    const result = await apiClient.v2RetrieveProductBackofficeUsingGET({
       productId,
       institutionId,
       environment,
@@ -100,8 +100,8 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getTechnologyPartnersList: async (institutionId: string): Promise<Array<DelegationResource>> => {
-    const result = await apiClient.getDelegationsUsingToUsingGET({ institutionId });
+  getDelegatingInstitutions: async (institutionId: string): Promise<DelegationWithPagination> => {
+    const result = await apiClient.getDelegationsUsingToUsingGET_1({ institutionId });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 

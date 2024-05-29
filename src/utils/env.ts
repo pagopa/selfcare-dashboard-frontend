@@ -5,6 +5,10 @@ export const ENV = {
   ENV: env.get('REACT_APP_ENV').required().asString(),
   PUBLIC_URL: PUBLIC_URL_INNER,
 
+  JSON_URL: {
+    COUNTRIES: env.get('REACT_APP_COUNTRY_DATA').required().asString(),
+  },
+
   ASSISTANCE: {
     ENABLE: env.get('REACT_APP_ENABLE_ASSISTANCE').required().asBool(),
     EMAIL: env.get('REACT_APP_PAGOPA_HELP_EMAIL').required().asString(),
@@ -43,6 +47,10 @@ export const ENV = {
 
   API_TIMEOUT_MS: {
     DASHBOARD: env.get('REACT_APP_API_DASHBOARD_TIMEOUT_MS').required().asInt(),
+  },
+
+  USER: {
+    ENABLE_USER_V2: env.get('REACT_APP_ENABLE_USER_V2').required().asBool(),
   },
 
   URL_INSTITUTION_LOGO: {

@@ -82,7 +82,7 @@ export default {
         messageProduct:
           'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
         devEnviromentMessage:
-          'Ti permettere di conoscere il prodotto e fare prove in tutta sicurezza',
+          'Ti permette di conoscere il prodotto e fare prove in tutta sicurezza',
         uatEnviromentMessage: 'Ti permette di esplorare il prodotto',
         prodEnviromentMessage: 'Prodotto in uso',
         envDevButton: 'Ambiente di Collaudo',
@@ -207,23 +207,29 @@ export default {
       },
     },
     ptPage: {
-      title: 'I tuoi enti',
+      title: 'Enti gestiti',
       subTitle:
         'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
       tableEmptyLabel: 'Non hai ancora nessuna delega dagli enti',
       headerPtTableLabels: {
         party: 'Ente',
+        taxCode: 'Codice fiscale',
         product: 'Prodotto',
+        createdAt: 'Delegato il'
       },
       bodyPtTable: {
         showMoreButtonLabel: 'Vedi tutti',
       },
       filterTechPartner: {
+        searchBy: 'Cerca per',
+        insert: 'Inserisci',
+        name: 'Nome',
+        taxCode: 'Codice fiscale',
         textfieldLabel: 'Cerca per nome',
         productSelectLabel: 'Prodotto',
         buttonLabel: 'Filtra',
         allProductsLabel: 'Tutti  i prodotti',
-        resetFilter: 'Annulla filtri',
+        resetFilter: 'Rimuovi filtri',
         emptyFilterResult:
           'I filtri che hai applicato non hanno dato nessun risultato. <1>Rimuovi filtri</1>',
       },
@@ -238,22 +244,25 @@ export default {
   },
   addDelegationPage: {
     title: 'Aggiungi delega',
-    subTitle:
-      "Qui trovi l'elenco dei Partner e degli Intermediari Tecnologici presenti in Area Riservata.",
+    subTitle: 'Scegli il prodotto e indica chi potrà gestirlo per conto del tuo ente.',
     navigationBar: {
       overview: 'Panoramica',
       delegations: 'Deleghe',
       addDelegation: 'Aggiungi delega',
     },
     addOneDelegation: 'Aggiungi una delega',
-    formSubTitle: 'Scegli il prodotto per il quale vuoi aggiungere una delega',
+    formSubTitle: 'Indica per quale prodotto vuoi delegare la gestione',
     findOutMore: 'Dubbi? Vai al manuale',
     chooseProduct: 'Scegli il prodotto',
     selectTechPartner: {
-      title: 'Seleziona un Partner Tecnologico o Intermediario',
-      subTitle: 'Digita il nome oppure scegli dalla lista',
-      label: 'Seleziona o scegli dalla lista',
-      groupByName: 'Nome',
+      title: 'Scegli chi gestirà il prodotto',
+      subTitle: 'Cerca utilizzando la ragione sociale o il Codice Fiscale dell’ente',
+      radioName: 'Ragione sociale',
+      radioFiscalCode: 'Codice Fiscale ente',
+      labelName: 'Inserisci la ragione sociale',
+      labelFiscalCode: 'Inserisci il Codice Fiscale',
+      groupByName: 'Ragione sociale',
+      groupByFiscalCode: 'Codice Fiscale',
       notFoundTechPartnerOptions: 'Nessun risultato',
       actions: {
         back: 'Indietro',
@@ -268,8 +277,8 @@ export default {
   },
   subHeader: {
     partySelectionSearch: {
-      title: 'I tuoi enti',
-      label: 'I tuoi enti',
+      title: 'Enti gestiti',
+      label: 'Enti gestiti',
     },
     backButton: 'Esci',
   },

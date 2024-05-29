@@ -1,8 +1,8 @@
+import { mockedBrokerResource } from '../api/__mocks__/DashboardApiClient';
 import { DashboardApi } from '../api/DashboardApiClient';
 import { BrokerResource } from '../api/generated/b4f-dashboard/BrokerResource';
 import { DelegationIdResource } from '../api/generated/b4f-dashboard/DelegationIdResource';
 import { InstitutionTypeEnum } from '../api/generated/b4f-dashboard/InstitutionResource';
-import { mockedBrokerResource } from '../api/__mocks__/DashboardApiClient';
 import {
   BaseParty,
   institutionBaseResource2BaseParty,

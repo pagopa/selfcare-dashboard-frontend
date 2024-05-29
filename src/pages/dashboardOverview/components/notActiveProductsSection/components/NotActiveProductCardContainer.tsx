@@ -31,8 +31,16 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
   const goToOnboarding = (product: Product, party: Party): void => {
     const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
+    const queryParam =
+      baseProductWithExistingSubProductNotOnboarded &&
+      existingSubProductNotOnboarded?.id === 'prod-io-premium'
+        ? `?partyId=${party.partyId}`
+        : `?partyExternalId=${party.externalId}`;
 
-    if (baseProductWithExistingSubProductNotOnboarded && existingSubProductNotOnboarded.id === 'prod-io-premium') {
+    if (
+      baseProductWithExistingSubProductNotOnboarded &&
+      existingSubProductNotOnboarded.id === 'prod-io-premium'
+    ) {
       trackEvent('PREMIUM_CTA_JOIN', {
         cta_referral: window.location.href,
         ctaId: t('overview.notActiveProducts.joinButton'),
@@ -42,7 +50,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     window.location.assign(
       `${ENV.URL_FE.ONBOARDING}/${product.id}${
         baseProductWithExistingSubProductNotOnboarded ? `/${existingSubProductNotOnboarded.id}` : ''
-      }?partyExternalId=${party.externalId}${subUnitType}${subUnitCode}`
+      }${queryParam}${subUnitType}${subUnitCode}`
     );
   };
 
