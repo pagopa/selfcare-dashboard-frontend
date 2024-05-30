@@ -192,7 +192,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
       {tableData.length > 0 ? (
         <Grid sx={{ backgroundColor: grey[200] }} mt={3} p={'0 16px 16px 16px'}>
           <Grid sx={{ width: '100%', height: '100%' }}>
-            <Table aria-label="simple table">
+            <Table aria-label="simple table" sx={{ tableLayout: 'fixed', width: '100%' }}>
               <EnhancedTableHeader order={order} orderBy={orderBy} onRequestSort={handleSort} />
               <TableBody sx={{ backgroundColor: 'background.paper' }}>
                 {getSortedData(tableData)
