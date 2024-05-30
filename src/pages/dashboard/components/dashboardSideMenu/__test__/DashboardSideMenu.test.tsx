@@ -53,7 +53,6 @@ test('Test: The techpartner has not been delegated by any body, will not see the
 });
 
 test('Test: The techpartner has not been delegated by any body, he will see the menu section and will be able to access it', async () => {
-  console.log('mockedParties[16]', mockedParties[16]);
   const { history } = renderWithProviders(
     <DashboardSideMenu
       party={mockedParties[16]}
