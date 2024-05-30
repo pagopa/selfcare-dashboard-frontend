@@ -1,4 +1,5 @@
 import { CircularProgress } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { useEffect, useState } from 'react';
@@ -68,22 +69,24 @@ export default function TechnologyPartnerTable({ party }: Props) {
   }, []);
 
   return !loading ? (
-    <>
+    <Box sx={{ backgroundColor: grey[100] }}>
       {party.delegation && delegationsWithoutDuplicates.length > 0 && (
         <DashboardTableContainer delegationsWithoutDuplicates={delegationsWithoutDuplicates} />
       )}
       {delegationsWithoutDuplicates.length === 0 && (
-        <Box
-          width={'100%'}
-          p={2}
-          sx={{ backgroundColor: 'white' }}
-          display="flex"
-          justifyContent={'center'}
-        >
-          {t('overview.ptPage.tableEmptyLabel')}
+        <Box sx={{ backgroundColor: grey[200], p: 2 }}>
+          <Box
+            width={'100%'}
+            p={2}
+            sx={{ backgroundColor: 'white' }}
+            display="flex"
+            justifyContent={'center'}
+          >
+            {t('overview.ptPage.tableEmptyLabel')}
+          </Box>
         </Box>
       )}
-    </>
+    </Box>
   ) : (
     <Box display={'flex'} justifyContent="center" alignItems={'center'} width={'100%'}>
       <CircularProgress />

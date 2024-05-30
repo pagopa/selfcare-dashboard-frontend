@@ -210,7 +210,7 @@ export default {
       title: 'Enti gestiti',
       subTitle:
         'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
-      tableEmptyLabel: 'Non hai ancora nessuna delega dagli enti',
+      tableEmptyLabel: 'Non sei stato ancora delegato da nessun ente.',
       headerPtTableLabels: {
         party: 'Ente',
         taxCode: 'Codice fiscale',
