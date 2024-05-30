@@ -2,7 +2,6 @@ import { ProductsResource } from '../api/generated/b4f-dashboard/ProductsResourc
 import { StatusEnum, SubProductResource } from '../api/generated/b4f-dashboard/SubProductResource';
 
 export type Product = {
-  activationDateTime?: Date;
   description: string;
   id: string;
   logo: string;
@@ -37,7 +36,6 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   id: resource.id ?? '',
   imageUrl: resource.imageUrl ?? '',
   logo: resource.logo ?? '',
-  activationDateTime: resource.activatedAt,
   status: resource.status ?? StatusEnum.INACTIVE,
   title: resource.title ?? '',
   urlBO: resource.urlBO ?? '',
