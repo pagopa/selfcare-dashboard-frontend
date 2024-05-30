@@ -19,7 +19,6 @@ const TableCellWithTooltip: React.FC<{ text: string }> = ({ text }) => {
           variant="body2"
           sx={{
             fontWeight: '600',
-            width: '90%',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             overflow: 'hidden',

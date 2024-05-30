@@ -1,7 +1,8 @@
-import React from 'react';
 import { Grid } from '@mui/material';
 import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
 import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
+import React from 'react';
+import { UserStatus } from '../../model/Party';
 
 type Props = {
   isDisabled?: boolean;
@@ -13,6 +14,7 @@ type Props = {
   action?: React.Dispatch<React.MouseEvent<HTMLDivElement, MouseEvent>>;
   moreThan3Parties?: boolean;
   parentPartyName?: string;
+  status?: UserStatus;
 };
 export default function PartyItemContainer({
   isDisabled,
@@ -24,6 +26,7 @@ export default function PartyItemContainer({
   action,
   moreThan3Parties,
   parentPartyName,
+  status,
 }: Props) {
   return (
     <Grid
@@ -46,7 +49,11 @@ export default function PartyItemContainer({
         selectedItem={moreThan3Parties ? false : selectedItem}
         action={!isDisabled ? action : undefined}
         disabled={isDisabled}
-        endSlot={isDisabled ? <Tag value={chip} color="warning" /> : undefined}
+        endSlot={
+          isDisabled ? (
+            <Tag value={chip} color={status === 'TOBEVALIDATED' ? 'info' : 'warning'} />
+          ) : undefined
+        }
         maxCharactersNumberMultiLine={20}
         parentPartyName={parentPartyName as string}
       />
