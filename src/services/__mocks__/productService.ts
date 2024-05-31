@@ -9,7 +9,6 @@ export const mockedPartyProducts: Array<Product> = [
     description: 'App IO description',
     id: 'prod-io',
     status: StatusEnum.ACTIVE,
-    activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'https://io.italia.it/ ',
     urlBO: 'https://io.selfcare.pagopa.it/path/acs?token=<IdentityToken>',
     imageUrl:
@@ -29,7 +28,7 @@ export const mockedPartyProducts: Array<Product> = [
       },
     ],
     logoBgColor: 'primary.main',
-    delegable: true,
+    delegable: false,
     invoiceable: false,
   },
   {
@@ -39,7 +38,6 @@ export const mockedPartyProducts: Array<Product> = [
     description: 'Piattaforma Notifiche description',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
-    activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -66,7 +64,6 @@ export const mockedPartyProducts: Array<Product> = [
     tag: 'Vecchio Portale',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
-    activationDateTime: new Date(2021, 1, 3),
     urlPublic: 'http://pagopa/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',

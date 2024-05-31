@@ -68,7 +68,7 @@ export const mockedBaseParties: Array<BaseParty> = [
     partyId: '11',
     description: 'Comune di Cernusco sul Naviglio',
     status: 'ACTIVE',
-    userRole: 'ADMIN',
+    userRole: 'LIMITED',
   },
   {
     partyId: '98123',
@@ -803,7 +803,7 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-pagopa',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
+        userRole: 'LIMITED',
         billing: {
           vatNumber: '81001510528',
           recipientCode: 'FLGKROWP',
@@ -834,7 +834,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
-    delegation: false,
+    delegation: true,
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -866,7 +866,6 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-io',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
         billing: {
           vatNumber: '76859430212',
           recipientCode: 'BBGG34D',
@@ -878,7 +877,6 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-interop-coll',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
         billing: {
           vatNumber: '3395867495',
           recipientCode: 'NBG455B',
@@ -890,7 +888,6 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-ciban',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
         billing: {
           vatNumber: '81001510528',
           recipientCode: 'DDFFRT',
@@ -1085,7 +1082,7 @@ export const mockedParties: Array<Party> = [
     ],
     products: [
       {
-        productId: 'prod-io',
+        productId: 'prod-pagopa',
         userRole: 'ADMIN',
         authorized: true,
         billing: {
