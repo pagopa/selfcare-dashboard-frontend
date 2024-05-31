@@ -803,7 +803,7 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-pagopa',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
+        userRole: 'LIMITED',
         billing: {
           vatNumber: '81001510528',
           recipientCode: 'FLGKROWP',
@@ -834,7 +834,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
-    delegation: false,
+    delegation: true,
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -1082,7 +1082,7 @@ export const mockedParties: Array<Party> = [
     ],
     products: [
       {
-        productId: 'prod-io',
+        productId: 'prod-pagopa',
         userRole: 'ADMIN',
         authorized: true,
         billing: {

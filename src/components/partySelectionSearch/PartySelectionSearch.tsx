@@ -186,6 +186,7 @@ export default function PartySelectionSearch({
                               handleListItemClick(event, party)
                             }
                             parentPartyName={party.parentDescription}
+                            status={party.status}
                           />
                         );
                       })}
