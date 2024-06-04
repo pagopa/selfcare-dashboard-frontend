@@ -129,6 +129,10 @@ const Dashboard = () => {
     authorizedDelegableProducts.length > 0 &&
     party?.institutionType !== 'PT';
 
+  const isPtSectionVisible =
+    party?.institutionType === 'PT' ||
+    (party?.delegation && authorizedDelegableProducts.length > 0);
+
   const location = useLocation();
 
   // Check if the current route matches ADD_DELEGATE
@@ -156,6 +160,7 @@ const Dashboard = () => {
               isDelegateSectionVisible={isDelegateSectionVisible}
               canSeeSection={canSeeSection}
               isInvoiceSectionVisible={isInvoiceSectionVisible}
+              isPtSectionVisible={isPtSectionVisible}
             />
           </Box>
         </Grid>
@@ -235,7 +240,6 @@ const Dashboard = () => {
               canSeeSection={canSeeSection}
               party={party}
               ptProducts={activeProducts}
-              isDelegateSectionVisible={isDelegateSectionVisible}
             />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}

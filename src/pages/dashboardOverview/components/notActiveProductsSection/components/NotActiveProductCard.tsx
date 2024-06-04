@@ -54,6 +54,29 @@ export default function NotActiveProductCard({
     WebkitBoxOrient: 'vertical' as const,
   };
 
+  const renderTitleForIoPremium = (title: string) => {
+    if (title && title.toLowerCase() === 'app io premium') {
+      const spliTitle = title.split(' ');
+      const baseName = `${spliTitle[0]} ${spliTitle[1]}`;
+      const subName = `${spliTitle[2]}`;
+      return (
+        <Typography
+          variant="h6"
+          sx={{
+            ...truncateText,
+            WebkitLineClamp: 1,
+            fontWeight: '400',
+          }}
+        >
+          <strong style={{ fontWeight: '600' }}>{baseName}</strong>
+          {` ${subName}`}
+        </Typography>
+      );
+    } else {
+      return title;
+    }
+  };
+
   return (
     <Card sx={{ height: '100%', borderRadius: theme.spacing(2), width: '100%' }}>
       <Grid item xs={12}>
@@ -128,7 +151,7 @@ export default function NotActiveProductCard({
                     WebkitLineClamp: 1,
                   }}
                 >
-                  {title}
+                  {renderTitleForIoPremium(title)}
                 </Typography>
               </Tooltip>
             )}

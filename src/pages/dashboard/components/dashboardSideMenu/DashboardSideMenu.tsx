@@ -23,6 +23,7 @@ type Props = {
   isDelegateSectionVisible?: boolean;
   canSeeSection: boolean;
   isInvoiceSectionVisible: boolean;
+  isPtSectionVisible?: boolean;
 };
 
 export default function DashboardSideMenu({
@@ -30,6 +31,7 @@ export default function DashboardSideMenu({
   isDelegateSectionVisible,
   canSeeSection,
   isInvoiceSectionVisible,
+  isPtSectionVisible,
 }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
@@ -99,7 +101,7 @@ export default function DashboardSideMenu({
             }
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
-            isPtPageVisible={party?.delegation}
+            isPtPageVisible={isPtSectionVisible}
             ptIcon={DnsIcon}
             ptTitle={t('overview.ptPage.title')}
             isPtSelected={isPtSelected}

@@ -14,7 +14,6 @@ test('Test: Insurance company party cannot see the geotaxonomies', () => {
 
 test('Test: Party with taxCode and zipCode and without vatNumber', () => {
   renderWithProviders(<PartyDetail party={mockedParties[22]} />);
-
   expect(screen.queryByText('Partita IVA')).not.toBeInTheDocument();
   expect(screen.queryByText('Codice Fiscale')).not.toBeInTheDocument();
   expect(screen.queryByText('Codice Fiscale / P.IVA')).not.toBeInTheDocument();
