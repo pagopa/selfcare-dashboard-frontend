@@ -51,11 +51,12 @@ export default function AddDelegationPage({ authorizedDelegableProducts, party }
     <Grid
       container
       alignItems={'center'}
+      justifyContent={'center'}
       px={3}
       mt={3}
       sx={{ width: '100%', backgroundColor: 'transparent !important' }}
     >
-      <Grid container item xs={12} lg={8}>
+      <Grid container item xs={12} lg={8} display={'flex'} justifyContent={'center'}>
         <Grid item xs={12}>
           <ProductNavigationBar
             paths={selectedProductByQuery ? pathsWithProduct : pathsWithoutProduct}
@@ -70,12 +71,12 @@ export default function AddDelegationPage({ authorizedDelegableProducts, party }
             variantSubTitle="body1"
             title={t('addDelegationPage.title')}
             subTitle={t('addDelegationPage.subTitle')}
-            mbTitle={1}
+            mbTitle={2}
             mtTitle={2}
             mbSubTitle={5}
           />
         </Grid>
-        <Grid item xs={11} mb={5}>
+        <Grid item xs={12} mb={5}>
           <AddDelegationForm
             authorizedDelegableProducts={authorizedDelegableProducts}
             party={party}
