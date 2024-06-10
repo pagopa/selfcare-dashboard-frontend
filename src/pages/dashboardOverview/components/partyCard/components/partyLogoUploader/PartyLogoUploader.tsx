@@ -1,11 +1,11 @@
-import { Grid, Box } from '@mui/material';
-import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
-import { useState, useEffect } from 'react';
+import { Grid } from '@mui/material';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { uniqueId } from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
+import { uniqueId } from 'lodash';
+import { useEffect, useState } from 'react';
+import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
@@ -141,25 +141,24 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   });
 
   return (
-    <Grid container direction="row">
-      <Box
+    <Grid container>
+      <Grid
+        item
+        xs={12}
         {...getRootProps({ className: 'dropzone' })}
-        display="flex"
-        justifyItems={'center'}
-        alignItems={'center'}
       >
         {canUploadLogo && (
           <>
-            <Box>
+            <Grid>
               <input {...getInputProps()} />
               <PartyLogo loading={loading} urlLogo={urlLogo} />
-            </Box>
-            <Box>
-              <PartyDescription labelLink={labelLink} open={open} loading={loading} />
-            </Box>
+            </Grid>
+            <Grid>
+              <PartyDescription labelLink={labelLink} open={open} loading={loading} urlLogo={urlLogo} />
+            </Grid>
           </>
         )}
-      </Box>
+      </Grid>
     </Grid>
   );
 }

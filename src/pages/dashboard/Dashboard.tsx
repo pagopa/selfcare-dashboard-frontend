@@ -1,4 +1,4 @@
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
@@ -91,6 +91,7 @@ const Dashboard = () => {
   const store = useStore();
   const theme = useTheme();
   const { i18n } = useTranslation();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -130,7 +131,7 @@ const Dashboard = () => {
     party?.institutionType !== 'PT';
 
   const isPtSectionVisible =
-    party?.institutionType === 'PT' ||
+    (party?.institutionType === 'PT' && authorizedDelegableProducts.length > 0) ||
     (party?.delegation && authorizedDelegableProducts.length > 0);
 
   const location = useLocation();
@@ -152,7 +153,7 @@ const Dashboard = () => {
         justifyContent: match && 'center',
       }}
     >
-      {!match && (
+      {!match && isDesktop && (
         <Grid component="nav" item xs={2}>
           <Box>
             <DashboardSideMenu
@@ -169,9 +170,9 @@ const Dashboard = () => {
       <Grid
         item
         component="main"
-        xs={10}
         sx={{ backgroundColor: 'background.default' }}
         display="flex"
+        xs={isDesktop ? 10 : undefined}
         pb={8}
       >
         <Switch>

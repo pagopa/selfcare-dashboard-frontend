@@ -65,12 +65,12 @@ export default function ActiveProductCard({
       sx={{
         borderRadius: theme.spacing(2),
         height: '176px',
-        minWidth: '347px',
+        minWidth: '272px',
       }}
     >
       <CardContent sx={{ display: 'flex', pb: 2 }}>
         {/* Logo */}
-        <Grid container>
+        <Grid container xs={12}>
           <Box display={'flex'} width="100%" alignItems="center">
             <Grid item>
               <ProductAvatar
