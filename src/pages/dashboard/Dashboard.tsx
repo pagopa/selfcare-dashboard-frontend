@@ -1,4 +1,4 @@
-import { Box, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
@@ -91,7 +91,6 @@ const Dashboard = () => {
   const store = useStore();
   const theme = useTheme();
   const { i18n } = useTranslation();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -153,7 +152,7 @@ const Dashboard = () => {
         justifyContent: match && 'center',
       }}
     >
-      {!match && isDesktop && (
+      {!match && (
         <Grid component="nav" item xs={2}>
           <Box>
             <DashboardSideMenu
@@ -172,8 +171,8 @@ const Dashboard = () => {
         component="main"
         sx={{ backgroundColor: 'background.default' }}
         display="flex"
-        xs={isDesktop ? 10 : undefined}
         pb={8}
+        xs={10}
       >
         <Switch>
           <Route path={ENV.ROUTES.ADMIN} exact={false}>
