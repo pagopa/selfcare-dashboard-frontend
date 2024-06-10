@@ -1,39 +1,49 @@
-import { Box, CircularProgress, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 type Props = {
   loading: boolean;
   urlLogo?: string;
+  isLoaded: boolean;
+  setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function PartyLogo({ loading, urlLogo }: Props) {
+export default function PartyLogo({ urlLogo, isLoaded, setIsLoaded }: Props) {
+  const handleImageLoad = () => {
+    setIsLoaded(true);
+  };
+
+  const handleImageError = () => {
+    setIsLoaded(false);
+  };
+
   return (
-    <Box
-      width="60px"
-      height="60px"
+    <Grid
+      width="102px"
+      height="102px"
       mr={2}
       display="flex"
       justifyContent="center"
       alignItems="center"
+      border="1px solid #E3E7EB"
+      borderRadius="8px"
+      style={{ display: isLoaded ? 'flex' : 'none' }}
     >
-      {!loading ? (
-        <Grid>
-          <img src={urlLogo} alt="partyLogo" id="partyLogo"></img>
-        </Grid>
-      ) : (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            backgroundColor: 'background.paper',
-            borderRadius: '50%',
-            width: '100%',
-            height: '100%',
-            alignItems: 'center',
-          }}
-        >
-          <CircularProgress sx={{ color: '#5C6F82' }} size={30} />
-        </Box>
-      )}
-    </Box>
+      <img
+        src={urlLogo}
+        id="partyLogo"
+        alt="logo"
+        onLoad={handleImageLoad}
+        onError={handleImageError}
+        height={'51px'}
+        width={'51px'}
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          objectFit: 'contain',
+          justifyContent: 'center',
+          alignContent: 'center',
+        }}
+      />
+    </Grid>
   );
 }

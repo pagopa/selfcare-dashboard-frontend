@@ -64,8 +64,8 @@ export default function ActiveProductCard({
       raised
       sx={{
         borderRadius: theme.spacing(2),
-        height: '176px',
         minWidth: '272px',
+        maxWidth: '450px',
       }}
     >
       <CardContent sx={{ display: 'flex', pb: 2 }}>

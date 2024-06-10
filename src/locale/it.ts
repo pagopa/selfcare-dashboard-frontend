@@ -111,7 +111,7 @@ export default {
     },
     partyLogo: {
       upload: "Carica il logo dell'ente",
-      modify: 'Modifica',
+      modify: 'Cambia immagine',
       uploadError: {
         title: 'Caricamento non riuscito',
         description:
@@ -122,9 +122,10 @@ export default {
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
       size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
-      info: 'Inserisci solo il logo del tuo ente. <1/> Sarai responsabile dell’inserimento di immagini diverse da quella indicata. ',
+      info: 'Inserisci solo il logo del tuo ente. Sarai responsabile dell’inserimento di immagini diverse da quella indicata.',
       infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
     },
+    changeDetails: 'Gestisci i dati dell’ente',
     partyDetail: {
       institutionType: 'Tipologia',
       category: 'Categoria',
@@ -215,7 +216,7 @@ export default {
         party: 'Ente',
         taxCode: 'Codice fiscale',
         product: 'Prodotto',
-        createdAt: 'Delegato il'
+        createdAt: 'Delegato il',
       },
       bodyPtTable: {
         showMoreButtonLabel: 'Vedi tutti',

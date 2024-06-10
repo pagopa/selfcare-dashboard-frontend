@@ -24,12 +24,11 @@ export default function WelcomeDashboard({ setOpen }: Props) {
           title={title}
           subTitle={subTitle}
           mbTitle={2}
-          mbSubTitle={3}
           variantTitle="h4"
           variantSubTitle="body1"
         />
       </Grid>
-      <Grid item justifyContent={'end'} sm={12} md={3}>
+      <Grid item justifyContent={'end'} sm={12} md={3} textAlign={{ xs: 'left', md: 'end' }}>
         <Box>
           <Button
             variant="outlined"
@@ -38,7 +37,7 @@ export default function WelcomeDashboard({ setOpen }: Props) {
             size="small"
             sx={{ color: 'primary.main', textWrap: 'no-wrap', flexWrap: 'nowrap' }}
           >
-            Gestisci i dati dell’ente
+            {t('overview.changeDetails')}
           </Button>
         </Box>
       </Grid>

@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Drawer, Grid, IconButton, Typography, styled } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import PartyDetail from '../partyCard/components/PartyDetail';
 import { PartyLogoUploader } from '../partyCard/components/partyLogoUploader/PartyLogoUploader';
@@ -29,34 +30,37 @@ const CustomDrawer = styled(Drawer)(() => ({
   },
 }));
 
-export const PartyDetailModal = ({ showInfoBanner, party, open, setOpen, isAdmin }: Props) => (
-  <CustomDrawer open={open} anchor="right" tabIndex={0} onClose={() => setOpen(false)}>
-    <Grid container p={3}>
-      <Grid xs={12} textAlign={'end'}>
-        <IconButton
-          color="default"
-          aria-label="close instituion detail modal"
-          component="span"
-          onClick={(e: any) => console.log(e)}
-          data-testid="close-modal-test"
-        >
-          <CloseIcon />
-        </IconButton>
-      </Grid>
-
-      <Typography variant="h6" sx={{ fontWeight: '700' }}>
-        Gestisci i dati dell’ente
-      </Typography>
-      <Grid item xs={12}>
-        <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
-      </Grid>
-      {showInfoBanner && (
-        <Grid item xs={12} my={2}>
-          <DashboardInfoBanner />
+export const PartyDetailModal = ({ showInfoBanner, party, open, setOpen, isAdmin }: Props) => {
+  const { t } = useTranslation();
+  return (
+    <CustomDrawer open={open} anchor="right" tabIndex={0} onClose={() => setOpen(false)}>
+      <Grid container px={3} pt={2}>
+        <Grid xs={12} textAlign={'end'} mb={2}>
+          <IconButton
+            color="default"
+            aria-label="close instituion detail modal"
+            component="span"
+            onClick={() => setOpen(false)}
+            data-testid="close-modal-test"
+          >
+            <CloseIcon />
+          </IconButton>
         </Grid>
-      )}
 
-      <PartyDetail party={party} />
-    </Grid>
-  </CustomDrawer>
-);
+        <Typography variant="h6" sx={{ fontWeight: '700' }} pb={3}>
+          {t('overview.changeDetails')}
+        </Typography>
+        <Grid item xs={12}>
+          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
+        </Grid>
+        {showInfoBanner && (
+          <Grid item xs={12} my={2}>
+            <DashboardInfoBanner />
+          </Grid>
+        )}
+
+        <PartyDetail party={party} />
+      </Grid>
+    </CustomDrawer>
+  );
+};
