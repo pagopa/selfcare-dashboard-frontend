@@ -2,18 +2,18 @@ import { Box, Typography, Link, useTheme } from '@mui/material';
 import { InfoOutlined } from '@mui/icons-material';
 import { Trans } from 'react-i18next';
 
-export default function DashboardInfoSection() {
+export const DashboardInfoBanner = () => {
   const theme = useTheme();
   return (
     <Box
       display="flex"
       alignItems="center"
-      height="48px"
       sx={{
         borderRadius: theme.shape,
         borderLeft: '4px solid #6BCFFB',
         backgroundColor: 'background.paper',
       }}
+      p={2}
     >
       <InfoOutlined sx={{ width: '20px', height: '20spx', mx: 1, color: '#6BCFFB' }} />
       <Trans i18nKey="overview.partyDetail.contactToModify" shouldUnescape>
@@ -30,4 +30,4 @@ export default function DashboardInfoSection() {
       </Trans>
     </Box>
   );
-}
+};

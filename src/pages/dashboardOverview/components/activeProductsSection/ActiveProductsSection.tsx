@@ -43,7 +43,7 @@ export default function ActiveProductsSection({ party, products }: Props) {
 
   return (
     <React.Fragment>
-      <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h5" />
+      <TitleBox title={t('overview.activeProductsSection.title')} mbTitle={2} variantTitle="h6" />
       <Grid container spacing={3}>
         {party.products
           .filter(

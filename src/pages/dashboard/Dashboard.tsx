@@ -130,7 +130,7 @@ const Dashboard = () => {
     party?.institutionType !== 'PT';
 
   const isPtSectionVisible =
-    party?.institutionType === 'PT' ||
+    (party?.institutionType === 'PT' && authorizedDelegableProducts.length > 0) ||
     (party?.delegation && authorizedDelegableProducts.length > 0);
 
   const location = useLocation();
@@ -169,10 +169,10 @@ const Dashboard = () => {
       <Grid
         item
         component="main"
-        xs={10}
         sx={{ backgroundColor: 'background.default' }}
         display="flex"
         pb={8}
+        xs={10}
       >
         <Switch>
           <Route path={ENV.ROUTES.ADMIN} exact={false}>

@@ -1,11 +1,10 @@
-import { Grid, Box } from '@mui/material';
-import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
-import { useState, useEffect } from 'react';
+import { Grid } from '@mui/material';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { uniqueId } from 'lodash';
+import { useState } from 'react';
+import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
 import { DashboardApi } from '../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../../../../../redux/slices/partiesSlice';
@@ -17,27 +16,17 @@ type Props = {
   canUploadLogo: boolean;
 };
 
-const getLabelLinkText = (t: TFunction<'translation', undefined>) =>
-  document.querySelector('#partyLogo')?.children[0].tagName === 'svg'
-    ? t('overview.partyLogo.upload')
-    : t('overview.partyLogo.modify');
-
 export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
   const urlLogo = useAppSelector(partiesSelectors.selectPartySelectedLogo);
   const dispatch = useAppDispatch();
   const setUrlLogo = (urlLogo?: string) =>
     dispatch(partiesActions.setPartySelectedPartyLogo(urlLogo));
 
-  const [labelLink, setLabelLink] = useState<string>(getLabelLinkText(t));
   const addError = useErrorDispatcher();
-
-  useEffect(() => {
-    if (urlLogo && partyId) {
-      setTimeout(() => setLabelLink(getLabelLinkText(t)), 600);
-    }
-  }, [urlLogo, partyId]);
 
   const maxLength = 400;
   const minLegth = 300;
@@ -58,7 +47,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   const { getRootProps, getInputProps, open } = useDropzone({
     onDropAccepted: (files: Array<File>) => {
       setLoading(true);
-      setLabelLink(files[0].name);
+
       const requestId = uniqueId();
       trackEvent('DASHBOARD_PARTY_CHANGE_LOGO', { party_id: partyId, request_id: requestId });
 
@@ -66,7 +55,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
         .then(() => {
           setUrlLogo(urlLogo);
           setLoading(false);
-          setLabelLink(t('overview.partyLogo.modify'));
+
           trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', {
             party_id: partyId,
             request_id: requestId,
@@ -88,7 +77,6 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
             toNotify: false,
             onRetry: open,
           });
-          setLabelLink(t('overview.partyLogo.upload'));
         });
     },
     onDropRejected: onFileRejected,
@@ -141,25 +129,25 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
   });
 
   return (
-    <Grid container direction="row">
-      <Box
-        {...getRootProps({ className: 'dropzone' })}
-        display="flex"
-        justifyItems={'center'}
-        alignItems={'center'}
-      >
+    <Grid container>
+      <Grid item xs={12} {...getRootProps({ className: 'dropzone' })}>
         {canUploadLogo && (
           <>
-            <Box>
+            <Grid display={'flex'} justifyContent={'center'} alignItems={'center'} xs={12}>
               <input {...getInputProps()} />
-              <PartyLogo loading={loading} urlLogo={urlLogo} />
-            </Box>
-            <Box>
-              <PartyDescription labelLink={labelLink} open={open} loading={loading} />
-            </Box>
+              <PartyLogo
+                loading={loading}
+                urlLogo={urlLogo}
+                isLoaded={isLoaded}
+                setIsLoaded={setIsLoaded}
+              />
+            </Grid>
+            <Grid>
+              <PartyDescription open={open} loading={loading} isLoaded={isLoaded} />
+            </Grid>
           </>
         )}
-      </Box>
+      </Grid>
     </Grid>
   );
 }
