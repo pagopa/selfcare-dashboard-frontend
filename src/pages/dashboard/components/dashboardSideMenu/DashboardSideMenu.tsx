@@ -24,6 +24,7 @@ type Props = {
   canSeeSection: boolean;
   isInvoiceSectionVisible: boolean;
   isPtSectionVisible?: boolean;
+  setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function DashboardSideMenu({
@@ -32,6 +33,7 @@ export default function DashboardSideMenu({
   canSeeSection,
   isInvoiceSectionVisible,
   isPtSectionVisible,
+  setDrawerOpen,
 }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
@@ -93,12 +95,13 @@ export default function DashboardSideMenu({
   return (
     <Grid container item mt={1} width="100%">
       <Grid item xs={12}>
-        <List sx={{ width: '100%' }}>
+        <List>
           <DashboardSidenavItem
             title={t('overview.sideMenu.institutionManagement.overview.title')}
-            handleClick={() =>
-              onExit(() => history.push(party.partyId ? overviewPath : overviewRoute))
-            }
+            handleClick={() => {
+              onExit(() => history.push(party.partyId ? overviewPath : overviewRoute));
+              setDrawerOpen(false);
+            }}
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
             isPtPageVisible={isPtSectionVisible}
@@ -110,9 +113,10 @@ export default function DashboardSideMenu({
           {isDelegateSectionVisible && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.delegations.title')}
-              handleClick={() =>
-                onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute))
-              }
+              handleClick={() => {
+                onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute));
+                setDrawerOpen(false);
+              }}
               isSelected={isDelegateSelected}
               icon={AssignmentIcon}
               isPtPageVisible={false}
@@ -121,7 +125,10 @@ export default function DashboardSideMenu({
           {canSeeSection && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.referents.title')}
-              handleClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
+              handleClick={() => {
+                onExit(() => history.push(party.partyId ? usersPath : usersRoute));
+                setDrawerOpen(false);
+              }}
               isSelected={isUserSelected}
               icon={PeopleAlt}
               isPtPageVisible={false}
@@ -130,9 +137,10 @@ export default function DashboardSideMenu({
           {canSeeSection && !isPt && (
             <DashboardSidenavItem
               title={t('overview.sideMenu.institutionManagement.groups.title')}
-              handleClick={() =>
-                onExit(() => history.push(party.partyId ? groupsPath : groupsRoute))
-              }
+              handleClick={() => {
+                onExit(() => history.push(party.partyId ? groupsPath : groupsRoute));
+                setDrawerOpen(false);
+              }}
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}
               isPtPageVisible={false}
@@ -145,6 +153,7 @@ export default function DashboardSideMenu({
               handleClick={() => {
                 setIsInvoiceSelected(true);
                 onExit(() => getToken());
+                
               }}
               isSelected={isInvoiceSelected}
               icon={EuroSymbolIcon}
