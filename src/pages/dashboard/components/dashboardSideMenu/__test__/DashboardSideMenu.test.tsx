@@ -11,6 +11,7 @@ test('Test: Access to the dashboard side menu voices', async () => {
       isInvoiceSectionVisible={true}
       isDelegateSectionVisible={true}
       isPtSectionVisible={false}
+      setDrawerOpen={jest.fn()}
     />
   );
 
@@ -45,6 +46,7 @@ test('Test: The techpartner has not been delegated by any body, will not see the
       isInvoiceSectionVisible={false}
       isDelegateSectionVisible={false}
       isPtSectionVisible={false}
+      setDrawerOpen={jest.fn()}
     />
   );
   const institutionsListVoice = screen.queryByText('Enti gestiti');
@@ -60,10 +62,9 @@ test('Test: The techpartner has not been delegated by any body, he will see the 
       isInvoiceSectionVisible={false}
       isDelegateSectionVisible={false}
       isPtSectionVisible={true}
+      setDrawerOpen={jest.fn()}
     />
   );
-
-  
 
   const institutionsListVoice = screen.getByText('Enti gestiti');
 

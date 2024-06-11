@@ -6,6 +6,8 @@ import {
   List,
   Divider,
   Box,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
 
@@ -32,6 +34,8 @@ export default function DashboardSidenavItem({
   isPtSelected,
   handleClickPtPage,
 }: Props) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   return (
     <List disablePadding>
       {isPtPageVisible && ptIcon && handleClickPtPage && (
@@ -43,8 +47,8 @@ export default function DashboardSidenavItem({
             }}
             sx={{
               height: '100%',
-              maxWidth: 360,
               backgroundColor: 'background.paper',
+              width: isMobile ? '270px' :'100%'
             }}
           >
             <ListItemIcon>
@@ -63,8 +67,8 @@ export default function DashboardSidenavItem({
         }}
         sx={{
           height: '100%',
-          maxWidth: 360,
           backgroundColor: 'background.paper',
+          width: isMobile ? '270px' :'100%'
         }}
       >
         <ListItemIcon>
