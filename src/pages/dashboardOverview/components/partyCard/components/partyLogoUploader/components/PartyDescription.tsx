@@ -22,8 +22,9 @@ export function PartyDescription({ open, loading, isLoaded }: Props) {
           container
           sx={{
             borderRadius: '10px',
-            border: `2px dashed ${theme.palette.primary.main}`,
+            border: `1px dashed ${theme.palette.primary.main}`,
             backgroundColor: '#ebf4fd',
+            gap: '10px',
           }}
         >
           <Grid item xs={12} py={3} display={'flex'} direction={'column'} alignItems={'center'}>
@@ -63,7 +64,7 @@ export function PartyDescription({ open, loading, isLoaded }: Props) {
         <Typography
           mt={2}
           mb={3}
-          sx={{ fontSize: '12px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
+          sx={{ fontSize: '12px', fontWeight: 'fontWeightRegular', color: 'text.secondary', textAlign: 'center' }}
         >
           {t('overview.partyLogo.info')}
         </Typography>

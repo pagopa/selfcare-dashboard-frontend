@@ -56,7 +56,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
 
   return (
     <>
-      <Grid item xs={12} sm={6} lg={3} xl={3} key={product.id}>
+      <Grid item xs={12} sm={6} lg={4} xl={3} key={product.id}>
         <NotActiveProductCard
           image={
             baseProductWithExistingSubProductNotOnboarded

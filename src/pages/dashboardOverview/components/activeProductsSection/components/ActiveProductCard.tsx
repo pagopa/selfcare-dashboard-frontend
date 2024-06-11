@@ -64,7 +64,8 @@ export default function ActiveProductCard({
       raised
       sx={{
         borderRadius: theme.spacing(2),
-        minWidth: '272px',
+        height: '176px',
+        minWidth: '264px',
         maxWidth: '450px',
       }}
     >

@@ -34,7 +34,7 @@ export const PartyDetailModal = ({ showInfoBanner, party, open, setOpen, isAdmin
   const { t } = useTranslation();
   return (
     <CustomDrawer open={open} anchor="right" tabIndex={0} onClose={() => setOpen(false)}>
-      <Grid container px={3} pt={2}>
+      <Grid container px={3} pt={2} mb={5}>
         <Grid xs={12} textAlign={'end'} mb={2}>
           <IconButton
             color="default"
@@ -42,6 +42,7 @@ export const PartyDetailModal = ({ showInfoBanner, party, open, setOpen, isAdmin
             component="span"
             onClick={() => setOpen(false)}
             data-testid="close-modal-test"
+            sx={{ p: 0 }}
           >
             <CloseIcon />
           </IconButton>
