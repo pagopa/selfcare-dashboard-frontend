@@ -97,10 +97,12 @@ export const DashboardApi = {
   getBillingToken: async (
     institutionId: string,
     environment?: string,
+    lang?: string
   ): Promise<string> => {
     const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,
+      lang
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

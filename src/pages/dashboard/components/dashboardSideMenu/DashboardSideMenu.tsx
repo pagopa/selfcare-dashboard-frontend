@@ -74,7 +74,7 @@ export default function DashboardSideMenu({
   const getToken = async () => {
     setLoading(true);
 
-    getBillingToken(party.partyId)
+    getBillingToken(party.partyId, undefined, lang)
       .then((result) => {
         window.location.assign(result);
       })

@@ -1553,6 +1553,13 @@
             "name": "environment",
             "required": false,
             "type": "string"
+          },
+          {
+            "description": "Selected language",
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -2713,7 +2720,7 @@
       }
     }
   },
-  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
+  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"GeographicTaxonomyResourceArray":{"type": "array", "items": {"$ref": "#/definitions/GeographicTaxonomyResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
     "Attribute": {
       "properties": {
         "code": {

@@ -9,5 +9,6 @@ export const retrieveBackOfficeUrl = (
 
 export const getBillingToken = (
   _partyId: string,
-  _environment?: string
+  _environment?: string,
+  _lang?: string
 ): Promise<string> => new Promise((resolve) => resolve('DUMMYTOKEN'));

@@ -10,10 +10,10 @@ export const retrieveBackOfficeUrl = (
 ): Promise<string> =>
   DashboardApi.getBackOfficeUrl(selectedParty?.partyId ?? '', product?.id ?? '', environment, lang);
 
-export const getBillingToken = (partyId: string, environment?: string): Promise<string> => {
+export const getBillingToken = (partyId: string, environment?: string, lang?: string): Promise<string> => {
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
     return new Promise((resolve) => resolve('DUMMYTOKEN'));
   } else {
-    return DashboardApi.getBillingToken(partyId, environment);
+    return DashboardApi.getBillingToken(partyId, environment, lang);
   }
 };
