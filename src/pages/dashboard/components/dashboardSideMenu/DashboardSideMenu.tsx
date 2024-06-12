@@ -7,6 +7,7 @@ import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import { Grid, List } from '@mui/material';
 import { useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -70,7 +71,7 @@ export default function DashboardSideMenu({
   const isGroupSelected = window.location.pathname.startsWith(groupsPath);
   const isPtSelected = window.location.pathname.startsWith(ptPath);
   const isPt = party.institutionType === 'PT';
-
+  const lang = i18n.language;
   const getToken = async () => {
     setLoading(true);
 
