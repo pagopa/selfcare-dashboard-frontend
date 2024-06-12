@@ -94,7 +94,11 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getBillingToken: async (institutionId: string, environment?: string, lang?: string): Promise<string> => {
+  getBillingToken: async (
+    institutionId: string,
+    environment?: string,
+    lang?: string
+  ): Promise<string> => {
     const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,

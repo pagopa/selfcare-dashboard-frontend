@@ -1,6 +1,5 @@
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
@@ -17,6 +16,7 @@ export const useTokenExchange = () => {
     product: Product,
     selectedParty: Party,
     selectedEnvironment?: string,
+    lang?: string
   ): Promise<void> => {
     const selectedEnvironmentUrl = product.backOfficeEnvironmentConfigurations?.find(
       (p) => p.environment === selectedEnvironment
@@ -34,8 +34,6 @@ export const useTokenExchange = () => {
       });
       return;
     }
-
-    const lang = i18n.language;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedEnvironment

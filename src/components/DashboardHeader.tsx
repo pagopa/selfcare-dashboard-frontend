@@ -83,6 +83,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   // eslint-disable-next-line functional/immutable-data
   actualSelectedParty.current = selectedParty;
 
+  const lang = i18n.language;
+
   return (
     <div tabIndex={0}>
       <Header
@@ -151,7 +153,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
               void invokeProductBo(
                 selectedProduct as Product,
-                actualSelectedParty.current as Party
+                actualSelectedParty.current as Party,
+                undefined,
+                lang
               );
             }
           });
@@ -185,7 +189,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={() =>
-          invokeProductBo(productSelected as Product, actualSelectedParty.current as Party)
+          invokeProductBo(
+            productSelected as Product,
+            actualSelectedParty.current as Party,
+            undefined,
+            lang
+          )
         }
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
@@ -214,7 +223,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           invokeProductBo(
             productSelected as Product,
             actualSelectedParty.current as Party,
-            (e.target as HTMLInputElement).value
+            (e.target as HTMLInputElement).value,
+            lang
           )
         }
         handleClose={() => {
