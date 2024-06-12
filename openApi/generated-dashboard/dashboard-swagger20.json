@@ -1553,13 +1553,6 @@
             "name": "environment",
             "required": false,
             "type": "string"
-          },
-          {
-            "description": "Selected language",
-            "in": "query",
-            "name": "lang",
-            "required": false,
-            "type": "string"
           }
         ],
         "responses": {
