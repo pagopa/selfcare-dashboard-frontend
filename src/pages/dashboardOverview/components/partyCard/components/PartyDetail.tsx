@@ -79,7 +79,7 @@ export default function PartyDetail({ party }: Props) {
 
   const institutionTypeTranscode = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
-  const showTooltipAfter = 49;
+  const showTooltipAfter = 45;
   const lastPartyVatNumber = party.products[party.products.length - 1]?.billing?.vatNumber;
   const isTaxCodeEquals2Piva = party.fiscalCode === lastPartyVatNumber;
 
@@ -243,12 +243,12 @@ export default function PartyDetail({ party }: Props) {
           {/* {structure} */}
           {isAooUo && (
             <>
-              <Grid item xs={2}>
+              <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.structure')}
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12}>
                 <Tooltip
                   title={
                     institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
