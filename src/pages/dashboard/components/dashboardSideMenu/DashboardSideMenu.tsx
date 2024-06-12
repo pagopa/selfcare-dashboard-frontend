@@ -7,6 +7,7 @@ import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import { Grid, List } from '@mui/material';
 import { useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +15,8 @@ import { useHistory } from 'react-router';
 import { Party } from '../../../../model/Party';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { getBillingToken } from '../../../../services/tokenExchangeService';
-import { ENV } from '../../../../utils/env';
 import { LOADING_TASK_TOKEN_EXCHANGE_INVOICE } from '../../../../utils/constants';
+import { ENV } from '../../../../utils/env';
 import DashboardSidenavItem from './DashboardSidenavItem';
 
 type Props = {
@@ -70,11 +71,11 @@ export default function DashboardSideMenu({
   const isGroupSelected = window.location.pathname.startsWith(groupsPath);
   const isPtSelected = window.location.pathname.startsWith(ptPath);
   const isPt = party.institutionType === 'PT';
-
+  const lang = i18n.language;
   const getToken = async () => {
     setLoading(true);
 
-    getBillingToken(party.partyId)
+    getBillingToken(party.partyId, undefined, lang)
       .then((result) => {
         window.location.assign(result);
       })
@@ -153,7 +154,6 @@ export default function DashboardSideMenu({
               handleClick={() => {
                 setIsInvoiceSelected(true);
                 onExit(() => getToken());
-                
               }}
               isSelected={isInvoiceSelected}
               icon={EuroSymbolIcon}

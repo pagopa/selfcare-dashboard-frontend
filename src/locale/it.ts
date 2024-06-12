@@ -43,7 +43,7 @@ export default {
   overview: {
     title: 'Panoramica',
     subTitle:
-      'Gestisci i prodotti PagoPA attivi per questo ente. Se hai i permessi, puoi anche aderire a nuovi prodotti.',
+      'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
       institutionManagement: {
         title: 'Gestione Ente',
@@ -165,7 +165,8 @@ export default {
       sdiCode: 'Codice SDI',
       aooParentCode: 'AOO di riferimento',
       contactToModify:
-        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, <1>vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
+        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, vai al sito dell'Indice della Pubblica Amministrazione (IPA)</0>",
+      goToIPA: 'Vai al sito',
       institutionTypeValue: {
         GSP: 'Gestore di servizi pubblici',
         PA: 'Pubblica Amministrazione',

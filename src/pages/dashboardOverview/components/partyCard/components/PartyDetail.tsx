@@ -79,7 +79,7 @@ export default function PartyDetail({ party }: Props) {
 
   const institutionTypeTranscode = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
-  const showTooltipAfter = 49;
+  const showTooltipAfter = 45;
   const lastPartyVatNumber = party.products[party.products.length - 1]?.billing?.vatNumber;
   const isTaxCodeEquals2Piva = party.fiscalCode === lastPartyVatNumber;
 
@@ -243,12 +243,12 @@ export default function PartyDetail({ party }: Props) {
           {/* {structure} */}
           {isAooUo && (
             <>
-              <Grid item xs={2}>
+              <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.structure')}
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12}>
                 <Tooltip
                   title={
                     institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
@@ -275,58 +275,65 @@ export default function PartyDetail({ party }: Props) {
           )}
           {/* geographicTaxonomy */}
           {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && showGeoTax && (
-            <>
-              {
-                <Grid item xs={12}>
-                  <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
-                    {t('overview.partyDetail.geographicTaxonomies.label')}
-                  </Typography>
-                </Grid>
-              }
-              <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    partyUpdated?.description && partyUpdated.description.length >= showTooltipAfter
-                      ? partyUpdated.description
-                      : ''
+            <Grid item xs={12}>
+              <Grid container>
+                <Grid item xs={8}>
+                  {
+                    <Grid item xs={12}>
+                      <Typography component="span" variant="body2" sx={{ ...labelStyles }}>
+                        {t('overview.partyDetail.geographicTaxonomies.label')}
+                      </Typography>
+                    </Grid>
                   }
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{
-                      ...infoStyles,
-                      maxWidth: '100% !important',
-                      textTransform: 'capitalize',
-                    }}
-                    className="ShowDots"
-                    component="span"
-                  >
-                    {partyUpdated?.geographicTaxonomies
-                      ? partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase()
-                      : '-'}
-                    {partyUpdated?.geographicTaxonomies &&
-                      partyUpdated.geographicTaxonomies.length >= 1 && (
-                        <>
-                          {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
-                          <ButtonNaked
-                            component="button"
-                            onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
-                            endIcon={<EditIcon />}
-                            sx={{ color: 'primary.main', flexDirection: 'row' }}
-                            weight="default"
-                          >
-                            {partyUpdated?.geographicTaxonomies.length !== 1
-                              ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
-                              : undefined}
-                          </ButtonNaked>
-                        </>
-                      )}
-                  </Typography>
-                </Tooltip>
-                <Divider sx={{ mb: 1 }} />
+                  <Grid item xs={12}>
+                    <Tooltip
+                      title={
+                        partyUpdated?.description &&
+                        partyUpdated.description.length >= showTooltipAfter
+                          ? partyUpdated.description
+                          : ''
+                      }
+                      placement="top"
+                      arrow={true}
+                    >
+                      <Typography
+                        sx={{
+                          ...infoStyles,
+                          maxWidth: '100% !important',
+                          textTransform: 'capitalize',
+                        }}
+                        className="ShowDots"
+                        component="span"
+                      >
+                        {partyUpdated?.geographicTaxonomies
+                          ? partyUpdated?.geographicTaxonomies[0]?.desc?.toLocaleLowerCase()
+                          : '-'}
+                      </Typography>
+                    </Tooltip>
+                  </Grid>
+                </Grid>
+                <Grid item xs={3} display="flex" justifyContent="flex-end">
+                  {partyUpdated?.geographicTaxonomies &&
+                    partyUpdated.geographicTaxonomies.length >= 1 && (
+                      <>
+                        {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
+                        <ButtonNaked
+                          component="button"
+                          onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
+                          endIcon={<EditIcon sx={{ height: '18px', width: '18px' }} />}
+                          sx={{ color: 'primary.main', flexDirection: 'row' }}
+                          weight="default"
+                        >
+                          {partyUpdated?.geographicTaxonomies.length !== 1
+                            ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
+                            : undefined}
+                        </ButtonNaked>
+                      </>
+                    )}
+                </Grid>
               </Grid>
-            </>
+              <Divider sx={{ mb: 1 }} />
+            </Grid>
           )}
 
           {/* origin (ipa code) */}
@@ -550,7 +557,6 @@ export default function PartyDetail({ party }: Props) {
                   : party.registeredOffice}
               </Typography>
             </Tooltip>
-            <Divider sx={{ mb: 1 }} />
           </Grid>
           {/* aooParentCode */}
           {party.aooParentCode &&

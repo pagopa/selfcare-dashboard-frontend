@@ -82,20 +82,27 @@ export const DashboardApi = {
   getBackOfficeUrl: async (
     institutionId: string,
     productId: string,
-    environment?: string
+    environment?: string,
+    lang?: string
   ): Promise<string> => {
     const result = await apiClient.v2RetrieveProductBackofficeUsingGET({
       productId,
       institutionId,
       environment,
+      lang,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getBillingToken: async (institutionId: string, environment?: string): Promise<string> => {
+  getBillingToken: async (
+    institutionId: string,
+    environment?: string,
+    lang?: string
+  ): Promise<string> => {
     const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,
+      lang
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

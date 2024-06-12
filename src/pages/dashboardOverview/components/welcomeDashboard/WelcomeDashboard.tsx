@@ -19,7 +19,7 @@ export default function WelcomeDashboard({ setOpen }: Props) {
       flexWrap={{ xs: 'wrap', md: 'nowrap' }}
       justifyContent={'space-between'}
     >
-      <Grid item>
+      <Grid item sm={12} md={8}>
         <TitleBox
           title={title}
           subTitle={subTitle}
@@ -28,14 +28,21 @@ export default function WelcomeDashboard({ setOpen }: Props) {
           variantSubTitle="body1"
         />
       </Grid>
-      <Grid item justifyContent={'end'} sm={12} md={3} textAlign={{ xs: 'left', md: 'end' }}>
+      <Grid item justifyContent={'end'} sm={12} md={4} textAlign={{ xs: 'left', md: 'end' }}>
         <Box>
           <Button
             variant="outlined"
             onClick={() => setOpen(true)}
             startIcon={<EditIcon />}
             size="small"
-            sx={{ color: 'primary.main', textWrap: 'no-wrap', flexWrap: 'nowrap' }}
+            sx={{
+              color: 'primary.main',
+              textWrap: 'no-wrap',
+              flexWrap: 'nowrap',
+              border: '2px solid primary.main',
+              fontWeight: '700px',
+              fontSize: '16px',
+            }}
           >
             {t('overview.changeDetails')}
           </Button>
