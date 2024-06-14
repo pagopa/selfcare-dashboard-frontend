@@ -26,6 +26,7 @@ type Props = {
   isInvoiceSectionVisible: boolean;
   isPtSectionVisible?: boolean;
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  hideLabels?: boolean;
 };
 
 export default function DashboardSideMenu({
@@ -35,6 +36,7 @@ export default function DashboardSideMenu({
   isInvoiceSectionVisible,
   isPtSectionVisible,
   setDrawerOpen,
+  hideLabels,
 }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
@@ -98,7 +100,7 @@ export default function DashboardSideMenu({
       <Grid item xs={12}>
         <List>
           <DashboardSidenavItem
-            title={t('overview.sideMenu.institutionManagement.overview.title')}
+            title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.overview.title')}
             handleClick={() => {
               onExit(() => history.push(party.partyId ? overviewPath : overviewRoute));
               setDrawerOpen(false);
@@ -107,13 +109,16 @@ export default function DashboardSideMenu({
             icon={DashboardCustomize}
             isPtPageVisible={isPtSectionVisible}
             ptIcon={DnsIcon}
-            ptTitle={t('overview.ptPage.title')}
+            ptTitle={hideLabels ? '' : t('overview.ptPage.title')}
             isPtSelected={isPtSelected}
             handleClickPtPage={() => onExit(() => history.push(party.partyId ? ptPath : ptRoute))}
+            hideLabels={hideLabels}
           />
           {isDelegateSectionVisible && (
             <DashboardSidenavItem
-              title={t('overview.sideMenu.institutionManagement.delegations.title')}
+              title={
+                hideLabels ? '' : t('overview.sideMenu.institutionManagement.delegations.title')
+              }
               handleClick={() => {
                 onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute));
                 setDrawerOpen(false);
@@ -121,11 +126,12 @@ export default function DashboardSideMenu({
               isSelected={isDelegateSelected}
               icon={AssignmentIcon}
               isPtPageVisible={false}
+              hideLabels={hideLabels}
             />
           )}
           {canSeeSection && (
             <DashboardSidenavItem
-              title={t('overview.sideMenu.institutionManagement.referents.title')}
+              title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.referents.title')}
               handleClick={() => {
                 onExit(() => history.push(party.partyId ? usersPath : usersRoute));
                 setDrawerOpen(false);
@@ -133,11 +139,12 @@ export default function DashboardSideMenu({
               isSelected={isUserSelected}
               icon={PeopleAlt}
               isPtPageVisible={false}
+              hideLabels={hideLabels}
             />
           )}
           {canSeeSection && !isPt && (
             <DashboardSidenavItem
-              title={t('overview.sideMenu.institutionManagement.groups.title')}
+              title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.groups.title')}
               handleClick={() => {
                 onExit(() => history.push(party.partyId ? groupsPath : groupsRoute));
                 setDrawerOpen(false);
@@ -145,11 +152,12 @@ export default function DashboardSideMenu({
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}
               isPtPageVisible={false}
+              hideLabels={hideLabels}
             />
           )}
           {isInvoiceSectionVisible && (
             <DashboardSidenavItem
-              title={t('overview.sideMenu.institutionManagement.invoices.title')}
+              title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.invoices.title')}
               // TODO add tokenExchange Call on click
               handleClick={() => {
                 setIsInvoiceSelected(true);
@@ -158,6 +166,7 @@ export default function DashboardSideMenu({
               isSelected={isInvoiceSelected}
               icon={EuroSymbolIcon}
               isPtPageVisible={false}
+              hideLabels={hideLabels}
             />
           )}
         </List>
