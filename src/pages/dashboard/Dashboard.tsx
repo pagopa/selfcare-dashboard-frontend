@@ -1,5 +1,5 @@
 import DehazeIcon from '@mui/icons-material/Dehaze';
-import { Box, Button, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Divider, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
@@ -94,6 +94,7 @@ const Dashboard = () => {
   const { i18n, t } = useTranslation();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [hideLabels, setHideLabels] = useState(false);
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -187,13 +188,7 @@ const Dashboard = () => {
             {getButtonText(location.pathname)}
           </Button>
           <Grid>
-            <Drawer
-              open={drawerOpen}
-              PaperProps={{
-                sx: { width: '270px' },
-              }}
-              onClose={() => setDrawerOpen(false)}
-            >
+            <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
               <Grid item xs={2} component="nav" display={'inline-grid'}>
                 <DashboardSideMenu
                   party={party}
@@ -202,13 +197,14 @@ const Dashboard = () => {
                   isInvoiceSectionVisible={isInvoiceSectionVisible}
                   isPtSectionVisible={isPtSectionVisible}
                   setDrawerOpen={setDrawerOpen}
+                  hideLabels={hideLabels}
                 />
               </Grid>
             </Drawer>
           </Grid>
         </>
       ) : (
-        <Grid component="nav" item xs={2}>
+        <Grid component="nav" item xs={hideLabels ? 1 : 2} position={'relative'}>
           <Box>
             <DashboardSideMenu
               party={party}
@@ -217,7 +213,26 @@ const Dashboard = () => {
               isInvoiceSectionVisible={isInvoiceSectionVisible}
               isPtSectionVisible={isPtSectionVisible}
               setDrawerOpen={setDrawerOpen}
+              hideLabels={hideLabels}
             />
+            <Box sx={{ position: 'absolute', bottom: '0', width: '100%' }}>
+              <Divider />
+
+              <Button
+                fullWidth
+                // disableRipple
+                sx={{
+                  height: '59px',
+                  display: 'flex',
+                  justifyContent: hideLabels ? 'center' : 'left',
+                  my: 3,
+                  color: 'text.primary',
+                }}
+                onClick={() => setHideLabels(!hideLabels)}
+              >
+                <DehazeIcon sx={{ marginRight: 2 }} />
+              </Button>
+            </Box>
           </Box>
         </Grid>
       )}
@@ -229,7 +244,7 @@ const Dashboard = () => {
         display="flex"
         pb={8}
         xs={12}
-        lg={10}
+        lg={hideLabels ? 11 : 10}
       >
         <Switch>
           <Route path={ENV.ROUTES.ADMIN} exact={false}>

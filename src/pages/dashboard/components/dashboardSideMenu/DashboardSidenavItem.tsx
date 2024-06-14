@@ -1,15 +1,15 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import {
-  ListItemButton,
-  ListItemText,
-  ListItemIcon,
+  Box,
+  Divider,
   Icon,
   List,
-  Divider,
-  Box,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { SvgIconComponent } from '@mui/icons-material';
 
 type Props = {
   handleClick: () => void;
@@ -21,6 +21,7 @@ type Props = {
   ptIcon?: SvgIconComponent;
   ptTitle?: string;
   isPtSelected?: boolean;
+  hideLabels?: boolean;
 };
 
 export default function DashboardSidenavItem({
@@ -33,6 +34,7 @@ export default function DashboardSidenavItem({
   ptTitle,
   isPtSelected,
   handleClickPtPage,
+  hideLabels,
 }: Props) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
@@ -48,7 +50,9 @@ export default function DashboardSidenavItem({
             sx={{
               height: '100%',
               backgroundColor: 'background.paper',
-              width: isMobile ? '270px' :'100%'
+              width: isMobile ? '270px' : '100%',
+              display: hideLabels ? 'grid' : '',
+              justifyContent: hideLabels ? 'center' : '',
             }}
           >
             <ListItemIcon>
@@ -57,6 +61,7 @@ export default function DashboardSidenavItem({
 
             <ListItemText primary={ptTitle} />
           </ListItemButton>
+
           <Divider />
         </Box>
       )}
@@ -68,7 +73,9 @@ export default function DashboardSidenavItem({
         sx={{
           height: '100%',
           backgroundColor: 'background.paper',
-          width: isMobile ? '270px' :'100%'
+          width: isMobile ? '270px' : '100%',
+          display: hideLabels ? 'grid' : '',
+          justifyContent: hideLabels ? 'center' : '',
         }}
       >
         <ListItemIcon>
