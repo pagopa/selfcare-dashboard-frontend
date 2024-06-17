@@ -43,7 +43,7 @@ export default {
   overview: {
     title: 'Panoramica',
     subTitle:
-      'Gestisci i prodotti PagoPA attivi per questo ente. Se hai i permessi, puoi anche aderire a nuovi prodotti.',
+      'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
       institutionManagement: {
         title: 'Gestione Ente',
@@ -111,7 +111,7 @@ export default {
     },
     partyLogo: {
       upload: "Carica il logo dell'ente",
-      modify: 'Modifica',
+      modify: 'Cambia immagine',
       uploadError: {
         title: 'Caricamento non riuscito',
         description:
@@ -122,9 +122,10 @@ export default {
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
       size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
-      info: 'Inserisci solo il logo del tuo ente. <1/> Sarai responsabile dell’inserimento di immagini diverse da quella indicata. ',
+      info: 'Inserisci solo il logo del tuo ente. Sarai responsabile dell’inserimento di immagini diverse da quella indicata.',
       infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
     },
+    changeDetails: 'Gestisci i dati dell’ente',
     partyDetail: {
       institutionType: 'Tipologia',
       category: 'Categoria',
@@ -164,7 +165,8 @@ export default {
       sdiCode: 'Codice SDI',
       aooParentCode: 'AOO di riferimento',
       contactToModify:
-        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, <1>vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
+        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, vai al sito dell'Indice della Pubblica Amministrazione (IPA)</0>",
+      goToIPA: 'Vai al sito',
       institutionTypeValue: {
         GSP: 'Gestore di servizi pubblici',
         PA: 'Pubblica Amministrazione',
@@ -215,7 +217,7 @@ export default {
         party: 'Ente',
         taxCode: 'Codice fiscale',
         product: 'Prodotto',
-        createdAt: 'Delegato il'
+        createdAt: 'Delegato il',
       },
       bodyPtTable: {
         showMoreButtonLabel: 'Vedi tutti',

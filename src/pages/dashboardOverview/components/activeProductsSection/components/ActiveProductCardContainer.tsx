@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
@@ -43,9 +44,11 @@ export default function ActiveProductCardContainer({
 
   const isOperatorWithNoAuthorizedProduct = party.userRole === 'LIMITED' && isDisabled;
 
+  const lang = i18n.language;
+
   return productOnboarded && !isOperatorWithNoAuthorizedProduct ? (
     <>
-      <Grid item xs={6} lg={4}>
+      <Grid item xs={12} sm={6} md={4} lg={4}>
         <ActiveProductCard
           disableBtn={
             productOnboarded.id?.startsWith('prod-interop') && hasMoreThanOneInteropEnv
@@ -61,7 +64,7 @@ export default function ActiveProductCardContainer({
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
                 productOnboarded.id !== 'prod-interop'
               ? setOpenGenericEnvProductModal(true)
-              : invokeProductBo(productOnboarded, party)
+              : invokeProductBo(productOnboarded, party, undefined, lang)
           }
           party={party}
           product={productOnboarded}
@@ -81,7 +84,7 @@ export default function ActiveProductCardContainer({
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={() => invokeProductBo(productOnboarded, party)}
+        onConfirm={() => invokeProductBo(productOnboarded, party, undefined, lang)}
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
@@ -107,7 +110,7 @@ export default function ActiveProductCardContainer({
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={(e) =>
-          invokeProductBo(productOnboarded, party, (e.target as HTMLInputElement).value)
+          invokeProductBo(productOnboarded, party, (e.target as HTMLInputElement).value, lang)
         }
         handleClose={() => {
           setOpenGenericEnvProductModal(false);
