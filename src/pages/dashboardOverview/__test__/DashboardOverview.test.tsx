@@ -45,18 +45,11 @@ test('should render component DashboardOverview with empty party', async () => {
 
 test('should render component DashboardOverview with populated props and product prod-pagopa and institutionType GSP', async () => {
   const mockedGsp = mockedParties[11];
-  const { history } = renderWithProviders(
-    <DashboardOverview party={mockedGsp} products={mockedPartyProducts} />
-  );
+  renderWithProviders(<DashboardOverview party={mockedGsp} products={mockedPartyProducts} />);
 
-  const delegationBanner = await screen.findByText(
-    'Delega la gestione dei prodotti a un Partner o a un Intermediario'
-  );
-  expect(delegationBanner).toBeInTheDocument();
+  const partyDetailModal = await screen.findByText('Gestisci i dati dell’ente');
 
-  fireEvent.click(await screen.findByText('Vai'));
-
-  expect(history.location.pathname).toBe(`/dashboard/13/delegations`);
+  fireEvent.click(partyDetailModal);
 
   // info section is not visible
   expect(screen.queryByTestId('InfoOutlinedIcon')).not.toBeInTheDocument();
@@ -87,8 +80,11 @@ test('should render component DashboardOverview with no geoTaxonomy', async () =
   );
 
   // geo tax modal is visile bc mockedPAWithNoGeoTax has no geoTaxonomies
-  const geoTaxLocalBtn = await screen.findByText('Locale');
+  const partyDetailModal = await screen.findByText('Gestisci i dati dell’ente');
 
-  fireEvent.click(geoTaxLocalBtn);
+  fireEvent.click(partyDetailModal);
 
+  const geoTaxModal = await screen.findByText('Locale');
+
+  fireEvent.click(geoTaxModal);
 });

@@ -1,16 +1,11 @@
-import { Grid, Box, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { Box, Grid } from '@mui/material';
+import { useState } from 'react';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
-import { ENV } from '../../utils/env';
-import DashboardDelegationsBanner from '../dashboardDelegations/DashboardDelegationsBanner';
-import { OnboardedProduct } from '../../api/generated/b4f-dashboard/OnboardedProduct';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
+import { PartyDetailModal } from './components/partyDetailModal/PartyDetailModal';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
-import PartyCard from './components/partyCard/PartyCard';
-import { PartyLogoUploader } from './components/partyCard/components/partyLogoUploader/PartyLogoUploader';
-import DashboardInfoSection from './components/DashboardInfoSection';
 
 type Props = {
   party: Party;
@@ -18,30 +13,8 @@ type Props = {
 };
 
 const DashboardOverview = ({ party, products }: Props) => {
+  const [open, setOpen] = useState(false);
   const isAdmin = party.userRole === 'ADMIN';
-
-  const manageablePartyProducts: Array<OnboardedProduct> = useMemo(
-    () =>
-      party.products?.filter((us) =>
-        products.some(
-          (p) =>
-            us.productId === p.id &&
-            us.productOnBoardingStatus === 'ACTIVE' &&
-            us.authorized === true &&
-            us.userRole === 'ADMIN' &&
-            p.delegable
-        )
-      ),
-    [party.products]
-  ) ?? [party.products];
-
-  const delegableProduct = manageablePartyProducts.find(
-    (p) => p.productId === 'prod-io' || p.productId === 'prod-pagopa'
-  );
-
-  const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin && delegableProduct;
-
-  const hasPartyDelegableProducts = party.institutionType !== 'PT' && isDelegable;
 
   const showInfoBanner = party.institutionType === 'PA';
 
@@ -50,30 +23,15 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
-      <WelcomeDashboard />
-      <Grid container direction="row" justifyContent={'center'} alignItems="center" mb={2}>
-        <Grid item xs={6} display="flex" alignItems="center">
-          <Typography variant="h6" sx={{ fontWeight: '700' }}>
-            {party.description}
-          </Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
-        </Grid>
-      </Grid>
-      {showInfoBanner && (
-        <Grid item xs={12} my={2}>
-          <DashboardInfoSection />
-        </Grid>
-      )}
-      <Grid item xs={12}>
-        <PartyCard party={party} />
-      </Grid>
-      {hasPartyDelegableProducts && (
-        <Grid item xs={12} mt={2}>
-          <DashboardDelegationsBanner party={party} />
-        </Grid>
-      )}
+      <PartyDetailModal
+        showInfoBanner={showInfoBanner}
+        party={party}
+        open={open}
+        setOpen={setOpen}
+        isAdmin={isAdmin}
+      />
+      <WelcomeDashboard setOpen={setOpen} />
+
       <Grid item xs={12} mb={2} mt={5}>
         <ActiveProductsSection products={products} party={party} />
         {isAdmin &&

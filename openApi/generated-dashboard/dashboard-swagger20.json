@@ -1365,6 +1365,13 @@
             "name": "environment",
             "required": false,
             "type": "string"
+          },
+          {
+            "description": "Selected language",
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -1544,6 +1551,13 @@
             "description": "Back Office environment",
             "in": "query",
             "name": "environment",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Selected language",
+            "in": "query",
+            "name": "lang",
             "required": false,
             "type": "string"
           }
@@ -3704,13 +3718,7 @@
           "type": "boolean"
         },
         "partyRole": {
-          "description": "Party role",
-          "enum": [
-            "DELEGATE",
-            "MANAGER",
-            "OPERATOR",
-            "SUB_DELEGATE"
-          ],
+          "description": "Party role, available values: MANAGER, DELEGATE, SUB_DELEGATE, OPERATOR, ADMIN_EA",
           "type": "string"
         },
         "productRoles": {

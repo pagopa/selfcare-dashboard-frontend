@@ -1,5 +1,6 @@
-import { Box, Grid, useTheme } from '@mui/material';
-import { useMemo } from 'react';
+import DehazeIcon from '@mui/icons-material/Dehaze';
+import { Box, Button, Divider, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
 import { Route, Switch, matchPath, useHistory } from 'react-router';
@@ -90,7 +91,10 @@ const Dashboard = () => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const store = useStore();
   const theme = useTheme();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [hideLabels, setHideLabels] = useState(false);
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -130,7 +134,7 @@ const Dashboard = () => {
     party?.institutionType !== 'PT';
 
   const isPtSectionVisible =
-    party?.institutionType === 'PT' ||
+    (party?.institutionType === 'PT' && authorizedDelegableProducts.length > 0) ||
     (party?.delegation && authorizedDelegableProducts.length > 0);
 
   const location = useLocation();
@@ -142,6 +146,22 @@ const Dashboard = () => {
     strict: false,
   });
 
+  const getButtonText = (pathname: string): string => {
+    if (pathname.includes('users')) {
+      return t('overview.sideMenu.institutionManagement.referents.title');
+    }
+    if (pathname.includes('groups')) {
+      return t('overview.sideMenu.institutionManagement.groups.title');
+    }
+    if (pathname.includes('delegations')) {
+      return t('overview.sideMenu.institutionManagement.delegations.title');
+    }
+    if (pathname.includes('delegate')) {
+      return t('overview.ptPage.title');
+    }
+    return t('overview.sideMenu.institutionManagement.overview.title');
+  };
+
   return party && products ? (
     <Grid
       container
@@ -149,11 +169,42 @@ const Dashboard = () => {
       xs={12}
       sx={{
         backgroundColor: match ? 'background.default' : 'background.paper',
-        justifyContent: match && 'center',
       }}
     >
-      {!match && (
-        <Grid component="nav" item xs={2}>
+      {isMobile ? (
+        <>
+          <Button
+            fullWidth
+            disableRipple
+            sx={{
+              height: '59px',
+              justifyContent: 'left',
+              boxShadow:
+                'rgba(0, 43, 85, 0.1) 0px 2px 4px -1px, rgba(0, 43, 85, 0.05) 0px 4px 5px !important',
+            }}
+            onClick={() => setDrawerOpen(true)}
+          >
+            <DehazeIcon sx={{ marginRight: 2 }} />
+            {getButtonText(location.pathname)}
+          </Button>
+          <Grid>
+            <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+              <Grid item xs={2} component="nav" display={'inline-grid'}>
+                <DashboardSideMenu
+                  party={party}
+                  isDelegateSectionVisible={isDelegateSectionVisible}
+                  canSeeSection={canSeeSection}
+                  isInvoiceSectionVisible={isInvoiceSectionVisible}
+                  isPtSectionVisible={isPtSectionVisible}
+                  setDrawerOpen={setDrawerOpen}
+                  hideLabels={hideLabels}
+                />
+              </Grid>
+            </Drawer>
+          </Grid>
+        </>
+      ) : (
+        <Grid component="nav" item xs={hideLabels ? 1 : 2} position={'relative'}>
           <Box>
             <DashboardSideMenu
               party={party}
@@ -161,7 +212,27 @@ const Dashboard = () => {
               canSeeSection={canSeeSection}
               isInvoiceSectionVisible={isInvoiceSectionVisible}
               isPtSectionVisible={isPtSectionVisible}
+              setDrawerOpen={setDrawerOpen}
+              hideLabels={hideLabels}
             />
+            <Box sx={{ position: 'absolute', bottom: '0', width: '100%' }}>
+              <Divider />
+
+              <Button
+                fullWidth
+                // disableRipple
+                sx={{
+                  height: '59px',
+                  display: 'flex',
+                  justifyContent: hideLabels ? 'center' : 'left',
+                  my: 3,
+                  color: 'text.primary',
+                }}
+                onClick={() => setHideLabels(!hideLabels)}
+              >
+                <DehazeIcon sx={{ marginRight: 2 }} />
+              </Button>
+            </Box>
           </Box>
         </Grid>
       )}
@@ -169,10 +240,11 @@ const Dashboard = () => {
       <Grid
         item
         component="main"
-        xs={10}
         sx={{ backgroundColor: 'background.default' }}
         display="flex"
         pb={8}
+        xs={12}
+        lg={hideLabels ? 11 : 10}
       >
         <Switch>
           <Route path={ENV.ROUTES.ADMIN} exact={false}>
