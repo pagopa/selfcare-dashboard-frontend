@@ -89,13 +89,12 @@ export default function ActiveProductCard({
                     key={p.id}
                     label={t('overview.activeProducts.premiumProduct')}
                     size="small"
+                    color="warning"
                     sx={{
                       display: 'flex',
                       mb: 1,
                       borderRadius: theme.shape,
                       width: '80px',
-                      backgroundColor: 'warning.main',
-                      color: 'colorTextPrimary',
                     }}
                   />
                 ))}
