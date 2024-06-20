@@ -13,6 +13,8 @@ export const DashboardInfoBanner = () => {
       sx={{
         borderRadius: theme.shape,
         borderLeft: '4px solid #6BCFFB',
+        boxShadow:
+          '0px 1px 10px 0px #002B551A, 0px 4px 5px 0px #002B550D, 0px 2px 4px -1px #002B551A',
         backgroundColor: 'background.paper',
       }}
       p={2}
