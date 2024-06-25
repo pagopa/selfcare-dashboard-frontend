@@ -15,7 +15,7 @@ import { mockedBaseParties, mockedParties } from './__mocks__/partyService';
 export const fetchParties = (): Promise<Array<BaseParty>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
-    return new Promise((resolve) => resolve([]));
+    return new Promise((resolve) => resolve(mockedBaseParties));
   } else {
     return DashboardApi.getInstitutions().then((institutionResources) =>
       institutionResources ? institutionResources.map(institutionBaseResource2BaseParty) : []
