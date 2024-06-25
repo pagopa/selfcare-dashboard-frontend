@@ -43,8 +43,8 @@ export default function NoParty() {
             <Box>
               <Typography variant="body1">
                 <Trans i18nKey="noParty.description">
-                  L’Area Riservata è dedicata agli enti che utilizzano i prodotti <br /> di PagoPA.
-                  Se lavori per un ente, chiedi a un <br /> Amministratore di aggiungerti nella
+                  L’Area Riservata è dedicata agli enti che utilizzano i prodotti <br /> PagoPA.
+                  Se lavori per un ente, chiedi a un Amministratore <br /> di aggiungerti nella
                   sezione Utenti.
                 </Trans>
               </Typography>
@@ -58,13 +58,10 @@ export default function NoParty() {
             startIcon={<MenuBookIcon />}
             sx={{ fontWeight: 'fontWeightBold', fontSize: 'fontSize' }}
             onClick={() => {
-              const docLink = isTechPartner
-                ? 'https://docs.pagopa.it/manuale-di-area-riservata-per-partner-tecnologici/area-riservata/ruoli'
-                : 'https://docs.pagopa.it/area-riservata/area-riservata/ruoli';
-              window.open(docLink);
+              window.open('https://docs.pagopa.it/area-riservata/area-riservata/ruoli');
             }}
           >
-            {t('moreInformationOnRoles')}
+            {t('noParty.moreInformationOnRoles')}
           </ButtonNaked>
         </Grid>
 
@@ -82,13 +79,13 @@ export default function NoParty() {
         </Grid>
 
         <Grid mt={5}>
-          <Typography variant="body1">
+          <Typography variant="body1" color={'#5C6F82'}>
             <Trans i18nKey={'noParty.addAdmin'}>
               Gli attuali Amministratori non sono più disponibili e hai l’esigenza <br /> di gestire
               i prodotti?
               <Link
                 color="#0073E6"
-                href={`${ENV.URL_FE.ONBOARDING}`}
+                href={`${ENV.URL_FE.ONBOARDING}/user`}
                 underline="none"
                 sx={{ fontSize: '18px', cursor: 'pointer' }}
               >
