@@ -1,26 +1,25 @@
-import { useMemo } from 'react';
+import { ArrowForward } from '@mui/icons-material';
 import {
-  Typography,
   Box,
-  CardContent,
-  Link,
-  Chip,
   Card,
-  useTheme,
-  Tooltip,
+  CardContent,
   Grid,
   IconButton,
+  Link,
+  Tooltip,
+  Typography,
+  useTheme,
 } from '@mui/material';
-import { ArrowForward } from '@mui/icons-material';
-import { Trans, useTranslation } from 'react-i18next';
-import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
-import { useHistory } from 'react-router';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { ProductAvatar } from '@pagopa/mui-italia';
-import { ENV } from '../../../../../utils/env';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
+import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
+import { ENV } from '../../../../../utils/env';
 
 type Props = {
   cardTitle: string;
@@ -58,6 +57,8 @@ export default function ActiveProductCard({
     [party]
   );
 
+  const isSubProductActive = activeSubProducts && activeSubProducts.length > 0;
+
   return (
     <Card
       id={product.id}
@@ -75,8 +76,16 @@ export default function ActiveProductCard({
           <Box display={'flex'} width="100%" alignItems="center">
             <Grid item>
               <ProductAvatar
-                logoUrl={urlLogo}
-                logoBgColor={product.logoBgColor}
+                logoUrl={
+                  product.id === 'prod-io' && isSubProductActive
+                    ? activeSubProducts[0].logo ?? ''
+                    : urlLogo
+                }
+                logoBgColor={
+                  product.id === 'prod-io' && isSubProductActive
+                    ? activeSubProducts[0].logoBgColor ?? ''
+                    : product.logoBgColor
+                }
                 logoAltText={`${product.title} logo`}
                 size="default"
               />
@@ -84,22 +93,7 @@ export default function ActiveProductCard({
             {/* Title */}
             {cardTitle && (
               <Grid item width={'100%'} ml={2}>
-                {activeSubProducts.map((p) => (
-                  <Chip
-                    key={p.id}
-                    label={t('overview.activeProducts.premiumProduct')}
-                    size="small"
-                    sx={{
-                      display: 'flex',
-                      mb: 1,
-                      borderRadius: theme.shape,
-                      width: '80px',
-                      backgroundColor: 'warning.main',
-                      color: 'colorTextPrimary',
-                    }}
-                  />
-                ))}
-                <Box>
+                <Box display="flex">
                   <Tooltip
                     title={cardTitle.length > 27 ? cardTitle : ''}
                     placement="top"
@@ -107,8 +101,7 @@ export default function ActiveProductCard({
                   >
                     <Typography
                       sx={{
-                        fontSize: '22px',
-                        fontWeight: 'medium',
+                        fontSize: '24px',
                         height: '100%',
                         width: '100%',
                         overflow: 'hidden',
@@ -118,7 +111,29 @@ export default function ActiveProductCard({
                         WebkitLineClamp: 2,
                       }}
                     >
-                      {cardTitle}
+                      <Typography
+                        component="span"
+                        sx={{
+                          fontSize: '24px',
+                          fontWeight: 'medium',
+                          display: 'inline',
+                          pr: 1,
+                        }}
+                      >
+                        {cardTitle}
+                      </Typography>
+                      {isSubProductActive && (
+                        <Typography
+                          component="span"
+                          sx={{
+                            fontSize: '24px',
+                            fontWeight: 'normal',
+                            display: 'inline',
+                          }}
+                        >
+                          {t('overview.activeProducts.premiumProduct')}
+                        </Typography>
+                      )}
                     </Typography>
                   </Tooltip>
                 </Box>

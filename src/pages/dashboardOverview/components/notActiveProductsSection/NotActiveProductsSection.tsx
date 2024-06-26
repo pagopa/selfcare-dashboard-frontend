@@ -33,7 +33,7 @@ export default function NotActiveProductsSection({ party, products }: Props) {
         title={t('overview.notActiveProductsSection.title')}
         mbTitle={2}
         mtTitle={5}
-        variantTitle="h6"
+        variantTitle="h5"
         titleFontSize="22px"
       />
       <Grid container spacing={3}>

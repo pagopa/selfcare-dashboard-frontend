@@ -1,5 +1,5 @@
 import DehazeIcon from '@mui/icons-material/Dehaze';
-import { Box, Button, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Divider, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
@@ -94,6 +94,7 @@ const Dashboard = () => {
   const { i18n, t } = useTranslation();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [hideLabels, setHideLabels] = useState(false);
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -168,59 +169,75 @@ const Dashboard = () => {
       xs={12}
       sx={{
         backgroundColor: match ? 'background.default' : 'background.paper',
+        justifyContent: match && 'center',
       }}
     >
-      {isMobile ? (
-        <>
-          <Button
-            fullWidth
-            disableRipple
-            sx={{
-              height: '59px',
-              justifyContent: 'left',
-              boxShadow:
-                'rgba(0, 43, 85, 0.1) 0px 2px 4px -1px, rgba(0, 43, 85, 0.05) 0px 4px 5px !important',
-            }}
-            onClick={() => setDrawerOpen(true)}
-          >
-            <DehazeIcon sx={{ marginRight: 2 }} />
-            {getButtonText(location.pathname)}
-          </Button>
-          <Grid>
-            <Drawer
-              open={drawerOpen}
-              PaperProps={{
-                sx: { width: '270px' },
+      {!match &&
+        (isMobile ? (
+          <>
+            <Button
+              fullWidth
+              disableRipple
+              sx={{
+                height: '59px',
+                justifyContent: 'left',
+                boxShadow:
+                  'rgba(0, 43, 85, 0.1) 0px 2px 4px -1px, rgba(0, 43, 85, 0.05) 0px 4px 5px !important',
               }}
-              onClose={() => setDrawerOpen(false)}
+              onClick={() => setDrawerOpen(true)}
             >
-              <Grid item xs={2} component="nav" display={'inline-grid'}>
-                <DashboardSideMenu
-                  party={party}
-                  isDelegateSectionVisible={isDelegateSectionVisible}
-                  canSeeSection={canSeeSection}
-                  isInvoiceSectionVisible={isInvoiceSectionVisible}
-                  isPtSectionVisible={isPtSectionVisible}
-                  setDrawerOpen={setDrawerOpen}
-                />
-              </Grid>
-            </Drawer>
+              <DehazeIcon sx={{ marginRight: 2 }} />
+              {getButtonText(location.pathname)}
+            </Button>
+            <Grid>
+              <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+                <Grid item xs={2} component="nav" display={'inline-grid'}>
+                  <DashboardSideMenu
+                    party={party}
+                    isDelegateSectionVisible={isDelegateSectionVisible}
+                    canSeeSection={canSeeSection}
+                    isInvoiceSectionVisible={isInvoiceSectionVisible}
+                    isPtSectionVisible={isPtSectionVisible}
+                    setDrawerOpen={setDrawerOpen}
+                    hideLabels={hideLabels}
+                  />
+                </Grid>
+              </Drawer>
+            </Grid>
+          </>
+        ) : (
+          <Grid component="nav" item xs={hideLabels ? 1 : 2} position={'relative'}>
+            <Box>
+              <DashboardSideMenu
+                party={party}
+                isDelegateSectionVisible={isDelegateSectionVisible}
+                canSeeSection={canSeeSection}
+                isInvoiceSectionVisible={isInvoiceSectionVisible}
+                isPtSectionVisible={isPtSectionVisible}
+                setDrawerOpen={setDrawerOpen}
+                hideLabels={hideLabels}
+              />
+              <Box sx={{ position: 'absolute', bottom: '0', width: '100%' }}>
+                <Divider />
+
+                <Button
+                  fullWidth
+                  // disableRipple
+                  sx={{
+                    height: '59px',
+                    display: 'flex',
+                    justifyContent: hideLabels ? 'center' : 'left',
+                    my: 3,
+                    color: 'text.primary',
+                  }}
+                  onClick={() => setHideLabels(!hideLabels)}
+                >
+                  <DehazeIcon sx={{ marginRight: 2 }} />
+                </Button>
+              </Box>
+            </Box>
           </Grid>
-        </>
-      ) : (
-        <Grid component="nav" item xs={2}>
-          <Box>
-            <DashboardSideMenu
-              party={party}
-              isDelegateSectionVisible={isDelegateSectionVisible}
-              canSeeSection={canSeeSection}
-              isInvoiceSectionVisible={isInvoiceSectionVisible}
-              isPtSectionVisible={isPtSectionVisible}
-              setDrawerOpen={setDrawerOpen}
-            />
-          </Box>
-        </Grid>
-      )}
+        ))}
 
       <Grid
         item
@@ -229,7 +246,7 @@ const Dashboard = () => {
         display="flex"
         pb={8}
         xs={12}
-        lg={10}
+        lg={hideLabels ? 11 : 10}
       >
         <Switch>
           <Route path={ENV.ROUTES.ADMIN} exact={false}>
