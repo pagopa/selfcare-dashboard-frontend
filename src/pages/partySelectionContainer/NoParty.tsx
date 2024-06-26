@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
-import { Grid, Button, Typography, Box } from '@mui/material';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import { Box, Button, Grid, Link, Typography } from '@mui/material';
+import { ButtonNaked, IllusError } from '@pagopa/mui-italia';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { IllusError } from '@pagopa/mui-italia';
-import { useTranslation, Trans } from 'react-i18next';
+import React, { useEffect } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { ENV } from '../../utils/env';
 
 export default function NoParty() {
@@ -42,13 +43,26 @@ export default function NoParty() {
             <Box>
               <Typography variant="body1">
                 <Trans i18nKey="noParty.description">
-                  L’Area Riservata è dedicata agli enti che utilizzano i prodotti <br /> di PagoPA.
-                  Se lavori per un ente, chiedi a un <br /> Amministratore di aggiungerti nella
+                  L’Area Riservata è dedicata agli enti che utilizzano i prodotti <br /> PagoPA.
+                  Se lavori per un ente, chiedi a un Amministratore <br /> di aggiungerti nella
                   sezione Utenti.
                 </Trans>
               </Typography>
             </Box>
           </Grid>
+        </Grid>
+        <Grid>
+          <ButtonNaked
+            component="button"
+            color="primary"
+            startIcon={<MenuBookIcon />}
+            sx={{ fontWeight: 'fontWeightBold', fontSize: 'fontSize' }}
+            onClick={() => {
+              window.open('https://docs.pagopa.it/area-riservata/area-riservata/ruoli');
+            }}
+          >
+            {t('noParty.moreInformationOnRoles')}
+          </ButtonNaked>
         </Grid>
 
         <Grid item xs={2} mt={3}>
@@ -62,6 +76,23 @@ export default function NoParty() {
           >
             {t('noParty.backHome')}
           </Button>
+        </Grid>
+
+        <Grid mt={5}>
+          <Typography variant="body1" color={'#5C6F82'}>
+            <Trans i18nKey={'noParty.addAdmin'}>
+              Gli attuali Amministratori non sono più disponibili e hai l’esigenza <br /> di gestire
+              i prodotti?
+              <Link
+                color="#0073E6"
+                href={`${ENV.URL_FE.ONBOARDING}/user`}
+                underline="none"
+                sx={{ fontSize: '18px', cursor: 'pointer' }}
+              >
+                Aggiungi un nuovo Amministratore
+              </Link>
+            </Trans>
+          </Typography>
         </Grid>
       </Grid>
     </React.Fragment>
