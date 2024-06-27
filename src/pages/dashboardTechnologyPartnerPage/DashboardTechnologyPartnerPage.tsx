@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { IllusError } from '@pagopa/mui-italia';
-import { EndingPage, TitleBox } from '@pagopa/selfcare-common-frontend';
+import { EndingPage, TitleBox } from '@pagopa/selfcare-common-frontend/lib';
 import { useTranslation, Trans } from 'react-i18next';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';

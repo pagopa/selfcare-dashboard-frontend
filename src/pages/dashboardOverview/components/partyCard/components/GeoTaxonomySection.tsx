@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
 import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
-import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
+import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend/lib';
 import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
 import { nationalValue } from '../../../../../model/GeographicTaxonomy';
 import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';

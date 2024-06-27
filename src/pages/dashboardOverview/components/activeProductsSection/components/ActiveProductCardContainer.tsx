@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';

@@ -1,5 +1,5 @@
 import { Redirect, useParams } from 'react-router';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
