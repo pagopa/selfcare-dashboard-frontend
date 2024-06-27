@@ -19,6 +19,7 @@ export default function AddDelegationPage({ authorizedDelegableProducts, party }
   const { t } = useTranslation();
 
   const productIdByQuery = new URLSearchParams(window.location.search).get('productId');
+  
   const selectedProductByQuery = authorizedDelegableProducts.find(
     (dp) => dp.id === productIdByQuery
   );
