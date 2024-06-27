@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import App from '../App';
 import { Provider } from 'react-redux';
 import { createStore } from '../redux/store';
-import { verifyMockExecution as verifyLoginMockExecution } from '../__mocks__/@pagopa/selfcare-common-frontend/lib/decorators/withLogin';
+import { verifyMockExecution as verifyLoginMockExecution } from '../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
 import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators/__mocks__/withParties';
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
 import { createMemoryHistory } from 'history';
