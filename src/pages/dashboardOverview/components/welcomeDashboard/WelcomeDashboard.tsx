@@ -1,6 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Grid } from '@mui/material';
-import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
 import { useTranslation } from 'react-i18next';
 
 type Props = {

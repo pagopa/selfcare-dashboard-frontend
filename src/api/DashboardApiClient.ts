@@ -1,7 +1,7 @@
-import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
-import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
-import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
+import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/lib/utils/api-utils';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { store } from '../redux/store';

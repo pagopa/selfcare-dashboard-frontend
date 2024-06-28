@@ -3,9 +3,9 @@ import {
   LoadingOverlay,
   UnloadEventHandler,
   UserNotifyHandle,
-} from '@pagopa/selfcare-common-frontend';
+} from '@pagopa/selfcare-common-frontend/lib';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
-import withLogin from '@pagopa/selfcare-common-frontend/decorators/withLogin';
+import withLogin from '@pagopa/selfcare-common-frontend/lib/decorators/withLogin';
 import { useStore } from 'react-redux';
 import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';

@@ -11,8 +11,8 @@ import {
   useTheme,
 } from '@mui/material';
 import { ProductAvatar } from '@pagopa/mui-italia';
-import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';

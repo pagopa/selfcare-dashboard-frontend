@@ -1,6 +1,6 @@
 import { PartyAccountItem } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { Box, IconButton } from '@mui/material';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { BaseParty } from '../../model/Party';

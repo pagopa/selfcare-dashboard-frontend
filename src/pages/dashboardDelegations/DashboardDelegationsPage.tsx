@@ -3,11 +3,11 @@ import {
   TitleBox,
   useErrorDispatcher,
   useUnloadEventOnExit,
-} from '@pagopa/selfcare-common-frontend';
+} from '@pagopa/selfcare-common-frontend/lib';
 import { useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { ProductAvatar } from '@pagopa/mui-italia';
 import { Party } from '../../model/Party';
 import { DASHBOARD_ROUTES } from '../../routes';
