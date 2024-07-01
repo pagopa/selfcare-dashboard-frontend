@@ -199,6 +199,7 @@ export default {
     delegationsPage: {
       title: 'Deleghe',
       subTitle: 'Aggiungi o visualizza i delegati per la gestione dei prodotti. ',
+      whatIsDelegation: 'Cos’è una delega?',
       addDelegationsBtn: 'Aggiungi delega',
       delegationsNavigationBar: {
         redirectDescription: 'Panoramica',
