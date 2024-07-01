@@ -24,5 +24,5 @@ import NavigationBar, {
       [selectedProduct, paths]
     );
   
-    return <NavigationBar paths={innerPaths} showBackComponent={showBackComponent} goBack={goBack} backLabel={backLabel} />;
+    return <NavigationBar paths={innerPaths} showBackComponent={showBackComponent} goBack={goBack} backLabel={backLabel} color='text.primary' />;
   }
