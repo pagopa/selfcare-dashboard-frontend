@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Grid, Typography, Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { BaseParty } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';

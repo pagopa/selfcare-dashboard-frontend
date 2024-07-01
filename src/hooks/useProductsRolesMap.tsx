@@ -1,4 +1,4 @@
-import useReduxCachedValue from '@pagopa/selfcare-common-frontend/hooks/useReduxCachedValue';
+import useReduxCachedValue from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
 import { useMemo } from 'react';
 import {
   ProductRolesLists,

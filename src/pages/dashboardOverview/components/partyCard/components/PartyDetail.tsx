@@ -2,8 +2,8 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Divider, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { SessionModal, useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { SessionModal, useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend/lib';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../api/DashboardApiClient';

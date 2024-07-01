@@ -11,7 +11,7 @@ import { mockedBaseParties, mockedParties } from '../services/__mocks__/partySer
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 
-jest.mock('@pagopa/selfcare-common-frontend/decorators/withLogin');
+jest.mock('@pagopa/selfcare-common-frontend/lib/decorators/withLogin');
 jest.mock('../decorators/withParties');
 jest.mock('../decorators/withSelectedParty');
 

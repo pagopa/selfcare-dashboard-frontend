@@ -1,4 +1,4 @@
-import { useReduxCachedValueParametricRetrieverTranscoded } from '@pagopa/selfcare-common-frontend/hooks/useReduxCachedValue';
+import { useReduxCachedValueParametricRetrieverTranscoded } from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
 import { Product } from '../model/Product';
 import {
   productRoles2ProductRolesList,

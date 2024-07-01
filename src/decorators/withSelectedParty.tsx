@@ -1,7 +1,7 @@
 import { uniqueId } from 'lodash';
 import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
 import { useSelectedParty } from '../hooks/useSelectedParty';
 import ROUTES from '../routes';
 
