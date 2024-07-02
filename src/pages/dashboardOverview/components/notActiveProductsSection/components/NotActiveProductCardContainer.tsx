@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
-import { useUserNotify } from '@pagopa/selfcare-common-frontend';
+import { useUserNotify } from '@pagopa/selfcare-common-frontend/lib';
 import { useTranslation } from 'react-i18next';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { ENV } from '../../../../../utils/env';

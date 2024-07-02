@@ -3,12 +3,12 @@ import {
   TitleBox,
   useErrorDispatcher,
   useUnloadEventOnExit,
-} from '@pagopa/selfcare-common-frontend';
+} from '@pagopa/selfcare-common-frontend/lib';
 import { useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { ProductAvatar } from '@pagopa/mui-italia';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { ButtonNaked, ProductAvatar } from '@pagopa/mui-italia';
 import { Party } from '../../model/Party';
 import { DASHBOARD_ROUTES } from '../../routes';
 import { Product } from '../../model/Product';
@@ -75,7 +75,6 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
             container
             alignItems={'center'}
             px={3}
-            mt={3}
             sx={{ width: '100%', backgroundColor: 'transparent !important' }}
           >
             <Grid container item xs={12}>
@@ -86,8 +85,22 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                   title={t('overview.delegationsPage.title')}
                   subTitle={t('overview.delegationsPage.subTitle')}
                   mbTitle={2}
-                  mbSubTitle={6}
+                  mbSubTitle={1}
                 />
+              </Grid>
+              <Grid item xs={12} mb={5}>
+                <ButtonNaked
+                  component="button"
+                  color="primary"
+                  sx={{ fontWeight: 'fontWeightBold', fontSize: '14', textDecoration: 'underline' }}
+                  onClick={() => {
+                    window.open(
+                      'https://docs.pagopa.it/manuale-di-area-riservata-per-partner-tecnologici/aggiunta-di-una-delega-da-parte-dellente#cose-una-delega'
+                    );
+                  }}
+                >
+                  {t('overview.delegationsPage.whatIsDelegation')}
+                </ButtonNaked>
               </Grid>
               <Grid item xs={12}>
                 <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>

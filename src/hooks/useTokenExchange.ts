@@ -1,6 +1,6 @@
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
-import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
+import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { retrieveBackOfficeUrl } from '../services/tokenExchangeService';

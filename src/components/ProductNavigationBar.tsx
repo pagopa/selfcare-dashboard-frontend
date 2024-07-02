@@ -1,6 +1,6 @@
 import NavigationBar, {
     NavigationPath,
-  } from '@pagopa/selfcare-common-frontend/components/NavigationBar';
+  } from '@pagopa/selfcare-common-frontend/lib/components/NavigationBar';
   import { useMemo } from 'react';
   import { Product } from '../model/Product';
   
@@ -24,5 +24,5 @@ import NavigationBar, {
       [selectedProduct, paths]
     );
   
-    return <NavigationBar paths={innerPaths} showBackComponent={showBackComponent} goBack={goBack} backLabel={backLabel} />;
+    return <NavigationBar paths={innerPaths} showBackComponent={showBackComponent} goBack={goBack} backLabel={backLabel} color='text.primary' />;
   }

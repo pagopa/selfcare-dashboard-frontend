@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-identical-functions */
 import React from 'react';
 import { Grid } from '@mui/material';
-import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
 import { useTranslation } from 'react-i18next';
 import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';

@@ -1,10 +1,10 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header } from '@pagopa/selfcare-common-frontend';
-import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
-import { User } from '@pagopa/selfcare-common-frontend/model/User';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { Header } from '@pagopa/selfcare-common-frontend/lib';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';

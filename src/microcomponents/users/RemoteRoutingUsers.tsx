@@ -1,6 +1,6 @@
 import React from 'react';
-import { LoadingOverlayComponent } from '@pagopa/selfcare-common-frontend';
-import { CONFIG } from '@pagopa/selfcare-common-frontend/config/env';
+import { LoadingOverlayComponent } from '@pagopa/selfcare-common-frontend/lib';
+import { CONFIG } from '@pagopa/selfcare-common-frontend/lib/config/env';
 import { DashboardMicrofrontendPageProps } from '../dashboardMicrocomponentsUtils';
 
 const RemoteRoutingUsers = React.lazy(() => import('selfcareUsers/RoutingUsers'));
