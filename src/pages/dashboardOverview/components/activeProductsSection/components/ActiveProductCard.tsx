@@ -5,21 +5,16 @@ import {
   CardContent,
   Grid,
   IconButton,
-  Link,
   Tooltip,
   Typography,
   useTheme,
 } from '@mui/material';
 import { ProductAvatar } from '@pagopa/mui-italia';
-import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useMemo } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { ENV } from '../../../../../utils/env';
 
 type Props = {
   cardTitle: string;
@@ -38,13 +33,8 @@ export default function ActiveProductCard({
   party,
   product,
 }: Props) {
-  const onExit = useUnloadEventOnExit();
-  const history = useHistory();
   const { t } = useTranslation();
-  const usersRoute = ENV.ROUTES.USERS;
-  const usersPath = resolvePathVariables(usersRoute, {
-    partyId: party.partyId ?? '',
-  }).concat(`#${product.id}`);
+
   const theme = useTheme();
 
   const activeSubProducts: Array<SubProductResource> = useMemo(
@@ -146,17 +136,7 @@ export default function ActiveProductCard({
         {disableBtn ? (
           // info label
           <Box display={'flex'} justifyContent={'flex-start'}>
-            <Typography sx={{ fontSize: '14px' }}>
-              <Trans i18nKey="activeProductCard.disableInfo">
-                Per gestire questo prodotto, chiedi a uno dei suoi
-                <Link
-                  onClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
-                  sx={{ fontWeight: 'fontWeightMedium' }}
-                >
-                  Amministratori
-                </Link>
-              </Trans>
-            </Typography>
+            <Typography sx={{ fontSize: '14px' }}>{t('activeProductCard.disableInfo')}</Typography>
           </Box>
         ) : (
           //  Action

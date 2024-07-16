@@ -40,7 +40,7 @@ export default {
     moreInformationOnRoles:'Più informazioni sui ruoli',
   },
   activeProductCard: {
-    disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',
+    disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi Amministratori',
   },
   overview: {
     title: 'Panoramica',
