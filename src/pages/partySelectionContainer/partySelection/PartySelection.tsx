@@ -72,7 +72,7 @@ export default function PartySelection({ parties }: Props) {
           <Grid container item xs={3} md={4} lg={3} sx={{ minWidth: '100%', p: 2 }}>
             <PartySelectionSearch
               iconColor={'#17324D'}
-              label={t('partySelection.label')}
+              label={t('partySelection.searchParty')}
               parties={parties}
               selectedParty={selectedParty}
               onPartySelectionChange={(selectedParty: BaseParty | null) => {

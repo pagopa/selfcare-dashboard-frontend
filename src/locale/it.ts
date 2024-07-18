@@ -14,8 +14,7 @@ export default {
       toBeValidated: 'In attesa',
     },
     continueButton: 'Accedi',
-    backButton: 'Indietro',
-    label: 'Cerca ente',
+    searchParty: 'Cerca ente',
     notFoundResults: 'Nessun risultato',
   },
   noActiveParty: {
@@ -36,11 +35,12 @@ export default {
     description:
       'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> PagoPA.  Se lavori per un ente, chiedi a un Amministratore <3 /> di aggiungerti nella sezione Utenti.',
     backHome: 'Chiudi',
-    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
-    moreInformationOnRoles:'Più informazioni sui ruoli',
+    addAdmin:
+      'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
-    disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi Amministratori',
+    disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',
   },
   overview: {
     title: 'Panoramica',
@@ -48,7 +48,6 @@ export default {
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
       institutionManagement: {
-        title: 'Gestione Ente',
         overview: {
           title: 'Panoramica',
         },
@@ -65,24 +64,16 @@ export default {
           title: 'Fatturazione',
         },
       },
-      product: {
-        overview: 'Panoramica',
-        users: 'Utenti',
-      },
     },
     activeProductsSection: {
       title: 'Prodotti attivi',
     },
     activeProducts: {
-      activationOf: 'Attivo dal ',
-      active: 'Attivo',
       premiumProduct: 'Premium',
       manageButton: 'Gestisci',
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
         message: `Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`,
-        messageProduct:
-          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
         devEnviromentMessage:
           'Ti permette di conoscere il prodotto e fare prove in tutta sicurezza',
         uatEnviromentMessage: 'Ti permette di esplorare il prodotto',
@@ -95,7 +86,6 @@ export default {
         backButton: 'Annulla',
       },
     },
-    lastServiceActive: 'Ultimo servizio attivato: ',
     notActiveProductsSection: {
       title: 'Prodotti disponibili',
     },
@@ -125,7 +115,6 @@ export default {
       },
       size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
       info: 'Inserisci solo il logo del tuo ente. Sarai responsabile dell’inserimento di immagini diverse da quella indicata.',
-      infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
     },
     changeDetails: 'Gestisci i dati dell’ente',
     partyDetail: {
@@ -164,7 +153,6 @@ export default {
       fiscalCode: 'Codice Fiscale',
       pec: 'Indirizzo PEC primario',
       registeredOffice: 'Sede Legale',
-      sdiCode: 'Codice SDI',
       aooParentCode: 'AOO di riferimento',
       contactToModify:
         "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, vai al sito dell'Indice della Pubblica Amministrazione (IPA)</0>",
@@ -181,18 +169,11 @@ export default {
         REC: 'Recapitista',
         CON: 'Consolidatore',
       },
-      delegationBanner: {
-        title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
-        subTitle:
-          'Se ti avvali di figure come Partner o Intermediari tecnologici, puoi delegare la gestione di alcuni prodotti.',
-        goToButton: 'Vai',
-      },
+      vatNumberGroup: 'Partita IVA di gruppo',
       vatNumberGroupValues: {
         yes: 'Sì',
         no: 'No',
       },
-      supportEmail: 'Indirizzo email visibile ai cittadini',
-      vatNumberGroup: 'Partita IVA di gruppo',
       isTaxCodeEquals2Piva: 'Codice Fiscale / P.IVA',
       vatNumber: 'Partita IVA',
     },
@@ -201,10 +182,6 @@ export default {
       subTitle: 'Aggiungi o visualizza i delegati per la gestione dei prodotti. ',
       whatIsDelegation: 'Cos’è una delega?',
       addDelegationsBtn: 'Aggiungi delega',
-      delegationsNavigationBar: {
-        redirectDescription: 'Panoramica',
-        titlePageDescription: 'Deleghe',
-      },
       productsSection: {
         title: 'Prodotti',
         labelDelegates: 'Delegato',
@@ -222,18 +199,12 @@ export default {
         product: 'Prodotto',
         createdAt: 'Delegato il',
       },
-      bodyPtTable: {
-        showMoreButtonLabel: 'Vedi tutti',
-      },
       filterTechPartner: {
         searchBy: 'Cerca per',
         insert: 'Inserisci',
         name: 'Nome',
         taxCode: 'Codice fiscale',
-        textfieldLabel: 'Cerca per nome',
-        productSelectLabel: 'Prodotto',
         buttonLabel: 'Filtra',
-        allProductsLabel: 'Tutti  i prodotti',
         resetFilter: 'Rimuovi filtri',
         emptyFilterResult:
           'I filtri che hai applicato non hanno dato nessun risultato. <1>Rimuovi filtri</1>',
@@ -270,8 +241,6 @@ export default {
       groupByFiscalCode: 'Codice Fiscale',
       notFoundTechPartnerOptions: 'Nessun risultato',
       actions: {
-        back: 'Indietro',
-        continue: 'Continua',
         exit: 'Esci',
         confirm: 'Conferma',
       },
@@ -280,17 +249,8 @@ export default {
     delegationNotCreated: 'Non è stato possibile aggiungere la delega. Riprova.',
     alreadyDelegated: 'Il Partner selezionato risulta già associato all’ente.',
   },
-  subHeader: {
-    partySelectionSearch: {
-      title: 'Enti gestiti',
-      label: 'Enti gestiti',
-    },
-    backButton: 'Esci',
-  },
-  SessionModalInteropProduct: {
+  sessionModalInteropProduct: {
     closeButton: 'Annulla',
     confirmButton: 'Riprova',
-    testLabel: 'Collaudo',
-    uatLabel: 'Attestazione',
   },
 };

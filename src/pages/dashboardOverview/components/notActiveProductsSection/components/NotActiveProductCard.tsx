@@ -184,7 +184,7 @@ export default function NotActiveProductCard({
               alignItems: 'center',
             }}
           >
-            <Trans i18nKey="discoverMore">
+            <Trans i18nKey="overview.discoverMore">
               <Link
                 sx={{
                   fontSize: 'fontSize',
