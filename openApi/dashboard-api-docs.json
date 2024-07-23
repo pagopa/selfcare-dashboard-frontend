@@ -3673,6 +3673,12 @@
           "taxCode" : {
             "type" : "string"
           },
+          "userActions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
           "zipCode" : {
             "type" : "string"
           }
@@ -3858,7 +3864,7 @@
           "role" : {
             "type" : "string",
             "description" : "User's role",
-            "enum" : [ "ADMIN", "LIMITED" ]
+            "enum" : [ "ADMIN", "ADMIN_EA", "LIMITED" ]
           },
           "status" : {
             "type" : "string",
@@ -3902,6 +3908,12 @@
             "type" : "string",
             "enum" : [ "ACTIVE", "DELETED", "PENDING", "REJECTED", "SUSPENDED", "TOBEVALIDATED" ]
           },
+          "userProductActions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
           "userRole" : {
             "type" : "string"
           }
@@ -3923,6 +3935,12 @@
           "productOnBoardingStatus" : {
             "type" : "string",
             "enum" : [ "ACTIVE", "DELETED", "PENDING", "REJECTED", "SUSPENDED", "TOBEVALIDATED" ]
+          },
+          "userProductActions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
           },
           "userRole" : {
             "type" : "string"
@@ -4098,7 +4116,7 @@
           "selcRole" : {
             "type" : "string",
             "description" : "User's role",
-            "enum" : [ "ADMIN", "LIMITED" ]
+            "enum" : [ "ADMIN", "ADMIN_EA", "LIMITED" ]
           },
           "status" : {
             "type" : "string",
@@ -4129,7 +4147,7 @@
           "selcRole" : {
             "type" : "string",
             "description" : "Self Care role",
-            "enum" : [ "ADMIN", "LIMITED" ]
+            "enum" : [ "ADMIN", "ADMIN_EA", "LIMITED" ]
           }
         }
       },
@@ -4175,7 +4193,7 @@
           "role" : {
             "type" : "string",
             "description" : "User's role",
-            "enum" : [ "ADMIN", "LIMITED" ]
+            "enum" : [ "ADMIN", "ADMIN_EA", "LIMITED" ]
           },
           "status" : {
             "type" : "string",

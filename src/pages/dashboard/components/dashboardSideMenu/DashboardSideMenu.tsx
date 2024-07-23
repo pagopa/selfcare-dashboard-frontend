@@ -5,9 +5,14 @@ import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import { Grid, List } from '@mui/material';
-import { useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend/lib';
+import {
+  useErrorDispatcher,
+  useLoading,
+  usePermissions,
+} from '@pagopa/selfcare-common-frontend/lib';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib/hooks/useUnloadEventInterceptor';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,20 +26,18 @@ import DashboardSidenavItem from './DashboardSidenavItem';
 
 type Props = {
   party: Party;
-  isDelegateSectionVisible?: boolean;
-  canSeeSection: boolean;
+  isAddDelegateSectionVisible?: boolean;
   isInvoiceSectionVisible: boolean;
-  isPtSectionVisible?: boolean;
+  isHandleDelegationsVisible?: boolean;
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   hideLabels?: boolean;
 };
 
 export default function DashboardSideMenu({
   party,
-  isDelegateSectionVisible,
-  canSeeSection,
+  isAddDelegateSectionVisible,
   isInvoiceSectionVisible,
-  isPtSectionVisible,
+  isHandleDelegationsVisible,
   setDrawerOpen,
   hideLabels,
 }: Props) {
@@ -50,6 +53,10 @@ export default function DashboardSideMenu({
   const groupsRoute = ENV.ROUTES.GROUPS;
   const delegatesRoute = DASHBOARD_ROUTES.DELEGATIONS.path;
   const ptRoute = DASHBOARD_ROUTES.TECHPARTNER.path;
+  const { getAllProductsWithPermission } = usePermissions();
+
+  const canSeeUsers = getAllProductsWithPermission(Actions.ManageProductUsers).length > 0;
+  const canSeeGroups = getAllProductsWithPermission(Actions.ManageProductGroups).length > 0;
 
   const overviewPath = resolvePathVariables(overviewRoute, {
     partyId: party.partyId ?? '',
@@ -107,14 +114,14 @@ export default function DashboardSideMenu({
             }}
             isSelected={isOVerviewSelected}
             icon={DashboardCustomize}
-            isPtPageVisible={isPtSectionVisible}
+            isHandleDelegationsVisible={isHandleDelegationsVisible}
             ptIcon={DnsIcon}
             ptTitle={hideLabels ? '' : t('overview.ptPage.title')}
             isPtSelected={isPtSelected}
             handleClickPtPage={() => onExit(() => history.push(party.partyId ? ptPath : ptRoute))}
             hideLabels={hideLabels}
           />
-          {isDelegateSectionVisible && (
+          {isAddDelegateSectionVisible && (
             <DashboardSidenavItem
               title={
                 hideLabels ? '' : t('overview.sideMenu.institutionManagement.delegations.title')
@@ -125,11 +132,11 @@ export default function DashboardSideMenu({
               }}
               isSelected={isDelegateSelected}
               icon={AssignmentIcon}
-              isPtPageVisible={false}
+              isHandleDelegationsVisible={false}
               hideLabels={hideLabels}
             />
           )}
-          {canSeeSection && (
+          {canSeeUsers && (
             <DashboardSidenavItem
               title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.referents.title')}
               handleClick={() => {
@@ -138,11 +145,11 @@ export default function DashboardSideMenu({
               }}
               isSelected={isUserSelected}
               icon={PeopleAlt}
-              isPtPageVisible={false}
+              isHandleDelegationsVisible={false}
               hideLabels={hideLabels}
             />
           )}
-          {canSeeSection && !isPt && (
+          {canSeeGroups && !isPt && (
             <DashboardSidenavItem
               title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.groups.title')}
               handleClick={() => {
@@ -151,7 +158,7 @@ export default function DashboardSideMenu({
               }}
               isSelected={isGroupSelected}
               icon={SupervisedUserCircle}
-              isPtPageVisible={false}
+              isHandleDelegationsVisible={false}
               hideLabels={hideLabels}
             />
           )}
@@ -165,7 +172,7 @@ export default function DashboardSideMenu({
               }}
               isSelected={isInvoiceSelected}
               icon={EuroSymbolIcon}
-              isPtPageVisible={false}
+              isHandleDelegationsVisible={false}
               hideLabels={hideLabels}
             />
           )}

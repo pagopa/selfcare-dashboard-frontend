@@ -1,9 +1,9 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header } from '@pagopa/selfcare-common-frontend/lib';
+import { Header, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions, roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -40,6 +40,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
   const [showDocBtn, setShowDocBtn] = useState(false);
+  const { hasPermission } = usePermissions();
 
   useEffect(() => {
     if (i18n.language === 'it') {
@@ -52,7 +53,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
 
   const findAuthorizedProduct = (productId: string) =>
-    party?.products.find((p) => p.productId === productId && p.authorized);
+    party?.products.find(
+      (p) =>
+        p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
+    );
 
   const authorizedProdInterop = findAuthorizedProduct('prod-interop');
   const authorizedProdAtst = findAuthorizedProduct('prod-interop-atst');
@@ -69,7 +73,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const onboardedPartyProducts = party?.products.filter(
     (pp) =>
       pp.productOnBoardingStatus === 'ACTIVE' &&
-      (pp.authorized || (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop'))
+      (hasPermission(pp.productId ?? '', Actions.AccessProductBackoffice) ||
+        (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop'))
   );
 
   const activeProducts: Array<Product> = useMemo(
