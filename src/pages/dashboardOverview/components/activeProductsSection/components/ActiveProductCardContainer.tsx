@@ -1,5 +1,7 @@
 import { Grid } from '@mui/material';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
@@ -35,9 +37,12 @@ export default function ActiveProductCardContainer({
 
   const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
+  const { hasPermission } = usePermissions();
 
   const isDisabled = !!party.products.find(
-    (p) => p.productId === product.productId && p.authorized === false
+    (p) =>
+      p.productId === product.productId &&
+      hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
   );
 
   const productOnboarded = products.find((p) => p.id === product.productId);

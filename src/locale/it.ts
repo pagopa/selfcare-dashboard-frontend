@@ -103,7 +103,7 @@ export default {
       joinButton: 'Aderisci',
     },
     depictOf: 'Rappresentazione di',
-    discoverMore: '<0> SCOPRI DI PIÙ → </0>',
+    discoverMore: '<0>Scopri di più</0>',
     adhesionPopup: {
       title: 'Adesione in corso',
       description:

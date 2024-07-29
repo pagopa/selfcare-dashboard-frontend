@@ -3232,6 +3232,12 @@
         "taxCode": {
           "type": "string"
         },
+        "userActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "zipCode": {
           "type": "string"
         }
@@ -3429,6 +3435,7 @@
           "description": "User's role",
           "enum": [
             "ADMIN",
+            "ADMIN_EA",
             "LIMITED"
           ],
           "type": "string"
@@ -3485,6 +3492,12 @@
           ],
           "type": "string"
         },
+        "userProductActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "userRole": {
           "type": "string"
         }
@@ -3513,6 +3526,12 @@
             "TOBEVALIDATED"
           ],
           "type": "string"
+        },
+        "userProductActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "userRole": {
           "type": "string"
@@ -3698,6 +3717,7 @@
           "description": "User's role",
           "enum": [
             "ADMIN",
+            "ADMIN_EA",
             "LIMITED"
           ],
           "type": "string"
@@ -3732,6 +3752,7 @@
           "description": "Self Care role",
           "enum": [
             "ADMIN",
+            "ADMIN_EA",
             "LIMITED"
           ],
           "type": "string"
@@ -3781,6 +3802,7 @@
           "description": "User's role",
           "enum": [
             "ADMIN",
+            "ADMIN_EA",
             "LIMITED"
           ],
           "type": "string"

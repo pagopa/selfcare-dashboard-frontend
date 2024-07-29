@@ -1,3 +1,4 @@
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { GeographicTaxonomy } from '../../api/generated/b4f-dashboard/GeographicTaxonomy';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { BaseParty, Party } from '../../model/Party';
@@ -210,6 +211,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'FLGKROWP',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice],
       },
       {
         productId: 'prod-pn',
@@ -221,6 +223,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [Actions.ListActiveProducts, Actions.AccessProductBackoffice],
       },
     ],
     delegation: false,
@@ -255,6 +258,15 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ManageProductUsers,
+          Actions.AccessProductBackoffice,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
     delegation: false,
@@ -294,10 +306,17 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pagopa',
-        authorized: true,
+        authorized: false,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
@@ -305,6 +324,15 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ManageProductUsers,
+          Actions.AccessProductBackoffice,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-io-premium',
@@ -316,6 +344,11 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+        ],
       },
       // Use case with prod-interop and prod-interop-coll
       {
@@ -328,6 +361,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers],
       },
       {
         productId: 'prod-interop-coll',
@@ -353,7 +387,6 @@ export const mockedParties: Array<Party> = [
       },
       {
         productId: 'prod-pn',
-        authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
@@ -361,6 +394,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        // userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers],
       },
       {
         productId: 'prod-pn-dev',
@@ -409,6 +443,11 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ViewBilling,
+        ],
       },
     ],
     delegation: false,
@@ -443,6 +482,11 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
