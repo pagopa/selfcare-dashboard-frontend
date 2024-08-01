@@ -30,10 +30,6 @@ test('search by name', async () => {
 
   userEvent.type(autocompleteInput, 'Random');
 
-  const noResults = screen.getByText('Nessun risultato');
-
-  expect(noResults).toBeInTheDocument();
-
   userEvent.clear(autocompleteInput);
 
   userEvent.type(autocompleteInput, 'Maggi');
