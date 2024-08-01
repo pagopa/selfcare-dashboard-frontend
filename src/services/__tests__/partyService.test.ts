@@ -7,7 +7,7 @@ import {
   fetchParties,
   fetchPartyDetails,
   getProductBrokers,
-} from '../partyService'; // Replace with the actual file path
+} from '../partyService'; 
 import { mockedBaseParties, mockedParties } from './../__mocks__/partyService';
 
 // Mock the DashboardApi methods
@@ -40,7 +40,6 @@ describe('yourModuleFile tests', () => {
 
       const result = await fetchParties();
       expect(DashboardApi.getInstitutions).toHaveBeenCalled();
-      // Adjust the expected result based on the actual mapping logic
       expect(result).toEqual(mockedInstitutions.map(institutionBaseResource2BaseParty));
     });
   });
@@ -62,7 +61,6 @@ describe('yourModuleFile tests', () => {
 
       const result = await fetchPartyDetails(partyId);
       expect(DashboardApi.getInstitution).toHaveBeenCalledWith(partyId);
-      // Adjust the expected result based on the actual mapping logic
       expect(result).toEqual(institutionResource2Party(mockedInstitution));
     });
   });
