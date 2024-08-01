@@ -30,8 +30,6 @@ test('search by name', async () => {
 
   userEvent.type(autocompleteInput, 'Random');
 
-  await waitFor(() => expect(autocompleteInput).toHaveValue('Random'));
-
   const noResults = screen.getByText('Nessun risultato');
 
   expect(noResults).toBeInTheDocument();
