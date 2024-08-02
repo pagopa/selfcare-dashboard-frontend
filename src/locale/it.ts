@@ -198,7 +198,7 @@ export default {
     },
     delegationsPage: {
       title: 'Deleghe',
-      subTitle: 'Aggiungi o visualizza i delegati per la gestione dei prodotti. ',
+      subTitle: 'Qui trovi l’elenco degli enti a cui hai affidato la gestione di uno o più prodotti. Puoi anche aggiungere una nuova delega.',
       whatIsDelegation: 'Cos’è una delega?',
       addDelegationsBtn: 'Aggiungi delega',
       delegationsNavigationBar: {
@@ -208,7 +208,7 @@ export default {
       productsSection: {
         title: 'Prodotti',
         labelDelegates: 'Delegato',
-        noDelegatesLabel: 'Nessun delegato per questo prodotto. <1>Aggiungi delega</1>',
+        noDelegatesLabel: 'Ancora nessuna delega,<1> creane una adesso</1>',
       },
     },
     ptPage: {
