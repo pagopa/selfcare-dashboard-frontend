@@ -1,5 +1,5 @@
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
+import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
 import DnsIcon from '@mui/icons-material/Dns';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
@@ -113,7 +113,7 @@ export default function DashboardSideMenu({
               setDrawerOpen(false);
             }}
             isSelected={isOVerviewSelected}
-            icon={DashboardCustomize}
+            icon={ViewSidebarIcon}
             isHandleDelegationsVisible={isHandleDelegationsVisible}
             ptIcon={DnsIcon}
             ptTitle={hideLabels ? '' : t('overview.ptPage.title')}
