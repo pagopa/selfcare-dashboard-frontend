@@ -65,7 +65,7 @@ export default function NotActiveProductCard({
           sx={{
             ...truncateText,
             WebkitLineClamp: 1,
-            fontWeight: 'fontWeightBold',
+            fontWeight: '400',
           }}
         >
           <strong style={{ fontWeight: 'fontWeightBold' }}>{baseName}</strong>

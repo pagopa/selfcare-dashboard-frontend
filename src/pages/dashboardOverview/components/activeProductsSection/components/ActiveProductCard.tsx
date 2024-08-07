@@ -54,8 +54,9 @@ export default function ActiveProductCard({
         borderRadius: theme.spacing(2),
         minHeight: '154px',
         background: '#FFFFFF',
-        boxShadow: '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
-          overflowWrap: 'anywhere',
+        boxShadow:
+          '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+        overflowWrap: 'anywhere',
       }}
     >
       <Grid container alignItems={disableBtn ? 'flex-start' : 'center'} flexWrap={'nowrap'} p={2}>
@@ -98,6 +99,22 @@ export default function ActiveProductCard({
             {cardTitle && (
               <Tooltip title={cardTitle.length > 20 ? cardTitle : ''} placement="top" arrow>
                 <Typography
+                  variant="h6"
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: '400',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical' as const,
+                    WebkitLineClamp: 2,
+                  }}
+                >
+                  <strong style={{ fontWeight: 'fontWeightBold' }}>{cardTitle}</strong>
+                  {` ${t(isSubProductActive ? 'overview.activeProducts.premiumProduct' : '')}`}
+                </Typography>
+                {/*
+                <Typography
                   sx={{
                     fontSize: '24px',
                     fontWeight: 'fontWeightBold',
@@ -108,10 +125,12 @@ export default function ActiveProductCard({
                     WebkitLineClamp: 2,
                   }}
                 >
+                  
                   {`${cardTitle} ${t(
                     isSubProductActive ? 'overview.activeProducts.premiumProduct' : ''
                   )}`}
                 </Typography>
+                */}
               </Tooltip>
             )}
 
@@ -132,6 +151,7 @@ export default function ActiveProductCard({
                   height: '44px',
                   color: 'white',
                   borderRadius: '48px',
+                  mt: 1,
                 }}
               >
                 <ArrowForward sx={{ m: 1 }} />
