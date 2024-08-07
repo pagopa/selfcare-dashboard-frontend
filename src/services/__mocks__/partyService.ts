@@ -337,7 +337,7 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-io-premium',
         authorized: false,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '11111111111',
@@ -348,6 +348,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListActiveProducts,
           Actions.ListAvailableProducts,
           Actions.ManageProductGroups,
+          Actions.AccessProductBackoffice,
         ],
       },
       // Use case with prod-interop and prod-interop-coll
@@ -394,7 +395,13 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
-        // userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers],
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn-dev',
@@ -444,6 +451,8 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
         userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
           Actions.ViewBilling,
@@ -483,8 +492,12 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
         userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
           Actions.ViewBilling,
         ],
       },
@@ -498,6 +511,13 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'dddd',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
     delegation: false,
@@ -533,6 +553,15 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -544,6 +573,12 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'dddd',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
     delegation: false,
@@ -579,6 +614,12 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
