@@ -1,4 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react';
+import React from 'react';
 import '../../../locale';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';

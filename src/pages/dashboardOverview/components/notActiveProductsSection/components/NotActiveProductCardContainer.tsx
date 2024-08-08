@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { useUserNotify } from '@pagopa/selfcare-common-frontend/lib';
+import { useErrorDispatcher, useUserNotify } from '@pagopa/selfcare-common-frontend/lib';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ type Props = {
 export default function NotActiveProductCardContainer({ party, product }: Props) {
   const { t } = useTranslation();
   const addNotify = useUserNotify();
+  const addError = useErrorDispatcher();
 
   const existingSubProductNotOnboarded = product.subProducts?.find((sp) =>
     party.products.map(
@@ -57,9 +58,10 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
 
   const getOnboardingStatus = async (institutionId: string, productId: string) => {
     const token = storageTokenOps.read();
+    const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
 
     const res = await fetch(
-      `${ENV.URL_API.API_DASHBOARD}/v2/institutions/${institutionId}/onboardings/${productId}/pending`,
+      `${ENV.URL_API.API_DASHBOARD}/v2/institutions/${institutionId}/onboardings/${productId}/pending?taxCode=${party.fiscalCode}${subUnitCode}`,
       {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
@@ -79,7 +81,15 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
         closeLabel: t('overview.adhesionPopup.closeButton'),
         onConfirm: () => goToOnboarding(product, party),
       });
+      return;
     }
+    addError({
+      id: `OnboardingStatusError-${product.id}`,
+      blocking: false,
+      error: new Error('Something gone wrong retrieving onboarding status'),
+      techDescription: 'Something gone wrong retrieving onboarding status',
+      toNotify: true,
+    });
   };
 
   return (
