@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, screen } from '@testing-library/react';
+import React from 'react';
 import { renderWithProviders } from '../../../../../../utils/test-utils';
 import SessionModalInteropProduct from '../SessionModalInteropProduct';
 
