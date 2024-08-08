@@ -56,39 +56,41 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     );
   };
 
-  const getOnboardingStatus = async (institutionId: string, productId: string) => {
+  const getOnboardingStatus = async (productId: string) => {
     const token = storageTokenOps.read();
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
 
-    const res = await fetch(
-      `${ENV.URL_API.API_DASHBOARD}/v2/institutions/${institutionId}/onboardings/${productId}/pending?taxCode=${party.fiscalCode}${subUnitCode}`,
+    void fetch(
+      `${ENV.URL_API.API_DASHBOARD}/v2/institutions/onboardings/${productId}/pending?taxCode=${party.fiscalCode}${subUnitCode}`,
       {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       }
-    );
-    if (res.status === 204) {
-      goToOnboarding(product, party);
-      return;
-    }
-    if (res.status === 200) {
-      addNotify({
-        component: 'SessionModal',
-        id: 'Notify_Example',
-        title: t('overview.adhesionPopup.title'),
-        message: t('overview.adhesionPopup.description'),
-        confirmLabel: t('overview.adhesionPopup.confirmButton'),
-        closeLabel: t('overview.adhesionPopup.closeButton'),
-        onConfirm: () => goToOnboarding(product, party),
+    ).then((res) => {
+      if (res.status === 204) {
+        goToOnboarding(product, party);
+        return;
+      }
+      if (res.status === 200) {
+        addNotify({
+          component: 'SessionModal',
+          id: 'Notify_Example',
+          title: t('overview.adhesionPopup.title'),
+          message: t('overview.adhesionPopup.description'),
+          confirmLabel: t('overview.adhesionPopup.confirmButton'),
+          closeLabel: t('overview.adhesionPopup.closeButton'),
+          onConfirm: () => goToOnboarding(product, party),
+        });
+        return;
+      }
+
+      addError({
+        id: `OnboardingStatusError-${product.id}`,
+        blocking: false,
+        error: new Error('Something gone wrong retrieving onboarding status'),
+        techDescription: 'Something gone wrong retrieving onboarding status',
+        toNotify: true,
       });
-      return;
-    }
-    addError({
-      id: `OnboardingStatusError-${product.id}`,
-      blocking: false,
-      error: new Error('Something gone wrong retrieving onboarding status'),
-      techDescription: 'Something gone wrong retrieving onboarding status',
-      toNotify: true,
     });
   };
 
@@ -122,7 +124,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
             const prodID = baseProductWithExistingSubProductNotOnboarded
               ? existingSubProductNotOnboarded.id
               : product.id;
-            void getOnboardingStatus(party.partyId, prodID ?? '');
+            void getOnboardingStatus(prodID ?? '');
           }}
           buttonLabel={t('overview.notActiveProducts.joinButton')}
           urlPublic={product.urlPublic}
