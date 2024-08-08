@@ -1,4 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react';
+import React from 'react';
 import '../../../locale';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
@@ -84,7 +85,26 @@ test('should render component DashboardOverview with no geoTaxonomy', async () =
 
   fireEvent.click(partyDetailModal);
 
-  const geoTaxModal = await screen.findByText('Locale');
+  const geoTaxModal = await screen.findByText('Nazionale');
 
   fireEvent.click(geoTaxModal);
+
+  const modifyButton = await screen.findByText('Aggiungi');
+
+  expect(modifyButton).toBeInTheDocument();
+  fireEvent.click(modifyButton);
+});
+
+test('should render component DashboardOverview with geoTaxonomy', async () => {
+  const mockedPAWithGeoTax = mockedParties[2];
+  renderWithProviders(
+    <DashboardOverview party={mockedPAWithGeoTax} products={mockedPartyProducts} />
+  );
+  const partyDetailModal = await screen.findByText('Gestisci i dati dell’ente');
+
+  fireEvent.click(partyDetailModal);
+
+  const closeModal = await screen.findByTestId('close-modal-test');
+
+  fireEvent.click(closeModal);
 });

@@ -1,21 +1,21 @@
 import {
-  Typography,
   Box,
-  Card,
-  CardContent,
-  CardActions,
   Button,
+  Card,
+  CardActions,
+  CardContent,
   Grid,
   Link,
-  useTheme,
-  Tooltip,
   Stack,
+  Tooltip,
+  Typography,
+  useTheme,
 } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
-import { Trans, useTranslation } from 'react-i18next';
 import { ProductAvatar } from '@pagopa/mui-italia/dist/components/ProductAvatar/ProductAvatar';
-import { Product } from '../../../../../model/Product';
+import { Trans, useTranslation } from 'react-i18next';
 import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
+import { Product } from '../../../../../model/Product';
 
 type Props = {
   image?: string;
@@ -68,7 +68,7 @@ export default function NotActiveProductCard({
             fontWeight: '400',
           }}
         >
-          <strong style={{ fontWeight: '600' }}>{baseName}</strong>
+          <strong style={{ fontWeight: 'fontWeightBold' }}>{baseName}</strong>
           {` ${subName}`}
         </Typography>
       );
@@ -137,7 +137,7 @@ export default function NotActiveProductCard({
                   }}
                 >
                   <p style={{ fontWeight: '400', padding: '0px', margin: '0px' }}>
-                    <strong style={{ fontWeight: '600' }}>{product?.title}</strong>&nbsp;
+                    <strong style={{ fontWeight: 'fontWeightBold' }}>{product?.title}</strong>&nbsp;
                     {prodActiveWithSubProdInactive?.title}
                   </p>
                 </Typography>
@@ -188,8 +188,9 @@ export default function NotActiveProductCard({
               <Link
                 sx={{
                   fontSize: 'fontSize',
-                  fontWeight: 'fontWeightBold',
+                  fontWeight: '400px',
                   color: 'primary.main',
+                  textDecoration: 'none',
                 }}
                 href={urlPublic}
               >

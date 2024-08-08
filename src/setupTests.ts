@@ -4,3 +4,8 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 import './locale';
+
+beforeEach(() => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });

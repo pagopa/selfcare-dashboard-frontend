@@ -1,18 +1,18 @@
 import { Box, Button, CircularProgress, Divider, Grid, Link, Typography } from '@mui/material';
+import { ButtonNaked, ProductAvatar } from '@pagopa/mui-italia';
 import {
   TitleBox,
   useErrorDispatcher,
   useUnloadEventOnExit,
 } from '@pagopa/selfcare-common-frontend/lib';
-import { useEffect, useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { ButtonNaked, ProductAvatar } from '@pagopa/mui-italia';
-import { Party } from '../../model/Party';
-import { DASHBOARD_ROUTES } from '../../routes';
-import { Product } from '../../model/Product';
+import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
+import { Party } from '../../model/Party';
+import { Product } from '../../model/Product';
+import { DASHBOARD_ROUTES } from '../../routes';
 import { fetchDelegations } from '../../services/delegationServices';
 
 type Props = {
@@ -105,7 +105,7 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
               <Grid item xs={12}>
                 <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
                   <Box>
-                    <Typography variant="h6">
+                    <Typography variant="h6" fontWeight={'fontWeightBold'}>
                       {t('overview.delegationsPage.productsSection.title')}
                     </Typography>
                   </Box>
@@ -143,7 +143,7 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                         />
                       </Box>
                       <Box>
-                        <Typography variant="h6">{product.title}</Typography>
+                        <Typography variant="h6" fontWeight={'fontWeightBold'}>{product.title}</Typography>
                       </Box>
                     </Box>
 
@@ -164,17 +164,16 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                             <Trans
                               i18nKey={'overview.delegationsPage.productsSection.noDelegatesLabel'}
                             >
-                              Nessun delegato per questo prodotto.
+                              Nessun delegato per questo prodotto. 
                               <Link
                                 onClick={() => goToAddDelegationsPage(product?.id)}
                                 sx={{
                                   fontWeight: 'fontWeightMedium',
-                                  ml: 1,
                                   textDecoration: 'none',
                                   cursor: 'pointer',
                                 }}
                               >
-                                Aggiungi delega
+                                creane una adesso
                               </Link>
                             </Trans>
                           </Typography>
