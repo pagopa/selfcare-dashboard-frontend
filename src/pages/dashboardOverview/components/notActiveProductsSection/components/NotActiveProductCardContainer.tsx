@@ -1,7 +1,8 @@
 import { Grid } from '@mui/material';
 import { useUserNotify } from '@pagopa/selfcare-common-frontend/lib';
-import { useTranslation } from 'react-i18next';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { ENV } from '../../../../../utils/env';
@@ -54,6 +55,33 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     );
   };
 
+  const getOnboardingStatus = async (institutionId: string, productId: string) => {
+    const token = storageTokenOps.read();
+
+    const res = await fetch(
+      `${ENV.URL_API.API_DASHBOARD}/v2/institutions/${institutionId}/onboardings/${productId}/pending`,
+      {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if (res.status === 204) {
+      goToOnboarding(product, party);
+      return;
+    }
+    if (res.status === 200) {
+      addNotify({
+        component: 'SessionModal',
+        id: 'Notify_Example',
+        title: t('overview.adhesionPopup.title'),
+        message: t('overview.adhesionPopup.description'),
+        confirmLabel: t('overview.adhesionPopup.confirmButton'),
+        closeLabel: t('overview.adhesionPopup.closeButton'),
+        onConfirm: () => goToOnboarding(product, party),
+      });
+    }
+  };
+
   return (
     <>
       <Grid item xs={12} sm={6} lg={4} xl={3} key={product.id}>
@@ -81,25 +109,10 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
           }
           disableBtn={false}
           btnAction={() => {
-            const isOnboardingNotCompletedYet = !!party.products.find(
-              (pp) =>
-                pp.productId === product.id &&
-                (pp.productOnBoardingStatus === 'TOBEVALIDATED' ||
-                  pp.productOnBoardingStatus === 'PENDING')
-            );
-            if (isOnboardingNotCompletedYet) {
-              addNotify({
-                component: 'SessionModal',
-                id: 'Notify_Example',
-                title: t('overview.adhesionPopup.title'),
-                message: t('overview.adhesionPopup.description'),
-                confirmLabel: t('overview.adhesionPopup.confirmButton'),
-                closeLabel: t('overview.adhesionPopup.closeButton'),
-                onConfirm: () => goToOnboarding(product, party),
-              });
-            } else {
-              goToOnboarding(product, party);
-            }
+            const prodID = baseProductWithExistingSubProductNotOnboarded
+              ? existingSubProductNotOnboarded.id
+              : product.id;
+            void getOnboardingStatus(party.partyId, prodID ?? '');
           }}
           buttonLabel={t('overview.notActiveProducts.joinButton')}
           urlPublic={product.urlPublic}

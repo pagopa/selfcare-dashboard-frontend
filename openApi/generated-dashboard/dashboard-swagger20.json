@@ -1090,6 +1090,71 @@
         "summary": "Retrieve list of delegation using to"
       }
     },
+    "/v2/institutions/{institutionId}/onboardings/{productId}/pending": {
+      "get": {
+        "produces": [
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Returns an institution's onboarding record by its ID only if its status is PENDING or TOBEVALIDATED",
+        "operationId": "getInstitutionOnboardingPending",
+        "summary": "getInstitutionOnboardingPending"
+      }
+    },
     "/v2/institutions/{institutionId}/products/{productId}/users": {
       "post": {
         "consumes": [
@@ -3232,12 +3297,6 @@
         "taxCode": {
           "type": "string"
         },
-        "userActions": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
         "zipCode": {
           "type": "string"
         }
@@ -3435,7 +3494,6 @@
           "description": "User's role",
           "enum": [
             "ADMIN",
-            "ADMIN_EA",
             "LIMITED"
           ],
           "type": "string"
@@ -3717,7 +3775,6 @@
           "description": "User's role",
           "enum": [
             "ADMIN",
-            "ADMIN_EA",
             "LIMITED"
           ],
           "type": "string"
@@ -3752,7 +3809,6 @@
           "description": "Self Care role",
           "enum": [
             "ADMIN",
-            "ADMIN_EA",
             "LIMITED"
           ],
           "type": "string"
@@ -3802,7 +3858,6 @@
           "description": "User's role",
           "enum": [
             "ADMIN",
-            "ADMIN_EA",
             "LIMITED"
           ],
           "type": "string"
