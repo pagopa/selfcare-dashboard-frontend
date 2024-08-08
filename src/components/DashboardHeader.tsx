@@ -43,11 +43,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const { hasPermission } = usePermissions();
 
   useEffect(() => {
-    if (i18n.language === 'it') {
-      setShowDocBtn(true);
-    } else {
-      setShowDocBtn(false);
-    }
+    setShowDocBtn(i18n.language === 'it');
   }, [i18n.language]);
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
