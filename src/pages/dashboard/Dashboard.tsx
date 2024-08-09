@@ -253,7 +253,7 @@ const Dashboard = () => {
       <Grid
         item
         component="main"
-        sx={{ backgroundColor: 'background.default', minHeight: '90vh' }}
+        sx={{ backgroundColor: 'background.default' }}
         display="flex"
         pb={8}
         xs={12}

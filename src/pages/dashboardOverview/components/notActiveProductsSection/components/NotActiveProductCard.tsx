@@ -158,7 +158,7 @@ export default function NotActiveProductCard({
           </Grid>
           <Grid item xs={12} height="48px">
             <Tooltip
-              title={description && description.length > 99 ? description : ''}
+              title={description && description.length > 35 ? description : ''}
               placement="top"
               arrow={true}
             >
