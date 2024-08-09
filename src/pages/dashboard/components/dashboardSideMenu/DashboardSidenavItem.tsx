@@ -17,7 +17,7 @@ type Props = {
   isSelected?: boolean;
   icon: SvgIconComponent;
   handleClickPtPage?: () => void;
-  isPtPageVisible?: boolean;
+  isHandleDelegationsVisible?: boolean;
   ptIcon?: SvgIconComponent;
   ptTitle?: string;
   isPtSelected?: boolean;
@@ -29,7 +29,7 @@ export default function DashboardSidenavItem({
   title,
   isSelected,
   icon,
-  isPtPageVisible,
+  isHandleDelegationsVisible,
   ptIcon,
   ptTitle,
   isPtSelected,
@@ -40,7 +40,7 @@ export default function DashboardSidenavItem({
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   return (
     <List disablePadding>
-      {isPtPageVisible && ptIcon && handleClickPtPage && (
+      {isHandleDelegationsVisible && ptIcon && handleClickPtPage && (
         <Box mb={2}>
           <ListItemButton
             selected={isPtSelected ?? false}

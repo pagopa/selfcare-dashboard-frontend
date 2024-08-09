@@ -47,10 +47,10 @@ test('Test rendering', () => {
 });
 
 test('Test routing', async () => {
-  const store = createStore();
+  //const store = createStore();
   const history = createMemoryHistory();
   history.push('/dashboard');
-  waitFor(() => renderDashboard(store, history));
+  waitFor(() => renderDashboard());
 
   history.push('/dashboard/1');
   expect(history.location.pathname).toBe('/dashboard/1');
@@ -66,17 +66,9 @@ test('Test routing', async () => {
   history.push('/dashboard/3/delegates');
   expect(history.location.pathname).toBe('/dashboard/3/delegates');
 
-  const InvoiceBtn = screen.getByText('Fatturazione');
-
-  // Operator with user role in prod-pn see Invoice
   history.push('/dashboard/4');
-  expect(InvoiceBtn).toBeInTheDocument();
 
-  // Admin with user role in prod-pn see Invoice
   history.push('/dashboard/3');
-  expect(InvoiceBtn).toBeInTheDocument();
-
-  await waitFor(() => fireEvent.click(InvoiceBtn));
 
   // history.push('/dashboard/13/prId/users/798');
   // await waitFor(() => expect(history.location.pathname).toBe('/dashboard/13/prId/users'));

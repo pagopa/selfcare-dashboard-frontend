@@ -1,4 +1,5 @@
 import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { ProductsRolesMap } from '../model/ProductRole';
@@ -35,6 +36,15 @@ export const useSelectedParty = (): {
           userRole: selectedParty?.userRole,
         };
         setParty(partyWithUserRoleAndStatus);
+        
+        const productPermissions = [...party.products]
+        .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
+        .map((product) => ({
+          productId: product.productId ?? '',
+          actions: product.userProductActions ? [...product.userProductActions] : [],
+        }));
+
+      dispatch(setProductPermissions(productPermissions));
         return party;
       } else {
         throw new Error(`Cannot find partyId ${partyId}`);

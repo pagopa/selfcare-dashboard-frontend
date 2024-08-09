@@ -11,7 +11,7 @@ type Props = {
   setOpen: (open: boolean) => void;
   showInfoBanner: boolean;
   party: Party;
-  isAdmin: boolean;
+  canUploadLogo: boolean;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -30,7 +30,13 @@ const CustomDrawer = styled(Drawer)(() => ({
   },
 }));
 
-export const PartyDetailModal = ({ showInfoBanner, party, open, setOpen, isAdmin }: Props) => {
+export const PartyDetailModal = ({
+  showInfoBanner,
+  party,
+  open,
+  setOpen,
+  canUploadLogo,
+}: Props) => {
   const { t } = useTranslation();
   return (
     <CustomDrawer open={open} anchor="right" tabIndex={0} onClose={() => setOpen(false)}>
@@ -52,7 +58,7 @@ export const PartyDetailModal = ({ showInfoBanner, party, open, setOpen, isAdmin
           {t('overview.changeDetails')}
         </Typography>
         <Grid item xs={12}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
+          <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
         </Grid>
         {showInfoBanner && (
           <Grid item xs={12} my={2}>
