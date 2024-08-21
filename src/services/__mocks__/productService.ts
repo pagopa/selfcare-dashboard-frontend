@@ -34,7 +34,7 @@ export const mockedPartyProducts: Array<Product> = [
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.svg',
     id: 'prod-pn',
-    title: 'Piattaforma Notifiche',
+    title: 'SEND - Servizio Notifiche Digitali',
     description: 'Piattaforma Notifiche description',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
