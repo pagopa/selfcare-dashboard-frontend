@@ -388,7 +388,7 @@ export const mockedParties: Array<Party> = [
       },
       {
         productId: 'prod-pn',
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '3395867495',
