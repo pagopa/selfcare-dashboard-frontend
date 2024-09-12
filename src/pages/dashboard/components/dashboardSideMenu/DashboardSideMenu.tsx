@@ -79,7 +79,6 @@ export default function DashboardSideMenu({
   const isDelegateSelected = window.location.pathname.startsWith(delegatesPath);
   const isGroupSelected = window.location.pathname.startsWith(groupsPath);
   const isPtSelected = window.location.pathname.startsWith(ptPath);
-  const isPt = party.institutionType === 'PT';
   const lang = i18n.language;
   const getToken = async () => {
     setLoading(true);
@@ -149,7 +148,7 @@ export default function DashboardSideMenu({
               hideLabels={hideLabels}
             />
           )}
-          {canSeeGroups && !isPt && (
+          {canSeeGroups && (
             <DashboardSidenavItem
               title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.groups.title')}
               handleClick={() => {
