@@ -99,7 +99,6 @@ const Dashboard = () => {
 
   const { getAllProductsWithPermission, hasPermission } = usePermissions();
 
-  const canSeeBillingSection = getAllProductsWithPermission(Actions.ViewBilling).length > 0;
   const canSeeHandleDelegations =
     getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
   const canSeeAddDelegation = getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
@@ -133,7 +132,7 @@ const Dashboard = () => {
   const isInvoiceSectionVisible = !!products?.some(
     (prod) =>
       prod.invoiceable &&
-      party?.products.some((partyProd) => partyProd.productId === prod.id && canSeeBillingSection)
+      party?.products.some((partyProd) => partyProd.productId === prod.id && hasPermission(partyProd.productId, Actions.ViewBilling))
   );
 
   const productsMap: ProductsMap =
@@ -229,7 +228,7 @@ const Dashboard = () => {
                 hideLabels={hideLabels}
               />
               <Box sx={{ position: 'absolute', bottom: '0', width: '100%' }}>
-                <Divider />
+                <Divider sx={{ marginTop: '80px' }} />
 
                 <Button
                   fullWidth
