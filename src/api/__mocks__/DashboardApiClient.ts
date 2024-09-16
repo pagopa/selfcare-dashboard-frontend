@@ -54,8 +54,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
 export const mockedProductResources: Array<ProductsResource> = [
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-io/logo.png',
-    title: 'App IO',
-    description: 'App IO description',
+    title: 'IO',
+    description: 'IO description',
     id: '1',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://appio/bo#<IdentityToken>',
@@ -177,7 +177,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     email: 'address' as EmailString,
     product: {
       id: 'prod-io',
-      title: 'App IO',
+      title: 'IO',
       roleInfos: [
         {
           relationshipId: 'relationshipId',
@@ -197,7 +197,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     email: 'address2' as EmailString,
     product: {
       id: 'prod-io',
-      title: 'App IO',
+      title: 'IO',
       roleInfos: [
         {
           relationshipId: 'relationshipId2',
