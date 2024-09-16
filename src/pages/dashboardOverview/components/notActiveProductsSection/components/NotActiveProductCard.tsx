@@ -55,7 +55,7 @@ export default function NotActiveProductCard({
   };
 
   const renderTitleForIoPremium = (title: string) => {
-    if (title && title.toLowerCase() === 'io premium') {
+    if (title && title.toLowerCase().includes('io premium')) {
       const spliTitle = title.split(' ');
       const baseName = `${spliTitle[0]}`;
       const subName = `${spliTitle[1]}`;
