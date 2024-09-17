@@ -24,7 +24,7 @@ test('search by name', async () => {
     />
   );
 
-  expect(screen.getByText('App IO')).toBeInTheDocument();
+  expect(screen.getByText('IO')).toBeInTheDocument();
   const autocompleteInput = screen.getByLabelText(
     'Inserisci la ragione sociale'
   ) as HTMLInputElement;
@@ -79,7 +79,7 @@ test('should display the choose product autocomplete input empty if there are no
   const chooseProduct = document.getElementById('select-product-choose') as HTMLInputElement;
   expect(chooseProduct).toBeInTheDocument();
 
-  expect(screen.queryByText('App IO')).not.toBeInTheDocument();
+  expect(screen.queryByText('IO')).not.toBeInTheDocument();
 });
 
 test('should display documentation link with correct href and text content', async () => {
