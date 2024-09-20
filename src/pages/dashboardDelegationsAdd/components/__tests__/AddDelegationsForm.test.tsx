@@ -24,15 +24,19 @@ test('search by name', async () => {
     />
   );
 
-  expect(screen.getByText('App IO')).toBeInTheDocument();
-  const autocompleteInput = screen.getByLabelText('Inserisci la ragione sociale');
+  expect(screen.getByText('IO')).toBeInTheDocument();
+  const autocompleteInput = screen.getByLabelText(
+    'Inserisci la ragione sociale'
+  ) as HTMLInputElement;
   expect(autocompleteInput).toBeInTheDocument();
 
   userEvent.type(autocompleteInput, 'Random');
+  fireEvent.change(autocompleteInput, { target: { value: 'Random' } });
 
   userEvent.clear(autocompleteInput);
 
   userEvent.type(autocompleteInput, 'Maggi');
+  fireEvent.change(autocompleteInput, { target: { value: 'Maggi' } });
 });
 
 test('search by fiscal code', async () => {
@@ -55,10 +59,16 @@ test('search by fiscal code', async () => {
 
   fireEvent.click(insertCFCodeInput);
 
-  userEvent.type(insertCFCodeInput, '12345678914');
+  fireEvent.change(insertCFCodeInput, { target: { value: '1234567891' } });
 
-  const confirmationButton = screen.getByText('Conferma');
-  expect(confirmationButton).toBeInTheDocument();
+  userEvent.type(insertCFCodeInput, '12345678914');
+  fireEvent.change(insertCFCodeInput, { target: { value: '12345678914' } });
+
+  const exitButton = screen.getByText('Esci');
+  expect(exitButton).toBeInTheDocument();
+
+  expect(exitButton).toBeEnabled();
+  fireEvent.click(exitButton);
 });
 
 test('should display the choose product autocomplete input empty if there are no products selected', () => {
@@ -69,7 +79,7 @@ test('should display the choose product autocomplete input empty if there are no
   const chooseProduct = document.getElementById('select-product-choose') as HTMLInputElement;
   expect(chooseProduct).toBeInTheDocument();
 
-  expect(screen.queryByText('App IO')).not.toBeInTheDocument();
+  expect(screen.queryByText('IO')).not.toBeInTheDocument();
 });
 
 test('should display documentation link with correct href and text content', async () => {
