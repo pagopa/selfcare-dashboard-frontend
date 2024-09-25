@@ -45,9 +45,9 @@ describe('compareStrings', () => {
 
 describe('codeToLabelProduct', () => {
   it('should return the correct label for product code', () => {
-    expect(codeToLabelProduct('prod-io')).toBe('App Io');
+    expect(codeToLabelProduct('prod-io')).toBe('Io');
     expect(codeToLabelProduct('prod-pagopa')).toBe('Piattaforma pagoPA');
-    expect(codeToLabelProduct('prod-io, prod-pagopa')).toBe('App Io, Piattaforma pagoPA');
+    expect(codeToLabelProduct('prod-io, prod-pagopa')).toBe('Io, Piattaforma pagoPA');
   });
 
   it('should return an empty string for unknown product code', () => {

@@ -73,7 +73,7 @@ export const mockedBaseParties: Array<BaseParty> = [
   },
   {
     partyId: '98123',
-    description: 'mockedTechPartner',
+    description: 'Prova PT',
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -223,7 +223,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
-        userProductActions: [Actions.ListActiveProducts, Actions.AccessProductBackoffice],
+        userProductActions: [Actions.ListActiveProducts, Actions.AccessProductBackoffice, Actions.ViewBilling],
       },
     ],
     delegation: false,
@@ -388,7 +388,7 @@ export const mockedParties: Array<Party> = [
       },
       {
         productId: 'prod-pn',
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '3395867495',
@@ -669,6 +669,15 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -1176,6 +1185,16 @@ export const mockedParties: Array<Party> = [
           publicServices: false,
         },
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+          Actions.ViewManagedInstitutions,
+        ],
       },
       {
         productId: 'prod-io-premium',

@@ -24,12 +24,11 @@ export const compareDates = (
   export const codeToLabelProduct = (code: string) => {
     switch (code) {
       case 'prod-io':
-        return 'App Io';
+        return 'Io';
       case 'prod-pagopa':
         return 'Piattaforma pagoPA';
       case 'prod-io, prod-pagopa':
-        return 'App Io, Piattaforma pagoPA';
-  
+        return 'Io, Piattaforma pagoPA';
       default:
         return '';
     }
