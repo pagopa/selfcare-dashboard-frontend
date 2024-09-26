@@ -132,7 +132,10 @@ const Dashboard = () => {
   const isInvoiceSectionVisible = !!products?.some(
     (prod) =>
       prod.invoiceable &&
-      party?.products.some((partyProd) => partyProd.productId === prod.id && hasPermission(partyProd.productId, Actions.ViewBilling))
+      party?.products.some(
+        (partyProd) =>
+          partyProd.productId === prod.id && hasPermission(partyProd.productId, Actions.ViewBilling)
+      )
   );
 
   const productsMap: ProductsMap =
@@ -151,9 +154,11 @@ const Dashboard = () => {
 
   const location = useLocation();
 
-  // Check if the current route matches ADD_DELEGATE
+  // Check if the current route matches any path in the array
+  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path, `${ENV.ROUTES.USERS}/add`];
+
   const match = matchPath(location.pathname, {
-    path: [DASHBOARD_ROUTES.ADD_DELEGATE.path],
+    path: paths,
     exact: true,
     strict: false,
   });
