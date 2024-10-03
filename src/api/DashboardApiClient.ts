@@ -14,7 +14,6 @@ import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxon
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import {
   InstitutionResource,
-  InstitutionTypeEnum,
 } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
@@ -134,7 +133,7 @@ export const DashboardApi = {
 
   getProductBrokers: async (
     productId: string,
-    institutionType: InstitutionTypeEnum
+    institutionType: string
   ): Promise<Array<BrokerResource>> => {
     const result = await apiClient.getProductBrokersUsingGET({
       productId,

@@ -1,6 +1,5 @@
 import { mockedBrokerResource } from '../../api/__mocks__/DashboardApiClient';
 import { DashboardApi } from '../../api/DashboardApiClient';
-import { InstitutionTypeEnum } from '../../api/generated/b4f-dashboard/InstitutionResource';
 import { institutionBaseResource2BaseParty, institutionResource2Party } from '../../model/Party';
 import {
   createDelegation,
@@ -69,7 +68,7 @@ describe('yourModuleFile tests', () => {
     test('returns mockedBrokerResource when REACT_APP_API_MOCK_PARTIES is true', async () => {
       process.env.REACT_APP_API_MOCK_PARTIES = 'true';
       const partyId = '1';
-      const institutionType = InstitutionTypeEnum.SCP;
+      const institutionType = 'SCP';
 
       const result = await getProductBrokers(partyId, institutionType);
       expect(result).toEqual(mockedBrokerResource);
@@ -78,7 +77,7 @@ describe('yourModuleFile tests', () => {
     test('calls DashboardApi.getProductBrokers', async () => {
       process.env.REACT_APP_API_MOCK_PARTIES = 'false';
       const partyId = '1';
-      const institutionType = InstitutionTypeEnum.PA;
+      const institutionType = 'PA';
       const mockedBrokers = [{ id: 'broker1', name: 'Broker 1' }];
       (DashboardApi.getProductBrokers as jest.Mock).mockResolvedValue(mockedBrokers);
 

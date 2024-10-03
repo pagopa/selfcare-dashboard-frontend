@@ -1,6 +1,5 @@
 import {
-  InstitutionResource,
-  InstitutionTypeEnum,
+  InstitutionResource
 } from '../../api/generated/b4f-dashboard/InstitutionResource';
 import { institutionResource2Party, Party } from '../Party';
 
@@ -30,6 +29,7 @@ test('Test Party', () => {
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
     parentDescription: undefined,
+    products: []
   };
   expect(party).toStrictEqual({
     userRole: 'ADMIN',
@@ -69,7 +69,7 @@ test('Test institutionResource2Party', () => {
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    institutionType: InstitutionTypeEnum.PA,
+    institutionType: 'PA',
     address: 'address',
     zipCode: '20121',
     recipientCode: 'MC45KDSX',
