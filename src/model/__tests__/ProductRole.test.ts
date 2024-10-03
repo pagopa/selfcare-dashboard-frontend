@@ -35,7 +35,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'incaricato-ente-creditore',
           title: 'Incaricato Ente Creditore',
           description: 'Descrizione incaricato-ente-creditore',
-          phasesAdditionAllowed: ['dashboard']
+          phasesAdditionAllowed: ['dashboard-async']
         },
       ],
       LIMITED: [
@@ -150,7 +150,7 @@ test('Test productRoles2ProductRolesList', () => {
         productRole: 'incaricato-ente-creditore',
         title: 'Incaricato Ente Creditore',
         description: 'Descrizione incaricato-ente-creditore',
-        phasesAdditionAllowed: ['dashboard']
+        phasesAdditionAllowed: ['dashboard-async']
       },
       'referente-dei-pagamenti': {
         productId: 'PRODID',
