@@ -99,8 +99,6 @@ const Dashboard = () => {
 
   const { getAllProductsWithPermission, hasPermission } = usePermissions();
 
-  const canSeeHandleDelegations =
-    getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
   const canSeeAddDelegation = getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
   const isPT = party?.institutionType === 'PT';
   const hasDelegation = !!party?.delegation;
@@ -150,7 +148,9 @@ const Dashboard = () => {
     canSeeAddDelegation;
 
   const isHandleDelegationsVisible =
-    canSeeHandleDelegations && hasAuthorizedProducts && (isPT || hasDelegation);
+    getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0 &&
+    hasAuthorizedProducts &&
+    (isPT || hasDelegation);
 
   const location = useLocation();
 

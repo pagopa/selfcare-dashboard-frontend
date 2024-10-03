@@ -4,7 +4,6 @@ import { DashboardApi } from '../api/DashboardApiClient';
 import { TypeEnum } from '../api/generated/b4f-dashboard/DelegationRequestDto';
 import {
   DelegationWithInfo,
-  InstitutionTypeEnum,
 } from '../api/generated/b4f-dashboard/DelegationWithInfo';
 import { DelegationWithPagination } from '../api/generated/b4f-dashboard/DelegationWithPagination';
 
@@ -29,7 +28,7 @@ function generateDelegationWithInfoArray(n: number): Array<DelegationWithInfo> {
       institutionId: `institutionId${i}`,
       institutionName: `Institution Name ${i}`,
       institutionRootName: `Institution Root Name ${i}`,
-      institutionType: InstitutionTypeEnum.PA,
+      institutionType: 'PA',
       productId: `prod-pagopa`,
       status: `Status${i}`,
       taxCode: `TaxCode${i}`,

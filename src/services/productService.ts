@@ -23,21 +23,20 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
     return fetchProductRolesMocked(product);
   } else {
     return DashboardApi.getProductRoles(product.id)
-      .then((roles) =>
-        roles
+      .then((roles) => roles
           ?.map((pr) =>
             pr?.productRoles?.map((r) => ({
               productId: product.id,
               partyRole: pr.partyRole,
               selcRole: pr.selcRole,
               multiroleAllowed: pr.multiroleAllowed,
+              phasesAdditionAllowed: pr.phasesAdditionAllowed,
               productRole: r.code ?? '',
               title: r.label ?? '',
               description: r.description ?? '',
             }))
           )
-          .flatMap((x) => x)
-      )
+          .flatMap((x) => x))
       .catch((reason) => reason);
   }
 };
