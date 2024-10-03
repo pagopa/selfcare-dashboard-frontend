@@ -15,6 +15,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'referente-legale',
           title: 'Referente Legale',
           description: 'Descrizione referente-legale',
+          phasesAdditionAllowed: ['dashboard']
         },
         {
           productId: 'PRODID',
@@ -24,6 +25,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'referente-amministrativo',
           title: 'Amministratore',
           description: 'Descrizione referente-amministrativo',
+          phasesAdditionAllowed: ['dashboard']
         },
         {
           productId: 'PRODID',
@@ -33,6 +35,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'incaricato-ente-creditore',
           title: 'Incaricato Ente Creditore',
           description: 'Descrizione incaricato-ente-creditore',
+          phasesAdditionAllowed: ['dashboard']
         },
       ],
       LIMITED: [
@@ -44,6 +47,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'referente-dei-pagamenti',
           title: 'Referente dei Pagamenti',
           description: 'Descrizione referente-dei-pagamenti',
+          phasesAdditionAllowed: ['dashboard']
         },
         {
           productId: 'PRODID',
@@ -53,6 +57,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'referente-tecnico',
           title: 'Referente Tecnico',
           description: 'Descrizione referente-tecnico',
+          phasesAdditionAllowed: ['dashboard']
         },
       ],
     },
@@ -66,6 +71,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'referente-amministrativo',
           selcRole: 'ADMIN',
           title: 'Amministratore',
+          phasesAdditionAllowed: ['dashboard']
         },
       ],
       MANAGER: [
@@ -77,6 +83,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'referente-legale',
           selcRole: 'ADMIN',
           title: 'Referente Legale',
+          phasesAdditionAllowed: ['dashboard']
         },
       ],
       OPERATOR: [
@@ -88,6 +95,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'referente-dei-pagamenti',
           selcRole: 'LIMITED',
           title: 'Referente dei Pagamenti',
+          phasesAdditionAllowed: ['dashboard']
         },
         {
           description: 'Descrizione referente-tecnico',
@@ -97,6 +105,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'referente-tecnico',
           selcRole: 'LIMITED',
           title: 'Referente Tecnico',
+          phasesAdditionAllowed: ['dashboard']
         },
       ],
       SUB_DELEGATE: [
@@ -108,6 +117,7 @@ test('Test productRoles2ProductRolesList', () => {
           productRole: 'incaricato-ente-creditore',
           selcRole: 'ADMIN',
           title: 'Incaricato Ente Creditore',
+          phasesAdditionAllowed: ['dashboard-async']
         },
       ],
     },
@@ -120,6 +130,7 @@ test('Test productRoles2ProductRolesList', () => {
         productRole: 'referente-legale',
         title: 'Referente Legale',
         description: 'Descrizione referente-legale',
+        phasesAdditionAllowed: ['dashboard']
       },
       'referente-amministrativo': {
         productId: 'PRODID',
@@ -129,6 +140,7 @@ test('Test productRoles2ProductRolesList', () => {
         productRole: 'referente-amministrativo',
         title: 'Amministratore',
         description: 'Descrizione referente-amministrativo',
+        phasesAdditionAllowed: ['dashboard']
       },
       'incaricato-ente-creditore': {
         productId: 'PRODID',
@@ -138,6 +150,7 @@ test('Test productRoles2ProductRolesList', () => {
         productRole: 'incaricato-ente-creditore',
         title: 'Incaricato Ente Creditore',
         description: 'Descrizione incaricato-ente-creditore',
+        phasesAdditionAllowed: ['dashboard']
       },
       'referente-dei-pagamenti': {
         productId: 'PRODID',
@@ -147,6 +160,7 @@ test('Test productRoles2ProductRolesList', () => {
         productRole: 'referente-dei-pagamenti',
         title: 'Referente dei Pagamenti',
         description: 'Descrizione referente-dei-pagamenti',
+        phasesAdditionAllowed: ['dashboard']
       },
       'referente-tecnico': {
         productId: 'PRODID',
@@ -156,6 +170,7 @@ test('Test productRoles2ProductRolesList', () => {
         productRole: 'referente-tecnico',
         title: 'Referente Tecnico',
         description: 'Descrizione referente-tecnico',
+        phasesAdditionAllowed: ['dashboard']
       },
     },
   });
