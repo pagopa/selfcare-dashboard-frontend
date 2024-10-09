@@ -87,21 +87,28 @@ export const buildRoutes = (
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const Dashboard = () => {
-  const history = useHistory();
-  const party = useAppSelector(partiesSelectors.selectPartySelected);
-  const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
-  const store = useStore();
-  const theme = useTheme();
+  const { getAllProductsWithPermission, hasPermission } = usePermissions();
   const { i18n, t } = useTranslation();
+  const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hideLabels, setHideLabels] = useState(false);
 
-  const { getAllProductsWithPermission, hasPermission } = usePermissions();
+  const history = useHistory();
+  const location = useLocation();
 
-  const canSeeAddDelegation = getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
+  const store = useStore();
+  const party = useAppSelector(partiesSelectors.selectPartySelected);
+  const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+
   const isPT = party?.institutionType === 'PT';
-  const hasDelegation = !!party?.delegation;
+  const hasDelegation = Boolean(party?.delegation);
+
+  const productsMap: ProductsMap =
+    useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
+
+  const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -117,6 +124,12 @@ const Dashboard = () => {
       [products, party]
     ) ?? [];
 
+  const delegableProducts: Array<Product> = activeProducts.filter((product) =>
+    party?.products.some(
+      (partyProduct) => partyProduct.productId === product.id && product.delegable
+    )
+  );
+
   const authorizedDelegableProducts: Array<Product> = activeProducts.filter((ap) =>
     party?.products.some(
       (p) =>
@@ -125,7 +138,15 @@ const Dashboard = () => {
         ap.delegable
     )
   );
-  const hasAuthorizedProducts = authorizedDelegableProducts.length > 0;
+
+  const canAggregatorSeeHandleDelegations = useMemo(() => {
+    const aggregatorProduct = party?.products?.find(
+      (product) =>
+        product.isAggregator &&
+        hasPermission(product.productId ?? '', Actions.ViewManagedInstitutions)
+    );
+    return Boolean(aggregatorProduct && hasDelegation);
+  }, [party, hasDelegation]);
 
   const isInvoiceSectionVisible = !!products?.some(
     (prod) =>
@@ -136,23 +157,22 @@ const Dashboard = () => {
       )
   );
 
-  const productsMap: ProductsMap =
-    useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
-
-  const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
-
   const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
     authorizedDelegableProducts.length > 0 &&
     !isPT &&
-    canSeeAddDelegation;
+    getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
 
-  const isHandleDelegationsVisible =
-    getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0 &&
-    hasAuthorizedProducts &&
-    (isPT || hasDelegation);
+  const isHandleDelegationsVisible = useMemo(() => {
+    const hasPermissionForManagedInstitutions =
+      getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
+    const canShowDelegations = delegableProducts.length > 0 && (isPT || hasDelegation);
 
-  const location = useLocation();
+    return (
+      (hasPermissionForManagedInstitutions && canShowDelegations) ||
+      canAggregatorSeeHandleDelegations
+    );
+  }, [authorizedDelegableProducts, isPT, hasDelegation, canAggregatorSeeHandleDelegations]);
 
   // Check if the current route matches any path in the array
   const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path, `${ENV.ROUTES.USERS}/add`];

@@ -19,7 +19,6 @@ test('Test: Access to the dashboard side menu voices', async () => {
   const overviewBtn = screen.getAllByText('Panoramica')[0];
   const delegationBtn = await screen.findByText('Deleghe');
 
-
   expect(overviewBtn).toBeInTheDocument();
   expect(delegationBtn).toBeInTheDocument();
 
@@ -30,7 +29,7 @@ test('Test: Access to the dashboard side menu voices', async () => {
   expect(history.location.pathname).toBe(`/dashboard/${mockedParties[2].partyId}/delegations`);
 });
 
-test('Test: The techpartner has not been delegated by any body, will not see the menu section and will not be able to access it', async () => {
+test('Test: render with props false', async () => {
   renderWithProviders(
     <DashboardSideMenu
       party={mockedParties[7]}
@@ -45,10 +44,13 @@ test('Test: The techpartner has not been delegated by any body, will not see the
   expect(institutionsListVoice).not.toBeInTheDocument();
 });
 
-test('Test: The techpartner has not been delegated by any body, he will see the menu section and will be able to access it', async () => {
+test('Test: The techpartner has not been delegated by any body, he will see the menu section and will be able to access it in empty state', async () => {
+  const institutionPT = mockedParties.find((party) => party.description === 'Maggioli S.p.A.')!;
+
+  console.log('institutionPT', institutionPT);
   const { history } = renderWithProviders(
     <DashboardSideMenu
-      party={mockedParties[16]}
+      party={institutionPT}
       isInvoiceSectionVisible={false}
       isAddDelegateSectionVisible={false}
       isHandleDelegationsVisible={true}
@@ -61,5 +63,25 @@ test('Test: The techpartner has not been delegated by any body, he will see the 
   expect(institutionsListVoice).toBeInTheDocument();
 
   fireEvent.click(institutionsListVoice);
-  expect(history.location.pathname).toBe(`/dashboard/${mockedParties[16].partyId}/delegate`);
+  expect(history.location.pathname).toBe(`/dashboard/${institutionPT.partyId}/delegate`);
+});
+
+test('Test: The Aggregator has been delegated will see the menu section and will be able to access it', async () => {
+  const institutionEA = mockedParties.find((party) => party.description === 'AGENCY ONBOARDED')!;
+  const { history } = renderWithProviders(
+    <DashboardSideMenu
+      party={institutionEA}
+      isInvoiceSectionVisible={false}
+      isAddDelegateSectionVisible={false}
+      isHandleDelegationsVisible={true}
+      setDrawerOpen={jest.fn()}
+    />
+  );
+
+  const institutionsListVoice = screen.getByText('Enti gestiti');
+
+  expect(institutionsListVoice).toBeInTheDocument();
+
+  fireEvent.click(institutionsListVoice);
+  expect(history.location.pathname).toBe(`/dashboard/${institutionEA.partyId}/delegate`);
 });

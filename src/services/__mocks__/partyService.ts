@@ -499,7 +499,9 @@ export const mockedParties: Array<Party> = [
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
+          Actions.ViewManagedInstitutions,
         ],
+        isAggregator: true,
       },
       {
         productId: 'prod-pn',
@@ -520,7 +522,7 @@ export const mockedParties: Array<Party> = [
         ],
       },
     ],
-    delegation: false,
+    delegation: true,
     status: undefined,
     userRole: undefined,
   },
@@ -689,6 +691,27 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewManagedInstitutions,
+          Actions.ViewBilling,
+        ],
+      }
     ],
     // Use case with no delegations
     delegation: false,
