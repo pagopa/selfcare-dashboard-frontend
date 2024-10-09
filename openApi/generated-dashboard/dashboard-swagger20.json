@@ -3354,6 +3354,9 @@
         "billing": {
           "$ref": "#/definitions/Billing"
         },
+        "isAggregator": {
+          "type": "boolean"
+        },
         "productId": {
           "type": "string"
         },
@@ -3388,6 +3391,9 @@
         },
         "billing": {
           "$ref": "#/definitions/Billing"
+        },
+        "isAggregator": {
+          "type": "boolean"
         },
         "productId": {
           "type": "string"
