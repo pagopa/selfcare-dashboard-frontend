@@ -2734,6 +2734,10 @@
           "type": "array",
           "uniqueItems": true
         },
+        "role": {
+          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
+          "type": "string"
+        },
         "surname": {
           "description": "User's surname",
           "type": "string"
@@ -3308,7 +3312,7 @@
           "type": "array"
         },
         "role": {
-          "description": "User's role",
+          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
           "enum": [
             "ADMIN",
             "ADMIN_EA",
@@ -3596,7 +3600,7 @@
           "type": "string"
         },
         "selcRole": {
-          "description": "User's role",
+          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
           "enum": [
             "ADMIN",
             "ADMIN_EA",
@@ -3688,7 +3692,7 @@
           "description": "Authorized user product"
         },
         "role": {
-          "description": "User's role",
+          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
           "enum": [
             "ADMIN",
             "ADMIN_EA",
@@ -4150,6 +4154,10 @@
           },
           "type": "array",
           "uniqueItems": true
+        },
+        "role": {
+          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
+          "type": "string"
         }
       },
       "title": "UserProductRoles",

@@ -311,7 +311,7 @@ export const DashboardApi = {
   getBillingToken: async (_partyId: string, _environment?: string, _lang?: string): Promise<string> =>
     new Promise((resolve) => resolve('DUMMYTOKEN')),
 
-  getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
+  getProductRoles: async (_productId: string, _institutionType: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
 
   getProductBrokers: async (

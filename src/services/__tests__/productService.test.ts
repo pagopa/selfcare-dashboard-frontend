@@ -2,11 +2,12 @@ import { DashboardApi } from '../../api/DashboardApiClient';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/ProductsResource';
 import { Product, productResource2Product } from '../../model/Product';
 
+import { mockedParties } from '../__mocks__/partyService';
 import {
-  fetchProducts,
-  fetchProductRoles
+  fetchProductRoles,
+  fetchProducts
 } from '../productService';
-import { mockedPartyProducts, fetchProductRoles as fetchProductRolesMocked } from './../__mocks__/productService';
+import { fetchProductRoles as fetchProductRolesMocked, mockedPartyProducts } from './../__mocks__/productService';
 
 // Mock the DashboardApi methods
 jest.mock('../../api/DashboardApiClient', () => ({
@@ -108,8 +109,8 @@ describe('productService tests', () => {
       ];
       (fetchProductRolesMocked as jest.Mock).mockResolvedValue(mockRoles);
       
-      const result = await fetchProductRoles(mockProduct);
-      expect(fetchProductRolesMocked).toHaveBeenCalledWith(mockProduct);
+      const result = await fetchProductRoles(mockProduct, mockedParties[0]);
+      expect(fetchProductRolesMocked).toHaveBeenCalledWith(mockProduct, mockedParties[0]);
       expect(result).toEqual(mockRoles);
     });
   
@@ -142,8 +143,8 @@ describe('productService tests', () => {
           description: 'Admin Role Description'
         }
       ];
-      const result = await fetchProductRoles(mockProduct);
-      expect(DashboardApi.getProductRoles).toHaveBeenCalledWith(mockProduct.id);
+      const result = await fetchProductRoles(mockProduct, mockedParties[0]);
+      expect(DashboardApi.getProductRoles).toHaveBeenCalledWith(mockProduct.id, mockedParties[0].typology);
       expect(result).toEqual(expectedRoles);
     });
   });
