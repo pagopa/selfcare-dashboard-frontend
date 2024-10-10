@@ -144,7 +144,7 @@ describe('productService tests', () => {
         }
       ];
       const result = await fetchProductRoles(mockProduct, mockedParties[0]);
-      expect(DashboardApi.getProductRoles).toHaveBeenCalledWith(mockProduct.id, mockedParties[0].typology);
+      expect(DashboardApi.getProductRoles).toHaveBeenCalledWith(mockProduct.id, mockedParties[0].institutionType);
       expect(result).toEqual(expectedRoles);
     });
   });
