@@ -1,9 +1,10 @@
 import { DashboardApi } from '../api/DashboardApiClient';
+import { Party } from '../model/Party';
 import { Product, productResource2Product } from '../model/Product';
 import { ProductRole } from '../model/ProductRole';
 import {
-  mockedPartyProducts,
   fetchProductRoles as fetchProductRolesMocked,
+  mockedPartyProducts,
 } from './__mocks__/productService';
 
 export const fetchProducts = (): Promise<Array<Product>> => {
@@ -17,12 +18,12 @@ export const fetchProducts = (): Promise<Array<Product>> => {
   }
 };
 
-export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
+export const fetchProductRoles = (product: Product, party: Party): Promise<Array<ProductRole>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
-    return fetchProductRolesMocked(product);
+    return fetchProductRolesMocked(product, party);
   } else {
-    return DashboardApi.getProductRoles(product.id)
+    return DashboardApi.getProductRoles(product.id ,party.institutionType ?? '')
       .then((roles) => roles
           ?.map((pr) =>
             pr?.productRoles?.map((r) => ({

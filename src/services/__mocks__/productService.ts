@@ -1,4 +1,5 @@
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
+import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
 
@@ -218,7 +219,7 @@ export const verifyFetchPartyProductsMockExecution = (partyProducts: Array<Produ
 
 export const fetchProducts = () => new Promise((resolve) => resolve(mockedPartyProducts));
 
-export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
+export const fetchProductRoles = (product: Product, _party: Party): Promise<Array<ProductRole>> => {
   const out = mockedProductRoles.map((r) =>
     Object.assign(
       {},

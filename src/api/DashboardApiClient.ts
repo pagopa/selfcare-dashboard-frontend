@@ -111,9 +111,10 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getProductRoles: async (productId: string): Promise<Array<ProductRoleMappingsResource>> => {
+  getProductRoles: async (productId: string, institutionType: string): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
+      institutionType,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

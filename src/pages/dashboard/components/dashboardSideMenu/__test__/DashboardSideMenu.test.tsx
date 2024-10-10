@@ -47,7 +47,6 @@ test('Test: render with props false', async () => {
 test('Test: The techpartner has not been delegated by any body, he will see the menu section and will be able to access it in empty state', async () => {
   const institutionPT = mockedParties.find((party) => party.description === 'Maggioli S.p.A.')!;
 
-  console.log('institutionPT', institutionPT);
   const { history } = renderWithProviders(
     <DashboardSideMenu
       party={institutionPT}
