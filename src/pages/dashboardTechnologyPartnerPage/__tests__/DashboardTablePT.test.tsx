@@ -35,8 +35,8 @@ const renderDashboardTablePT = (
   injectedStore?: ReturnType<typeof createStore>,
   injectedHistory?: ReturnType<typeof createMemoryHistory>
 ) => {
-  const store = injectedStore ? injectedStore : createStore();
-  const history = injectedHistory ? injectedHistory : createMemoryHistory();
+  const store = injectedStore || createStore();
+  const history = injectedHistory || createMemoryHistory();
   render(
     <Router history={history}>
       <Provider store={store}>

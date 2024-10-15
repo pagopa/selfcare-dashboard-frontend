@@ -16,11 +16,11 @@ import { DASHBOARD_ROUTES } from '../../routes';
 import { fetchDelegations } from '../../services/delegationServices';
 
 type Props = {
-  party: Party;
-  authorizedDelegableProducts: Array<Product>;
+  party: Readonly<Party>;
+  authorizedDelegableProducts: Readonly<Array<Product>>;
 };
 
-export default function DashboardDelegationsPage({ party, authorizedDelegableProducts }: Props) {
+export default function DashboardDelegationsPage({ party, authorizedDelegableProducts }: Readonly<Props>) {
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
   const history = useHistory();
