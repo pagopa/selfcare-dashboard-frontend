@@ -24,6 +24,7 @@ const parties: Array<Party> = [
     registeredOffice: 'registeredOffice',
     zipCode: '40506',
     typology: 'typology',
+    products: []
   },
   {
     fiscalCode: 'MILANO_FC',
@@ -39,6 +40,7 @@ const parties: Array<Party> = [
     registeredOffice: 'registeredOffice',
     zipCode: '40507',
     typology: 'typology',
+    products: []
   },
   {
     fiscalCode: 'ROMA_FC',
@@ -54,6 +56,7 @@ const parties: Array<Party> = [
     registeredOffice: 'registeredOffice',
     zipCode: '40508',
     typology: 'typology',
+    products: []
   },
   {
     fiscalCode: 'NAPOLI_FC',
@@ -69,6 +72,7 @@ const parties: Array<Party> = [
     registeredOffice: 'registeredOffice',
     zipCode: '40509',
     typology: 'typology',
+    products: []
   },
 ];
 

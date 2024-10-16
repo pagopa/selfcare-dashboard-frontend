@@ -16,6 +16,7 @@ type Props = {
 
 const DashboardOverview = ({ party, products }: Props) => {
   const [open, setOpen] = useState(false);
+
   const { getAllProductsWithPermission } = usePermissions();
 
   const showInfoBanner = party.institutionType === 'PA';

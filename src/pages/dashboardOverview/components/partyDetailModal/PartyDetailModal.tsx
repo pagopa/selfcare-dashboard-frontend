@@ -41,7 +41,7 @@ export const PartyDetailModal = ({
   return (
     <CustomDrawer open={open} anchor="right" tabIndex={0} onClose={() => setOpen(false)}>
       <Grid container px={3} pt={2} mb={5}>
-        <Grid xs={12} textAlign={'end'} mb={2}>
+        <Grid item xs={12} textAlign={'end'} mb={2}>
           <IconButton
             color="default"
             aria-label="close instituion detail modal"

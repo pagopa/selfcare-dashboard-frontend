@@ -190,6 +190,7 @@ export const mockedParties: Array<Party> = [
     digitalAddress: 'comune.bari@pec.it',
     fiscalCode: '111111111111',
     category: 'Comuni e loro Consorzi e Associazioni',
+    categoryCode:'L6',
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
@@ -237,6 +238,7 @@ export const mockedParties: Array<Party> = [
     digitalAddress: 'comune.milano@pec.it',
     fiscalCode: 'fiscalCodeMilano',
     category: 'Comuni e loro Consorzi e Associazioni',
+    categoryCode:'L6',
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
@@ -280,6 +282,7 @@ export const mockedParties: Array<Party> = [
     digitalAddress: 'comune.roma@pec.it',
     fiscalCode: 'fiscalCodeRoma',
     category: 'Comuni e loro Consorzi e Associazioni',
+    categoryCode:'L6',
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
@@ -1703,7 +1706,7 @@ export const verifyFetchPartiesMockExecution = (parties: Array<Party>) => {
   expect(parties).toStrictEqual(mockedParties);
 };
 
-export const fetchParties = () => new Promise((resolve) => resolve(mockedParties));
+export const fetchParties = () => Promise.resolve(mockedParties);
 
 export const verifyFetchPartyDetailsMockExecution = (party: Party) => {
   expect(party).toStrictEqual(mockedParties.filter((p) => p.partyId === party.partyId)[0]);
@@ -1713,4 +1716,4 @@ export const fetchPartyDetails = (
   partyId: string,
   _parties?: Array<Party>
 ): Promise<Party | null> =>
-  new Promise((resolve) => resolve(mockedParties.find((p) => p.partyId === partyId) ?? null));
+  Promise.resolve(mockedParties.find((p) => p.partyId === partyId) ?? null);

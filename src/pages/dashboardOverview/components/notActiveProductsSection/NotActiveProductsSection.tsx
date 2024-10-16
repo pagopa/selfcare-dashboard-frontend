@@ -3,10 +3,11 @@ import { Grid } from '@mui/material';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
+import { ENV } from '../../../../utils/env';
 import NotActiveProductCardContainer from './components/NotActiveProductCardContainer';
 
 type Props = {
@@ -14,21 +15,37 @@ type Props = {
   products: Array<Product>;
 };
 
-export default function NotActiveProductsSection({ party, products }: Props) {
+export default function NotActiveProductsSection({ party, products }: Readonly<Props>) {
+  const [allowedCategoriesOnProdPN, setAllowedCategoriesOnProdPN] = React.useState<Array<string>>(
+    []
+  );
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
-  const isOnboardingAllowedInProdPN = (category?: string): boolean => {
-    const allowedCategories = [
-      'Regioni, Province Autonome e loro Consorzi e Associazioni', // L4
-      'Comuni e loro Consorzi e Associazioni', // L6
-      "Citta' Metropolitane", // L45
-      'Agenzie, Enti e Consorzi Pubblici per il Diritto allo Studio Universitario', // L15
-      'Federazioni Nazionali, Ordini, Collegi e Consigli Professionali', // C14
-    ];
+  const getCategoriesOnboardingAllowed = async () => {
+    try {
+      const response = await fetch(ENV.BASE_PATH_CDN_URL + '/assets/config.json');
 
-    return category !== undefined && allowedCategories.includes(category);
+      if (!response.ok) {
+        console.error(`Failed to fetch config.json: ${response.status} - ${response.statusText}`);
+        return;
+      }
+
+      const categoriesAllowedJSON = await response.json();
+
+      const categoriesStringToArray = categoriesAllowedJSON?.product['prod-pn']?.ipa.PA?.split(
+        ','
+      ).map((c: string) => c.trim());
+
+      setAllowedCategoriesOnProdPN(categoriesStringToArray);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  useEffect(() => {
+    void getCategoriesOnboardingAllowed();
+  }, []);
 
   const isProductEligible = (product: Product) => {
     const isActive = product.status === 'ACTIVE';
@@ -49,14 +66,18 @@ export default function NotActiveProductsSection({ party, products }: Props) {
     return isActive && (isNotOnboarded || hasEligibleSubProducts);
   };
 
-  const isProductAllowed = (product: Product) => {
+  const isNotProductAllowed = (product: Product) => {
     if (party.institutionType === 'PSP' && product.id === 'prod-pagopa') {
       return false;
     }
-    return !(product.id === 'prod-pn' && !isOnboardingAllowedInProdPN(party?.category));
+    return !(
+      product.id === 'prod-pn' &&
+      party.categoryCode &&
+      allowedCategoriesOnProdPN.includes(party.categoryCode)
+    );
   };
 
-  const eligibleProducts = products.filter(isProductEligible).filter(isProductAllowed);
+  const eligibleProducts = products.filter(isProductEligible).filter(isNotProductAllowed);
 
   return (
     <React.Fragment>
