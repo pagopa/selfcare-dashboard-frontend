@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
@@ -16,11 +16,10 @@ type Props = {
 };
 
 export default function NotActiveProductsSection({ party, products }: Readonly<Props>) {
-  const [allowedCategoriesOnProdPN, setAllowedCategoriesOnProdPN] = React.useState<Array<string>>(
-    []
-  );
+  const [allowedCategoriesOnProdPN, setAllowedCategoriesOnProdPN] = useState<Array<string>>([]);
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
+  const [eligibleProducts, setEligibleProducts] = useState<Array<Product>>([]);
 
   const getCategoriesOnboardingAllowed = async () => {
     try {
@@ -77,7 +76,9 @@ export default function NotActiveProductsSection({ party, products }: Readonly<P
     );
   };
 
-  const eligibleProducts = products.filter(isProductEligible).filter(isNotProductAllowed);
+  useEffect(() => {
+    setEligibleProducts(products.filter(isProductEligible).filter(isNotProductAllowed));
+  }, [party]);
 
   return (
     <React.Fragment>
