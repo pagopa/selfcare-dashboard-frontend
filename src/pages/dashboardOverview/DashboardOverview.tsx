@@ -51,11 +51,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   const isInstitutionTypeAllowedOnb = (product: Product) =>
     !['PT', 'SA', 'AS'].includes(party.institutionType ?? '') &&
     !(party.institutionType === 'PSP' && product.id === 'prod-pagopa') &&
-    !(
-      product.id === 'prod-pn' &&
-      party.categoryCode &&
-      allowedCategoriesOnProdPN.includes(party.categoryCode)
-    );
+    !(product.id === 'prod-pn' && !allowedCategoriesOnProdPN.includes(party.categoryCode ?? ''));
 
   const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
 
