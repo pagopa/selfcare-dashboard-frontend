@@ -4,7 +4,6 @@ import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenR
 import { InstitutionBaseResource } from '../generated/b4f-dashboard/InstitutionBaseResource';
 import {
   InstitutionResource,
-  InstitutionTypeEnum,
 } from '../generated/b4f-dashboard/InstitutionResource';
 import { SelcRoleEnum } from '../generated/b4f-dashboard/ProductRoleInfoResource';
 import { ProductRoleMappingsResource } from '../generated/b4f-dashboard/ProductRoleMappingsResource';
@@ -26,7 +25,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    institutionType: InstitutionTypeEnum.PA,
+    institutionType: 'PA',
     delegation: false,
     address: 'Piazza della Scala, 2',
     zipCode: '20121',
@@ -42,7 +41,7 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     category: '',
-    institutionType: InstitutionTypeEnum.PA,
+    institutionType: 'PA',
     delegation: true,
     address: 'Piazza della Scala, 2',
     zipCode: '20121',
@@ -312,11 +311,11 @@ export const DashboardApi = {
   getBillingToken: async (_partyId: string, _environment?: string, _lang?: string): Promise<string> =>
     new Promise((resolve) => resolve('DUMMYTOKEN')),
 
-  getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
+  getProductRoles: async (_productId: string, _institutionType: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
 
   getProductBrokers: async (
     _productId: string,
-    _institutionType: InstitutionTypeEnum
+    _institutionType: string
   ): Promise<Array<BrokerResource>> => new Promise((resolve) => resolve(mockedProductRoles)),
 };

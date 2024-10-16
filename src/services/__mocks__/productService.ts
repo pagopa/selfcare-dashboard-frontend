@@ -1,4 +1,5 @@
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
+import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
 
@@ -168,6 +169,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-legale',
     title: 'Referente Legale',
     description: 'Descrizione referente-legale',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -177,6 +179,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-amministrativo',
     title: 'Amministratore',
     description: 'Descrizione referente-amministrativo',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -186,6 +189,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'incaricato-ente-creditore',
     title: 'Incaricato Ente Creditore',
     description: 'Descrizione incaricato-ente-creditore',
+    phasesAdditionAllowed: ['dashboard-async'],
   },
   {
     productId: 'PRODID',
@@ -195,6 +199,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-dei-pagamenti',
     title: 'Referente dei Pagamenti',
     description: 'Descrizione referente-dei-pagamenti',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -204,6 +209,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-tecnico',
     title: 'Referente Tecnico',
     description: 'Descrizione referente-tecnico',
+    phasesAdditionAllowed: ['dashboard'],
   },
 ];
 
@@ -213,7 +219,7 @@ export const verifyFetchPartyProductsMockExecution = (partyProducts: Array<Produ
 
 export const fetchProducts = () => new Promise((resolve) => resolve(mockedPartyProducts));
 
-export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
+export const fetchProductRoles = (product: Product, _party: Party): Promise<Array<ProductRole>> => {
   const out = mockedProductRoles.map((r) =>
     Object.assign(
       {},

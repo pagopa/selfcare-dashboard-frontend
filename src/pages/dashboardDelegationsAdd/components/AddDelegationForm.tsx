@@ -29,7 +29,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
 import { DelegationResource } from '../../../api/generated/b4f-dashboard/DelegationResource';
-import { InstitutionTypeEnum } from '../../../api/generated/b4f-dashboard/InstitutionResource';
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
@@ -114,11 +113,11 @@ export default function AddDelegationForm({
 
   useEffect(() => {
     if (productSelected && delegationsListRef) {
-      handleProductBrokers(productSelected.id, party.institutionType as InstitutionTypeEnum);
+      handleProductBrokers(productSelected.id, party.institutionType as string);
     }
   }, [productSelected]);
 
-  const handleProductBrokers = (productId: string, institutionType: InstitutionTypeEnum) => {
+  const handleProductBrokers = (productId: string, institutionType: string) => {
     setLoading(true);
     getProductBrokers(productId, institutionType)
       .then((pb) => {
