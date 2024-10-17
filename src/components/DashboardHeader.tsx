@@ -153,7 +153,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               setOpenGenericEnvProductModal(true);
             } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
               void invokeProductBo(
-                selectedProduct as Product,
+                selectedProduct,
                 actualSelectedParty.current as Party,
                 undefined,
                 lang
