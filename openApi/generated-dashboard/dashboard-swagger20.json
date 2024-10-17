@@ -3174,7 +3174,11 @@
           "type": "string"
         },
         "category": {
-          "description": "Institution's category",
+          "description": "Institution's category description",
+          "type": "string"
+        },
+        "categoryCode": {
+          "description": "Institution's category code",
           "type": "string"
         },
         "city": {
