@@ -23,8 +23,8 @@ export default function NotActiveProductsSection({
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
-  const isOnboardingAllowedInProdPN = (category?: string): boolean =>
-    allowedCategoriesOnProdPN.includes(category ?? '');
+  const isOnboardingAllowedInProdPN = (categoryCode?: string): boolean =>
+    allowedCategoriesOnProdPN.includes(categoryCode ?? '');
 
   const isProductEligible = (product: Product) => {
     const isActive = product.status === 'ACTIVE';
@@ -49,7 +49,7 @@ export default function NotActiveProductsSection({
     if (party.institutionType === 'PSP' && product.id === 'prod-pagopa') {
       return false;
     }
-    return !(product.id === 'prod-pn' && !isOnboardingAllowedInProdPN(party?.category));
+    return !(product.id === 'prod-pn' && !isOnboardingAllowedInProdPN(party?.categoryCode));
   };
 
   const eligibleProducts = products.filter(isProductEligible).filter(isProductAllowed);
