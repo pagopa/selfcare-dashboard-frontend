@@ -15,29 +15,25 @@ import SessionModalInteropProduct from './SessionModalInteropProduct';
 type Props = {
   party: Party;
   product: OnboardedProduct;
-  authorizedProdColl: boolean;
-  authorizedProdAtst: boolean;
-  authorizedProdInterop: boolean;
   hasMoreThanOneInteropEnv: boolean;
   products: Array<Product>;
+  authorizedInteropProducts: Array<string>;
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export default function ActiveProductCardContainer({
   party,
   product,
-  authorizedProdColl,
-  authorizedProdAtst,
-  authorizedProdInterop,
   hasMoreThanOneInteropEnv,
   products,
+  authorizedInteropProducts,
 }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
+  const { hasPermission } = usePermissions();
 
   const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
-  const { hasPermission } = usePermissions();
 
   const isDisabled = !!party.products.find(
     (p) =>
@@ -51,20 +47,27 @@ export default function ActiveProductCardContainer({
 
   const lang = i18n.language;
 
+  const startWithProductInterop = (id?: string) =>
+    id !== undefined && id.startsWith('prod-interop');
+
   return productOnboarded && !isOperatorWithNoAuthorizedProduct ? (
     <>
       <Grid item xs={12} sm={6} md={6} lg={4}>
         <ActiveProductCard
           disableBtn={
-            productOnboarded.id?.startsWith('prod-interop') && hasMoreThanOneInteropEnv
+            startWithProductInterop(productOnboarded.id) && hasMoreThanOneInteropEnv
               ? false
               : isDisabled
           }
-          cardTitle={productOnboarded?.title ?? ''}
+          cardTitle={
+            startWithProductInterop(productOnboarded?.id)
+              ? products.find((p) => p.id === 'prod-interop')?.title ?? ''
+              : productOnboarded?.title ?? ''
+          }
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
-            hasMoreThanOneInteropEnv && productOnboarded.id.startsWith('prod-interop')
+            hasMoreThanOneInteropEnv && startWithProductInterop(productOnboarded.id)
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
                 productOnboarded.id !== 'prod-interop'
@@ -81,7 +84,11 @@ export default function ActiveProductCardContainer({
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
-            values={{ productTitle: productOnboarded.title }}
+            values={{
+              productTitle: startWithProductInterop(productOnboarded.id)
+                ? products?.find((pp) => pp.id === 'prod-interop')?.title
+                : productOnboarded.title,
+            }}
             components={{ 1: <strong /> }}
           >
             {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
@@ -93,9 +100,7 @@ export default function ActiveProductCardContainer({
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        authorizedProdColl={authorizedProdColl}
-        authorizedProdAtst={authorizedProdAtst}
-        authorizedProdInterop={authorizedProdInterop}
+        authorizedInteropProducts={authorizedInteropProducts}
         products={products}
         party={party}
       />

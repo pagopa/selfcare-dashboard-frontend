@@ -23,7 +23,7 @@ export default function ActiveProductCard({
   btnAction,
   party,
   product,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
 
   const theme = useTheme();

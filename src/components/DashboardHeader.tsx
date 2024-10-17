@@ -48,21 +48,18 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
 
+  const interopProductIds = ['prod-interop', 'prod-interop-atst', 'prod-interop-coll'];
+
   const findAuthorizedProduct = (productId: string) =>
     party?.products.find(
       (p) =>
         p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
     );
 
-  const authorizedProdInterop = findAuthorizedProduct('prod-interop');
-  const authorizedProdAtst = findAuthorizedProduct('prod-interop-atst');
-  const authorizedProdColl = findAuthorizedProduct('prod-interop-coll');
-
-  const authorizedInteropProducts = [
-    authorizedProdInterop,
-    authorizedProdAtst,
-    authorizedProdColl,
-  ].filter((product) => product);
+  const authorizedInteropProducts = interopProductIds
+    .map(findAuthorizedProduct)
+    .filter(Boolean)
+    .map((p) => p?.productId ?? '');
 
   const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
@@ -94,13 +91,15 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
-            hasMoreThanOneInteropEnv
-              ? p.id !== 'prod-interop-coll' && p.id !== 'prod-interop-atst'
+            p.id?.startsWith('prod-interop') && hasMoreThanOneInteropEnv
+              ? p.id === authorizedInteropProducts[0]
               : true
           )
           .map((p) => ({
             id: p.id,
-            title: p.title,
+            title: p.id.startsWith('prod-interop')
+              ? products?.find((pp) => pp.id === 'prod-interop')?.title ?? ''
+              : p.title,
             productUrl: p.urlPublic ?? '',
             linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
           }))}
@@ -181,7 +180,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
-            values={{ productTitle: productSelected?.title }}
+            values={{
+              productTitle: productSelected?.id.startsWith('prod-interop')
+                ? products?.find((pp) => pp.id === 'prod-interop')?.title
+                : productSelected?.title,
+            }}
             components={{ 1: <strong /> }}
           >
             {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
@@ -200,9 +203,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        authorizedProdInterop={!!authorizedProdInterop}
-        authorizedProdColl={!!authorizedProdColl}
-        authorizedProdAtst={!!authorizedProdAtst}
+        authorizedInteropProducts={authorizedInteropProducts}
         products={products}
         party={party}
       />
