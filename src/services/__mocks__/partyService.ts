@@ -367,13 +367,14 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-interop-coll',
         authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '3395867495',
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers]
       },
       {
         productId: 'prod-interop-atst',
@@ -385,6 +386,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers]
       },
       {
         productId: 'prod-pn',

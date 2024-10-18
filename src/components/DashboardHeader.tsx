@@ -17,6 +17,8 @@ import SessionModalInteropProduct from '../pages/dashboardOverview/components/ac
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
+import { INTEROP_PRODUCT_ENUM, interopProductIdList } from '../utils/constants';
+import { startWithProductInterop } from '../utils/helperFunctions';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -54,15 +56,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
     );
 
-  const authorizedProdInterop = findAuthorizedProduct('prod-interop');
-  const authorizedProdAtst = findAuthorizedProduct('prod-interop-atst');
-  const authorizedProdColl = findAuthorizedProduct('prod-interop-coll');
-
-  const authorizedInteropProducts = [
-    authorizedProdInterop,
-    authorizedProdAtst,
-    authorizedProdColl,
-  ].filter((product) => product);
+  const authorizedInteropProducts = interopProductIdList
+    .map(findAuthorizedProduct)
+    .filter(Boolean)
+    .map((p) => p?.productId ?? '');
 
   const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
@@ -70,7 +67,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     (pp) =>
       pp.productOnBoardingStatus === 'ACTIVE' &&
       (hasPermission(pp.productId ?? '', Actions.AccessProductBackoffice) ||
-        (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop'))
+        (hasMoreThanOneInteropEnv && pp.productId === INTEROP_PRODUCT_ENUM.INTEROP))
   );
 
   const activeProducts: Array<Product> = useMemo(
@@ -94,13 +91,15 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
-            hasMoreThanOneInteropEnv
-              ? p.id !== 'prod-interop-coll' && p.id !== 'prod-interop-atst'
+            startWithProductInterop(p.id) && hasMoreThanOneInteropEnv
+              ? p.id === authorizedInteropProducts[0]
               : true
           )
           .map((p) => ({
             id: p.id,
-            title: p.title,
+            title: startWithProductInterop(p.id)
+              ? products?.find((pp) => pp.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title ?? ''
+              : p.title,
             productUrl: p.urlPublic ?? '',
             linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
           }))}
@@ -143,7 +142,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             if (
               actualSelectedParty.current &&
               hasMoreThanOneInteropEnv &&
-              p.id.startsWith('prod-interop')
+              startWithProductInterop(p.id)
             ) {
               setOpenCustomEnvInteropModal(true);
             } else if (
@@ -181,7 +180,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
-            values={{ productTitle: productSelected?.title }}
+            values={{
+              productTitle: startWithProductInterop(productSelected?.id)
+                ? products?.find((pp) => pp.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title
+                : productSelected?.title,
+            }}
             components={{ 1: <strong /> }}
           >
             {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
@@ -200,9 +203,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        authorizedProdInterop={!!authorizedProdInterop}
-        authorizedProdColl={!!authorizedProdColl}
-        authorizedProdAtst={!!authorizedProdAtst}
+        authorizedInteropProducts={authorizedInteropProducts}
         products={products}
         party={party}
       />
