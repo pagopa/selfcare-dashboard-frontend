@@ -6,6 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
+import { interopProductIdList } from '../../../../utils/constants';
 import ActiveProductCardContainer from './components/ActiveProductCardContainer';
 
 type Props = {
@@ -17,15 +18,13 @@ export default function ActiveProductsSection({ party, products }: Readonly<Prop
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
-  const interopProductIds = ['prod-interop', 'prod-interop-atst', 'prod-interop-coll'];
-
   const findAuthorizedProduct = (productId: string) =>
     party?.products.find(
       (p) =>
         p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
     );
 
-  const authorizedInteropProducts = interopProductIds
+  const authorizedInteropProducts = interopProductIdList
     .map(findAuthorizedProduct)
     .filter(Boolean)
     .map((p) => p?.productId ?? '');

@@ -17,6 +17,8 @@ import SessionModalInteropProduct from '../pages/dashboardOverview/components/ac
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
+import { INTEROP_PRODUCT_ENUM, interopProductIdList } from '../utils/constants';
+import { startWithProductInterop } from '../utils/helperFunctions';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -48,15 +50,13 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
 
-  const interopProductIds = ['prod-interop', 'prod-interop-atst', 'prod-interop-coll'];
-
   const findAuthorizedProduct = (productId: string) =>
     party?.products.find(
       (p) =>
         p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
     );
 
-  const authorizedInteropProducts = interopProductIds
+  const authorizedInteropProducts = interopProductIdList
     .map(findAuthorizedProduct)
     .filter(Boolean)
     .map((p) => p?.productId ?? '');
@@ -67,7 +67,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     (pp) =>
       pp.productOnBoardingStatus === 'ACTIVE' &&
       (hasPermission(pp.productId ?? '', Actions.AccessProductBackoffice) ||
-        (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop'))
+        (hasMoreThanOneInteropEnv && pp.productId === INTEROP_PRODUCT_ENUM.INTEROP))
   );
 
   const activeProducts: Array<Product> = useMemo(
@@ -91,14 +91,14 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
-            p.id?.startsWith('prod-interop') && hasMoreThanOneInteropEnv
+            startWithProductInterop(p.id) && hasMoreThanOneInteropEnv
               ? p.id === authorizedInteropProducts[0]
               : true
           )
           .map((p) => ({
             id: p.id,
-            title: p.id.startsWith('prod-interop')
-              ? products?.find((pp) => pp.id === 'prod-interop')?.title ?? ''
+            title: startWithProductInterop(p.id)
+              ? products?.find((pp) => pp.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title ?? ''
               : p.title,
             productUrl: p.urlPublic ?? '',
             linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
@@ -142,7 +142,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             if (
               actualSelectedParty.current &&
               hasMoreThanOneInteropEnv &&
-              p.id.startsWith('prod-interop')
+              startWithProductInterop(p.id)
             ) {
               setOpenCustomEnvInteropModal(true);
             } else if (
@@ -181,8 +181,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
             values={{
-              productTitle: productSelected?.id.startsWith('prod-interop')
-                ? products?.find((pp) => pp.id === 'prod-interop')?.title
+              productTitle: startWithProductInterop(productSelected?.id)
+                ? products?.find((pp) => pp.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title
                 : productSelected?.title,
             }}
             components={{ 1: <strong /> }}

@@ -8,6 +8,8 @@ import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/Onb
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
+import { INTEROP_PRODUCT_ENUM } from '../../../../../utils/constants';
+import { startWithProductInterop } from '../../../../../utils/helperFunctions';
 import ActiveProductCard from './ActiveProductCard';
 import GenericEnvProductModal from './GenericEnvProductModal';
 import SessionModalInteropProduct from './SessionModalInteropProduct';
@@ -47,9 +49,6 @@ export default function ActiveProductCardContainer({
 
   const lang = i18n.language;
 
-  const startWithProductInterop = (id?: string) =>
-    id !== undefined && id.startsWith('prod-interop');
-
   return productOnboarded && !isOperatorWithNoAuthorizedProduct ? (
     <>
       <Grid item xs={12} sm={6} md={6} lg={4}>
@@ -61,7 +60,7 @@ export default function ActiveProductCardContainer({
           }
           cardTitle={
             startWithProductInterop(productOnboarded?.id)
-              ? products.find((p) => p.id === 'prod-interop')?.title ?? ''
+              ? products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title ?? ''
               : productOnboarded?.title ?? ''
           }
           buttonLabel={t('overview.activeProducts.manageButton')}
@@ -70,7 +69,7 @@ export default function ActiveProductCardContainer({
             hasMoreThanOneInteropEnv && startWithProductInterop(productOnboarded.id)
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
-                productOnboarded.id !== 'prod-interop'
+                productOnboarded.id !== INTEROP_PRODUCT_ENUM.INTEROP
               ? setOpenGenericEnvProductModal(true)
               : invokeProductBo(productOnboarded, party, undefined, lang)
           }
