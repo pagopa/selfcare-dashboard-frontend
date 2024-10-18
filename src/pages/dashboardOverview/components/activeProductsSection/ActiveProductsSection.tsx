@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
 import { interopProductIdList } from '../../../../utils/constants';
+import { startWithProductInterop } from '../../../../utils/helperFunctions';
 import ActiveProductCardContainer from './components/ActiveProductCardContainer';
 
 type Props = {
@@ -44,7 +45,7 @@ export default function ActiveProductsSection({ party, products }: Readonly<Prop
           .filter(
             (us) =>
               us.productOnBoardingStatus === 'ACTIVE' &&
-              (us.productId?.startsWith('prod-interop') && hasMoreThanOneInteropEnv
+              (startWithProductInterop(us.productId) && hasMoreThanOneInteropEnv
                 ? us.productId === authorizedInteropProducts[0]
                 : true)
           )

@@ -1,3 +1,5 @@
+import { INTEROP_PRODUCT_ENUM } from "./constants";
+
 export const compareDates = (
   dateA?: Date,
   dateB?: Date,
@@ -34,4 +36,4 @@ export const codeToLabelProduct = (code: string) => {
   }
 };
 
-export const startWithProductInterop = (id?: string) => id?.startsWith('prod-interop');
+export const startWithProductInterop = (id?: string) => id?.startsWith(INTEROP_PRODUCT_ENUM.INTEROP);
