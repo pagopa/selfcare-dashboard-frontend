@@ -367,13 +367,14 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-interop-coll',
         authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '3395867495',
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers]
       },
       {
         productId: 'prod-interop-atst',
@@ -385,6 +386,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers]
       },
       {
         productId: 'prod-pn',
@@ -452,16 +454,14 @@ export const mockedParties: Array<Party> = [
         },
         userProductActions: [
           Actions.ListActiveProducts,
-          Actions.ListAvailableProducts,
           Actions.AccessProductBackoffice,
-          Actions.ManageProductUsers,
           Actions.ViewBilling,
         ],
       },
     ],
     delegation: false,
     status: undefined,
-    userRole: undefined,
+    userRole: 'LIMITED',
   },
   {
     description: 'AGENCY ONBOARDED',
@@ -470,6 +470,7 @@ export const mockedParties: Array<Party> = [
     digitalAddress: 'comune.onboarded@pec.it',
     fiscalCode: 'fiscalCodeONBOARDED',
     category: 'Comuni e loro Consorzi e Associazioni',
+    categoryCode: 'L6',
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
@@ -1703,7 +1704,7 @@ export const verifyFetchPartiesMockExecution = (parties: Array<Party>) => {
   expect(parties).toStrictEqual(mockedParties);
 };
 
-export const fetchParties = () => new Promise((resolve) => resolve(mockedParties));
+export const fetchParties = () => Promise.resolve(mockedParties);
 
 export const verifyFetchPartyDetailsMockExecution = (party: Party) => {
   expect(party).toStrictEqual(mockedParties.filter((p) => p.partyId === party.partyId)[0]);
@@ -1713,4 +1714,4 @@ export const fetchPartyDetails = (
   partyId: string,
   _parties?: Array<Party>
 ): Promise<Party | null> =>
-  new Promise((resolve) => resolve(mockedParties.find((p) => p.partyId === partyId) ?? null));
+  Promise.resolve(mockedParties.find((p) => p.partyId === partyId) ?? null);

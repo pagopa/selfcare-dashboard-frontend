@@ -12,23 +12,19 @@ import NotActiveProductCardContainer from './components/NotActiveProductCardCont
 type Props = {
   party: Party;
   products: Array<Product>;
+  allowedCategoriesOnProdPN: Array<string>;
 };
 
-export default function NotActiveProductsSection({ party, products }: Props) {
+export default function NotActiveProductsSection({
+  party,
+  products,
+  allowedCategoriesOnProdPN,
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
-  const isOnboardingAllowedInProdPN = (category?: string): boolean => {
-    const allowedCategories = [
-      'Regioni, Province Autonome e loro Consorzi e Associazioni', // L4
-      'Comuni e loro Consorzi e Associazioni', // L6
-      "Citta' Metropolitane", // L45
-      'Agenzie, Enti e Consorzi Pubblici per il Diritto allo Studio Universitario', // L15
-      'Federazioni Nazionali, Ordini, Collegi e Consigli Professionali', // C14
-    ];
-
-    return category !== undefined && allowedCategories.includes(category);
-  };
+  const isOnboardingAllowedInProdPN = (categoryCode?: string): boolean =>
+    allowedCategoriesOnProdPN.includes(categoryCode ?? '');
 
   const isProductEligible = (product: Product) => {
     const isActive = product.status === 'ACTIVE';
@@ -53,7 +49,7 @@ export default function NotActiveProductsSection({ party, products }: Props) {
     if (party.institutionType === 'PSP' && product.id === 'prod-pagopa') {
       return false;
     }
-    return !(product.id === 'prod-pn' && !isOnboardingAllowedInProdPN(party?.category));
+    return !(product.id === 'prod-pn' && !isOnboardingAllowedInProdPN(party?.categoryCode));
   };
 
   const eligibleProducts = products.filter(isProductEligible).filter(isProductAllowed);
