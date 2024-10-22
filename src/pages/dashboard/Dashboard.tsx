@@ -164,15 +164,19 @@ const Dashboard = () => {
     getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
 
   const isHandleDelegationsVisible = useMemo(() => {
-    const hasPermissionForManagedInstitutions =
+    const canDelegateSeeHandleDelegations =
+      delegableProducts.length > 0 &&
+      (isPT || hasDelegation) &&
       getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
-    const canShowDelegations = delegableProducts.length > 0 && (isPT || hasDelegation);
 
-    return (
-      (hasPermissionForManagedInstitutions && canShowDelegations) ||
-      canAggregatorSeeHandleDelegations
-    );
-  }, [authorizedDelegableProducts, isPT, hasDelegation, canAggregatorSeeHandleDelegations]);
+    return canDelegateSeeHandleDelegations || canAggregatorSeeHandleDelegations;
+  }, [
+    authorizedDelegableProducts,
+    isPT,
+    hasDelegation,
+    canAggregatorSeeHandleDelegations,
+    delegableProducts,
+  ]);
 
   // Check if the current route matches any path in the array
   // TODO `${ENV.ROUTES.USERS}/add` add after release in PROD
