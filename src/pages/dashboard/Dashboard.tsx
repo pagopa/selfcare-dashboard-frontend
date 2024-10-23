@@ -175,7 +175,8 @@ const Dashboard = () => {
   }, [authorizedDelegableProducts, isPT, hasDelegation, canAggregatorSeeHandleDelegations]);
 
   // Check if the current route matches any path in the array
-  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path, `${ENV.ROUTES.USERS}/add`];
+  // TODO `${ENV.ROUTES.USERS}/add` add after release in PROD
+  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path];
 
   const match = matchPath(location.pathname, {
     path: paths,
