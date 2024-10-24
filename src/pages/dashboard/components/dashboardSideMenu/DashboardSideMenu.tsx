@@ -55,7 +55,7 @@ export default function DashboardSideMenu({
   const ptRoute = DASHBOARD_ROUTES.TECHPARTNER.path;
   const { getAllProductsWithPermission } = usePermissions();
 
-  const canSeeUsers = getAllProductsWithPermission(Actions.ManageProductUsers).length > 0;
+  const canSeeUsers = getAllProductsWithPermission(Actions.ListProductUsers).length > 0;
   const canSeeGroups = getAllProductsWithPermission(Actions.ManageProductGroups).length > 0;
 
   const overviewPath = resolvePathVariables(overviewRoute, {
