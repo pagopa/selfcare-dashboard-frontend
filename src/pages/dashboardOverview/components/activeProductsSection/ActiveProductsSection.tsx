@@ -6,7 +6,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
-import { interopProductIdList } from '../../../../utils/constants';
 import { startWithProductInterop } from '../../../../utils/helperFunctions';
 import ActiveProductCardContainer from './components/ActiveProductCardContainer';
 
@@ -19,18 +18,34 @@ export default function ActiveProductsSection({ party, products }: Readonly<Prop
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
-  const findAuthorizedProduct = (productId: string) =>
-    party?.products.find(
-      (p) =>
-        p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
-    );
+  const interopProducts = party?.products
+    .filter(
+      (product) =>
+        startWithProductInterop(product.productId) && product.productOnBoardingStatus === 'ACTIVE'
+    )
+    .map((p) => p.productId ?? '');
 
-  const authorizedInteropProducts = interopProductIdList
-    .map(findAuthorizedProduct)
-    .filter(Boolean)
-    .map((p) => p?.productId ?? '');
+  const authorizedInteropProducts = party?.products
+    .filter(
+      (product) =>
+        startWithProductInterop(product.productId) &&
+        hasPermission(product.productId ?? '', Actions.AccessProductBackoffice)
+    )
+    .map((p) => p.productId ?? '');
 
   const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
+
+  const isRelevantInteropProduct = (productId: string) => {
+    if (startWithProductInterop(productId)) {
+      if (authorizedInteropProducts.length > 0) {
+        return productId === authorizedInteropProducts[0];
+      }
+      if (interopProducts.length > 0) {
+        return productId === interopProducts[0];
+      }
+    }
+    return true;
+  };
 
   return (
     <React.Fragment>
@@ -45,9 +60,7 @@ export default function ActiveProductsSection({ party, products }: Readonly<Prop
           .filter(
             (us) =>
               us.productOnBoardingStatus === 'ACTIVE' &&
-              (startWithProductInterop(us.productId) && hasMoreThanOneInteropEnv
-                ? us.productId === authorizedInteropProducts[0]
-                : true)
+              isRelevantInteropProduct(us.productId ?? '')
           )
           .sort((a, b) => {
             const aHasPermission = hasPermission(
