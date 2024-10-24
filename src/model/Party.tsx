@@ -19,6 +19,7 @@ type OnboardedProduct = {
   productOnBoardingStatus?: ProductOnBoardingStatusEnum;
   userProductActions?: Array<string>;
   userRole?: string;
+  isAggregator?: boolean;
 };
 
 export type Party = {
@@ -30,6 +31,7 @@ export type Party = {
   description: string;
   digitalAddress?: string;
   category?: string;
+  categoryCode?: string;
   urlLogo?: string;
   fiscalCode?: string;
   registeredOffice: string;
@@ -74,6 +76,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     description: institutionResource.name ?? '',
     digitalAddress: institutionResource.mailAddress,
     category: institutionResource.category,
+    categoryCode: institutionResource.categoryCode,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
     registeredOffice: institutionResource.address ?? '',

@@ -6,6 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
+import { startWithProductInterop } from '../../../../utils/helperFunctions';
 import ActiveProductCardContainer from './components/ActiveProductCardContainer';
 
 type Props = {
@@ -13,39 +14,38 @@ type Props = {
   products: Array<Product>;
 };
 
-export default function ActiveProductsSection({ party, products }: Props) {
+export default function ActiveProductsSection({ party, products }: Readonly<Props>) {
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
-  const findAuthorizedProduct = (productId: string) =>
-    party.products.find(
-      (p) =>
-        p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
-    );
+  const interopProducts = party?.products
+    .filter(
+      (product) =>
+        startWithProductInterop(product.productId) && product.productOnBoardingStatus === 'ACTIVE'
+    )
+    .map((p) => p.productId ?? '');
 
-  const authorizedProdInterop = findAuthorizedProduct('prod-interop');
-  const authorizedProdAtst = findAuthorizedProduct('prod-interop-atst');
-  const authorizedProdColl = findAuthorizedProduct('prod-interop-coll');
-
-  const authorizedInteropProducts = [
-    authorizedProdInterop,
-    authorizedProdAtst,
-    authorizedProdColl,
-  ].filter((product) => product);
+  const authorizedInteropProducts = party?.products
+    .filter(
+      (product) =>
+        startWithProductInterop(product.productId) &&
+        hasPermission(product.productId ?? '', Actions.AccessProductBackoffice)
+    )
+    .map((p) => p.productId ?? '');
 
   const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
-  const handleInteropEnviroments = (productId?: string) =>
-    (hasMoreThanOneInteropEnv
-      ? productId !== 'prod-interop-coll' && productId !== 'prod-interop-atst'
-      : true) &&
-    (!authorizedProdColl ? productId !== 'prod-interop-coll' : true) &&
-    (!authorizedProdAtst ? productId !== 'prod-interop-atst' : true) &&
-    (authorizedInteropProducts.length === 0
-      ? true
-      : !authorizedProdInterop && !hasMoreThanOneInteropEnv
-      ? productId !== 'prod-interop'
-      : true);
+  const isRelevantInteropProduct = (productId: string) => {
+    if (startWithProductInterop(productId)) {
+      if (authorizedInteropProducts.length > 0) {
+        return productId === authorizedInteropProducts[0];
+      }
+      if (interopProducts.length > 0) {
+        return productId === interopProducts[0];
+      }
+    }
+    return true;
+  };
 
   return (
     <React.Fragment>
@@ -59,7 +59,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
         {party.products
           .filter(
             (us) =>
-              us.productOnBoardingStatus === 'ACTIVE' && handleInteropEnviroments(us?.productId)
+              us.productOnBoardingStatus === 'ACTIVE' &&
+              isRelevantInteropProduct(us.productId ?? '')
           )
           .sort((a, b) => {
             const aHasPermission = hasPermission(
@@ -81,10 +82,8 @@ export default function ActiveProductsSection({ party, products }: Props) {
               key={product.productId}
               party={party}
               product={product}
-              authorizedProdColl={!!authorizedProdColl}
-              authorizedProdAtst={!!authorizedProdAtst}
-              authorizedProdInterop={!!authorizedProdInterop}
               hasMoreThanOneInteropEnv={hasMoreThanOneInteropEnv}
+              authorizedInteropProducts={authorizedInteropProducts}
               products={products}
             />
           ))}

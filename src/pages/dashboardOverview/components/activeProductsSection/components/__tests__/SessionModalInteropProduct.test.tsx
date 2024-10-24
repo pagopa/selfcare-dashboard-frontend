@@ -13,9 +13,7 @@ const defaultProps = {
   message: 'Test Message',
   onConfirm: mockOnConfirm,
   handleClose: mockHandleClose,
-  authorizedProdInterop: true,
-  authorizedProdAtst: true,
-  authorizedProdColl: true,
+  authorizedInteropProducts: ['prod-interop', 'prod-interop-atst', 'prod-interop-coll'],
   t: (key: string) => key,
 };
 

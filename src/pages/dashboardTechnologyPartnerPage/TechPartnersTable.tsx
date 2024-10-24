@@ -22,7 +22,9 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
-import { codeToLabelProduct, compareDates, compareStrings } from '../../utils/helperFunctions';
+import { useAppSelector } from '../../redux/hooks';
+import { partiesSelectors } from '../../redux/slices/partiesSlice';
+import { compareDates, compareStrings } from '../../utils/helperFunctions';
 import EmptyFilterResults from './components/EmptyFilterResults';
 import EnhancedTableHeader from './components/EnhanchedTableHeader';
 import TableCellWithTooltip from './components/TableCellWithTooltip';
@@ -31,7 +33,7 @@ type Props = {
   delegationsWithoutDuplicates: Array<DelegationWithInfo>;
 };
 
-export default function TechPartnersTable({ delegationsWithoutDuplicates }: Props) {
+export default function TechPartnersTable({ delegationsWithoutDuplicates }: Readonly<Props>) {
   const { t } = useTranslation();
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [filterBy, setFilterBy] = useState<string>('');
@@ -43,6 +45,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
   const [orderBy, setOrderBy] = useState('institutionName');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(Math.ceil(tableData.length / itemsPerPage));
+  const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
 
   useEffect(() => {
     setTotalPages(Math.ceil(tableData.length / itemsPerPage));
@@ -76,7 +79,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
   const getSortedData = (data: Array<typeof tableData[number]>): Array<typeof tableData[number]> =>
     [...data].sort((a, b) => {
       if (orderBy === 'institutionName') {
-        return compareStrings(a.institutionName || '', b.institutionName || '', order);
+        return compareStrings(a.institutionName ?? '', b.institutionName ?? '', order);
       }
 
       if (orderBy === 'createdAt') {
@@ -118,6 +121,11 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
     setCurrentPage(1);
   };
 
+  const prodIdToProdTitle = (prodId: string) => {
+    const prod = products?.find((p) => p.id === prodId);
+    return prod?.title ?? '';
+  };
+
   return (
     <Grid width={'100%'} height={'100%'}>
       <Grid
@@ -137,7 +145,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
               id="select-search-by"
               value={filterBy}
               label={t('overview.ptPage.filterTechPartner.searchBy')}
-              onChange={(e) => handleSearchBy(e.target.value as string)}
+              onChange={(e) => handleSearchBy(e.target.value)}
             >
               <MenuItem value="name">{t('overview.ptPage.filterTechPartner.name')}</MenuItem>
               <MenuItem value="fiscalCode">
@@ -206,7 +214,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Prop
                             {item.taxCode?.toUpperCase() ?? '-'}
                           </Typography>
                         </TableCell>
-                        <TableCell>{codeToLabelProduct(item.productId as string) ?? '-'}</TableCell>
+                        <TableCell>{prodIdToProdTitle(item.productId as string) ?? '-'}</TableCell>
                         <TableCell>
                           <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
                         </TableCell>

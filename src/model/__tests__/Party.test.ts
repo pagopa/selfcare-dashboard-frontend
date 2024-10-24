@@ -1,7 +1,4 @@
-import {
-  InstitutionResource,
-  InstitutionTypeEnum,
-} from '../../api/generated/b4f-dashboard/InstitutionResource';
+import { InstitutionResource } from '../../api/generated/b4f-dashboard/InstitutionResource';
 import { institutionResource2Party, Party } from '../Party';
 
 test('Test Party', () => {
@@ -30,6 +27,7 @@ test('Test Party', () => {
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
     parentDescription: undefined,
+    products: [],
   };
   expect(party).toStrictEqual({
     userRole: 'ADMIN',
@@ -37,6 +35,7 @@ test('Test Party', () => {
     urlLogo: 'image',
     status: 'ACTIVE',
     partyId: '1',
+    products: [],
     digitalAddress: 'comune.bari@pec.it',
     category: 'Comuni e loro Consorzi e Associazioni',
     registeredOffice: 'Piazza della Scala, 2',
@@ -67,9 +66,10 @@ test('Test institutionResource2Party', () => {
     originId: 'originId1',
     origin: 'IPA',
     category: 'Ente locale',
+    categoryCode: 'L1',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    institutionType: InstitutionTypeEnum.PA,
+    institutionType: 'PA',
     address: 'address',
     zipCode: '20121',
     recipientCode: 'MC45KDSX',
@@ -92,6 +92,7 @@ test('Test institutionResource2Party', () => {
     fiscalCode: 'fiscalCode',
     digitalAddress: 'address',
     category: 'Ente locale',
+    categoryCode: 'L1',
     urlLogo: 'http://checkout.selfcare/institutions/1/logo.png',
     externalId: 'externalId1',
     originId: 'originId1',

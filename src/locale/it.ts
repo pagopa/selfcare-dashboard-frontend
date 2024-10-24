@@ -180,6 +180,7 @@ export default {
         PG: 'Azienda',
         REC: 'Recapitista',
         CON: 'Consolidatore',
+        PRV: 'Privato',
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',

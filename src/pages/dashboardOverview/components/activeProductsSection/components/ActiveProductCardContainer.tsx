@@ -8,6 +8,8 @@ import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/Onb
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
+import { INTEROP_PRODUCT_ENUM } from '../../../../../utils/constants';
+import { startWithProductInterop } from '../../../../../utils/helperFunctions';
 import ActiveProductCard from './ActiveProductCard';
 import GenericEnvProductModal from './GenericEnvProductModal';
 import SessionModalInteropProduct from './SessionModalInteropProduct';
@@ -15,29 +17,25 @@ import SessionModalInteropProduct from './SessionModalInteropProduct';
 type Props = {
   party: Party;
   product: OnboardedProduct;
-  authorizedProdColl: boolean;
-  authorizedProdAtst: boolean;
-  authorizedProdInterop: boolean;
   hasMoreThanOneInteropEnv: boolean;
   products: Array<Product>;
+  authorizedInteropProducts: Array<string>;
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export default function ActiveProductCardContainer({
   party,
   product,
-  authorizedProdColl,
-  authorizedProdAtst,
-  authorizedProdInterop,
   hasMoreThanOneInteropEnv,
   products,
+  authorizedInteropProducts,
 }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
+  const { hasPermission } = usePermissions();
 
   const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
-  const { hasPermission } = usePermissions();
 
   const isDisabled = !!party.products.find(
     (p) =>
@@ -56,18 +54,22 @@ export default function ActiveProductCardContainer({
       <Grid item xs={12} sm={6} md={6} lg={4}>
         <ActiveProductCard
           disableBtn={
-            productOnboarded.id?.startsWith('prod-interop') && hasMoreThanOneInteropEnv
+            startWithProductInterop(productOnboarded.id) && hasMoreThanOneInteropEnv
               ? false
               : isDisabled
           }
-          cardTitle={productOnboarded?.title ?? ''}
+          cardTitle={
+            startWithProductInterop(productOnboarded?.id)
+              ? products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title ?? ''
+              : productOnboarded?.title ?? ''
+          }
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
-            hasMoreThanOneInteropEnv && productOnboarded.id.startsWith('prod-interop')
+            hasMoreThanOneInteropEnv && startWithProductInterop(productOnboarded.id)
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
-                productOnboarded.id !== 'prod-interop'
+                productOnboarded.id !== INTEROP_PRODUCT_ENUM.INTEROP
               ? setOpenGenericEnvProductModal(true)
               : invokeProductBo(productOnboarded, party, undefined, lang)
           }
@@ -81,7 +83,11 @@ export default function ActiveProductCardContainer({
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
-            values={{ productTitle: productOnboarded.title }}
+            values={{
+              productTitle: startWithProductInterop(productOnboarded.id)
+                ? products?.find((pp) => pp.id === 'prod-interop')?.title
+                : productOnboarded.title,
+            }}
             components={{ 1: <strong /> }}
           >
             {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
@@ -93,9 +99,7 @@ export default function ActiveProductCardContainer({
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        authorizedProdColl={authorizedProdColl}
-        authorizedProdAtst={authorizedProdAtst}
-        authorizedProdInterop={authorizedProdInterop}
+        authorizedInteropProducts={authorizedInteropProducts}
         products={products}
         party={party}
       />

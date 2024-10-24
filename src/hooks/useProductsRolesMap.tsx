@@ -1,8 +1,9 @@
 import useReduxCachedValue from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
 import { useMemo } from 'react';
+import { Party } from '../model/Party';
 import {
-  ProductRolesLists,
   productRoles2ProductRolesList,
+  ProductRolesLists,
   ProductsRolesMap,
 } from '../model/ProductRole';
 import { useAppSelector } from '../redux/hooks';
@@ -33,7 +34,7 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
     const promises: Array<Promise<[string, ProductRolesLists]>> = activeProducts
       .filter((p) => !productsRolesMap[p.id])
       .map((p) =>
-        fetchProductRoles(p).then((roles) => [p.id, productRoles2ProductRolesList(roles)])
+        fetchProductRoles(p, party as Party).then((roles) => [p.id, productRoles2ProductRolesList(roles)])
       );
     const fetched: Array<[string, ProductRolesLists]> = await Promise.all(promises);
 

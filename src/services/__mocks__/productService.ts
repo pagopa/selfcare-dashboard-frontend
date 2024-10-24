@@ -1,4 +1,5 @@
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
+import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
 
@@ -168,6 +169,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-legale',
     title: 'Referente Legale',
     description: 'Descrizione referente-legale',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -177,6 +179,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-amministrativo',
     title: 'Amministratore',
     description: 'Descrizione referente-amministrativo',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -186,6 +189,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'incaricato-ente-creditore',
     title: 'Incaricato Ente Creditore',
     description: 'Descrizione incaricato-ente-creditore',
+    phasesAdditionAllowed: ['dashboard-async'],
   },
   {
     productId: 'PRODID',
@@ -195,6 +199,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-dei-pagamenti',
     title: 'Referente dei Pagamenti',
     description: 'Descrizione referente-dei-pagamenti',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -204,16 +209,33 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-tecnico',
     title: 'Referente Tecnico',
     description: 'Descrizione referente-tecnico',
+    phasesAdditionAllowed: ['dashboard'],
   },
 ];
+
+export const mockedCategories = {
+  product: {
+    'prod-pn': {
+      ipa: {
+        PA: 'L6,L4,L45,L35,L5,L17,L15,C14',
+      },
+    },
+    default: {
+      ipa: {
+        GSP: 'L37,SAG',
+        PA: 'C17,C16,L10,L19,L13,L2,C10,L20,L21,L22,L15,L1,C13,C5,L40,L11,L39,L46,L8,L34,L7,L35,L45,L47,L6,L12,L24,L28,L42,L36,L44,C8,C3,C7,C14,L16,C11,L33,C12,L43,C2,L38,C1,L5,L4,L31,L18,L17,S01,SA',
+      },
+    },
+  },
+};
 
 export const verifyFetchPartyProductsMockExecution = (partyProducts: Array<Product>) => {
   expect(partyProducts).toStrictEqual(mockedPartyProducts);
 };
 
-export const fetchProducts = () => new Promise((resolve) => resolve(mockedPartyProducts));
+export const fetchProducts = () => Promise.resolve(mockedPartyProducts);
 
-export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
+export const fetchProductRoles = (product: Product, _party: Party): Promise<Array<ProductRole>> => {
   const out = mockedProductRoles.map((r) =>
     Object.assign(
       {},
@@ -222,5 +244,5 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
       { multiroleAllowed: product.id === 'prod-interop' && r.partyRole === 'OPERATOR' }
     )
   );
-  return new Promise((resolve) => resolve(out));
+  return Promise.resolve(out);
 };
