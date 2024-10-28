@@ -179,8 +179,7 @@ const Dashboard = () => {
   ]);
 
   // Check if the current route matches any path in the array
-  // TODO `${ENV.ROUTES.USERS}/add` add after release in PROD
-  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path];
+  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path, `${ENV.ROUTES.USERS}/add`];
 
   const match = matchPath(location.pathname, {
     path: paths,
