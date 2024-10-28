@@ -130,13 +130,8 @@ const Dashboard = () => {
     )
   );
 
-  const authorizedDelegableProducts: Array<Product> = activeProducts.filter((ap) =>
-    party?.products.some(
-      (p) =>
-        p.productId === ap.id &&
-        hasPermission(p.productId, Actions.AccessProductBackoffice) &&
-        ap.delegable
-    )
+  const authorizedDelegableProducts: Array<Product> = delegableProducts.filter((ap) =>
+    hasPermission(ap.id ?? '', Actions.AccessProductBackoffice)
   );
 
   const canAggregatorSeeHandleDelegations = useMemo(() => {

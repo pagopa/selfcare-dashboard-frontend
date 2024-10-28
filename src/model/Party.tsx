@@ -4,8 +4,8 @@ import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionR
 import { ProductOnBoardingStatusEnum } from '../api/generated/b4f-dashboard/OnboardedProductResource';
 import { ENV } from '../utils/env';
 
-export type UserRole = 'ADMIN' | 'LIMITED';
-export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
+export type UserRole = 'ADMIN' | 'LIMITED' | 'ADMIN_EA';
+export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE' | 'ADMIN_EA';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
 
 type OnboardedProduct = {
