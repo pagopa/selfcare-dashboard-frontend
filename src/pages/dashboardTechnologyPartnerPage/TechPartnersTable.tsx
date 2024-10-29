@@ -50,6 +50,8 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(Math.ceil(tableData.length / itemsPerPage));
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+  const parties = useAppSelector(partiesSelectors.selectPartiesList);
+  const partyIdsSet = parties ? new Set(parties.map((party) => party.partyId)) : new Set();
 
   useEffect(() => {
     setTotalPages(Math.ceil(tableData.length / itemsPerPage));
@@ -210,9 +212,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
                 {getSortedData(tableData)
                   .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
                   .map((item, _index) => {
-                    const isClickable =
-                      (item.productId === 'prod-io' || item.productId === 'prod-pagopa') &&
-                      item.type === 'EA';
+                    const isClickable = item.type === 'EA' && partyIdsSet.has(item.institutionId);
 
                     return (
                       <>
@@ -223,6 +223,10 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
                                 <ButtonNaked
                                   color="primary"
                                   component="button"
+                                  sx={{
+                                    fontWeight: 700,
+                                    fontSize: '16px',
+                                  }}
                                   onClick={() => {
                                     history.push(
                                       resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {

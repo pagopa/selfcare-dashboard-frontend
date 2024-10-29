@@ -13,14 +13,24 @@ import TechPartnersTable from '../TechPartnersTable';
 const mockedDelegation: DelegationWithPagination = {
   delegations: [
     {
-      brokerId: '123',
+      brokerId: '111',
       brokerName: 'Broker 1',
-      id: '456',
-      institutionId: '789',
+      id: '1',
+      institutionId: '1111',
       institutionName: 'Institution 1',
       institutionRootName: 'Root Institution',
       productId: '7890',
       type: TypeEnum.AOO,
+    },
+    {
+      brokerId: '222',
+      brokerName: 'Broker EA',
+      id: '2',
+      institutionId: 'institutionId0',
+      institutionName: 'Institution EA',
+      institutionRootName: 'Root Institution',
+      productId: '7890',
+      type: TypeEnum.EA,
     },
   ],
   pageInfo: {
@@ -79,4 +89,14 @@ test('test input field change and filter on click and search by name', async () 
   const removeFiltersButton = screen.getByText('Rimuovi filtri');
   expect(removeFiltersButton).toBeEnabled();
   fireEvent.click(removeFiltersButton);
+});
+
+test('delegation of type EA should be clikable for same institution is present on instituionList', async () => {
+  renderDashboardTablePT();
+
+  const delegationOfTypeEA = await screen.findByText('Institution EA');
+
+  expect(delegationOfTypeEA).toBeInTheDocument();
+
+  fireEvent.click(delegationOfTypeEA);
 });
