@@ -19,11 +19,14 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ButtonNaked } from '@pagopa/mui-italia';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
+import ROUTES from '../../routes';
 import { compareDates, compareStrings } from '../../utils/helperFunctions';
 import EmptyFilterResults from './components/EmptyFilterResults';
 import EnhancedTableHeader from './components/EnhanchedTableHeader';
@@ -35,6 +38,7 @@ type Props = {
 
 export default function TechPartnersTable({ delegationsWithoutDuplicates }: Readonly<Props>) {
   const { t } = useTranslation();
+  const history = useHistory();
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [filterBy, setFilterBy] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -205,23 +209,51 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
               <TableBody sx={{ backgroundColor: 'background.paper' }}>
                 {getSortedData(tableData)
                   .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-                  .map((item, _index) => (
-                    <>
-                      <TableRow key={item.id}>
-                        <TableCellWithTooltip text={item.institutionName ?? '-'} />
-                        <TableCell>
-                          <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
-                            {item.taxCode?.toUpperCase() ?? '-'}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>{prodIdToProdTitle(item.productId as string) ?? '-'}</TableCell>
-                        <TableCell>
-                          <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
-                        </TableCell>
-                      </TableRow>
-                      <Divider />
-                    </>
-                  ))}
+                  .map((item, _index) => {
+                    const isClickable =
+                      (item.productId === 'prod-io' || item.productId === 'prod-pagopa') &&
+                      item.type === 'EA';
+
+                    return (
+                      <>
+                        <TableRow key={item.id}>
+                          <TableCellWithTooltip
+                            text={
+                              isClickable ? (
+                                <ButtonNaked
+                                  color="primary"
+                                  component="button"
+                                  onClick={() => {
+                                    history.push(
+                                      resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
+                                        partyId: item.institutionId ?? '',
+                                      })
+                                    );
+                                  }}
+                                >
+                                  {item.institutionName ?? ''}
+                                </ButtonNaked>
+                              ) : (
+                                item.institutionName ?? '-'
+                              )
+                            }
+                          />
+                          <TableCell>
+                            <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
+                              {item.taxCode?.toUpperCase() ?? '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            {prodIdToProdTitle(item.productId as string) ?? '-'}
+                          </TableCell>
+                          <TableCell>
+                            <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
+                          </TableCell>
+                        </TableRow>
+                        <Divider />
+                      </>
+                    );
+                  })}
               </TableBody>
             </Table>
           </Grid>
