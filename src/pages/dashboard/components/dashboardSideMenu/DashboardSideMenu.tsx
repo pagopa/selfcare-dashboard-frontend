@@ -40,7 +40,7 @@ export default function DashboardSideMenu({
   isHandleDelegationsVisible,
   setDrawerOpen,
   hideLabels,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
