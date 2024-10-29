@@ -228,11 +228,12 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
                                     fontSize: '16px',
                                   }}
                                   onClick={() => {
-                                    history.push(
+                                    window.location.assign(
                                       resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                                        partyId: item.institutionId ?? '',
+                                        partyId: item?.institutionId ?? '',
                                       })
                                     );
+                                    
                                   }}
                                 >
                                   {item.institutionName ?? ''}
