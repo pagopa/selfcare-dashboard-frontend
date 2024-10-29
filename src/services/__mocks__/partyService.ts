@@ -42,7 +42,7 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
-    partyId: '6',
+    partyId: 'institutionId0',
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     status: 'ACTIVE',
     userRole: 'ADMIN',
@@ -601,7 +601,7 @@ export const mockedParties: Array<Party> = [
   {
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     urlLogo: 'image',
-    partyId: '6',
+    partyId: 'institutionId0',
     digitalAddress: 'comune.bressanone@pec.it',
     fiscalCode: '111122211111',
     category: 'Comuni e loro Consorzi e Associazioni',
