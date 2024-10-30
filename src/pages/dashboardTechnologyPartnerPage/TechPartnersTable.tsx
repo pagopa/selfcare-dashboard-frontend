@@ -22,7 +22,6 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
@@ -38,7 +37,6 @@ type Props = {
 
 export default function TechPartnersTable({ delegationsWithoutDuplicates }: Readonly<Props>) {
   const { t } = useTranslation();
-  const history = useHistory();
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [filterBy, setFilterBy] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -228,11 +226,12 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
                                     fontSize: '16px',
                                   }}
                                   onClick={() => {
-                                    history.push(
+                                    window.location.assign(
                                       resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                                        partyId: item.institutionId ?? '',
+                                        partyId: item?.institutionId ?? '',
                                       })
                                     );
+                                    
                                   }}
                                 >
                                   {item.institutionName ?? ''}
