@@ -42,7 +42,7 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
-    partyId: '6',
+    partyId: 'institutionId0',
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     status: 'ACTIVE',
     userRole: 'ADMIN',
@@ -262,6 +262,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListActiveProducts,
           Actions.ListAvailableProducts,
           Actions.ManageProductGroups,
+          Actions.ListProductUsers,
           Actions.ManageProductUsers,
           Actions.AccessProductBackoffice,
           Actions.ViewDelegations,
@@ -309,6 +310,7 @@ export const mockedParties: Array<Party> = [
         userProductActions: [
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -329,6 +331,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListAvailableProducts,
           Actions.ManageProductGroups,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.AccessProductBackoffice,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -348,6 +351,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListActiveProducts,
           Actions.ListAvailableProducts,
           Actions.ManageProductGroups,
+          Actions.ListProductUsers,
           Actions.AccessProductBackoffice,
         ],
       },
@@ -362,7 +366,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
-        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers],
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers],
       },
       {
         productId: 'prod-interop-coll',
@@ -374,7 +378,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
-        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers]
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers]
       },
       {
         productId: 'prod-interop-atst',
@@ -386,7 +390,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
-        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers]
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers]
       },
       {
         productId: 'prod-pn',
@@ -400,6 +404,7 @@ export const mockedParties: Array<Party> = [
         userProductActions: [
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -456,6 +461,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListActiveProducts,
           Actions.AccessProductBackoffice,
           Actions.ViewBilling,
+          Actions.ListProductUsers,
         ],
       },
     ],
@@ -497,6 +503,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListAvailableProducts,
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -517,6 +524,7 @@ export const mockedParties: Array<Party> = [
         userProductActions: [
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -561,6 +569,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListAvailableProducts,
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -578,6 +587,7 @@ export const mockedParties: Array<Party> = [
         },
         userProductActions: [
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -591,7 +601,7 @@ export const mockedParties: Array<Party> = [
   {
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     urlLogo: 'image',
-    partyId: '6',
+    partyId: 'institutionId0',
     digitalAddress: 'comune.bressanone@pec.it',
     fiscalCode: '111122211111',
     category: 'Comuni e loro Consorzi e Associazioni',
@@ -619,6 +629,7 @@ export const mockedParties: Array<Party> = [
         },
         userProductActions: [
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -677,6 +688,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListAvailableProducts,
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
@@ -707,6 +719,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListAvailableProducts,
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewManagedInstitutions,
@@ -1214,6 +1227,7 @@ export const mockedParties: Array<Party> = [
           Actions.ListAvailableProducts,
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
+          Actions.ListProductUsers,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,

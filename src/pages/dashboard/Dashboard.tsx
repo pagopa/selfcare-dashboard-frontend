@@ -130,13 +130,8 @@ const Dashboard = () => {
     )
   );
 
-  const authorizedDelegableProducts: Array<Product> = activeProducts.filter((ap) =>
-    party?.products.some(
-      (p) =>
-        p.productId === ap.id &&
-        hasPermission(p.productId, Actions.AccessProductBackoffice) &&
-        ap.delegable
-    )
+  const authorizedDelegableProducts: Array<Product> = delegableProducts.filter((ap) =>
+    hasPermission(ap.id ?? '', Actions.AccessProductBackoffice)
   );
 
   const canAggregatorSeeHandleDelegations = useMemo(() => {
@@ -164,19 +159,22 @@ const Dashboard = () => {
     getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
 
   const isHandleDelegationsVisible = useMemo(() => {
-    const hasPermissionForManagedInstitutions =
+    const canDelegateSeeHandleDelegations =
+      delegableProducts.length > 0 &&
+      (isPT || hasDelegation) &&
       getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
-    const canShowDelegations = delegableProducts.length > 0 && (isPT || hasDelegation);
 
-    return (
-      (hasPermissionForManagedInstitutions && canShowDelegations) ||
-      canAggregatorSeeHandleDelegations
-    );
-  }, [authorizedDelegableProducts, isPT, hasDelegation, canAggregatorSeeHandleDelegations]);
+    return canDelegateSeeHandleDelegations || canAggregatorSeeHandleDelegations;
+  }, [
+    authorizedDelegableProducts,
+    isPT,
+    hasDelegation,
+    canAggregatorSeeHandleDelegations,
+    delegableProducts,
+  ]);
 
   // Check if the current route matches any path in the array
-  // TODO `${ENV.ROUTES.USERS}/add` add after release in PROD
-  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path];
+  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path, `${ENV.ROUTES.USERS}/add`];
 
   const match = matchPath(location.pathname, {
     path: paths,
@@ -346,7 +344,7 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
-            <DashboardTechnologyPartnerPage party={party} ptProducts={activeProducts} />
+            <DashboardTechnologyPartnerPage party={party} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>

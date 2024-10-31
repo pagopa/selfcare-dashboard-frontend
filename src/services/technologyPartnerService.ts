@@ -32,7 +32,7 @@ function generateDelegationWithInfoArray(n: number): Array<DelegationWithInfo> {
       productId: `prod-pagopa`,
       status: `Status${i}`,
       taxCode: `TaxCode${i}`,
-      type: TypeEnum.AOO,
+      type: TypeEnum.EA,
       updatedAt,
     };
 

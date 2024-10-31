@@ -63,7 +63,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
-  const onboardedPartyProducts = party?.products.filter(
+  const authorizedPartyProducts = party?.products.filter(
     (pp) =>
       pp.productOnBoardingStatus === 'ACTIVE' &&
       (hasPermission(pp.productId ?? '', Actions.AccessProductBackoffice) ||
@@ -72,8 +72,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const activeProducts: Array<Product> = useMemo(
     () =>
-      products?.filter((p) => onboardedPartyProducts?.some((op) => op.productId === p.id)) ?? [],
-    [onboardedPartyProducts]
+      products?.filter((p) => authorizedPartyProducts?.some((op) => op.productId === p.id)) ?? [],
+    [authorizedPartyProducts]
   );
 
   // eslint-disable-next-line functional/immutable-data
