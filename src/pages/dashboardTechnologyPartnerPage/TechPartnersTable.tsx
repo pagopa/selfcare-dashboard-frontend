@@ -19,11 +19,13 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ButtonNaked } from '@pagopa/mui-italia';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import { useAppSelector } from '../../redux/hooks';
 import { partiesSelectors } from '../../redux/slices/partiesSlice';
+import ROUTES from '../../routes';
 import { compareDates, compareStrings } from '../../utils/helperFunctions';
 import EmptyFilterResults from './components/EmptyFilterResults';
 import EnhancedTableHeader from './components/EnhanchedTableHeader';
@@ -46,6 +48,8 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(Math.ceil(tableData.length / itemsPerPage));
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+  const parties = useAppSelector(partiesSelectors.selectPartiesList);
+  const partyIdsSet = parties ? new Set(parties.map((party) => party.partyId)) : new Set();
 
   useEffect(() => {
     setTotalPages(Math.ceil(tableData.length / itemsPerPage));
@@ -205,23 +209,54 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
               <TableBody sx={{ backgroundColor: 'background.paper' }}>
                 {getSortedData(tableData)
                   .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-                  .map((item, _index) => (
-                    <>
-                      <TableRow key={item.id}>
-                        <TableCellWithTooltip text={item.institutionName ?? '-'} />
-                        <TableCell>
-                          <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
-                            {item.taxCode?.toUpperCase() ?? '-'}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>{prodIdToProdTitle(item.productId as string) ?? '-'}</TableCell>
-                        <TableCell>
-                          <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
-                        </TableCell>
-                      </TableRow>
-                      <Divider />
-                    </>
-                  ))}
+                  .map((item, _index) => {
+                    const isClickable = item.type === 'EA' && partyIdsSet.has(item.institutionId);
+
+                    return (
+                      <>
+                        <TableRow key={item.id}>
+                          <TableCellWithTooltip
+                            text={
+                              isClickable ? (
+                                <ButtonNaked
+                                  color="primary"
+                                  component="button"
+                                  sx={{
+                                    fontWeight: 700,
+                                    fontSize: '16px',
+                                  }}
+                                  onClick={() => {
+                                    window.location.assign(
+                                      resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
+                                        partyId: item?.institutionId ?? '',
+                                      })
+                                    );
+                                    
+                                  }}
+                                >
+                                  {item.institutionName ?? ''}
+                                </ButtonNaked>
+                              ) : (
+                                item.institutionName ?? '-'
+                              )
+                            }
+                          />
+                          <TableCell>
+                            <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
+                              {item.taxCode?.toUpperCase() ?? '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            {prodIdToProdTitle(item.productId as string) ?? '-'}
+                          </TableCell>
+                          <TableCell>
+                            <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
+                          </TableCell>
+                        </TableRow>
+                        <Divider />
+                      </>
+                    );
+                  })}
               </TableBody>
             </Table>
           </Grid>

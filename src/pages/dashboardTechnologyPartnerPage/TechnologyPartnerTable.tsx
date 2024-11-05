@@ -6,13 +6,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
 import { Party } from '../../model/Party';
-import { Product } from '../../model/Product';
 import { getDelegatingInstitutions } from '../../services/technologyPartnerService';
-import DashboardTableContainer from './DashboardTableContainer';
+import TechPartnersTable from './TechPartnersTable';
 
 type Props = {
   party: Party;
-  ptProducts: Array<Product>;
 };
 export default function TechnologyPartnerTable({ party }: Props) {
   const [delegationsWithoutDuplicates, setDelegationsWithoutDuplicates] = useState<
@@ -46,7 +44,7 @@ export default function TechnologyPartnerTable({ party }: Props) {
             []
           );
 
-          setDelegationsWithoutDuplicates(filteredArray as Array<DelegationWithInfo>);
+          setDelegationsWithoutDuplicates(filteredArray);
         } else {
           setDelegationsWithoutDuplicates([]);
         }
@@ -71,7 +69,13 @@ export default function TechnologyPartnerTable({ party }: Props) {
   return !loading ? (
     <Box sx={{ backgroundColor: grey[100] }}>
       {party.delegation && delegationsWithoutDuplicates.length > 0 && (
-        <DashboardTableContainer delegationsWithoutDuplicates={delegationsWithoutDuplicates} />
+        <Box
+        sx={{
+          height: '100%',
+        }}
+      >
+        <TechPartnersTable delegationsWithoutDuplicates={delegationsWithoutDuplicates} />
+      </Box>
       )}
       {delegationsWithoutDuplicates.length === 0 && (
         <Box sx={{ backgroundColor: grey[200], p: 2 }}>
