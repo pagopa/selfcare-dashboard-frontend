@@ -23,7 +23,7 @@ import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
-import DashboardTechnologyPartnerPage from '../dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
+import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -344,7 +344,7 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
-            <DashboardTechnologyPartnerPage party={party} />
+            <DashboardHandleDelegatesPage party={party} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>

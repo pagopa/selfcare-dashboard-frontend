@@ -4,10 +4,10 @@ import { createMemoryHistory } from 'history';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
-import { TypeEnum } from '../../../api/generated/b4f-dashboard/DelegationResource';
-import { DelegationWithInfo } from '../../../api/generated/b4f-dashboard/DelegationWithInfo';
-import { DelegationWithPagination } from '../../../api/generated/b4f-dashboard/DelegationWithPagination';
-import { createStore } from '../../../redux/store';
+import { TypeEnum } from '../../../../api/generated/b4f-dashboard/DelegationResource';
+import { DelegationWithInfo } from '../../../../api/generated/b4f-dashboard/DelegationWithInfo';
+import { DelegationWithPagination } from '../../../../api/generated/b4f-dashboard/DelegationWithPagination';
+import { createStore } from '../../../../redux/store';
 import TechPartnersTable from '../TechPartnersTable';
 
 const mockedDelegation: DelegationWithPagination = {
