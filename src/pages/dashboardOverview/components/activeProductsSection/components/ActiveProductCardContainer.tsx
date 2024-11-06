@@ -44,6 +44,7 @@ export default function ActiveProductCardContainer({
   );
 
   const productOnboarded = products.find((p) => p.id === product.productId);
+  const interopProduction = products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP);
 
   const isOperatorWithNoAuthorizedProduct = party.userRole === 'LIMITED' && isDisabled;
 
@@ -95,7 +96,7 @@ export default function ActiveProductCardContainer({
         }
         onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={() => invokeProductBo(productOnboarded, party, undefined, lang)}
+        onConfirm={() => invokeProductBo(interopProduction as Product, party, undefined, lang)}
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
