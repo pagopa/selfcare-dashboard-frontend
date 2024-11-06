@@ -174,7 +174,12 @@ const Dashboard = () => {
   ]);
 
   // Check if the current route matches any path in the array
-  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path, `${ENV.ROUTES.USERS}/add`];
+  const paths = [
+    DASHBOARD_ROUTES.ADD_DELEGATE.path,
+    `${ENV.ROUTES.USERS}/add`,
+    `${ENV.ROUTES.USERS}/:userId/edit`,
+    `${ENV.ROUTES.USERS}/:userId/add-product`,
+  ];
 
   const match = matchPath(location.pathname, {
     path: paths,
