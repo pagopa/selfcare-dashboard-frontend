@@ -1,13 +1,15 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import {
-  ListItemButton,
-  ListItemText,
-  ListItemIcon,
+  Box,
+  Divider,
   Icon,
   List,
-  Divider,
-  Box,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { SvgIconComponent } from '@mui/icons-material';
 
 type Props = {
   handleClick: () => void;
@@ -15,10 +17,11 @@ type Props = {
   isSelected?: boolean;
   icon: SvgIconComponent;
   handleClickPtPage?: () => void;
-  isPtPageVisible: boolean;
+  isHandleDelegationsVisible?: boolean;
   ptIcon?: SvgIconComponent;
   ptTitle?: string;
   isPtSelected?: boolean;
+  hideLabels?: boolean;
 };
 
 export default function DashboardSidenavItem({
@@ -26,15 +29,18 @@ export default function DashboardSidenavItem({
   title,
   isSelected,
   icon,
-  isPtPageVisible,
+  isHandleDelegationsVisible,
   ptIcon,
   ptTitle,
   isPtSelected,
   handleClickPtPage,
-}: Props) {
+  hideLabels,
+}: Readonly<Props>) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   return (
     <List disablePadding>
-      {isPtPageVisible && ptIcon && handleClickPtPage && (
+      {isHandleDelegationsVisible && ptIcon && handleClickPtPage && (
         <Box mb={2}>
           <ListItemButton
             selected={isPtSelected ?? false}
@@ -43,8 +49,10 @@ export default function DashboardSidenavItem({
             }}
             sx={{
               height: '100%',
-              maxWidth: 360,
               backgroundColor: 'background.paper',
+              width: isMobile ? '270px' : '100%',
+              display: hideLabels ? 'grid' : '',
+              justifyContent: hideLabels ? 'center' : '',
             }}
           >
             <ListItemIcon>
@@ -53,6 +61,7 @@ export default function DashboardSidenavItem({
 
             <ListItemText primary={ptTitle} />
           </ListItemButton>
+
           <Divider />
         </Box>
       )}
@@ -63,8 +72,10 @@ export default function DashboardSidenavItem({
         }}
         sx={{
           height: '100%',
-          maxWidth: 360,
           backgroundColor: 'background.paper',
+          width: isMobile ? '270px' : '100%',
+          display: hideLabels ? 'grid' : '',
+          justifyContent: hideLabels ? 'center' : '',
         }}
       >
         <ListItemIcon>

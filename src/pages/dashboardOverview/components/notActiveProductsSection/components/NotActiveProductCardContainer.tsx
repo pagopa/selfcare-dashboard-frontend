@@ -1,7 +1,8 @@
 import { Grid } from '@mui/material';
-import { useUserNotify } from '@pagopa/selfcare-common-frontend';
+import { useErrorDispatcher, useUserNotify } from '@pagopa/selfcare-common-frontend/lib';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { ENV } from '../../../../../utils/env';
@@ -15,6 +16,7 @@ type Props = {
 export default function NotActiveProductCardContainer({ party, product }: Props) {
   const { t } = useTranslation();
   const addNotify = useUserNotify();
+  const addError = useErrorDispatcher();
 
   const existingSubProductNotOnboarded = product.subProducts?.find((sp) =>
     party.products.map(
@@ -31,8 +33,16 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
   const goToOnboarding = (product: Product, party: Party): void => {
     const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
+    const queryParam =
+      baseProductWithExistingSubProductNotOnboarded &&
+      existingSubProductNotOnboarded?.id === 'prod-io-premium'
+        ? `?partyId=${party.partyId}`
+        : `?partyExternalId=${party.externalId}`;
 
-    if (baseProductWithExistingSubProductNotOnboarded && existingSubProductNotOnboarded.id === 'prod-io-premium') {
+    if (
+      baseProductWithExistingSubProductNotOnboarded &&
+      existingSubProductNotOnboarded.id === 'prod-io-premium'
+    ) {
       trackEvent('PREMIUM_CTA_JOIN', {
         cta_referral: window.location.href,
         ctaId: t('overview.notActiveProducts.joinButton'),
@@ -42,13 +52,51 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     window.location.assign(
       `${ENV.URL_FE.ONBOARDING}/${product.id}${
         baseProductWithExistingSubProductNotOnboarded ? `/${existingSubProductNotOnboarded.id}` : ''
-      }?partyExternalId=${party.externalId}${subUnitType}${subUnitCode}`
+      }${queryParam}${subUnitType}${subUnitCode}`
     );
+  };
+
+  const getOnboardingStatus = async (productId: string) => {
+    const token = storageTokenOps.read();
+    const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
+
+    void fetch(
+      `${ENV.URL_API.API_DASHBOARD}/v2/institutions/onboardings/${productId}/pending?taxCode=${party.fiscalCode}${subUnitCode}`,
+      {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    ).then((res) => {
+      if (res.status === 204) {
+        goToOnboarding(product, party);
+        return;
+      }
+      if (res.status === 200) {
+        addNotify({
+          component: 'SessionModal',
+          id: 'Notify_Example',
+          title: t('overview.adhesionPopup.title'),
+          message: t('overview.adhesionPopup.description'),
+          confirmLabel: t('overview.adhesionPopup.confirmButton'),
+          closeLabel: t('overview.adhesionPopup.closeButton'),
+          onConfirm: () => goToOnboarding(product, party),
+        });
+        return;
+      }
+
+      addError({
+        id: `OnboardingStatusError-${product.id}`,
+        blocking: false,
+        error: new Error('Something gone wrong retrieving onboarding status'),
+        techDescription: 'Something gone wrong retrieving onboarding status',
+        toNotify: true,
+      });
+    });
   };
 
   return (
     <>
-      <Grid item xs={6} lg={4} xl={3} key={product.id}>
+      <Grid item xs={12} sm={6} lg={4} xl={3} key={product.id}>
         <NotActiveProductCard
           image={
             baseProductWithExistingSubProductNotOnboarded
@@ -73,25 +121,10 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
           }
           disableBtn={false}
           btnAction={() => {
-            const isOnboardingNotCompletedYet = !!party.products.find(
-              (pp) =>
-                pp.productId === product.id &&
-                (pp.productOnBoardingStatus === 'TOBEVALIDATED' ||
-                  pp.productOnBoardingStatus === 'PENDING')
-            );
-            if (isOnboardingNotCompletedYet) {
-              addNotify({
-                component: 'SessionModal',
-                id: 'Notify_Example',
-                title: t('overview.adhesionPopup.title'),
-                message: t('overview.adhesionPopup.description'),
-                confirmLabel: t('overview.adhesionPopup.confirmButton'),
-                closeLabel: t('overview.adhesionPopup.closeButton'),
-                onConfirm: () => goToOnboarding(product, party),
-              });
-            } else {
-              goToOnboarding(product, party);
-            }
+            const prodID = baseProductWithExistingSubProductNotOnboarded
+              ? existingSubProductNotOnboarded.id
+              : product.id;
+            void getOnboardingStatus(prodID ?? '');
           }}
           buttonLabel={t('overview.notActiveProducts.joinButton')}
           urlPublic={product.urlPublic}

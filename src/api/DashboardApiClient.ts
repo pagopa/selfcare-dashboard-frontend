@@ -1,7 +1,7 @@
-import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
-import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
-import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/utils/api-utils';
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
+import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/lib/utils/api-utils';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { store } from '../redux/store';
@@ -9,12 +9,11 @@ import { ENV } from '../utils/env';
 import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
 import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
 import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
-import { DelegationResource } from './generated/b4f-dashboard/DelegationResource';
+import { DelegationWithPagination } from './generated/b4f-dashboard/DelegationWithPagination';
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import {
   InstitutionResource,
-  InstitutionTypeEnum,
 } from './generated/b4f-dashboard/InstitutionResource';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
@@ -50,12 +49,12 @@ const onRedirectToLogin = () =>
 
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionBaseResource>> => {
-    const result = await apiClient.getInstitutionsUsingGET({});
+    const result = await apiClient.v2RetrieveUserInstitutions({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
   getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
-    const result = await apiClient.getInstitutionUsingGET({
+    const result = await apiClient.v2GetInstitution({
       institutionId,
     });
     return extractResponse(result, 200, onRedirectToLogin);
@@ -82,32 +81,40 @@ export const DashboardApi = {
   getBackOfficeUrl: async (
     institutionId: string,
     productId: string,
-    environment?: string
+    environment?: string,
+    lang?: string
   ): Promise<string> => {
-    const result = await apiClient.retrieveProductBackofficeUsingGET({
+    const result = await apiClient.v2RetrieveProductBackofficeUsingGET({
       productId,
       institutionId,
       environment,
+      lang,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getBillingToken: async (institutionId: string, environment?: string): Promise<string> => {
+  getBillingToken: async (
+    institutionId: string,
+    environment?: string,
+    lang?: string
+  ): Promise<string> => {
     const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,
+      lang
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getTechnologyPartnersList: async (institutionId: string): Promise<Array<DelegationResource>> => {
-    const result = await apiClient.getDelegationsUsingToUsingGET({ institutionId });
+  getDelegatingInstitutions: async (institutionId: string): Promise<DelegationWithPagination> => {
+    const result = await apiClient.getDelegationsUsingToUsingGET_1({ institutionId });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getProductRoles: async (productId: string): Promise<Array<ProductRoleMappingsResource>> => {
+  getProductRoles: async (productId: string, institutionType: string): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
+      institutionType,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
@@ -127,7 +134,7 @@ export const DashboardApi = {
 
   getProductBrokers: async (
     productId: string,
-    institutionType: InstitutionTypeEnum
+    institutionType: string
   ): Promise<Array<BrokerResource>> => {
     const result = await apiClient.getProductBrokersUsingGET({
       productId,

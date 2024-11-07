@@ -1,15 +1,15 @@
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
+import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
 
 export const mockedPartyProducts: Array<Product> = [
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-io/logo.svg',
-    title: 'App IO',
-    description: 'App IO description',
+    title: 'IO',
+    description: 'IO description',
     id: 'prod-io',
     status: StatusEnum.ACTIVE,
-    activationDateTime: new Date(2021, 1, 1),
     urlPublic: 'https://io.italia.it/ ',
     urlBO: 'https://io.selfcare.pagopa.it/path/acs?token=<IdentityToken>',
     imageUrl:
@@ -17,7 +17,7 @@ export const mockedPartyProducts: Array<Product> = [
     subProducts: [
       {
         id: 'prod-io-premium',
-        title: 'App IO Premium',
+        title: 'IO Premium',
         status: StatusEnum.ACTIVE,
         delegable: false,
         imageUrl:
@@ -29,17 +29,16 @@ export const mockedPartyProducts: Array<Product> = [
       },
     ],
     logoBgColor: 'primary.main',
-    delegable: true,
+    delegable: false,
     invoiceable: false,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.svg',
     id: 'prod-pn',
-    title: 'Piattaforma Notifiche',
+    title: 'SEND - Servizio Notifiche Digitali',
     description: 'Piattaforma Notifiche description',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
-    activationDateTime: new Date(2021, 1, 2),
     urlPublic: 'http://notifiche/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -66,7 +65,6 @@ export const mockedPartyProducts: Array<Product> = [
     tag: 'Vecchio Portale',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
-    activationDateTime: new Date(2021, 1, 3),
     urlPublic: 'http://pagopa/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -145,6 +143,21 @@ export const mockedPartyProducts: Array<Product> = [
     delegable: false,
     invoiceable: false,
   },
+  {
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',
+    id: 'prod-interop-atst',
+    title: 'Interoperabilità Attestazioni',
+    description: 'Condividi dati con altri Enti in maniera semplice, sicura ed economica.',
+    urlBO: 'http://ATT/bo#token=<IdentityToken>',
+    status: StatusEnum.TESTING,
+    urlPublic: undefined,
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
+    subProducts: [],
+    logoBgColor: undefined,
+    delegable: false,
+    invoiceable: false,
+  },
 ];
 
 export const mockedProductRoles: Array<ProductRole> = [
@@ -156,6 +169,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-legale',
     title: 'Referente Legale',
     description: 'Descrizione referente-legale',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -165,6 +179,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-amministrativo',
     title: 'Amministratore',
     description: 'Descrizione referente-amministrativo',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -174,6 +189,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'incaricato-ente-creditore',
     title: 'Incaricato Ente Creditore',
     description: 'Descrizione incaricato-ente-creditore',
+    phasesAdditionAllowed: ['dashboard-async'],
   },
   {
     productId: 'PRODID',
@@ -183,6 +199,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-dei-pagamenti',
     title: 'Referente dei Pagamenti',
     description: 'Descrizione referente-dei-pagamenti',
+    phasesAdditionAllowed: ['dashboard'],
   },
   {
     productId: 'PRODID',
@@ -192,16 +209,33 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-tecnico',
     title: 'Referente Tecnico',
     description: 'Descrizione referente-tecnico',
+    phasesAdditionAllowed: ['dashboard'],
   },
 ];
+
+export const mockedCategories = {
+  product: {
+    'prod-pn': {
+      ipa: {
+        PA: 'L6,L4,L45,L35,L5,L17,L15,C14',
+      },
+    },
+    default: {
+      ipa: {
+        GSP: 'L37,SAG',
+        PA: 'C17,C16,L10,L19,L13,L2,C10,L20,L21,L22,L15,L1,C13,C5,L40,L11,L39,L46,L8,L34,L7,L35,L45,L47,L6,L12,L24,L28,L42,L36,L44,C8,C3,C7,C14,L16,C11,L33,C12,L43,C2,L38,C1,L5,L4,L31,L18,L17,S01,SA',
+      },
+    },
+  },
+};
 
 export const verifyFetchPartyProductsMockExecution = (partyProducts: Array<Product>) => {
   expect(partyProducts).toStrictEqual(mockedPartyProducts);
 };
 
-export const fetchProducts = () => new Promise((resolve) => resolve(mockedPartyProducts));
+export const fetchProducts = () => Promise.resolve(mockedPartyProducts);
 
-export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>> => {
+export const fetchProductRoles = (product: Product, _party: Party): Promise<Array<ProductRole>> => {
   const out = mockedProductRoles.map((r) =>
     Object.assign(
       {},
@@ -210,5 +244,5 @@ export const fetchProductRoles = (product: Product): Promise<Array<ProductRole>>
       { multiroleAllowed: product.id === 'prod-interop' && r.partyRole === 'OPERATOR' }
     )
   );
-  return new Promise((resolve) => resolve(out));
+  return Promise.resolve(out);
 };

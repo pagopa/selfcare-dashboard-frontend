@@ -1,3 +1,4 @@
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { GeographicTaxonomy } from '../../api/generated/b4f-dashboard/GeographicTaxonomy';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { BaseParty, Party } from '../../model/Party';
@@ -41,7 +42,7 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
-    partyId: '6',
+    partyId: 'institutionId0',
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     status: 'ACTIVE',
     userRole: 'ADMIN',
@@ -68,11 +69,11 @@ export const mockedBaseParties: Array<BaseParty> = [
     partyId: '11',
     description: 'Comune di Cernusco sul Naviglio',
     status: 'ACTIVE',
-    userRole: 'ADMIN',
+    userRole: 'LIMITED',
   },
   {
-    partyId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
-    description: 'Test PT 12',
+    partyId: '98123',
+    description: 'Prova PT',
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -113,6 +114,42 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
+    partyId: '46',
+    description: 'Comune di Alberobello',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '47',
+    description: 'Comune di Novara',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '48',
+    description: 'Comune di Salerno',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '49',
+    description: 'Comune di Trento',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '50',
+    description: 'Comune di Catania',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '51',
+    description: 'Comune di Taranto',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
     partyId: '5dbec5e1-4262-4d00-a493-916e6171856a',
     description: 'Asea Azienda Speciale',
     status: 'ACTIVE',
@@ -136,6 +173,13 @@ export const mockedBaseParties: Array<BaseParty> = [
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
+
+  {
+    partyId: '431',
+    description: 'ARCA VITA INTERNATIONAL DESIGNATED ACTIVITY COMPANY',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
 ];
 
 export const mockedParties: Array<Party> = [
@@ -155,7 +199,6 @@ export const mockedParties: Array<Party> = [
     institutionType: 'PA',
     recipientCode: 'CGDAS23A',
     geographicTaxonomies: undefined,
-    vatNumber: '111111111141',
     supportEmail: '',
     products: [
       {
@@ -168,6 +211,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'FLGKROWP',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice],
       },
       {
         productId: 'prod-pn',
@@ -179,8 +223,10 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [Actions.ListActiveProducts, Actions.AccessProductBackoffice, Actions.ViewBilling],
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
@@ -212,8 +258,19 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ListProductUsers,
+          Actions.ManageProductUsers,
+          Actions.AccessProductBackoffice,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
@@ -250,6 +307,14 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pagopa',
@@ -261,6 +326,16 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.AccessProductBackoffice,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-io-premium',
@@ -272,6 +347,13 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ListProductUsers,
+          Actions.AccessProductBackoffice,
+        ],
       },
       // Use case with prod-interop and prod-interop-coll
       {
@@ -284,9 +366,22 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers],
       },
       {
-        productId: 'prod-pn',
+        productId: 'prod-interop-coll',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers]
+      },
+      {
+        productId: 'prod-interop-atst',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
@@ -295,9 +390,28 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers]
       },
       {
-        productId: 'prod-interop-coll',
+        productId: 'prod-pn',
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '3395867495',
+          recipientCode: 'NBG455B',
+          publicServices: true,
+        },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
+      },
+      {
+        productId: 'prod-pn-dev',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
@@ -308,6 +422,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    delegation: false,
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -342,10 +457,17 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ViewBilling,
+          Actions.ListProductUsers,
+        ],
       },
     ],
+    delegation: false,
     status: undefined,
-    userRole: undefined,
+    userRole: 'LIMITED',
   },
   {
     description: 'AGENCY ONBOARDED',
@@ -354,6 +476,7 @@ export const mockedParties: Array<Party> = [
     digitalAddress: 'comune.onboarded@pec.it',
     fiscalCode: 'fiscalCodeONBOARDED',
     category: 'Comuni e loro Consorzi e Associazioni',
+    categoryCode: 'L6',
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
@@ -375,6 +498,18 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+          Actions.ViewManagedInstitutions,
+        ],
+        isAggregator: true,
       },
       {
         productId: 'prod-pn',
@@ -386,8 +521,17 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'dddd',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
+    delegation: true,
     status: undefined,
     userRole: undefined,
   },
@@ -420,6 +564,16 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -431,15 +585,23 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'dddd',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
   {
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     urlLogo: 'image',
-    partyId: '6',
+    partyId: 'institutionId0',
     digitalAddress: 'comune.bressanone@pec.it',
     fiscalCode: '111122211111',
     category: 'Comuni e loro Consorzi e Associazioni',
@@ -465,6 +627,13 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -478,6 +647,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
@@ -513,6 +683,16 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -524,7 +704,31 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewManagedInstitutions,
+          Actions.ViewBilling,
+        ],
+      }
     ],
+    // Use case with no delegations
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
@@ -574,6 +778,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
@@ -619,6 +824,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
@@ -654,6 +860,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
@@ -700,6 +907,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    delegation: false,
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -726,7 +934,7 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-pagopa',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
+        userRole: 'LIMITED',
         billing: {
           vatNumber: '81001510528',
           recipientCode: 'FLGKROWP',
@@ -757,6 +965,7 @@ export const mockedParties: Array<Party> = [
         },
       },
     ],
+    delegation: true,
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -780,7 +989,7 @@ export const mockedParties: Array<Party> = [
       { code: '456723', desc: 'Carugate - Comune' },
       { code: '665543', desc: 'Cernusco sul Naviglio - Comune' },
     ], // Use case with three taxonomy
-    vatNumber: '34434356575',
+    vatNumber: '76859430212',
     supportEmail: '',
     products: [
       // Use case with two delegable products
@@ -788,9 +997,8 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-io',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
         billing: {
-          vatNumber: '81001510528',
+          vatNumber: '76859430212',
           recipientCode: 'BBGG34D',
           publicServices: true,
         },
@@ -800,7 +1008,6 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-interop-coll',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
         billing: {
           vatNumber: '3395867495',
           recipientCode: 'NBG455B',
@@ -812,7 +1019,6 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-ciban',
         authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
-        userRole: 'ADMIN',
         billing: {
           vatNumber: '81001510528',
           recipientCode: 'DDFFRT',
@@ -825,7 +1031,7 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
         userRole: 'ADMIN',
         billing: {
-          vatNumber: '81001510528',
+          vatNumber: '76859430212',
           recipientCode: 'DDFFRT',
           publicServices: true,
         },
@@ -927,6 +1133,7 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
@@ -935,7 +1142,6 @@ export const mockedParties: Array<Party> = [
     urlLogo: 'image',
     partyId: '29',
     digitalAddress: 'comune.carbonia@pec.it',
-    fiscalCode: 'fiscalCodeCarbonia',
     category: 'Comuni e loro Consorzi e Associazioni',
     registeredOffice: 'Via Luigi Crespellani',
     zipCode: '20334',
@@ -949,7 +1155,6 @@ export const mockedParties: Array<Party> = [
       // Use case with one taxonomy
       { code: '938465', desc: 'Cagliari - Comune' },
     ],
-    vatNumber: '87659012374',
     products: [
       // Use case with prod-interop with authorized true and prod-interop-coll with authorized false
       {
@@ -958,7 +1163,6 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
-          vatNumber: '3395867495',
           recipientCode: 'NBG455B',
           publicServices: true,
         },
@@ -969,7 +1173,6 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
-          vatNumber: '3395867495',
           recipientCode: 'NBG455B',
           publicServices: true,
         },
@@ -979,19 +1182,19 @@ export const mockedParties: Array<Party> = [
         userRole: 'ADMIN',
         authorized: false,
         billing: {
-          vatNumber: '94287592749',
           recipientCode: 'c_b988',
           publicServices: false,
         },
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
     ],
+    delegation: false,
     status: undefined,
     userRole: undefined,
   },
   // Test PT with multiple products delegated
   {
-    partyId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
+    partyId: '98123',
     externalId: '94287592749',
     originId: 'PT_94287592749',
     origin: 'SELC',
@@ -1010,7 +1213,7 @@ export const mockedParties: Array<Party> = [
     ],
     products: [
       {
-        productId: 'prod-io',
+        productId: 'prod-pagopa',
         userRole: 'ADMIN',
         authorized: true,
         billing: {
@@ -1019,6 +1222,17 @@ export const mockedParties: Array<Party> = [
           publicServices: false,
         },
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+          Actions.ViewManagedInstitutions,
+        ],
       },
       {
         productId: 'prod-io-premium',
@@ -1031,6 +1245,8 @@ export const mockedParties: Array<Party> = [
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
       },
     ],
+    // Use case with delegation
+    delegation: true,
   },
   // Test SA with multiple products delegated
   {
@@ -1220,6 +1436,263 @@ export const mockedParties: Array<Party> = [
       },
     ],
   },
+  // Use case without vatNumber, taxCode and zipCode
+  {
+    description: 'Comune di Alberobello',
+    urlLogo: 'image',
+    partyId: '46',
+    digitalAddress: 'comune.Alberobello@pec.it',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Via Roma, 10',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'externalId4',
+    originId: 'originId4',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'PTSCMA44D',
+    geographicTaxonomies: [{ code: '5454732', desc: 'Alberobello - Comune' }],
+    supportEmail: 'support@comune.Alberobello.it',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        userRole: 'ADMIN',
+        billing: {
+          recipientCode: 'POIUYTRE',
+          publicServices: true,
+        },
+      },
+      {
+        productId: 'prod-pn',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          recipientCode: 'pppp',
+          publicServices: true,
+        },
+      },
+    ],
+    delegation: false,
+    status: undefined,
+    userRole: undefined,
+  },
+  // Use case with vatNumber and without fiscalCode and zipCode
+  {
+    description: 'Comune di Novara',
+    urlLogo: 'image',
+    partyId: '47',
+    digitalAddress: 'comune.novara@pec.it',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Via Garibaldi, 10',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'extId47',
+    originId: 'originId47',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'NOVCMA47Z',
+    geographicTaxonomies: [{ code: '4545554', desc: 'Novara - Comune' }],
+    vatNumber: '12345678901',
+    supportEmail: 'support@comune.novara.it',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '98765432101',
+          recipientCode: 'NOVCMA47Z',
+          publicServices: true,
+        },
+      },
+    ],
+    delegation: false,
+    status: undefined,
+    userRole: undefined,
+  },
+  // Use case with fiscalCode and without vatNumber and zipCode
+  {
+    description: 'Comune di Salerno',
+    urlLogo: 'image',
+    partyId: '48',
+    digitalAddress: 'comune.salerno@pec.it',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Corso Vittorio Emanuele, 1',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'extId48',
+    originId: 'originId48',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'SLRNCM48Y',
+    geographicTaxonomies: [{ code: '863413', desc: 'Salerno - Comune' }],
+    fiscalCode: '98765432101',
+    supportEmail: 'support@comune.salerno.it',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        userRole: 'ADMIN',
+        billing: {
+          recipientCode: 'SLRNCM48Y',
+          publicServices: true,
+        },
+      },
+    ],
+    delegation: false,
+    status: undefined,
+    userRole: undefined,
+  },
+  // Use case with zipCode and without fiscalCode and vatNumber
+  {
+    description: 'Comune di Trento',
+    urlLogo: 'image',
+    partyId: '49',
+    digitalAddress: 'comune.trento@pec.it',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Piazza Duomo, 1',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'extId49',
+    originId: 'originId49',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'TRNTCM49X',
+    geographicTaxonomies: [{ code: '9944123', desc: 'Trento - Comune' }],
+    zipCode: '38100',
+    supportEmail: 'support@comune.trento.it',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        userRole: 'ADMIN',
+        billing: {
+          recipientCode: 'TRNTCM49X',
+          publicServices: true,
+        },
+      },
+    ],
+    delegation: false,
+    status: undefined,
+    userRole: undefined,
+  },
+  // Use case with different vatNumber and fiscalCode without zipCode
+  {
+    description: 'Comune di Catania',
+    urlLogo: 'image',
+    partyId: '50',
+    digitalAddress: 'comune.catania@pec.it',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Via Etnea, 100',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'extId50',
+    originId: 'originId50',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'CTNCMA50W',
+    geographicTaxonomies: [{ code: '441234', desc: 'Catania - Comune' }],
+    vatNumber: '11223344556',
+    fiscalCode: '65432109876',
+    supportEmail: 'support@comune.catania.it',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '11223344556',
+          recipientCode: 'CTNCMA50W',
+          publicServices: true,
+        },
+      },
+    ],
+    delegation: false,
+    status: undefined,
+    userRole: undefined,
+  },
+  // Use case with all data
+  {
+    description: 'Comune di Taranto',
+    urlLogo: 'image',
+    partyId: '51',
+    digitalAddress: 'comune.taranto@pec.it',
+    category: 'Comuni e loro Consorzi e Associazioni',
+    registeredOffice: 'Via Garibaldi, 10',
+    typology: 'Pubblica Amministrazione',
+    externalId: 'extId51',
+    originId: 'originId51',
+    origin: 'IPA',
+    institutionType: 'PA',
+    recipientCode: 'TRNTMA51T',
+    geographicTaxonomies: [{ code: '4400001', desc: 'Taranto - Comune' }],
+    vatNumber: '98765432109',
+    fiscalCode: '12345678901',
+    zipCode: '74100',
+    supportEmail: 'support@comune.taranto.it',
+    products: [
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '98765432109',
+          recipientCode: 'TRNTMA51T',
+          publicServices: true,
+        },
+      },
+    ],
+    delegation: false,
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
+  {
+    partyId: '431',
+    externalId: '20128',
+    originId: '20128',
+    origin: 'IVASS',
+    institutionType: 'AS',
+    typology: 'Società di assicurazione',
+    description: 'ARCA VITA INTERNATIONAL DESIGNATED ACTIVITY COMPANY',
+    digitalAddress: 'arcavitaintl@pec.unipol.it',
+    registeredOffice: 'street 12',
+    geographicTaxonomies: [],
+    products: [
+      {
+        productId: 'prod-interop',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop-atst',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+      {
+        productId: 'prod-interop-coll',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+    ],
+    city: 'london',
+    country: 'GB',
+    delegation: false,
+  },
 ];
 
 export const mockedGeotaxonomies: Array<GeographicTaxonomy> = [
@@ -1245,7 +1718,7 @@ export const verifyFetchPartiesMockExecution = (parties: Array<Party>) => {
   expect(parties).toStrictEqual(mockedParties);
 };
 
-export const fetchParties = () => new Promise((resolve) => resolve(mockedParties));
+export const fetchParties = () => Promise.resolve(mockedParties);
 
 export const verifyFetchPartyDetailsMockExecution = (party: Party) => {
   expect(party).toStrictEqual(mockedParties.filter((p) => p.partyId === party.partyId)[0]);
@@ -1255,4 +1728,4 @@ export const fetchPartyDetails = (
   partyId: string,
   _parties?: Array<Party>
 ): Promise<Party | null> =>
-  new Promise((resolve) => resolve(mockedParties.find((p) => p.partyId === partyId) ?? null));
+  Promise.resolve(mockedParties.find((p) => p.partyId === partyId) ?? null);

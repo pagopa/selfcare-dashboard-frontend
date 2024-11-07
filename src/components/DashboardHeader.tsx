@@ -1,20 +1,24 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header, SessionModal } from '@pagopa/selfcare-common-frontend';
-import { User } from '@pagopa/selfcare-common-frontend/model/User';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useMemo, useRef, useState } from 'react';
+import { Header, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
+import { Actions, roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { useTranslation, Trans } from 'react-i18next';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
-import SessionModalInteropProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInteropProduct';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
-import { Product } from '../model/Product';
 import { Party } from '../model/Party';
+import { Product } from '../model/Product';
+import GenericEnvProductModal from '../pages/dashboardOverview/components/activeProductsSection/components/GenericEnvProductModal';
+import SessionModalInteropProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInteropProduct';
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
+import { INTEROP_PRODUCT_ENUM, interopProductIdList } from '../utils/constants';
+import { startWithProductInterop } from '../utils/helperFunctions';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -37,17 +41,39 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const [productSelected, setProductSelected] = useState<Product>();
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
+  const [showDocBtn, setShowDocBtn] = useState(false);
+  const { hasPermission } = usePermissions();
+
+  useEffect(() => {
+    setShowDocBtn(i18n.language === 'it');
+  }, [i18n.language]);
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
 
-  const onboardedPartyProducts = party?.products.filter(
-    (pp) => pp.productOnBoardingStatus === 'ACTIVE' && pp.authorized
+  const findAuthorizedProduct = (productId: string) =>
+    party?.products.find(
+      (p) =>
+        p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
+    );
+
+  const authorizedInteropProducts = interopProductIdList
+    .map(findAuthorizedProduct)
+    .filter(Boolean)
+    .map((p) => p?.productId ?? '');
+
+  const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
+
+  const authorizedPartyProducts = party?.products.filter(
+    (pp) =>
+      pp.productOnBoardingStatus === 'ACTIVE' &&
+      (hasPermission(pp.productId ?? '', Actions.AccessProductBackoffice) ||
+        (hasMoreThanOneInteropEnv && pp.productId === INTEROP_PRODUCT_ENUM.INTEROP))
   );
 
   const activeProducts: Array<Product> = useMemo(
     () =>
-      products?.filter((p) => onboardedPartyProducts?.some((op) => op.productId === p.id)) ?? [],
-    [onboardedPartyProducts]
+      products?.filter((p) => authorizedPartyProducts?.some((op) => op.productId === p.id)) ?? [],
+    [authorizedPartyProducts]
   );
 
   // eslint-disable-next-line functional/immutable-data
@@ -55,25 +81,25 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   // eslint-disable-next-line functional/immutable-data
   actualSelectedParty.current = selectedParty;
 
-  const prodInteropAndProdInteropColl =
-    onboardedPartyProducts?.find(
-      (p) => p.productId === 'prod-interop-coll' && p.authorized === true
-    ) &&
-    onboardedPartyProducts.find((p) => p.productId === 'prod-interop' && p.authorized === true);
+  const lang = i18n.language;
 
   return (
-    <div tabIndex={0}>
+    <div>
       <Header
         onExit={onExit}
         withSecondHeader={!!party}
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
-            prodInteropAndProdInteropColl ? p.id !== 'prod-interop-coll' : 'prod-interop'
+            startWithProductInterop(p.id) && hasMoreThanOneInteropEnv
+              ? p.id === authorizedInteropProducts[0]
+              : true
           )
           .map((p) => ({
             id: p.id,
-            title: p.title,
+            title: startWithProductInterop(p.id)
+              ? products?.find((pp) => pp.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title ?? ''
+              : p.title,
             productUrl: p.urlPublic ?? '',
             linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
           }))}
@@ -98,12 +124,16 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }
         enableAssistanceButton={ENV.ENV !== 'UAT'}
         assistanceEmail={ENV.ASSISTANCE.EMAIL}
-        onDocumentationClick={() => {
-          trackEvent('OPEN_OPERATIVE_MANUAL', {
-            from: 'dashboard',
-          });
-          window.open(ENV.URL_DOCUMENTATION, '_blank');
-        }}
+        onDocumentationClick={
+          showDocBtn
+            ? () => {
+                trackEvent('OPEN_OPERATIVE_MANUAL', {
+                  from: 'dashboard',
+                });
+                window.open(ENV.URL_DOCUMENTATION, '_blank');
+              }
+            : undefined
+        }
         enableLogin={true}
         onSelectedProduct={(p) => {
           onExit(() => {
@@ -111,8 +141,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             setProductSelected(selectedProduct);
             if (
               actualSelectedParty.current &&
-              prodInteropAndProdInteropColl &&
-              p.id === 'prod-interop'
+              hasMoreThanOneInteropEnv &&
+              startWithProductInterop(p.id)
             ) {
               setOpenCustomEnvInteropModal(true);
             } else if (
@@ -122,8 +152,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               setOpenGenericEnvProductModal(true);
             } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
               void invokeProductBo(
-                selectedProduct as Product,
-                actualSelectedParty.current as Party
+                selectedProduct,
+                actualSelectedParty.current as Party,
+                undefined,
+                lang
               );
             }
           });
@@ -132,13 +164,13 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           trackEvent('DASHBOARD_PARTY_SELECTION', {
             party_id: selectedParty.id,
           });
-          onExit(() =>
+          onExit(() => {
             history.push(
               resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
                 partyId: selectedParty.id,
               })
-            )
-          );
+            );
+          });
         }}
         maxCharactersNumberMultiLineItem={25}
       />
@@ -148,43 +180,53 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
-            values={{ productTitle: productSelected?.title }}
+            values={{
+              productTitle: startWithProductInterop(productSelected?.id)
+                ? products?.find((pp) => pp.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title
+                : productSelected?.title,
+            }}
             components={{ 1: <strong /> }}
           >
             {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={() =>
-          invokeProductBo(productSelected as Product, actualSelectedParty.current as Party)
+          invokeProductBo(
+            productSelected as Product,
+            actualSelectedParty.current as Party,
+            undefined,
+            lang
+          )
         }
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        prodInteropAndProdInteropColl={!!prodInteropAndProdInteropColl}
+        authorizedInteropProducts={authorizedInteropProducts}
         products={products}
         party={party}
       />
-      <SessionModal
+      <GenericEnvProductModal
         open={openGenericEnvProductModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans
-            i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct"
+            i18nKey="overview.activeProducts.activeProductsEnvModal.message"
             values={{ productTitle: productSelected?.title }}
             components={{ 1: <strong /> }}
           >
-            {`L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.`}
+            {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={(e) =>
           invokeProductBo(
             productSelected as Product,
             actualSelectedParty.current as Party,
-            (e.target as HTMLInputElement).value
+            (e.target as HTMLInputElement).value,
+            lang
           )
         }
         handleClose={() => {

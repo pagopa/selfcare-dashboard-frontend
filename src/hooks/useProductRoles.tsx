@@ -1,4 +1,5 @@
-import { useReduxCachedValueParametricRetrieverTranscoded } from '@pagopa/selfcare-common-frontend/hooks/useReduxCachedValue';
+import { useReduxCachedValueParametricRetrieverTranscoded } from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
+import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import {
   productRoles2ProductRolesList,
@@ -8,14 +9,15 @@ import {
 import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
 import { fetchProductRoles } from '../services/productService';
 
-export const useProductRoles = (): ((product: Product) => Promise<ProductRolesLists>) =>
+export const useProductRoles = (): ((args: { product: Product; party: Party }) => Promise<ProductRolesLists>) =>
   useReduxCachedValueParametricRetrieverTranscoded(
     'PRODUCT_ROLES',
-    (product: Product) =>
-      fetchProductRoles(product).then((roles) => productRoles2ProductRolesList(roles)),
+    ({ product, party }: { product: Product; party: Party }) =>
+      fetchProductRoles(product, party).then((roles) => productRoles2ProductRolesList(roles)),
     partiesSelectors.selectPartySelectedProductsRolesMap,
-    (roles: ProductRolesLists, product: Product) =>
+    (roles: ProductRolesLists, { product }: { product: Product }) =>
       partiesActions.addPartySelectedProductRoles({ [product.id]: roles }),
-    (productsRolesMap: ProductsRolesMap, product: Product) => productsRolesMap[product.id],
-    (productsRolesMap: ProductsRolesMap, product: Product) => !productsRolesMap[product.id]
+    (productsRolesMap: ProductsRolesMap, { product }: { product: Product }) => productsRolesMap[product.id],
+    (productsRolesMap: ProductsRolesMap, { product }: { product: Product }) => !productsRolesMap[product.id]
   );
+

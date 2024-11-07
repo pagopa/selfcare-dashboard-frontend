@@ -1,54 +1,78 @@
 import { Grid } from '@mui/material';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
-import { SessionModal } from '@pagopa/selfcare-common-frontend';
+import { Trans, useTranslation } from 'react-i18next';
+import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
+import { INTEROP_PRODUCT_ENUM } from '../../../../../utils/constants';
+import { startWithProductInterop } from '../../../../../utils/helperFunctions';
 import ActiveProductCard from './ActiveProductCard';
+import GenericEnvProductModal from './GenericEnvProductModal';
 import SessionModalInteropProduct from './SessionModalInteropProduct';
 
 type Props = {
   party: Party;
   product: OnboardedProduct;
-  haveProdInteropAndEnvProduct: boolean;
+  hasMoreThanOneInteropEnv: boolean;
   products: Array<Product>;
+  authorizedInteropProducts: Array<string>;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default function ActiveProductCardContainer({
   party,
   product,
-  haveProdInteropAndEnvProduct,
+  hasMoreThanOneInteropEnv,
   products,
+  authorizedInteropProducts,
 }: Props) {
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
+  const { hasPermission } = usePermissions();
 
   const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
 
   const isDisabled = !!party.products.find(
-    (p) => p.productId === product.productId && p.authorized === false
+    (p) =>
+      p.productId === product.productId &&
+      hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
   );
 
   const productOnboarded = products.find((p) => p.id === product.productId);
+  const interopProduction = products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP);
 
-  return productOnboarded ? (
+  const isOperatorWithNoAuthorizedProduct = party.userRole === 'LIMITED' && isDisabled;
+
+  const lang = i18n.language;
+
+  return productOnboarded && !isOperatorWithNoAuthorizedProduct ? (
     <>
-      <Grid item xs={6} lg={4}>
+      <Grid item xs={12} sm={6} md={6} lg={4}>
         <ActiveProductCard
-          disableBtn={isDisabled}
-          cardTitle={productOnboarded?.title ?? ''}
+          disableBtn={
+            startWithProductInterop(productOnboarded.id) && hasMoreThanOneInteropEnv
+              ? false
+              : isDisabled
+          }
+          cardTitle={
+            startWithProductInterop(productOnboarded?.id)
+              ? products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title ?? ''
+              : productOnboarded?.title ?? ''
+          }
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}
           btnAction={() =>
-            haveProdInteropAndEnvProduct && productOnboarded.id === 'prod-interop'
+            hasMoreThanOneInteropEnv && startWithProductInterop(productOnboarded.id)
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
-                productOnboarded.id !== 'prod-interop'
+                productOnboarded.id !== INTEROP_PRODUCT_ENUM.INTEROP
               ? setOpenGenericEnvProductModal(true)
-              : invokeProductBo(productOnboarded, party)
+              : invokeProductBo(productOnboarded, party, undefined, lang)
           }
           party={party}
           product={productOnboarded}
@@ -60,39 +84,43 @@ export default function ActiveProductCardContainer({
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
-            values={{ productTitle: productOnboarded.title }}
+            values={{
+              productTitle: startWithProductInterop(productOnboarded.id)
+                ? products?.find((pp) => pp.id === 'prod-interop')?.title
+                : productOnboarded.title,
+            }}
             components={{ 1: <strong /> }}
           >
-            {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
+            {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
-        onConfirm={() => invokeProductBo(productOnboarded, party)}
+        onConfirm={() => invokeProductBo(interopProduction as Product, party, undefined, lang)}
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        prodInteropAndProdInteropColl={haveProdInteropAndEnvProduct}
+        authorizedInteropProducts={authorizedInteropProducts}
         products={products}
         party={party}
       />
 
-      <SessionModal
+      <GenericEnvProductModal
         open={openGenericEnvProductModal}
         title={t('overview.activeProducts.activeProductsEnvModal.title')}
         message={
           <Trans
-            i18nKey="overview.activeProducts.activeProductsEnvModal.messageProduct"
+            i18nKey="overview.activeProducts.activeProductsEnvModal.message"
             values={{ productTitle: productOnboarded.title }}
             components={{ 1: <strong /> }}
           >
-            {`L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.`}
+            {`Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`}
           </Trans>
         }
-        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+        onConfirmLabel={t('overview.activeProducts.activeProductsEnvModal.enterButton')}
         onCloseLabel={t('overview.activeProducts.activeProductsEnvModal.backButton')}
         onConfirm={(e) =>
-          invokeProductBo(productOnboarded, party, (e.target as HTMLInputElement).value)
+          invokeProductBo(productOnboarded, party, (e.target as HTMLInputElement).value, lang)
         }
         handleClose={() => {
           setOpenGenericEnvProductModal(false);

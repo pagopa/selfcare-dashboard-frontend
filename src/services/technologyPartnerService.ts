@@ -1,8 +1,50 @@
+/* eslint-disable functional/no-let */
+/* eslint-disable functional/immutable-data */
 import { DashboardApi } from '../api/DashboardApiClient';
 import { TypeEnum } from '../api/generated/b4f-dashboard/DelegationRequestDto';
-import { DelegationResource } from '../api/generated/b4f-dashboard/DelegationResource';
+import {
+  DelegationWithInfo,
+} from '../api/generated/b4f-dashboard/DelegationWithInfo';
+import { DelegationWithPagination } from '../api/generated/b4f-dashboard/DelegationWithPagination';
 
-export const mockedTechPartner: Array<DelegationResource> = [
+function generateDelegationWithInfoArray(n: number): Array<DelegationWithInfo> {
+  const delegationArray: Array<DelegationWithInfo> = [];
+  let currentDate = new Date();
+
+  for (let i = 0; i < n; i++) {
+    const createdAt = new Date(currentDate);
+    createdAt.setDate(currentDate.getDate() - i);
+
+    const updatedAt = new Date(createdAt);
+    updatedAt.setDate(createdAt.getDate() + 1);
+
+    const delegation: DelegationWithInfo = {
+      brokerId: `brokerId${i}`,
+      brokerName: `Broker Name ${i}`,
+      brokerTaxCode: `BrokerTaxCode${i}`,
+      brokerType: `BrokerType${i}`,
+      createdAt,
+      id: `id${i}`,
+      institutionId: `institutionId${i}`,
+      institutionName: `Institution Name ${i}`,
+      institutionRootName: `Institution Root Name ${i}`,
+      institutionType: 'PA',
+      productId: `prod-pagopa`,
+      status: `Status${i}`,
+      taxCode: `TaxCode${i}`,
+      type: TypeEnum.EA,
+      updatedAt,
+    };
+
+    delegationArray.push(delegation);
+
+    currentDate = createdAt;
+  }
+
+  return delegationArray;
+}
+
+export const mockedTechPartner: Array<DelegationWithInfo> = [
   {
     // id partner delegato
     brokerId: '07f05ae5-dfac-4e67-9c06-82c0d2a89fd3',
@@ -198,7 +240,7 @@ export const mockedTechPartner: Array<DelegationResource> = [
     // id oggetto delega (?)
     id: '8aaff6e3-f0f7-4eb3-b584-3886ccd3b0att',
     // id dell'ente delegante
-    institutionId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
+    institutionId: '98123',
     // nome ente delegante
     institutionName: 'Comune di Livorno',
     // nome dell'ente centrale se fosse gestita la relazione con aoo/uo (?)
@@ -215,7 +257,7 @@ export const mockedTechPartner: Array<DelegationResource> = [
     // id oggetto delega (?)
     id: '8aaff6e3-f0f7-4eb3-b584-3886ccd3b0au',
     // id dell'ente delegante
-    institutionId: '072b11f1-5bca-4fc5-9fe2-2c646f51e4bf',
+    institutionId: '98123',
     // nome ente delegante
     institutionName: 'Comune di Viterbo',
     // nome dell'ente centrale se fosse gestita la relazione con aoo/uo (?)
@@ -226,16 +268,22 @@ export const mockedTechPartner: Array<DelegationResource> = [
   },
 ];
 
-export const fetchTechnologyPartnersList = (
-  partyId: string
-): Promise<Array<DelegationResource>> => {
+export const mockedDelegationsWithPagination: DelegationWithPagination = {
+  delegations: generateDelegationWithInfoArray(101),
+  pageInfo: {
+    pageNo: 0,
+    pageSize: 10,
+    totalElements: 4,
+    totalPages: 1,
+  },
+};
+
+export const getDelegatingInstitutions = (partyId: string): Promise<DelegationWithPagination> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
-    return new Promise((resolve) =>
-      resolve(mockedTechPartner.filter((d) => d.institutionId === partyId))
-    );
+    return Promise.resolve(mockedDelegationsWithPagination);
   } else {
-    return DashboardApi.getTechnologyPartnersList(partyId).then(
+    return DashboardApi.getDelegatingInstitutions(partyId).then(
       (delegationsResource) => delegationsResource
     );
   }

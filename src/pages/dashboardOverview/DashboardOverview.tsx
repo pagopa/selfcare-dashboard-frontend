@@ -1,16 +1,15 @@
-import { Grid, Box, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { Box, Grid } from '@mui/material';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { useEffect, useState } from 'react';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
+import { mockedCategories } from '../../services/__mocks__/productService';
 import { ENV } from '../../utils/env';
-import DashboardDelegationsBanner from '../dashboardDelegations/DashboardDelegationsBanner';
-import { OnboardedProduct } from '../../api/generated/b4f-dashboard/OnboardedProduct';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
+import { PartyDetailModal } from './components/partyDetailModal/PartyDetailModal';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
-import PartyCard from './components/partyCard/PartyCard';
-import { PartyLogoUploader } from './components/partyCard/components/partyLogoUploader/PartyLogoUploader';
-import DashboardInfoSection from './components/DashboardInfoSection';
 
 type Props = {
   party: Party;
@@ -18,66 +17,69 @@ type Props = {
 };
 
 const DashboardOverview = ({ party, products }: Props) => {
-  const isAdmin = party.userRole === 'ADMIN';
-
-  const manageablePartyProducts: Array<OnboardedProduct> = useMemo(
-    () =>
-      party.products?.filter((us) =>
-        products.some(
-          (p) =>
-            us.productId === p.id &&
-            us.productOnBoardingStatus === 'ACTIVE' &&
-            us.authorized === true &&
-            us.userRole === 'ADMIN' &&
-            p.delegable
-        )
-      ),
-    [party.products]
-  ) ?? [party.products];
-
-  const delegableProduct = manageablePartyProducts.find(
-    (p) => p.productId === 'prod-io' || p.productId === 'prod-pagopa'
-  );
-
-  const isDelegable = ENV.DELEGATIONS.ENABLE && isAdmin && delegableProduct;
-
-  const hasPartyDelegableProducts = party.institutionType !== 'PT' && isDelegable;
+  const [open, setOpen] = useState(false);
+  const [allowedCategoriesOnProdPN, setAllowedCategoriesOnProdPN] = useState<Array<string>>([]);
+  const { getAllProductsWithPermission } = usePermissions();
 
   const showInfoBanner = party.institutionType === 'PA';
 
-  const isAvaibleProductsVisible =
+  const isInstitutionTypeAllowedOnb =
     party.institutionType && !['PT', 'SA', 'AS'].includes(party.institutionType);
+
+  const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
+
+  const canSeeActiveProductsList =
+    getAllProductsWithPermission(Actions.ListActiveProducts).length > 0;
+
+  const canSeeNotActiveProductsList =
+    getAllProductsWithPermission(Actions.ListAvailableProducts).length > 0;
+
+  const getCategoriesOnboardingAllowed = async () => {
+    if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+      await Promise.resolve(
+        mockedCategories.product['prod-pn']?.ipa.PA?.split(',').map((c: string) => c.trim())
+      );
+    } else {
+      try {
+        const response = await fetch(ENV.BASE_PATH_CDN_URL + '/assets/config.json');
+
+        if (!response.ok) {
+          console.error(`Failed to fetch config.json: ${response.status} - ${response.statusText}`);
+          return;
+        }
+
+        const categoriesAllowedJSON = await response.json();
+
+        const categoriesStringToArray = categoriesAllowedJSON?.product['prod-pn']?.ipa.PA?.split(
+          ','
+        ).map((c: string) => c.trim());
+
+        setAllowedCategoriesOnProdPN(categoriesStringToArray);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    void getCategoriesOnboardingAllowed();
+  }, []);
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
-      <WelcomeDashboard />
-      <Grid container direction="row" justifyContent={'center'} alignItems="center" mb={2}>
-        <Grid item xs={6} display="flex" alignItems="center">
-          <Typography variant="h6" sx={{ fontWeight: '700' }}>
-            {party.description}
-          </Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={isAdmin} />
-        </Grid>
-      </Grid>
-      {showInfoBanner && (
-        <Grid item xs={12} my={2}>
-          <DashboardInfoSection />
-        </Grid>
-      )}
-      <Grid item xs={12}>
-        <PartyCard party={party} />
-      </Grid>
-      {hasPartyDelegableProducts && (
-        <Grid item xs={12} mt={2}>
-          <DashboardDelegationsBanner party={party} />
-        </Grid>
-      )}
+      <PartyDetailModal
+        showInfoBanner={showInfoBanner}
+        party={party}
+        open={open}
+        setOpen={setOpen}
+        canUploadLogo={canUploadLogo}
+      />
+      <WelcomeDashboard setOpen={setOpen} />
+
       <Grid item xs={12} mb={2} mt={5}>
-        <ActiveProductsSection products={products} party={party} />
-        {isAdmin &&
-          isAvaibleProductsVisible &&
+        {canSeeActiveProductsList && <ActiveProductsSection products={products} party={party} />}
+        {canSeeNotActiveProductsList &&
+          isInstitutionTypeAllowedOnb &&
           products &&
           products.findIndex(
             (product) =>
@@ -85,7 +87,13 @@ const DashboardOverview = ({ party, products }: Props) => {
               party.products.map(
                 (us) => us.productId === product.id && us.productOnBoardingStatus !== 'ACTIVE'
               )
-          ) > -1 && <NotActiveProductsSection party={party} products={products} />}
+          ) > -1 && (
+            <NotActiveProductsSection
+              party={party}
+              products={products}
+              allowedCategoriesOnProdPN={allowedCategoriesOnProdPN}
+            />
+          )}
       </Grid>
     </Box>
   );

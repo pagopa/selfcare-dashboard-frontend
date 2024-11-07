@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Grid, Typography, Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { BaseParty } from '../../model/Party';
 import PartySelectionSearchInput from './PartySelectionSearchInput';
 import PartyItemContainer from './PartyItemContainer';
@@ -45,13 +45,44 @@ export default function PartySelectionSearch({
   partyTitle,
 }: Props) {
   const { t } = useTranslation();
-  const [input, setInput] = useState('');
-  const [filteredParties, setFilteredParties] = useState<Array<BaseParty>>(parties);
-
   const theme = useTheme();
+  const [visibleParties, setVisibleParties] = useState<Array<BaseParty>>([]);
+  const [filteredParties, setFilteredParties] = useState<Array<BaseParty>>(parties);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    setVisibleParties(filteredParties.slice(0, 50));
+  }, [filteredParties]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        containerRef.current &&
+        containerRef.current.scrollHeight - containerRef.current.scrollTop <=
+          containerRef.current.clientHeight + 20 &&
+        filteredParties.length > visibleParties.length
+      ) {
+        // User has scrolled to the bottom, load more parties
+        loadMoreParties();
+      }
+    };
+
+    containerRef.current?.addEventListener('scroll', handleScroll);
+
+    return () => {
+      containerRef.current?.removeEventListener('scroll', handleScroll);
+    };
+  }, [visibleParties, filteredParties, selectedParty]);
+
+  const loadMoreParties = () => {
+    const remainingParties = filteredParties.slice(visibleParties.length);
+    const nextBatch = remainingParties.slice(0, 50);
+    setVisibleParties((prevParties) => [...prevParties, ...nextBatch]);
+  };
 
   const onFilterChange = (value: string) => {
-    setInput(value);
+    setSearchQuery(value);
     if (!value) {
       setFilteredParties(parties);
     } else {
@@ -82,7 +113,7 @@ export default function PartySelectionSearch({
                   label={label}
                   iconMarginRight={iconMarginRight}
                   onChange={(e) => onFilterChange(e.target.value)}
-                  input={input}
+                  input={searchQuery}
                   clearField={() => onFilterChange('')}
                   iconColor={iconColor}
                 />
@@ -127,9 +158,12 @@ export default function PartySelectionSearch({
                     {t('partySelection.notFoundResults')}
                   </Typography>
                 ) : (
-                  <CustomBox sx={{ pointerEvents: parties.length !== 1 ? 'auto' : 'none' }}>
-                    {filteredParties &&
-                      filteredParties.map((party) => {
+                  <CustomBox
+                    ref={containerRef}
+                    sx={{ pointerEvents: parties.length !== 1 ? 'auto' : 'none' }}
+                  >
+                    {visibleParties &&
+                      visibleParties.map((party) => {
                         const isDisabled =
                           party.status === 'PENDING' || party.status === 'TOBEVALIDATED';
                         return (
@@ -152,6 +186,7 @@ export default function PartySelectionSearch({
                               handleListItemClick(event, party)
                             }
                             parentPartyName={party.parentDescription}
+                            status={party.status}
                           />
                         );
                       })}

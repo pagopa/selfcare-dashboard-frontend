@@ -4,20 +4,16 @@ import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenR
 import { InstitutionBaseResource } from '../generated/b4f-dashboard/InstitutionBaseResource';
 import {
   InstitutionResource,
-  InstitutionTypeEnum,
 } from '../generated/b4f-dashboard/InstitutionResource';
-import {
-  InstitutionUserResource,
-  RoleEnum,
-} from '../generated/b4f-dashboard/InstitutionUserResource';
 import { SelcRoleEnum } from '../generated/b4f-dashboard/ProductRoleInfoResource';
-import {
-  PartyRoleEnum,
-  ProductRoleMappingsResource,
-} from '../generated/b4f-dashboard/ProductRoleMappingsResource';
+import { ProductRoleMappingsResource } from '../generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
 import { UserResource } from '../generated/b4f-dashboard/UserResource';
+import {
+  InstitutionUserDetailsResource,
+  RoleEnum,
+} from '../generated/b4f-dashboard/InstitutionUserDetailsResource';
 
 export const mockedInstitutionResources: Array<InstitutionResource> = [
   {
@@ -29,7 +25,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     category: 'Ente locale',
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
-    institutionType: InstitutionTypeEnum.PA,
+    institutionType: 'PA',
+    delegation: false,
     address: 'Piazza della Scala, 2',
     zipCode: '20121',
     geographicTaxonomies: undefined,
@@ -44,7 +41,8 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
     mailAddress: 'address',
     fiscalCode: 'fiscalCode',
     category: '',
-    institutionType: InstitutionTypeEnum.PA,
+    institutionType: 'PA',
+    delegation: true,
     address: 'Piazza della Scala, 2',
     zipCode: '20121',
     geographicTaxonomies: [],
@@ -55,12 +53,11 @@ export const mockedInstitutionResources: Array<InstitutionResource> = [
 export const mockedProductResources: Array<ProductsResource> = [
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-io/logo.png',
-    title: 'App IO',
-    description: 'App IO description',
+    title: 'IO',
+    description: 'IO description',
     id: '1',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://appio/bo#<IdentityToken>',
-    activatedAt: new Date(2021, 1, 1, 0, 0, 0, 0),
     urlPublic: 'http://appio/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -72,7 +69,6 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Piattaforma Notifiche description',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://notifiche/bo?token=<IdentityToken>',
-    activatedAt: new Date(2021, 1, 2, 0, 0, 0, 0),
     urlPublic: 'http://notifiche/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -84,7 +80,6 @@ export const mockedProductResources: Array<ProductsResource> = [
     description: 'Pagamenti pagoPA description',
     status: StatusEnum.ACTIVE,
     urlBO: 'http://pagopa/bo#token=<IdentityToken>',
-    activatedAt: new Date(2021, 1, 3, 0, 0, 0, 0),
     urlPublic: 'http://pagopa/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
@@ -124,7 +119,7 @@ export const mockedProductResources: Array<ProductsResource> = [
   },
 ];
 
-export const mockedInstitutionUserResource: Array<InstitutionUserResource> = [
+export const mockedInstitutionUserResource: Array<InstitutionUserDetailsResource> = [
   {
     id: '1',
     name: 'Name',
@@ -181,7 +176,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     email: 'address' as EmailString,
     product: {
       id: 'prod-io',
-      title: 'App IO',
+      title: 'IO',
       roleInfos: [
         {
           relationshipId: 'relationshipId',
@@ -201,7 +196,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
     email: 'address2' as EmailString,
     product: {
       id: 'prod-io',
-      title: 'App IO',
+      title: 'IO',
       roleInfos: [
         {
           relationshipId: 'relationshipId2',
@@ -216,7 +211,7 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
 
 export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
   {
-    partyRole: PartyRoleEnum.SUB_DELEGATE,
+    partyRole: 'SUB_DELEGATE',
     selcRole: SelcRoleEnum.ADMIN,
     multiroleAllowed: false,
     productRoles: [
@@ -228,7 +223,7 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
     ],
   },
   {
-    partyRole: PartyRoleEnum.OPERATOR,
+    partyRole: 'OPERATOR',
     selcRole: SelcRoleEnum.LIMITED,
     multiroleAllowed: true,
     productRoles: [
@@ -256,42 +251,42 @@ export const mockedUserResource: UserResource = {
 
 export const mockedBrokerResource: Array<BrokerResource> = [
   {
-    code: '004',
-    description: 'A.S.S.A.P er01',
+    code: '12345678914',
+    description: 'Agenzia per La Rappresentanza Negoziale della Regione Siciliana',
     enabled: true,
   },
   {
-    code: '005',
-    description: 'C_br..oker02',
+    code: '12345678915',
+    description: 'Maggioli S.p.A.',
     enabled: true,
   },
   {
-    code: '006',
+    code: '12345678916',
     description: 'E_broke--r04',
     enabled: true,
   },
   {
-    code: '007',
+    code: '12345678917',
     description: 'agenzia er01',
     enabled: true,
   },
   {
-    code: '008',
+    code: '12345678918',
     description: 'D_bro.k.er06',
     enabled: true,
   },
   {
-    code: '009',
+    code: '12345678919',
     description: 'F_broker03',
     enabled: true,
   },
   {
-    code: '010',
+    code: '12345678910',
     description: 'S_broker03',
     enabled: true,
   },
   {
-    code: '011',
+    code: '12345678911',
     description: 'K_broker03',
     enabled: true,
   },
@@ -313,14 +308,14 @@ export const DashboardApi = {
     _environment?: string
   ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
-  getBillingToken: async (_partyId: string, _environment?: string): Promise<string> =>
+  getBillingToken: async (_partyId: string, _environment?: string, _lang?: string): Promise<string> =>
     new Promise((resolve) => resolve('DUMMYTOKEN')),
 
-  getProductRoles: async (_productId: string): Promise<Array<ProductRoleMappingsResource>> =>
+  getProductRoles: async (_productId: string, _institutionType: string): Promise<Array<ProductRoleMappingsResource>> =>
     new Promise((resolve) => resolve(mockedProductRoles)),
 
   getProductBrokers: async (
     _productId: string,
-    _institutionType: InstitutionTypeEnum
+    _institutionType: string
   ): Promise<Array<BrokerResource>> => new Promise((resolve) => resolve(mockedProductRoles)),
 };

@@ -1,74 +1,72 @@
-import { Stack, Tooltip, Typography } from '@mui/material';
-import { useTranslation, Trans } from 'react-i18next';
-import EditIcon from '@mui/icons-material/Edit';
-import { ButtonNaked } from '@pagopa/mui-italia';
-import { MouseEventHandler } from 'react';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { CloudUpload } from '@mui/icons-material';
+import { Grid, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import UploadIcon from '@mui/icons-material/Upload';
+import { ButtonNaked, theme } from '@pagopa/mui-italia';
+import { MouseEventHandler } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 // Utility to wait some time
 
 type Props = {
-  labelLink: string;
   open: MouseEventHandler<HTMLButtonElement> | undefined;
   loading: boolean;
+  isLoaded: boolean;
 };
 
-export function PartyDescription({ labelLink, open, loading }: Props) {
+export function PartyDescription({ open, loading, isLoaded }: Props) {
   const { t } = useTranslation();
-  const isLogoNotPresent = document.querySelector('#partyLogo')?.children[0].tagName === 'svg';
 
   return (
     <Stack>
-      <Box display="flex">
-        <ButtonNaked
-          component="button"
-          onClick={open}
-          startIcon={
-            !loading && isLogoNotPresent ? (
-              <UploadIcon sx={{ fontSize: '23px !important' }} />
-            ) : (
-              <EditIcon />
-            )
-          }
-          sx={{ color: 'primary.main' }}
-          weight="default"
+      {!loading && !isLoaded ? (
+        <Grid
+          container
+          sx={{
+            borderRadius: '10px',
+            border: `1px dashed ${theme.palette.primary.main}`,
+            backgroundColor: '#ebf4fd',
+            gap: '10px',
+          }}
         >
-          {labelLink}
-        </ButtonNaked>
-        {!loading && isLogoNotPresent && (
-          <Tooltip
-            title={
-              <Trans i18nKey={t('overview.partyLogo.size')}>
-                Dimensione esatta 300 x <br /> 300px - Formato .png
-              </Trans>
-            }
-            placement="top"
-            arrow={true}
+          <Grid item xs={12} py={3} display={'flex'} direction={'column'} alignItems={'center'}>
+            <CloudUpload color="primary" sx={{ pb: 1 }} />
+            <ButtonNaked
+              component="button"
+              onClick={open}
+              sx={{ color: 'primary.main' }}
+              weight="default"
+            >
+              {t('overview.partyLogo.upload')}
+            </ButtonNaked>
+            {!loading && !isLoaded && (
+              <Typography fontSize={'10px'}>
+                <Trans i18nKey={t('overview.partyLogo.size')}>
+                  Dimensione esatta 300 x 300px - Formato .png
+                </Trans>
+              </Typography>
+            )}
+          </Grid>
+        </Grid>
+      ) : (
+        <Grid container justifyContent={'center'} alignItems={'center'} pt={2}>
+          <CloudUpload color="primary" />
+          <ButtonNaked
+            component="button"
+            onClick={open}
+            sx={{ color: 'primary.main', p: '8px' }}
+            weight="default"
           >
-            <InfoOutlinedIcon
-              sx={{ color: 'text.secondary', cursor: 'pointer', ml: 1 }}
-              fontSize="small"
-            />
-          </Tooltip>
-        )}
-      </Box>
+            {t('overview.partyLogo.modify')}
+          </ButtonNaked>
+        </Grid>
+      )}
+
       <Box>
         <Typography
-          mt={1}
-          sx={{ fontSize: '12px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
+          mt={2}
+          mb={3}
+          sx={{ fontSize: '12px', fontWeight: 'fontWeightRegular', color: 'text.secondary', textAlign: 'center' }}
         >
-          {!loading && isLogoNotPresent ? (
-            <Trans i18nKey="overview.partyLogo.info">
-              Inserisci solo il logo del tuo ente.
-              <br />
-              Sarai responsabile dell’inserimento di immagini diverse da quella indicata.
-            </Trans>
-          ) : (
-            <Trans i18nKey="overview.partyLogo.infoEditLabel">
-              Dimensione esatta 300 x 300px - Formato .jpg o .png
-            </Trans>
-          )}
+          {t('overview.partyLogo.info')}
         </Typography>
       </Box>
     </Stack>

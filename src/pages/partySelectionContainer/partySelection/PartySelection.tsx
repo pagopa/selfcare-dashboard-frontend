@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Grid, Button, Paper, useTheme, Typography, Stack } from '@mui/material';
 import { useHistory } from 'react-router';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { useTranslation, Trans } from 'react-i18next';
 import PartySelectionSearch from '../../../components/partySelectionSearch/PartySelectionSearch';
 import ROUTES from '../../../routes';

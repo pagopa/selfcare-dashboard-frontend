@@ -1,29 +1,26 @@
 import { Box, Button, CircularProgress, Divider, Grid, Link, Typography } from '@mui/material';
+import { ButtonNaked, ProductAvatar } from '@pagopa/mui-italia';
 import {
-  NavigationBar,
   TitleBox,
   useErrorDispatcher,
   useUnloadEventOnExit,
-} from '@pagopa/selfcare-common-frontend';
+} from '@pagopa/selfcare-common-frontend/lib';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { ProductAvatar } from '@pagopa/mui-italia';
-import { Party } from '../../model/Party';
-import { DASHBOARD_ROUTES } from '../../routes';
-import { Product } from '../../model/Product';
 import { DelegationResource } from '../../api/generated/b4f-dashboard/DelegationResource';
+import { Party } from '../../model/Party';
+import { Product } from '../../model/Product';
+import { DASHBOARD_ROUTES } from '../../routes';
 import { fetchDelegations } from '../../services/delegationServices';
 
 type Props = {
-  isDelegateSectionVisible?: boolean;
-  party: Party;
-  authorizedDelegableProducts: Array<Product>;
+  party: Readonly<Party>;
+  authorizedDelegableProducts: Readonly<Array<Product>>;
 };
 
-export default function DashboardDelegationsPage({ party, authorizedDelegableProducts }: Props) {
+export default function DashboardDelegationsPage({ party, authorizedDelegableProducts }: Readonly<Props>) {
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
   const history = useHistory();
@@ -61,15 +58,6 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
     void retrieveDelegationsList();
   }, []);
 
-  const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
-  const overviewPath = resolvePathVariables(overviewRoute, {
-    partyId: party.partyId,
-  });
-
-  const goBack = () => {
-    history.goBack();
-  };
-
   const goToAddDelegationsPage = (productId?: string) =>
     onExit(() =>
       history.push(
@@ -79,18 +67,6 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
       )
     );
 
-  const paths = [
-    {
-      description: t('overview.delegationsPage.delegationsNavigationBar.redirectDescription'),
-      icon: AssignmentIcon,
-      onClick: () => onExit(() => history.push(party.partyId ? overviewPath : overviewRoute)),
-    },
-    {
-      description: t('overview.delegationsPage.delegationsNavigationBar.titlePageDescription'),
-    },
-  ];
-
-
   return (
     <>
       {!loading ? (
@@ -99,13 +75,9 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
             container
             alignItems={'center'}
             px={3}
-            mt={3}
             sx={{ width: '100%', backgroundColor: 'transparent !important' }}
           >
             <Grid container item xs={12}>
-              <Grid item xs={12} mb={3}>
-                <NavigationBar showBackComponent={true} goBack={goBack} paths={paths} />
-              </Grid>
               <Grid item xs={12}>
                 <TitleBox
                   variantTitle="h4"
@@ -113,13 +85,27 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                   title={t('overview.delegationsPage.title')}
                   subTitle={t('overview.delegationsPage.subTitle')}
                   mbTitle={2}
-                  mbSubTitle={6}
+                  mbSubTitle={1}
                 />
+              </Grid>
+              <Grid item xs={12} mb={5}>
+                <ButtonNaked
+                  component="button"
+                  color="primary"
+                  sx={{ fontWeight: 'fontWeightBold', fontSize: '14', textDecoration: 'underline' }}
+                  onClick={() => {
+                    window.open(
+                      'https://docs.pagopa.it/manuale-di-area-riservata-per-partner-tecnologici/aggiunta-di-una-delega-da-parte-dellente#cose-una-delega'
+                    );
+                  }}
+                >
+                  {t('overview.delegationsPage.whatIsDelegation')}
+                </ButtonNaked>
               </Grid>
               <Grid item xs={12}>
                 <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
                   <Box>
-                    <Typography variant="h6">
+                    <Typography variant="h6" fontWeight={'fontWeightBold'}>
                       {t('overview.delegationsPage.productsSection.title')}
                     </Typography>
                   </Box>
@@ -157,7 +143,7 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                         />
                       </Box>
                       <Box>
-                        <Typography variant="h6">{product.title}</Typography>
+                        <Typography variant="h6" fontWeight={'fontWeightBold'}>{product.title}</Typography>
                       </Box>
                     </Box>
 
@@ -178,17 +164,16 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                             <Trans
                               i18nKey={'overview.delegationsPage.productsSection.noDelegatesLabel'}
                             >
-                              Nessun delegato per questo prodotto.
+                              Nessun delegato per questo prodotto. 
                               <Link
                                 onClick={() => goToAddDelegationsPage(product?.id)}
                                 sx={{
                                   fontWeight: 'fontWeightMedium',
-                                  ml: 1,
                                   textDecoration: 'none',
                                   cursor: 'pointer',
                                 }}
                               >
-                                Aggiungi delega
+                                creane una adesso
                               </Link>
                             </Trans>
                           </Typography>

@@ -1,14 +1,23 @@
-import * as React from 'react';
-import { Typography, Box, Button, Grid, IconButton } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { withTranslation } from 'react-i18next';
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { TFunction } from 'i18next';
-import { Product } from '../../../../../model/Product';
+import * as React from 'react';
+import { withTranslation } from 'react-i18next';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
+import { Product } from '../../../../../model/Product';
 
 type Props = {
   /** If this component should be displayed or not */
@@ -18,22 +27,15 @@ type Props = {
   /** The body to show in the popup */
   message: React.ReactNode;
   /** If defined, it will render a confirm button using this function as behavior */
-  onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
-  /** If the confirm button should be enabled. Default true */
-  onConfirmEnabled?: boolean;
+  onConfirm?: React.MouseEventHandler<HTMLButtonElement>;
   /** The confirm label text */
   onConfirmLabel?: string;
-  /** Introduced to manage the presence of test environments in the products, if defined, it will render as many buttons as there are test environments for the product */
-  productEnvironments?: Array<{
-    environment: string;
-    url: string;
-  }>;
-  /** indicates if pary has prod-interop and prod-interop-coll */
-  prodInteropAndProdInteropColl?: boolean;
+  /** indicates on which prod interop enviroments is authorized */
+  authorizedInteropProducts?: Array<string>;
   /** The function invoked when clicking on close button or in the showed X icon */
-  handleClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  handleClose: () => void | undefined;
   /** If defined, it allow to set a different behavior when clicking on X icon */
-  handleExit?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  handleExit?: React.MouseEventHandler<HTMLButtonElement>;
   /** Close button text */
   onCloseLabel?: string;
   /** The popup height */
@@ -60,9 +62,8 @@ function SessionModalInteropProduct({
   title,
   message,
   onConfirm,
-  onConfirmEnabled = true,
   onConfirmLabel = t('SessionModalInteropProduct.confirmButton'),
-  prodInteropAndProdInteropColl,
+  authorizedInteropProducts,
   handleClose,
   handleExit = handleClose,
   onCloseLabel = t('SessionModalInteropProduct.closeButton'),
@@ -73,11 +74,28 @@ function SessionModalInteropProduct({
   showCloseButton = true,
   products,
   party,
-  productEnvironments,
-}: Props) {
+}: Readonly<Props>) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+  const [selectedEnviroment, setSelectedEnviroment] = React.useState<string>('');
   const { invokeProductBo } = useTokenExchange();
+
+  const handleTokenExchange = async (prodEnv: string): Promise<void> => {
+    if (products && party) {
+      if (prodEnv === 'Collaudo') {
+        const productInteropColl = products.find((p) => p.id === 'prod-interop-coll');
+        if (productInteropColl) {
+          return invokeProductBo(productInteropColl, party);
+        }
+      } else {
+        const productInteropAtst = products.find((p) => p.id === 'prod-interop-atst');
+        if (productInteropAtst) {
+          return invokeProductBo(productInteropAtst, party);
+        }
+      }
+    }
+  };
+
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -95,23 +113,86 @@ function SessionModalInteropProduct({
               <ClearOutlinedIcon />
             </IconButton>
           )}
-          <Typography sx={{ fontSize: '24px', fontWeight: '600' }}>{title}</Typography>
+          <Typography sx={{ fontSize: '24px', fontWeight: '700' }}>{title}</Typography>
         </Grid>
 
         <Box width="100%">
-          <Grid item xs={12} my={3}>
+          <Grid item xs={12} my={1} mb={3}>
             <Typography sx={{ fontSize: '18px', fontWeight: '400' }}>{message}</Typography>
           </Grid>
+
           <Grid item xs={12}>
-            <Box
-              display="flex"
-              justifyContent={
-                prodInteropAndProdInteropColl || productEnvironments ? 'space-between' : 'flex-end'
-              }
-            >
+            <RadioGroup>
+              {authorizedInteropProducts?.includes('prod-interop-atst') && (
+                <FormControlLabel
+                  value="Attestazione"
+                  onClick={() => setSelectedEnviroment('Attestazione')}
+                  control={<Radio />}
+                  label={
+                    <>
+                      <Typography>
+                        {t('overview.activeProducts.activeProductsEnvModal.envUatButton')}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {t('overview.activeProducts.activeProductsEnvModal.uatEnviromentMessage')}
+                      </Typography>
+                    </>
+                  }
+                  sx={{ mb: 1 }}
+                />
+              )}
+
+              {authorizedInteropProducts?.includes('prod-interop-coll') && (
+                <FormControlLabel
+                  value="Collaudo"
+                  onClick={() => setSelectedEnviroment('Collaudo')}
+                  control={<Radio />}
+                  label={
+                    <>
+                      <Typography>
+                        {t('overview.activeProducts.activeProductsEnvModal.envDevButton')}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {t('overview.activeProducts.activeProductsEnvModal.devEnviromentMessage')}
+                      </Typography>
+                    </>
+                  }
+                  sx={{ mb: 1 }}
+                />
+              )}
+              {authorizedInteropProducts?.includes('prod-interop') && (
+                <FormControlLabel
+                  value={'Produzione'}
+                  onClick={() => setSelectedEnviroment('Produzione')}
+                  control={<Radio />}
+                  label={
+                    <>
+                      <Typography>
+                        {t('overview.activeProducts.activeProductsEnvModal.envProdButton')}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {t('overview.activeProducts.activeProductsEnvModal.prodEnviromentMessage')}
+                      </Typography>
+                    </>
+                  }
+                  sx={{ mb: 1 }}
+                />
+              )}
+            </RadioGroup>
+          </Grid>
+
+          <Grid item xs={12} my={1}>
+            <Box display="flex" justifyContent={'flex-end'}>
               {showCloseButton && (
                 <Box mb={3} mt={0}>
-                  <Button onClick={handleClose} color="primary" variant="outlined">
+                  <Button
+                    onClick={() => {
+                      setSelectedEnviroment('');
+                      handleClose();
+                    }}
+                    color="primary"
+                    variant="outlined"
+                  >
                     {onCloseLabel}
                   </Button>
                 </Box>
@@ -122,41 +203,15 @@ function SessionModalInteropProduct({
                     sx={{ marginLeft: 2 }}
                     color="primary"
                     variant="contained"
-                    onClick={onConfirm}
-                    disabled={!onConfirmEnabled}
+                    onClick={(e) =>
+                      selectedEnviroment === 'Produzione'
+                        ? onConfirm(e)
+                        : handleTokenExchange(selectedEnviroment)
+                    }
+                    disabled={selectedEnviroment.length < 1}
                   >
                     {onConfirmLabel}
                   </Button>
-                  {prodInteropAndProdInteropColl &&
-                    products
-                      ?.filter((p) => p.id === 'prod-interop-coll')
-                      .map((p) => (
-                        <Box ml={2} key={p.id}>
-                          <Button
-                            value={'Collaudo'}
-                            color="primary"
-                            variant="contained"
-                            onClick={() => invokeProductBo(p, party as Party)}
-                          >
-                            {t('SessionModalInteropProduct.testLabel')}
-                          </Button>
-                        </Box>
-                      ))}
-                  {productEnvironments &&
-                    productEnvironments.map((p) => (
-                      <Box ml={2} key={p.environment}>
-                        <Button
-                          value={p.environment}
-                          color="primary"
-                          variant="contained"
-                          onClick={onConfirm}
-                        >
-                          {p.environment
-                            .toLowerCase()
-                            .replace(/\b[a-z]/g, p.environment.charAt(0).toUpperCase())}
-                        </Button>
-                      </Box>
-                    ))}
                 </Box>
               )}
             </Box>

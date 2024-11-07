@@ -1,29 +1,58 @@
 /* eslint-disable sonarjs/no-identical-functions */
-import React from 'react';
 import { Grid } from '@mui/material';
-import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Product } from '../../../../model/Product';
 import { Party } from '../../../../model/Party';
+import { Product } from '../../../../model/Product';
 import NotActiveProductCardContainer from './components/NotActiveProductCardContainer';
 
 type Props = {
   party: Party;
   products: Array<Product>;
+  allowedCategoriesOnProdPN: Array<string>;
 };
 
-export default function NotActiveProductsSection({ party, products }: Props) {
+export default function NotActiveProductsSection({
+  party,
+  products,
+  allowedCategoriesOnProdPN,
+}: Readonly<Props>) {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
 
-  const isOnboardingAllowedInProdPN = (category?: string): boolean => {
-    const allowedCategories = [
-      'Regioni, Province Autonome e loro Consorzi e Associazioni', // L4
-      'Comuni e loro Consorzi e Associazioni', // L6
-      "Citta' Metropolitane", // L45
-    ];
+  const isOnboardingAllowedInProdPN = (categoryCode?: string): boolean =>
+    allowedCategoriesOnProdPN.includes(categoryCode ?? '');
 
-    return category !== undefined && allowedCategories.includes(category);
+  const isProductEligible = (product: Product) => {
+    const isActive = product.status === 'ACTIVE';
+    const isNotOnboarded = !party.products.some(
+      (pp) => pp.productId === product.id && pp.productOnBoardingStatus === 'ACTIVE'
+    );
+    const hasEligibleSubProducts =
+      product.subProducts &&
+      party.products.find(
+        (pp) =>
+          pp.productId === product.id &&
+          hasPermission(pp.productId, Actions.AccessProductBackoffice)
+      ) &&
+      product.subProducts.some(
+        (subProduct) => !party.products.some((pp) => pp.productId === subProduct.id)
+      );
+
+    return isActive && (isNotOnboarded || hasEligibleSubProducts);
   };
+
+  const isProductAllowed = (product: Product) => {
+    if (party.institutionType === 'PSP' && product.id === 'prod-pagopa') {
+      return false;
+    }
+    return !(product.id === 'prod-pn' && !isOnboardingAllowedInProdPN(party?.categoryCode));
+  };
+
+  const eligibleProducts = products.filter(isProductEligible).filter(isProductAllowed);
 
   return (
     <React.Fragment>
@@ -32,30 +61,12 @@ export default function NotActiveProductsSection({ party, products }: Props) {
         mbTitle={2}
         mtTitle={5}
         variantTitle="h5"
+        titleFontSize="22px"
       />
       <Grid container spacing={3}>
-        {products
-          .filter(
-            (p) =>
-              p.status === 'ACTIVE' &&
-              (party.products.some(
-                (us) => us.productId === p.id && us.productOnBoardingStatus !== 'ACTIVE'
-              ) ||
-                !party.products.some((us) => us.productId === p.id) ||
-                (p.subProducts &&
-                  party.products.find((pp) => pp.productId === p.id && pp.authorized) &&
-                  p.subProducts.some(
-                    (subProduct) => !party.products.some((us) => us.productId === subProduct.id)
-                  )))
-          )
-          .filter(
-            (p) =>
-              (party.institutionType === 'PSP' ? p.id !== 'prod-pagopa' : p.id) &&
-              (p.id !== 'prod-pn' || isOnboardingAllowedInProdPN(party?.category))
-          )
-          .map((product) => (
-            <NotActiveProductCardContainer key={product.id} party={party} product={product} />
-          ))}
+        {eligibleProducts.map((product) => (
+          <NotActiveProductCardContainer key={product.id} party={party} product={product} />
+        ))}
       </Grid>
     </React.Fragment>
   );

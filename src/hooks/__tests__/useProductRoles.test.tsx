@@ -1,14 +1,14 @@
-import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { render, screen, waitFor } from '@testing-library/react';
+import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
+import withProductsRolesMap from '../../decorators/withProductsRolesMap';
 import { Product } from '../../model/Product';
+import { ProductRole } from '../../model/ProductRole';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { createStore } from '../../redux/store';
+import { mockedParties } from '../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
 import { useProductRoles } from '../useProductRoles';
-import withProductsRolesMap from '../../decorators/withProductsRolesMap';
-import { useEffect, useState } from 'react';
-import { ProductRole } from '../../model/ProductRole';
 
 jest.mock('../../services/productService');
 
@@ -19,7 +19,7 @@ const renderApp = (product: Product, injectedStore?: ReturnType<typeof createSto
     const fetchProductRoles = useProductRoles();
 
     useEffect(() => {
-      fetchProductRoles(product)
+      fetchProductRoles({ product, party: mockedParties[0] })
         .then((r) => setProductRoles(r.list))
         .catch((r) => console.error(r));
     }, []);

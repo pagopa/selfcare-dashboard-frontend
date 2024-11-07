@@ -34,16 +34,18 @@ export default {
   noParty: {
     title: 'Accesso non consentito',
     description:
-      'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> di PagoPA.  Se lavori per un ente, chiedi a un <3 /> Amministratore di aggiungerti nella sezione Utenti.',
+      'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> PagoPA.  Se lavori per un ente, chiedi a un Amministratore <3 /> di aggiungerti nella sezione Utenti.',
     backHome: 'Chiudi',
+    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles:'Più informazioni sui ruoli',
   },
   activeProductCard: {
-    disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',
+    disableInfo: 'Non hai un ruolo per gestire questo prodotto',
   },
   overview: {
     title: 'Panoramica',
     subTitle:
-      'Gestisci i prodotti PagoPA attivi per questo ente. Se hai i permessi, puoi anche aderire a nuovi prodotti.',
+      'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
       institutionManagement: {
         title: 'Gestione Ente',
@@ -78,10 +80,18 @@ export default {
       manageButton: 'Gestisci',
       activeProductsEnvModal: {
         title: 'In quale ambiente vuoi entrare?',
-        message: `Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`,
+        message: `Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`,
         messageProduct:
           'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
-        envProdButton: 'Produzione',
+        devEnviromentMessage:
+          'Ti permette di conoscere il prodotto e fare prove in tutta sicurezza',
+        uatEnviromentMessage: 'Ti permette di esplorare il prodotto',
+        prodEnviromentMessage: 'Prodotto in uso',
+        envDevButton: 'Ambiente di Collaudo',
+        envLocalButton: 'Ambiente Locale',
+        envUatButton: 'Ambiente di Attestazione',
+        envProdButton: 'Ambiente di Produzione',
+        enterButton: 'Entra',
         backButton: 'Annulla',
       },
     },
@@ -93,7 +103,7 @@ export default {
       joinButton: 'Aderisci',
     },
     depictOf: 'Rappresentazione di',
-    discoverMore: '<0> SCOPRI DI PIÙ → </0>',
+    discoverMore: '<0>Scopri di più</0>',
     adhesionPopup: {
       title: 'Adesione in corso',
       description:
@@ -103,7 +113,7 @@ export default {
     },
     partyLogo: {
       upload: "Carica il logo dell'ente",
-      modify: 'Modifica',
+      modify: 'Cambia immagine',
       uploadError: {
         title: 'Caricamento non riuscito',
         description:
@@ -114,9 +124,10 @@ export default {
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
       },
       size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
-      info: 'Inserisci solo il logo del tuo ente. <1/> Sarai responsabile dell’inserimento di immagini diverse da quella indicata. ',
+      info: 'Inserisci solo il logo del tuo ente. Sarai responsabile dell’inserimento di immagini diverse da quella indicata.',
       infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
     },
+    changeDetails: 'Gestisci i dati dell’ente',
     partyDetail: {
       institutionType: 'Tipologia',
       category: 'Categoria',
@@ -156,7 +167,8 @@ export default {
       sdiCode: 'Codice SDI',
       aooParentCode: 'AOO di riferimento',
       contactToModify:
-        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, <1>vai al sito</1> dell'Indice della Pubblica Amministrazione (IPA)</0>",
+        "<0>Alcuni dati non sono modificabili da questa sezione. Per farlo, vai al sito dell'Indice della Pubblica Amministrazione (IPA)</0>",
+      goToIPA: 'Vai al sito',
       institutionTypeValue: {
         GSP: 'Gestore di servizi pubblici',
         PA: 'Pubblica Amministrazione',
@@ -168,6 +180,7 @@ export default {
         PG: 'Azienda',
         REC: 'Recapitista',
         CON: 'Consolidatore',
+        PRV: 'Privato',
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
@@ -186,7 +199,8 @@ export default {
     },
     delegationsPage: {
       title: 'Deleghe',
-      subTitle: 'Aggiungi o visualizza i delegati per la gestione dei prodotti. ',
+      subTitle: 'Qui trovi l’elenco degli enti a cui hai affidato la gestione di uno o più prodotti. Puoi anche aggiungere una nuova delega.',
+      whatIsDelegation: 'Cos’è una delega?',
       addDelegationsBtn: 'Aggiungi delega',
       delegationsNavigationBar: {
         redirectDescription: 'Panoramica',
@@ -195,27 +209,33 @@ export default {
       productsSection: {
         title: 'Prodotti',
         labelDelegates: 'Delegato',
-        noDelegatesLabel: 'Nessun delegato per questo prodotto. <1>Aggiungi delega</1>',
+        noDelegatesLabel: 'Ancora nessuna delega,<1> creane una adesso</1>',
       },
     },
     ptPage: {
-      title: 'I tuoi enti',
+      title: 'Enti gestiti',
       subTitle:
         'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
-      tableEmptyLabel: 'Non hai ancora nessuna delega dagli enti',
+      tableEmptyLabel: 'Non sei stato ancora delegato da nessun ente.',
       headerPtTableLabels: {
         party: 'Ente',
+        taxCode: 'Codice fiscale',
         product: 'Prodotto',
+        createdAt: 'Delegato il',
       },
       bodyPtTable: {
         showMoreButtonLabel: 'Vedi tutti',
       },
       filterTechPartner: {
+        searchBy: 'Cerca per',
+        insert: 'Inserisci',
+        name: 'Nome',
+        taxCode: 'Codice fiscale',
         textfieldLabel: 'Cerca per nome',
         productSelectLabel: 'Prodotto',
         buttonLabel: 'Filtra',
         allProductsLabel: 'Tutti  i prodotti',
-        resetFilter: 'Annulla filtri',
+        resetFilter: 'Rimuovi filtri',
         emptyFilterResult:
           'I filtri che hai applicato non hanno dato nessun risultato. <1>Rimuovi filtri</1>',
       },
@@ -230,22 +250,25 @@ export default {
   },
   addDelegationPage: {
     title: 'Aggiungi delega',
-    subTitle:
-      "Qui trovi l'elenco dei Partner e degli Intermediari Tecnologici presenti in Area Riservata.",
+    subTitle: 'Scegli il prodotto e indica chi potrà gestirlo per conto del tuo ente.',
     navigationBar: {
       overview: 'Panoramica',
       delegations: 'Deleghe',
       addDelegation: 'Aggiungi delega',
     },
     addOneDelegation: 'Aggiungi una delega',
-    formSubTitle: 'Scegli il prodotto per il quale vuoi aggiungere una delega',
+    formSubTitle: 'Indica per quale prodotto vuoi delegare la gestione',
     findOutMore: 'Dubbi? Vai al manuale',
     chooseProduct: 'Scegli il prodotto',
     selectTechPartner: {
-      title: 'Seleziona un Partner Tecnologico o Intermediario',
-      subTitle: 'Digita il nome oppure scegli dalla lista',
-      label: 'Seleziona o scegli dalla lista',
-      groupByName: 'Nome',
+      title: 'Scegli chi gestirà il prodotto',
+      subTitle: 'Cerca utilizzando la ragione sociale o il Codice Fiscale dell’ente',
+      radioName: 'Ragione sociale',
+      radioFiscalCode: 'Codice Fiscale ente',
+      labelName: 'Inserisci la ragione sociale',
+      labelFiscalCode: 'Inserisci il Codice Fiscale',
+      groupByName: 'Ragione sociale',
+      groupByFiscalCode: 'Codice Fiscale',
       notFoundTechPartnerOptions: 'Nessun risultato',
       actions: {
         back: 'Indietro',
@@ -260,8 +283,8 @@ export default {
   },
   subHeader: {
     partySelectionSearch: {
-      title: 'I tuoi enti',
-      label: 'I tuoi enti',
+      title: 'Enti gestiti',
+      label: 'Enti gestiti',
     },
     backButton: 'Esci',
   },
@@ -269,5 +292,6 @@ export default {
     closeButton: 'Annulla',
     confirmButton: 'Riprova',
     testLabel: 'Collaudo',
+    uatLabel: 'Attestazione',
   },
 };

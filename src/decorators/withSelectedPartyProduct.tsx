@@ -1,14 +1,17 @@
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
+import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
-import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { useSelectedPartyProduct } from '../hooks/useSelectedPartyProduct';
-import { Product } from '../model/Product';
-import ROUTES from '../routes';
 import { useProductRoles } from '../hooks/useProductRoles';
-import { LOADING_TASK_FETCH_PRODUCT_ROLES } from '../utils/constants';
+import { useSelectedPartyProduct } from '../hooks/useSelectedPartyProduct';
+import { Party } from '../model/Party';
+import { Product } from '../model/Product';
 import { buildEmptyProductRolesLists, ProductRolesLists } from '../model/ProductRole';
+import { useAppSelector } from '../redux/hooks';
+import { partiesSelectors } from '../redux/slices/partiesSlice';
+import ROUTES from '../routes';
+import { LOADING_TASK_FETCH_PRODUCT_ROLES } from '../utils/constants';
 
 type ProductUrlParams = {
   partyId: string;
@@ -29,6 +32,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
     const { partyId, productId } = useParams<ProductUrlParams>();
     const history = useHistory();
     const selectedPartyProduct = useSelectedPartyProduct(productId, props.products);
+    const party = useAppSelector(partiesSelectors.selectPartySelected);
     const addError = useErrorDispatcher();
 
     useEffect(() => {
@@ -54,7 +58,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
 
     const doFetchProductRoles = (onRetry?: () => void): Promise<ProductRolesLists> => {
       setLoading_fetchProductRoles(true);
-      return fetchSelectedProductRoles(selectedPartyProduct as Product)
+      return fetchSelectedProductRoles({product:selectedPartyProduct as Product, party: party as Party})
         .catch((reason) => {
           addError({
             id: `FETCH_PRODUCT_ROLES_ERROR_${selectedPartyProduct?.id}`,

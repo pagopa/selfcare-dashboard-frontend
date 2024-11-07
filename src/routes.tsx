@@ -1,12 +1,13 @@
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { Redirect, useParams } from 'react-router';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import Dashboard from './pages/dashboard/Dashboard';
+import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
+import AddDelegationPage from './pages/dashboardDelegationsAdd/AddDelegationPage';
+import DashboardHandleDelegatesPage from './pages/dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
-import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
-import AddDelegationPage from './pages/dashboardDelegationsAdd/AddDelegationPage';
-import DashboardTechnologyPartnerPage from './pages/dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
+
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -61,7 +62,7 @@ export const DASHBOARD_ROUTES = {
   TECHPARTNER: {
     path: `${BASE_ROUTE}/:partyId/delegate`,
     exact: true,
-    component: DashboardTechnologyPartnerPage,
+    component: DashboardHandleDelegatesPage,
   },
   ADD_DELEGATE: {
     path: `${BASE_ROUTE}/:partyId/delegations/add`,

@@ -1,10 +1,10 @@
-import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { LOADING_TASK_TOKEN_EXCHANGE } from '../utils/constants';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
+import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
+import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { retrieveBackOfficeUrl } from '../services/tokenExchangeService';
-import { Party } from '../model/Party';
+import { LOADING_TASK_TOKEN_EXCHANGE } from '../utils/constants';
 
 const hostnameRegexp = /^(?:https?:\/\/)([-.a-zA-Z0-9_]+)/;
 
@@ -15,7 +15,8 @@ export const useTokenExchange = () => {
   const invokeProductBo = async (
     product: Product,
     selectedParty: Party,
-    selectedEnvironment?: string
+    selectedEnvironment?: string,
+    lang?: string
   ): Promise<void> => {
     const selectedEnvironmentUrl = product.backOfficeEnvironmentConfigurations?.find(
       (p) => p.environment === selectedEnvironment
@@ -37,7 +38,7 @@ export const useTokenExchange = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedEnvironment
       ? (setLoading(true),
-        retrieveBackOfficeUrl(selectedParty, product, selectedEnvironment)
+        retrieveBackOfficeUrl(selectedParty, product, selectedEnvironment, lang)
           .then((url) => {
             trackEvent(
               'DASHBOARD_OPEN_PRODUCT',
@@ -61,7 +62,7 @@ export const useTokenExchange = () => {
           )
           .finally(() => setLoading(false)))
       : (setLoading(true),
-        retrieveBackOfficeUrl(selectedParty, product)
+        retrieveBackOfficeUrl(selectedParty, product, undefined, lang)
           .then((url) => {
             trackEvent(
               'DASHBOARD_OPEN_PRODUCT',

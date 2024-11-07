@@ -1,26 +1,10 @@
-import { useMemo } from 'react';
-import {
-  Typography,
-  Box,
-  CardContent,
-  Link,
-  Chip,
-  Card,
-  useTheme,
-  Tooltip,
-  Grid,
-  IconButton,
-} from '@mui/material';
 import { ArrowForward } from '@mui/icons-material';
-import { Trans, useTranslation } from 'react-i18next';
-import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend';
-import { useHistory } from 'react-router';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
-import { ProductAvatar } from '@pagopa/mui-italia';
-import { ENV } from '../../../../../utils/env';
+import { Box, Card, Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 
 type Props = {
   cardTitle: string;
@@ -31,6 +15,7 @@ type Props = {
   party: Party;
   product: Product;
 };
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default function ActiveProductCard({
   cardTitle,
   disableBtn,
@@ -38,14 +23,9 @@ export default function ActiveProductCard({
   btnAction,
   party,
   product,
-}: Props) {
-  const onExit = useUnloadEventOnExit();
-  const history = useHistory();
+}: Readonly<Props>) {
   const { t } = useTranslation();
-  const usersRoute = ENV.ROUTES.USERS;
-  const usersPath = resolvePathVariables(usersRoute, {
-    partyId: party.partyId ?? '',
-  }).concat(`#${product.id}`);
+
   const theme = useTheme();
 
   const activeSubProducts: Array<SubProductResource> = useMemo(
@@ -58,93 +38,112 @@ export default function ActiveProductCard({
     [party]
   );
 
+  const isSubProductActive = activeSubProducts && activeSubProducts.length > 0;
+  const logoUrl =
+    product.id === 'prod-io' && isSubProductActive ? activeSubProducts[0].logo ?? '' : urlLogo;
+  const logoBgColor =
+    product.id === 'prod-io' && isSubProductActive
+      ? activeSubProducts[0].logoBgColor ?? ''
+      : product.logoBgColor;
+
   return (
     <Card
       id={product.id}
       raised
       sx={{
         borderRadius: theme.spacing(2),
-        height: '176px',
-        minWidth: '347px',
+        minHeight: '154px',
+        background: '#FFFFFF',
+        boxShadow:
+          '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+        overflowWrap: 'anywhere',
       }}
     >
-      <CardContent sx={{ display: 'flex', pb: 2 }}>
+      <Grid container alignItems={disableBtn ? 'flex-start' : 'center'} flexWrap={'nowrap'} p={2}>
         {/* Logo */}
-        <Grid container>
-          <Box display={'flex'} width="100%" alignItems="center">
-            <Grid item>
-              <ProductAvatar
-                logoUrl={urlLogo}
-                logoBgColor={product.logoBgColor}
-                logoAltText={`${product.title} logo`}
-                size="default"
-              />
-            </Grid>
-            {/* Title */}
+        <Grid item xs={'auto'} mr={2}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              width: '72px',
+              height: '72px',
+              padding: 1,
+              backgroundColor: logoBgColor,
+              boxSizing: 'border-box',
+              borderRadius: theme.spacing(1),
+            }}
+          >
+            <img
+              src={logoUrl}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                objectPosition: 'center',
+              }}
+              alt={`${product.title} logo`}
+            />
+          </Box>
+        </Grid>
+        {/* Title and disableBtn info */}
+        <Grid item xs={disableBtn ? 9 : true}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={disableBtn ? 'flex-start' : 'center'}
+            height="100%"
+          >
             {cardTitle && (
-              <Grid item width={'100%'} ml={2}>
-                {activeSubProducts.map((p) => (
-                  <Chip
-                    key={p.id}
-                    label={t('overview.activeProducts.premiumProduct')}
-                    size="small"
-                    sx={{
-                      display: 'flex',
-                      mb: 1,
-                      borderRadius: theme.shape,
-                      width: '80px',
-                      backgroundColor: 'warning.main',
-                      color: 'colorTextPrimary',
-                    }}
-                  />
-                ))}
-                <Box>
-                  <Tooltip
-                    title={cardTitle.length > 27 ? cardTitle : ''}
-                    placement="top"
-                    arrow={true}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: '22px',
-                        fontWeight: 'medium',
-                        height: '100%',
-                        width: '100%',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitBoxOrient: 'vertical' as const,
-                        WebkitLineClamp: 2,
-                      }}
-                    >
-                      {cardTitle}
-                    </Typography>
-                  </Tooltip>
-                </Box>
-              </Grid>
+              <Tooltip title={cardTitle.length > 20 ? cardTitle : ''} placement="top" arrow>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: '400',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical' as const,
+                    WebkitLineClamp: 2,
+                  }}
+                >
+                  <strong style={{ fontWeight: 'fontWeightBold' }}>{cardTitle}</strong>
+                  {` ${t(isSubProductActive ? 'overview.activeProducts.premiumProduct' : '')}`}
+                </Typography>
+                {/*
+                <Typography
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: 'fontWeightBold',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical' as const,
+                    WebkitLineClamp: 2,
+                  }}
+                >
+                  
+                  {`${cardTitle} ${t(
+                    isSubProductActive ? 'overview.activeProducts.premiumProduct' : ''
+                  )}`}
+                </Typography>
+                */}
+              </Tooltip>
+            )}
+
+            {disableBtn && (
+              <Typography sx={{ fontSize: '14px', mt: 1 }}>
+                {t('activeProductCard.disableInfo')}
+              </Typography>
             )}
           </Box>
         </Grid>
-      </CardContent>
-      <Box px={3}>
-        {disableBtn ? (
-          // info label
-          <Box display={'flex'} justifyContent={'flex-start'}>
-            <Typography sx={{ fontSize: '14px' }}>
-              <Trans i18nKey="activeProductCard.disableInfo">
-                Per gestire questo prodotto, chiedi a uno dei suoi
-                <Link
-                  onClick={() => onExit(() => history.push(party.partyId ? usersPath : usersRoute))}
-                  sx={{ fontWeight: 'fontWeightMedium' }}
-                >
-                  Amministratori
-                </Link>
-              </Trans>
-            </Typography>
-          </Box>
-        ) : (
-          //  Action
-          <Box display={'flex'} justifyContent={'flex-end'}>
+        {/* Arrow Button */}
+        {!disableBtn && (
+          <Grid item>
             <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`}>
               <Box
                 sx={{
@@ -152,14 +151,15 @@ export default function ActiveProductCard({
                   height: '44px',
                   color: 'white',
                   borderRadius: '48px',
+                  mt: 1,
                 }}
               >
-                <ArrowForward sx={{ m: 1 }} />{' '}
+                <ArrowForward sx={{ m: 1 }} />
               </Box>
             </IconButton>
-          </Box>
+          </Grid>
         )}
-      </Box>
+      </Grid>
     </Card>
   );
 }

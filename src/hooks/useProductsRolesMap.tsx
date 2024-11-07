@@ -1,8 +1,11 @@
-import useReduxCachedValue from '@pagopa/selfcare-common-frontend/hooks/useReduxCachedValue';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import useReduxCachedValue from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useMemo } from 'react';
+import { Party } from '../model/Party';
 import {
-  ProductRolesLists,
   productRoles2ProductRolesList,
+  ProductRolesLists,
   ProductsRolesMap,
 } from '../model/ProductRole';
 import { useAppSelector } from '../redux/hooks';
@@ -14,26 +17,33 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
+  const { hasPermission } = usePermissions();
 
-  const activeProducts = useMemo(
+  const activeAndAccessibleProducts = useMemo(
     () =>
       products?.filter((p) =>
         party?.products.some(
-          (us) => us.productId === p.id && us.productOnBoardingStatus === 'ACTIVE'
+          (us) =>
+            us.productId === p.id &&
+            us.productOnBoardingStatus === 'ACTIVE' &&
+            hasPermission(us.productId ?? '', Actions.AccessProductBackoffice)
         )
       ),
     [products, party?.products]
   );
 
   const fetchProductRolesNotYetCached = async (): Promise<ProductsRolesMap> => {
-    if (!activeProducts) {
-      return new Promise((resolve) => resolve(productsRolesMap));
+    if (!activeAndAccessibleProducts) {
+      return Promise.resolve(productsRolesMap);
     }
 
-    const promises: Array<Promise<[string, ProductRolesLists]>> = activeProducts
+    const promises: Array<Promise<[string, ProductRolesLists]>> = activeAndAccessibleProducts
       .filter((p) => !productsRolesMap[p.id])
       .map((p) =>
-        fetchProductRoles(p).then((roles) => [p.id, productRoles2ProductRolesList(roles)])
+        fetchProductRoles(p, party as Party).then((roles) => [
+          p.id,
+          productRoles2ProductRolesList(roles),
+        ])
       );
     const fetched: Array<[string, ProductRolesLists]> = await Promise.all(promises);
 
@@ -44,9 +54,9 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
     'PRODUCTS_ROLES',
     fetchProductRolesNotYetCached,
     (state: RootState) =>
-      !activeProducts ||
+      !activeAndAccessibleProducts ||
       (state.parties.selectedProductsRolesMap &&
-        !activeProducts.find(
+        !activeAndAccessibleProducts.find(
           (p) => !(state.parties.selectedProductsRolesMap as ProductsRolesMap)[p.id]
         ))
         ? state.parties.selectedProductsRolesMap
