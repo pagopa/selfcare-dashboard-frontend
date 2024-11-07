@@ -23,7 +23,7 @@ import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
-import DashboardTechnologyPartnerPage from '../dashboardTechnologyPartnerPage/DashboardTechnologyPartnerPage';
+import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
 export type DashboardPageProps = {
@@ -174,7 +174,12 @@ const Dashboard = () => {
   ]);
 
   // Check if the current route matches any path in the array
-  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path, `${ENV.ROUTES.USERS}/add`];
+  const paths = [
+    DASHBOARD_ROUTES.ADD_DELEGATE.path,
+    `${ENV.ROUTES.USERS}/add`,
+    `${ENV.ROUTES.USERS}/:userId/edit`,
+    `${ENV.ROUTES.USERS}/:userId/add-product`,
+  ];
 
   const match = matchPath(location.pathname, {
     path: paths,
@@ -344,7 +349,7 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
-            <DashboardTechnologyPartnerPage party={party} />
+            <DashboardHandleDelegatesPage party={party} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>

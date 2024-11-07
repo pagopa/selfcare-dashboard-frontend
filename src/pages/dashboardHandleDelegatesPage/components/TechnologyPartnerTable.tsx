@@ -4,9 +4,9 @@ import { Box } from '@mui/system';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend/lib';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
-import { Party } from '../../model/Party';
-import { getDelegatingInstitutions } from '../../services/technologyPartnerService';
+import { DelegationWithInfo } from '../../../api/generated/b4f-dashboard/DelegationWithInfo';
+import { Party } from '../../../model/Party';
+import { getDelegatingInstitutions } from '../../../services/technologyPartnerService';
 import TechPartnersTable from './TechPartnersTable';
 
 type Props = {
