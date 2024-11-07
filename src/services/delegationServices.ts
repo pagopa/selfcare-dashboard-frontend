@@ -12,7 +12,7 @@ export const mockedDelegations: Array<DelegationResource> = [
     institutionId: mockedParties[2].partyId,
     institutionName: mockedParties[2].description,
     productId: mockedPartyProducts[0].id,
-    type: TypeEnum.PT,
+    type: TypeEnum.EA,
   },
   {
     id: '1111',
@@ -21,7 +21,7 @@ export const mockedDelegations: Array<DelegationResource> = [
     institutionId: mockedParties[2].partyId,
     institutionName: mockedParties[2].description,
     productId: mockedPartyProducts[0].id,
-    type: TypeEnum.PT,
+    type: TypeEnum.EA,
   },
   {
     id: '2222',
@@ -30,7 +30,7 @@ export const mockedDelegations: Array<DelegationResource> = [
     institutionId: mockedParties[2].partyId,
     institutionName: mockedParties[2].description,
     productId: mockedPartyProducts[2].id,
-    type: TypeEnum.PT,
+    type: TypeEnum.EA,
   },
   {
     id: '3333',

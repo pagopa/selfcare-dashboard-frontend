@@ -1,22 +1,37 @@
 import { GeographicTaxonomyResource } from '../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { InstitutionBaseResource } from '../api/generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from '../api/generated/b4f-dashboard/InstitutionResource';
-import { OnboardedProductResource } from '../api/generated/b4f-dashboard/OnboardedProductResource';
+import { ProductOnBoardingStatusEnum } from '../api/generated/b4f-dashboard/OnboardedProductResource';
 import { ENV } from '../utils/env';
 
-export type UserRole = 'ADMIN' | 'LIMITED';
-export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE';
+export type UserRole = 'ADMIN' | 'LIMITED' | 'ADMIN_EA';
+export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE' | 'ADMIN_EA';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
+
+type OnboardedProduct = {
+  authorized?: boolean;
+  billing?: {
+      publicServices?: boolean;
+      recipientCode?: string;
+      vatNumber?: string;
+  };
+  productId?: string;
+  productOnBoardingStatus?: ProductOnBoardingStatusEnum;
+  userProductActions?: Array<string>;
+  userRole?: string;
+  isAggregator?: boolean;
+};
 
 export type Party = {
   partyId: string;
-  products: Array<OnboardedProductResource>;
+  products: Array<OnboardedProduct>;
   externalId?: string;
   originId?: string;
   origin?: string;
   description: string;
   digitalAddress?: string;
   category?: string;
+  categoryCode?: string;
   urlLogo?: string;
   fiscalCode?: string;
   registeredOffice: string;
@@ -61,6 +76,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     description: institutionResource.name ?? '',
     digitalAddress: institutionResource.mailAddress,
     category: institutionResource.category,
+    categoryCode: institutionResource.categoryCode,
     urlLogo,
     fiscalCode: institutionResource.fiscalCode,
     registeredOffice: institutionResource.address ?? '',
@@ -80,7 +96,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     subunitType: institutionResource.subunitType,
     aooParentCode: institutionResource.aooParentCode,
     parentDescription: institutionResource.parentDescription,
-    products: institutionResource.products as Array<OnboardedProductResource>,
+    products: institutionResource.products as Array<OnboardedProduct>,
   };
 };
 

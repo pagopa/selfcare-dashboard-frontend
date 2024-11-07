@@ -4,7 +4,6 @@ import { DashboardApi } from '../api/DashboardApiClient';
 import { TypeEnum } from '../api/generated/b4f-dashboard/DelegationRequestDto';
 import {
   DelegationWithInfo,
-  InstitutionTypeEnum,
 } from '../api/generated/b4f-dashboard/DelegationWithInfo';
 import { DelegationWithPagination } from '../api/generated/b4f-dashboard/DelegationWithPagination';
 
@@ -29,11 +28,11 @@ function generateDelegationWithInfoArray(n: number): Array<DelegationWithInfo> {
       institutionId: `institutionId${i}`,
       institutionName: `Institution Name ${i}`,
       institutionRootName: `Institution Root Name ${i}`,
-      institutionType: InstitutionTypeEnum.PA,
+      institutionType: 'PA',
       productId: `prod-pagopa`,
       status: `Status${i}`,
       taxCode: `TaxCode${i}`,
-      type: TypeEnum.AOO,
+      type: TypeEnum.EA,
       updatedAt,
     };
 
@@ -282,9 +281,7 @@ export const mockedDelegationsWithPagination: DelegationWithPagination = {
 export const getDelegatingInstitutions = (partyId: string): Promise<DelegationWithPagination> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
-    return new Promise((resolve) => {
-      resolve(mockedDelegationsWithPagination);
-    });
+    return Promise.resolve(mockedDelegationsWithPagination);
   } else {
     return DashboardApi.getDelegatingInstitutions(partyId).then(
       (delegationsResource) => delegationsResource

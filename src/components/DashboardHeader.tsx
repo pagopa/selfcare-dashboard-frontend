@@ -1,9 +1,9 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header } from '@pagopa/selfcare-common-frontend/lib';
+import { Header, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions, roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -17,6 +17,8 @@ import SessionModalInteropProduct from '../pages/dashboardOverview/components/ac
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
+import { INTEROP_PRODUCT_ENUM, interopProductIdList } from '../utils/constants';
+import { startWithProductInterop } from '../utils/helperFunctions';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -40,42 +42,38 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
   const [showDocBtn, setShowDocBtn] = useState(false);
+  const { hasPermission } = usePermissions();
 
   useEffect(() => {
-    if (i18n.language === 'it') {
-      setShowDocBtn(true);
-    } else {
-      setShowDocBtn(false);
-    }
+    setShowDocBtn(i18n.language === 'it');
   }, [i18n.language]);
 
   const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
 
   const findAuthorizedProduct = (productId: string) =>
-    party?.products.find((p) => p.productId === productId && p.authorized);
+    party?.products.find(
+      (p) =>
+        p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
+    );
 
-  const authorizedProdInterop = findAuthorizedProduct('prod-interop');
-  const authorizedProdAtst = findAuthorizedProduct('prod-interop-atst');
-  const authorizedProdColl = findAuthorizedProduct('prod-interop-coll');
-
-  const authorizedInteropProducts = [
-    authorizedProdInterop,
-    authorizedProdAtst,
-    authorizedProdColl,
-  ].filter((product) => product);
+  const authorizedInteropProducts = interopProductIdList
+    .map(findAuthorizedProduct)
+    .filter(Boolean)
+    .map((p) => p?.productId ?? '');
 
   const hasMoreThanOneInteropEnv = authorizedInteropProducts.length > 1;
 
-  const onboardedPartyProducts = party?.products.filter(
+  const authorizedPartyProducts = party?.products.filter(
     (pp) =>
       pp.productOnBoardingStatus === 'ACTIVE' &&
-      (pp.authorized || (hasMoreThanOneInteropEnv && pp.productId === 'prod-interop'))
+      (hasPermission(pp.productId ?? '', Actions.AccessProductBackoffice) ||
+        (hasMoreThanOneInteropEnv && pp.productId === INTEROP_PRODUCT_ENUM.INTEROP))
   );
 
   const activeProducts: Array<Product> = useMemo(
     () =>
-      products?.filter((p) => onboardedPartyProducts?.some((op) => op.productId === p.id)) ?? [],
-    [onboardedPartyProducts]
+      products?.filter((p) => authorizedPartyProducts?.some((op) => op.productId === p.id)) ?? [],
+    [authorizedPartyProducts]
   );
 
   // eslint-disable-next-line functional/immutable-data
@@ -93,13 +91,15 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
-            hasMoreThanOneInteropEnv
-              ? p.id !== 'prod-interop-coll' && p.id !== 'prod-interop-atst'
+            startWithProductInterop(p.id) && hasMoreThanOneInteropEnv
+              ? p.id === authorizedInteropProducts[0]
               : true
           )
           .map((p) => ({
             id: p.id,
-            title: p.title,
+            title: startWithProductInterop(p.id)
+              ? products?.find((pp) => pp.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title ?? ''
+              : p.title,
             productUrl: p.urlPublic ?? '',
             linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
           }))}
@@ -142,7 +142,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             if (
               actualSelectedParty.current &&
               hasMoreThanOneInteropEnv &&
-              p.id.startsWith('prod-interop')
+              startWithProductInterop(p.id)
             ) {
               setOpenCustomEnvInteropModal(true);
             } else if (
@@ -152,7 +152,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               setOpenGenericEnvProductModal(true);
             } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
               void invokeProductBo(
-                selectedProduct as Product,
+                selectedProduct,
                 actualSelectedParty.current as Party,
                 undefined,
                 lang
@@ -180,7 +180,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         message={
           <Trans
             i18nKey="overview.activeProducts.activeProductsEnvModal.message"
-            values={{ productTitle: productSelected?.title }}
+            values={{
+              productTitle: startWithProductInterop(productSelected?.id)
+                ? products?.find((pp) => pp.id === INTEROP_PRODUCT_ENUM.INTEROP)?.title
+                : productSelected?.title,
+            }}
             components={{ 1: <strong /> }}
           >
             {`Sei stato abilitato ad operare in entrambi gli ambienti. Ti ricordiamo che l’ambiente di collaudo ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di produzione è il prodotto in esercizio.`}
@@ -199,9 +203,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         handleClose={() => {
           setOpenCustomEnvInteropModal(false);
         }}
-        authorizedProdInterop={!!authorizedProdInterop}
-        authorizedProdColl={!!authorizedProdColl}
-        authorizedProdAtst={!!authorizedProdAtst}
+        authorizedInteropProducts={authorizedInteropProducts}
         products={products}
         party={party}
       />

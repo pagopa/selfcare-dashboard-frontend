@@ -1,8 +1,12 @@
 import { TableCell, Tooltip, Typography } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, ReactElement } from 'react';
 
-const TableCellWithTooltip: React.FC<{ text: string }> = ({ text }) => {
-  const textRef = useRef<HTMLSpanElement | null>(null);
+interface TableCellWithTooltipProps {
+  text: string | ReactElement;
+}
+
+const TableCellWithTooltip: React.FC<TableCellWithTooltipProps> = ({ text }) => {
+  const textRef = useRef<HTMLDivElement | null>(null);
   const [isOverflowed, setIsOverflowed] = useState(false);
 
   useEffect(() => {
@@ -13,7 +17,7 @@ const TableCellWithTooltip: React.FC<{ text: string }> = ({ text }) => {
 
   return (
     <TableCell>
-      <Tooltip title={isOverflowed ? text : ''} placement="top" arrow>
+      <Tooltip title={isOverflowed && typeof text === 'string' ? text : ''} placement="top" arrow>
         <Typography
           ref={textRef}
           variant="body2"

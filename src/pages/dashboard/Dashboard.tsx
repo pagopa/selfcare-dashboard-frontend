@@ -1,5 +1,7 @@
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import { Box, Button, Divider, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
@@ -85,16 +87,28 @@ export const buildRoutes = (
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const Dashboard = () => {
-  const history = useHistory();
-  const parties = useAppSelector(partiesSelectors.selectPartiesList);
-  const party = useAppSelector(partiesSelectors.selectPartySelected);
-  const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
-  const store = useStore();
-  const theme = useTheme();
+  const { getAllProductsWithPermission, hasPermission } = usePermissions();
   const { i18n, t } = useTranslation();
+  const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hideLabels, setHideLabels] = useState(false);
+
+  const history = useHistory();
+  const location = useLocation();
+
+  const store = useStore();
+  const party = useAppSelector(partiesSelectors.selectPartySelected);
+  const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+
+  const isPT = party?.institutionType === 'PT';
+  const hasDelegation = Boolean(party?.delegation);
+
+  const productsMap: ProductsMap =
+    useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
+
+  const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
 
   const activeProducts: Array<Product> =
     useMemo(
@@ -110,38 +124,60 @@ const Dashboard = () => {
       [products, party]
     ) ?? [];
 
-  const authorizedDelegableProducts: Array<Product> = activeProducts.filter((ap) =>
+  const delegableProducts: Array<Product> = activeProducts.filter((product) =>
     party?.products.some(
-      (p) => p.productId === ap.id && p.authorized && p.userRole === 'ADMIN' && ap.delegable
+      (partyProduct) => partyProduct.productId === product.id && product.delegable
     )
   );
+
+  const authorizedDelegableProducts: Array<Product> = delegableProducts.filter((ap) =>
+    hasPermission(ap.id ?? '', Actions.AccessProductBackoffice)
+  );
+
+  const canAggregatorSeeHandleDelegations = useMemo(() => {
+    const aggregatorProduct = party?.products?.find(
+      (product) =>
+        product.isAggregator &&
+        hasPermission(product.productId ?? '', Actions.ViewManagedInstitutions)
+    );
+    return Boolean(aggregatorProduct && hasDelegation);
+  }, [party, hasDelegation]);
 
   const isInvoiceSectionVisible = !!products?.some(
     (prod) =>
       prod.invoiceable &&
-      party?.products.some((partyProd) => partyProd.productId === prod.id && partyProd.userRole)
+      party?.products.some(
+        (partyProd) =>
+          partyProd.productId === prod.id && hasPermission(partyProd.productId, Actions.ViewBilling)
+      )
   );
 
-  const productsMap: ProductsMap =
-    useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
-
-  const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
-  const canSeeSection = parties?.find((p) => p.partyId === party?.partyId)?.userRole === 'ADMIN';
-
-  const isDelegateSectionVisible =
+  const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
     authorizedDelegableProducts.length > 0 &&
-    party?.institutionType !== 'PT';
+    !isPT &&
+    getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
 
-  const isPtSectionVisible =
-    (party?.institutionType === 'PT' && authorizedDelegableProducts.length > 0) ||
-    (party?.delegation && authorizedDelegableProducts.length > 0);
+  const isHandleDelegationsVisible = useMemo(() => {
+    const canDelegateSeeHandleDelegations =
+      delegableProducts.length > 0 &&
+      (isPT || hasDelegation) &&
+      getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
 
-  const location = useLocation();
+    return canDelegateSeeHandleDelegations || canAggregatorSeeHandleDelegations;
+  }, [
+    authorizedDelegableProducts,
+    isPT,
+    hasDelegation,
+    canAggregatorSeeHandleDelegations,
+    delegableProducts,
+  ]);
 
-  // Check if the current route matches ADD_DELEGATE
+  // Check if the current route matches any path in the array
+  const paths = [DASHBOARD_ROUTES.ADD_DELEGATE.path, `${ENV.ROUTES.USERS}/add`];
+
   const match = matchPath(location.pathname, {
-    path: [DASHBOARD_ROUTES.ADD_DELEGATE.path],
+    path: paths,
     exact: true,
     strict: false,
   });
@@ -194,10 +230,9 @@ const Dashboard = () => {
                 <Grid item xs={2} component="nav" display={'inline-grid'}>
                   <DashboardSideMenu
                     party={party}
-                    isDelegateSectionVisible={isDelegateSectionVisible}
-                    canSeeSection={canSeeSection}
+                    isAddDelegateSectionVisible={isAddDelegateSectionVisible}
                     isInvoiceSectionVisible={isInvoiceSectionVisible}
-                    isPtSectionVisible={isPtSectionVisible}
+                    isHandleDelegationsVisible={isHandleDelegationsVisible}
                     setDrawerOpen={setDrawerOpen}
                     hideLabels={hideLabels}
                   />
@@ -210,15 +245,14 @@ const Dashboard = () => {
             <Box>
               <DashboardSideMenu
                 party={party}
-                isDelegateSectionVisible={isDelegateSectionVisible}
-                canSeeSection={canSeeSection}
+                isAddDelegateSectionVisible={isAddDelegateSectionVisible}
                 isInvoiceSectionVisible={isInvoiceSectionVisible}
-                isPtSectionVisible={isPtSectionVisible}
+                isHandleDelegationsVisible={isHandleDelegationsVisible}
                 setDrawerOpen={setDrawerOpen}
                 hideLabels={hideLabels}
               />
               <Box sx={{ position: 'absolute', bottom: '0', width: '100%' }}>
-                <Divider />
+                <Divider sx={{ marginTop: '80px' }} />
 
                 <Button
                   fullWidth
@@ -310,11 +344,7 @@ const Dashboard = () => {
             />
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
-            <DashboardTechnologyPartnerPage
-              canSeeSection={canSeeSection}
-              party={party}
-              ptProducts={activeProducts}
-            />
+            <DashboardTechnologyPartnerPage party={party} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>

@@ -40,7 +40,7 @@ export default {
     moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
-    disableInfo: 'Per gestire questo prodotto, chiedi a uno dei suoi <1>Amministratori</1>',
+    disableInfo: 'Non hai un ruolo per gestire questo prodotto',
   },
   overview: {
     title: 'Panoramica',
@@ -93,7 +93,7 @@ export default {
       joinButton: 'Aderisci',
     },
     depictOf: 'Rappresentazione di',
-    discoverMore: '<0> SCOPRI DI PIÙ → </0>',
+    discoverMore: '<0>Scopri di più</0>',
     adhesionPopup: {
       title: 'Adesione in corso',
       description:
@@ -168,8 +168,14 @@ export default {
         PG: 'Azienda',
         REC: 'Recapitista',
         CON: 'Consolidatore',
+        PRV: 'Privato',
       },
-      vatNumberGroup: 'Partita IVA di gruppo',
+      delegationBanner: {
+        title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
+        subTitle:
+          'Se ti avvali di figure come Partner o Intermediari tecnologici, puoi delegare la gestione di alcuni prodotti.',
+        goToButton: 'Vai',
+      },
       vatNumberGroupValues: {
         yes: 'Sì',
         no: 'No',
@@ -179,13 +185,14 @@ export default {
     },
     delegationsPage: {
       title: 'Deleghe',
-      subTitle: 'Aggiungi o visualizza i delegati per la gestione dei prodotti. ',
+      subTitle:
+        'Qui trovi l’elenco degli enti a cui hai affidato la gestione di uno o più prodotti. Puoi anche aggiungere una nuova delega.',
       whatIsDelegation: 'Cos’è una delega?',
       addDelegationsBtn: 'Aggiungi delega',
       productsSection: {
         title: 'Prodotti',
         labelDelegates: 'Delegato',
-        noDelegatesLabel: 'Nessun delegato per questo prodotto. <1>Aggiungi delega</1>',
+        noDelegatesLabel: 'Ancora nessuna delega,<1> creane una adesso</1>',
       },
     },
     ptPage: {

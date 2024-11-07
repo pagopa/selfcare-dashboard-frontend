@@ -1,38 +1,74 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { mockedParties } from '../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../../utils/test-utils';
 import AddDelegationForm from '../AddDelegationForm';
+import userEvent from '@testing-library/user-event';
 
 test('render the form correctly woth empty props', () => {
   renderWithProviders(
     <AddDelegationForm authorizedDelegableProducts={[]} party={mockedParties[0]} />
   );
+
+  const escapeButton = screen.getByText('Esci');
+  fireEvent.click(escapeButton);
 });
 
-test('render the form correctly and name header should not be visible in pt list combox', () => {
+test('search by name', async () => {
   renderWithProviders(
     <AddDelegationForm
-      authorizedDelegableProducts={mockedPartyProducts}
-      party={mockedParties[0]}
+      authorizedDelegableProducts={[mockedPartyProducts[0]]}
+      party={mockedParties[2]}
       selectedProductByQuery={mockedPartyProducts[0]}
     />
   );
 
-  expect(screen.getByText('App IO')).toBeInTheDocument();
-  const ptListComboBox = screen.getByLabelText('Inserisci la ragione sociale');
-  expect(ptListComboBox).toBeInTheDocument();
+  expect(screen.getByText('IO')).toBeInTheDocument();
+  const autocompleteInput = screen.getByLabelText(
+    'Inserisci la ragione sociale'
+  ) as HTMLInputElement;
+  expect(autocompleteInput).toBeInTheDocument();
 
+  userEvent.type(autocompleteInput, 'Random');
+  fireEvent.change(autocompleteInput, { target: { value: 'Random' } });
+
+  userEvent.clear(autocompleteInput);
+
+  userEvent.type(autocompleteInput, 'Maggi');
+  fireEvent.change(autocompleteInput, { target: { value: 'Maggi' } });
+});
+
+test('search by fiscal code', async () => {
+  renderWithProviders(
+    <AddDelegationForm
+      authorizedDelegableProducts={[mockedPartyProducts[0]]}
+      party={mockedParties[2]}
+      selectedProductByQuery={mockedPartyProducts[0]}
+    />
+  );
   const searchByFiscalCodeRadio = screen.getByLabelText('Codice Fiscale ente');
   expect(searchByFiscalCodeRadio).toBeInTheDocument();
 
   fireEvent.click(searchByFiscalCodeRadio);
-  expect(searchByFiscalCodeRadio).toBeChecked();
+  await waitFor(() => expect(searchByFiscalCodeRadio).toBeChecked());
 
-  fireEvent.click(ptListComboBox);
-  // TODO the name should be visible once intermediate enteties data is available
-  expect(screen.queryByText('Nome')).not.toBeInTheDocument();
+  const insertCFCodeInput = screen.getByLabelText(
+    'Inserisci il Codice Fiscale'
+  ) as HTMLInputElement;
+
+  fireEvent.click(insertCFCodeInput);
+
+  fireEvent.change(insertCFCodeInput, { target: { value: '1234567891' } });
+
+  userEvent.type(insertCFCodeInput, '12345678914');
+  fireEvent.change(insertCFCodeInput, { target: { value: '12345678914' } });
+
+  const exitButton = screen.getByText('Esci');
+  expect(exitButton).toBeInTheDocument();
+
+  expect(exitButton).toBeEnabled();
+  fireEvent.click(exitButton);
 });
 
 test('should display the choose product autocomplete input empty if there are no products selected', () => {
@@ -43,7 +79,7 @@ test('should display the choose product autocomplete input empty if there are no
   const chooseProduct = document.getElementById('select-product-choose') as HTMLInputElement;
   expect(chooseProduct).toBeInTheDocument();
 
-  expect(screen.queryByText('App IO')).not.toBeInTheDocument();
+  expect(screen.queryByText('IO')).not.toBeInTheDocument();
 });
 
 test('should display documentation link with correct href and text content', async () => {

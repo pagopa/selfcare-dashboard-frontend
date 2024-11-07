@@ -1,3 +1,4 @@
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { GeographicTaxonomy } from '../../api/generated/b4f-dashboard/GeographicTaxonomy';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { BaseParty, Party } from '../../model/Party';
@@ -41,7 +42,7 @@ export const mockedBaseParties: Array<BaseParty> = [
     userRole: 'ADMIN',
   },
   {
-    partyId: '6',
+    partyId: 'institutionId0',
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     status: 'ACTIVE',
     userRole: 'ADMIN',
@@ -72,7 +73,7 @@ export const mockedBaseParties: Array<BaseParty> = [
   },
   {
     partyId: '98123',
-    description: 'mockedTechPartner',
+    description: 'Prova PT',
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
@@ -210,6 +211,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'FLGKROWP',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice],
       },
       {
         productId: 'prod-pn',
@@ -221,6 +223,7 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [Actions.ListActiveProducts, Actions.AccessProductBackoffice, Actions.ViewBilling],
       },
     ],
     delegation: false,
@@ -255,6 +258,16 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ListProductUsers,
+          Actions.ManageProductUsers,
+          Actions.AccessProductBackoffice,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
     delegation: false,
@@ -294,10 +307,18 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pagopa',
-        authorized: true,
+        authorized: false,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
@@ -305,6 +326,16 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.AccessProductBackoffice,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-io-premium',
@@ -316,6 +347,13 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'CH435V',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ListProductUsers,
+          Actions.AccessProductBackoffice,
+        ],
       },
       // Use case with prod-interop and prod-interop-coll
       {
@@ -328,17 +366,19 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers],
       },
       {
         productId: 'prod-interop-coll',
         authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '3395867495',
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers]
       },
       {
         productId: 'prod-interop-atst',
@@ -350,10 +390,10 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers]
       },
       {
         productId: 'prod-pn',
-        authorized: true,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
@@ -361,6 +401,14 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn-dev',
@@ -409,11 +457,17 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ViewBilling,
+          Actions.ListProductUsers,
+        ],
       },
     ],
     delegation: false,
     status: undefined,
-    userRole: undefined,
+    userRole: 'LIMITED',
   },
   {
     description: 'AGENCY ONBOARDED',
@@ -422,6 +476,7 @@ export const mockedParties: Array<Party> = [
     digitalAddress: 'comune.onboarded@pec.it',
     fiscalCode: 'fiscalCodeONBOARDED',
     category: 'Comuni e loro Consorzi e Associazioni',
+    categoryCode: 'L6',
     registeredOffice: 'Piazza della Scala, 2',
     zipCode: '20121',
     typology: 'Pubblica Amministrazione',
@@ -443,6 +498,18 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+          Actions.ViewManagedInstitutions,
+        ],
+        isAggregator: true,
       },
       {
         productId: 'prod-pn',
@@ -454,9 +521,17 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'dddd',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
-    delegation: false,
+    delegation: true,
     status: undefined,
     userRole: undefined,
   },
@@ -489,6 +564,16 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -500,6 +585,13 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'dddd',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
     ],
     delegation: false,
@@ -509,7 +601,7 @@ export const mockedParties: Array<Party> = [
   {
     description: 'Scuola Media Oswald Von Wolkenstein di Bressa',
     urlLogo: 'image',
-    partyId: '6',
+    partyId: 'institutionId0',
     digitalAddress: 'comune.bressanone@pec.it',
     fiscalCode: '111122211111',
     category: 'Comuni e loro Consorzi e Associazioni',
@@ -535,6 +627,13 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -584,6 +683,16 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -595,6 +704,28 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
       },
+      {
+        productId: 'prod-pagopa',
+        authorized: true,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '2222',
+          recipientCode: 'cccc',
+          publicServices: true,
+        },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewManagedInstitutions,
+          Actions.ViewBilling,
+        ],
+      }
     ],
     // Use case with no delegations
     delegation: false,
@@ -1091,6 +1222,17 @@ export const mockedParties: Array<Party> = [
           publicServices: false,
         },
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+          Actions.ViewManagedInstitutions,
+        ],
       },
       {
         productId: 'prod-io-premium',
@@ -1576,7 +1718,7 @@ export const verifyFetchPartiesMockExecution = (parties: Array<Party>) => {
   expect(parties).toStrictEqual(mockedParties);
 };
 
-export const fetchParties = () => new Promise((resolve) => resolve(mockedParties));
+export const fetchParties = () => Promise.resolve(mockedParties);
 
 export const verifyFetchPartyDetailsMockExecution = (party: Party) => {
   expect(party).toStrictEqual(mockedParties.filter((p) => p.partyId === party.partyId)[0]);
@@ -1586,4 +1728,4 @@ export const fetchPartyDetails = (
   partyId: string,
   _parties?: Array<Party>
 ): Promise<Party | null> =>
-  new Promise((resolve) => resolve(mockedParties.find((p) => p.partyId === partyId) ?? null));
+  Promise.resolve(mockedParties.find((p) => p.partyId === partyId) ?? null);

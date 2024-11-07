@@ -9,6 +9,8 @@ export const ENV = {
     COUNTRIES: env.get('REACT_APP_COUNTRY_DATA').required().asString(),
   },
 
+  BASE_PATH_CDN_URL: env.get('REACT_APP_URL_CDN').required().asString(),
+
   ASSISTANCE: {
     ENABLE: env.get('REACT_APP_ENABLE_ASSISTANCE').required().asBool(),
     EMAIL: env.get('REACT_APP_PAGOPA_HELP_EMAIL').required().asString(),

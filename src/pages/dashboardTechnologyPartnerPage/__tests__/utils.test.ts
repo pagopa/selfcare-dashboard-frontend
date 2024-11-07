@@ -1,4 +1,4 @@
-import { compareDates, compareStrings, codeToLabelProduct } from '../../../utils/helperFunctions';
+import { compareDates, compareStrings } from '../../../utils/helperFunctions';
 
 describe('compareDates', () => {
   it('should return 0 when both dates are undefined', () => {
@@ -40,17 +40,5 @@ describe('compareStrings', () => {
   it('should correctly compare two strings in descending order', () => {
     expect(compareStrings('apple', 'banana', 'desc')).toBeGreaterThan(0);
     expect(compareStrings('banana', 'apple', 'desc')).toBeLessThan(0);
-  });
-});
-
-describe('codeToLabelProduct', () => {
-  it('should return the correct label for product code', () => {
-    expect(codeToLabelProduct('prod-io')).toBe('App Io');
-    expect(codeToLabelProduct('prod-pagopa')).toBe('Piattaforma pagoPA');
-    expect(codeToLabelProduct('prod-io, prod-pagopa')).toBe('App Io, Piattaforma pagoPA');
-  });
-
-  it('should return an empty string for unknown product code', () => {
-    expect(codeToLabelProduct('unknown')).toBe('');
   });
 });

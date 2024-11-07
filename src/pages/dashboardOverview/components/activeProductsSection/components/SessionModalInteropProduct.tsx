@@ -27,19 +27,15 @@ type Props = {
   /** The body to show in the popup */
   message: React.ReactNode;
   /** If defined, it will render a confirm button using this function as behavior */
-  onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onConfirm?: React.MouseEventHandler<HTMLButtonElement>;
   /** The confirm label text */
   onConfirmLabel?: string;
-  /** indicates if pary is authorized for prod-interopl */
-  authorizedProdInterop?: boolean;
-  /** indicates if pary is authorized for prod-interop-coll */
-  authorizedProdColl?: boolean;
-  /** indicates if pary is authorized for prod-interop-atst */
-  authorizedProdAtst?: boolean;
+  /** indicates on which prod interop enviroments is authorized */
+  authorizedInteropProducts?: Array<string>;
   /** The function invoked when clicking on close button or in the showed X icon */
   handleClose: () => void | undefined;
   /** If defined, it allow to set a different behavior when clicking on X icon */
-  handleExit?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  handleExit?: React.MouseEventHandler<HTMLButtonElement>;
   /** Close button text */
   onCloseLabel?: string;
   /** The popup height */
@@ -66,10 +62,8 @@ function SessionModalInteropProduct({
   title,
   message,
   onConfirm,
-  onConfirmLabel = t('sessionModalInteropProduct.confirmButton'),
-  authorizedProdInterop,
-  authorizedProdAtst,
-  authorizedProdColl,
+  onConfirmLabel = t('SessionModalInteropProduct.confirmButton'),
+  authorizedInteropProducts,
   handleClose,
   handleExit = handleClose,
   onCloseLabel = t('sessionModalInteropProduct.closeButton'),
@@ -80,7 +74,7 @@ function SessionModalInteropProduct({
   showCloseButton = true,
   products,
   party,
-}: Props) {
+}: Readonly<Props>) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const [selectedEnviroment, setSelectedEnviroment] = React.useState<string>('');
@@ -129,7 +123,7 @@ function SessionModalInteropProduct({
 
           <Grid item xs={12}>
             <RadioGroup>
-              {authorizedProdAtst && (
+              {authorizedInteropProducts?.includes('prod-interop-atst') && (
                 <FormControlLabel
                   value="Attestazione"
                   onClick={() => setSelectedEnviroment('Attestazione')}
@@ -148,7 +142,7 @@ function SessionModalInteropProduct({
                 />
               )}
 
-              {authorizedProdColl && (
+              {authorizedInteropProducts?.includes('prod-interop-coll') && (
                 <FormControlLabel
                   value="Collaudo"
                   onClick={() => setSelectedEnviroment('Collaudo')}
@@ -166,7 +160,7 @@ function SessionModalInteropProduct({
                   sx={{ mb: 1 }}
                 />
               )}
-              {authorizedProdInterop && (
+              {authorizedInteropProducts?.includes('prod-interop') && (
                 <FormControlLabel
                   value={'Produzione'}
                   onClick={() => setSelectedEnviroment('Produzione')}

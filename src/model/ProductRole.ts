@@ -1,4 +1,5 @@
-import { UserRole, PartyRole } from './Party';
+import { PartyRole, UserRole } from "./Party";
+
 
 export type ProductRole = {
   productId: string;
@@ -8,6 +9,7 @@ export type ProductRole = {
   productRole: string;
   title: string;
   description: string;
+  phasesAdditionAllowed: Array<string>;
 };
 
 export type ProductRolesLists = {
@@ -19,9 +21,9 @@ export type ProductRolesLists = {
 
 export const buildEmptyProductRolesLists = (): ProductRolesLists => ({
   list: [],
-  groupBySelcRole: { ADMIN: [], LIMITED: [] },
+  groupBySelcRole: { ADMIN: [], LIMITED: [], ADMIN_EA: [] },
   groupByProductRole: {},
-  groupByPartyRole: { MANAGER: [], DELEGATE: [], SUB_DELEGATE: [], OPERATOR: [] },
+  groupByPartyRole: { MANAGER: [], DELEGATE: [], SUB_DELEGATE: [], OPERATOR: [], ADMIN_EA: [] },
 });
 
 export type ProductRolesByProductRoleType = { [productRole: string]: ProductRole };
