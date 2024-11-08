@@ -1,4 +1,5 @@
-import { compareDates, compareStrings } from '../../../utils/helperFunctions';
+import { compareDates, compareStrings } from '../helperFunctions';
+
 
 describe('compareDates', () => {
   it('should return 0 when both dates are undefined', () => {

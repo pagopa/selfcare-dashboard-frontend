@@ -3,13 +3,13 @@ import { Box } from '@mui/system';
 import { TitleBox } from '@pagopa/selfcare-common-frontend/lib';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../model/Party';
-import TechnologyPartnerTable from './TechnologyPartnerTable';
+import TechnologyPartnerTable from './components/TechnologyPartnerTable';
 
 type Props = {
   party: Party;
 };
 
-export default function DashboardTechnologyPartnerPage({ party }: Readonly<Props>) {
+export default function DashboardHandleDelegatesPage({ party }: Readonly<Props>) {
   const { t } = useTranslation();
   return (
     <Box p={3} sx={{ width: '100%' }}>
