@@ -3,10 +3,11 @@ import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useState } from 'react';
 import { Party } from '../../model/Party';
-import { Product } from '../../model/Product';
+import { Product, ProductInstitutionMap } from '../../model/Product';
 import { mockedCategories } from '../../services/__mocks__/productService';
 import { ENV } from '../../utils/env';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
+import { filterProducts } from './components/notActiveProductsSection/components/productFilters';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
 import { PartyDetailModal } from './components/partyDetailModal/PartyDetailModal';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
@@ -18,14 +19,15 @@ type Props = {
 
 const DashboardOverview = ({ party, products }: Props) => {
   const [open, setOpen] = useState(false);
-  const [allowedCategoriesOnProdPN, setAllowedCategoriesOnProdPN] = useState<Array<string>>([]);
+  const [allowedInstitutionTypes, setAllowedInsitutionTypes] = useState<ProductInstitutionMap>();
+  const [filteredProducts, setFilteredProducts] = useState<Array<Product>>([]);
   const { getAllProductsWithPermission } = usePermissions();
 
   const showInfoBanner = party.institutionType === 'PA';
-
+  /*
   const isInstitutionTypeAllowedOnb =
     party.institutionType && !['PT', 'SA', 'AS'].includes(party.institutionType);
-
+*/
   const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
 
   const canSeeActiveProductsList =
@@ -34,27 +36,21 @@ const DashboardOverview = ({ party, products }: Props) => {
   const canSeeNotActiveProductsList =
     getAllProductsWithPermission(Actions.ListAvailableProducts).length > 0;
 
-  const getCategoriesOnboardingAllowed = async () => {
+  const getOnboardingAllowedByInstitutionType = async () => {
     if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
-      await Promise.resolve(
-        mockedCategories.product['prod-pn']?.ipa.PA?.split(',').map((c: string) => c.trim())
-      );
+      await Promise.resolve(mockedCategories);
     } else {
       try {
-        const response = await fetch(ENV.BASE_PATH_CDN_URL + '/assets/config.json');
+        const response = await fetch(
+          ENV.BASE_PATH_CDN_URL + '/assets/product_institution_types.json'
+        );
 
         if (!response.ok) {
           console.error(`Failed to fetch config.json: ${response.status} - ${response.statusText}`);
           return;
         }
 
-        const categoriesAllowedJSON = await response.json();
-
-        const categoriesStringToArray = categoriesAllowedJSON?.product['prod-pn']?.ipa.PA?.split(
-          ','
-        ).map((c: string) => c.trim());
-
-        setAllowedCategoriesOnProdPN(categoriesStringToArray);
+        setAllowedInsitutionTypes(await response.json());
       } catch (error) {
         console.error(error);
       }
@@ -62,8 +58,25 @@ const DashboardOverview = ({ party, products }: Props) => {
   };
 
   useEffect(() => {
-    void getCategoriesOnboardingAllowed();
+    void getOnboardingAllowedByInstitutionType();
   }, []);
+
+  useEffect(() => {
+    if (canSeeNotActiveProductsList && allowedInstitutionTypes) {
+      const filterConfig = {
+        institutionType: party.institutionType ?? '',
+        categoryCode: party.categoryCode,
+        allowedInstitutionTypes,
+      };
+      const productsWithStatusACtive = products.filter((p) => p.status === 'ACTIVE');
+      const onboardedProducts = party.products.filter(
+        (p) => p.productOnBoardingStatus === 'ACTIVE'
+      );
+      setFilteredProducts(
+        filterProducts(productsWithStatusACtive, filterConfig, onboardedProducts)
+      );
+    }
+  }, [canSeeNotActiveProductsList, allowedInstitutionTypes, party.institutionType]);
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
@@ -78,22 +91,9 @@ const DashboardOverview = ({ party, products }: Props) => {
 
       <Grid item xs={12} mb={2} mt={5}>
         {canSeeActiveProductsList && <ActiveProductsSection products={products} party={party} />}
-        {canSeeNotActiveProductsList &&
-          isInstitutionTypeAllowedOnb &&
-          products &&
-          products.findIndex(
-            (product) =>
-              product.status === 'ACTIVE' &&
-              party.products.map(
-                (us) => us.productId === product.id && us.productOnBoardingStatus !== 'ACTIVE'
-              )
-          ) > -1 && (
-            <NotActiveProductsSection
-              party={party}
-              products={products}
-              allowedCategoriesOnProdPN={allowedCategoriesOnProdPN}
-            />
-          )}
+        {canSeeNotActiveProductsList && filteredProducts.length > 0 && (
+          <NotActiveProductsSection party={party} filteredProducts={filteredProducts} />
+        )}
       </Grid>
     </Box>
   );
