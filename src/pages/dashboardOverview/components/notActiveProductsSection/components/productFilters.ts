@@ -1,5 +1,6 @@
 import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
 import { OnboardedProductResource } from '../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
+import { StatusEnum } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Product, ProductInstitutionMap } from '../../../../../model/Product';
 
 type FilterConfig = {
@@ -22,7 +23,8 @@ const institutionTypeFilter = (
     // If categories are required, check if the institution's category is in the allowed list
     if (allowedTypes[institutionType].categories) {
       const categories = categoryCode && (allowedTypes[institutionType].categories as string);
-      return categories && categories.includes(categoryCode);
+      const categoriesArray = categories?.split(',');
+      return categoriesArray && categoryCode ? categoriesArray.includes(categoryCode) : false;
     }
 
     return true;
@@ -38,7 +40,8 @@ const onboardingStatusFilter = (
     // For productsWithStatusActive with active base version, show eligible children
     if (product.subProducts && product.subProducts?.length > 0) {
       return product.subProducts.some(
-        (child) => !onboardedProductIds.includes(child.id ?? '') && child.status === 'ACTIVE'
+        (child) =>
+          !onboardedProductIds.includes(child.id ?? '') && child.status === StatusEnum.ACTIVE
       );
     }
 

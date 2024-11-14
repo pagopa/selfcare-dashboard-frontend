@@ -2,6 +2,8 @@ import { Box, Grid } from '@mui/material';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useState } from 'react';
+import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
+import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../model/Party';
 import { Product, ProductInstitutionMap } from '../../model/Product';
 import { mockedCategories } from '../../services/__mocks__/productService';
@@ -19,7 +21,7 @@ type Props = {
 
 const DashboardOverview = ({ party, products }: Props) => {
   const [open, setOpen] = useState(false);
-  const [allowedInstitutionTypes, setAllowedInsitutionTypes] = useState<ProductInstitutionMap>();
+  const [allowedInstitutionTypes, setAllowedInstitutionTypes] = useState<ProductInstitutionMap>();
   const [filteredProducts, setFilteredProducts] = useState<Array<Product>>([]);
   const { getAllProductsWithPermission } = usePermissions();
 
@@ -50,7 +52,7 @@ const DashboardOverview = ({ party, products }: Props) => {
           return;
         }
 
-        setAllowedInsitutionTypes(await response.json());
+        setAllowedInstitutionTypes(await response.json());
       } catch (error) {
         console.error(error);
       }
@@ -68,12 +70,12 @@ const DashboardOverview = ({ party, products }: Props) => {
         categoryCode: party.categoryCode,
         allowedInstitutionTypes,
       };
-      const productsWithStatusACtive = products.filter((p) => p.status === 'ACTIVE');
+      const productsWithStatusActive = products.filter((p) => p.status === StatusEnum.ACTIVE);
       const onboardedProducts = party.products.filter(
-        (p) => p.productOnBoardingStatus === 'ACTIVE'
+        (p) => p.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE
       );
       setFilteredProducts(
-        filterProducts(productsWithStatusACtive, filterConfig, onboardedProducts)
+        filterProducts(productsWithStatusActive, filterConfig, onboardedProducts)
       );
     }
   }, [canSeeNotActiveProductsList, allowedInstitutionTypes, party.institutionType]);
