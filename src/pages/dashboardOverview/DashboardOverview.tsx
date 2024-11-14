@@ -64,7 +64,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (canSeeNotActiveProductsList && allowedInstitutionTypes) {
+    if (canSeeNotActiveProductsList && allowedInstitutionTypes && party) {
       const filterConfig = {
         institutionType: party.institutionType ?? '',
         categoryCode: party.categoryCode,
@@ -78,7 +78,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         filterProducts(productsWithStatusActive, filterConfig, onboardedProducts)
       );
     }
-  }, [canSeeNotActiveProductsList, allowedInstitutionTypes, party.institutionType]);
+  }, [canSeeNotActiveProductsList, allowedInstitutionTypes, party.partyId]);
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
