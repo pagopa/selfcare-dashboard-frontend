@@ -1,6 +1,6 @@
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../model/Party';
-import { Product } from '../../model/Product';
+import { Product, ProductInstitutionMap } from '../../model/Product';
 import { ProductRole } from '../../model/ProductRole';
 
 export const mockedPartyProducts: Array<Product> = [
@@ -213,19 +213,48 @@ export const mockedProductRoles: Array<ProductRole> = [
   },
 ];
 
-export const mockedCategories = {
-  product: {
-    'prod-pn': {
-      ipa: {
-        PA: 'L6,L4,L45,L35,L5,L17,L15,C14',
-      },
+export const mockedCategories: ProductInstitutionMap = {
+  'prod-interop': {
+    PA: {},
+    GSP: {},
+    SA: {},
+    SCP: {},
+    AS: {},
+    PRV: {},
+  },
+  'prod-pn': {
+    PA: {
+      categories: 'L6,L4,L45,L35,L5,L17,L15,L7,L22',
     },
-    default: {
-      ipa: {
-        GSP: 'L37,SAG',
-        PA: 'C17,C16,L10,L19,L13,L2,C10,L20,L21,L22,L15,L1,C13,C5,L40,L11,L39,L46,L8,L34,L7,L35,L45,L47,L6,L12,L24,L28,L42,L36,L44,C8,C3,C7,C14,L16,C11,L33,C12,L43,C2,L38,C1,L5,L4,L31,L18,L17,S01,SA',
-      },
+  },
+  'prod-idpay': {
+    PA: {},
+  },
+  'prod-io': {
+    PA: {},
+    GSP: {},
+    PT: {},
+  },
+  'prod-pagopa': {
+    PA: {},
+    GSP: {},
+    PSP: {},
+    PT: {},
+    PRV: {},
+  },
+  'prod-io-sign': {
+    PA: {},
+    GSP: {},
+  },
+  default: {
+    PA: {
+      categories:
+        'C17,C16,L10,L19,L13,L2,C10,L20,L21,L22,L15,L1,C13,C5,L40,L11,L39,L46,L8,L34,L7,L35,L45,L47,L6,L12,L24,L28,L42,L36,L44,C8,C3,C7,C14,L16,C11,L33,C12,L43,C2,L38,C1,L5,L4,L31,L18,L17,S01,SA',
     },
+    GSP: {
+      categories: 'L37,SAG',
+    },
+    SCP: {},
   },
 };
 

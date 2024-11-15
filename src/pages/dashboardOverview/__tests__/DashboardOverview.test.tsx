@@ -108,3 +108,4 @@ test('should render component DashboardOverview with geoTaxonomy', async () => {
 
   fireEvent.click(closeModal);
 });
+

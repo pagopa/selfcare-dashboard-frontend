@@ -1,5 +1,5 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -27,12 +27,17 @@ afterAll(() => {
   Object.defineProperty(window, 'location', { value: oldWindowLocation });
 });
 
+afterEach(() => {
+  jest.clearAllMocks();
+  cleanup();
+});
+
 const renderDashboard = (
   injectedStore?: ReturnType<typeof createStore>,
   injectedHistory?: ReturnType<typeof createMemoryHistory>
 ) => {
-  const store = injectedStore ? injectedStore : createStore();
-  const history = injectedHistory ? injectedHistory : createMemoryHistory();
+  const store = injectedStore || createStore();
+  const history = injectedHistory || createMemoryHistory();
   render(
     <Router history={history}>
       <Provider store={store}>
@@ -87,6 +92,8 @@ test('Test rendering on mobile', async () => {
   const drawer = await waitFor(() => screen.getByRole('presentation'));
   expect(drawer).toBeInTheDocument();
 
+  fireEvent.click(drawer);
+
   const drawerNav = within(drawer).getByRole('navigation');
 
   const overviewButtonInDrawer = within(drawerNav).getByText('Panoramica');
@@ -97,4 +104,15 @@ test('Test rendering on mobile', async () => {
   await waitFor(() => {
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument(); 
   });
+});
+
+test('Test rendering on desktop', async () => {
+  (useMediaQuery as jest.Mock).mockReturnValue(false);
+
+  renderDashboard();
+
+  const sideBarCloseIcon = await screen.findByTestId('DehazeIcon');
+
+  fireEvent.click(sideBarCloseIcon);
+
 });

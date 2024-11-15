@@ -84,7 +84,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const lang = i18n.language;
 
   return (
-    <div tabIndex={0}>
+    <div>
       <Header
         onExit={onExit}
         withSecondHeader={!!party}

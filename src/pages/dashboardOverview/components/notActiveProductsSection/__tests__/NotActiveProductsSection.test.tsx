@@ -6,18 +6,20 @@ import NotActiveProductsSection from '../NotActiveProductsSection';
 
 describe('NotActiveProductsSection test suite', () => {
   test('NotActiveProductsSection render', () => {
-    renderWithProviders(<NotActiveProductsSection products={[]} party={mockedParties[0]} allowedCategoriesOnProdPN={[]} />);
-  });
-
-  test('NotActiveProductsSection render with products', () => {
     renderWithProviders(
-      <NotActiveProductsSection products={mockedPartyProducts} party={mockedParties[1]} allowedCategoriesOnProdPN={[]} />
+      <NotActiveProductsSection filteredProducts={[]} party={mockedParties[0]} />
     );
   });
 
   test('NotActiveProductsSection render with products', () => {
     renderWithProviders(
-      <NotActiveProductsSection products={mockedPartyProducts} party={mockedParties[3]} allowedCategoriesOnProdPN={[]} />
+      <NotActiveProductsSection filteredProducts={mockedPartyProducts} party={mockedParties[1]} />
+    );
+  });
+
+  test('NotActiveProductsSection render with products', () => {
+    renderWithProviders(
+      <NotActiveProductsSection filteredProducts={mockedPartyProducts} party={mockedParties[3]} />
     );
   });
 });

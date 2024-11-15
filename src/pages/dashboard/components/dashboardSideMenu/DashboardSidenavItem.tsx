@@ -35,7 +35,7 @@ export default function DashboardSidenavItem({
   isPtSelected,
   handleClickPtPage,
   hideLabels,
-}: Props) {
+}: Readonly<Props>) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   return (

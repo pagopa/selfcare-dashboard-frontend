@@ -22,14 +22,14 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DelegationWithInfo } from '../../api/generated/b4f-dashboard/DelegationWithInfo';
-import { useAppSelector } from '../../redux/hooks';
-import { partiesSelectors } from '../../redux/slices/partiesSlice';
-import ROUTES from '../../routes';
-import { compareDates, compareStrings } from '../../utils/helperFunctions';
-import EmptyFilterResults from './components/EmptyFilterResults';
-import EnhancedTableHeader from './components/EnhanchedTableHeader';
-import TableCellWithTooltip from './components/TableCellWithTooltip';
+import { DelegationWithInfo } from '../../../api/generated/b4f-dashboard/DelegationWithInfo';
+import { useAppSelector } from '../../../redux/hooks';
+import { partiesSelectors } from '../../../redux/slices/partiesSlice';
+import ROUTES from '../../../routes';
+import { compareDates, compareStrings } from '../../../utils/helperFunctions';
+import EmptyFilterResults from './EmptyFilterResults';
+import EnhancedTableHeader from './EnhanchedTableHeader';
+import TableCellWithTooltip from './TableCellWithTooltip';
 
 type Props = {
   delegationsWithoutDuplicates: Array<DelegationWithInfo>;
