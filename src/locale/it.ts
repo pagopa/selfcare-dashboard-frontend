@@ -1,4 +1,8 @@
 export default {
+  customAlert: {
+    message:
+      'Per migliorare la tua esperienza e offrirti una gestione più mirata, vedrai solo le informazioni e i prodotti di cui sei amministratore.',
+  },
   session: {
     expired: {
       title: 'Sessione scaduta',
@@ -36,8 +40,9 @@ export default {
     description:
       'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> PagoPA.  Se lavori per un ente, chiedi a un Amministratore <3 /> di aggiungerti nella sezione Utenti.',
     backHome: 'Chiudi',
-    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
-    moreInformationOnRoles:'Più informazioni sui ruoli',
+    addAdmin:
+      'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
     disableInfo: 'Non hai un ruolo per gestire questo prodotto',
@@ -199,7 +204,8 @@ export default {
     },
     delegationsPage: {
       title: 'Deleghe',
-      subTitle: 'Qui trovi l’elenco degli enti a cui hai affidato la gestione di uno o più prodotti. Puoi anche aggiungere una nuova delega.',
+      subTitle:
+        'Qui trovi l’elenco degli enti a cui hai affidato la gestione di uno o più prodotti. Puoi anche aggiungere una nuova delega.',
       whatIsDelegation: 'Cos’è una delega?',
       addDelegationsBtn: 'Aggiungi delega',
       delegationsNavigationBar: {
