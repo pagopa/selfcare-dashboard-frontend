@@ -52,7 +52,7 @@ export default function WelcomeDashboard({ setOpen }: Props) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <CustomAlert sx={{ mt: 5 }} />
+        <CustomAlert sx={{ mt: 5 }} text={t('customAlert.message')} />
       </Grid>
     </>
   );
