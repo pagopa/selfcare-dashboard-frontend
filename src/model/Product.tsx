@@ -24,6 +24,13 @@ export type Product = {
 
 export type ProductsMap = { [id: string]: Product };
 
+export type ProductInstitutionMap = {
+  [productId: string]: {
+    [institutionType: string]: Record<string, unknown>;
+  };
+};
+
+
 export const buildProductsMap = (products: Array<Product>): ProductsMap =>
   products.reduce((acc, p) => {
     // eslint-disable-next-line functional/immutable-data
