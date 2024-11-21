@@ -29,8 +29,7 @@ export default function TechnologyPartnerTable({ party }: Props) {
             (result: Array<DelegationWithInfo>, current: DelegationWithInfo) => {
               const existingItem = result.find(
                 (item) =>
-                  item.brokerId === current.brokerId &&
-                  item.institutionName === current.institutionName
+                  item.brokerId === current.brokerId && item.institutionId === current.institutionId
               );
               if (existingItem) {
                 // eslint-disable-next-line functional/immutable-data
@@ -70,12 +69,12 @@ export default function TechnologyPartnerTable({ party }: Props) {
     <Box sx={{ backgroundColor: grey[100] }}>
       {party.delegation && delegationsWithoutDuplicates.length > 0 && (
         <Box
-        sx={{
-          height: '100%',
-        }}
-      >
-        <TechPartnersTable delegationsWithoutDuplicates={delegationsWithoutDuplicates} />
-      </Box>
+          sx={{
+            height: '100%',
+          }}
+        >
+          <TechPartnersTable delegationsWithoutDuplicates={delegationsWithoutDuplicates} />
+        </Box>
       )}
       {delegationsWithoutDuplicates.length === 0 && (
         <Box sx={{ backgroundColor: grey[200], p: 2 }}>
