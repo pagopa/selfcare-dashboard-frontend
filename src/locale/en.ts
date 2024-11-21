@@ -1,4 +1,8 @@
 export default {
+  customAlert: {
+    message:
+      'Per migliorare la tua esperienza e offrirti una gestione più mirata, vedrai solo le informazioni e i prodotti di cui sei amministratore.',
+  },
   session: {
     expired: {
       title: 'Session expired',
@@ -22,7 +26,7 @@ export default {
     pending: {
       title: 'There are no registration requests <1 /> for this institution',
       description:
-        "Registration may still be in progress. <1 /> Check that all required steps have been completed.",
+        'Registration may still be in progress. <1 /> Check that all required steps have been completed.',
     },
     toBeValidated: {
       title: 'The registration request is <1 />is being validated',
@@ -36,8 +40,9 @@ export default {
     description:
       'The reserved area is dedicated to institutions that use <1 /> PagoPA products.  To work for an institution, ask an Administrator <3 /> to add you in the Users section.',
     backHome: 'Close',
-    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
-    moreInformationOnRoles:'Più informazioni sui ruoli',
+    addAdmin:
+      'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
     disableInfo: 'To manage this product, contact one of your administrators',
@@ -112,7 +117,7 @@ export default {
       closeButton: 'Exit',
     },
     partyLogo: {
-      upload: "Upload your institution’s logo",
+      upload: 'Upload your institution’s logo',
       modify: 'Change image',
       uploadError: {
         title: 'Uploading unsuccessful',
@@ -167,7 +172,7 @@ export default {
       sdiCode: 'SDI code',
       aooParentCode: 'AOO (Homogeneous Organizational Area) of reference',
       contactToModify:
-        "<0>Some data cannot be changed in this section. To do so, go to the website of the Public Administration Index (IPA)</0>",
+        '<0>Some data cannot be changed in this section. To do so, go to the website of the Public Administration Index (IPA)</0>',
       goToIPA: 'Visit the website',
       institutionTypeValue: {
         GSP: 'Public Service Provider',
@@ -235,8 +240,7 @@ export default {
         buttonLabel: 'Filter',
         allProductsLabel: 'All products',
         resetFilter: 'Remove filters',
-        emptyFilterResult:
-          'No result from the filters you used. <1>Remove filters</1>',
+        emptyFilterResult: 'No result from the filters you used. <1>Remove filters</1>',
       },
     },
     genericError: {

@@ -1,4 +1,8 @@
 export default {
+  customAlert: {
+    message:
+      'Per migliorare la tua esperienza e offrirti una gestione più mirata, vedrai solo le informazioni e i prodotti di cui sei amministratore.',
+  },
   session: {
     expired: {
       title: 'Seja je potekla',
@@ -22,7 +26,7 @@ export default {
     pending: {
       title: 'Za to organizacijo ni prošenj za <1 /> članstvo',
       description:
-        "Članstvo morda še traja. <1 /> Preverite, ali so bili opravljeni vsi zahtevani koraki.",
+        'Članstvo morda še traja. <1 /> Preverite, ali so bili opravljeni vsi zahtevani koraki.',
     },
     toBeValidated: {
       title: 'Zahteva za registracijo <1 />v postopku na potrditev',
@@ -36,8 +40,9 @@ export default {
     description:
       'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> PagoPA.  Se lavori per un ente, chiedi a un Amministratore <3 /> di aggiungerti nella sezione Utenti.',
     backHome: 'Zapri',
-    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
-    moreInformationOnRoles:'Più informazioni sui ruoli',
+    addAdmin:
+      'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
     disableInfo: 'Za upravljanje tega produkta se obrnite na enega od njegovih skrbnikov',
@@ -112,7 +117,7 @@ export default {
       closeButton: 'Izhod',
     },
     partyLogo: {
-      upload: "Naložite logotip svoje organizacije",
+      upload: 'Naložite logotip svoje organizacije',
       modify: 'Spremenite sliko',
       uploadError: {
         title: 'Nalaganje ni uspelo',
@@ -167,7 +172,7 @@ export default {
       sdiCode: 'Koda SDI',
       aooParentCode: 'Referenca AOO',
       contactToModify:
-        "<0>Nekaterih podatkov v tem razdelku ni mogoče spreminjati. To storite tako, da obiščete spletno mesto Indeksa javne uprave (IPA)</0>",
+        '<0>Nekaterih podatkov v tem razdelku ni mogoče spreminjati. To storite tako, da obiščete spletno mesto Indeksa javne uprave (IPA)</0>',
       goToIPA: 'Pojdite na spletno mesto',
       institutionTypeValue: {
         GSP: 'Vodja javne službe',
