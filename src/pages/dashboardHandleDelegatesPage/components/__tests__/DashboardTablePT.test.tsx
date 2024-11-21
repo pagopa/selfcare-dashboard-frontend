@@ -93,10 +93,11 @@ test('test input field change and filter on click and search by name', async () 
 
 test('delegation of type EA should be clikable for same institution is present on instituionList', async () => {
   renderDashboardTablePT();
-
-  const delegationOfTypeEA = await screen.findByText('Institution EA');
+  const delegationOfTypeEA = await screen.findByText('Institution EA - Root Institution');
 
   expect(delegationOfTypeEA).toBeInTheDocument();
 
   fireEvent.click(delegationOfTypeEA);
+
+  
 });
