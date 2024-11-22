@@ -1,11 +1,11 @@
 import { TableCell, Tooltip, Typography } from '@mui/material';
-import { useEffect, useRef, useState, ReactElement } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 
-interface TableCellWithTooltipProps {
+interface TableCellWithStyleProps {
   text: string | ReactElement;
 }
 
-const TableCellWithTooltip: React.FC<TableCellWithTooltipProps> = ({ text }) => {
+const TableCellWithStyle: React.FC<TableCellWithStyleProps> = ({ text }) => {
   const textRef = useRef<HTMLDivElement | null>(null);
   const [isOverflowed, setIsOverflowed] = useState(false);
 
@@ -23,9 +23,9 @@ const TableCellWithTooltip: React.FC<TableCellWithTooltipProps> = ({ text }) => 
           variant="body2"
           sx={{
             fontWeight: '600',
-            whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
+            textAlign: 'left',
           }}
         >
           {text}
@@ -35,4 +35,4 @@ const TableCellWithTooltip: React.FC<TableCellWithTooltipProps> = ({ text }) => 
   );
 };
 
-export default TableCellWithTooltip;
+export default TableCellWithStyle;
