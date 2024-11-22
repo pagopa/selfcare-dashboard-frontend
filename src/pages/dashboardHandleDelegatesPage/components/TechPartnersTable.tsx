@@ -29,7 +29,7 @@ import ROUTES from '../../../routes';
 import { compareDates, compareStrings } from '../../../utils/helperFunctions';
 import EmptyFilterResults from './EmptyFilterResults';
 import EnhancedTableHeader from './EnhanchedTableHeader';
-import TableCellWithTooltip from './TableCellWithTooltip';
+import TableCellWithStyle from './TableCellWithStyle';
 
 type Props = {
   delegationsWithoutDuplicates: Array<DelegationWithInfo>;
@@ -130,6 +130,11 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
     return prod?.title ?? '';
   };
 
+  const getInstitutionDisplayName = (institutionName?: string, institutionRootName?: string) =>
+    institutionRootName
+      ? `${institutionName ?? ''} - ${institutionRootName}`
+      : institutionName ?? '';
+
   return (
     <Grid width={'100%'} height={'100%'}>
       <Grid
@@ -215,7 +220,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
                     return (
                       <>
                         <TableRow key={item.id}>
-                          <TableCellWithTooltip
+                          <TableCellWithStyle
                             text={
                               isClickable ? (
                                 <ButtonNaked
@@ -224,6 +229,7 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
                                   sx={{
                                     fontWeight: 700,
                                     fontSize: '16px',
+                                    textAlign: 'left',
                                   }}
                                   onClick={() => {
                                     window.location.assign(
@@ -231,13 +237,18 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
                                         partyId: item?.institutionId ?? '',
                                       })
                                     );
-                                    
                                   }}
                                 >
-                                  {item.institutionName ?? ''}
+                                  {getInstitutionDisplayName(
+                                    item.institutionName,
+                                    item.institutionRootName
+                                  )}
                                 </ButtonNaked>
                               ) : (
-                                item.institutionName ?? '-'
+                                getInstitutionDisplayName(
+                                  item.institutionName,
+                                  item.institutionRootName
+                                )
                               )
                             }
                           />
