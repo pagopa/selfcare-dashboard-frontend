@@ -1,4 +1,8 @@
 export default {
+  customAlert: {
+    message:
+      'Per migliorare la tua esperienza e offrirti una gestione più mirata, vedrai solo le informazioni e i prodotti di cui sei amministratore.',
+  },
   session: {
     expired: {
       title: 'Session expirée',
@@ -22,7 +26,7 @@ export default {
     pending: {
       title: 'Aucune demande d’<1 />adhésion pour cet organisme',
       description:
-        "L’adhésion pourrait encore être en cours. <1 /> Vérifier que tous les passages requis ont été complétés.",
+        'L’adhésion pourrait encore être en cours. <1 /> Vérifier que tous les passages requis ont été complétés.',
     },
     toBeValidated: {
       title: 'La demande d’enregistrement est <1 />en attente de validation',
@@ -36,8 +40,9 @@ export default {
     description:
       'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> PagoPA.  Se lavori per un ente, chiedi a un Amministratore <3 /> di aggiungerti nella sezione Utenti.',
     backHome: 'Fermer',
-    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
-    moreInformationOnRoles:'Più informazioni sui ruoli',
+    addAdmin:
+      'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
     disableInfo: 'Pour gérer ce produit, demandez à l’un de ses Administrateurs',
@@ -112,7 +117,7 @@ export default {
       closeButton: 'Sortir',
     },
     partyLogo: {
-      upload: "Télécharger le logo de l’organisme",
+      upload: 'Télécharger le logo de l’organisme',
       modify: 'Modifier l’image',
       uploadError: {
         title: 'Échec du téléchargement',
@@ -167,7 +172,7 @@ export default {
       sdiCode: 'Code SDI',
       aooParentCode: 'ZOH de référence',
       contactToModify:
-        "<0>Certaines données ne sont pas modifiables à partir de cette section. Pour ce faire, aller sur le site de l’Indice de l’administration publique (IAP)</0>",
+        '<0>Certaines données ne sont pas modifiables à partir de cette section. Pour ce faire, aller sur le site de l’Indice de l’administration publique (IAP)</0>',
       goToIPA: 'Accédez au site',
       institutionTypeValue: {
         GSP: 'Opérateur de services publics',

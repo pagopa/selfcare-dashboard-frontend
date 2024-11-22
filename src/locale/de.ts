@@ -1,4 +1,8 @@
 export default {
+  customAlert: {
+    message:
+      'Per migliorare la tua esperienza e offrirti una gestione più mirata, vedrai solo le informazioni e i prodotti di cui sei amministratore.',
+  },
   session: {
     expired: {
       title: 'Sitzung abgelaufen',
@@ -22,7 +26,7 @@ export default {
     pending: {
       title: 'Es liegen keine <1 /> Beitrittsanträge für diese Körperschaft vor',
       description:
-        "Der Beitritt wird möglicherweise noch bearbeitet. <1 /> Überprüfe, ob alle erforderlichen Schritte abgeschlossen sind.",
+        'Der Beitritt wird möglicherweise noch bearbeitet. <1 /> Überprüfe, ob alle erforderlichen Schritte abgeschlossen sind.',
     },
     toBeValidated: {
       title: 'Die Registrierungsanfrage ist <1 />noch nicht validiert',
@@ -36,8 +40,9 @@ export default {
     description:
       'Der reservierte Bereich ist für die Körperschaften bestimmt, die <1 />PagoPA-Produkte verwenden.  Wenn du für eine Körperschaft arbeitest, bitte einen Administrator, dich <3 /> im Bereich Benutzer hinzuzufügen.',
     backHome: 'Schließen',
-    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
-    moreInformationOnRoles:'Più informazioni sui ruoli',
+    addAdmin:
+      'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
     disableInfo: 'Um dieses Produkt zu verwalten, frage einen seiner Administratoren',
@@ -112,7 +117,7 @@ export default {
       closeButton: 'Beenden',
     },
     partyLogo: {
-      upload: "Logo der Körperschaft laden",
+      upload: 'Logo der Körperschaft laden',
       modify: 'Anderes Bild wählen',
       uploadError: {
         title: 'Laden fehlgeschlagen',
@@ -167,7 +172,7 @@ export default {
       sdiCode: 'SDI-Code',
       aooParentCode: 'Referenz-AOO',
       contactToModify:
-        "<0>Einige Daten können in diesem Abschnitt nicht geändert werden. Gehe hierzu auf die Website des Index der öffentlichen Verwaltung (IPA)</0>",
+        '<0>Einige Daten können in diesem Abschnitt nicht geändert werden. Gehe hierzu auf die Website des Index der öffentlichen Verwaltung (IPA)</0>',
       goToIPA: 'Besuche die Website',
       institutionTypeValue: {
         GSP: 'Betreiber öffentlicher Dienstleistungen',
