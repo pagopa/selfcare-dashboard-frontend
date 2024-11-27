@@ -5,6 +5,11 @@ import { mockedPartyProducts } from '../../../../services/__mocks__/productServi
 import { renderWithProviders } from '../../../../utils/test-utils';
 import AddDelegationForm from '../AddDelegationForm';
 import userEvent from '@testing-library/user-event';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+
+beforeAll(() => {
+  i18n.changeLanguage('it');
+});
 
 test('render the form correctly woth empty props', () => {
   renderWithProviders(
