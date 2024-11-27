@@ -3,9 +3,13 @@ import { BaseParty, Party } from '../../../model/Party';
 import PartyAccountItemSelection from '../PartyAccountItemSelection';
 import PartySelectionSearch from '../PartySelectionSearch';
 import './../../../locale';
-import { mockedBaseParties } from '../../../services/__mocks__/partyService';
 import React from 'react';
 import { renderWithProviders } from '../../../utils/test-utils';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+
+beforeAll(() => {
+  i18n.changeLanguage('it');
+});
 
 let selectedParty: BaseParty | null = null;
 

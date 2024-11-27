@@ -9,6 +9,11 @@ import { DelegationWithInfo } from '../../../../api/generated/b4f-dashboard/Dele
 import { DelegationWithPagination } from '../../../../api/generated/b4f-dashboard/DelegationWithPagination';
 import { createStore } from '../../../../redux/store';
 import TechPartnersTable from '../TechPartnersTable';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+
+beforeAll(() => {
+  i18n.changeLanguage('it');
+});
 
 const mockedDelegation: DelegationWithPagination = {
   delegations: [
@@ -98,6 +103,4 @@ test('delegation of type EA should be clikable for same institution is present o
   expect(delegationOfTypeEA).toBeInTheDocument();
 
   fireEvent.click(delegationOfTypeEA);
-
-  
 });
