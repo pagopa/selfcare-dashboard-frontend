@@ -1,4 +1,8 @@
 export default {
+  customAlert: {
+    message:
+      'Per migliorare la tua esperienza e offrirti una gestione più mirata, vedrai solo le informazioni e i prodotti di cui sei amministratore.',
+  },
   session: {
     expired: {
       title: 'Sitzung abgelaufen',
@@ -8,7 +12,7 @@ export default {
   partySelection: {
     title: 'Wähle deine Körperschaft',
     subTitle:
-      'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.',
+      'Wenn du für mehrere Körperschaften operierst, kannst du deine Wahl nach dem <1 /> Anmelden ändern.',
     partyStatus: {
       pending: 'Zu vervollständigen',
       toBeValidated: 'Warten',
@@ -22,22 +26,23 @@ export default {
     pending: {
       title: 'Es liegen keine <1 /> Beitrittsanträge für diese Körperschaft vor',
       description:
-        "Der Beitritt wird möglicherweise noch bearbeitet. <1 /> Überprüfe, ob alle erforderlichen Schritte abgeschlossen sind.",
+        'Der Beitritt wird möglicherweise noch bearbeitet. <1 /> Überprüfe, ob alle erforderlichen Schritte abgeschlossen sind.',
     },
     toBeValidated: {
       title: 'Die Registrierungsanfrage ist <1 />noch nicht validiert',
       description:
-        'La richiesta di registrazione per l’ente {{partyName}} deve <3 />essere ancora confermata. Per accedere, attendi la conferma <5 />che arriverà all’indirizzo PEC dell’ente.',
+        'Die Registrierungsanfrage für die Körperschaft {{partyName}} muss <3 />noch bestätigt werden. Zum Anmelden warte bitte auf die Bestätigung, <5 />die an der PEC-Adresse der Körperschaft eingehen wird.',
     },
-    close: 'Beenden',
+    close: 'Schließen',
   },
   noParty: {
     title: 'Zugriff unzulässig',
     description:
-      'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> PagoPA.  Se lavori per un ente, chiedi a un Amministratore <3 /> di aggiungerti nella sezione Utenti.',
-    backHome: 'Beenden',
-    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
-    moreInformationOnRoles:'Più informazioni sui ruoli',
+      'Der reservierte Bereich ist für die Körperschaften bestimmt, die <1 />PagoPA-Produkte verwenden.  Wenn du für eine Körperschaft arbeitest, bitte einen Administrator, dich <3 /> im Bereich Benutzer hinzuzufügen.',
+    backHome: 'Schließen',
+    addAdmin:
+      'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
     disableInfo: 'Um dieses Produkt zu verwalten, frage einen seiner Administratoren',
@@ -45,7 +50,7 @@ export default {
   overview: {
     title: 'Übersicht',
     subTitle:
-      'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
+      'Du verwaltest die aktiven PagoPA-Produkte und kannst, sofern im Besitz der Berechtigungen, neuen Produkten beitreten.',
     sideMenu: {
       institutionManagement: {
         title: 'Körperschaftsverwaltung',
@@ -82,9 +87,9 @@ export default {
         title: 'In welche Umgebung möchtest du?',
         message: `Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`,
         messageProduct:
-          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
+          'Die Testumgebung bietet dir die Möglichkeit, <1>{{productTitle}}</1> kennenzulernen und Tests in aller Sicherheit auszuführen. Die Produktionsumgebung ist das Produkt beim effektiven Betrieb.',
         devEnviromentMessage:
-          'Ti permette di conoscere il prodotto e fare prove in tutta sicurezza',
+          'Sie bietet dir die Möglichkeit, das Produkt kennenzulernen und Tests in aller Sicherheit auszuführen.',
         uatEnviromentMessage: 'Hiermit kannst du das Produkt erkunden',
         prodEnviromentMessage: 'Verwendetes Produkt',
         envDevButton: 'Testumgebung',
@@ -107,17 +112,17 @@ export default {
     adhesionPopup: {
       title: 'Beitritt wird bearbeitet',
       description:
-        'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?',
+        'Für dieses Produkt steht bereits ein Beitrittsantrag in Bearbeitung. Möchtest du dennoch fortfahren?',
       confirmButton: 'Mit neuem Beitritt fortfahren',
       closeButton: 'Beenden',
     },
     partyLogo: {
-      upload: "Logo der Körperschaft laden",
+      upload: 'Logo der Körperschaft laden',
       modify: 'Anderes Bild wählen',
       uploadError: {
         title: 'Laden fehlgeschlagen',
         description:
-          'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo',
+          'Das Laden des Logos ist fehlgeschlagen. Prüfe, ob Format und Größe korrekt sind, und lade es erneut',
       },
       modifyError: {
         title: 'Laden fehlgeschlagen',
@@ -150,13 +155,13 @@ export default {
         firstTimeInsertGeographicTaxonomiesModal: {
           title: 'Geografisches Gebiet angeben',
           description:
-            'Seleziona il territorio in cui opera il tuo ente. Se locale, puoi scegliere una o più aree di competenza. La scelta verrà applicata a tutti i prodotti PagoPA a cui l’ente aderirà.',
+            'Wähle das Gebiet, in dem deine Körperschaft tätig ist. Sofern lokal, kannst du ein oder mehrere Zuständigkeitsgebiete wählen. Die Auswahl wird auf alle Produkte von PagoPA angewendet, denen die Körperschaft beitreten wird.',
           add: 'Hinzufügen',
         },
         addNewGeographicTaxonomiesModal: {
           title: 'Geografisches Gebiet ändern',
           description:
-            'Seleziona il territorio in cui opera il tuo ente. Se locale, puoi scegliere una o più aree di competenza. La modifica verrà applicata a tutti i prodotti PagoPA a cui l’ente ha già aderito.',
+            'Wähle das Gebiet, in dem deine Körperschaft tätig ist. Sofern lokal, kannst du ein oder mehrere Zuständigkeitsgebiete wählen. Die Änderung wird auf alle Produkte von PagoPA angewendet, denen die Körperschaft bereits beigetreten ist.',
           modify: 'Ändern',
           back: 'Beenden',
         },
@@ -167,7 +172,7 @@ export default {
       sdiCode: 'SDI-Code',
       aooParentCode: 'Referenz-AOO',
       contactToModify:
-        "<0>Einige Daten können in diesem Abschnitt nicht geändert werden. Gehe hierzu auf die Website des Index der öffentlichen Verwaltung (IPA)</0>",
+        '<0>Einige Daten können in diesem Abschnitt nicht geändert werden. Gehe hierzu auf die Website des Index der öffentlichen Verwaltung (IPA)</0>',
       goToIPA: 'Besuche die Website',
       institutionTypeValue: {
         GSP: 'Betreiber öffentlicher Dienstleistungen',
@@ -184,7 +189,7 @@ export default {
       delegationBanner: {
         title: 'Betraut einen Partner oder Vermittler mit dem Produktmanagement',
         subTitle:
-          'Se ti avvali di figure come Partner o Intermediari tecnologici, puoi delegare la gestione di alcuni prodotti.',
+          'Wenn du Berufsbilder wie Partner oder technologische Vermittler einsetzt, kannst du die Verwaltung bestimmter Produkte bevollmächtigen.',
         goToButton: 'Gehe zu',
       },
       vatNumberGroupValues: {
@@ -214,7 +219,7 @@ export default {
     ptPage: {
       title: 'Verwaltete Körperschaften',
       subTitle:
-        'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
+        'Hier findest du die Liste der Körperschaften, die die Verwaltung eines oder mehrerer Produkte bevollmächtigt haben. ',
       tableEmptyLabel: 'Du wurdest noch von keiner Körperschaft bevollmächtigt.',
       headerPtTableLabels: {
         party: 'Körperschaft',
@@ -236,7 +241,7 @@ export default {
         allProductsLabel: 'Alle Produkte',
         resetFilter: 'Filter entfernen',
         emptyFilterResult:
-          'I filtri che hai applicato non hanno dato nessun risultato. <1>Rimuovi filtri</1>',
+          'Die von dir angewendeten Filter ergaben keine Ergebnisse. <1>Filter entfernen</1>',
       },
     },
     genericError: {

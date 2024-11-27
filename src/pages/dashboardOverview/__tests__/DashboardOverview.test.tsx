@@ -5,6 +5,11 @@ import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardOverview from '../DashboardOverview';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+
+beforeAll(() => {
+  i18n.changeLanguage('it');
+});
 
 test('should render component DashboardOverview with empty party', async () => {
   renderWithProviders(
@@ -108,4 +113,3 @@ test('should render component DashboardOverview with geoTaxonomy', async () => {
 
   fireEvent.click(closeModal);
 });
-

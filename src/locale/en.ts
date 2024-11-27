@@ -1,4 +1,8 @@
 export default {
+  customAlert: {
+    message:
+      'Per migliorare la tua esperienza e offrirti una gestione più mirata, vedrai solo le informazioni e i prodotti di cui sei amministratore.',
+  },
   session: {
     expired: {
       title: 'Session expired',
@@ -8,7 +12,7 @@ export default {
   partySelection: {
     title: 'Select your institution',
     subTitle:
-      'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.',
+      'If you work for multiple institutions, you can change your selection after <1 /> logging in.',
     partyStatus: {
       pending: 'To be completed',
       toBeValidated: 'Wait',
@@ -22,22 +26,23 @@ export default {
     pending: {
       title: 'There are no registration requests <1 /> for this institution',
       description:
-        "Registration may still be in progress. <1 /> Check that all required steps have been completed.",
+        'Registration may still be in progress. <1 /> Check that all required steps have been completed.',
     },
     toBeValidated: {
       title: 'The registration request is <1 />is being validated',
       description:
-        'La richiesta di registrazione per l’ente {{partyName}} deve <3 />essere ancora confermata. Per accedere, attendi la conferma <5 />che arriverà all’indirizzo PEC dell’ente.',
+        'The registration request for the institution {{partyName}} must <3 />still be confirmed. To log in, wait for the confirmation <5 />that will be sent to the PEC address of the institution.',
     },
     close: 'Close',
   },
   noParty: {
     title: 'Access not permitted',
     description:
-      'L’Area Riservata è dedicata agli enti che utilizzano i prodotti <1 /> PagoPA.  Se lavori per un ente, chiedi a un Amministratore <3 /> di aggiungerti nella sezione Utenti.',
+      'The reserved area is dedicated to institutions that use <1 /> PagoPA products.  To work for an institution, ask an Administrator <3 /> to add you in the Users section.',
     backHome: 'Close',
-    addAdmin:'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
-    moreInformationOnRoles:'Più informazioni sui ruoli',
+    addAdmin:
+      'Gli attuali Amministratori non sono più disponibili e hai l’esigenza<1 /> di gestire i prodotti? <3>Aggiungi un nuovo Amministratore</3>',
+    moreInformationOnRoles: 'Più informazioni sui ruoli',
   },
   activeProductCard: {
     disableInfo: 'To manage this product, contact one of your administrators',
@@ -45,7 +50,7 @@ export default {
   overview: {
     title: 'Overview',
     subTitle:
-      'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
+      'Manage the active PagoPA products and, if you have permissions, you can register for new products.',
     sideMenu: {
       institutionManagement: {
         title: 'Institution management',
@@ -82,9 +87,9 @@ export default {
         title: 'Which environment do you want to enter?',
         message: `Sei stato abilitato ad operare negli ambienti riportati di seguito per il prodotto <1>{{productTitle}}</1>.`,
         messageProduct:
-          'L’ambiente di test ti permette di conoscere <1>{{productTitle}}</1> e fare prove in tutta sicurezza. L’ambiente di Produzione è il prodotto in esercizio effettivo.',
+          'The test environment allows you to learn about <1>{{productTitle}}</1> and perform tests securely. In the production environment, the product is fully operative.',
         devEnviromentMessage:
-          'Ti permette di conoscere il prodotto e fare prove in tutta sicurezza',
+          'This allows you to learn about the product and perform tests securely',
         uatEnviromentMessage: 'It allows you to explore the product',
         prodEnviromentMessage: 'Product in use',
         envDevButton: 'Test environment',
@@ -107,17 +112,17 @@ export default {
     adhesionPopup: {
       title: 'Registration in progress',
       description:
-        'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?',
+        'There is already a registration request in progress for this product. Do you still want to proceed?',
       confirmButton: 'Proceed with a new registration',
       closeButton: 'Exit',
     },
     partyLogo: {
-      upload: "Upload your institution’s logo",
+      upload: 'Upload your institution’s logo',
       modify: 'Change image',
       uploadError: {
         title: 'Uploading unsuccessful',
         description:
-          'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo',
+          'The logo was not uploaded successfully. Check that the format and dimensions are correct and upload it again',
       },
       modifyError: {
         title: 'Uploading unsuccessful',
@@ -150,24 +155,24 @@ export default {
         firstTimeInsertGeographicTaxonomiesModal: {
           title: 'Indicate the geographical area',
           description:
-            'Seleziona il territorio in cui opera il tuo ente. Se locale, puoi scegliere una o più aree di competenza. La scelta verrà applicata a tutti i prodotti PagoPA a cui l’ente aderirà.',
+            'Select the territory in which your institution operates. If local, you can select one or more areas of competence. The selection will be applied to all the PagoPA products for which the institution will register.',
           add: 'Add',
         },
         addNewGeographicTaxonomiesModal: {
           title: 'Change the geographical area',
           description:
-            'Seleziona il territorio in cui opera il tuo ente. Se locale, puoi scegliere una o più aree di competenza. La modifica verrà applicata a tutti i prodotti PagoPA a cui l’ente ha già aderito.',
-          modify: 'Modify',
+            'Select the territory in which your institution operates. If local, you can select one or more areas of competence. The change will be applied to all the PagoPA products for which the institution has already registered.',
+          modify: 'Change',
           back: 'Exit',
         },
       },
-      fiscalCode: 'Fiscal code',
+      fiscalCode: 'Tax code',
       pec: 'Primary PEC address',
       registeredOffice: 'Registered office',
       sdiCode: 'SDI code',
       aooParentCode: 'AOO (Homogeneous Organizational Area) of reference',
       contactToModify:
-        "<0>Some data cannot be changed in this section. To do so, go to the website of the Public Administration Index (IPA)</0>",
+        '<0>Some data cannot be changed in this section. To do so, go to the website of the Public Administration Index (IPA)</0>',
       goToIPA: 'Visit the website',
       institutionTypeValue: {
         GSP: 'Public Service Provider',
@@ -184,7 +189,7 @@ export default {
       delegationBanner: {
         title: 'Delegate the management of products to a Partner or an Intermediary',
         subTitle:
-          'Se ti avvali di figure come Partner o Intermediari tecnologici, puoi delegare la gestione di alcuni prodotti.',
+          'If you use figures such as technical partners or intermediaries, you can delegate the management of some products.',
         goToButton: 'Go',
       },
       vatNumberGroupValues: {
@@ -214,7 +219,7 @@ export default {
     ptPage: {
       title: 'Managed institutions',
       subTitle:
-        'Qui trovi l’elenco degli enti che ti hanno delegato la gestione di uno o più prodotti. ',
+        'Here you can find the list of institutions who delegated the management of one or more products to you. ',
       tableEmptyLabel: 'You do not represent any institution.',
       headerPtTableLabels: {
         party: 'Institution',
@@ -234,9 +239,8 @@ export default {
         productSelectLabel: 'Product',
         buttonLabel: 'Filter',
         allProductsLabel: 'All products',
-        resetFilter: 'Reset filters',
-        emptyFilterResult:
-          'I filtri che hai applicato non hanno dato nessun risultato. <1>Rimuovi filtri</1>',
+        resetFilter: 'Remove filters',
+        emptyFilterResult: 'No result from the filters you used. <1>Remove filters</1>',
       },
     },
     genericError: {
@@ -267,7 +271,7 @@ export default {
       labelName: 'Enter the company name',
       labelFiscalCode: 'Enter the fiscal code',
       groupByName: 'Company name',
-      groupByFiscalCode: 'Fiscal code',
+      groupByFiscalCode: 'Tax code',
       notFoundTechPartnerOptions: 'No result',
       actions: {
         back: 'Go back',

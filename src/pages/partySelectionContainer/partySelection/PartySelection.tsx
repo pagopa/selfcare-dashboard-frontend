@@ -49,9 +49,10 @@ export default function PartySelection({ parties }: Props) {
         </Grid>
         <Grid item xs={18} display="flex" justifyContent="center">
           <Typography variant="body1" align="center">
-            <Trans i18nKey="partySelection.subTitle">
-              Se operi per più enti, potrai modificare la tua scelta dopo aver <br /> effettuato
-              l’accesso.
+            <Trans i18nKey="partySelection.subTitle" components={{ 1: <br /> }}>
+              {
+                'Se operi per più enti, potrai modificare la tua scelta dopo aver <1 /> effettuato l’accesso.'
+              }
             </Trans>
           </Typography>
         </Grid>

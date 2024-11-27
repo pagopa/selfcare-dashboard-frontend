@@ -1,8 +1,13 @@
 import { fireEvent, screen } from '@testing-library/react';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { store } from '../../../../../redux/store';
 import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import DashboardSideMenu from '../DashboardSideMenu';
+
+beforeAll(() => {
+  void i18n.changeLanguage('it');
+});
 
 test('Test: Access to the dashboard side menu voices', async () => {
   const { history } = renderWithProviders(
