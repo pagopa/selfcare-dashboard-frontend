@@ -75,12 +75,9 @@ test('should render component DashboardOverview with institutionType AS and Prod
     <DashboardOverview party={mockedInsuranceCompany} products={mockedPartyProducts} />
   );
 
-  const addButtons = await screen.findAllByText('Aggiungi');
+  const addMobilePhoneButton = await screen.queryByText('Aggiungi');
 
-  const addMobilePhoneButton = addButtons[0];
-
-  expect(addMobilePhoneButton).toBeInTheDocument();
-  fireEvent.click(addMobilePhoneButton);
+  expect(addMobilePhoneButton).not.toBeInTheDocument();
 
   // Avaible products section is not visible for AS
   expect(screen.queryByText('Prodotti disponibili')).not.toBeInTheDocument();
