@@ -69,7 +69,7 @@ export default function WelcomeDashboard({ setOpen, partyId }: Readonly<Props>) 
                 history.push(
                   resolvePathVariables(`${ENV.ROUTES.USERS}/:userId/edit`, {
                     partyId,
-                    userId: storageUserOps.read().uid,
+                    userId: storageUserOps.read()?.uid ?? '',
                   }) + '?activeField=mobilePhone'
                 )
               }
