@@ -1,15 +1,21 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Grid } from '@mui/material';
-import { CustomAlert } from '@pagopa/selfcare-common-frontend/lib';
+import { Alert, Box, Button, Grid } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+import { ENV } from '../../../../utils/env';
 
 type Props = {
   setOpen: (open: boolean) => void;
+  partyId: string;
 };
 
-export default function WelcomeDashboard({ setOpen }: Props) {
+export default function WelcomeDashboard({ setOpen, partyId }: Readonly<Props>) {
   const { t } = useTranslation();
+  const history = useHistory();
   const title = t('overview.title');
   const subTitle = t('overview.subTitle');
 
@@ -52,7 +58,30 @@ export default function WelcomeDashboard({ setOpen }: Props) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <CustomAlert sx={{ mt: 5 }} text={t('customAlert.message')} />
+        <Alert
+          sx={{ mt: 5 }}
+          severity="info"
+          variant="standard"
+          action={
+            <ButtonNaked
+              component={Button}
+              onClick={() =>
+                history.push(
+                  resolvePathVariables(`${ENV.ROUTES.USERS}/:userId/edit`, {
+                    partyId,
+                    userId: storageUserOps.read().uid,
+                  }) + '?activeField=mobilePhone'
+                )
+              }
+              color="primary"
+              sx={{ fontSize: 'fontSize', fontWeight: 'fontWeightBold' }}
+            >
+              {t('customAlert.button')}
+            </ButtonNaked>
+          }
+        >
+          {t('customAlert.message')}
+        </Alert>
       </Grid>
     </>
   );

@@ -89,7 +89,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         setOpen={setOpen}
         canUploadLogo={canUploadLogo}
       />
-      <WelcomeDashboard setOpen={setOpen} />
+      <WelcomeDashboard setOpen={setOpen} partyId={party.partyId} />
 
       <Grid item xs={12} mb={2} mt={5}>
         {canSeeActiveProductsList && <ActiveProductsSection products={products} party={party} />}
