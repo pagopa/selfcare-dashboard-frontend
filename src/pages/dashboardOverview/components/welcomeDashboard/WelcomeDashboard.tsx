@@ -7,13 +7,14 @@ import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/stora
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { ENV } from '../../../../utils/env';
+import { Party } from '../../../../model/Party';
 
 type Props = {
   setOpen: (open: boolean) => void;
-  partyId: string;
+  party: Party;
 };
 
-export default function WelcomeDashboard({ setOpen, partyId }: Readonly<Props>) {
+export default function WelcomeDashboard({ setOpen, party }: Readonly<Props>) {
   const { t } = useTranslation();
   const history = useHistory();
   const title = t('overview.title');
@@ -57,32 +58,34 @@ export default function WelcomeDashboard({ setOpen, partyId }: Readonly<Props>) 
           </Box>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <Alert
-          sx={{ mt: 5 }}
-          severity="info"
-          variant="standard"
-          action={
-            <ButtonNaked
-              component={Button}
-              onClick={() =>
-                history.push(
-                  resolvePathVariables(`${ENV.ROUTES.USERS}/:userId/edit`, {
-                    partyId,
-                    userId: storageUserOps.read()?.uid ?? '',
-                  }) + '?activeField=mobilePhone'
-                )
-              }
-              color="primary"
-              sx={{ fontSize: 'fontSize', fontWeight: 'fontWeightBold' }}
-            >
-              {t('customAlert.button')}
-            </ButtonNaked>
-          }
-        >
-          {t('customAlert.message')}
-        </Alert>
-      </Grid>
+      {party.userRole === 'ADMIN' && (
+        <Grid item xs={12}>
+          <Alert
+            sx={{ mt: 5 }}
+            severity="info"
+            variant="standard"
+            action={
+              <ButtonNaked
+                component={Button}
+                onClick={() =>
+                  history.push(
+                    resolvePathVariables(`${ENV.ROUTES.USERS}/:userId/edit`, {
+                      partyId: party.partyId,
+                      userId: storageUserOps.read()?.uid ?? '',
+                    }) + '?activeField=mobilePhone'
+                  )
+                }
+                color="primary"
+                sx={{ fontSize: 'fontSize', fontWeight: 'fontWeightBold' }}
+              >
+                {t('customAlert.button')}
+              </ButtonNaked>
+            }
+          >
+            {t('customAlert.message')}
+          </Alert>
+        </Grid>
+      )}
     </>
   );
 }
