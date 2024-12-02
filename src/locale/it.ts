@@ -1,7 +1,8 @@
 export default {
   customAlert: {
     message:
-      'Per migliorare la tua esperienza e offrirti una gestione più mirata, vedrai solo le informazioni e i prodotti di cui sei amministratore.',
+      'Aggiungi il tuo numero di cellulare di lavoro, o se non disponibile un fisso. Ci permetterà di contattarti in caso di necessità.',
+    button: 'Aggiungi',
   },
   session: {
     expired: {
