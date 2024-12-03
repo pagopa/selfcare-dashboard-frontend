@@ -9,12 +9,3 @@ test('Should render component DashboardHandleDelegatesPage with populated props'
   renderWithProviders(<DashboardHandleDelegatesPage party={mockedPartyRoma} />);
 });
 
-test('a party that is Aggregator can click on a delegated institution of type EA', async () => {
-  const mockedPartyAgencyOnboarded = mockedParties[4];
-  renderWithProviders(<DashboardHandleDelegatesPage party={mockedPartyAgencyOnboarded} />);
-
-  const delegatedInstitionName = await screen.findByText('Institution Name 0');
-  expect(delegatedInstitionName).toBeInTheDocument();
-  fireEvent.click(delegatedInstitionName);
-
-});

@@ -9,6 +9,11 @@ import { DelegationWithInfo } from '../../../../api/generated/b4f-dashboard/Dele
 import { DelegationWithPagination } from '../../../../api/generated/b4f-dashboard/DelegationWithPagination';
 import { createStore } from '../../../../redux/store';
 import TechPartnersTable from '../TechPartnersTable';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+
+beforeAll(() => {
+  i18n.changeLanguage('it');
+});
 
 const mockedDelegation: DelegationWithPagination = {
   delegations: [
@@ -93,8 +98,7 @@ test('test input field change and filter on click and search by name', async () 
 
 test('delegation of type EA should be clikable for same institution is present on instituionList', async () => {
   renderDashboardTablePT();
-
-  const delegationOfTypeEA = await screen.findByText('Institution EA');
+  const delegationOfTypeEA = await screen.findByText('Institution EA - Root Institution');
 
   expect(delegationOfTypeEA).toBeInTheDocument();
 

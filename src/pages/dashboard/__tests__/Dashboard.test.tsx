@@ -7,6 +7,7 @@ import { Router } from 'react-router';
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../../../decorators/__mocks__/withSelectedParty';
 import { createStore } from '../../../redux/store';
 import Dashboard from '../Dashboard';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 
 jest.mock('../../../decorators/withSelectedParty');
 jest.mock('@mui/material/useMediaQuery');
@@ -22,7 +23,9 @@ const mockedLocation = {
 
 beforeAll(() => {
   Object.defineProperty(window, 'location', { value: mockedLocation });
+  i18n.changeLanguage('it');
 });
+
 afterAll(() => {
   Object.defineProperty(window, 'location', { value: oldWindowLocation });
 });
@@ -102,7 +105,7 @@ test('Test rendering on mobile', async () => {
   fireEvent.keyDown(drawer, { key: 'Escape' });
 
   await waitFor(() => {
-    expect(screen.queryByRole('presentation')).not.toBeInTheDocument(); 
+    expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 });
 
@@ -114,5 +117,4 @@ test('Test rendering on desktop', async () => {
   const sideBarCloseIcon = await screen.findByTestId('DehazeIcon');
 
   fireEvent.click(sideBarCloseIcon);
-
 });

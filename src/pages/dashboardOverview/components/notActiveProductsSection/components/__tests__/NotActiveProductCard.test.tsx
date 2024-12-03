@@ -8,6 +8,7 @@ import { createStore } from './../../../../../../redux/store';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router';
 import { Provider } from 'react-redux';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
@@ -20,7 +21,9 @@ const mockedLocation = {
 
 beforeAll(() => {
   Object.defineProperty(window, 'location', { value: mockedLocation });
+  i18n.changeLanguage('it');
 });
+
 afterAll(() => {
   Object.defineProperty(window, 'location', { value: oldWindowLocation });
 });

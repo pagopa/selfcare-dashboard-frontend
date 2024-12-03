@@ -3,9 +3,14 @@ import { fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import { renderWithProviders } from '../../../../../../utils/test-utils';
 import SessionModalInteropProduct from '../SessionModalInteropProduct';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 
 const mockHandleClose = jest.fn();
 const mockOnConfirm = jest.fn();
+
+beforeAll(() => {
+  i18n.changeLanguage('it');
+});
 
 const defaultProps = {
   open: true,

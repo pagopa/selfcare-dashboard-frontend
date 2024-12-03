@@ -1,9 +1,9 @@
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
 import DnsIcon from '@mui/icons-material/Dns';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
+import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
 import { Grid, List } from '@mui/material';
 import {
   useErrorDispatcher,

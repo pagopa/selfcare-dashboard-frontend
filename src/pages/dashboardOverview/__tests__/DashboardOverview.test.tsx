@@ -1,3 +1,4 @@
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import '../../../locale';
@@ -5,6 +6,10 @@ import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardOverview from '../DashboardOverview';
+
+beforeAll(() => {
+  i18n.changeLanguage('it');
+});
 
 test('should render component DashboardOverview with empty party', async () => {
   renderWithProviders(
@@ -70,6 +75,10 @@ test('should render component DashboardOverview with institutionType AS and Prod
     <DashboardOverview party={mockedInsuranceCompany} products={mockedPartyProducts} />
   );
 
+  const addMobilePhoneButton = await screen.queryByText('Aggiungi');
+
+  expect(addMobilePhoneButton).not.toBeInTheDocument();
+
   // Avaible products section is not visible for AS
   expect(screen.queryByText('Prodotti disponibili')).not.toBeInTheDocument();
 });
@@ -89,7 +98,9 @@ test('should render component DashboardOverview with no geoTaxonomy', async () =
 
   fireEvent.click(geoTaxModal);
 
-  const modifyButton = await screen.findByText('Aggiungi');
+  const addButtons = await screen.findAllByText('Aggiungi');
+
+  const modifyButton = addButtons[0];
 
   expect(modifyButton).toBeInTheDocument();
   fireEvent.click(modifyButton);
@@ -108,4 +119,3 @@ test('should render component DashboardOverview with geoTaxonomy', async () => {
 
   fireEvent.click(closeModal);
 });
-

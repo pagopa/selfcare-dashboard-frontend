@@ -1,5 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import GenericEnvProductModal from '../GenericEnvProductModal'; // Adjust the import as needed
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+
+beforeAll(() => {
+  i18n.changeLanguage('it');
+});
 
 const mockProps = {
   open: true,
@@ -48,7 +53,6 @@ test('enviroment collaudo', () => {
   };
 
   render(<GenericEnvProductModal {...mockProps} />);
-
 
   const closeButton = screen.getByRole('button', { name: /Annulla/i });
   fireEvent.click(closeButton);
