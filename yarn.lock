@@ -1942,10 +1942,17 @@
   resolved "https://registry.npmjs.org/@mui/core-downloads-tracker/-/core-downloads-tracker-5.16.8.tgz#b83316d14dad08fac7cd0574f2643b01959b4464"
   integrity sha512-DARxShbBsWz6azwkTmv05rR7rJfcd9cXFsQtbcr24A+5esQBSnK2N3cbg/izlvuMGxonfWaysz/ae+6Ij9RAHQ==
 
-"@mui/icons-material@^5.14.1", "@mui/icons-material@^5.8.2":
+"@mui/icons-material@^5.14.1":
   version "5.16.8"
   resolved "https://registry.npmjs.org/@mui/icons-material/-/icons-material-5.16.8.tgz#8c32c6fe8f80f6859a73cd2c153fe97c160791ca"
   integrity sha512-2HKzTsCPbNgJq2z4tI6sLDwxKXqiiPh6L3IhuB8w+ypShE/qAI4FZQfI2o93vysQnkPB4Rw3FKSwAJWTThhHQA==
+  dependencies:
+    "@babel/runtime" "^7.23.9"
+
+"@mui/icons-material@^5.8.2":
+  version "5.16.9"
+  resolved "https://registry.npmjs.org/@mui/icons-material/-/icons-material-5.16.9.tgz#0f754ef0b943e3bea78343cd2861e8d95a114617"
+  integrity sha512-nnOJIqan6FS6zEsLX3vf8LZ4vXpZjP5xfCFezeXmqfQConypCOZG4nangoVwKwROlas7b6/bqOdacFUb/HuM/g==
   dependencies:
     "@babel/runtime" "^7.23.9"
 
@@ -7193,13 +7200,6 @@ is-typed-array@^1.1.13:
   dependencies:
     which-typed-array "^1.1.14"
 
-is-typed-array@^1.1.13:
-  version "1.1.13"
-  resolved "https://registry.npmjs.org/is-typed-array/-/is-typed-array-1.1.13.tgz#d6c5ca56df62334959322d7d7dd1cca50debe229"
-  integrity sha512-uZ25/bUAlUY5fR4OKT4rZQEBrzQWYV9ZJYGGsUmEJ6thodVJ1HX64ePQ6Z0qPWP+m+Uq6e9UugrE38jeYsDSMw==
-  dependencies:
-    which-typed-array "^1.1.14"
-
 is-typedarray@^1.0.0, is-typedarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
@@ -12439,46 +12439,6 @@ which-boxed-primitive@^1.0.2:
     is-number-object "^1.1.0"
     is-string "^1.1.0"
     is-symbol "^1.1.0"
-
-which-builtin-type@^1.1.4:
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/which-builtin-type/-/which-builtin-type-1.2.0.tgz#58042ac9602d78a6d117c7e811349df1268ba63c"
-  integrity sha512-I+qLGQ/vucCby4tf5HsLmGueEla4ZhwTBSqaooS+Y0BuxN4Cp+okmGuV+8mXZ84KDI9BA+oklo+RzKg0ONdSUA==
-  dependencies:
-    call-bind "^1.0.7"
-    function.prototype.name "^1.1.6"
-    has-tostringtag "^1.0.2"
-    is-async-function "^2.0.0"
-    is-date-object "^1.0.5"
-    is-finalizationregistry "^1.1.0"
-    is-generator-function "^1.0.10"
-    is-regex "^1.1.4"
-    is-weakref "^1.0.2"
-    isarray "^2.0.5"
-    which-boxed-primitive "^1.0.2"
-    which-collection "^1.0.2"
-    which-typed-array "^1.1.15"
-
-which-collection@^1.0.1, which-collection@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/which-collection/-/which-collection-1.0.2.tgz#627ef76243920a107e7ce8e96191debe4b16c2a0"
-  integrity sha512-K4jVyjnBdgvc86Y6BkaLZEN933SwYOuBFkdmBu9ZfkcAbdVbpITnDmjvZ/aQjRXQrv5EPkTnD1s39GiiqbngCw==
-  dependencies:
-    is-map "^2.0.3"
-    is-set "^2.0.3"
-    is-weakmap "^2.0.2"
-    is-weakset "^2.0.3"
-
-which-typed-array@^1.1.13, which-typed-array@^1.1.14, which-typed-array@^1.1.15:
-  version "1.1.16"
-  resolved "https://registry.npmjs.org/which-typed-array/-/which-typed-array-1.1.16.tgz#db4db429c4706feca2f01677a144278e4a8c216b"
-  integrity sha512-g+N+GAWiRj66DngFwHvISJd+ITsyphZvD1vChfVg6cEdnzy53GzB3oy0fUNlvhz7H7+MiqhYr26qxQShCpKTTQ==
-  dependencies:
-    available-typed-arrays "^1.0.7"
-    call-bind "^1.0.7"
-    for-each "^0.3.3"
-    gopd "^1.0.1"
-    has-tostringtag "^1.0.2"
 
 which-builtin-type@^1.1.4:
   version "1.2.0"
