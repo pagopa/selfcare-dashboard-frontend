@@ -187,6 +187,7 @@ export default {
         REC: 'Recapitista',
         CON: 'Consolidatore',
         PRV: 'Privato',
+        GPU: 'Gestore di pubblica utilità e/o di interesse generale',
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',

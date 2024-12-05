@@ -241,6 +241,7 @@ export const mockedCategories: ProductInstitutionMap = {
     PSP: {},
     PT: {},
     PRV: {},
+    GPU: {},
   },
   'prod-io-sign': {
     PA: {},
