@@ -70,6 +70,7 @@ export default function ActiveProductCardContainer({
             hasMoreThanOneInteropEnv && startWithProductInterop(productOnboarded.id)
               ? setOpenCustomEnvInteropModal(true)
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
+                productOnboarded.backOfficeEnvironmentConfigurations.length > 0 &&
                 productOnboarded.id !== INTEROP_PRODUCT_ENUM.INTEROP
               ? setOpenGenericEnvProductModal(true)
               : invokeProductBo(productOnboarded, party, undefined, lang)

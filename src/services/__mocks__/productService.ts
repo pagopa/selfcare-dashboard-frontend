@@ -42,16 +42,7 @@ export const mockedPartyProducts: Array<Product> = [
     urlPublic: 'http://notifiche/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
-    backOfficeEnvironmentConfigurations: [
-      {
-        environment: 'test1',
-        url: 'www.test1.com',
-      },
-      {
-        environment: 'test2',
-        url: 'www.test2.com',
-      },
-    ],
+    backOfficeEnvironmentConfigurations: [],
     subProducts: [],
     logoBgColor: 'pagoPA.main',
     delegable: false,
