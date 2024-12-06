@@ -180,6 +180,12 @@ export const mockedBaseParties: Array<BaseParty> = [
     status: 'ACTIVE',
     userRole: 'ADMIN',
   },
+  {
+    partyId: 'gpuId',
+    description: 'GPU S.P.A',
+    status: 'ACTIVE',
+    userRole: 'ADMIN',
+  },
 ];
 
 export const mockedParties: Array<Party> = [
@@ -223,7 +229,11 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'cccc',
           publicServices: true,
         },
-        userProductActions: [Actions.ListActiveProducts, Actions.AccessProductBackoffice, Actions.ViewBilling],
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ViewBilling,
+        ],
       },
     ],
     delegation: false,
@@ -366,7 +376,11 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
-        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers],
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+        ],
       },
       {
         productId: 'prod-interop-coll',
@@ -378,7 +392,11 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
-        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers]
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+        ],
       },
       {
         productId: 'prod-interop-atst',
@@ -390,7 +408,11 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'NBG455B',
           publicServices: true,
         },
-        userProductActions: [Actions.AccessProductBackoffice, Actions.ManageProductUsers, Actions.ListProductUsers]
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+        ],
       },
       {
         productId: 'prod-pn',
@@ -725,7 +747,7 @@ export const mockedParties: Array<Party> = [
           Actions.ViewManagedInstitutions,
           Actions.ViewBilling,
         ],
-      }
+      },
     ],
     // Use case with no delegations
     delegation: false,
@@ -1687,6 +1709,43 @@ export const mockedParties: Array<Party> = [
           publicServices: false,
         },
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      },
+    ],
+    city: 'london',
+    country: 'GB',
+    delegation: false,
+  },
+  {
+    partyId: 'gpuId',
+    externalId: '20128',
+    originId: '20128',
+    origin: 'IVASS',
+    institutionType: 'GPU',
+    typology: 'Gestore di pubblica utilità e/o di interesse generale',
+    description: 'GPU S.P.A',
+    digitalAddress: 'arcavitaintl@pec.unipol.it',
+    registeredOffice: 'street 12',
+    geographicTaxonomies: [{ code: '441234', desc: 'Catania - Comune' }],
+    products: [
+      {
+        productId: 'prod-pagopa',
+        userRole: 'ADMIN',
+        authorized: true,
+        billing: {
+          publicServices: false,
+        },
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.AccessProductBackoffice,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.ManageProductGroups,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+          Actions.ViewManagedInstitutions,
+        ],
       },
     ],
     city: 'london',
