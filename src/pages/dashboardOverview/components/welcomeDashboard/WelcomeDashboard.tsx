@@ -58,7 +58,7 @@ export default function WelcomeDashboard({ setOpen, party }: Readonly<Props>) {
           </Box>
         </Grid>
       </Grid>
-      {party.userRole === 'ADMIN' && (
+      {ENV.ENABLE_MOBILE_PHONE && party.userRole === 'ADMIN' && (
         <Grid item xs={12}>
           <Alert
             sx={{ mt: 5 }}

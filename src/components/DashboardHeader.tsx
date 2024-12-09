@@ -147,7 +147,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               setOpenCustomEnvInteropModal(true);
             } else if (
               actualSelectedParty.current &&
-              selectedProduct?.backOfficeEnvironmentConfigurations
+              selectedProduct?.backOfficeEnvironmentConfigurations &&
+              selectedProduct?.backOfficeEnvironmentConfigurations.length > 0
             ) {
               setOpenGenericEnvProductModal(true);
             } else if (selectedProduct && selectedProduct.id !== 'prod-selfcare') {
