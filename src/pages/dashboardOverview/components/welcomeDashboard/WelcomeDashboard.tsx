@@ -6,8 +6,8 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils
 import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { ENV } from '../../../../utils/env';
 import { Party } from '../../../../model/Party';
+import { ENV } from '../../../../utils/env';
 
 type Props = {
   setOpen: (open: boolean) => void;
@@ -58,7 +58,7 @@ export default function WelcomeDashboard({ setOpen, party }: Readonly<Props>) {
           </Box>
         </Grid>
       </Grid>
-      {ENV.ENABLE_MOBILE_PHONE && party.userRole === 'ADMIN' && (
+      {party.userRole === 'ADMIN' && (
         <Grid item xs={12}>
           <Alert
             sx={{ mt: 5 }}
