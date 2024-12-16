@@ -50,8 +50,6 @@ variables:
     react_app_url_api_dashboard: '$(UAT_REACT_APP_URL_API_DASHBOARD)'
 
     react_app_enable_assistance: 'true'
-    react_app_enable_user_v2: '$(UAT_REACT_APP_ENABLE_USER_V2)'
-    react_app_enable_mobile_phone: '$(UAT_REACT_APP_ENABLE_MOBILE_PHONE)'
 
     react_app_url_storage: '$(UAT_REACT_APP_URL_STORAGE)'
 
@@ -94,8 +92,6 @@ variables:
 
     
     react_app_enable_assistance: 'true'
-    react_app_enable_user_v2: '$(PROD_REACT_APP_ENABLE_USER_V2)'
-    react_app_enable_mobile_phone: '$(PROD_REACT_APP_ENABLE_MOBILE_PHONE)'
 
     react_app_url_storage: '$(PROD_REACT_APP_URL_STORAGE)'
 
@@ -139,8 +135,6 @@ variables:
     react_app_url_api_dashboard: '$(DEV_REACT_APP_URL_API_DASHBOARD)'
 
     react_app_enable_assistance: 'true'
-    react_app_enable_user_v2: '$(DEV_REACT_APP_ENABLE_USER_V2)'
-    react_app_enable_mobile_phone: '$(DEV_REACT_APP_ENABLE_MOBILE_PHONE)'
 
     react_app_url_storage: '$(DEV_REACT_APP_URL_STORAGE)'
 
@@ -256,8 +250,6 @@ stages:
 
               REACT_APP_URL_INSTITUTION_LOGO_PREFIX: '$(react_app_url_storage)/institutions/'
 
-              REACT_APP_ENABLE_USER_V2": '$(react_app_enable_user_v2)'
-              RREACT_APP_ENABLE_MOBILE_PHONE: '$(react_app_enable_mobile_phone)'
               REACT_APP_ANALYTICS_ENABLE: '$(react_app_analytics_enabled)'
               REACT_APP_ENABLE_GEOTAXONOMY: '$(react_app_enable_geotaxonomy)'
               REACT_APP_ANALYTICS_MOCK: '$(react_app_analytics_mocked)'
