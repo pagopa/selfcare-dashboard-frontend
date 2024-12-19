@@ -1,6 +1,6 @@
 import * as env from 'env-var';
 
-const PUBLIC_URL_INNER: string | undefined = env.get('PUBLIC_URL').asString() || '/dashboard';
+const PUBLIC_URL_INNER: string ='/dashboard';
 export const ENV = {
   ENV: env.get('REACT_APP_ENV').required().asString(),
   PUBLIC_URL: PUBLIC_URL_INNER,
