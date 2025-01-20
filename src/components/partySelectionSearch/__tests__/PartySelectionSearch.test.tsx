@@ -1,11 +1,11 @@
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, getByText, render, screen, waitFor } from '@testing-library/react';
-import { BaseParty, Party } from '../../../model/Party';
+import React from 'react';
+import { BaseParty, UserStatus } from '../../../model/Party';
+import { renderWithProviders } from '../../../utils/test-utils';
 import PartyAccountItemSelection from '../PartyAccountItemSelection';
 import PartySelectionSearch from '../PartySelectionSearch';
 import './../../../locale';
-import React from 'react';
-import { renderWithProviders } from '../../../utils/test-utils';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 
 beforeAll(() => {
   i18n.changeLanguage('it');
@@ -13,66 +13,34 @@ beforeAll(() => {
 
 let selectedParty: BaseParty | null = null;
 
-const parties: Array<Party> = [
+const parties: Array<BaseParty> = [
   {
-    fiscalCode: 'BARI_FC',
     description: 'Comune di Bari',
-    urlLogo: 'image',
-    status: 'PENDING',
-    origin: 'IPA',
-    partyId: '1',
-    digitalAddress: '',
+    partyId: 'partyId1',
+    status: 'PENDING' as UserStatus,
     userRole: 'ADMIN',
-    externalId: 'externalId1',
-    originId: 'originId1',
-    registeredOffice: 'registeredOffice',
-    zipCode: '40506',
-    typology: 'typology',
+    urlLogo: 'urlLogo1',
   },
   {
-    fiscalCode: 'MILANO_FC',
     description: 'Comune di Milano',
-    urlLogo: 'image',
-    status: 'PENDING',
-    origin: 'IPA',
-    partyId: '2',
-    digitalAddress: '',
+    partyId: 'partyId2',
+    status: 'TOBEVALIDATED' as UserStatus,
     userRole: 'ADMIN',
-    externalId: 'externalId2',
-    originId: 'originId2',
-    registeredOffice: 'registeredOffice',
-    zipCode: '40507',
-    typology: 'typology',
+    urlLogo: 'urlLogo2',
   },
   {
-    fiscalCode: 'ROMA_FC',
     description: 'Comune di Roma',
-    urlLogo: 'image',
-    status: 'ACTIVE',
-    origin: 'IPA',
-    partyId: '3',
-    digitalAddress: '',
+    partyId: 'partyId3',
+    status: 'ACTIVE' as UserStatus,
     userRole: 'ADMIN',
-    externalId: 'externalId3',
-    originId: 'originId3',
-    registeredOffice: 'registeredOffice',
-    zipCode: '40508',
-    typology: 'typology',
+    urlLogo: 'urlLogo3',
   },
   {
-    fiscalCode: 'NAPOLI_FC',
     description: 'Comune di Napoli',
-    urlLogo: 'image',
-    status: 'ACTIVE',
-    origin: 'IPA',
-    partyId: '4',
-    digitalAddress: '',
+    partyId: 'partyId4',
+    status: 'ACTIVE' as UserStatus,
     userRole: 'ADMIN',
-    externalId: 'externalId4',
-    originId: 'originId4',
-    registeredOffice: 'registeredOffice',
-    zipCode: '40509',
-    typology: 'typology',
+    urlLogo: 'urlLogo4',
   },
 ];
 
@@ -184,15 +152,18 @@ test('Test selection when there are > 3 parties', async () => {
   fireEvent.click(buttonParty);
 
   // verifichiamo che al click sia selezionato il pulsante "Napoli"
-  const selectedMoreThen3 = document.getElementsByClassName('selectedMoreThen3')[0];
+  const selectedMoreThen3 = document.getElementsByClassName('selectedMoreThen3')[0] as HTMLElement;
   if (selectedMoreThen3) getByText(selectedMoreThen3, 'Comune di Bari');
 });
 
 test('Select a party, then clear the selection', async () => {
-  render(<PartyAccountItemSelection selectedParty={selectedParty} clearField={() => 'clear'} />);
+  const mockClearFunction = jest.fn();
+  render(<PartyAccountItemSelection selectedParty={selectedParty} clearField={mockClearFunction} />);
 
   const clearSelection = screen.getByTestId('ClearOutlinedIcon');
   fireEvent.click(clearSelection);
+  expect(mockClearFunction).toHaveBeenCalledTimes(1);
+  
 
   expect(selectedParty).toBe(null);
 });
@@ -257,4 +228,15 @@ test('Test disabled party', async () => {
   expect(party40).not.toBeInTheDocument();
 
   await waitFor(() => expect(screen.getByText('Party 52')).toBeInTheDocument());
+});
+
+test('with less than 3 parties', async () => {
+  renderWithProviders(
+    <PartySelectionSearch
+      parties={[parties[0]]}
+      onPartySelectionChange={(p) => (selectedParty = p)}
+      selectedParty={parties[0]}
+    />
+  );
+
 });

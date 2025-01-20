@@ -85,7 +85,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
     noKeyboard: true,
     accept: 'image/png',
     getFilesFromEvent: (event: DropEvent): Promise<Array<File | DataTransferItem>> => {
-      const files = (event.target as any).files || (event as any).dataTransfer.files;
+      const files = (event.target as any)?.files || (event as any)?.dataTransfer.files;
       const file = files[0];
       if (!file) {
         return new Promise((resolve) => resolve([]));
