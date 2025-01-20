@@ -163,7 +163,6 @@ test('Select a party, then clear the selection', async () => {
   const clearSelection = screen.getByTestId('ClearOutlinedIcon');
   fireEvent.click(clearSelection);
   expect(mockClearFunction).toHaveBeenCalledTimes(1);
-  
 
   expect(selectedParty).toBe(null);
 });

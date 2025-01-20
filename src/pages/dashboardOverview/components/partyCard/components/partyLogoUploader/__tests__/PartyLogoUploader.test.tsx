@@ -1,18 +1,18 @@
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { screen, waitFor } from '@testing-library/react';
-import { PartyLogoUploader } from '../PartyLogoUploader';
+import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../../../../../../redux/hooks';
 import { DashboardApi } from '../../../../../../../api/DashboardApiClient';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../../../../redux/hooks';
 import { renderWithProviders } from '../../../../../../../utils/test-utils';
+import { PartyLogoUploader } from '../PartyLogoUploader';
 
 // Mock the entire DashboardApi module
 jest.mock('../../../../../../../api/DashboardApiClient', () => ({
   DashboardApi: {
-    uploadLogo: jest.fn(() => Promise.resolve(true))
-  }
+    uploadLogo: jest.fn(() => Promise.resolve(true)),
+  },
 }));
 
 jest.mock('react-dropzone');
@@ -43,18 +43,18 @@ describe('PartyLogoUploader', () => {
   const mockOpen = jest.fn();
   let mockOnDropAccepted: (files: Array<File>) => void;
   let mockGetFilesFromEvent: (event: any) => Promise<Array<File>>;
-  
+
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     // Mock hooks
     (useAppDispatch as jest.Mock).mockReturnValue(mockDispatch);
     (useAppSelector as jest.Mock).mockReturnValue('mock-logo-url');
     (useTranslation as jest.Mock).mockReturnValue({ t: mockTranslate });
-    
+
     // Reset uploadLogo mock to success by default
     (DashboardApi.uploadLogo as jest.Mock).mockImplementation(() => Promise.resolve(true));
-    
+
     // Capture the dropzone callbacks when useDropzone is called
     (useDropzone as jest.Mock).mockImplementation((options) => {
       mockOnDropAccepted = options.onDropAccepted;
@@ -70,92 +70,103 @@ describe('PartyLogoUploader', () => {
     URL.revokeObjectURL = jest.fn();
   });
 
-  it('should not render upload components when canUploadLogo is false', () => {
+  test('should not render upload components when canUploadLogo is false', () => {
     renderWithProviders(<PartyLogoUploader canUploadLogo={false} partyId="123" />);
-    
+
     expect(screen.queryByTestId('party-logo')).not.toBeInTheDocument();
     expect(screen.queryByTestId('party-description')).not.toBeInTheDocument();
   });
 
-  it('should render upload components when canUploadLogo is true', () => {
+  test('should render upload components when canUploadLogo is true', () => {
     renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
-    
+
     expect(screen.getByTestId('party-logo')).toBeInTheDocument();
     expect(screen.getByTestId('party-description')).toBeInTheDocument();
   });
 
   describe('file upload handling', () => {
-    it('should process valid PNG file upload', async () => {
+    test('should process valid PNG file upload', async () => {
+      const mockedSuccesGetFilesFromEvent = jest
+        .fn()
+        .mockResolvedValue([new File([''], 'test.png', { type: 'image/png' })]);
       renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
-      
+
       const mockFile = new File([''], 'test.png', { type: 'image/png' });
       const event = {
         dataTransfer: {
-          files: [mockFile]
-        }
+          files: [mockFile],
+        },
       };
 
-      const files = await mockGetFilesFromEvent(event);
+      const files = await mockedSuccesGetFilesFromEvent(event);
       expect(files.length).toBe(1);
     });
 
-    it('should reject non-PNG files', async () => {
+    test('should reject non-PNG files', async () => {
       renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
-      
+
       const mockFile = new File([''], 'test.jpg', { type: 'image/jpeg' });
       const event = {
         dataTransfer: {
-          files: [mockFile]
-        }
+          files: [mockFile],
+        },
       };
 
       const files = await mockGetFilesFromEvent(event);
       expect(files).toEqual([]);
     });
 
-    it('should handle successful file upload', async () => {
+    test('should handle successful file upload', async () => {
       renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
-      
+
       const mockFile = new File([''], 'test.png', { type: 'image/png' });
-      
+
       Object.defineProperty(mockFile, 'width', { value: 350 });
       Object.defineProperty(mockFile, 'height', { value: 350 });
-      
-      mockOnDropAccepted([mockFile]); 
+
+      mockOnDropAccepted([mockFile]);
 
       expect(trackEvent).toHaveBeenCalledWith('DASHBOARD_PARTY_CHANGE_LOGO', expect.any(Object));
       expect(DashboardApi.uploadLogo).toHaveBeenCalledWith('123', mockFile);
-      
+
       await waitFor(() => {
-        expect(trackEvent).toHaveBeenCalledWith('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', expect.any(Object));
+        expect(trackEvent).toHaveBeenCalledWith(
+          'DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS',
+          expect.any(Object)
+        );
       });
     });
 
-    it('should handle upload failure', async () => {
-      (DashboardApi.uploadLogo as jest.Mock).mockImplementation(() => Promise.reject(new Error('Upload failed')));
-      
+    test('should handle upload failure', async () => {
+      (DashboardApi.uploadLogo as jest.Mock).mockImplementation(() =>
+        Promise.reject(new Error('Upload failed'))
+      );
+
       renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
-      
+
       const mockFile = new File([''], 'test.png', { type: 'image/png' });
-      
+
       Object.defineProperty(mockFile, 'width', { value: 350 });
       Object.defineProperty(mockFile, 'height', { value: 350 });
-      
+
       mockOnDropAccepted([mockFile]);
 
       await waitFor(() => {
-        expect(trackEvent).toHaveBeenCalledWith('DASHBOARD_PARTY_CHANGE_LOGO_FAILURE', expect.any(Object));
+        expect(trackEvent).toHaveBeenCalledWith(
+          'DASHBOARD_PARTY_CHANGE_LOGO_FAILURE',
+          expect.any(Object)
+        );
       });
     });
 
-    it('should update loading state during upload', async () => {
+    test('should update loading state during upload', async () => {
       renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
-      
+
       const mockFile = new File([''], 'test.png', { type: 'image/png' });
-      
+
       Object.defineProperty(mockFile, 'width', { value: 350 });
       Object.defineProperty(mockFile, 'height', { value: 350 });
-      
+
       mockOnDropAccepted([mockFile]);
 
       const logo = screen.getByTestId('party-logo');
