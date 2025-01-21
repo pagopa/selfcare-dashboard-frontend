@@ -9,12 +9,12 @@ test('should render with no parties in status active', () => {
   );
 });
 
-test('should render with parties', () => {
+test('should render with parties in status Pending', () => {
   renderWithProviders(
     <NoActiveParty parties={mockedBaseParties.filter((p) => p.status === 'PENDING')} />
   );
 
-  const closeButton = screen.getByText('Close');
+  const closeButton = screen.getByText('Chiudi');
   expect(closeButton).toBeInTheDocument();
   fireEvent.click(closeButton);
 });
