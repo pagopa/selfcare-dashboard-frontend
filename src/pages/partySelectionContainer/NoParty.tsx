@@ -2,7 +2,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Box, Button, Grid, Link, Typography } from '@mui/material';
 import { ButtonNaked, IllusError } from '@pagopa/mui-italia';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { ENV } from '../../utils/env';
 
