@@ -7,13 +7,18 @@ test('should render with no parties in status active', () => {
   renderWithProviders(
     <NoActiveParty parties={mockedBaseParties.filter((p) => p.status === 'TOBEVALIDATED')} />
   );
+
+  const toBeValidatedDescrition = screen.getByRole('heading', { name: /in attesa di validazione/i });
+  expect(toBeValidatedDescrition).toBeInTheDocument();
 });
 
 test('should render with parties in status Pending', () => {
   renderWithProviders(
     <NoActiveParty parties={mockedBaseParties.filter((p) => p.status === 'PENDING')} />
+    
   );
-
+  const pendingDescrition = screen.getByText('Non risultano richieste di adesione per questo ente');
+  expect(pendingDescrition).toBeInTheDocument();
   const closeButton = screen.getByText('Chiudi');
   expect(closeButton).toBeInTheDocument();
   fireEvent.click(closeButton);
