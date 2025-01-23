@@ -1,27 +1,19 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { Alert, Box, Button, Grid } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Button, Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
-import { Party } from '../../../../model/Party';
-import { ENV } from '../../../../utils/env';
 
 type Props = {
   setOpen: (open: boolean) => void;
-  party: Party;
 };
 
-export default function WelcomeDashboard({ setOpen, party }: Readonly<Props>) {
+export default function WelcomeDashboard({ setOpen }: Readonly<Props>) {
   const { t } = useTranslation();
-  const history = useHistory();
   const title = t('overview.title');
   const subTitle = t('overview.subTitle');
 
   return (
-    <>
+
       <Grid
         container
         spacing={2}
@@ -58,34 +50,6 @@ export default function WelcomeDashboard({ setOpen, party }: Readonly<Props>) {
           </Box>
         </Grid>
       </Grid>
-      {party.userRole === 'ADMIN' && (
-        <Grid item xs={12}>
-          <Alert
-            sx={{ mt: 5 }}
-            severity="info"
-            variant="standard"
-            action={
-              <ButtonNaked
-                component={Button}
-                onClick={() =>
-                  history.push(
-                    resolvePathVariables(`${ENV.ROUTES.USERS}/:userId/edit`, {
-                      partyId: party.partyId,
-                      userId: storageUserOps.read()?.uid ?? '',
-                    }) + '?activeField=mobilePhone'
-                  )
-                }
-                color="primary"
-                sx={{ fontSize: 'fontSize', fontWeight: 'fontWeightBold' }}
-              >
-                {t('customAlert.button')}
-              </ButtonNaked>
-            }
-          >
-            {t('customAlert.message')}
-          </Alert>
-        </Grid>
-      )}
-    </>
+
   );
 }

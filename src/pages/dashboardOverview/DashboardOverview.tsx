@@ -26,10 +26,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   const { getAllProductsWithPermission } = usePermissions();
 
   const showInfoBanner = party.institutionType === 'PA';
-  /*
-  const isInstitutionTypeAllowedOnb =
-    party.institutionType && !['PT', 'SA', 'AS'].includes(party.institutionType);
-*/
+
   const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
 
   const canSeeActiveProductsList =
@@ -89,7 +86,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         setOpen={setOpen}
         canUploadLogo={canUploadLogo}
       />
-      <WelcomeDashboard setOpen={setOpen} party={party} />
+      <WelcomeDashboard setOpen={setOpen} />
 
       <Grid item xs={12} mb={2} mt={5}>
         {canSeeActiveProductsList && <ActiveProductsSection products={products} party={party} />}
