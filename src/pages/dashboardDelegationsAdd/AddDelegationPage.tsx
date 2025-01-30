@@ -20,11 +20,11 @@ export default function AddDelegationPage({ authorizedDelegableProducts, party }
 
   const productIdByQuery = new URLSearchParams(window.location.search).get('productId');
 
-  const productsWithCreatDelegationAction = authorizedDelegableProducts.filter((ap) =>
+  const productsWithCreateDelegationAction = authorizedDelegableProducts.filter((ap) =>
     hasPermission(ap.id, Actions.CreateDelegation)
   );
 
-  const selectedProductByQuery = productsWithCreatDelegationAction.find(
+  const selectedProductByQuery = productsWithCreateDelegationAction.find(
     (dp) => dp.id === productIdByQuery
   );
 
@@ -63,7 +63,7 @@ export default function AddDelegationPage({ authorizedDelegableProducts, party }
         </Grid>
         <Grid item xs={12} mb={5}>
           <AddDelegationForm
-            authorizedDelegableProducts={productsWithCreatDelegationAction}
+            productsWithCreateDelegationAction={productsWithCreateDelegationAction}
             party={party}
             selectedProductByQuery={selectedProductByQuery}
           />

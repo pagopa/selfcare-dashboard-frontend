@@ -38,13 +38,13 @@ import { LOADING_TASK_DELEGATION_FORM } from '../../../utils/constants';
 import CustomListBoxComponent from './CustomListBoxComponent';
 
 type Props = {
-  authorizedDelegableProducts: Array<Product>;
+  productsWithCreateDelegationAction: Array<Product>;
   party: Party;
   selectedProductByQuery?: Product;
 };
 
 export default function AddDelegationForm({
-  authorizedDelegableProducts,
+  productsWithCreateDelegationAction,
   party,
   selectedProductByQuery,
 }: Readonly<Props>) {
@@ -64,14 +64,14 @@ export default function AddDelegationForm({
   const delegationsListRef = useRef(delegationsList);
 
   useEffect(() => {
-    if (authorizedDelegableProducts.length === 1) {
-      setProductSelected(authorizedDelegableProducts[0]);
+    if (productsWithCreateDelegationAction.length === 1) {
+      setProductSelected(productsWithCreateDelegationAction[0]);
     }
-  }, [authorizedDelegableProducts]);
+  }, [productsWithCreateDelegationAction]);
 
   useEffect(() => {
     if (selectedProductByQuery) {
-      const chosenProduct = authorizedDelegableProducts.find(
+      const chosenProduct = productsWithCreateDelegationAction.find(
         (dp) => dp.id === selectedProductByQuery.id
       );
       setProductSelected(chosenProduct);
@@ -229,7 +229,7 @@ export default function AddDelegationForm({
             <Select
               id="select-product-choose"
               size="small"
-              disabled={authorizedDelegableProducts.length === 1 || !!selectedProductByQuery}
+              disabled={productsWithCreateDelegationAction.length === 1 || !!selectedProductByQuery}
               fullWidth
               value={productSelected ? productSelected?.title : ''}
               displayEmpty
@@ -243,7 +243,7 @@ export default function AddDelegationForm({
                 </Typography>
               )}
             >
-              {authorizedDelegableProducts.map((p: Product, index) => (
+              {productsWithCreateDelegationAction.map((p: Product, index) => (
                 <MenuItem
                   key={index}
                   value={p.title}
