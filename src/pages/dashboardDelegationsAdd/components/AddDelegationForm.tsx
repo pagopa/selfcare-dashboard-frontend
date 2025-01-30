@@ -47,7 +47,7 @@ export default function AddDelegationForm({
   authorizedDelegableProducts,
   party,
   selectedProductByQuery,
-}: Props) {
+}: Readonly<Props>) {
   const history = useHistory();
   const onExit = useUnloadEventOnExit();
   const { t } = useTranslation();

@@ -283,6 +283,7 @@ const Dashboard = () => {
         component="main"
         sx={{ backgroundColor: 'background.default' }}
         display="flex"
+        justifyContent={match ? 'center' : 'flex-start'}
         pb={8}
         xs={12}
         lg={hideLabels ? 11 : 10}
