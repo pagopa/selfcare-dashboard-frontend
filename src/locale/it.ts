@@ -217,7 +217,8 @@ export default {
       productsSection: {
         title: 'Prodotti',
         labelDelegates: 'Delegato',
-        noDelegatesLabel: 'Ancora nessuna delega,<1> creane una adesso</1>',
+        noDelegatesLabel: 'Ancora nessuna delega',
+        noDelegatesLabelWithLink: 'Ancora nessuna delega,<1> creane una adesso</1>',
       },
     },
     ptPage: {
@@ -263,6 +264,7 @@ export default {
       overview: 'Panoramica',
       delegations: 'Deleghe',
       addDelegation: 'Aggiungi delega',
+      exit: 'Esci',
     },
     addOneDelegation: 'Aggiungi una delega',
     formSubTitle: 'Indica per quale prodotto vuoi delegare la gestione',

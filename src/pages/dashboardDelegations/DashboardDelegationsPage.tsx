@@ -3,8 +3,10 @@ import { ButtonNaked, ProductAvatar } from '@pagopa/mui-italia';
 import {
   TitleBox,
   useErrorDispatcher,
+  usePermissions,
   useUnloadEventOnExit,
 } from '@pagopa/selfcare-common-frontend/lib';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -20,14 +22,20 @@ type Props = {
   authorizedDelegableProducts: Readonly<Array<Product>>;
 };
 
-export default function DashboardDelegationsPage({ party, authorizedDelegableProducts }: Readonly<Props>) {
+export default function DashboardDelegationsPage({
+  party,
+  authorizedDelegableProducts,
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
   const history = useHistory();
   const addError = useErrorDispatcher();
+  const { getAllProductsWithPermission, hasPermission } = usePermissions();
 
   const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const canCreateDelegation = getAllProductsWithPermission(Actions.CreateDelegation).length > 0;
 
   const retrieveDelegationsList = async () => {
     setLoading(true);
@@ -109,15 +117,17 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                       {t('overview.delegationsPage.productsSection.title')}
                     </Typography>
                   </Box>
-                  <Box>
-                    <Button
-                      variant="contained"
-                      sx={{ height: '40px' }}
-                      onClick={() => goToAddDelegationsPage()}
-                    >
-                      {t('overview.delegationsPage.addDelegationsBtn')}
-                    </Button>
-                  </Box>
+                  {canCreateDelegation && (
+                    <Box>
+                      <Button
+                        variant="contained"
+                        sx={{ height: '40px' }}
+                        onClick={() => goToAddDelegationsPage()}
+                      >
+                        {t('overview.delegationsPage.addDelegationsBtn')}
+                      </Button>
+                    </Box>
+                  )}
                 </Box>
               </Grid>
               {authorizedDelegableProducts.map((product) => {
@@ -143,7 +153,9 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                         />
                       </Box>
                       <Box>
-                        <Typography variant="h6" fontWeight={'fontWeightBold'}>{product.title}</Typography>
+                        <Typography variant="h6" fontWeight={'fontWeightBold'}>
+                          {product.title}
+                        </Typography>
                       </Box>
                     </Box>
 
@@ -154,29 +166,33 @@ export default function DashboardDelegationsPage({ party, authorizedDelegablePro
                     </Box>
                     {delegatesByProduct.length === 0 ? (
                       <Box display={'flex'}>
-                        <Grid item xs={3}>
-                          <Typography variant="body1" sx={{ fontSize: '16px' }}>
-                            {t('overview.delegationsPage.productsSection.labelDelegates')}
-                          </Typography>
-                        </Grid>
+                        <Grid item xs={3}></Grid>
                         <Grid item xs={9}>
-                          <Typography variant="body1" sx={{ fontSize: '16px' }}>
-                            <Trans
-                              i18nKey={'overview.delegationsPage.productsSection.noDelegatesLabel'}
-                            >
-                              Nessun delegato per questo prodotto. 
-                              <Link
-                                onClick={() => goToAddDelegationsPage(product?.id)}
-                                sx={{
-                                  fontWeight: 'fontWeightMedium',
-                                  textDecoration: 'none',
-                                  cursor: 'pointer',
-                                }}
+                          {hasPermission(product.id, Actions.CreateDelegation) ? (
+                            <Typography variant="body1" sx={{ fontSize: '16px' }}>
+                              <Trans
+                                i18nKey={
+                                  'overview.delegationsPage.productsSection.noDelegatesLabelWithLink'
+                                }
                               >
-                                creane una adesso
-                              </Link>
-                            </Trans>
-                          </Typography>
+                                Nessun delegato per questo prodotto.
+                                <Link
+                                  onClick={() => goToAddDelegationsPage(product?.id)}
+                                  sx={{
+                                    fontWeight: 'fontWeightMedium',
+                                    textDecoration: 'none',
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  creane una adesso
+                                </Link>
+                              </Trans>
+                            </Typography>
+                          ) : (
+                            <Typography variant="body1" sx={{ fontSize: '16px' }}>
+                              {t('overview.delegationsPage.productsSection.noDelegatesLabel')}
+                            </Typography>
+                          )}
                         </Grid>
                       </Box>
                     ) : (

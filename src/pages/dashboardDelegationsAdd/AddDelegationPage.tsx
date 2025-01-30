@@ -1,12 +1,11 @@
-import { Grid, useMediaQuery } from '@mui/material';
-import { TitleBox } from '@pagopa/selfcare-common-frontend/lib';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { Grid } from '@mui/material';
+import { TitleBox, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import ProductNavigationBar from '../../components/ProductNavigationBar';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
-import { DASHBOARD_ROUTES } from '../../routes';
 import AddDelegationForm from './components/AddDelegationForm';
 
 type Props = {
@@ -14,37 +13,24 @@ type Props = {
   party: Party;
 };
 
-export default function AddDelegationPage({ authorizedDelegableProducts, party }: Props) {
+export default function AddDelegationPage({ authorizedDelegableProducts, party }: Readonly<Props>) {
   const history = useHistory();
   const { t } = useTranslation();
-  const isMobile = useMediaQuery('@media (max-width: 600px)');
+  const { hasPermission } = usePermissions();
 
   const productIdByQuery = new URLSearchParams(window.location.search).get('productId');
 
-  const selectedProductByQuery = authorizedDelegableProducts.find(
+  const productsWithCreateDelegationAction = authorizedDelegableProducts.filter((ap) =>
+    hasPermission(ap.id, Actions.CreateDelegation)
+  );
+
+  const selectedProductByQuery = productsWithCreateDelegationAction.find(
     (dp) => dp.id === productIdByQuery
   );
 
   const goBack = () => {
     history.goBack();
   };
-
-  const paths = [
-    {
-      description: t('addDelegationPage.navigationBar.delegations'),
-      onClick: () =>
-        history.push(
-          resolvePathVariables(DASHBOARD_ROUTES.DELEGATIONS.path, {
-            partyId: party.partyId,
-          })
-        ),
-    },
-    {
-      description: t('addDelegationPage.navigationBar.addDelegation'),
-    },
-  ];
-
-  const pathInMobileView = paths.filter((_p, index) => index === 0);
 
   return (
     <Grid
@@ -58,10 +44,10 @@ export default function AddDelegationPage({ authorizedDelegableProducts, party }
       <Grid container item xs={12} lg={8} display={'flex'} justifyContent={'center'}>
         <Grid item xs={12}>
           <ProductNavigationBar
-            paths={isMobile ? pathInMobileView : paths}
-            showBackComponent={isMobile ? true : false}
+            showBackComponent={true}
             goBack={goBack}
-            backLabel={t('addDelegationPage.navigationBar.delegations')}
+            backLabel={t('addDelegationPage.navigationBar.exit')}
+            colorBackComponent="primary.main"
           />
         </Grid>
         <Grid item xs={12}>
@@ -77,7 +63,7 @@ export default function AddDelegationPage({ authorizedDelegableProducts, party }
         </Grid>
         <Grid item xs={12} mb={5}>
           <AddDelegationForm
-            authorizedDelegableProducts={authorizedDelegableProducts}
+            productsWithCreateDelegationAction={productsWithCreateDelegationAction}
             party={party}
             selectedProductByQuery={selectedProductByQuery}
           />
