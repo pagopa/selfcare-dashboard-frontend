@@ -1,11 +1,11 @@
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { mockedParties } from '../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../../utils/test-utils';
 import AddDelegationForm from '../AddDelegationForm';
-import userEvent from '@testing-library/user-event';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 
 beforeAll(() => {
   i18n.changeLanguage('it');
@@ -13,7 +13,7 @@ beforeAll(() => {
 
 test('render the form correctly woth empty props', () => {
   renderWithProviders(
-    <AddDelegationForm authorizedDelegableProducts={[]} party={mockedParties[0]} />
+    <AddDelegationForm productsWithCreateDelegationAction={[]} party={mockedParties[0]} />
   );
 
   const escapeButton = screen.getByText('Esci');
@@ -23,7 +23,7 @@ test('render the form correctly woth empty props', () => {
 test('search by name', async () => {
   renderWithProviders(
     <AddDelegationForm
-      authorizedDelegableProducts={[mockedPartyProducts[0]]}
+      productsWithCreateDelegationAction={[mockedPartyProducts[0]]}
       party={mockedParties[2]}
       selectedProductByQuery={mockedPartyProducts[0]}
     />
@@ -47,7 +47,7 @@ test('search by name', async () => {
 test('search by fiscal code', async () => {
   renderWithProviders(
     <AddDelegationForm
-      authorizedDelegableProducts={[mockedPartyProducts[0]]}
+      productsWithCreateDelegationAction={[mockedPartyProducts[0]]}
       party={mockedParties[2]}
       selectedProductByQuery={mockedPartyProducts[0]}
     />
@@ -78,7 +78,10 @@ test('search by fiscal code', async () => {
 
 test('should display the choose product autocomplete input empty if there are no products selected', () => {
   renderWithProviders(
-    <AddDelegationForm authorizedDelegableProducts={mockedPartyProducts} party={mockedParties[0]} />
+    <AddDelegationForm
+      productsWithCreateDelegationAction={mockedPartyProducts}
+      party={mockedParties[0]}
+    />
   );
 
   const chooseProduct = document.getElementById('select-product-choose') as HTMLInputElement;
@@ -89,7 +92,10 @@ test('should display the choose product autocomplete input empty if there are no
 
 test('should display documentation link with correct href and text content', async () => {
   renderWithProviders(
-    <AddDelegationForm authorizedDelegableProducts={mockedPartyProducts} party={mockedParties[0]} />
+    <AddDelegationForm
+      productsWithCreateDelegationAction={mockedPartyProducts}
+      party={mockedParties[0]}
+    />
   );
 
   const href =
