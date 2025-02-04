@@ -23,7 +23,7 @@ export const buildEmptyProductRolesLists = (): ProductRolesLists => ({
   list: [],
   groupBySelcRole: { ADMIN: [], LIMITED: [], ADMIN_EA: [] },
   groupByProductRole: {},
-  groupByPartyRole: { MANAGER: [], DELEGATE: [], SUB_DELEGATE: [], OPERATOR: [], ADMIN_EA: [] },
+  groupByPartyRole: { MANAGER: [], DELEGATE: [], SUB_DELEGATE: [], OPERATOR: [], ADMIN_EA: [], ADMIN_EA_IO: [] },
 });
 
 export type ProductRolesByProductRoleType = { [productRole: string]: ProductRole };
