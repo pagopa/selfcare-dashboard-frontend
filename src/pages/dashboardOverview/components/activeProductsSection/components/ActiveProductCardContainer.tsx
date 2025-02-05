@@ -67,13 +67,14 @@ export default function ActiveProductCardContainer({
         message={
           <Trans
             i18nKey="overview.activeProducts.adminLimit.message"
+            values={{ adminLimit: ENV.MAX_ADMIN_COUNT }}
             components={{
               1: <strong />,
               3: <strong />,
               5: <div style={{ marginTop: '8px' }} />,
             }}
           >
-            {`Il tuo ente ha <1> superato il limite</1> di 4 Amministratori , che è il numero massimo consentito per accedere alla <3>Piattaforma pagoPA.</3> <5 /> Per accedere, modifica l’elenco degli Amministratori per questo prodotto.`}
+            {`Il tuo ente ha <1>superato il limite</1> di {{adminLimit}} Amministratori, che è il numero massimo consentito per accedere alla <3>Piattaforma pagoPA.</3><5 /> Per accedere, modifica l’elenco degli Amministratori per questo prodotto.`}
           </Trans>
         }
         onConfirmLabel={t('overview.activeProducts.adminLimit.modifyButton')}

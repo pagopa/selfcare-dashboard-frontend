@@ -103,7 +103,7 @@ export default {
       adminLimit: {
         title: 'Non è possibile accedere ',
         message:
-          'Il tuo ente ha <1> superato il limite</1> di 4 Amministratori , che è il numero massimo consentito per accedere alla <3>Piattaforma pagoPA.</3> <5 /> <6 /> Per accedere, modifica l’elenco degli Amministratori per questo prodotto.',
+          'Il tuo ente ha <1>superato il limite</1> di {{adminLimit}} Amministratori, che è il numero massimo consentito per accedere alla <3>Piattaforma pagoPA.</3><5 /> Per accedere, modifica l’elenco degli Amministratori per questo prodotto.',
         modifyButton: 'Modifica',
         backButton: 'Indietro',
       },
