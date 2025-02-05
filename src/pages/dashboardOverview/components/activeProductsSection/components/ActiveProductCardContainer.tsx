@@ -1,14 +1,17 @@
 import { Grid } from '@mui/material';
-import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import { SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { INTEROP_PRODUCT_ENUM } from '../../../../../utils/constants';
+import { INTEROP_PRODUCT_ENUM, PRODUCT_IDS } from '../../../../../utils/constants';
+import { ENV } from '../../../../../utils/env';
 import { startWithProductInterop } from '../../../../../utils/helperFunctions';
 import ActiveProductCard from './ActiveProductCard';
 import GenericEnvProductModal from './GenericEnvProductModal';
@@ -30,12 +33,18 @@ export default function ActiveProductCardContainer({
   products,
   authorizedInteropProducts,
 }: Props) {
+  const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
+  const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
+  const [openAminMaxLimitsModal, setOpenAminMaxLimitsModal] = useState<boolean>(false);
+
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
   const { hasPermission } = usePermissions();
+  const history = useHistory();
 
-  const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
-  const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
+  const usersPathWithProduct = `${resolvePathVariables(ENV.ROUTES.USERS, {
+    partyId: party.partyId ?? '',
+  })}#${PRODUCT_IDS.PAGOPA}`;
 
   const isDisabled = !!party.products.find(
     (p) =>
@@ -52,6 +61,30 @@ export default function ActiveProductCardContainer({
 
   return productOnboarded && !isOperatorWithNoAuthorizedProduct ? (
     <>
+      <SessionModal
+        open={openAminMaxLimitsModal}
+        title={t('overview.activeProducts.adminLimit.title')}
+        message={
+          <Trans
+            i18nKey="overview.activeProducts.adminLimit.message"
+            components={{
+              1: <strong />,
+              3: <strong />,
+              5: <div style={{ marginTop: '8px' }} />,
+            }}
+          >
+            {`Il tuo ente ha <1> superato il limite</1> di 4 Amministratori , che è il numero massimo consentito per accedere alla <3>Piattaforma pagoPA.</3> <5 /> Per accedere, modifica l’elenco degli Amministratori per questo prodotto.`}
+          </Trans>
+        }
+        onConfirmLabel={t('overview.activeProducts.adminLimit.modifyButton')}
+        onConfirm={() => {
+          history.push(usersPathWithProduct);
+          setOpenAminMaxLimitsModal(false);
+        }}
+        onCloseLabel={t('overview.activeProducts.adminLimit.backButton')}
+        handleClose={() => setOpenAminMaxLimitsModal(false)}
+      />
+
       <Grid item xs={12} sm={6} md={6} lg={4}>
         <ActiveProductCard
           disableBtn={

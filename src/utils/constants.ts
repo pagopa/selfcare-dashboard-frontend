@@ -23,3 +23,7 @@ export const interopProductIdList = [
   INTEROP_PRODUCT_ENUM.INTEROP_ATST,
   INTEROP_PRODUCT_ENUM.INTEROP_COLL,
 ];
+
+export const PRODUCT_IDS = {
+  PAGOPA: 'prod-pagopa',
+} as const;
