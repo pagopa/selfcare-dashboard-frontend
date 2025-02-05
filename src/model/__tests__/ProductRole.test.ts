@@ -60,7 +60,18 @@ test('Test productRoles2ProductRolesList', () => {
           phasesAdditionAllowed: ['dashboard'],
         },
       ],
-      ADMIN_EA: [],
+      ADMIN_EA: [
+        {
+          description: 'Descrizione amministratore-ea-io',
+          multiroleAllowed: true,
+          partyRole: 'ADMIN_EA_IO',
+          phasesAdditionAllowed: ['dashboard'],
+          productId: 'PRODID',
+          productRole: 'Amministratore-ea-io',
+          selcRole: 'ADMIN_EA',
+          title: 'Amministratore Ea IO',
+        },
+      ],
     },
     groupByPartyRole: {
       DELEGATE: [
@@ -122,6 +133,18 @@ test('Test productRoles2ProductRolesList', () => {
         },
       ],
       ADMIN_EA: [],
+      ADMIN_EA_IO: [
+        {
+          description: 'Descrizione amministratore-ea-io',
+          multiroleAllowed: true,
+          partyRole: 'ADMIN_EA_IO',
+          phasesAdditionAllowed: ['dashboard'],
+          productId: 'PRODID',
+          productRole: 'Amministratore-ea-io',
+          selcRole: 'ADMIN_EA',
+          title: 'Amministratore Ea IO',
+        },
+      ],
     },
     groupByProductRole: {
       'referente-legale': {
@@ -173,6 +196,16 @@ test('Test productRoles2ProductRolesList', () => {
         title: 'Referente Tecnico',
         description: 'Descrizione referente-tecnico',
         phasesAdditionAllowed: ['dashboard'],
+      },
+      'Amministratore-ea-io': {
+        description: 'Descrizione amministratore-ea-io',
+        multiroleAllowed: true,
+        partyRole: 'ADMIN_EA_IO',
+        phasesAdditionAllowed: ['dashboard'],
+        productId: 'PRODID',
+        productRole: 'Amministratore-ea-io',
+        selcRole: 'ADMIN_EA',
+        title: 'Amministratore Ea IO',
       },
     },
   });
