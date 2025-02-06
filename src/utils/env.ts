@@ -70,4 +70,6 @@ export const ENV = {
   DELEGATIONS: {
     ENABLE: env.get('REACT_APP_DELEGATIONS_ENABLE').default('false').asBool(),
   },
+
+  MAX_ADMIN_COUNT: env.get('REACT_APP_MAX_ADMIN_COUNT').default('4').asString(),
 };
