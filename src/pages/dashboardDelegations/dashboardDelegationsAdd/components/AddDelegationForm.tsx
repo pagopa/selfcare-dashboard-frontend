@@ -27,14 +27,14 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils
 import { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { BrokerResource } from '../../../api/generated/b4f-dashboard/BrokerResource';
-import { DelegationResource } from '../../../api/generated/b4f-dashboard/DelegationResource';
-import { Party } from '../../../model/Party';
-import { Product } from '../../../model/Product';
-import { DASHBOARD_ROUTES } from '../../../routes';
-import { fetchDelegations } from '../../../services/delegationServices';
-import { createDelegation, getProductBrokers } from '../../../services/partyService';
-import { LOADING_TASK_DELEGATION_FORM } from '../../../utils/constants';
+import { BrokerResource } from '../../../../api/generated/b4f-dashboard/BrokerResource';
+import { DelegationResource } from '../../../../api/generated/b4f-dashboard/DelegationResource';
+import { Party } from '../../../../model/Party';
+import { Product } from '../../../../model/Product';
+import { DASHBOARD_ROUTES } from '../../../../routes';
+import { fetchDelegations } from '../../../../services/delegationServices';
+import { createDelegation, getProductBrokers } from '../../../../services/partyService';
+import { LOADING_TASK_DELEGATION_FORM } from '../../../../utils/constants';
 import CustomListBoxComponent from './CustomListBoxComponent';
 
 type Props = {

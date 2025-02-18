@@ -3,9 +3,9 @@ import { TitleBox, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import ProductNavigationBar from '../../components/ProductNavigationBar';
-import { Party } from '../../model/Party';
-import { Product } from '../../model/Product';
+import ProductNavigationBar from '../../../components/ProductNavigationBar';
+import { Party } from '../../../model/Party';
+import { Product } from '../../../model/Product';
 import AddDelegationForm from './components/AddDelegationForm';
 
 type Props = {

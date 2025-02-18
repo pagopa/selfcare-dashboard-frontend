@@ -22,7 +22,7 @@ import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
-import AddDelegationPage from '../dashboardDelegationsAdd/AddDelegationPage';
+import AddDelegationPage from '../dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
 import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import { renderWithProviders } from '../../../utils/test-utils';
+import { renderWithProviders } from '../../../../utils/test-utils';
 import AddDelegationPage from '../AddDelegationPage';
-import { mockedParties } from '../../../services/__mocks__/partyService';
-import { mockedPartyProducts } from '../../../services/__mocks__/productService';
+import { mockedParties } from '../../../../services/__mocks__/partyService';
+import { mockedPartyProducts } from '../../../../services/__mocks__/productService';
 
 test('should render component AddDelegationPage empty props', () => {
   const mockedAgencyOnboarded = mockedParties[4];
