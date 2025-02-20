@@ -1,7 +1,9 @@
-import { Box, Grid } from '@mui/material';
+import { Alert, Box, Grid } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../model/Party';
@@ -24,6 +26,8 @@ const DashboardOverview = ({ party, products }: Props) => {
   const [allowedInstitutionTypes, setAllowedInstitutionTypes] = useState<ProductInstitutionMap>();
   const [filteredProducts, setFilteredProducts] = useState<Array<Product>>([]);
   const { getAllProductsWithPermission } = usePermissions();
+  
+  const { t } = useTranslation();
 
   const showInfoBanner = party.institutionType === 'PA';
 
@@ -88,6 +92,30 @@ const DashboardOverview = ({ party, products }: Props) => {
       />
       <WelcomeDashboard setOpen={setOpen} />
 
+      <Alert severity="info" sx={{ mt: 5 }}>
+        <Trans
+          i18nKey="customAlert.message"
+          components={{
+            1: <strong />,
+            2: <strong />,
+            3: (
+              <ButtonNaked
+                component="button"
+                color="primary"
+                onClick={() => window.open('#', 'blank', 'noopener,noreferrer')}
+                sx={{ textDecoration: 'underline' }}
+              />
+            ),
+          }}
+        >
+          <strong>Novità!</strong>
+          <br />
+          Disponibile dal gg/mm/aaaa la funzionalità dei <strong>Gruppi</strong> per IO. Permette di
+          gestire i servizi limitando l’accesso a gruppi specifici di utenti.
+          <br />
+          <ButtonNaked>{t('customAlert.button')}</ButtonNaked>
+        </Trans>
+      </Alert>
       <Grid item xs={12} mb={2} mt={5}>
         {canSeeActiveProductsList && <ActiveProductsSection products={products} party={party} />}
         {canSeeNotActiveProductsList && filteredProducts.length > 0 && (
