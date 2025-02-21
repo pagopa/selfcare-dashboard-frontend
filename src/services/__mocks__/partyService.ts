@@ -356,6 +356,28 @@ export const mockedParties: Array<Party> = [
         ],
       },
       {
+        productId: 'prod-dashboard-psp',
+        authorized: false,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'ADMIN',
+        billing: {
+          vatNumber: '11111111111',
+          recipientCode: 'CH435V',
+          publicServices: true,
+        },
+        userProductActions: [
+          Actions.ListActiveProducts,
+          Actions.ListAvailableProducts,
+          Actions.ManageProductGroups,
+          Actions.ManageProductUsers,
+          Actions.ListProductUsers,
+          Actions.AccessProductBackoffice,
+          Actions.ViewDelegations,
+          Actions.ViewBilling,
+          Actions.CreateDelegation,
+        ],
+      },
+      {
         productId: 'prod-io-premium',
         authorized: false,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
