@@ -9,8 +9,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+    - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
       with:
         node-version: lts/*
     - name: Install dependencies
@@ -19,7 +19,7 @@ jobs:
       run: yarn playwright install --with-deps
     - name: Run Playwright tests
       run: yarn playwright test
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
