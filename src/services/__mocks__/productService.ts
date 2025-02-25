@@ -59,7 +59,21 @@ export const mockedPartyProducts: Array<Product> = [
     urlPublic: 'http://pagopa/public',
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
-    subProducts: [],
+    subProducts: [
+      {
+        id: 'prod-dashboard-psp',
+        title: 'Servizio di dashboarding pagoPA per PSP',
+        status: StatusEnum.ACTIVE,
+        delegable: false,
+        imageUrl:
+          'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
+        logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.svg',
+        logoBgColor: '#0073E6',
+        description:
+          'Accedi ai dati transazionali della piattaforma pagoPA e analizzali con una dashboard dinamica e intuitiva, aggiornata quotidianamente, ottimizzando il monitoraggio e la gestione delle tue attività.',
+        urlPublic: 'http://pagopa/public',
+      },
+    ],
     logoBgColor: 'pagoPA.main',
     backOfficeEnvironmentConfigurations: [
       {

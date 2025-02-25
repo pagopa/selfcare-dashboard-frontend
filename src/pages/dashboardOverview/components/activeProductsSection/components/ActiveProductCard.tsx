@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
+import { PRODUCT_IDS } from '../../../../../utils/constants';
 
 type Props = {
   cardTitle: string;
@@ -111,7 +112,7 @@ export default function ActiveProductCard({
                   }}
                 >
                   <strong style={{ fontWeight: 'fontWeightBold' }}>{cardTitle}</strong>
-                  {` ${t(isSubProductActive ? 'overview.activeProducts.premiumProduct' : '')}`}
+                  {` ${t(isSubProductActive && product.id === PRODUCT_IDS.IO ? 'overview.activeProducts.premiumProduct' : '')}`}
                 </Typography>
                 {/*
                 <Typography
