@@ -1,14 +1,15 @@
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { Product } from '../../../../../../model/Product';
+import { createMemoryHistory } from 'history';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
+import { renderWithProviders } from '../../../../../../utils/test-utils';
 import './../../../../../../locale';
-import NotActiveProductCardContainer from './../NotActiveProductCardContainer';
 import { createStore } from './../../../../../../redux/store';
-import { createMemoryHistory } from 'history';
-import { Router } from 'react-router';
-import { Provider } from 'react-redux';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import NotActiveProductCardContainer from './../NotActiveProductCardContainer';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
@@ -119,4 +120,22 @@ describe('test onboarding', () => {
       )
     );
   });
+});
+
+test('should go to onboarding with partyId', () => {
+  const pagopaProduct = mockedPartyProducts.filter((p) => p.id === 'prod-pagopa')[0]
+  renderWithProviders(
+    <NotActiveProductCardContainer
+      party={mockedParties[0]}
+      product={mockedPartyProducts.filter((p) => p.id === 'prod-pagopa')[0]}
+    />
+  );
+
+  screen.getByText(pagopaProduct.title);
+  screen.getByText(pagopaProduct.description);
+  screen.getByText('Aderisci');
+
+    const button = screen.getByText('Aderisci');
+
+    fireEvent.click(button);
 });
