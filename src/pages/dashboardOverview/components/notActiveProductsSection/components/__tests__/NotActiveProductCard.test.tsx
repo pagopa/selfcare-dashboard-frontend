@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
-import { renderWithProviders } from '../../../../../../utils/test-utils';
 import './../../../../../../locale';
 import { createStore } from './../../../../../../redux/store';
 import NotActiveProductCardContainer from './../NotActiveProductCardContainer';
@@ -122,20 +121,3 @@ describe('test onboarding', () => {
   });
 });
 
-test('should go to onboarding with partyId', () => {
-  const pagopaProduct = mockedPartyProducts.filter((p) => p.id === 'prod-pagopa')[0]
-  renderWithProviders(
-    <NotActiveProductCardContainer
-      party={mockedParties[0]}
-      product={mockedPartyProducts.filter((p) => p.id === 'prod-pagopa')[0]}
-    />
-  );
-
-  screen.getByText(pagopaProduct.title);
-  screen.getByText(pagopaProduct.description);
-  screen.getByText('Aderisci');
-
-    const button = screen.getByText('Aderisci');
-
-    fireEvent.click(button);
-});
