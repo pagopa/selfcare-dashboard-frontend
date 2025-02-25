@@ -35,7 +35,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
     const queryParam =
       baseProductWithExistingSubProductNotOnboarded &&
-      existingSubProductNotOnboarded?.id === 'prod-io-premium'
+      existingSubProductNotOnboarded?.id
         ? `?partyId=${party.partyId}`
         : `?partyExternalId=${party.externalId}`;
 

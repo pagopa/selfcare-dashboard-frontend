@@ -1,14 +1,14 @@
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { Product } from '../../../../../../model/Product';
+import { createMemoryHistory } from 'history';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
 import './../../../../../../locale';
-import NotActiveProductCardContainer from './../NotActiveProductCardContainer';
 import { createStore } from './../../../../../../redux/store';
-import { createMemoryHistory } from 'history';
-import { Router } from 'react-router';
-import { Provider } from 'react-redux';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import NotActiveProductCardContainer from './../NotActiveProductCardContainer';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
@@ -120,3 +120,4 @@ describe('test onboarding', () => {
     );
   });
 });
+
