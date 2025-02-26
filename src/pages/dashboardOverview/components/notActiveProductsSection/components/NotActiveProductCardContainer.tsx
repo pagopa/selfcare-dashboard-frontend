@@ -13,7 +13,7 @@ type Props = {
   product: Product;
 };
 
-export default function NotActiveProductCardContainer({ party, product }: Props) {
+export default function NotActiveProductCardContainer({ party, product }: Readonly<Props>) {
   const { t } = useTranslation();
   const addNotify = useUserNotify();
   const addError = useErrorDispatcher();
@@ -34,8 +34,7 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     const subUnitType = party.subunitType ? `&subunitType=${party.subunitType}` : '';
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
     const queryParam =
-      baseProductWithExistingSubProductNotOnboarded &&
-      existingSubProductNotOnboarded?.id
+      baseProductWithExistingSubProductNotOnboarded && existingSubProductNotOnboarded?.id
         ? `?partyId=${party.partyId}`
         : `?partyExternalId=${party.externalId}`;
 
@@ -94,43 +93,25 @@ export default function NotActiveProductCardContainer({ party, product }: Props)
     });
   };
 
+  const displayProduct = baseProductWithExistingSubProductNotOnboarded
+    ? existingSubProductNotOnboarded
+    : product;
+
   return (
-    <>
-      <Grid item xs={12} sm={6} lg={4} xl={3} key={product.id}>
-        <NotActiveProductCard
-          image={
-            baseProductWithExistingSubProductNotOnboarded
-              ? existingSubProductNotOnboarded.imageUrl
-              : product.imageUrl
-          }
-          urlLogo={
-            baseProductWithExistingSubProductNotOnboarded
-              ? (existingSubProductNotOnboarded.logo as string)
-              : product.logo
-          }
-          title={
-            baseProductWithExistingSubProductNotOnboarded && existingSubProductNotOnboarded.title
-              ? existingSubProductNotOnboarded.title
-              : product.title
-          }
-          description={
-            baseProductWithExistingSubProductNotOnboarded &&
-            existingSubProductNotOnboarded.description
-              ? existingSubProductNotOnboarded.description
-              : product.description
-          }
-          disableBtn={false}
-          btnAction={() => {
-            const prodID = baseProductWithExistingSubProductNotOnboarded
-              ? existingSubProductNotOnboarded.id
-              : product.id;
-            void getOnboardingStatus(prodID ?? '');
-          }}
-          buttonLabel={t('overview.notActiveProducts.joinButton')}
-          urlPublic={product.urlPublic}
-          product={product}
-        />
-      </Grid>
-    </>
+    <Grid item xs={12} sm={6} lg={4} xl={3} key={product.id}>
+      <NotActiveProductCard
+        image={displayProduct.imageUrl}
+        urlLogo={displayProduct.logo ?? product.logo}
+        title={displayProduct.title ?? product.title}
+        description={displayProduct.description ?? product.description}
+        disableBtn={false}
+        btnAction={() => {
+          void getOnboardingStatus(displayProduct.id ?? product.id);
+        }}
+        buttonLabel={t('overview.notActiveProducts.joinButton')}
+        urlPublic={displayProduct.urlPublic}
+        product={product}
+      />
+    </Grid>
   );
 }

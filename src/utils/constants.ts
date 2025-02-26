@@ -26,5 +26,6 @@ export const interopProductIdList = [
 
 export const PRODUCT_IDS = {
   PAGOPA: 'prod-pagopa',
+  PAGOPA_INSIGHTS: 'prod-pagopa-insights',
   IO: 'prod-io',
 } as const;
