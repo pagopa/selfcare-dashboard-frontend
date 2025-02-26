@@ -100,7 +100,7 @@ export default function NotActiveProductCardContainer({ party, product }: Readon
   return (
     <Grid item xs={12} sm={6} lg={4} xl={3} key={product.id}>
       <NotActiveProductCard
-        image={displayProduct.imageUrl}
+        image={displayProduct.imageUrl ?? product.imageUrl}
         urlLogo={displayProduct.logo ?? product.logo}
         title={displayProduct.title ?? product.title}
         description={displayProduct.description ?? product.description}
