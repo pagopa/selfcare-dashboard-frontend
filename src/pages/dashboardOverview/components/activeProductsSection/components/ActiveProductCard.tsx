@@ -112,7 +112,11 @@ export default function ActiveProductCard({
                   }}
                 >
                   <strong style={{ fontWeight: 'fontWeightBold' }}>{cardTitle}</strong>
-                  {` ${t(isSubProductActive && product.id === PRODUCT_IDS.IO ? 'overview.activeProducts.premiumProduct' : '')}`}
+                  {` ${t(
+                    isSubProductActive && product.id === PRODUCT_IDS.IO
+                      ? 'overview.activeProducts.premiumProduct'
+                      : ''
+                  )}`}
                 </Typography>
                 {/*
                 <Typography
@@ -152,7 +156,6 @@ export default function ActiveProductCard({
                   height: '44px',
                   color: 'white',
                   borderRadius: '48px',
-                  mt: 1,
                 }}
               >
                 <ArrowForward sx={{ m: 1 }} />
