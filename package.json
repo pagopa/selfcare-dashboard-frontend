@@ -36,6 +36,7 @@
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",
     "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
+    "start:mockoon": "mockoon-cli start --data ./mockoon/dashboard-enviorment.json",
     "generate": "npm-run-all generate:*",
     "clean:api-b4f-dashboard": "rimraf src/api/generated/b4f-dashboard && rimraf openApi/generated-dashboard",
     "clean:api-party-registry-proxy": "rimraf src/api/generated/party-registry-proxy && rimraf openApi/generated-party-registry-proxy",
@@ -63,6 +64,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^6.4.3",
+    "@mockoon/cli": "^9.1.0",
     "@pagopa/openapi-codegen-ts": "^12.1.2",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "12.1.2",
