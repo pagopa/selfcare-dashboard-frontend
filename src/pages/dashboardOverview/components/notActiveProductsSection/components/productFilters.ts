@@ -42,7 +42,7 @@ const onboardingStatusFilter = (
     // For productsWithStatusActive with active base version, show eligible children
     if (product.subProducts && product.subProducts?.length > 0) {
       return product.subProducts.some((child) => {
-        if (product.id === PRODUCT_IDS.PAGOPA && child.id === PRODUCT_IDS.PAGOPA_INSIGHTS) {
+        if (product.id === PRODUCT_IDS.PAGOPA && child.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP) {
           return (
             institutionType === 'PSP' &&
             !onboardedProductIds.includes(child.id) &&
