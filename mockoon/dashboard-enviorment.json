@@ -299,7 +299,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "200",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -323,7 +331,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "400",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -347,7 +363,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "401",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -371,7 +395,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "404",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -395,7 +427,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "500",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -1099,7 +1139,7 @@
       "responses": [
         {
           "uuid": "7e373d6c-b33d-4a33-bf87-045bc48d4e3c",
-          "body": "[\n\n]",
+          "body": "[\r\n    {\r\n        \"id\": \"400\",\r\n        \"name\": \"400\",\r\n        \"userRole\": \"ADMIN\",\r\n        \"status\": \"ACTIVE\"\r\n    },\r\n    {\r\n        \"id\": \"401\",\r\n        \"name\": \"401\",\r\n        \"userRole\": \"ADMIN\",\r\n        \"status\": \"ACTIVE\"\r\n    },\r\n    {\r\n        \"id\": \"404\",\r\n        \"name\": \"404\",\r\n        \"userRole\": \"ADMIN\",\r\n        \"status\": \"ACTIVE\"\r\n    },\r\n    {\r\n        \"id\": \"500\",\r\n        \"name\": \"500\",\r\n        \"userRole\": \"ADMIN\",\r\n        \"status\": \"ACTIVE\"\r\n    }\r\n]",
           "latency": 0,
           "statusCode": 200,
           "label": "OK",
@@ -1113,7 +1153,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "",
+              "value": "",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -1383,7 +1431,7 @@
         },
         {
           "uuid": "efa60aa3-0703-4dce-b4c3-c067f809fc05",
-          "body": "",
+          "body": "{\r\n  \"detail\": \"string\",\r\n  \"instance\": \"string\",\r\n  \"invalidParams\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"reason\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": 400,\r\n  \"title\": \"string\",\r\n  \"type\": \"string\"\r\n}",
           "latency": 0,
           "statusCode": 400,
           "label": "Bad Request",
@@ -1397,7 +1445,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "400",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -1407,7 +1463,7 @@
         },
         {
           "uuid": "f258cbd3-3f63-425d-8ec5-cd7393ef0c27",
-          "body": "",
+          "body": "{\r\n  \"detail\": \"string\",\r\n  \"instance\": \"string\",\r\n  \"invalidParams\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"reason\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": 401,\r\n  \"title\": \"string\",\r\n  \"type\": \"string\"\r\n}",
           "latency": 0,
           "statusCode": 401,
           "label": "Unauthorized",
@@ -1421,7 +1477,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "401",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -1431,7 +1495,7 @@
         },
         {
           "uuid": "6509e60c-d111-4791-b55d-42be9ebd66b9",
-          "body": "",
+          "body": "{\r\n  \"detail\": \"string\",\r\n  \"instance\": \"string\",\r\n  \"invalidParams\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"reason\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": 404,\r\n  \"title\": \"string\",\r\n  \"type\": \"string\"\r\n}",
           "latency": 0,
           "statusCode": 404,
           "label": "Not Found",
@@ -1445,7 +1509,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "404",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
@@ -1455,7 +1527,7 @@
         },
         {
           "uuid": "d0dc0962-3e0d-473d-8668-9b15efa043f4",
-          "body": "",
+          "body": "{\r\n  \"detail\": \"string\",\r\n  \"instance\": \"string\",\r\n  \"invalidParams\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"reason\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": 500,\r\n  \"title\": \"string\",\r\n  \"type\": \"string\"\r\n}",
           "latency": 0,
           "statusCode": 500,
           "label": "Internal Server Error",
@@ -1469,7 +1541,15 @@
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
-          "rules": [],
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "institutionId",
+              "value": "500",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
