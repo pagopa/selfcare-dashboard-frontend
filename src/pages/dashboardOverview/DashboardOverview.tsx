@@ -94,7 +94,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         <Trans
           i18nKey="customAlert.message"
           components={{
-            1: <strong />,
+            1: <span style={{ fontWeight: 600 }} />,
             2: <strong />,
             3: (
               <ButtonNaked
