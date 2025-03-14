@@ -1,7 +1,9 @@
-import { Box, Grid } from '@mui/material';
+import { Alert, Box, Grid } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useState } from 'react';
+import { Trans } from 'react-i18next';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../model/Party';
@@ -88,6 +90,33 @@ const DashboardOverview = ({ party, products }: Props) => {
       />
       <WelcomeDashboard setOpen={setOpen} />
 
+      <Alert severity="info" sx={{ mt: 5 }}>
+        <Trans
+          i18nKey="customAlert.message"
+          components={{
+            1: <span style={{ fontWeight: 600 }} />,
+            2: <strong />,
+            3: (
+              <ButtonNaked
+                component="button"
+                color="primary"
+                onClick={() =>
+                  window.open(
+                    'https://docs.pagopa.it/io-guida-tecnica/v5.2-preview',
+                    'blank',
+                    'noopener,noreferrer'
+                  )
+                }
+                sx={{ textDecoration: 'underline', color: 'primary.main', verticalAlign: 'baseline', }}
+              />
+            ),
+          }}
+        >
+          {
+            "<1>Novità!</1><br />Disponibile dal 31/03/2025 la funzionalità dei <2>Gruppi</2> per IO. Permette di gestire i servizi limitando l'accesso a gruppi specifici di utenti. <3>Come funziona?</3>"
+          }
+        </Trans>
+      </Alert>
       <Grid item xs={12} mb={2} mt={5}>
         {canSeeActiveProductsList && <ActiveProductsSection products={products} party={party} />}
         {canSeeNotActiveProductsList && filteredProducts.length > 0 && (

@@ -2,7 +2,7 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils
 import { Redirect, useParams } from 'react-router';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
-import AddDelegationPage from './pages/dashboardDelegationsAdd/AddDelegationPage';
+import AddDelegationPage from './pages/dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
 import DashboardHandleDelegatesPage from './pages/dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
