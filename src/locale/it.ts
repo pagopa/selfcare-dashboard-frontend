@@ -1,8 +1,7 @@
 export default {
   customAlert: {
     message:
-      '<1>Novità!</1><br />Disponibile dal gg/mm/aaaa la funzionalità dei <2>Gruppi</2> per IO. Permette di gestire i servizi limitando l’accesso a gruppi specifici di utenti.<br /><3>Come funziona?</3>',
-    button: 'Come funziona?',
+      '<1>Novità!</1><br />Disponibile dal 31/03/2025 la funzionalità dei <2>Gruppi</2> per IO. Permette di gestire i servizi limitando l’accesso a gruppi specifici di utenti. <3>Come funziona?</3>',
   },
   session: {
     expired: {

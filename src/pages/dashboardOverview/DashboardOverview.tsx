@@ -3,7 +3,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../model/Party';
@@ -26,8 +26,6 @@ const DashboardOverview = ({ party, products }: Props) => {
   const [allowedInstitutionTypes, setAllowedInstitutionTypes] = useState<ProductInstitutionMap>();
   const [filteredProducts, setFilteredProducts] = useState<Array<Product>>([]);
   const { getAllProductsWithPermission } = usePermissions();
-  
-  const { t } = useTranslation();
 
   const showInfoBanner = party.institutionType === 'PA';
 
@@ -102,18 +100,21 @@ const DashboardOverview = ({ party, products }: Props) => {
               <ButtonNaked
                 component="button"
                 color="primary"
-                onClick={() => window.open('#', 'blank', 'noopener,noreferrer')}
-                sx={{ textDecoration: 'underline' }}
+                onClick={() =>
+                  window.open(
+                    'https://docs.pagopa.it/io-guida-tecnica/v5.2-preview',
+                    'blank',
+                    'noopener,noreferrer'
+                  )
+                }
+                sx={{ textDecoration: 'underline', color: 'primary.main', verticalAlign: 'baseline', }}
               />
             ),
           }}
         >
-          <strong>Novità!</strong>
-          <br />
-          Disponibile dal gg/mm/aaaa la funzionalità dei <strong>Gruppi</strong> per IO. Permette di
-          gestire i servizi limitando l’accesso a gruppi specifici di utenti.
-          <br />
-          <ButtonNaked>{t('customAlert.button')}</ButtonNaked>
+          {
+            "<1>Novità!</1><br />Disponibile dal 31/03/2025 la funzionalità dei <2>Gruppi</2> per IO. Permette di gestire i servizi limitando l'accesso a gruppi specifici di utenti. <3>Come funziona?</3>"
+          }
         </Trans>
       </Alert>
       <Grid item xs={12} mb={2} mt={5}>
