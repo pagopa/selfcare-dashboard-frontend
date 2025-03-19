@@ -1,4 +1,4 @@
-import { INTEROP_PRODUCT_ENUM } from "./constants";
+import { INTEROP_PRODUCT_ENUM } from './constants';
 
 export const compareDates = (
   dateA?: Date,
@@ -36,13 +36,15 @@ export const codeToLabelProduct = (code: string) => {
   }
 };
 
-export const startWithProductInterop = (id?: string) => id?.startsWith(INTEROP_PRODUCT_ENUM.INTEROP);
+export const startWithProductInterop = (id?: string) =>
+  id?.startsWith(INTEROP_PRODUCT_ENUM.INTEROP);
 
 export const addCacheBuster = (url?: string) => {
   if (!url) {
     return undefined;
   }
-  // Remove any existing timestamps
-  const baseUrl = url.split('?')[0];
-  return `${baseUrl}?t=${new Date().getTime()}`;
+  // Remove only existing 't' parameter
+  const baseUrl = url.replace(/([?&])t=\d+(&|$)/, '$1').replace(/([?&])$/, '');
+  const separator = baseUrl.includes('?') ? '&' : '?';
+  return `${baseUrl}${separator}t=${new Date().getTime()}`;
 };
