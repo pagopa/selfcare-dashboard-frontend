@@ -23,19 +23,6 @@ export const compareDates = (
 export const compareStrings = (strA: string, strB: string, sortOrder: 'asc' | 'desc') =>
   sortOrder === 'asc' ? strA.localeCompare(strB) : strB.localeCompare(strA);
 
-export const codeToLabelProduct = (code: string) => {
-  switch (code) {
-    case 'prod-io':
-      return 'Io';
-    case 'prod-pagopa':
-      return 'Piattaforma pagoPA';
-    case 'prod-io, prod-pagopa':
-      return 'Io, Piattaforma pagoPA';
-    default:
-      return '';
-  }
-};
-
 export const startWithProductInterop = (id?: string) =>
   id?.startsWith(INTEROP_PRODUCT_ENUM.INTEROP);
 

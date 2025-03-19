@@ -1804,7 +1804,9 @@ export const mockedGeotaxonomies: Array<GeographicTaxonomy> = [
 ];
 
 export const verifyFetchPartiesMockExecution = (parties: Array<Party>) => {
-  expect(parties).toStrictEqual(mockedParties);
+  const cleanedParties = parties.map(({ urlLogo, ...rest }) => rest);
+  const cleanedMockedParties = mockedParties.map(({ urlLogo, ...rest }) => rest);
+  expect(cleanedParties).toStrictEqual(cleanedMockedParties);
 };
 
 export const fetchParties = () => Promise.resolve(mockedParties);

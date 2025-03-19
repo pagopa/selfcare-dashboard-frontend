@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from '../../redux/store';
 import withParties from '../withParties';
 import { verifyFetchPartiesMockExecution } from '../../services/__mocks__/partyService';
+import React from 'react';
 
 jest.mock('../../services/partyService');
 
