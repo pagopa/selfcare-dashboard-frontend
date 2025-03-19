@@ -1,5 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Drawer, Grid, IconButton, Typography, styled } from '@mui/material';
+import { useLoading } from '@pagopa/selfcare-common-frontend/lib';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import PartyDetail from '../partyCard/components/PartyDetail';
@@ -38,8 +40,23 @@ export const PartyDetailModal = ({
   canUploadLogo,
 }: Props) => {
   const { t } = useTranslation();
+  const setLoading = useLoading('DRAWER_PARTY_DETAIL');
+  const [clearCashe, setClearCashe] = useState(false);
   return (
-    <CustomDrawer open={open} anchor="right" tabIndex={0} onClose={() => setOpen(false)}>
+    <CustomDrawer
+      open={open}
+      anchor="right"
+      tabIndex={0}
+      onClose={() => {
+        setLoading(true);
+        setOpen(false);
+        if (clearCashe) {
+          window.location.replace(window.location.href);
+          setClearCashe(false);
+        }
+        setLoading(false);
+      }}
+    >
       <Grid container px={3} pt={2} mb={5}>
         <Grid xs={12} textAlign={'end'} mb={2}>
           <IconButton
@@ -58,7 +75,11 @@ export const PartyDetailModal = ({
           {t('overview.changeDetails')}
         </Typography>
         <Grid item xs={12}>
-          <PartyLogoUploader partyId={party.partyId} canUploadLogo={canUploadLogo} />
+          <PartyLogoUploader
+            partyId={party.partyId}
+            canUploadLogo={canUploadLogo}
+            setClearCashe={setClearCashe}
+          />
         </Grid>
         {showInfoBanner && (
           <Grid item xs={12} my={2}>

@@ -27,7 +27,7 @@ export const partiesSlice = createSlice({
       state.selectedPartyLogoUrl = action.payload?.urlLogo;
     },
     setPartySelectedPartyLogo: (state, action: PayloadAction<string | undefined>) => {
-      state.selectedPartyLogoUrl = `${action.payload}?${new Date()}`;
+      state.selectedPartyLogoUrl = `${action.payload}?${new Date().getTime()}`;
     },
     setPartySelectedProducts: (state, action: PayloadAction<Array<Product> | undefined>) => {
       state.selectedProducts = action.payload;
