@@ -43,8 +43,8 @@ export const addCacheBuster = (url?: string) => {
   if (!url) {
     return undefined;
   }
-  // Remove only existing 't' parameter
-  const baseUrl = url.replace(/([?&])t=\d+(&|$)/, '$1').replace(/([?&])$/, '');
+  // Remove any existing 't' parameter
+  const baseUrl = url.replace(/([?&])t=[^&]*(&|$)/, '$1').replace(/([?&])$/, '');
   const separator = baseUrl.includes('?') ? '&' : '?';
   return `${baseUrl}${separator}t=${new Date().getTime()}`;
 };
