@@ -37,3 +37,12 @@ export const codeToLabelProduct = (code: string) => {
 };
 
 export const startWithProductInterop = (id?: string) => id?.startsWith(INTEROP_PRODUCT_ENUM.INTEROP);
+
+export const addCacheBuster = (url?: string) => {
+  if (!url) {
+    return undefined;
+  }
+  // Remove any existing timestamps
+  const baseUrl = url.split('?')[0];
+  return `${baseUrl}?t=${new Date().getTime()}`;
+};
