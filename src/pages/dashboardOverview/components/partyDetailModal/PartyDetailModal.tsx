@@ -42,6 +42,10 @@ export const PartyDetailModal = ({
   const { t } = useTranslation();
   const setLoading = useLoading('DRAWER_PARTY_DETAIL');
   const [clearCashe, setClearCashe] = useState(false);
+  const reloadPage = () => {
+    setClearCashe(false);
+    window.location.replace(window.location.href);
+  };
   return (
     <CustomDrawer
       open={open}
@@ -51,8 +55,7 @@ export const PartyDetailModal = ({
         setLoading(true);
         setOpen(false);
         if (clearCashe) {
-          window.location.replace(window.location.href);
-          setClearCashe(false);
+          reloadPage();
         }
         setLoading(false);
       }}
@@ -63,7 +66,12 @@ export const PartyDetailModal = ({
             color="default"
             aria-label="close instituion detail modal"
             component="span"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              if (clearCashe) {
+                reloadPage();
+              }
+            }}
             data-testid="close-modal-test"
             sx={{ p: 0 }}
           >
