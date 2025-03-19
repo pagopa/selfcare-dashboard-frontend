@@ -14,10 +14,10 @@ import PartyLogo from './components/PartyLogo';
 type Props = {
   partyId?: string;
   canUploadLogo: boolean;
-  setClearCashe: React.Dispatch<React.SetStateAction<boolean>>;
+  setclearCache: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export function PartyLogoUploader({ canUploadLogo, partyId, setClearCashe }: Readonly<Props>) {
+export function PartyLogoUploader({ canUploadLogo, partyId, setclearCache }: Readonly<Props>) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -29,6 +29,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId, setClearCashe }: Rea
 
   const addError = useErrorDispatcher();
 
+  const maxLength = 400;
   const minLegth = 300;
 
   const onFileRejected = (files: Array<FileRejection>) => {
@@ -54,7 +55,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId, setClearCashe }: Rea
       DashboardApi.uploadLogo(partyId as string, files[0])
         .then(() => {
           setUrlLogo(urlLogo);
-          setClearCashe(true);
+          setclearCache(true);
           setLoading(false);
 
           trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', {
@@ -115,7 +116,11 @@ export function PartyLogoUploader({ canUploadLogo, partyId, setClearCashe }: Rea
       }) as Promise<Array<File | DataTransferItem>>;
     },
     validator: (file) => {
-      if ((file as any).height < minLegth || (file as any).height !== (file as any).width) {
+      if (
+        (file as any).height > maxLength ||
+        (file as any).height < minLegth ||
+        (file as any).height !== (file as any).width
+      ) {
         return {
           code: 'height-width',
           message: `Image width and height must be equal with a value betwenn 300-400`,

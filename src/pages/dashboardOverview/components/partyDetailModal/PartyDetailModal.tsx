@@ -41,9 +41,9 @@ export const PartyDetailModal = ({
 }: Props) => {
   const { t } = useTranslation();
   const setLoading = useLoading('DRAWER_PARTY_DETAIL');
-  const [clearCashe, setClearCashe] = useState(false);
+  const [clearCache, setclearCache] = useState(false);
   const reloadPage = () => {
-    setClearCashe(false);
+    setclearCache(false);
     window.location.replace(window.location.href);
   };
   return (
@@ -54,7 +54,7 @@ export const PartyDetailModal = ({
       onClose={() => {
         setLoading(true);
         setOpen(false);
-        if (clearCashe) {
+        if (clearCache) {
           reloadPage();
         }
         setLoading(false);
@@ -68,7 +68,7 @@ export const PartyDetailModal = ({
             component="span"
             onClick={() => {
               setOpen(false);
-              if (clearCashe) {
+              if (clearCache) {
                 reloadPage();
               }
             }}
@@ -86,7 +86,7 @@ export const PartyDetailModal = ({
           <PartyLogoUploader
             partyId={party.partyId}
             canUploadLogo={canUploadLogo}
-            setClearCashe={setClearCashe}
+            setclearCache={setclearCache}
           />
         </Grid>
         {showInfoBanner && (
