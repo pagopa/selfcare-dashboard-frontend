@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
 import { BaseParty, Party } from '../../model/Party';
-import { ProductRolesLists, ProductsRolesMap } from '../../model/ProductRole';
 import { Product } from '../../model/Product';
+import { ProductRolesLists, ProductsRolesMap } from '../../model/ProductRole';
+import { addCacheBuster } from '../../utils/helperFunctions';
+import type { RootState } from '../store';
 
 interface PartiesState {
   list?: Array<BaseParty>;
@@ -20,15 +21,23 @@ export const partiesSlice = createSlice({
   initialState,
   reducers: {
     setPartiesList: (state, action: PayloadAction<Array<BaseParty>>) => {
-      state.list = action.payload;
+      state.list = action.payload.map((party) => ({
+        ...party,
+        urlLogo: party.urlLogo ? addCacheBuster(party.urlLogo) : undefined,
+      }));
     },
+
     setPartySelected: (state, action: PayloadAction<Party | undefined>) => {
       state.selected = action.payload;
-      state.selectedPartyLogoUrl = action.payload?.urlLogo;
+      state.selectedPartyLogoUrl = action.payload?.urlLogo
+        ? addCacheBuster(action.payload.urlLogo)
+        : undefined;
     },
+
     setPartySelectedPartyLogo: (state, action: PayloadAction<string | undefined>) => {
-      state.selectedPartyLogoUrl = `${action.payload}?${new Date()}`;
+      state.selectedPartyLogoUrl = addCacheBuster(action.payload);
     },
+
     setPartySelectedProducts: (state, action: PayloadAction<Array<Product> | undefined>) => {
       state.selectedProducts = action.payload;
     },

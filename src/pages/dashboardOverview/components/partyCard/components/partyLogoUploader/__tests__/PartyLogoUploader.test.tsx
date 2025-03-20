@@ -71,14 +71,18 @@ describe('PartyLogoUploader', () => {
   });
 
   test('should not render upload components when canUploadLogo is false', () => {
-    renderWithProviders(<PartyLogoUploader canUploadLogo={false} partyId="123" />);
+    renderWithProviders(
+      <PartyLogoUploader canUploadLogo={false} partyId="123" setclearCache={jest.fn()} />
+    );
 
     expect(screen.queryByTestId('party-logo')).not.toBeInTheDocument();
     expect(screen.queryByTestId('party-description')).not.toBeInTheDocument();
   });
 
   test('should render upload components when canUploadLogo is true', () => {
-    renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
+    renderWithProviders(
+      <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={jest.fn()} />
+    );
 
     expect(screen.getByTestId('party-logo')).toBeInTheDocument();
     expect(screen.getByTestId('party-description')).toBeInTheDocument();
@@ -89,7 +93,9 @@ describe('PartyLogoUploader', () => {
       const mockedSuccesGetFilesFromEvent = jest
         .fn()
         .mockResolvedValue([new File([''], 'test.png', { type: 'image/png' })]);
-      renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={jest.fn()} />
+      );
 
       const mockFile = new File([''], 'test.png', { type: 'image/png' });
       const event = {
@@ -103,7 +109,9 @@ describe('PartyLogoUploader', () => {
     });
 
     test('should reject non-PNG files', async () => {
-      renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={jest.fn()} />
+      );
 
       const mockFile = new File([''], 'test.jpg', { type: 'image/jpeg' });
       const event = {
@@ -117,7 +125,9 @@ describe('PartyLogoUploader', () => {
     });
 
     test('should handle successful file upload', async () => {
-      renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={jest.fn()} />
+      );
 
       const mockFile = new File([''], 'test.png', { type: 'image/png' });
 
@@ -142,7 +152,9 @@ describe('PartyLogoUploader', () => {
         Promise.reject(new Error('Upload failed'))
       );
 
-      renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={jest.fn()} />
+      );
 
       const mockFile = new File([''], 'test.png', { type: 'image/png' });
 
@@ -160,7 +172,9 @@ describe('PartyLogoUploader', () => {
     });
 
     test('should update loading state during upload', async () => {
-      renderWithProviders(<PartyLogoUploader canUploadLogo={true} partyId="123" />);
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={jest.fn()} />
+      );
 
       const mockFile = new File([''], 'test.png', { type: 'image/png' });
 

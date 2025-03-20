@@ -14,9 +14,10 @@ import PartyLogo from './components/PartyLogo';
 type Props = {
   partyId?: string;
   canUploadLogo: boolean;
+  setclearCache: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
+export function PartyLogoUploader({ canUploadLogo, partyId, setclearCache }: Readonly<Props>) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -54,6 +55,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId }: Props) {
       DashboardApi.uploadLogo(partyId as string, files[0])
         .then(() => {
           setUrlLogo(urlLogo);
+          setclearCache(true);
           setLoading(false);
 
           trackEvent('DASHBOARD_PARTY_CHANGE_LOGO_SUCCESS', {

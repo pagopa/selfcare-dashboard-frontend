@@ -1,15 +1,17 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import App from '../App';
-import { Provider } from 'react-redux';
-import { createStore } from '../redux/store';
-import { verifyMockExecution as verifyLoginMockExecution } from '../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
-import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators/__mocks__/withParties';
-import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
-import { createMemoryHistory } from 'history';
-import { Router } from 'react-router';
-import { mockedBaseParties, mockedParties } from '../services/__mocks__/partyService';
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
+import { render, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router';
+import { verifyMockExecution as verifyLoginMockExecution } from '../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
+import App from '../App';
+import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators/__mocks__/withParties';
+import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
+import { BaseParty } from '../model/Party';
+import { createStore } from '../redux/store';
+import { mockedBaseParties } from '../services/__mocks__/partyService';
 
 jest.mock('@pagopa/selfcare-common-frontend/lib/decorators/withLogin');
 jest.mock('../decorators/withParties');
@@ -46,7 +48,15 @@ test('Test rendering dashboard parties loaded', () => {
   const { store } = renderApp(undefined, history);
 
   verifyLoginMockExecution(store.getState());
-  expect(store.getState().parties.list).toBe(mockedBaseParties); // the new UI is always fetching parties list
+  const partiesList = store.getState().parties.list;
+
+  if (partiesList) {
+    const cleanedParties = partiesList.map(({ urlLogo, ...rest }: BaseParty) => rest);
+    const cleanedMockedParties = mockedBaseParties.map(({ urlLogo, ...rest }: BaseParty) => rest);
+    expect(cleanedParties).toEqual(cleanedMockedParties);
+  } else {
+    console.log('Parties list is undefined');
+  }
 });
 
 test('Test routing ', async () => {

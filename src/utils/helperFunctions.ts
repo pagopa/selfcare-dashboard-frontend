@@ -1,4 +1,4 @@
-import { INTEROP_PRODUCT_ENUM } from "./constants";
+import { INTEROP_PRODUCT_ENUM } from './constants';
 
 export const compareDates = (
   dateA?: Date,
@@ -23,17 +23,15 @@ export const compareDates = (
 export const compareStrings = (strA: string, strB: string, sortOrder: 'asc' | 'desc') =>
   sortOrder === 'asc' ? strA.localeCompare(strB) : strB.localeCompare(strA);
 
-export const codeToLabelProduct = (code: string) => {
-  switch (code) {
-    case 'prod-io':
-      return 'Io';
-    case 'prod-pagopa':
-      return 'Piattaforma pagoPA';
-    case 'prod-io, prod-pagopa':
-      return 'Io, Piattaforma pagoPA';
-    default:
-      return '';
-  }
-};
+export const startWithProductInterop = (id?: string) =>
+  id?.startsWith(INTEROP_PRODUCT_ENUM.INTEROP);
 
-export const startWithProductInterop = (id?: string) => id?.startsWith(INTEROP_PRODUCT_ENUM.INTEROP);
+export const addCacheBuster = (url?: string) => {
+  if (!url) {
+    return undefined;
+  }
+  // Remove any existing 't' parameter
+  const baseUrl = url.replace(/([?&])t=[^&]*(&|$)/, '$1').replace(/([?&])$/, '');
+  const separator = baseUrl.includes('?') ? '&' : '?';
+  return `${baseUrl}${separator}t=${new Date().getTime()}`;
+};
