@@ -66,12 +66,6 @@ export default function PartyDetail({ party }: Props) {
     }
   }, [party]);
 
-  useEffect(() => {
-    if (partyUpdated && party.partyId) {
-      setPartyUpdated(partyUpdated);
-    }
-  }, [partyUpdated, party.partyId]);
-
   const infoStyles = {
     fontWeight: theme.typography.fontWeightMedium,
     fontSize: theme.typography.fontSize,
