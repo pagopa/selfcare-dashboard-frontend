@@ -23,13 +23,13 @@ test('render the form correctly woth empty props', () => {
 test('search by name', async () => {
   renderWithProviders(
     <AddDelegationForm
-      productsWithCreateDelegationAction={[mockedPartyProducts[0]]}
+      productsWithCreateDelegationAction={[mockedPartyProducts[2]]}
       party={mockedParties[2]}
-      selectedProductByQuery={mockedPartyProducts[0]}
+      selectedProductByQuery={mockedPartyProducts[2]}
     />
   );
 
-  expect(screen.getByText('IO')).toBeInTheDocument();
+  expect(screen.getByText('Pagamenti pagoPA')).toBeInTheDocument();
   const autocompleteInput = screen.getByLabelText(
     'Inserisci la ragione sociale'
   ) as HTMLInputElement;
@@ -42,6 +42,10 @@ test('search by name', async () => {
 
   userEvent.type(autocompleteInput, 'Maggi');
   fireEvent.change(autocompleteInput, { target: { value: 'Maggi' } });
+
+  const confirmDelegationBtn = await screen.findByText('Conferma');
+  expect(confirmDelegationBtn).toBeInTheDocument();
+  fireEvent.click(confirmDelegationBtn);
 });
 
 test('search by fiscal code', async () => {

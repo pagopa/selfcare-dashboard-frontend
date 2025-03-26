@@ -154,10 +154,10 @@ export default function AddDelegationForm({
       .finally(() => setLoading(false));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (productSelected && techPartnerSelected) {
       setLoading(true);
-      await createDelegation(party, productSelected, techPartnerSelected)
+      createDelegation(party, productSelected, techPartnerSelected)
         .then(() => {
           addNotify({
             component: 'Toast',
@@ -187,7 +187,34 @@ export default function AddDelegationForm({
         .finally(() => setLoading(false));
     }
   };
-
+  const confirmAddDelegateModal = () => {
+    addNotify({
+      component: 'SessionModal',
+      id: 'Notify_Example',
+      title: t('addDelegationPage.confirmModal.title'),
+      message: (
+        <Trans
+          i18nKey="addDelegationPage.confirmModal.description"
+          values={{
+            productName: productSelected?.title,
+            institutionName: party.description,
+            partnerName: techPartnerSelected?.description,
+          }}
+          components={{
+            1: <strong />,
+            2: <strong />,
+            3: <strong />,
+            4: <br />,
+          }}
+        >
+          {`Delegando la gestione del prodotto <1>{{productName}}</1> per l’ente <2>{{institutionName}}</2> a <3>{{partnerName}}</3>.<4/> Se confermi, {{partnerName}} potrà gestire il prodotto per conto del tuo ente.`}
+        </Trans>
+      ),
+      confirmLabel: t('addDelegationPage.confirmModal.confirmButton'),
+      closeLabel: t('addDelegationPage.confirmModal.backButton'),
+      onConfirm: () => handleSubmit(),
+    });
+  };
   return (
     <>
       <Grid container sx={{ backgroundColor: 'background.paper' }} p={3}>
@@ -429,7 +456,7 @@ export default function AddDelegationForm({
         </Button>
         <Button
           disabled={!productSelected || !techPartnerSelected}
-          onClick={() => handleSubmit()}
+          onClick={() => confirmAddDelegateModal()}
           color="primary"
           variant="contained"
           type="submit"
