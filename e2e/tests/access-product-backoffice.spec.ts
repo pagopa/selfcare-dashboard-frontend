@@ -3,8 +3,6 @@ import { login } from '../utils/login';
 
 test('user can access backoffice of pagopa', async ({ page }) => {
   await login(page, 'msisti', 'test');
-  await page.getByRole('button', { name: 'Invia' }).click();
-  await page.getByRole('button', { name: 'Invia' }).click();
   await page.getByRole('button', { name: 'Anpal Servizi SpA.' }).click();
   await page.getByRole('button', { name: 'Accedi' }).click();
   await page.getByRole('button', { name: 'Anpal Servizi SpA.' }).click();

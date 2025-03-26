@@ -296,6 +296,12 @@ export default {
     delegationSuccessfulCreated: 'Delega aggiunta correttamente.',
     delegationNotCreated: 'Non è stato possibile aggiungere la delega. Riprova.',
     alreadyDelegated: 'Il Partner selezionato risulta già associato all’ente.',
+    confirmModal: {
+      title: 'Confermi la delega?',
+      description: `Delegando la gestione del prodotto <1>{{productName}}</1> per l’ente <2>{{institutionName}}</2> a <3>{{partnerName}}</3>.<4/> Se confermi, {{partnerName}} potrà gestire il prodotto per conto del tuo ente.`,
+      confirmButton: 'Conferma',
+      backButton: 'Indietro',
+    },
   },
   subHeader: {
     partySelectionSearch: {
