@@ -12,6 +12,7 @@ import { useAppSelector } from '../redux/hooks';
 import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
 import { RootState } from '../redux/store';
 import { fetchProductRoles } from '../services/productService';
+import { PRODUCT_IDS } from '../utils/constants';
 
 export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
   const party = useAppSelector(partiesSelectors.selectPartySelected);
@@ -38,7 +39,7 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
     }
 
     const promises: Array<Promise<[string, ProductRolesLists]>> = activeAndAccessibleProducts
-      .filter((p) => !productsRolesMap[p.id])
+      .filter((p) => !productsRolesMap[p.id] || productsRolesMap[PRODUCT_IDS.PAGOPA])
       .map((p) =>
         fetchProductRoles(p, party as Party).then((roles) => [
           p.id,
@@ -57,7 +58,9 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
       !activeAndAccessibleProducts ||
       (state.parties.selectedProductsRolesMap &&
         !activeAndAccessibleProducts.find(
-          (p) => !(state.parties.selectedProductsRolesMap as ProductsRolesMap)[p.id]
+          (p) =>
+            !(state.parties.selectedProductsRolesMap as ProductsRolesMap)[p.id] ||
+            productsRolesMap[PRODUCT_IDS.PAGOPA]
         ))
         ? state.parties.selectedProductsRolesMap
         : undefined,
