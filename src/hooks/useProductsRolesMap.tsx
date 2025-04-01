@@ -59,8 +59,7 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
       (state.parties.selectedProductsRolesMap &&
         !activeAndAccessibleProducts.find(
           (p) =>
-            !(state.parties.selectedProductsRolesMap as ProductsRolesMap)[p.id] ||
-            productsRolesMap[PRODUCT_IDS.PAGOPA]
+            !state.parties.selectedProductsRolesMap?.[p.id] || productsRolesMap[PRODUCT_IDS.PAGOPA]
         ))
         ? state.parties.selectedProductsRolesMap
         : undefined,
