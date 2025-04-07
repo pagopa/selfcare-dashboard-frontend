@@ -1,20 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Grid, Typography, Box, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useTranslation } from 'react-i18next';
 import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BaseParty } from '../../model/Party';
-import PartySelectionSearchInput from './PartySelectionSearchInput';
-import PartyItemContainer from './PartyItemContainer';
 import PartyAccountItemSelection from './PartyAccountItemSelection';
+import PartyItemContainer from './PartyItemContainer';
+import PartySelectionSearchInput from './PartySelectionSearchInput';
 
 type Props = {
   parties: Array<BaseParty>;
   selectedParty: BaseParty | null;
   onPartySelectionChange: (selectedParty: BaseParty | null) => void;
   label?: string;
-  iconColor?: string;
-  iconMarginRight?: string;
   partyTitle?: string;
 };
 
@@ -40,10 +38,8 @@ export default function PartySelectionSearch({
   selectedParty,
   onPartySelectionChange,
   label,
-  iconColor,
-  iconMarginRight,
   partyTitle,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const theme = useTheme();
   const [visibleParties, setVisibleParties] = useState<Array<BaseParty>>([]);
@@ -111,11 +107,9 @@ export default function PartySelectionSearch({
               {moreThan3Parties ? (
                 <PartySelectionSearchInput
                   label={label}
-                  iconMarginRight={iconMarginRight}
                   onChange={(e) => onFilterChange(e.target.value)}
                   input={searchQuery}
                   clearField={() => onFilterChange('')}
-                  iconColor={iconColor}
                 />
               ) : (
                 parties.length >= 1 && (

@@ -21,8 +21,8 @@ const renderApp = (
   injectedStore?: ReturnType<typeof createStore>,
   injectedHistory?: ReturnType<typeof createMemoryHistory>
 ) => {
-  const store = injectedStore ? injectedStore : createStore();
-  const history = injectedHistory ? injectedHistory : createMemoryHistory();
+  const store = injectedStore || createStore();
+  const history = injectedHistory || createMemoryHistory();
   render(
     <ThemeProvider theme={theme}>
       <Router history={history}>

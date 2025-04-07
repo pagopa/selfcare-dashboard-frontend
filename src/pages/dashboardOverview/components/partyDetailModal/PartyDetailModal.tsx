@@ -73,7 +73,6 @@ export const PartyDetailModal = ({
               }
             }}
             data-testid="close-modal-test"
-            sx={{ p: 0 }}
           >
             <CloseIcon />
           </IconButton>
