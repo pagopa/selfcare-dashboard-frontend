@@ -5,6 +5,7 @@ import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/stor
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
+import { PRODUCT_IDS } from '../../../../../utils/constants';
 import { ENV } from '../../../../../utils/env';
 import NotActiveProductCard from './NotActiveProductCard';
 
@@ -18,12 +19,16 @@ export default function NotActiveProductCardContainer({ party, product }: Readon
   const addNotify = useUserNotify();
   const addError = useErrorDispatcher();
 
-  const existingSubProductNotOnboarded = product.subProducts?.find((sp) =>
-    party.products.map(
+  const existingSubProductNotOnboarded = product.subProducts?.find((sp) => {
+    if (party.institutionType !== 'PSP' && sp.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP) {
+      return false;
+    }
+
+    return party.products.map(
       (us) =>
         sp.id !== us.productId && us.productOnBoardingStatus !== 'ACTIVE' && sp.status === 'ACTIVE'
-    )
-  );
+    );
+  });
 
   const baseProductWithExistingSubProductNotOnboarded =
     existingSubProductNotOnboarded &&

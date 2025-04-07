@@ -2,7 +2,6 @@ import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/Onb
 import { OnboardedProductResource } from '../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Product, ProductInstitutionMap } from '../../../../../model/Product';
-import { PRODUCT_IDS } from '../../../../../utils/constants';
 
 type FilterConfig = {
   institutionType: string;
@@ -17,7 +16,7 @@ const institutionTypeFilter = (
   productsWithStatusActive.filter((product) => {
     // Check if product is allowed for the institution type
     const allowedTypes = allowedInstitutionTypes[product.id] ?? allowedInstitutionTypes?.default;
-    if (!allowedTypes || !allowedTypes[institutionType]) {
+    if (!allowedTypes || !allowedTypes?.[institutionType]) {
       return false;
     }
 
@@ -33,26 +32,17 @@ const institutionTypeFilter = (
 
 const onboardingStatusFilter = (
   productsWithStatusActive: Array<Product>,
-  onboardedProducts: Array<OnboardedProductResource>,
-  institutionType: string
+  onboardedProducts: Array<OnboardedProductResource>
 ): Array<Product> => {
   const onboardedProductIds = onboardedProducts.map((p) => p.productId);
 
   return productsWithStatusActive.filter((product) => {
     // For productsWithStatusActive with active base version, show eligible children
     if (product.subProducts && product.subProducts?.length > 0) {
-      return product.subProducts.some((child) => {
-        if (product.id === PRODUCT_IDS.PAGOPA && child.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP) {
-          return (
-            institutionType === 'PSP' &&
-            !onboardedProductIds.includes(child.id) &&
-            child.status === StatusEnum.ACTIVE
-          );
-        }
-
-        // Default check for other child products
-        return !onboardedProductIds.includes(child.id ?? '') && child.status === StatusEnum.ACTIVE;
-      });
+      return product.subProducts.some(
+        (child) =>
+          !onboardedProductIds.includes(child.id ?? '') && child.status === StatusEnum.ACTIVE
+      );
     }
 
     // Exclude productsWithStatusActive that are already onboarded
@@ -74,6 +64,5 @@ export const filterProducts = (
 ): Array<Product> =>
   onboardingStatusFilter(
     institutionTypeFilter(productsWithStatusActive, config),
-    onboardedProducts,
-    config.institutionType
+    onboardedProducts
   );

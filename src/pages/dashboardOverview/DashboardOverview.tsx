@@ -39,6 +39,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const getOnboardingAllowedByInstitutionType = async () => {
     if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+      setAllowedInstitutionTypes(mockedCategories);
       await Promise.resolve(mockedCategories);
     } else {
       try {

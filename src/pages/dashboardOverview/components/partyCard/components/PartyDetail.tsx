@@ -309,20 +309,17 @@ export default function PartyDetail({ party }: Props) {
                 <Grid item xs={3} display="flex" justifyContent="flex-end">
                   {partyUpdated?.geographicTaxonomies &&
                     partyUpdated.geographicTaxonomies.length >= 1 && (
-                      <>
-                        {partyUpdated.geographicTaxonomies.length !== 1 ? ', ' : undefined}
-                        <ButtonNaked
-                          component="button"
-                          onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
-                          endIcon={<EditIcon sx={{ height: '18px', width: '18px' }} />}
-                          sx={{ color: 'primary.main', flexDirection: 'row' }}
-                          weight="default"
-                        >
-                          {partyUpdated?.geographicTaxonomies.length !== 1
-                            ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
-                            : undefined}
-                        </ButtonNaked>
-                      </>
+                      <ButtonNaked
+                        component="button"
+                        onClick={() => setOpenModalAddNewGeographicTaxonomies(true)}
+                        endIcon={<EditIcon sx={{ height: '18px', width: '18px' }} />}
+                        sx={{ color: 'primary.main', flexDirection: 'row' }}
+                        weight="default"
+                      >
+                        {partyUpdated?.geographicTaxonomies.length !== 1
+                          ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
+                          : undefined}
+                      </ButtonNaked>
                     )}
                 </Grid>
               </Grid>

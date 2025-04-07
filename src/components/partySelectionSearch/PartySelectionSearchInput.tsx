@@ -1,14 +1,9 @@
-import { Grid, TextField, IconButton, styled } from '@mui/material';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { Grid, IconButton, styled, TextField } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import React, { ChangeEventHandler } from 'react';
 
-const CustomIconButton = styled(IconButton)({
-  '&:hover': {
-    backgroundColor: 'transparent !important',
-  },
-});
 const CustomTextField = styled(TextField)({
   label: { fontSize: '14px', fontWeight: 'fontWeightMedium', color: '#475A6D', paddingLeft: '8px' },
   input: { cursor: 'pointer' },
@@ -20,10 +15,8 @@ const CustomTextField = styled(TextField)({
 type Props = {
   onChange: ChangeEventHandler<HTMLInputElement>;
   input: string;
-  clearField?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  clearField?: React.MouseEventHandler<HTMLButtonElement>;
   label?: string;
-  iconColor?: string;
-  iconMarginRight?: string;
 };
 
 export default function PartySelectionSearchInput({
@@ -31,8 +24,7 @@ export default function PartySelectionSearchInput({
   input,
   clearField,
   label,
-  iconColor = '#475A6D',
-}: Props) {
+}: Readonly<Props>) {
   const inputRef = React.useRef<HTMLInputElement>();
 
   const focusTextInput = () => {
@@ -55,20 +47,16 @@ export default function PartySelectionSearchInput({
           startAdornment: (
             <InputAdornment position="start">
               {
-                <CustomIconButton disableRipple={true} onClick={focusTextInput}>
-                  <SearchOutlinedIcon sx={{ color: iconColor }} />
-                </CustomIconButton>
+                <IconButton disableRipple={true} onClick={focusTextInput}>
+                  <SearchOutlinedIcon />
+                </IconButton>
               }
             </InputAdornment>
           ),
           endAdornment: (
-            <CustomIconButton
-              disableRipple={true}
-              onClick={clearField}
-              aria-label="removeSelectionIcon"
-            >
-              <ClearOutlinedIcon sx={{ color: iconColor }} />
-            </CustomIconButton>
+            <IconButton disableRipple={true} onClick={clearField} aria-label="removeSelectionIcon">
+              <ClearOutlinedIcon />
+            </IconButton>
           ),
         }}
       />

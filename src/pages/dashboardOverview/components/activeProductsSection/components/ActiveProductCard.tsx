@@ -149,17 +149,8 @@ export default function ActiveProductCard({
         {/* Arrow Button */}
         {!disableBtn && (
           <Grid item>
-            <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`}>
-              <Box
-                sx={{
-                  backgroundColor: 'primary.main',
-                  height: '44px',
-                  color: 'white',
-                  borderRadius: '48px',
-                }}
-              >
-                <ArrowForward sx={{ m: 1 }} />
-              </Box>
+            <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`} color='primary'>
+              <ArrowForward />
             </IconButton>
           </Grid>
         )}
