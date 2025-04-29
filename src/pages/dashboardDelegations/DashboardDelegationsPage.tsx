@@ -30,12 +30,14 @@ export default function DashboardDelegationsPage({
   const onExit = useUnloadEventOnExit();
   const history = useHistory();
   const addError = useErrorDispatcher();
-  const { getAllProductsWithPermission, hasPermission } = usePermissions();
+  const { hasPermission } = usePermissions();
 
   const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const canCreateDelegation = getAllProductsWithPermission(Actions.CreateDelegation).length > 0;
+  const canCreateDelegation = authorizedDelegableProducts.some((p) =>
+    hasPermission(p.id, Actions.CreateDelegation)
+  );
 
   const retrieveDelegationsList = async () => {
     setLoading(true);
