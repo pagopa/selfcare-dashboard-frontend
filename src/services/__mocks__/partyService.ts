@@ -337,6 +337,7 @@ export const mockedParties: Array<Party> = [
           Actions.ViewDelegations,
           Actions.ViewBilling,
           Actions.ListAvailableProducts,
+          Actions.CreateDelegation,
         ],
       },
       {
@@ -358,7 +359,6 @@ export const mockedParties: Array<Party> = [
           Actions.AccessProductBackoffice,
           Actions.ViewDelegations,
           Actions.ViewBilling,
-          Actions.CreateDelegation,
         ],
       },
       {

@@ -29,7 +29,7 @@ export const mockedPartyProducts: Array<Product> = [
       },
     ],
     logoBgColor: 'primary.main',
-    delegable: true,
+    delegable: false,
     invoiceable: false,
   },
   {
