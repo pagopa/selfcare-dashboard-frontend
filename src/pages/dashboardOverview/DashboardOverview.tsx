@@ -110,7 +110,7 @@ const DashboardOverview = ({ party, products }: Props) => {
                   color="primary"
                   onClick={() =>
                     window.open(
-                      'https://docs.pagopa.it/io-guida-tecnica/funzionalita/pubblicare-un-servizio/gestire-laccesso-ai-servizi-tramite-i-gruppi',
+                      'https://developer.pagopa.it/app-io/guides/io-guida-tecnica/funzionalita/pubblicare-un-servizio/gestire-laccesso-ai-servizi-tramite-i-gruppi',
                       'blank',
                       'noopener,noreferrer'
                     )
