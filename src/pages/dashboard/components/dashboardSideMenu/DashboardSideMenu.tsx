@@ -50,7 +50,7 @@ export default function DashboardSideMenu({
   isAddDelegateSectionVisible = false,
   isInvoiceSectionVisible = false,
   isHandleDelegationsVisible = false,
-  isDocumentsSectionVisible = true,
+  isDocumentsSectionVisible = false,
   setDrawerOpen,
   hideLabels = false,
 }: Readonly<Props>) {

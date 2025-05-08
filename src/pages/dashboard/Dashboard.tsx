@@ -152,6 +152,10 @@ const Dashboard = () => {
       )
   );
 
+  const isDocumentsSectionVisible = !!activeProducts.some((partyProd) =>
+    hasPermission(partyProd.id ?? '', Actions.ViewContract)
+  );
+
   const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
     authorizedDelegableProducts.length > 0 &&
@@ -259,6 +263,7 @@ const Dashboard = () => {
                 isAddDelegateSectionVisible={isAddDelegateSectionVisible}
                 isInvoiceSectionVisible={isInvoiceSectionVisible}
                 isHandleDelegationsVisible={isHandleDelegationsVisible}
+                isDocumentsSectionVisible={isDocumentsSectionVisible}
                 setDrawerOpen={setDrawerOpen}
                 hideLabels={hideLabels}
               />
