@@ -1,89 +1,51 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import {
-  Box,
-  Divider,
-  Icon,
-  List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Icon,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 
-type Props = {
-  handleClick: () => void;
+type SideNavItemProps = {
   title: string;
-  isSelected?: boolean;
   icon: SvgIconComponent;
-  handleClickPtPage?: () => void;
-  isHandleDelegationsVisible?: boolean;
-  ptIcon?: SvgIconComponent;
-  ptTitle?: string;
-  isPtSelected?: boolean;
+  handleClick: () => void;
+  isSelected?: boolean;
   hideLabels?: boolean;
 };
 
-export default function DashboardSidenavItem({
-  handleClick,
+/**
+ * A reusable navigation item component for the dashboard sidebar
+ */
+export default function DashboardSideNavItem({
   title,
-  isSelected,
   icon,
-  isHandleDelegationsVisible,
-  ptIcon,
-  ptTitle,
-  isPtSelected,
-  handleClickPtPage,
-  hideLabels,
-}: Readonly<Props>) {
+  handleClick,
+  isSelected = false,
+  hideLabels = false,
+}: Readonly<SideNavItemProps>) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+
   return (
-    <List disablePadding>
-      {isHandleDelegationsVisible && ptIcon && handleClickPtPage && (
-        <Box mb={2}>
-          <ListItemButton
-            selected={isPtSelected ?? false}
-            onClick={() => {
-              handleClickPtPage();
-            }}
-            sx={{
-              height: '100%',
-              backgroundColor: 'background.paper',
-              width: isMobile ? '270px' : '100%',
-              display: hideLabels ? 'grid' : '',
-              justifyContent: hideLabels ? 'center' : '',
-            }}
-          >
-            <ListItemIcon>
-              <Icon component={ptIcon} />
-            </ListItemIcon>
-
-            <ListItemText primary={ptTitle} />
-          </ListItemButton>
-
-          <Divider />
-        </Box>
-      )}
-      <ListItemButton
-        selected={isSelected}
-        onClick={() => {
-          handleClick();
-        }}
-        sx={{
-          height: '100%',
-          backgroundColor: 'background.paper',
-          width: isMobile ? '270px' : '100%',
-          display: hideLabels ? 'grid' : '',
-          justifyContent: hideLabels ? 'center' : '',
-        }}
-      >
-        <ListItemIcon>
-          <Icon component={icon} />
-        </ListItemIcon>
-
-        <ListItemText primary={title} />
-      </ListItemButton>
-    </List>
+    <ListItemButton
+      selected={isSelected}
+      onClick={handleClick}
+      sx={{
+        height: '100%',
+        backgroundColor: 'background.paper',
+        width: isMobile ? '270px' : '100%',
+        display: hideLabels ? 'grid' : '',
+        justifyContent: hideLabels ? 'center' : '',
+      }}
+    >
+      <ListItemIcon>
+        <Icon component={icon} />
+      </ListItemIcon>
+      
+      {!hideLabels && <ListItemText primary={title} />}
+    </ListItemButton>
   );
 }

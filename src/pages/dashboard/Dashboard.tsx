@@ -246,8 +246,17 @@ const Dashboard = () => {
             </Grid>
           </>
         ) : (
-          <Grid component="nav" item xs={hideLabels ? 1 : 2} position={'relative'}>
-            <Box>
+          <Grid
+            component="nav"
+            item
+            xs={hideLabels ? 1 : 2}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%',
+            }}
+          >
+            <Box sx={{ flexGrow: 1 }}>
               <DashboardSideMenu
                 party={party}
                 isAddDelegateSectionVisible={isAddDelegateSectionVisible}
@@ -256,24 +265,23 @@ const Dashboard = () => {
                 setDrawerOpen={setDrawerOpen}
                 hideLabels={hideLabels}
               />
-              <Box sx={{ position: 'absolute', bottom: '0', width: '100%' }}>
-                <Divider sx={{ marginTop: '80px' }} />
+            </Box>
 
-                <Button
-                  fullWidth
-                  // disableRipple
-                  sx={{
-                    height: '59px',
-                    display: 'flex',
-                    justifyContent: hideLabels ? 'center' : 'left',
-                    my: 3,
-                    color: 'text.primary',
-                  }}
-                  onClick={() => setHideLabels(!hideLabels)}
-                >
-                  <DehazeIcon sx={{ marginRight: 2 }} />
-                </Button>
-              </Box>
+            <Box>
+              <Divider sx={{ marginTop: '80px' }} />
+              <Button
+                fullWidth
+                sx={{
+                  height: '59px',
+                  display: 'flex',
+                  justifyContent: hideLabels ? 'center' : 'left',
+                  my: 3,
+                  color: 'text.primary',
+                }}
+                onClick={() => setHideLabels(!hideLabels)}
+              >
+                <DehazeIcon sx={{ marginRight: 2 }} />
+              </Button>
             </Box>
           </Grid>
         ))}
@@ -351,6 +359,9 @@ const Dashboard = () => {
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
             <DashboardHandleDelegatesPage party={party} />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.DOCUMENTS.path} exact>
+            <></>
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>
