@@ -188,19 +188,16 @@ const Dashboard = () => {
   });
 
   const getButtonText = (pathname: string): string => {
-    if (pathname.includes('users')) {
-      return t('overview.sideMenu.institutionManagement.referents.title');
-    }
-    if (pathname.includes('groups')) {
-      return t('overview.sideMenu.institutionManagement.groups.title');
-    }
-    if (pathname.includes('delegations')) {
-      return t('overview.sideMenu.institutionManagement.delegations.title');
-    }
-    if (pathname.includes('delegate')) {
-      return t('overview.ptPage.title');
-    }
-    return t('overview.sideMenu.institutionManagement.overview.title');
+    const pathMap: Record<string, string> = {
+      users: 'overview.sideMenu.institutionManagement.referents.title',
+      groups: 'overview.sideMenu.institutionManagement.groups.title',
+      delegations: 'overview.sideMenu.institutionManagement.delegations.title',
+      delegate: 'overview.ptPage.title',
+      documents: 'overview.sideMenu.institutionManagement.documents.title',
+    };
+
+    const key = Object.keys(pathMap).find((key) => pathname.includes(key));
+    return key ? t(pathMap[key]) : t('overview.sideMenu.institutionManagement.overview.title');
   };
 
   return party && products ? (
@@ -289,7 +286,7 @@ const Dashboard = () => {
       <Grid
         item
         component="main"
-        sx={{ backgroundColor: 'background.default' }}
+        sx={{ backgroundColor: 'background.default', minHeight: '100%' }}
         display="flex"
         justifyContent={match ? 'center' : 'flex-start'}
         pb={8}

@@ -216,16 +216,6 @@ export const mockedProductRoles: Array<ProductRole> = [
     description: 'Descrizione referente-tecnico',
     phasesAdditionAllowed: ['dashboard'],
   },
-  {
-    productId: 'PRODID',
-    partyRole: 'ADMIN_EA_IO',
-    selcRole: 'ADMIN_EA',
-    multiroleAllowed: true,
-    productRole: 'Amministratore-ea-io',
-    title: 'Amministratore Ea IO',
-    description: 'Descrizione amministratore-ea-io',
-    phasesAdditionAllowed: ['dashboard'],
-  },
 ];
 
 export const mockedCategories: ProductInstitutionMap = {
