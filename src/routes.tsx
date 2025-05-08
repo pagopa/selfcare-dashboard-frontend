@@ -47,6 +47,10 @@ const ROUTES = {
   },
 };
 
+// TODO remove empty component and add documents page
+const EmptyComponent = () => <></>;
+
+
 export const DASHBOARD_ROUTES = {
   OVERVIEW: {
     path: `${BASE_ROUTE}/:partyId`,
@@ -71,7 +75,7 @@ export const DASHBOARD_ROUTES = {
   DOCUMENTS: {
     path: `${BASE_ROUTE}/:partyId/documents`,
     exact: true,
-    component: AddDelegationPage,
+    component: EmptyComponent,
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:partyId`),
 };
