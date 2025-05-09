@@ -152,6 +152,10 @@ const Dashboard = () => {
       )
   );
 
+  const isDocumentsSectionVisible = !!activeProducts.some((partyProd) =>
+    hasPermission(partyProd.id ?? '', Actions.ViewContract)
+  );
+
   const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
     authorizedDelegableProducts.length > 0 &&
@@ -188,19 +192,16 @@ const Dashboard = () => {
   });
 
   const getButtonText = (pathname: string): string => {
-    if (pathname.includes('users')) {
-      return t('overview.sideMenu.institutionManagement.referents.title');
-    }
-    if (pathname.includes('groups')) {
-      return t('overview.sideMenu.institutionManagement.groups.title');
-    }
-    if (pathname.includes('delegations')) {
-      return t('overview.sideMenu.institutionManagement.delegations.title');
-    }
-    if (pathname.includes('delegate')) {
-      return t('overview.ptPage.title');
-    }
-    return t('overview.sideMenu.institutionManagement.overview.title');
+    const pathMap: Record<string, string> = {
+      users: 'overview.sideMenu.institutionManagement.referents.title',
+      groups: 'overview.sideMenu.institutionManagement.groups.title',
+      delegations: 'overview.sideMenu.institutionManagement.delegations.title',
+      delegate: 'overview.ptPage.title',
+      documents: 'overview.sideMenu.institutionManagement.documents.title',
+    };
+
+    const key = Object.keys(pathMap).find((key) => pathname.includes(key));
+    return key ? t(pathMap[key]) : t('overview.sideMenu.institutionManagement.overview.title');
   };
 
   return party && products ? (
@@ -246,34 +247,43 @@ const Dashboard = () => {
             </Grid>
           </>
         ) : (
-          <Grid component="nav" item xs={hideLabels ? 1 : 2} position={'relative'}>
-            <Box>
+          <Grid
+            component="nav"
+            item
+            xs={hideLabels ? 1 : 2}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%',
+            }}
+          >
+            <Box sx={{ flexGrow: 1 }}>
               <DashboardSideMenu
                 party={party}
                 isAddDelegateSectionVisible={isAddDelegateSectionVisible}
                 isInvoiceSectionVisible={isInvoiceSectionVisible}
                 isHandleDelegationsVisible={isHandleDelegationsVisible}
+                isDocumentsSectionVisible={isDocumentsSectionVisible}
                 setDrawerOpen={setDrawerOpen}
                 hideLabels={hideLabels}
               />
-              <Box sx={{ position: 'absolute', bottom: '0', width: '100%' }}>
-                <Divider sx={{ marginTop: '80px' }} />
+            </Box>
 
-                <Button
-                  fullWidth
-                  // disableRipple
-                  sx={{
-                    height: '59px',
-                    display: 'flex',
-                    justifyContent: hideLabels ? 'center' : 'left',
-                    my: 3,
-                    color: 'text.primary',
-                  }}
-                  onClick={() => setHideLabels(!hideLabels)}
-                >
-                  <DehazeIcon sx={{ marginRight: 2 }} />
-                </Button>
-              </Box>
+            <Box>
+              <Divider sx={{ marginTop: '80px' }} />
+              <Button
+                fullWidth
+                sx={{
+                  height: '59px',
+                  display: 'flex',
+                  justifyContent: hideLabels ? 'center' : 'left',
+                  my: 3,
+                  color: 'text.primary',
+                }}
+                onClick={() => setHideLabels(!hideLabels)}
+              >
+                <DehazeIcon sx={{ marginRight: 2 }} />
+              </Button>
             </Box>
           </Grid>
         ))}
@@ -281,7 +291,7 @@ const Dashboard = () => {
       <Grid
         item
         component="main"
-        sx={{ backgroundColor: 'background.default' }}
+        sx={{ backgroundColor: 'background.default', minHeight: '100%' }}
         display="flex"
         justifyContent={match ? 'center' : 'flex-start'}
         pb={8}
@@ -351,6 +361,9 @@ const Dashboard = () => {
           </Route>
           <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
             <DashboardHandleDelegatesPage party={party} />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.DOCUMENTS.path} exact>
+            <></>
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>

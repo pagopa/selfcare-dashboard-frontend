@@ -1,10 +1,11 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DnsIcon from '@mui/icons-material/Dns';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
-import { Grid, List } from '@mui/material';
+import { Box, Divider, Grid, List } from '@mui/material';
 import {
   useErrorDispatcher,
   useLoading,
@@ -14,73 +15,76 @@ import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib/hooks
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { Party } from '../../../../model/Party';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { getBillingToken } from '../../../../services/tokenExchangeService';
 import { LOADING_TASK_TOKEN_EXCHANGE_INVOICE } from '../../../../utils/constants';
 import { ENV } from '../../../../utils/env';
-import DashboardSidenavItem from './DashboardSidenavItem';
+import DashboardSideNavItem from './DashboardSidenavItem';
+
+type MenuItem = {
+  key: string;
+  title: string;
+  icon: SvgIconComponent;
+  path: string;
+  isVisible: boolean;
+  isSelected: boolean;
+  action?: () => void;
+};
 
 type Props = {
   party: Party;
   isAddDelegateSectionVisible?: boolean;
   isInvoiceSectionVisible: boolean;
   isHandleDelegationsVisible?: boolean;
+  isDocumentsSectionVisible?: boolean;
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   hideLabels?: boolean;
 };
 
 export default function DashboardSideMenu({
   party,
-  isAddDelegateSectionVisible,
-  isInvoiceSectionVisible,
-  isHandleDelegationsVisible,
+  isAddDelegateSectionVisible = false,
+  isInvoiceSectionVisible = false,
+  isHandleDelegationsVisible = false,
+  isDocumentsSectionVisible = false,
   setDrawerOpen,
-  hideLabels,
+  hideLabels = false,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const history = useHistory();
+  const location = useLocation();
   const onExit = useUnloadEventOnExit();
-  const [isInvoiceSelected, setIsInvoiceSelected] = useState(false);
   const addError = useErrorDispatcher();
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE_INVOICE);
-
-  const overviewRoute = DASHBOARD_ROUTES.OVERVIEW.path;
-  const usersRoute = ENV.ROUTES.USERS;
-  const groupsRoute = ENV.ROUTES.GROUPS;
-  const delegatesRoute = DASHBOARD_ROUTES.DELEGATIONS.path;
-  const ptRoute = DASHBOARD_ROUTES.TECHPARTNER.path;
   const { getAllProductsWithPermission } = usePermissions();
 
   const canSeeUsers = getAllProductsWithPermission(Actions.ListProductUsers).length > 0;
   const canSeeGroups = getAllProductsWithPermission(Actions.ManageProductGroups).length > 0;
 
-  const overviewPath = resolvePathVariables(overviewRoute, {
-    partyId: party.partyId ?? '',
-  });
-  const usersPath = resolvePathVariables(usersRoute, {
-    partyId: party.partyId ?? '',
-  });
-  const groupsPath = resolvePathVariables(groupsRoute, {
-    partyId: party.partyId ?? '',
-  });
-  const delegatesPath = resolvePathVariables(delegatesRoute, {
-    partyId: party.partyId,
-  });
-  const ptPath = resolvePathVariables(ptRoute, {
-    partyId: party.partyId,
-  });
+  // Helper to resolve paths with party ID
+  const resolvePath = useCallback(
+    (path: string) => resolvePathVariables(path, { partyId: party.partyId ?? '' }),
+    [party.partyId]
+  );
 
-  const isOVerviewSelected = window.location.pathname === overviewPath;
-  const isUserSelected = window.location.pathname.startsWith(usersPath);
-  const isDelegateSelected = window.location.pathname.startsWith(delegatesPath);
-  const isGroupSelected = window.location.pathname.startsWith(groupsPath);
-  const isPtSelected = window.location.pathname.startsWith(ptPath);
-  const lang = i18n.language;
-  const getToken = async () => {
+  // Handle navigation with unload event
+  const navigateTo = useCallback(
+    (path: string) => {
+      onExit(() => {
+        history.push(path);
+        setDrawerOpen(false);
+      });
+    },
+    [onExit, history, setDrawerOpen]
+  );
+
+  // Handle invoice token exchange
+  const handleInvoiceClick = useCallback(() => {
+    const lang = i18n.language;
     setLoading(true);
 
     getBillingToken(party.partyId, undefined, lang)
@@ -99,82 +103,91 @@ export default function DashboardSideMenu({
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [party.partyId, setLoading, addError]);
+
+  const menuItems: Array<MenuItem> = [
+    {
+      key: 'techpartner',
+      title: t('overview.ptPage.title'),
+      icon: DnsIcon,
+      path: resolvePath(DASHBOARD_ROUTES.TECHPARTNER.path),
+      isVisible: isHandleDelegationsVisible,
+      isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.TECHPARTNER.path),
+    },
+    {
+      key: 'overview',
+      title: t('overview.sideMenu.institutionManagement.overview.title'),
+      icon: ViewSidebarIcon,
+      path: resolvePath(DASHBOARD_ROUTES.OVERVIEW.path),
+      isVisible: true,
+      isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.OVERVIEW.path),
+    },
+    {
+      key: 'delegations',
+      title: t('overview.sideMenu.institutionManagement.delegations.title'),
+      icon: AssignmentIcon,
+      path: resolvePath(DASHBOARD_ROUTES.DELEGATIONS.path),
+      isVisible: isAddDelegateSectionVisible,
+      isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DELEGATIONS.path),
+    },
+    {
+      key: 'documents',
+      title: t('overview.sideMenu.institutionManagement.documents.title'),
+      icon: AssignmentIcon,
+      path: resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
+      isVisible: isDocumentsSectionVisible,
+      isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
+    },
+    {
+      key: 'users',
+      title: t('overview.sideMenu.institutionManagement.referents.title'),
+      icon: PeopleAlt,
+      path: resolvePath(ENV.ROUTES.USERS),
+      isVisible: canSeeUsers,
+      isSelected: location.pathname.startsWith(resolvePath(ENV.ROUTES.USERS)),
+    },
+    {
+      key: 'groups',
+      title: t('overview.sideMenu.institutionManagement.groups.title'),
+      icon: SupervisedUserCircle,
+      path: resolvePath(ENV.ROUTES.GROUPS),
+      isVisible: canSeeGroups,
+      isSelected: location.pathname.startsWith(resolvePath(ENV.ROUTES.GROUPS)),
+    },
+    {
+      key: 'invoices',
+      title: t('overview.sideMenu.institutionManagement.invoices.title'),
+      icon: EuroSymbolIcon,
+      path: '#',
+      isVisible: isInvoiceSectionVisible,
+      isSelected: false,
+      action: () => onExit(() => handleInvoiceClick()),
+    },
+  ];
 
   return (
     <Grid container item mt={1} width="100%">
       <Grid item xs={12}>
         <List>
-          <DashboardSidenavItem
-            title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.overview.title')}
-            handleClick={() => {
-              onExit(() => history.push(party.partyId ? overviewPath : overviewRoute));
-              setDrawerOpen(false);
-            }}
-            isSelected={isOVerviewSelected}
-            icon={ViewSidebarIcon}
-            isHandleDelegationsVisible={isHandleDelegationsVisible}
-            ptIcon={DnsIcon}
-            ptTitle={hideLabels ? '' : t('overview.ptPage.title')}
-            isPtSelected={isPtSelected}
-            handleClickPtPage={() => onExit(() => history.push(party.partyId ? ptPath : ptRoute))}
-            hideLabels={hideLabels}
-          />
-          {isAddDelegateSectionVisible && (
-            <DashboardSidenavItem
-              title={
-                hideLabels ? '' : t('overview.sideMenu.institutionManagement.delegations.title')
-              }
-              handleClick={() => {
-                onExit(() => history.push(party.partyId ? delegatesPath : delegatesRoute));
-                setDrawerOpen(false);
-              }}
-              isSelected={isDelegateSelected}
-              icon={AssignmentIcon}
-              isHandleDelegationsVisible={false}
-              hideLabels={hideLabels}
-            />
-          )}
-          {canSeeUsers && (
-            <DashboardSidenavItem
-              title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.referents.title')}
-              handleClick={() => {
-                onExit(() => history.push(party.partyId ? usersPath : usersRoute));
-                setDrawerOpen(false);
-              }}
-              isSelected={isUserSelected}
-              icon={PeopleAlt}
-              isHandleDelegationsVisible={false}
-              hideLabels={hideLabels}
-            />
-          )}
-          {canSeeGroups && (
-            <DashboardSidenavItem
-              title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.groups.title')}
-              handleClick={() => {
-                onExit(() => history.push(party.partyId ? groupsPath : groupsRoute));
-                setDrawerOpen(false);
-              }}
-              isSelected={isGroupSelected}
-              icon={SupervisedUserCircle}
-              isHandleDelegationsVisible={false}
-              hideLabels={hideLabels}
-            />
-          )}
-          {isInvoiceSectionVisible && (
-            <DashboardSidenavItem
-              title={hideLabels ? '' : t('overview.sideMenu.institutionManagement.invoices.title')}
-              // TODO add tokenExchange Call on click
-              handleClick={() => {
-                setIsInvoiceSelected(true);
-                onExit(() => getToken());
-              }}
-              isSelected={isInvoiceSelected}
-              icon={EuroSymbolIcon}
-              isHandleDelegationsVisible={false}
-              hideLabels={hideLabels}
-            />
-          )}
+          {menuItems.map((item) => {
+            if (!item.isVisible) {
+              return null;
+            }
+
+            return (
+              <Box key={item.key} mb={item.key === 'techpartner' ? 2 : 0}>
+                <DashboardSideNavItem
+                  title={hideLabels ? '' : item.title}
+                  icon={item.icon}
+                  handleClick={item.action || (() => navigateTo(item.path))}
+                  isSelected={item.isSelected}
+                  hideLabels={hideLabels}
+                />
+
+                {item.key === 'techpartner' && <Divider />}
+              </Box>
+            );
+          })}
         </List>
       </Grid>
     </Grid>

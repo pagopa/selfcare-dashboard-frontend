@@ -8,7 +8,6 @@ import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
 
-
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
 export type RoutesObject = { [key: string]: RouteConfig };
@@ -48,6 +47,10 @@ const ROUTES = {
   },
 };
 
+// TODO remove empty component and add documents page
+const EmptyComponent = () => <></>;
+
+
 export const DASHBOARD_ROUTES = {
   OVERVIEW: {
     path: `${BASE_ROUTE}/:partyId`,
@@ -68,6 +71,11 @@ export const DASHBOARD_ROUTES = {
     path: `${BASE_ROUTE}/:partyId/delegations/add`,
     exact: true,
     component: AddDelegationPage,
+  },
+  DOCUMENTS: {
+    path: `${BASE_ROUTE}/:partyId/documents`,
+    exact: true,
+    component: EmptyComponent,
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:partyId`),
 };
