@@ -2,6 +2,7 @@ import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/Onb
 import { OnboardedProductResource } from '../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Product, ProductInstitutionMap } from '../../../../../model/Product';
+import { PRODUCT_IDS } from '../../../../../utils/constants';
 
 type FilterConfig = {
   institutionType: string;
@@ -32,17 +33,26 @@ const institutionTypeFilter = (
 
 const onboardingStatusFilter = (
   productsWithStatusActive: Array<Product>,
-  onboardedProducts: Array<OnboardedProductResource>
+  onboardedProducts: Array<OnboardedProductResource>,
+  institutionType: string
 ): Array<Product> => {
   const onboardedProductIds = onboardedProducts.map((p) => p.productId);
 
   return productsWithStatusActive.filter((product) => {
     // For productsWithStatusActive with active base version, show eligible children
     if (product.subProducts && product.subProducts?.length > 0) {
-      return product.subProducts.some(
-        (child) =>
-          !onboardedProductIds.includes(child.id ?? '') && child.status === StatusEnum.ACTIVE
-      );
+      return product.subProducts.some((child) => {
+        if (
+          !onboardedProductIds.includes(child.id ?? '') &&
+          child.status === StatusEnum.ACTIVE &&
+          child.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP &&
+          institutionType !== 'PSP'
+        ) {
+          return false;
+        }
+
+        return !onboardedProductIds.includes(child.id ?? '') && child.status === StatusEnum.ACTIVE;
+      });
     }
 
     // Exclude productsWithStatusActive that are already onboarded
@@ -65,5 +75,9 @@ export const filterProducts = (
 ): Array<Product> => {
   const productsFilteredByInstitution = institutionTypeFilter(productsWithStatusActive, config);
 
-  return onboardingStatusFilter(productsFilteredByInstitution, onboardedProducts);
+  return onboardingStatusFilter(
+    productsFilteredByInstitution,
+    onboardedProducts,
+    config.institutionType
+  );
 };
