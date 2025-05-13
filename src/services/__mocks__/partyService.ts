@@ -309,7 +309,7 @@ export const mockedParties: Array<Party> = [
     externalId: 'externalId3',
     originId: 'originId3',
     origin: 'IPA',
-    institutionType: 'PG',
+    institutionType: 'PSP',
     recipientCode: 'CGDAS23C',
     geographicTaxonomies: [
       // Use case with two taxonomies
@@ -366,7 +366,7 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-dashboard-psp',
         authorized: false,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '11111111111',
@@ -388,7 +388,7 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-io-premium',
         authorized: false,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '11111111111',

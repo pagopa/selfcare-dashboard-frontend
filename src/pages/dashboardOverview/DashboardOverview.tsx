@@ -70,13 +70,18 @@ const DashboardOverview = ({ party, products }: Props) => {
         categoryCode: party.categoryCode,
         allowedInstitutionTypes,
       };
+
       const productsWithStatusActive = products.filter((p) => p.status === StatusEnum.ACTIVE);
       const onboardedProducts = party.products.filter(
         (p) => p.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE
       );
-      setFilteredProducts(
-        filterProducts(productsWithStatusActive, filterConfig, onboardedProducts)
+
+      const filteredResult = filterProducts(
+        productsWithStatusActive,
+        filterConfig,
+        onboardedProducts
       );
+      setFilteredProducts([...filteredResult]);
     }
   }, [canSeeNotActiveProductsList, allowedInstitutionTypes, party.partyId]);
 

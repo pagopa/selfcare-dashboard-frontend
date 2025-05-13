@@ -51,18 +51,19 @@ const onboardingStatusFilter = (
 };
 
 /**
- * Applies all the product filters in the correct order.
- * @param productsWithStatusActive - The list of productsWithStatusActive to filter
- * @param config - The filter configuration, including institution type, category code, and allowed product types
- * @param onboardedProducts - The list of productsWithStatusActive that are already onboarded for the institution
- * @returns The filtered list of productsWithStatusActive
+ * Applies all the filters in the correct order.
+ *
+ * @param productsWithStatusActive - The list of products to filter
+ * @param config - The filter configuration, including institution type, category code, etc.
+ * @param onboardedProducts - The list of products that are already onboarded
+ * @returns The filtered list of products
  */
 export const filterProducts = (
   productsWithStatusActive: Array<Product>,
   config: FilterConfig,
   onboardedProducts: Array<OnboardedProduct>
-): Array<Product> =>
-  onboardingStatusFilter(
-    institutionTypeFilter(productsWithStatusActive, config),
-    onboardedProducts
-  );
+): Array<Product> => {
+  const productsFilteredByInstitution = institutionTypeFilter(productsWithStatusActive, config);
+
+  return onboardingStatusFilter(productsFilteredByInstitution, onboardedProducts);
+};
