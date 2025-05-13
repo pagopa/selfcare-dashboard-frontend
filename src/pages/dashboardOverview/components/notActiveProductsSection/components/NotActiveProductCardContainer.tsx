@@ -19,12 +19,16 @@ export default function NotActiveProductCardContainer({ party, product }: Readon
   const addNotify = useUserNotify();
   const addError = useErrorDispatcher();
 
-  const existingSubProductNotOnboarded = product.subProducts?.find((sp) =>
-    party.products.map(
+  const existingSubProductNotOnboarded = product.subProducts?.find((sp) => {
+    if (party.institutionType !== 'PSP' && sp.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP) {
+      return false;
+    }
+
+    return party.products.map(
       (us) =>
         sp.id !== us.productId && us.productOnBoardingStatus !== 'ACTIVE' && sp.status === 'ACTIVE'
-    )
-  );
+    );
+  });
 
   const baseProductWithExistingSubProductNotOnboarded =
     existingSubProductNotOnboarded &&
@@ -94,31 +98,25 @@ export default function NotActiveProductCardContainer({ party, product }: Readon
     });
   };
 
-  const displayProduct =
-    baseProductWithExistingSubProductNotOnboarded?.productId === PRODUCT_IDS.PAGOPA &&
-    party.institutionType !== 'PSP'
-      ? null
-      : baseProductWithExistingSubProductNotOnboarded
-      ? existingSubProductNotOnboarded
-      : product;
+  const displayProduct = baseProductWithExistingSubProductNotOnboarded
+    ? existingSubProductNotOnboarded
+    : product;
 
   return (
     <Grid item xs={12} sm={6} lg={4} xl={3} key={product.id}>
-      {displayProduct && (
-        <NotActiveProductCard
-          image={displayProduct.imageUrl ?? product.imageUrl}
-          urlLogo={displayProduct.logo ?? product.logo}
-          title={displayProduct.title ?? product.title}
-          description={displayProduct.description ?? product.description}
-          disableBtn={false}
-          btnAction={() => {
-            void getOnboardingStatus(displayProduct.id ?? product.id);
-          }}
-          buttonLabel={t('overview.notActiveProducts.joinButton')}
-          urlPublic={displayProduct.urlPublic}
-          product={product}
-        />
-      )}
+      <NotActiveProductCard
+        image={displayProduct.imageUrl ?? product.imageUrl}
+        urlLogo={displayProduct.logo ?? product.logo}
+        title={displayProduct.title ?? product.title}
+        description={displayProduct.description ?? product.description}
+        disableBtn={false}
+        btnAction={() => {
+          void getOnboardingStatus(displayProduct.id ?? product.id);
+        }}
+        buttonLabel={t('overview.notActiveProducts.joinButton')}
+        urlPublic={displayProduct.urlPublic}
+        product={product}
+      />
     </Grid>
   );
 }
