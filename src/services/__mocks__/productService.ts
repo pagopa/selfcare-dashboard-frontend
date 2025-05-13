@@ -23,7 +23,7 @@ export const mockedPartyProducts: Array<Product> = [
         imageUrl:
           'https://selcucheckoutsa.z6.web.core.windows.net/resources/products/prod-io-premium/depict-image.jpeg',
         logo: 'https://selcucheckoutsa.z6.web.core.windows.net/resources/products/prod-io-premium/logo.svg',
-        logoBgColor: '#0073E6',
+        logoBgColor: '#0B3EE3',
         description: "Accedi alle funzionalità avanzate per i messaggi dell'app IO",
         urlPublic: 'https://io.italia.it/',
       },
@@ -44,7 +44,7 @@ export const mockedPartyProducts: Array<Product> = [
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     backOfficeEnvironmentConfigurations: [],
     subProducts: [],
-    logoBgColor: 'pagoPA.main',
+    logoBgColor: '#0B3EE3',
     delegable: false,
     invoiceable: true,
   },

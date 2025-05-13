@@ -338,6 +338,7 @@ export const mockedParties: Array<Party> = [
           Actions.ViewBilling,
           Actions.ListAvailableProducts,
           Actions.CreateDelegation,
+          Actions.ViewContract,
         ],
       },
       {
@@ -359,12 +360,13 @@ export const mockedParties: Array<Party> = [
           Actions.AccessProductBackoffice,
           Actions.ViewDelegations,
           Actions.ViewBilling,
+          Actions.ViewContract,
         ],
       },
       {
         productId: 'prod-dashboard-psp',
         authorized: false,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '11111111111',
@@ -416,6 +418,7 @@ export const mockedParties: Array<Party> = [
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
           Actions.ListProductUsers,
+          Actions.ViewContract,
         ],
       },
       {
@@ -466,6 +469,7 @@ export const mockedParties: Array<Party> = [
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
+          Actions.ViewContract,
         ],
       },
       {

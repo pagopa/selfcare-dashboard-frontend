@@ -306,6 +306,11 @@ export default {
       backButton: 'Indietro',
     },
   },
+  documents: {
+    title: 'Documenti',
+    subTitle: 'Qui puoi visualizzare i tuoi prodotti attivi e scaricare il relativo contratto di adesione. Per farlo, clicca su ‘Vedi di più’.',
+    viewMore: 'Vedi di più',
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Enti gestiti',
