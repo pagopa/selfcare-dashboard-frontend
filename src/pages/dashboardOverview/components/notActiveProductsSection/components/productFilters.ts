@@ -43,6 +43,7 @@ const onboardingStatusFilter = (
     if (product.subProducts && product.subProducts?.length > 0) {
       return product.subProducts.some((child) => {
         if (
+          onboardedProductIds.includes(product.id ?? '') &&
           !onboardedProductIds.includes(child.id ?? '') &&
           child.status === StatusEnum.ACTIVE &&
           child.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP &&
