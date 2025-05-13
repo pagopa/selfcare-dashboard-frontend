@@ -240,6 +240,7 @@ const Dashboard = () => {
                     isAddDelegateSectionVisible={isAddDelegateSectionVisible}
                     isInvoiceSectionVisible={isInvoiceSectionVisible}
                     isHandleDelegationsVisible={isHandleDelegationsVisible}
+                    isDocumentsSectionVisible={isDocumentsSectionVisible}
                     setDrawerOpen={setDrawerOpen}
                     hideLabels={hideLabels}
                   />
