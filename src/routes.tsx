@@ -7,6 +7,7 @@ import DashboardHandleDelegatesPage from './pages/dashboardHandleDelegatesPage/D
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
+import DashboardDocuments from './pages/dashboardDocuments/DashboardDocuments';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -47,9 +48,6 @@ const ROUTES = {
   },
 };
 
-// TODO remove empty component and add documents page
-const EmptyComponent = () => <></>;
-
 
 export const DASHBOARD_ROUTES = {
   OVERVIEW: {
@@ -75,7 +73,7 @@ export const DASHBOARD_ROUTES = {
   DOCUMENTS: {
     path: `${BASE_ROUTE}/:partyId/documents`,
     exact: true,
-    component: EmptyComponent,
+    component: DashboardDocuments,
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:partyId`),
 };

@@ -2,6 +2,7 @@ import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/Onb
 import { OnboardedProductResource } from '../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Product, ProductInstitutionMap } from '../../../../../model/Product';
+import { PRODUCT_IDS } from '../../../../../utils/constants';
 
 type FilterConfig = {
   institutionType: string;
@@ -32,17 +33,27 @@ const institutionTypeFilter = (
 
 const onboardingStatusFilter = (
   productsWithStatusActive: Array<Product>,
-  onboardedProducts: Array<OnboardedProductResource>
+  onboardedProducts: Array<OnboardedProductResource>,
+  institutionType: string
 ): Array<Product> => {
   const onboardedProductIds = onboardedProducts.map((p) => p.productId);
 
   return productsWithStatusActive.filter((product) => {
     // For productsWithStatusActive with active base version, show eligible children
     if (product.subProducts && product.subProducts?.length > 0) {
-      return product.subProducts.some(
-        (child) =>
-          !onboardedProductIds.includes(child.id ?? '') && child.status === StatusEnum.ACTIVE
-      );
+      return product.subProducts.some((child) => {
+        if (
+          onboardedProductIds.includes(product.id ?? '') &&
+          !onboardedProductIds.includes(child.id ?? '') &&
+          child.status === StatusEnum.ACTIVE &&
+          child.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP &&
+          institutionType !== 'PSP'
+        ) {
+          return false;
+        }
+
+        return !onboardedProductIds.includes(child.id ?? '') && child.status === StatusEnum.ACTIVE;
+      });
     }
 
     // Exclude productsWithStatusActive that are already onboarded
@@ -51,18 +62,23 @@ const onboardingStatusFilter = (
 };
 
 /**
- * Applies all the product filters in the correct order.
- * @param productsWithStatusActive - The list of productsWithStatusActive to filter
- * @param config - The filter configuration, including institution type, category code, and allowed product types
- * @param onboardedProducts - The list of productsWithStatusActive that are already onboarded for the institution
- * @returns The filtered list of productsWithStatusActive
+ * Applies all the filters in the correct order.
+ *
+ * @param productsWithStatusActive - The list of products to filter
+ * @param config - The filter configuration, including institution type, category code, etc.
+ * @param onboardedProducts - The list of products that are already onboarded
+ * @returns The filtered list of products
  */
 export const filterProducts = (
   productsWithStatusActive: Array<Product>,
   config: FilterConfig,
   onboardedProducts: Array<OnboardedProduct>
-): Array<Product> =>
-  onboardingStatusFilter(
-    institutionTypeFilter(productsWithStatusActive, config),
-    onboardedProducts
+): Array<Product> => {
+  const productsFilteredByInstitution = institutionTypeFilter(productsWithStatusActive, config);
+
+  return onboardingStatusFilter(
+    productsFilteredByInstitution,
+    onboardedProducts,
+    config.institutionType
   );
+};

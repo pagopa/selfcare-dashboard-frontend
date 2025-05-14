@@ -309,7 +309,7 @@ export const mockedParties: Array<Party> = [
     externalId: 'externalId3',
     originId: 'originId3',
     origin: 'IPA',
-    institutionType: 'PG',
+    institutionType: 'PSP',
     recipientCode: 'CGDAS23C',
     geographicTaxonomies: [
       // Use case with two taxonomies
@@ -338,6 +338,7 @@ export const mockedParties: Array<Party> = [
           Actions.ViewBilling,
           Actions.ListAvailableProducts,
           Actions.CreateDelegation,
+          Actions.ViewContract,
         ],
       },
       {
@@ -359,6 +360,7 @@ export const mockedParties: Array<Party> = [
           Actions.AccessProductBackoffice,
           Actions.ViewDelegations,
           Actions.ViewBilling,
+          Actions.ViewContract,
         ],
       },
       {
@@ -386,7 +388,7 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-io-premium',
         authorized: false,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '11111111111',
@@ -416,6 +418,7 @@ export const mockedParties: Array<Party> = [
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
           Actions.ListProductUsers,
+          Actions.ViewContract,
         ],
       },
       {
@@ -466,6 +469,7 @@ export const mockedParties: Array<Party> = [
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
+          Actions.ViewContract,
         ],
       },
       {

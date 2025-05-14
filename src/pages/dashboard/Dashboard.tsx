@@ -23,6 +23,7 @@ import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
+import DashboardDocuments from '../dashboardDocuments/DashboardDocuments';
 import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
@@ -239,6 +240,7 @@ const Dashboard = () => {
                     isAddDelegateSectionVisible={isAddDelegateSectionVisible}
                     isInvoiceSectionVisible={isInvoiceSectionVisible}
                     isHandleDelegationsVisible={isHandleDelegationsVisible}
+                    isDocumentsSectionVisible={isDocumentsSectionVisible}
                     setDrawerOpen={setDrawerOpen}
                     hideLabels={hideLabels}
                   />
@@ -363,7 +365,7 @@ const Dashboard = () => {
             <DashboardHandleDelegatesPage party={party} />
           </Route>
           <Route path={DASHBOARD_ROUTES.DOCUMENTS.path} exact>
-            <></>
+            <DashboardDocuments party={party} products={products} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>
