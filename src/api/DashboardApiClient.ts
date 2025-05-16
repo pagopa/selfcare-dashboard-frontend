@@ -1,23 +1,25 @@
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
-import { buildFetchApi, extractResponse } from '@pagopa/selfcare-common-frontend/lib/utils/api-utils';
+import {
+  buildFetchApi,
+  extractResponse,
+} from '@pagopa/selfcare-common-frontend/lib/utils/api-utils';
 import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
 import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
+import { WithDefaultsT, createClient } from './generated/b4f-dashboard/client';
 import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
 import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
 import { DelegationWithPagination } from './generated/b4f-dashboard/DelegationWithPagination';
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
-import {
-  InstitutionResource,
-} from './generated/b4f-dashboard/InstitutionResource';
+import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
+import { OnboardingInfo } from './generated/b4f-dashboard/OnboardingInfo';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
-import { WithDefaultsT, createClient } from './generated/b4f-dashboard/client';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -101,7 +103,7 @@ export const DashboardApi = {
     const result = await apiClient.billingTokenUsingGET({
       institutionId,
       environment,
-      lang
+      lang,
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
@@ -111,7 +113,10 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
-  getProductRoles: async (productId: string, institutionType: string): Promise<Array<ProductRoleMappingsResource>> => {
+  getProductRoles: async (
+    productId: string,
+    institutionType: string
+  ): Promise<Array<ProductRoleMappingsResource>> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
       institutionType,
@@ -160,4 +165,25 @@ export const DashboardApi = {
     });
     return extractResponse(result, 201, onRedirectToLogin);
   },
+
+  getOnboardingInfo: async (
+    institutionId: string,
+    products: string
+  ): Promise<Array<OnboardingInfo>> => {
+    const result = await apiClient.v2GetOnboardingsInfo({
+      institutionId,
+      products,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+  /*
+  TODO used fetch in place of codegen to handle issue with base64 file
+  getContract: async (institutionId: string, productId: string): Promise<ContractData> => {
+    const result = await apiClient.v2GetContract({
+      institutionId,
+      productId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+  */
 };

@@ -23,7 +23,8 @@ import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
 import { ENV } from '../../utils/env';
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
-import DashboardDocuments from '../dashboardDocuments/DashboardDocuments';
+import DashboardDocuments from '../dashboardDocuments/DashboardDocumentsPage';
+import DashboardDocumentsDetail from '../dashboardDocumentsDetail/DashboardDocumentsDetailPage';
 import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
 
@@ -366,6 +367,9 @@ const Dashboard = () => {
           </Route>
           <Route path={DASHBOARD_ROUTES.DOCUMENTS.path} exact>
             <DashboardDocuments party={party} products={products} />
+          </Route>
+          <Route path={DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path} exact>
+            <DashboardDocumentsDetail party={party} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>

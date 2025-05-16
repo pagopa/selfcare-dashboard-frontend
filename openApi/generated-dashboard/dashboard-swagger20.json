@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "Self Care Dashboard API documentation",
-    "title": "selc-dashboard",
+    "title": "selc-starter-parent",
     "version": "0.0.1-SNAPSHOT"
   },
   "host": "localhost:80",
@@ -311,69 +311,6 @@
         "description": "Service to update the geographic taxonomy of an onboarded institution",
         "operationId": "updateInstitutionGeographicTaxonomyUsingPUT",
         "summary": "updateInstitutionGeographicTaxonomy"
-      }
-    },
-    "/v1/institutions/{institutionId}/geographicTaxonomy": {
-      "put": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/problem+json"
-        ],
-        "parameters": [
-          {
-            "description": "Institution's unique internal identifier",
-            "in": "path",
-            "name": "institutionId",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/GeographicTaxonomyListDto"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/Problem"
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": [
-              "global"
-            ]
-          }
-        ],
-        "tags": [
-          "institutions"
-        ],
-        "deprecated": true,
-        "description": "Service to update the geographic taxonomy of an onboarded institution",
-        "operationId": "updateInstitutionGeographicTaxonomyDeprecatedUsingPUT",
-        "summary": "updateInstitutionGeographicTaxonomyDeprecated"
       }
     },
     "/v1/institutions/{institutionId}/institutions": {
@@ -993,6 +930,76 @@
         "summary": "Service to get a specific institution related to logged user"
       }
     },
+    "/v2/institutions/{institutionId}/contract": {
+      "get": {
+        "produces": [
+          "application/octet-stream",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "query",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "format": "byte",
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to get the signed contract of a specific institution and product",
+        "operationId": "v2GetContract",
+        "summary": "getContract"
+      }
+    },
     "/v2/institutions/{institutionId}/institutions": {
       "get": {
         "produces": [
@@ -1101,6 +1108,73 @@
         "summary": "Retrieve list of delegation using to"
       }
     },
+    "/v2/institutions/{institutionId}/onboardings-info": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Filtered product list",
+            "in": "query",
+            "name": "products",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema":{"$ref":"#/definitions/OnboardingInfoArray"}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to get the onboardings info as productId, status and contract availability related to a specific institution optionally filtered by a list of products",
+        "operationId": "v2GetOnboardingsInfo",
+        "summary": "getOnboardingsInfo"
+      }
+    },
     "/v2/institutions/{institutionId}/products/{productId}/users": {
       "post": {
         "consumes": [
@@ -1172,6 +1246,89 @@
         "description": "Service to Create a user related to a specific pair of institution-product",
         "operationId": "v2PostCreateInstitutionProductUser",
         "summary": "createInstitutionProductUser"
+      }
+    },
+    "/v2/institutions/{institutionId}/products/{productId}/users/count": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "List of party roles (ex: roles=MANAGER,DELEGATE)",
+            "in": "query",
+            "name": "roles",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "User's status list (ex: status=ACTIVE,SUSPENDED)",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserCountResource"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to get the number of users related to a specific pair of institution-product optionally filtered by role and status",
+        "operationId": "v2GetUserCount",
+        "summary": "getUserCount"
       }
     },
     "/v2/institutions/{institutionId}/products/{productId}/users/{userId}": {
@@ -2153,6 +2310,13 @@
             "name": "productRoles",
             "required": false,
             "type": "string"
+          },
+          {
+            "description": "roles",
+            "in": "query",
+            "name": "roles",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -2635,7 +2799,7 @@
       }
     }
   },
-  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
+  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"OnboardingInfoArray":{"type": "array", "items": {"$ref": "#/definitions/OnboardingInfo"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -2735,7 +2899,7 @@
           "uniqueItems": true
         },
         "role": {
-          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
+          "description": "User's role, available values: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
           "type": "string"
         },
         "surname": {
@@ -3304,6 +3468,10 @@
           "format": "uuid",
           "type": "string"
         },
+        "mobilePhone": {
+          "description": "User's institutional phone number",
+          "type": "string"
+        },
         "name": {
           "description": "User's name",
           "type": "string"
@@ -3316,7 +3484,7 @@
           "type": "array"
         },
         "role": {
-          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
+          "description": "User's role, available values: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
           "enum": [
             "ADMIN",
             "ADMIN_EA",
@@ -3428,6 +3596,25 @@
         }
       },
       "title": "OnboardedProductResource",
+      "type": "object"
+    },
+    "OnboardingInfo": {
+      "properties": {
+        "contractAvailable": {
+          "description": "Boolean indicating the presence of a contract",
+          "example": false,
+          "type": "boolean"
+        },
+        "productId": {
+          "description": "Product's unique identifier",
+          "type": "string"
+        },
+        "status": {
+          "description": "Product's status",
+          "type": "string"
+        }
+      },
+      "title": "OnboardingInfo",
       "type": "object"
     },
     "PageInfo": {
@@ -3604,7 +3791,7 @@
           "type": "string"
         },
         "selcRole": {
-          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
+          "description": "User's Selfcare role, available values: [ADMIN, ADMIN_EA, LIMITED]",
           "enum": [
             "ADMIN",
             "ADMIN_EA",
@@ -3678,8 +3865,17 @@
     },
     "ProductUserResource": {
       "properties": {
+        "createdAt": {
+          "description": "User's creation date associated with a product",
+          "format": "date-time",
+          "type": "string"
+        },
         "email": {
           "description": "User's personal email",
+          "type": "string"
+        },
+        "fiscalCode": {
+          "description": "User's fiscal code",
           "type": "string"
         },
         "id": {
@@ -3696,7 +3892,7 @@
           "description": "Authorized user product"
         },
         "role": {
-          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
+          "description": "User's Selfcare role, available values: [ADMIN, ADMIN_EA, LIMITED]",
           "enum": [
             "ADMIN",
             "ADMIN_EA",
@@ -3904,6 +4100,10 @@
     },
     "SupportRequestDto": {
       "properties": {
+        "data": {
+          "description": "Technical data",
+          "type": "string"
+        },
         "email": {
           "description": "User's email",
           "example": "email@example.com",
@@ -3966,6 +4166,11 @@
           "format": "email",
           "type": "string"
         },
+        "mobilePhone": {
+          "description": "User's institutional phone number",
+          "pattern": "^\\+?[0-9]{7,15}$",
+          "type": "string"
+        },
         "name": {
           "description": "User's name",
           "type": "string"
@@ -4004,6 +4209,39 @@
         "name"
       ],
       "title": "UpdateUserGroupDto",
+      "type": "object"
+    },
+    "UserCountResource": {
+      "properties": {
+        "count": {
+          "description": "Number of users",
+          "format": "int64",
+          "type": "integer"
+        },
+        "institutionId": {
+          "description": "Institution's unique internal identifier",
+          "type": "string"
+        },
+        "productId": {
+          "description": "Product's unique identifier",
+          "type": "string"
+        },
+        "roles": {
+          "description": "Party role, available values: MANAGER, DELEGATE, SUB_DELEGATE, OPERATOR, ADMIN_EA",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "description": "User's status",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "UserCountResource",
       "type": "object"
     },
     "UserGroupIdResource": {
@@ -4160,7 +4398,7 @@
           "uniqueItems": true
         },
         "role": {
-          "description": "User's role, available value: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
+          "description": "User's role, available values: [MANAGER, DELEGATE, SUBDELEGATE, OPERATOR, ADMIN_EA]",
           "type": "string"
         }
       },
@@ -4185,6 +4423,10 @@
           "description": "User's unique identifier",
           "format": "uuid",
           "type": "string"
+        },
+        "mobilePhone": {
+          "$ref": "#/definitions/CertifiedFieldResourceOfstring",
+          "description": "User's institutional phone number"
         },
         "name": {
           "$ref": "#/definitions/CertifiedFieldResourceOfstring",
