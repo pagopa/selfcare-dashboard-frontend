@@ -369,7 +369,7 @@ const Dashboard = () => {
             <DashboardDocuments party={party} products={products} />
           </Route>
           <Route path={DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path} exact>
-            <DashboardDocumentsDetail party={party} />
+            <DashboardDocumentsDetail party={party} products={products} />
           </Route>
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>

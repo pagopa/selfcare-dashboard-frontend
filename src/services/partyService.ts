@@ -66,7 +66,9 @@ export const getOnboardingInfo = (
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
     return Promise.resolve([
-      { productId: 'prod-interop', status: 'ACTIVE', contractAvailable: true },
+      { productId: 'prod-io', status: 'ACTIVE', contractAvailable: true },
+      { productId: 'prod-io-premium', status: 'ACTIVE', contractAvailable: false },
+      { productId: 'prod-dashboard-psp', status: 'ACTIVE', contractAvailable: false },
     ]);
   } else {
     return DashboardApi.getOnboardingInfo(institutionId, products);

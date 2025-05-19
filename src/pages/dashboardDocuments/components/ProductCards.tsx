@@ -68,7 +68,12 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
       partyId: party.partyId,
     });
 
-    const encodedTitle = encodeURIComponent(product.title);
+    const title =
+      product.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
+        ? products.find((p) => p.id === PRODUCT_IDS.PAGOPA)?.title
+        : product.title;
+
+    const encodedTitle = encodeURIComponent(title ?? '');
 
     // eslint-disable-next-line functional/no-let
     let queryParams = `?productId=${product.id}&productTitle=${encodedTitle}`;
@@ -130,7 +135,11 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
             }}
           >
             <img
-              src={product.logo}
+              src={
+                product.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
+                  ? products.find((p) => p.id === PRODUCT_IDS.PAGOPA)?.logo
+                  : product.logo
+              }
               alt={`${product.title} logo`}
               style={{
                 maxWidth: '80%',
