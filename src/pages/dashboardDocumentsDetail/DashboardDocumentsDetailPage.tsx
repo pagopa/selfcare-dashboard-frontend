@@ -250,7 +250,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
                 {doc.contractAvailable && (
                   <Grid item>
                     <Box display="flex" alignItems="center" height="100%">
-                      <IconButton onClick={() => openContractFile(doc.productId, 'preview')}>
+                      <IconButton onClick={() => openContractFile(doc.productId)}>
                         <OpenInNew />
                       </IconButton>
                     </Box>
