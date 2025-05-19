@@ -107,7 +107,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
     )
       .then(async (response) => {
         if (!response.ok) {
-          addError({
+          return addError({
             id: `contract-${productId}`,
             blocking: false,
             error: new Error(),

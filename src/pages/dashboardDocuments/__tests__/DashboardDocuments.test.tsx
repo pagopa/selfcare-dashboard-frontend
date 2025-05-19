@@ -3,11 +3,11 @@ import { fireEvent, screen } from '@testing-library/react';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
-import DashboardDocuments from '../DashboardDocuments';
+import DashboardDocumentsPage from '../DashboardDocumentsPage';
 
 test('should render component DashboardDocuments', async () => {
   const { store } = renderWithProviders(
-    <DashboardDocuments party={mockedParties[2]} products={mockedPartyProducts} />
+    <DashboardDocumentsPage party={mockedParties[2]} products={mockedPartyProducts} />
   );
 
   const mockedActions = mockedParties[2].products
