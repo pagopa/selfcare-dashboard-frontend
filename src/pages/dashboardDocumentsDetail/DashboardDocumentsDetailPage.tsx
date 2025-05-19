@@ -86,7 +86,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
     }
   }, [productId, subProductId]);
 
-  const openContractFile = (productId?: string, type: string = 'preview') => {
+  const openContractFile = (productId?: string) => {
     if (!productId) {
       return;
     }
@@ -123,20 +123,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
 
           const pdfUrl = URL.createObjectURL(pdfBlob);
 
-          if (type === 'preview') {
-            window.open(pdfUrl, '_blank');
-          } else {
-            const link = document.createElement('a');
-            // eslint-disable-next-line functional/immutable-data
-            link.href = pdfUrl;
-            link.setAttribute(
-              'download',
-              `Contratto_di_adesione_${mapProductIdToTitle(productId)}.pdf`
-            );
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-          }
+          window.open(pdfUrl, '_blank');
         } catch (error) {
           addError({
             id: `contract-${productId}`,
@@ -247,7 +234,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
                     {doc.contractAvailable ? (
                       <ButtonNaked
                         color="primary"
-                        onClick={() => openContractFile(doc.productId, 'download')}
+                        onClick={() => openContractFile(doc.productId)}
                         sx={{ textAlign: 'start', justifyContent: 'flex-start' }}
                       >{`Contratto_di_adesione_${mapProductIdToTitle(
                         doc.productId ?? ''

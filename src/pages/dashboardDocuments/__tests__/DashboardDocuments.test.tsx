@@ -18,8 +18,6 @@ test('should render component DashboardDocuments', async () => {
     }));
   store.dispatch(setProductPermissions(mockedActions));
 
-  console.log('DashboardDocuments', mockedParties[2]);
-
   const documenTitle = await screen.findByText('Documenti');
 
   expect(documenTitle).toBeInTheDocument();
