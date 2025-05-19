@@ -3,11 +3,12 @@ import { Redirect, useParams } from 'react-router';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from './pages/dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
+import DashboardDocuments from './pages/dashboardDocuments/DashboardDocumentsPage';
+import DashboardDocumentsDetail from './pages/dashboardDocumentsDetail/DashboardDocumentsDetailPage';
 import DashboardHandleDelegatesPage from './pages/dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';
 import { ENV } from './utils/env';
-import DashboardDocuments from './pages/dashboardDocuments/DashboardDocuments';
 
 export const BASE_ROUTE = ENV.PUBLIC_URL;
 
@@ -48,7 +49,6 @@ const ROUTES = {
   },
 };
 
-
 export const DASHBOARD_ROUTES = {
   OVERVIEW: {
     path: `${BASE_ROUTE}/:partyId`,
@@ -74,6 +74,11 @@ export const DASHBOARD_ROUTES = {
     path: `${BASE_ROUTE}/:partyId/documents`,
     exact: true,
     component: DashboardDocuments,
+  },
+  DOCUMENTS_DETAIL: {
+    path: `${BASE_ROUTE}/:partyId/documents/details`,
+    exact: true,
+    component: DashboardDocumentsDetail,
   },
   ...buildRedirectToBasePath(`${BASE_ROUTE}/:partyId`),
 };

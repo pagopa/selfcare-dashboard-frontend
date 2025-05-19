@@ -3,11 +3,14 @@ import { Box, Card, CardContent, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { SubProductResource } from '../../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
+import { DASHBOARD_ROUTES } from '../../../routes';
 import { PRODUCT_IDS } from '../../../utils/constants';
 
 type ProductCardsProps = {
@@ -50,6 +53,8 @@ const isProductEligible = (
 const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
+  const history = useHistory();
+
   const displayProducts = useMemo(
     () =>
       products
@@ -57,6 +62,44 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
         .filter((product): product is Product => product !== null),
     [products, party, hasPermission]
   );
+
+  const handleProductClick = (product: Product) => {
+    const baseUrl = resolvePathVariables(DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path, {
+      partyId: party.partyId,
+    });
+
+    const title =
+      product.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
+        ? products.find((p) => p.id === PRODUCT_IDS.PAGOPA)?.title
+        : product.title;
+
+    const encodedTitle = encodeURIComponent(title ?? '');
+
+    // eslint-disable-next-line functional/no-let
+    let queryParams = `?productId=${product.id}&productTitle=${encodedTitle}`;
+
+    // Check if this product is a base product with an active subproduct
+    if (product.subProducts && product.subProducts?.length > 0) {
+      const activeSubProduct = product.subProducts.find((subProduct) =>
+        party.products.some(
+          (ip) => ip.productId === subProduct.id && ip.productOnBoardingStatus === 'ACTIVE'
+        )
+      );
+
+      if (activeSubProduct) {
+        queryParams += `&subProductId=${activeSubProduct.id}`;
+      }
+    }
+
+    // Check if this product is a subproduct itself
+    const parentProduct = products.find((p) => p.subProducts?.some((sub) => sub.id === product.id));
+
+    if (parentProduct) {
+      queryParams = `?productId=${parentProduct.id}&subProductId=${product.id}&productTitle=${encodedTitle}`;
+    }
+
+    history.push(baseUrl.concat(queryParams));
+  };
 
   return (
     <Box
@@ -92,7 +135,11 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
             }}
           >
             <img
-              src={product.logo}
+              src={
+                product.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
+                  ? products.find((p) => p.id === PRODUCT_IDS.PAGOPA)?.logo
+                  : product.logo
+              }
               alt={`${product.title} logo`}
               style={{
                 maxWidth: '80%',
@@ -111,7 +158,7 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
           <ButtonNaked
             component="button"
             endIcon={<ArrowForwardIosIcon />}
-            onClick={() => console.log('view product details', product)}
+            onClick={() => handleProductClick(product)}
             sx={{ color: 'primary.main', fontWeight: 'bold' }}
           >
             {t('documents.viewMore')}

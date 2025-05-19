@@ -308,8 +308,22 @@ export default {
   },
   documents: {
     title: 'Documenti',
-    subTitle: 'Qui puoi visualizzare i tuoi prodotti attivi e scaricare il relativo contratto di adesione. Per farlo, clicca su ‘Vedi di più’.',
+    subTitle:
+      'Qui puoi visualizzare i tuoi prodotti attivi e scaricare il relativo contratto di adesione. Per farlo, clicca su ‘Vedi di più’.',
     viewMore: 'Vedi di più',
+    backButton: 'Esci',
+  },
+  documentsDetails: {
+    firstCard: {
+      title: 'DETTAGLI ADESIONE',
+      state: 'Stato',
+      active: 'Attivo',
+    },
+    secondCard: {
+      title: 'DOCUMENTI',
+      noDocumentFound:
+        'Non ci è possibile recuperare questo documento, ma la tua adesione al prodotto resta valida.',
+    },
   },
   subHeader: {
     partySelectionSearch: {

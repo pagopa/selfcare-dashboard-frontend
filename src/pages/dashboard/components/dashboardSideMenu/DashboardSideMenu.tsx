@@ -1,4 +1,5 @@
 import { SvgIconComponent } from '@mui/icons-material';
+import ArticleIcon from '@mui/icons-material/Article';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DnsIcon from '@mui/icons-material/Dns';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
@@ -133,7 +134,7 @@ export default function DashboardSideMenu({
     {
       key: 'documents',
       title: t('overview.sideMenu.institutionManagement.documents.title'),
-      icon: AssignmentIcon,
+      icon: ArticleIcon,
       path: resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
       isVisible: isDocumentsSectionVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),

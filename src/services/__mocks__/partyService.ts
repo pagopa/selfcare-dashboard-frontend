@@ -388,7 +388,7 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-io-premium',
         authorized: false,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '11111111111',
