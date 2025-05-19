@@ -227,7 +227,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
                 <Grid item xs>
                   <Box display="flex" flexDirection="column">
                     {documents.length > 1 && (
-                      <Typography variant="body1">
+                      <Typography variant="body1" fontWeight={'fontWeightMedium'}>
                         {mapProductIdToTitle(doc.productId ?? '')}
                       </Typography>
                     )}
