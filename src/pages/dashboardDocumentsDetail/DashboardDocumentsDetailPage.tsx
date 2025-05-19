@@ -15,6 +15,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend/lib';
 import BackComponent from '@pagopa/selfcare-common-frontend/lib/components/BackComponent';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useEffect, useState } from 'react';
@@ -92,6 +93,12 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
     }
 
     const token = storageTokenOps.read();
+
+    trackEvent('DASHBOARD_VIEW_DOCUMENT', {
+      product_role: party.products.find((p) => p.productId === productId)?.userRole,
+      product_id: productId,
+      party_id: party.partyId,
+    });
 
     setLoadigContract(true);
 

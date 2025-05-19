@@ -14,6 +14,7 @@ import {
 } from '@pagopa/selfcare-common-frontend/lib';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib/hooks/useUnloadEventInterceptor';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useCallback } from 'react';
@@ -138,6 +139,10 @@ export default function DashboardSideMenu({
       path: resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
       isVisible: isDocumentsSectionVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
+      action: () => {
+        trackEvent('DASHBOARD_OPEN_DOCUMENT', { party_id: party.partyId });
+        navigateTo(resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path));
+      },
     },
     {
       key: 'users',
