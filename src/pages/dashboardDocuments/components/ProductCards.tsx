@@ -2,6 +2,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import React, { useMemo } from 'react';
@@ -64,6 +65,11 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
   );
 
   const handleProductClick = (product: Product) => {
+    trackEvent('DASHBOARD_OPEN_PRODUCT_DOCUMENT', {
+      product_role: party.products.find((p) => p.productId === product.id)?.userRole,
+      product_id: product.id,
+      party_id: party.partyId,
+    });
     const baseUrl = resolvePathVariables(DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path, {
       partyId: party.partyId,
     });
