@@ -24,7 +24,7 @@ const isProductEligible = (
   hasPermission: (productId: string, action: Actions) => boolean
 ): Product | SubProductResource | null => {
   const baseInstitutionProduct = party.products.find(
-    (ip) => ip.productId === product.id && product.status === 'ACTIVE'
+    (ip) => ip.productId === product.id && product.status === 'ACTIVE' && ip.productOnBoardingStatus === 'ACTIVE'
   );
 
   if (
