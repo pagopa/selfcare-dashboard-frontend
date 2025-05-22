@@ -1,9 +1,7 @@
-import { Alert, Box, Grid } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Grid } from '@mui/material';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useState } from 'react';
-import { Trans } from 'react-i18next';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../model/Party';
