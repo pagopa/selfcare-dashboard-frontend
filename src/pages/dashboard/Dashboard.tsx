@@ -154,7 +154,7 @@ const Dashboard = () => {
       )
   );
 
-  const isDocumentsSectionVisible = !!activeProducts.some((partyProd) =>
+  const isDocumentsSectionVisible = ENV.SHOW_DOCUMENTS && !!activeProducts.some((partyProd) =>
     hasPermission(partyProd.id ?? '', Actions.ViewContract)
   );
 

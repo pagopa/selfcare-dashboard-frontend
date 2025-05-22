@@ -72,4 +72,6 @@ export const ENV = {
   },
 
   MAX_ADMIN_COUNT: env.get('REACT_APP_MAX_ADMIN_COUNT').default('4').asString(),
+
+  SHOW_DOCUMENTS: env.get('REACT_APP_SHOW_DOCUMENTS').default('false').asBool(),
 };
