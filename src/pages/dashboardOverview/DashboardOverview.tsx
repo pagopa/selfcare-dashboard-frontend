@@ -85,13 +85,6 @@ const DashboardOverview = ({ party, products }: Props) => {
     }
   }, [canSeeNotActiveProductsList, allowedInstitutionTypes, party.partyId]);
 
-  const canSeeBannerIo =
-    party.products.filter(
-      (p) =>
-        p.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
-        p.productId?.startsWith('prod-io')
-    ).length > 0;
-
   return (
     <Box p={3} sx={{ width: '100%' }}>
       <PartyDetailModal
@@ -102,39 +95,6 @@ const DashboardOverview = ({ party, products }: Props) => {
         canUploadLogo={canUploadLogo}
       />
       <WelcomeDashboard setOpen={setOpen} />
-      {canSeeBannerIo && (
-        <Alert severity="info" sx={{ mt: 5 }}>
-          <Trans
-            i18nKey="customAlert.message"
-            components={{
-              1: <span style={{ fontWeight: 600 }} />,
-              2: <strong />,
-              3: (
-                <ButtonNaked
-                  component="button"
-                  color="primary"
-                  onClick={() =>
-                    window.open(
-                      'https://developer.pagopa.it/app-io/guides/io-guida-tecnica/funzionalita/pubblicare-un-servizio/gestire-laccesso-ai-servizi-tramite-i-gruppi',
-                      'blank',
-                      'noopener,noreferrer'
-                    )
-                  }
-                  sx={{
-                    textDecoration: 'underline',
-                    color: 'primary.main',
-                    verticalAlign: 'baseline',
-                  }}
-                />
-              ),
-            }}
-          >
-            {
-              "<1>Novità!</1><br />Disponibile dal 31/03/2025 la funzionalità dei <2>Gruppi</2> per IO. Permette di gestire i servizi limitando l'accesso a gruppi specifici di utenti. <3>Come funziona?</3>"
-            }
-          </Trans>
-        </Alert>
-      )}
 
       <Grid item xs={12} mb={2} mt={5}>
         {canSeeActiveProductsList && <ActiveProductsSection products={products} party={party} />}
