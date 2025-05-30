@@ -174,6 +174,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
                 resolvePathVariables(DASHBOARD_ROUTES.DOCUMENTS.path, { partyId: party.partyId })
               )
             }
+            size="medium"
           >
             {t('documents.title')}
           </ButtonNaked>
@@ -185,16 +186,24 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
       <Typography variant="h4" fontWeight={'fontWeightBold'} mt={1}>
         {productTitle}
       </Typography>
-      <Grid container mt={3} sx={{ gap: '8px' }} alignItems="flex-start">
+      <Grid
+        container
+        mt={3}
+        sx={{ gap: '8px' }}
+        alignItems="flex-start"
+        justifyContent="space-between"
+        flexWrap={{ xs: 'wrap', md: 'nowrap' }}
+      >
         <Grid
           item
           xs={12}
-          md={5.9}
+          md={6}
           p={3}
           bgcolor={'background.paper'}
           sx={{ height: 'auto', alignSelf: 'flex-start' }}
+          borderRadius={'8px'}
         >
-          <Typography fontSize={'14px'} fontWeight={'fontWeightBold'}>
+          <Typography fontSize={'14px'} fontWeight={'fontWeightBold'} mb={3}>
             {t('documentsDetails.firstCard.title')}
           </Typography>
           <Grid container alignItems="center">
@@ -209,40 +218,44 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
         <Grid
           item
           xs={12}
-          md={5.9}
+          md={6}
           p={3}
           bgcolor={'background.paper'}
+          borderRadius={'8px'}
           sx={{ height: 'auto', alignSelf: 'flex-start' }}
         >
           <Typography fontSize={'14px'} fontWeight={'fontWeightBold'}>
             {t('documentsDetails.secondCard.title')}
           </Typography>
 
-          <Grid mt={1}>
+          <Grid mt={3} spacing={1}>
             {documents.map((doc, i) => (
-              <Grid container key={i} alignItems="center" spacing={1} marginBottom={1}>
-                <Grid item>
-                  <Box ml={4}>
+              <Grid container key={i} alignItems="center" spacing={1} marginBottom={3}>
+                <Grid item ml={4}>
+                  <Grid display="flex">
                     {doc.contractAvailable ? (
                       <InsertDriveFileIcon color="primary" />
                     ) : (
                       <FileCopyOff />
                     )}
-                  </Box>
+                  </Grid>
                 </Grid>
 
                 <Grid item xs>
                   <Box display="flex" flexDirection="column">
-                    {documents.length > 1 && (
+                    {(documents.length > 1 || !doc.contractAvailable) && (
                       <Typography variant="body1" fontWeight={'fontWeightMedium'}>
                         {mapProductIdToTitle(doc.productId ?? '')}
                       </Typography>
                     )}
+
                     {doc.contractAvailable ? (
                       <ButtonNaked
                         color="primary"
                         onClick={() => openContractFile(doc.productId)}
                         sx={{ textAlign: 'start', justifyContent: 'flex-start' }}
+                        component={'a'}
+                        size="medium"
                       >{`Contratto_di_adesione_${mapProductIdToTitle(
                         doc.productId ?? ''
                       )}`}</ButtonNaked>

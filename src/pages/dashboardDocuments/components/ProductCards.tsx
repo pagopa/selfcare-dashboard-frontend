@@ -1,4 +1,4 @@
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { ArrowForward } from '@mui/icons-material';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
@@ -25,7 +25,10 @@ const isProductEligible = (
   hasPermission: (productId: string, action: Actions) => boolean
 ): Product | SubProductResource | null => {
   const baseInstitutionProduct = party.products.find(
-    (ip) => ip.productId === product.id && product.status === 'ACTIVE' && ip.productOnBoardingStatus === 'ACTIVE'
+    (ip) =>
+      ip.productId === product.id &&
+      product.status === 'ACTIVE' &&
+      ip.productOnBoardingStatus === 'ACTIVE'
   );
 
   if (
@@ -163,7 +166,7 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
           </CardContent>
           <ButtonNaked
             component="button"
-            endIcon={<ArrowForwardIosIcon />}
+            endIcon={<ArrowForward />}
             onClick={() => handleProductClick(product)}
             sx={{ color: 'primary.main', fontWeight: 'bold' }}
           >
