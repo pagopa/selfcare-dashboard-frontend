@@ -317,7 +317,7 @@ export default {
     firstCard: {
       title: 'DETTAGLI ADESIONE',
       state: 'Stato',
-      active: 'Attivo',
+      active: 'Attiva',
     },
     secondCard: {
       title: 'DOCUMENTI',
