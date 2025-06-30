@@ -149,7 +149,13 @@ export default function ActiveProductCard({
         {/* Arrow Button */}
         {!disableBtn && (
           <Grid item>
-            <IconButton onClick={btnAction} disabled={disableBtn} id={`forward_${product.id}`} color='primary'>
+            <IconButton
+              onClick={btnAction}
+              disabled={disableBtn}
+              id={`forward_${product.id}`}
+              color="primary"
+              aria-label={`Accedi alla piattaforma del prodotto ${product.title}`}
+            >
               <ArrowForward />
             </IconButton>
           </Grid>
