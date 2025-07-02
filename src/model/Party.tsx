@@ -26,9 +26,9 @@ export type OnboardedProduct = {
   userProductActions?: Array<string>;
   userRole?: string;
   isAggregator?: boolean;
-  institutionType: string;
-  origin: string;
-  originId: string;
+  institutionType?: string;
+  origin?: string;
+  originId?: string;
 };
 
 export type Party = {
