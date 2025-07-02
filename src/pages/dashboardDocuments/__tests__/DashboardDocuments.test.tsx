@@ -21,7 +21,6 @@ test('should render component DashboardDocuments', async () => {
   const documenTitle = await screen.findByText('Documenti');
 
   expect(documenTitle).toBeInTheDocument();
-  screen.debug();
 
   const seeMoreButtons = await screen.findAllByText('Vedi di più');
 

@@ -5,21 +5,30 @@ import { ProductOnBoardingStatusEnum } from '../api/generated/b4f-dashboard/Onbo
 import { ENV } from '../utils/env';
 
 export type UserRole = 'ADMIN' | 'LIMITED' | 'ADMIN_EA';
-export type PartyRole = 'DELEGATE' | 'MANAGER' | 'OPERATOR' | 'SUB_DELEGATE' | 'ADMIN_EA'| 'ADMIN_EA_IO';
+export type PartyRole =
+  | 'DELEGATE'
+  | 'MANAGER'
+  | 'OPERATOR'
+  | 'SUB_DELEGATE'
+  | 'ADMIN_EA'
+  | 'ADMIN_EA_IO';
 export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'TOBEVALIDATED';
 
-type OnboardedProduct = {
+export type OnboardedProduct = {
   authorized?: boolean;
   billing?: {
-      publicServices?: boolean;
-      recipientCode?: string;
-      vatNumber?: string;
+    publicServices?: boolean;
+    recipientCode?: string;
+    vatNumber?: string;
   };
   productId?: string;
   productOnBoardingStatus?: ProductOnBoardingStatusEnum;
   userProductActions?: Array<string>;
   userRole?: string;
   isAggregator?: boolean;
+  institutionType?: string;
+  origin?: string;
+  originId?: string;
 };
 
 export type Party = {
@@ -84,7 +93,7 @@ export const institutionResource2Party = (institutionResource: InstitutionResour
     city: institutionResource.city ?? '',
     country: institutionResource.country ?? '',
     typology: 'TODO', // it will represent the taxonomy of the party
-    institutionType: institutionResource.institutionType,
+    institutionType: institutionResource.institutionType as string,
     recipientCode: institutionResource.recipientCode,
     geographicTaxonomies:
       institutionResource.geographicTaxonomies as Array<GeographicTaxonomyResource>,

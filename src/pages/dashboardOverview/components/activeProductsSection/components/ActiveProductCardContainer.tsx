@@ -6,9 +6,8 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
-import { Party } from '../../../../../model/Party';
+import { Party, OnboardedProduct } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { INTEROP_PRODUCT_ENUM, PRODUCT_IDS } from '../../../../../utils/constants';
 import { ENV } from '../../../../../utils/env';
