@@ -1175,6 +1175,79 @@
         "summary": "getOnboardingsInfo"
       }
     },
+    "/v2/institutions/{institutionId}/product/{productId}/check-user": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/SearchUserDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CheckUserResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to verify if the user is already onboarded on an institution and product given its fiscal code",
+        "operationId": "v2CheckUser",
+        "summary": "checkUser"
+      }
+    },
     "/v2/institutions/{institutionId}/products/{productId}/users": {
       "post": {
         "consumes": [
@@ -2878,6 +2951,17 @@
       "title": "CertifiedFieldResourceOfstring",
       "type": "object"
     },
+    "CheckUserResponse": {
+      "properties": {
+        "isUserOnboarded": {
+          "description": "Boolean indicating the presence of a user given its fiscal code, institutionId and productId",
+          "example": false,
+          "type": "boolean"
+        }
+      },
+      "title": "CheckUserResponse",
+      "type": "object"
+    },
     "CreateUserDto": {
       "properties": {
         "email": {
@@ -3530,8 +3614,31 @@
         "billing": {
           "$ref": "#/definitions/Billing"
         },
+        "institutionType": {
+          "enum": [
+            "AS",
+            "CON",
+            "GPU",
+            "GSP",
+            "PA",
+            "PG",
+            "PRV",
+            "PSP",
+            "PT",
+            "REC",
+            "SA",
+            "SCP"
+          ],
+          "type": "string"
+        },
         "isAggregator": {
           "type": "boolean"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "originId": {
+          "type": "string"
         },
         "productId": {
           "type": "string"
@@ -3568,8 +3675,31 @@
         "billing": {
           "$ref": "#/definitions/Billing"
         },
+        "institutionType": {
+          "enum": [
+            "AS",
+            "CON",
+            "GPU",
+            "GSP",
+            "PA",
+            "PG",
+            "PRV",
+            "PSP",
+            "PT",
+            "REC",
+            "SA",
+            "SCP"
+          ],
+          "type": "string"
+        },
         "isAggregator": {
           "type": "boolean"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "originId": {
+          "type": "string"
         },
         "productId": {
           "type": "string"
@@ -3604,6 +3734,32 @@
           "description": "Boolean indicating the presence of a contract",
           "example": false,
           "type": "boolean"
+        },
+        "institutionType": {
+          "description": "Institution Type",
+          "enum": [
+            "AS",
+            "CON",
+            "GPU",
+            "GSP",
+            "PA",
+            "PG",
+            "PRV",
+            "PSP",
+            "PT",
+            "REC",
+            "SA",
+            "SCP"
+          ],
+          "type": "string"
+        },
+        "origin": {
+          "description": "Product's data origin",
+          "type": "string"
+        },
+        "originId": {
+          "description": "Product's identifier related to origin",
+          "type": "string"
         },
         "productId": {
           "description": "Product's unique identifier",

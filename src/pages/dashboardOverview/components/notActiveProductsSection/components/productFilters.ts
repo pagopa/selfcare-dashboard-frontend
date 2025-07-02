@@ -1,6 +1,5 @@
-import { OnboardedProduct } from '../../../../../api/generated/b4f-dashboard/OnboardedProduct';
-import { OnboardedProductResource } from '../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
+import { OnboardedProduct } from '../../../../../model/Party';
 import { Product, ProductInstitutionMap } from '../../../../../model/Product';
 import { PRODUCT_IDS } from '../../../../../utils/constants';
 
@@ -33,7 +32,7 @@ const institutionTypeFilter = (
 
 const onboardingStatusFilter = (
   productsWithStatusActive: Array<Product>,
-  onboardedProducts: Array<OnboardedProductResource>,
+  onboardedProducts: Array<OnboardedProduct>,
   institutionType: string
 ): Array<Product> => {
   const onboardedProductIds = onboardedProducts.map((p) => p.productId);
