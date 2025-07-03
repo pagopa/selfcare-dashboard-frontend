@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../api/DashboardApiClient';
 import { GeographicTaxonomyDto } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
 import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
+import { ProductOnBoardingStatusEnum } from '../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { CountryResource } from '../../../../../model/CountryResource';
 import { Party } from '../../../../../model/Party';
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks';
@@ -19,6 +20,7 @@ import GeoTaxonomySection from './GeoTaxonomySection';
 
 type Props = {
   party: Party;
+  institutionTypesList: Array<string>;
 };
 
 const labelStyles = {
@@ -28,7 +30,7 @@ const labelStyles = {
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export default function PartyDetail({ party }: Props) {
+export default function PartyDetail({ party, institutionTypesList }: Props) {
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -49,14 +51,16 @@ export default function PartyDetail({ party }: Props) {
     dispatch(partiesActions.setPartySelected(partyUpdated));
   };
 
-  const showGeoTax = party.institutionType && !['PT', 'SA', 'AS'].includes(party.institutionType);
-
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
+  const showGeoTaxonomyForInstitutionType = institutionTypesList.some(
+    (type) => !['PT', 'SA', 'AS'].includes(type)
+  );
+
   useEffect(() => {
     if (
       ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
       (!party.geographicTaxonomies || party?.geographicTaxonomies?.length === 0) &&
-      showGeoTax
+      showGeoTaxonomyForInstitutionType
     ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     } else if (party.geographicTaxonomies && party?.geographicTaxonomies?.length > 0) {
@@ -73,11 +77,14 @@ export default function PartyDetail({ party }: Props) {
 
   const institutionTypeTranscode = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
+
   const showTooltipAfter = 45;
   const lastPartyVatNumber = party.products[party.products.length - 1]?.billing?.vatNumber;
   const isTaxCodeEquals2Piva = party.fiscalCode === lastPartyVatNumber;
+  const uniqueInstitutionTypesList = [...new Set(institutionTypesList)];
+  const isInstitutionTypePA = institutionTypesList?.includes('PA');
 
-  const isInstitutionTypePA = party.institutionType === 'PA';
+  console.log('uniqueInstitutionTypesList', uniqueInstitutionTypesList);
 
   const handleAddNewTaxonomies = () => {
     setLoadingSaveGeotaxonomies(true);
@@ -158,6 +165,10 @@ export default function PartyDetail({ party }: Props) {
     }
   };
 
+  const ipaCodeForPa = party.products
+    .filter((product) => product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE)
+    .find((product) => product.institutionType === 'PA')?.originId;
+
   return (
     <>
       <Grid container spacing={1}>
@@ -184,34 +195,45 @@ export default function PartyDetail({ party }: Props) {
                 {party.description}
               </Typography>
             </Tooltip>
-            <Divider sx={{ mb: 1 }} />
           </Grid>
 
           {/* institutionType */}
-          <Grid item xs={12}>
-            <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t('overview.partyDetail.institutionType')}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Tooltip
-              title={
-                institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
-                  ? institutionTypeTranscode(party.institutionType)
-                  : ''
-              }
-              placement="top"
-              arrow={true}
-            >
-              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {institutionTypeTranscode(party.institutionType)}
-              </Typography>
-            </Tooltip>
-            <Divider sx={{ mb: 1 }} />
-          </Grid>
-          {/* category */}
-          {party.category && (
+          {uniqueInstitutionTypesList.length < 2 && (
             <>
+              <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2" sx={{ ...labelStyles }}>
+                  {t('overview.partyDetail.institutionType')}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Tooltip
+                  title={
+                    institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
+                      ? institutionTypeTranscode(party.institutionType)
+                      : ''
+                  }
+                  placement="top"
+                  arrow={true}
+                >
+                  <Typography
+                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                    className="ShowDots"
+                  >
+                    {institutionTypeTranscode(party.institutionType)}
+                  </Typography>
+                </Tooltip>
+              </Grid>
+            </>
+          )}
+          {/* category */}
+          {uniqueInstitutionTypesList.length < 2 && party.category && (
+            <>
+              <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.category')}
@@ -230,7 +252,6 @@ export default function PartyDetail({ party }: Props) {
                     {party.category}
                   </Typography>
                 </Tooltip>
-                <Divider sx={{ mb: 1 }} />
               </Grid>
             </>
           )}
@@ -238,38 +259,31 @@ export default function PartyDetail({ party }: Props) {
           {isAooUo && (
             <>
               <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
+              <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.structure')}
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
-                      ? institutionTypeTranscode(party.institutionType)
-                      : ''
-                  }
-                  placement="top"
-                  arrow={true}
+                <Typography
+                  sx={{ ...infoStyles, maxWidth: '100% !important' }}
+                  className="ShowDots"
                 >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.subunitType === 'AOO'
-                      ? 'Area Organizzativa Omogenea'
-                      : party.subunitType === 'UO'
-                      ? 'Unità Organizzativa'
-                      : ''}
-                  </Typography>
-                </Tooltip>
-                <Divider sx={{ mb: 1 }} />
+                  {party.subunitType === 'AOO'
+                    ? 'Area Organizzativa Omogenea'
+                    : party.subunitType === 'UO'
+                    ? 'Unità Organizzativa'
+                    : ''}
+                </Typography>
               </Grid>
             </>
           )}
           {/* geographicTaxonomy */}
-          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && showGeoTax && (
+          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && showGeoTaxonomyForInstitutionType && (
             <Grid item xs={12}>
+              <Divider sx={{ mb: 1 }} />
               <Grid container>
                 <Grid item xs={8}>
                   {
@@ -323,13 +337,15 @@ export default function PartyDetail({ party }: Props) {
                     )}
                 </Grid>
               </Grid>
-              <Divider sx={{ mb: 1 }} />
             </Grid>
           )}
 
           {/* origin (ipa code) */}
           {isInstitutionTypePA && !isAooUo ? (
             <>
+              <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.originId')}&nbsp;{party.origin}
@@ -338,8 +354,8 @@ export default function PartyDetail({ party }: Props) {
               <Grid item xs={12}>
                 <Tooltip
                   title={
-                    party.originId && party.originId.length >= showTooltipAfter
-                      ? party.originId
+                    ipaCodeForPa && ipaCodeForPa.length >= showTooltipAfter
+                      ? ipaCodeForPa
                       : ''
                   }
                   placement="top"
@@ -349,13 +365,16 @@ export default function PartyDetail({ party }: Props) {
                     sx={{ ...infoStyles, maxWidth: '100% !important' }}
                     className="ShowDots"
                   >
-                    {party.originId}
+                    {ipaCodeForPa}
                   </Typography>
                 </Tooltip>
               </Grid>
             </>
           ) : isAooUo ? (
             <>
+              <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.uniqueCode')}
@@ -378,13 +397,15 @@ export default function PartyDetail({ party }: Props) {
                     {party.subunitCode}
                   </Typography>
                 </Tooltip>
-                <Divider sx={{ mb: 1 }} />
               </Grid>
             </>
           ) : undefined}
-          {!isInstitutionTypePA && party.fiscalCode ? (
+          {!isInstitutionTypePA && party.fiscalCode && (
             <>
               {/* fiscalCode */}
+              <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {isTaxCodeEquals2Piva
@@ -409,15 +430,15 @@ export default function PartyDetail({ party }: Props) {
                     {party.fiscalCode}
                   </Typography>
                 </Tooltip>
-                <Divider sx={{ mb: 1 }} />
               </Grid>
             </>
-          ) : (
-            <></>
           )}
           {/* vatNumberGroup */}
-          {party.institutionType === 'PSP' && (
+          {institutionTypesList?.includes('PSP') && (
             <>
+              <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {t('overview.partyDetail.vatNumberGroup')}
@@ -432,7 +453,6 @@ export default function PartyDetail({ party }: Props) {
                     ? t('overview.partyDetail.vatNumberGroupValues.yes')
                     : t('overview.partyDetail.vatNumberGroupValues.no')}
                 </Typography>
-                <Divider sx={{ mb: 1 }} />
               </Grid>
             </>
           )}
@@ -440,6 +460,9 @@ export default function PartyDetail({ party }: Props) {
           {/* fiscalCode */}
           {isInstitutionTypePA && party.fiscalCode && (
             <>
+              <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2" sx={{ ...labelStyles }}>
                   {isTaxCodeEquals2Piva
@@ -464,7 +487,6 @@ export default function PartyDetail({ party }: Props) {
                     {party.fiscalCode}
                   </Typography>
                 </Tooltip>
-                <Divider sx={{ mb: 1 }} />
               </Grid>
             </>
           )}
@@ -472,6 +494,9 @@ export default function PartyDetail({ party }: Props) {
             {/* vatNumber */}
             {!isTaxCodeEquals2Piva && lastPartyVatNumber && (
               <>
+                <Grid item xs={12}>
+                  <Divider sx={{ mb: 1 }} />
+                </Grid>
                 <Grid item xs={12}>
                   <Typography variant="body2" sx={{ ...labelStyles }}>
                     {t('overview.partyDetail.vatNumber')}
@@ -494,13 +519,15 @@ export default function PartyDetail({ party }: Props) {
                       {lastPartyVatNumber}
                     </Typography>
                   </Tooltip>
-                  <Divider sx={{ mb: 1 }} />
                 </Grid>
               </>
             )}
           </>
 
           {/* pecEmail */}
+          <Grid item xs={12}>
+            <Divider sx={{ mb: 1 }} />
+          </Grid>
           <Grid item xs={12}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.pec')}
@@ -520,10 +547,12 @@ export default function PartyDetail({ party }: Props) {
                 {party.digitalAddress}
               </Typography>
             </Tooltip>
-            <Divider sx={{ mb: 1 }} />
           </Grid>
 
           {/* registeredOffice  */}
+          <Grid item xs={12}>
+            <Divider sx={{ mb: 1 }} />
+          </Grid>
           <Grid item xs={12}>
             <Typography variant="body2" sx={{ ...labelStyles }}>
               {t('overview.partyDetail.registeredOffice')}
@@ -550,9 +579,13 @@ export default function PartyDetail({ party }: Props) {
             </Tooltip>
           </Grid>
           {/* aooParentCode */}
+
           {party.aooParentCode &&
             party.subunitType === 'UO' && ( // TODO: change logic if party.aooParentCode is present
               <>
+                <Grid item xs={12}>
+                  <Divider sx={{ mb: 1 }} />
+                </Grid>
                 <Grid item xs={12}>
                   <Typography variant="body2" sx={{ ...labelStyles }}>
                     {t('overview.partyDetail.aooParentCode')}
@@ -565,7 +598,6 @@ export default function PartyDetail({ party }: Props) {
                   >
                     {party.aooParentCode}
                   </Typography>
-                  <Divider sx={{ mb: 1 }} />
                 </Grid>
               </>
             )}

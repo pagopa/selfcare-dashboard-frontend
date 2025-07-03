@@ -25,8 +25,6 @@ const DashboardOverview = ({ party, products }: Props) => {
   const [filteredProducts, setFilteredProducts] = useState<Array<Product>>([]);
   const { getAllProductsWithPermission } = usePermissions();
 
-  const showInfoBanner = party.institutionType === 'PA';
-
   const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
 
   const canSeeActiveProductsList =
@@ -86,7 +84,6 @@ const DashboardOverview = ({ party, products }: Props) => {
   return (
     <Box p={3} sx={{ width: '100%' }}>
       <PartyDetailModal
-        showInfoBanner={showInfoBanner}
         party={party}
         open={open}
         setOpen={setOpen}

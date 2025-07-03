@@ -36,15 +36,21 @@ export const useSelectedParty = (): {
           userRole: selectedParty?.userRole,
         };
         setParty(partyWithUserRoleAndStatus);
-        
-        const productPermissions = [...party.products]
-        .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
-        .map((product) => ({
-          productId: product.productId ?? '',
-          actions: product.userProductActions ? [...product.userProductActions] : [],
-        }));
 
-      dispatch(setProductPermissions(productPermissions));
+        const productPermissions = [...party.products]
+          .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
+          .map((product) => ({
+            productId: product.productId ?? '',
+            actions: product.userProductActions ? [...product.userProductActions] : [],
+          }));
+
+        dispatch(setProductPermissions(productPermissions));
+
+        const institutionTypesList = [...party.products]
+          .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
+          .map((product) => product.institutionType);
+
+        dispatch(partiesActions.setPartySelectedInstitutionTypes(institutionTypesList));
         return party;
       } else {
         throw new Error(`Cannot find partyId ${partyId}`);
