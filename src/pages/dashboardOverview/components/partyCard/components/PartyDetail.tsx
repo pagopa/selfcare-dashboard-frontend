@@ -165,8 +165,6 @@ export default function PartyDetail({ party, institutionTypesList }: Readonly<Pr
     .filter((product) => product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE)
     .find((product) => product.institutionType === 'PA')?.originId;
 
-  // Helper function to get tooltip text for simple cases
-
   const getSimpleTooltipText = (text?: string): string =>
     text && text.length >= showTooltipAfter ? text : '';
 
@@ -357,13 +355,16 @@ export default function PartyDetail({ party, institutionTypesList }: Readonly<Pr
               isForeignInsurence
                 ? formattedForeignAddress
                 : party.zipCode
-                ? `${party.registeredOffice} - ${party.zipCode}`
-                : party.registeredOffice
+                ? `${party.registeredOffice} - ${party.zipCode} ${getCountryNameByAlpha2(
+                    countries,
+                    party.country
+                  )}`
+                : `${party.registeredOffice} ${getCountryNameByAlpha2(countries, party.country)}`
             }
             tooltipText={getTooltipText(
               isForeignInsurence,
               formattedForeignAddress,
-              party.registeredOffice,
+              `${party.registeredOffice} ${getCountryNameByAlpha2(countries, party.country)}`,
               showTooltipAfter
             )}
           />
