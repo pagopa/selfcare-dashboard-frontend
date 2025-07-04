@@ -230,7 +230,7 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
         userProductActions: [Actions.AccessProductBackoffice, Actions.ListAvailableProducts],
-        institutionType: 'GPU',
+        institutionType: 'PA',
         origin: 'IVASS',
         originId: '20128',
       },
