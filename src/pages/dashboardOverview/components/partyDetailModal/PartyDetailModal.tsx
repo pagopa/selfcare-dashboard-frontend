@@ -4,6 +4,8 @@ import { useLoading } from '@pagopa/selfcare-common-frontend/lib';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
+import { useAppSelector } from '../../../../redux/hooks';
+import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
 import PartyDetail from '../partyCard/components/PartyDetail';
 import { PartyLogoUploader } from '../partyCard/components/partyLogoUploader/PartyLogoUploader';
 import { DashboardInfoBanner } from './DashboardInfoBanner';
@@ -11,7 +13,6 @@ import { DashboardInfoBanner } from './DashboardInfoBanner';
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  showInfoBanner: boolean;
   party: Party;
   canUploadLogo: boolean;
 };
@@ -32,16 +33,15 @@ const CustomDrawer = styled(Drawer)(() => ({
   },
 }));
 
-export const PartyDetailModal = ({
-  showInfoBanner,
-  party,
-  open,
-  setOpen,
-  canUploadLogo,
-}: Props) => {
+export const PartyDetailModal = ({ party, open, setOpen, canUploadLogo }: Props) => {
   const { t } = useTranslation();
   const setLoading = useLoading('DRAWER_PARTY_DETAIL');
+  const institutionTypesList = useAppSelector(partiesSelectors.selectPartySelectedInstitutionTypes);
+
   const [clearCache, setclearCache] = useState(false);
+
+  const showInfoBanner = institutionTypesList?.includes('PA');
+
   const reloadPage = () => {
     setclearCache(false);
     window.location.replace(window.location.href);
@@ -94,7 +94,7 @@ export const PartyDetailModal = ({
           </Grid>
         )}
 
-        <PartyDetail party={party} />
+        <PartyDetail party={party} institutionTypesList={institutionTypesList}/>
       </Grid>
     </CustomDrawer>
   );

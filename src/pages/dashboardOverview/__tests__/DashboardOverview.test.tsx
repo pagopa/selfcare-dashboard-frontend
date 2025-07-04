@@ -1,7 +1,8 @@
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen } from '@testing-library/react';
-import React from 'react';
 import '../../../locale';
+import { partiesActions } from '../../../redux/slices/partiesSlice';
+import { store } from '../../../redux/store';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
@@ -85,8 +86,12 @@ test('should render component DashboardOverview with institutionType AS and Prod
 
 test('should render component DashboardOverview with no geoTaxonomy', async () => {
   const mockedPAWithNoGeoTax = mockedParties[0];
+
+  store.dispatch(partiesActions.setPartySelectedInstitutionTypes(['PA', 'GSP']));
+
   renderWithProviders(
-    <DashboardOverview party={mockedPAWithNoGeoTax} products={mockedPartyProducts} />
+    <DashboardOverview party={mockedPAWithNoGeoTax} products={mockedPartyProducts} />,
+    store
   );
 
   // geo tax modal is visile bc mockedPAWithNoGeoTax has no geoTaxonomies
@@ -108,9 +113,11 @@ test('should render component DashboardOverview with no geoTaxonomy', async () =
 
 test('should render component DashboardOverview with geoTaxonomy', async () => {
   const mockedPAWithGeoTax = mockedParties[2];
+
   renderWithProviders(
     <DashboardOverview party={mockedPAWithGeoTax} products={mockedPartyProducts} />
   );
+
   const partyDetailModal = await screen.findByText('Gestisci i dati dell’ente');
 
   fireEvent.click(partyDetailModal);

@@ -233,7 +233,7 @@ export default function GeoTaxonomySection({
                     value={val?.desc?.toLowerCase()}
                     renderOption={(props, option) => (
                       <span style={{ textTransform: 'capitalize' }} {...props}>
-                        {option ? option.toLocaleLowerCase() : '' || undefined}
+                        {option ? option.toLocaleLowerCase() : ''}
                       </span>
                     )}
                     renderInput={(params) => (

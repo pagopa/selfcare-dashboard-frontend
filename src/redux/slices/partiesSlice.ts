@@ -11,6 +11,7 @@ interface PartiesState {
   selectedPartyLogoUrl?: string;
   selectedProducts?: Array<Product>;
   selectedProductsRolesMap?: ProductsRolesMap;
+  selectedPartyInstitutionTypes?: Array<string | undefined>;
 }
 
 const initialState: PartiesState = {};
@@ -50,6 +51,10 @@ export const partiesSlice = createSlice({
       }
       Object.assign(state.selectedProductsRolesMap, action.payload);
     },
+
+    setPartySelectedInstitutionTypes: (state, action: PayloadAction<Array<string | undefined>>) => {
+      state.selectedPartyInstitutionTypes = action.payload;
+    },
   },
 });
 
@@ -72,4 +77,7 @@ export const partiesSelectors = {
     state.parties.selectedProductsRolesMap
       ? state.parties.selectedProductsRolesMap[productId]
       : undefined,
+
+  selectPartySelectedInstitutionTypes: (state: RootState): Array<string> =>
+    (state.parties.selectedPartyInstitutionTypes ?? []).filter((t): t is string => t !== undefined),
 };

@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../api/DashboardApiClient';
 import { GeographicTaxonomyDto } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
 import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
+import { ProductOnBoardingStatusEnum } from '../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { CountryResource } from '../../../../../model/CountryResource';
 import { Party } from '../../../../../model/Party';
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks';
@@ -16,9 +17,11 @@ import { partiesActions, partiesSelectors } from '../../../../../redux/slices/pa
 import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../../../../utils/constants';
 import { ENV } from '../../../../../utils/env';
 import GeoTaxonomySection from './GeoTaxonomySection';
+import { PartyDetailField } from './PartyDetailField';
 
 type Props = {
   party: Party;
+  institutionTypesList: Array<string>;
 };
 
 const labelStyles = {
@@ -28,7 +31,7 @@ const labelStyles = {
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export default function PartyDetail({ party }: Props) {
+export default function PartyDetail({ party, institutionTypesList }: Readonly<Props>) {
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -49,14 +52,16 @@ export default function PartyDetail({ party }: Props) {
     dispatch(partiesActions.setPartySelected(partyUpdated));
   };
 
-  const showGeoTax = party.institutionType && !['PT', 'SA', 'AS'].includes(party.institutionType);
-
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
+  const showGeoTaxonomyForInstitutionType = institutionTypesList.some(
+    (type) => !['PT', 'SA', 'AS'].includes(type)
+  );
+
   useEffect(() => {
     if (
       ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
       (!party.geographicTaxonomies || party?.geographicTaxonomies?.length === 0) &&
-      showGeoTax
+      showGeoTaxonomyForInstitutionType
     ) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     } else if (party.geographicTaxonomies && party?.geographicTaxonomies?.length > 0) {
@@ -73,11 +78,12 @@ export default function PartyDetail({ party }: Props) {
 
   const institutionTypeTranscode = (institutionType: any) =>
     t(`overview.partyDetail.institutionTypeValue.${institutionType}`);
+
   const showTooltipAfter = 45;
   const lastPartyVatNumber = party.products[party.products.length - 1]?.billing?.vatNumber;
   const isTaxCodeEquals2Piva = party.fiscalCode === lastPartyVatNumber;
-
-  const isInstitutionTypePA = party.institutionType === 'PA';
+  const uniqueInstitutionTypesList = [...new Set(institutionTypesList)];
+  const isInstitutionTypePA = institutionTypesList?.includes('PA');
 
   const handleAddNewTaxonomies = () => {
     setLoadingSaveGeotaxonomies(true);
@@ -106,18 +112,15 @@ export default function PartyDetail({ party }: Props) {
         setOpenModalFirstTimeAddGeographicTaxonomies(false);
       });
   };
-  const isAooUo = party.subunitType === 'AOO' || party.subunitType === 'UO';
 
-  const isForeignInsurence = !!(
-    party.institutionType === 'AS' &&
-    party.country &&
-    party.country !== 'IT'
-  );
+  const isAooUo = party.subunitType === 'AOO' || party.subunitType === 'UO';
+  const isForeignInsurence = !!(party.country && party.country !== 'IT');
 
   const getCountriesJSON = async () => {
     const countries = await fetch(ENV.JSON_URL.COUNTRIES);
     setCountries(await countries.json());
   };
+
   useEffect(() => {
     if (isForeignInsurence && countries.length === 0) {
       void getCountriesJSON();
@@ -158,118 +161,65 @@ export default function PartyDetail({ party }: Props) {
     }
   };
 
+  const ipaCodeForPa = party.products
+    .filter((product) => product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE)
+    .find((product) => product.institutionType === 'PA')?.originId;
+
+  const getSimpleTooltipText = (text?: string): string =>
+    text && text.length >= showTooltipAfter ? text : '';
+
   return (
     <>
       <Grid container spacing={1}>
         <Grid container item xs={12}>
           {/* companyName */}
-          <Grid item xs={12}>
-            <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t(
-                isAooUo ? 'overview.partyDetail.denomination' : 'overview.partyDetail.companyName'
-              )}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Tooltip
-              title={
-                party.description && party.description.length >= showTooltipAfter
-                  ? party.description
-                  : ''
-              }
-              placement="top"
-              arrow={true}
-            >
-              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {party.description}
-              </Typography>
-            </Tooltip>
-            <Divider sx={{ mb: 1 }} />
-          </Grid>
+          <PartyDetailField
+            label={t(
+              isAooUo ? 'overview.partyDetail.denomination' : 'overview.partyDetail.companyName'
+            )}
+            value={party.description}
+            tooltipText={getSimpleTooltipText(party.description)}
+            showDivider={false}
+          />
 
           {/* institutionType */}
-          <Grid item xs={12}>
-            <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t('overview.partyDetail.institutionType')}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Tooltip
-              title={
-                institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
-                  ? institutionTypeTranscode(party.institutionType)
+          {uniqueInstitutionTypesList.length < 2 && (
+            <PartyDetailField
+              label={t('overview.partyDetail.institutionType')}
+              value={institutionTypeTranscode(uniqueInstitutionTypesList[0])}
+              tooltipText={getSimpleTooltipText(
+                institutionTypeTranscode(uniqueInstitutionTypesList[0])
+              )}
+            />
+          )}
+
+          {/* category */}
+          {uniqueInstitutionTypesList.length < 2 && party.category && (
+            <PartyDetailField
+              label={t('overview.partyDetail.category')}
+              value={party.category}
+              tooltipText={getSimpleTooltipText(party.category)}
+            />
+          )}
+
+          {/* structure */}
+          {isAooUo && (
+            <PartyDetailField
+              label={t('overview.partyDetail.structure')}
+              value={
+                party.subunitType === 'AOO'
+                  ? 'Area Organizzativa Omogenea'
+                  : party.subunitType === 'UO'
+                  ? 'Unità Organizzativa'
                   : ''
               }
-              placement="top"
-              arrow={true}
-            >
-              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {institutionTypeTranscode(party.institutionType)}
-              </Typography>
-            </Tooltip>
-            <Divider sx={{ mb: 1 }} />
-          </Grid>
-          {/* category */}
-          {party.category && (
-            <>
-              <Grid item xs={12}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.category')}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Tooltip
-                  title={party.category.length >= showTooltipAfter ? party.category : ''}
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.category}
-                  </Typography>
-                </Tooltip>
-                <Divider sx={{ mb: 1 }} />
-              </Grid>
-            </>
+            />
           )}
-          {/* {structure} */}
-          {isAooUo && (
-            <>
-              <Grid item xs={12}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.structure')}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    institutionTypeTranscode(party.institutionType).length >= showTooltipAfter
-                      ? institutionTypeTranscode(party.institutionType)
-                      : ''
-                  }
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.subunitType === 'AOO'
-                      ? 'Area Organizzativa Omogenea'
-                      : party.subunitType === 'UO'
-                      ? 'Unità Organizzativa'
-                      : ''}
-                  </Typography>
-                </Tooltip>
-                <Divider sx={{ mb: 1 }} />
-              </Grid>
-            </>
-          )}
+
           {/* geographicTaxonomy */}
-          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && showGeoTax && (
+          {ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY && showGeoTaxonomyForInstitutionType && (
             <Grid item xs={12}>
+              <Divider sx={{ mb: 1 }} />
               <Grid container>
                 <Grid item xs={8}>
                   {
@@ -323,254 +273,112 @@ export default function PartyDetail({ party }: Props) {
                     )}
                 </Grid>
               </Grid>
-              <Divider sx={{ mb: 1 }} />
             </Grid>
           )}
 
           {/* origin (ipa code) */}
-          {isInstitutionTypePA && !isAooUo ? (
-            <>
-              <Grid item xs={12}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.originId')}&nbsp;{party.origin}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    party.originId && party.originId.length >= showTooltipAfter
-                      ? party.originId
-                      : ''
-                  }
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.originId}
-                  </Typography>
-                </Tooltip>
-              </Grid>
-            </>
-          ) : isAooUo ? (
-            <>
-              <Grid item xs={12}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.uniqueCode')}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    party.originId && party.originId.length >= showTooltipAfter
-                      ? party.originId
-                      : ''
-                  }
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.subunitCode}
-                  </Typography>
-                </Tooltip>
-                <Divider sx={{ mb: 1 }} />
-              </Grid>
-            </>
-          ) : undefined}
-          {!isInstitutionTypePA && party.fiscalCode ? (
-            <>
-              {/* fiscalCode */}
-              <Grid item xs={12}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {isTaxCodeEquals2Piva
-                    ? t('overview.partyDetail.isTaxCodeEquals2Piva')
-                    : t('overview.partyDetail.fiscalCode')}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    party.fiscalCode && party.fiscalCode.length >= showTooltipAfter
-                      ? party.fiscalCode
-                      : ''
-                  }
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.fiscalCode}
-                  </Typography>
-                </Tooltip>
-                <Divider sx={{ mb: 1 }} />
-              </Grid>
-            </>
-          ) : (
-            <></>
-          )}
-          {/* vatNumberGroup */}
-          {party.institutionType === 'PSP' && (
-            <>
-              <Grid item xs={12}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {t('overview.partyDetail.vatNumberGroup')}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography
-                  sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                  className="ShowDots"
-                >
-                  {party.vatNumberGroup === true
-                    ? t('overview.partyDetail.vatNumberGroupValues.yes')
-                    : t('overview.partyDetail.vatNumberGroupValues.no')}
-                </Typography>
-                <Divider sx={{ mb: 1 }} />
-              </Grid>
-            </>
+          {isInstitutionTypePA && !isAooUo && (
+            <PartyDetailField
+              label={`${t('overview.partyDetail.originId')} ${party.origin}`}
+              value={ipaCodeForPa}
+              tooltipText={getSimpleTooltipText(ipaCodeForPa)}
+            />
           )}
 
-          {/* fiscalCode */}
-          {isInstitutionTypePA && party.fiscalCode && (
-            <>
-              <Grid item xs={12}>
-                <Typography variant="body2" sx={{ ...labelStyles }}>
-                  {isTaxCodeEquals2Piva
-                    ? t('overview.partyDetail.isTaxCodeEquals2Piva')
-                    : t('overview.partyDetail.fiscalCode')}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    party.fiscalCode && party.fiscalCode.length >= showTooltipAfter
-                      ? party.fiscalCode
-                      : ''
-                  }
-                  placement="top"
-                  arrow={true}
-                >
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.fiscalCode}
-                  </Typography>
-                </Tooltip>
-                <Divider sx={{ mb: 1 }} />
-              </Grid>
-            </>
+          {/* uniqueCode for AOO/UO */}
+          {isAooUo && (
+            <PartyDetailField
+              label={t('overview.partyDetail.uniqueCode')}
+              value={party.subunitCode}
+              tooltipText={getSimpleTooltipText(party.originId)}
+            />
           )}
-          <>
-            {/* vatNumber */}
-            {!isTaxCodeEquals2Piva && lastPartyVatNumber && (
-              <>
-                <Grid item xs={12}>
-                  <Typography variant="body2" sx={{ ...labelStyles }}>
-                    {t('overview.partyDetail.vatNumber')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Tooltip
-                    title={
-                      lastPartyVatNumber && lastPartyVatNumber.length >= showTooltipAfter
-                        ? lastPartyVatNumber
-                        : ''
-                    }
-                    placement="top"
-                    arrow={true}
-                  >
-                    <Typography
-                      sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                      className="ShowDots"
-                    >
-                      {lastPartyVatNumber}
-                    </Typography>
-                  </Tooltip>
-                  <Divider sx={{ mb: 1 }} />
-                </Grid>
-              </>
-            )}
-          </>
+
+          {/* fiscalCode for non-PA */}
+          {!isInstitutionTypePA && party.fiscalCode && (
+            <PartyDetailField
+              label={
+                isTaxCodeEquals2Piva
+                  ? t('overview.partyDetail.isTaxCodeEquals2Piva')
+                  : t('overview.partyDetail.fiscalCode')
+              }
+              value={party.fiscalCode}
+              tooltipText={getSimpleTooltipText(party.fiscalCode)}
+            />
+          )}
+
+          {/* vatNumberGroup */}
+          {institutionTypesList?.includes('PSP') && (
+            <PartyDetailField
+              label={t('overview.partyDetail.vatNumberGroup')}
+              value={
+                party.vatNumberGroup === true
+                  ? t('overview.partyDetail.vatNumberGroupValues.yes')
+                  : t('overview.partyDetail.vatNumberGroupValues.no')
+              }
+            />
+          )}
+
+          {/* fiscalCode for PA */}
+          {isInstitutionTypePA && party.fiscalCode && (
+            <PartyDetailField
+              label={
+                isTaxCodeEquals2Piva
+                  ? t('overview.partyDetail.isTaxCodeEquals2Piva')
+                  : t('overview.partyDetail.fiscalCode')
+              }
+              value={party.fiscalCode}
+              tooltipText={getSimpleTooltipText(party.fiscalCode)}
+            />
+          )}
+
+          {/* vatNumber */}
+          {!isTaxCodeEquals2Piva && lastPartyVatNumber && (
+            <PartyDetailField
+              label={t('overview.partyDetail.vatNumber')}
+              value={lastPartyVatNumber}
+              tooltipText={getSimpleTooltipText(lastPartyVatNumber)}
+            />
+          )}
 
           {/* pecEmail */}
-          <Grid item xs={12}>
-            <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t('overview.partyDetail.pec')}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sx={{}}>
-            <Tooltip
-              title={
-                party.digitalAddress && party.digitalAddress.length >= showTooltipAfter
-                  ? party.digitalAddress
-                  : ''
-              }
-              placement="top"
-              arrow={true}
-            >
-              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {party.digitalAddress}
-              </Typography>
-            </Tooltip>
-            <Divider sx={{ mb: 1 }} />
-          </Grid>
+          <PartyDetailField
+            label={t('overview.partyDetail.pec')}
+            value={party.digitalAddress}
+            tooltipText={getSimpleTooltipText(party.digitalAddress)}
+          />
 
-          {/* registeredOffice  */}
-          <Grid item xs={12}>
-            <Typography variant="body2" sx={{ ...labelStyles }}>
-              {t('overview.partyDetail.registeredOffice')}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Tooltip
-              title={getTooltipText(
-                isForeignInsurence,
-                formattedForeignAddress,
-                party.registeredOffice,
-                showTooltipAfter
-              )}
-              placement="top"
-              arrow={true}
-            >
-              <Typography sx={{ ...infoStyles, maxWidth: '100% !important' }} className="ShowDots">
-                {isForeignInsurence
-                  ? formattedForeignAddress
-                  : party.zipCode
-                  ? `${party.registeredOffice} - ${party.zipCode}`
-                  : party.registeredOffice}
-              </Typography>
-            </Tooltip>
-          </Grid>
-          {/* aooParentCode */}
-          {party.aooParentCode &&
-            party.subunitType === 'UO' && ( // TODO: change logic if party.aooParentCode is present
-              <>
-                <Grid item xs={12}>
-                  <Typography variant="body2" sx={{ ...labelStyles }}>
-                    {t('overview.partyDetail.aooParentCode')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography
-                    sx={{ ...infoStyles, maxWidth: '100% !important' }}
-                    className="ShowDots"
-                  >
-                    {party.aooParentCode}
-                  </Typography>
-                  <Divider sx={{ mb: 1 }} />
-                </Grid>
-              </>
+          {/* registeredOffice */}
+          <PartyDetailField
+            label={t('overview.partyDetail.registeredOffice')}
+            value={
+              isForeignInsurence
+                ? formattedForeignAddress
+                : party.zipCode
+                ? `${party.registeredOffice} - ${party.zipCode} ${getCountryNameByAlpha2(
+                    countries,
+                    party.country
+                  )}`
+                : `${party.registeredOffice} ${getCountryNameByAlpha2(countries, party.country)}`
+            }
+            tooltipText={getTooltipText(
+              isForeignInsurence,
+              formattedForeignAddress,
+              `${party.registeredOffice} ${getCountryNameByAlpha2(countries, party.country)}`,
+              showTooltipAfter
             )}
+          />
+
+          {/* aooParentCode */}
+          {party.aooParentCode && party.subunitType === 'UO' && (
+            <PartyDetailField
+              label={t('overview.partyDetail.aooParentCode')}
+              value={party.aooParentCode}
+            />
+          )}
         </Grid>
       </Grid>
+
       <SessionModal
         open={openModalFirstTimeAddGeographicTaxonomies}
         title={t(
