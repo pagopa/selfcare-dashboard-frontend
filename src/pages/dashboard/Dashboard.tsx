@@ -103,9 +103,16 @@ const Dashboard = () => {
   const store = useStore();
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+  const institutionTypes = useAppSelector(partiesSelectors.selectPartySelectedInstitutionTypes);
 
-  const isPT = party?.institutionType === 'PT';
+  const uniqueInstitutionTypesList = [...new Set(institutionTypes)];
+  const isPTTheOnlyType =
+    uniqueInstitutionTypesList.length === 1 && uniqueInstitutionTypesList?.includes('PT');
+  const isPTOnAnyOnboarding = institutionTypes?.includes('PT') ?? false;
   const hasDelegation = Boolean(party?.delegation);
+
+  const activeOnboardings =
+    party?.products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE') ?? [];
 
   const productsMap: ProductsMap =
     useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
@@ -116,28 +123,27 @@ const Dashboard = () => {
     useMemo(
       () =>
         products?.filter((p) =>
-          party?.products.some(
-            (ap) =>
-              ap.productId === p.id &&
-              ap.productOnBoardingStatus === 'ACTIVE' &&
-              p.status !== 'INACTIVE'
-          )
+          activeOnboardings.some((ap) => ap.productId === p.id && p.status !== 'INACTIVE')
         ),
       [products, party]
     ) ?? [];
 
   const delegableProducts: Array<Product> = activeProducts.filter((product) =>
-    party?.products.some(
+    activeOnboardings.some(
       (partyProduct) => partyProduct.productId === product.id && product.delegable
     )
   );
 
-  const authorizedDelegableProducts: Array<Product> = delegableProducts.filter((ap) =>
-    hasPermission(ap.id ?? '', Actions.AccessProductBackoffice)
+  const authorizedDelegableProducts: Array<Product> = delegableProducts.filter(
+    (ap) =>
+      hasPermission(ap.id ?? '', Actions.AccessProductBackoffice) &&
+      activeOnboardings.some(
+        (partyProduct) => partyProduct.productId === ap.id && partyProduct.institutionType !== 'PT'
+      )
   );
 
   const canAggregatorSeeHandleDelegations = useMemo(() => {
-    const aggregatorProduct = party?.products?.find(
+    const aggregatorProduct = activeOnboardings.find(
       (product) =>
         product.isAggregator &&
         hasPermission(product.productId ?? '', Actions.ViewManagedInstitutions)
@@ -148,32 +154,32 @@ const Dashboard = () => {
   const isInvoiceSectionVisible = !!products?.some(
     (prod) =>
       prod.invoiceable &&
-      party?.products.some(
+      activeOnboardings.some(
         (partyProd) =>
           partyProd.productId === prod.id && hasPermission(partyProd.productId, Actions.ViewBilling)
       )
   );
 
-  const isDocumentsSectionVisible = ENV.SHOW_DOCUMENTS && !!activeProducts.some((partyProd) =>
-    hasPermission(partyProd.id ?? '', Actions.ViewContract)
-  );
+  const isDocumentsSectionVisible =
+    ENV.SHOW_DOCUMENTS &&
+    !!activeProducts.some((partyProd) => hasPermission(partyProd.id ?? '', Actions.ViewContract));
 
   const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
     authorizedDelegableProducts.length > 0 &&
-    !isPT &&
+    !isPTTheOnlyType &&
     getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
 
   const isHandleDelegationsVisible = useMemo(() => {
     const canDelegateSeeHandleDelegations =
       delegableProducts.length > 0 &&
-      (isPT || hasDelegation) &&
+      (isPTOnAnyOnboarding || hasDelegation) &&
       getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
 
     return canDelegateSeeHandleDelegations || canAggregatorSeeHandleDelegations;
   }, [
     authorizedDelegableProducts,
-    isPT,
+    isPTOnAnyOnboarding,
     hasDelegation,
     canAggregatorSeeHandleDelegations,
     delegableProducts,
