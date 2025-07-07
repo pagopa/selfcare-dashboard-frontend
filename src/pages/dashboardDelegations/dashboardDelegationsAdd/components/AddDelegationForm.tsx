@@ -113,13 +113,16 @@ export default function AddDelegationForm({
 
   useEffect(() => {
     if (productSelected && delegationsListRef) {
-      handleProductBrokers(productSelected.id, party.institutionType as string);
+      const instituionTypeOnSelectedProduct = party.products.find(
+        (p) => p.productOnBoardingStatus === 'ACTIVE' && p.productId === productSelected?.id
+      )?.institutionType;
+      handleProductBrokers(productSelected.id, instituionTypeOnSelectedProduct as string);
     }
   }, [productSelected]);
 
-  const handleProductBrokers = (productId: string, institutionType: string) => {
+  const handleProductBrokers = (productId: string, instituionTypeOnSelectedProduct: string) => {
     setLoading(true);
-    getProductBrokers(productId, institutionType)
+    getProductBrokers(productId, instituionTypeOnSelectedProduct)
       .then((pb) => {
         const orderedProductBrokers = [...pb].sort(
           (firstBroker: BrokerResource, secondBroker: BrokerResource) => {
@@ -148,7 +151,7 @@ export default function AddDelegationForm({
           blocking: false,
           toNotify: false,
           error: reason,
-          techDescription: `Cannot find product brokers for product: ${productId} and institution type: ${institutionType}`,
+          techDescription: `Cannot find product brokers for product: ${productId} and institution type: ${instituionTypeOnSelectedProduct}`,
         });
       })
       .finally(() => setLoading(false));
