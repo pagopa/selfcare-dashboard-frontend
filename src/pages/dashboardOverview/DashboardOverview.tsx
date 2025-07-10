@@ -6,6 +6,8 @@ import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/O
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../model/Party';
 import { Product, ProductInstitutionMap } from '../../model/Product';
+import { useAppSelector } from '../../redux/hooks';
+import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { mockedCategories } from '../../services/__mocks__/productService';
 import { ENV } from '../../utils/env';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
@@ -23,7 +25,9 @@ const DashboardOverview = ({ party, products }: Props) => {
   const [open, setOpen] = useState(false);
   const [allowedInstitutionTypes, setAllowedInstitutionTypes] = useState<ProductInstitutionMap>();
   const [filteredProducts, setFilteredProducts] = useState<Array<Product>>([]);
+
   const { getAllProductsWithPermission } = usePermissions();
+  const institutionTypesList = useAppSelector(partiesSelectors.selectPartySelectedInstitutionTypes);
 
   const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
 
@@ -61,8 +65,8 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   useEffect(() => {
     if (canSeeNotActiveProductsList && allowedInstitutionTypes && party) {
-      const filterConfig = {
-        institutionType: party.institutionType ?? '',
+      const filterByConfig = {
+        institutionTypesList: institutionTypesList || [],
         categoryCode: party.categoryCode,
         allowedInstitutionTypes,
       };
@@ -74,7 +78,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
       const filteredResult = filterProducts(
         productsWithStatusActive,
-        filterConfig,
+        filterByConfig,
         onboardedProducts
       );
       setFilteredProducts([...filteredResult]);
@@ -83,12 +87,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
-      <PartyDetailModal
-        party={party}
-        open={open}
-        setOpen={setOpen}
-        canUploadLogo={canUploadLogo}
-      />
+      <PartyDetailModal party={party} open={open} setOpen={setOpen} canUploadLogo={canUploadLogo} />
       <WelcomeDashboard setOpen={setOpen} />
 
       <Grid item xs={12} mb={2} mt={5}>

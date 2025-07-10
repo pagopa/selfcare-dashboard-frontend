@@ -1,7 +1,7 @@
-import { filterProducts } from '../productFilters';
 import { StatusEnum } from '../../../../../../api/generated/b4f-dashboard/ProductsResource';
+import { OnboardedProduct } from '../../../../../../model/Party';
 import { Product, ProductInstitutionMap } from '../../../../../../model/Product';
-import { OnboardedProductResource } from '../../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
+import { filterProducts } from '../productFilters';
 
 enum ProductOnBoardingStatusEnum {
   ACTIVE = 'ACTIVE',
@@ -59,7 +59,7 @@ describe('filterProducts', () => {
     },
   };
 
-  const onboardedProducts: Array<OnboardedProductResource> = [
+  const onboardedProducts: Array<OnboardedProduct> = [
     {
       productId: 'prod-pagopa',
       authorized: true,
@@ -71,6 +71,9 @@ describe('filterProducts', () => {
         publicServices: true,
       },
       userProductActions: [Actions.AccessProductBackoffice],
+      institutionType: 'PA',
+      origin: 'IPA',
+      originId: '20128',
     },
     {
       productId: 'prod-pn',
@@ -87,6 +90,9 @@ describe('filterProducts', () => {
         Actions.AccessProductBackoffice,
         Actions.ViewBilling,
       ],
+      institutionType: 'PA',
+      origin: 'IPA',
+      originId: '20128',
     },
   ];
 
@@ -131,7 +137,7 @@ describe('filterProducts', () => {
     ];
 
     const config = {
-      institutionType: 'PA',
+      institutionTypesList: ['PA'],
       categoryCode: 'L6',
       allowedInstitutionTypes,
     };
@@ -197,7 +203,7 @@ describe('filterProducts', () => {
     ];
 
     const config = {
-      institutionType: 'PA',
+      institutionTypesList: ['PA'],
       allowedInstitutionTypes,
     };
 
