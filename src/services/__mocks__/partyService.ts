@@ -375,14 +375,14 @@ export const mockedParties: Array<Party> = [
           Actions.ViewContract,
           Actions.UploadLogo,
         ],
-        institutionType: 'GPU',
+        institutionType: 'PSP',
         origin: 'IVASS',
         originId: '20128',
       },
       {
         productId: 'prod-dashboard-psp',
         authorized: false,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '11111111111',

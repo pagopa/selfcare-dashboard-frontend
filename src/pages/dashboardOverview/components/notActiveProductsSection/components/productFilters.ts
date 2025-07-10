@@ -4,59 +4,68 @@ import { Product, ProductInstitutionMap } from '../../../../../model/Product';
 import { PRODUCT_IDS } from '../../../../../utils/constants';
 
 type FilterConfig = {
-  institutionType: string;
+  institutionTypesList: Array<string>;
   categoryCode?: string;
   allowedInstitutionTypes: ProductInstitutionMap;
 };
 
 const institutionTypeFilter = (
   productsWithStatusActive: Array<Product>,
-  { institutionType, categoryCode, allowedInstitutionTypes }: FilterConfig
+  {
+    institutionTypesList,
+    categoryCode,
+    allowedInstitutionTypes,
+  }: FilterConfig & { institutionTypesList: Array<string> }
 ): Array<Product> =>
   productsWithStatusActive.filter((product) => {
-    // Check if product is allowed for the institution type
     const allowedTypes = allowedInstitutionTypes[product.id] ?? allowedInstitutionTypes?.default;
-    if (!allowedTypes || !allowedTypes?.[institutionType]) {
+    if (!allowedTypes) {
       return false;
     }
 
-    // If categories are required, check if the institution's category is in the allowed list
-    if (allowedTypes[institutionType].categories) {
-      const categories = categoryCode && (allowedTypes[institutionType].categories as string);
-      const categoriesArray = categories?.split(',');
-      return categoriesArray && categoryCode ? categoriesArray.includes(categoryCode) : false;
-    }
+    // Check if any of the institution types are allowed
+    return institutionTypesList?.some((type) => {
+      const typeConfig = allowedTypes[type];
+      if (!typeConfig) {
+        return false;
+      }
 
-    return true;
+      if (typeConfig.categories) {
+        const categoriesArray = (typeConfig.categories as string).split(',');
+        return categoryCode ? categoriesArray.includes(categoryCode) : false;
+      }
+
+      return true;
+    });
   });
 
 const onboardingStatusFilter = (
   productsWithStatusActive: Array<Product>,
   onboardedProducts: Array<OnboardedProduct>,
-  institutionType: string
+  institutionTypesList: Array<string>
 ): Array<Product> => {
-  const onboardedProductIds = onboardedProducts.map((p) => p.productId);
+  const onboardedProductIds = new Set(onboardedProducts.map((p) => p.productId));
 
   return productsWithStatusActive.filter((product) => {
-    // For productsWithStatusActive with active base version, show eligible children
-    if (product.subProducts && product.subProducts?.length > 0) {
+    const isOnboarded = onboardedProductIds.has(product.id ?? '');
+
+    if (product.subProducts?.length) {
       return product.subProducts.some((child) => {
-        if (
-          onboardedProductIds.includes(product.id ?? '') &&
-          !onboardedProductIds.includes(child.id ?? '') &&
-          child.status === StatusEnum.ACTIVE &&
-          child.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP &&
-          institutionType !== 'PSP'
-        ) {
+        const isChildOnboarded = onboardedProductIds.has(child.id ?? '');
+        const isChildActive = child.status === StatusEnum.ACTIVE;
+        // only psp can onboard on pagopa insights
+        const isSpecialPSPCase =
+          child.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP && !institutionTypesList.includes('PSP');
+
+        if (isOnboarded && !isChildOnboarded && isChildActive && isSpecialPSPCase) {
           return false;
         }
-
-        return !onboardedProductIds.includes(child.id ?? '') && child.status === StatusEnum.ACTIVE;
+        // If the product is onboarded, we only want to show it if at least one child is active and not onboarded
+        return !isChildOnboarded && isChildActive;
       });
     }
-
-    // Exclude productsWithStatusActive that are already onboarded
-    return !onboardedProductIds.includes(product.id);
+    // Exclude products that are already onboarded
+    return !isOnboarded;
   });
 };
 
@@ -64,20 +73,23 @@ const onboardingStatusFilter = (
  * Applies all the filters in the correct order.
  *
  * @param productsWithStatusActive - The list of products to filter
- * @param config - The filter configuration, including institution type, category code, etc.
+ * @param filterByConfig - The filter configuration, including institution type, category code, etc.
  * @param onboardedProducts - The list of products that are already onboarded
  * @returns The filtered list of products
  */
 export const filterProducts = (
   productsWithStatusActive: Array<Product>,
-  config: FilterConfig,
+  filterByConfig: FilterConfig,
   onboardedProducts: Array<OnboardedProduct>
 ): Array<Product> => {
-  const productsFilteredByInstitution = institutionTypeFilter(productsWithStatusActive, config);
+  const productsFilteredByInstitution = institutionTypeFilter(
+    productsWithStatusActive,
+    filterByConfig
+  );
 
   return onboardingStatusFilter(
     productsFilteredByInstitution,
     onboardedProducts,
-    config.institutionType
+    filterByConfig.institutionTypesList
   );
 };

@@ -163,6 +163,20 @@ export const mockedPartyProducts: Array<Product> = [
     delegable: false,
     invoiceable: false,
   },
+  {
+    id: 'prod-idpay',
+    logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-idpay/logo.svg',
+    logoBgColor: '#0B3EE3',
+    imageUrl:
+      'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-idpay/depict-image.jpeg',
+    title: 'Portale Bonus',
+    description: 'Crea e gestisci iniziative di welfare e supporto alla spesa',
+    urlPublic: 'https://www.pagopa.it/it/prodotti-e-servizi/centro-stella-pagamenti-elettronici',
+    urlBO: 'https://welfare-italy.dev.cstar.pagopa.it/portale-enti/auth#token=<IdentityToken>',
+    status: StatusEnum.ACTIVE,
+    delegable: false,
+    invoiceable: false,
+  },
 ];
 
 export const mockedProductRoles: Array<ProductRole> = [
