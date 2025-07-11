@@ -19,12 +19,17 @@ export const fetchProducts = (): Promise<Array<Product>> => {
 };
 
 export const fetchProductRoles = (product: Product, party: Party): Promise<Array<ProductRole>> => {
+  const activeOnboardings = party.products.filter((p) => p.productOnBoardingStatus === 'ACTIVE');
+  const institutionTypeOnActiveOnboarding =
+    activeOnboardings.find((p) => p.productId === product.id)?.institutionType ?? '';
+
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
     return fetchProductRolesMocked(product, party);
   } else {
-    return DashboardApi.getProductRoles(product.id ,party.institutionType ?? '')
-      .then((roles) => roles
+    return DashboardApi.getProductRoles(product.id, institutionTypeOnActiveOnboarding)
+      .then((roles) =>
+        roles
           ?.map((pr) =>
             pr?.productRoles?.map((r) => ({
               productId: product.id,
@@ -37,7 +42,8 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
               description: r.description ?? '',
             }))
           )
-          .flatMap((x) => x))
+          .flatMap((x) => x)
+      )
       .catch((reason) => reason);
   }
 };
