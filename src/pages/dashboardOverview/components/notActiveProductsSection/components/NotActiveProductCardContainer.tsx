@@ -19,8 +19,12 @@ export default function NotActiveProductCardContainer({ party, product }: Readon
   const addNotify = useUserNotify();
   const addError = useErrorDispatcher();
 
+  const pSPInstitutionType = party.products.some(
+    (p) => p.productOnBoardingStatus === 'ACTIVE' && p.institutionType === 'PSP'
+  );
+
   const existingSubProductNotOnboarded = product.subProducts?.find((sp) => {
-    if (party.institutionType !== 'PSP' && sp.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP) {
+    if (!pSPInstitutionType && sp.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP) {
       return false;
     }
 
