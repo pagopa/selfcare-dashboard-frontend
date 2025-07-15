@@ -41,7 +41,7 @@ export default function NotActiveProductCard({
   title,
   product,
   prodActiveWithSubProdInactive,
-}: Props) {
+}: Readonly<Props>) {
   const theme = useTheme();
   const { t } = useTranslation();
   const truncateText = {
