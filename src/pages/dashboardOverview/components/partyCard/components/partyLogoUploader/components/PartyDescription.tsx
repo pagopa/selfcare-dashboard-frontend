@@ -27,7 +27,7 @@ export function PartyDescription({ open, loading, isLoaded }: Props) {
             gap: '10px',
           }}
         >
-          <Grid item xs={12} py={3} display={'flex'} direction={'column'} alignItems={'center'}>
+          <Grid container item xs={12} py={3} display={'flex'} direction={'column'} alignItems={'center'}>
             <CloudUpload color="primary" sx={{ pb: 1 }} />
             <ButtonNaked
               component="button"

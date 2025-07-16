@@ -135,7 +135,7 @@ export function PartyLogoUploader({ canUploadLogo, partyId, setclearCache }: Rea
       <Grid item xs={12} {...getRootProps({ className: 'dropzone' })}>
         {canUploadLogo && (
           <>
-            <Grid display={'flex'} justifyContent={'center'} alignItems={'center'} xs={12}>
+            <Grid item display={'flex'} justifyContent={'center'} alignItems={'center'} xs={12}>
               <input {...getInputProps()} />
               <PartyLogo
                 loading={loading}
