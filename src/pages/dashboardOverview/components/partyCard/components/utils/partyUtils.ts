@@ -47,5 +47,32 @@ export const getFormattedForeignAddress = (
     party.country
   )}`;
 
-export const getTooltipText = (text: string, showTooltipAfter: number): string =>
-  text.length >= showTooltipAfter ? text : '';
+export const getSimpleTooltipText = (text?: string, showTooltipAfter?: number): string =>
+  text && text.length >= (showTooltipAfter || 45) ? text : '';
+
+export const getTooltipText = (
+  isForeignInsurence: boolean,
+  formattedForeignAddress: string,
+  registeredOffice: string,
+  showTooltipAfter: number
+): string => {
+  if (isForeignInsurence && formattedForeignAddress.length >= showTooltipAfter) {
+    return formattedForeignAddress;
+  }
+  if (registeredOffice.length >= showTooltipAfter) {
+    return registeredOffice;
+  }
+  return '';
+};
+
+export const getIpaCodeForPa = (party: Party): string | undefined =>
+  party.products
+    .filter((product) => product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE)
+    .find((product) => product.institutionType === 'PA')?.originId;
+
+export const getStructureValue = (subunitType?: string): string =>
+  subunitType === 'AOO'
+    ? 'Area Organizzativa Omogenea'
+    : subunitType === 'UO'
+    ? 'Unità Organizzativa'
+    : '';
