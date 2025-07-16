@@ -24,7 +24,7 @@ import { ENV } from '../../utils/env';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import { filterProducts } from './components/notActiveProductsSection/components/productFilters';
 import NotActiveProductsSection from './components/notActiveProductsSection/NotActiveProductsSection';
-import GeoTaxonomySection from './components/partyCard/components/GeoTaxonomySection';
+import GeoTaxonomySection from './components/partyDetailModal/components/GeoTaxonomySection';
 import { PartyDetailModal } from './components/partyDetailModal/PartyDetailModal';
 import WelcomeDashboard from './components/welcomeDashboard/WelcomeDashboard';
 

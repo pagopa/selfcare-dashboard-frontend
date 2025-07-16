@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
-import PartyDetail from '../partyCard/components/PartyDetail';
-import { PartyLogoUploader } from '../partyCard/components/partyLogoUploader/PartyLogoUploader';
-import { DashboardInfoBanner } from './DashboardInfoBanner';
+import PartyDetail from './components/PartyDetail';
+import { PartyLogoUploader } from './components/partyLogoUploader/PartyLogoUploader';
+import { DashboardInfoBanner } from './components/DashboardInfoBanner';
 
 type Props = {
   open: boolean;
