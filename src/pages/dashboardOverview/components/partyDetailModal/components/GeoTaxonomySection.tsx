@@ -37,7 +37,7 @@ export default function GeoTaxonomySection({
   setIsAddNewAutocompleteEnabled,
   optionsSelected,
   isAddNewAutocompleteEnabled,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const addError = useErrorDispatcher();
 

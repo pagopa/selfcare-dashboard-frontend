@@ -83,7 +83,7 @@ describe('productService tests', () => {
 
   describe('fetchProductRoles', () => {
     const mockProduct: Product = {
-      id: 'prod1',
+      id: 'prod-pagopa',
       description: 'Product 1 Description',
       logo: 'logo1.png',
       title: 'Product 1',
@@ -133,7 +133,7 @@ describe('productService tests', () => {
 
       const expectedRoles = [
         {
-          productId: 'prod1',
+          productId: 'prod-pagopa',
           partyRole: 'Admin',
           selcRole: 'User',
           multiroleAllowed: true,

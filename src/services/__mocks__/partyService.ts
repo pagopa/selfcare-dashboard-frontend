@@ -222,7 +222,7 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-pagopa',
         authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '81001510528',
