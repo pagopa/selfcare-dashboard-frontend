@@ -1,21 +1,21 @@
+import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import {
   Autocomplete,
   Box,
+  debounce,
   FormControlLabel,
+  Grid,
+  Radio,
   RadioGroup,
   TextField,
-  Radio,
-  debounce,
-  Grid,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useTranslation } from 'react-i18next';
-import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend/lib';
-import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
-import { nationalValue } from '../../../../../model/GeographicTaxonomy';
+import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
+import { nationalValue } from '../../../../../model/GeographicTaxonomy';
+import { retrieveGeotaxonomyFromDescription } from '../../../../../services/partyRegistryProxyService';
 
 type Error = {
   [index: number]: boolean;
@@ -159,13 +159,14 @@ export default function GeoTaxonomySection({
 
   return (
     <Grid>
-      {notFoundAnyTaxonomies
-        ? t(
-            'overview.partyDetail.geographicTaxonomies.firstTimeInsertGeographicTaxonomiesModal.description'
-          )
-        : t(
-            'overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.description'
-          )}
+      {notFoundAnyTaxonomies ? (
+        <Trans
+          i18nKey="overview.partyDetail.geographicTaxonomies.firstTimeInsertGeographicTaxonomiesModal.description"
+          components={[<br key="br" />]}
+        />
+      ) : (
+        t('overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.description')
+      )}
       <RadioGroup name="geographicTaxonomy">
         <Box display="flex" mt={4}>
           <FormControlLabel
