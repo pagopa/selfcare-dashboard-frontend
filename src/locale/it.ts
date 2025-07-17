@@ -3,6 +3,9 @@ export default {
     message:
       '<1>Novità!</1><br />Disponibile dal 31/03/2025 la funzionalità dei <2>Gruppi</2> per IO. Permette di gestire i servizi limitando l’accesso a gruppi specifici di utenti. <3>Come funziona?</3>',
   },
+  exitModal: {
+    title: 'Confermi di voler uscire da Area Riservata?',
+  },
   session: {
     expired: {
       title: 'Sessione scaduta',
@@ -165,7 +168,7 @@ export default {
         firstTimeInsertGeographicTaxonomiesModal: {
           title: 'Indica l’area geografica',
           description:
-            'Seleziona il territorio in cui opera il tuo ente. Se locale, puoi scegliere una o più aree di competenza. La scelta verrà applicata a tutti i prodotti PagoPA a cui l’ente aderirà.',
+            'Seleziona il territorio in cui opera il tuo ente. Se locale, puoi scegliere una o più aree di competenza.<br/> La scelta verrà applicata a tutti i prodotti PagoPA a cui l’ente aderirà.',
           add: 'Aggiungi',
         },
         addNewGeographicTaxonomiesModal: {

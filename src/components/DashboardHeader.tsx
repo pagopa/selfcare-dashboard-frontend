@@ -1,5 +1,10 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import {
+  Header,
+  usePermissions,
+  useUnloadEventInterceptor,
+  useUnloadEventOnExit,
+} from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
@@ -44,6 +49,18 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const [showDocBtn, setShowDocBtn] = useState(false);
   const { hasPermission } = usePermissions();
 
+  const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
+  const onExitModal = useUnloadEventOnExit();
+
+  const handleExit = (exitAction: () => void) => {
+    registerUnloadEvent(t('exitModal.title'), '');
+
+    onExitModal(() => {
+      unregisterUnloadEvent();
+      exitAction();
+    });
+  };
+
   useEffect(() => {
     setShowDocBtn(i18n.language === 'it');
   }, [i18n.language]);
@@ -86,7 +103,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   return (
     <div>
       <Header
-        onExit={onExit}
+        onExit={handleExit}
         withSecondHeader={!!party}
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
