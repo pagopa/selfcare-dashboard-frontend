@@ -5,6 +5,8 @@ export default {
   },
   exitModal: {
     title: 'Confermi di voler uscire da Area Riservata?',
+    confirm: 'Esci',
+    cancel: 'Annulla',
   },
   session: {
     expired: {
