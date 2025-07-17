@@ -1,10 +1,9 @@
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { GeographicTaxonomyResource } from '../../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { renderWithProviders } from '../../../../../../utils/test-utils';
 import GeoTaxonomySection from '../GeoTaxonomySection';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 
 const mockSetOptionsSelected = jest.fn();
 const mockSetIsAddNewAutocompleteEnabled = jest.fn();

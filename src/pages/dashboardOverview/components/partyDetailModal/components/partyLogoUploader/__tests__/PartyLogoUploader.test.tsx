@@ -1,6 +1,5 @@
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { screen, waitFor } from '@testing-library/react';
-import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../../../api/DashboardApiClient';

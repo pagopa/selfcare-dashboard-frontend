@@ -222,7 +222,7 @@ export const mockedParties: Array<Party> = [
       {
         productId: 'prod-pagopa',
         authorized: true,
-        productOnBoardingStatus: ProductOnBoardingStatusEnum.PENDING,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
         billing: {
           vatNumber: '81001510528',
@@ -660,10 +660,7 @@ export const mockedParties: Array<Party> = [
     origin: 'IPA',
     institutionType: 'PA',
     recipientCode: 'CGDAS23D',
-    geographicTaxonomies: [
-      { code: '5555678', desc: 'Comune di Milano' },
-      { code: '8853441', desc: 'Comune di Roma' },
-    ],
+    geographicTaxonomies: [],
     vatNumber: '111122211111',
     products: [
       {

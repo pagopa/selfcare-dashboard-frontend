@@ -6,15 +6,17 @@ import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
-import PartyDetail from '../partyCard/components/PartyDetail';
-import { PartyLogoUploader } from '../partyCard/components/partyLogoUploader/PartyLogoUploader';
-import { DashboardInfoBanner } from './DashboardInfoBanner';
+import PartyDetail from './components/PartyDetail';
+import { PartyLogoUploader } from './components/partyLogoUploader/PartyLogoUploader';
+import { DashboardInfoBanner } from './components/DashboardInfoBanner';
 
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   party: Party;
   canUploadLogo: boolean;
+  showGeoTaxonomyForInstitutionType: boolean;
+  setOpenModalAddNewGeographicTaxonomies: (open: boolean) => void;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -33,7 +35,14 @@ const CustomDrawer = styled(Drawer)(() => ({
   },
 }));
 
-export const PartyDetailModal = ({ party, open, setOpen, canUploadLogo }: Props) => {
+export const PartyDetailModal = ({
+  party,
+  open,
+  setOpen,
+  canUploadLogo,
+  showGeoTaxonomyForInstitutionType,
+  setOpenModalAddNewGeographicTaxonomies,
+}: Props) => {
   const { t } = useTranslation();
   const setLoading = useLoading('DRAWER_PARTY_DETAIL');
   const institutionTypesList = useAppSelector(partiesSelectors.selectPartySelectedInstitutionTypes);
@@ -94,7 +103,12 @@ export const PartyDetailModal = ({ party, open, setOpen, canUploadLogo }: Props)
           </Grid>
         )}
 
-        <PartyDetail party={party} institutionTypesList={institutionTypesList}/>
+        <PartyDetail
+          party={party}
+          institutionTypesList={institutionTypesList}
+          setOpenModalAddNewGeographicTaxonomies={setOpenModalAddNewGeographicTaxonomies}
+          showGeoTaxonomyForInstitutionType={showGeoTaxonomyForInstitutionType}
+        />
       </Grid>
     </CustomDrawer>
   );
