@@ -1,10 +1,5 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import {
-  Header,
-  usePermissions,
-  useUnloadEventInterceptor,
-  useUnloadEventOnExit,
-} from '@pagopa/selfcare-common-frontend/lib';
+import { Header, SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
@@ -42,24 +37,13 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
-
   const [productSelected, setProductSelected] = useState<Product>();
+  const [openExitModal, setOpenExitModal] = useState<boolean>(false);
+
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
   const [showDocBtn, setShowDocBtn] = useState(false);
   const { hasPermission } = usePermissions();
-
-  const { registerUnloadEvent, unregisterUnloadEvent } = useUnloadEventInterceptor();
-  const onExitModal = useUnloadEventOnExit();
-
-  const handleExit = (exitAction: () => void) => {
-    registerUnloadEvent(t('exitModal.title'), '');
-
-    onExitModal(() => {
-      unregisterUnloadEvent();
-      exitAction();
-    });
-  };
 
   useEffect(() => {
     setShowDocBtn(i18n.language === 'it');
@@ -103,7 +87,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   return (
     <div>
       <Header
-        onExit={handleExit}
+        onExit={() => setOpenExitModal(true)}
         withSecondHeader={!!party}
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
@@ -191,6 +175,20 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           });
         }}
         maxCharactersNumberMultiLineItem={25}
+      />
+      <SessionModal
+        open={openExitModal}
+        title={t('exitModal.title')}
+        message=""
+        onConfirmLabel={t('exitModal.confirm')}
+        onCloseLabel={t('exitModal.cancel')}
+        handleClose={() => {
+          setOpenExitModal(false);
+        }}
+        onConfirm={() => {
+          setOpenExitModal(false);
+          window.location.assign(ENV.URL_FE.LOGOUT);
+        }}
       />
       <SessionModalInteropProduct
         open={openCustomEnvInteropModal}
