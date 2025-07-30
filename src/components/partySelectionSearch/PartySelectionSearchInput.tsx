@@ -25,18 +25,9 @@ export default function PartySelectionSearchInput({
   clearField,
   label,
 }: Readonly<Props>) {
-  const inputRef = React.useRef<HTMLInputElement>();
-
-  const focusTextInput = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
   return (
     <Grid item display="flex" justifyContent="center" xs={12}>
       <CustomTextField
-        inputRef={inputRef}
         label={label}
         name="partySearchInput"
         sx={{ width: '100%' }}
@@ -46,11 +37,7 @@ export default function PartySelectionSearchInput({
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              {
-                <IconButton disableRipple={true} onClick={focusTextInput}>
-                  <SearchOutlinedIcon />
-                </IconButton>
-              }
+              <SearchOutlinedIcon />
             </InputAdornment>
           ),
           endAdornment: (
