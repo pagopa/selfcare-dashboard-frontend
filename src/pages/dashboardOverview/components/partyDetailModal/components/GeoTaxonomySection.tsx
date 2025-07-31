@@ -167,37 +167,44 @@ export default function GeoTaxonomySection({
       ) : (
         t('overview.partyDetail.geographicTaxonomies.addNewGeographicTaxonomiesModal.description')
       )}
-      <RadioGroup name="geographicTaxonomy">
-        <Box display="flex" mt={4}>
-          <FormControlLabel
-            checked={isNationalAreaVisible}
-            value={'national'}
-            control={<Radio disableRipple={true} />}
-            label={t('overview.partyDetail.geographicTaxonomies.modalSections.national')}
-            onChange={() => {
-              setIsNationalAreaVisible(true);
-              setIsLocalAreaVisible(false);
-              setError(undefined);
-              setIsAddNewAutocompleteEnabled(true);
-              setLocalOptionsSelected(optionsSelected);
-              setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
-            }}
-            sx={{ mr: 3, ml: 1 }}
-          />
-          <FormControlLabel
-            id={'geographicTaxonomies'}
-            checked={isLocalAreaVisible}
-            value={'local'}
-            control={<Radio disableRipple={true} />}
-            label={t('overview.partyDetail.geographicTaxonomies.modalSections.local')}
-            onChange={() => {
-              setIsNationalAreaVisible(false);
-              setIsLocalAreaVisible(true);
-              setIsAddNewAutocompleteEnabled(true);
-              setOptionsSelected(localOptionsSelected);
-            }}
-          />
-        </Box>
+      <RadioGroup
+        name="geographicTaxonomy"
+        row
+        sx={{ mt: 4 }}
+        onChange={(e) => {
+          const value = e.target.value;
+
+          const isNational = value === 'national';
+
+          setIsNationalAreaVisible(isNational);
+          setIsLocalAreaVisible(!isNational);
+          setIsAddNewAutocompleteEnabled(true);
+
+          if (isNational) {
+            setError(undefined);
+            setLocalOptionsSelected(optionsSelected);
+            setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
+          } else {
+            setOptionsSelected(localOptionsSelected);
+          }
+        }}
+      >
+        <FormControlLabel
+          checked={isNationalAreaVisible}
+          value={'national'}
+          control={<Radio disableRipple={true} />}
+          aria-label={t('overview.partyDetail.geographicTaxonomies.modalSections.national')}
+          label={t('overview.partyDetail.geographicTaxonomies.modalSections.national')}
+          sx={{ mr: 3, ml: 1 }}
+        />
+        <FormControlLabel
+          id={'geographicTaxonomies'}
+          checked={isLocalAreaVisible}
+          value={'local'}
+          control={<Radio disableRipple={true} />}
+          aria-label={t('overview.partyDetail.geographicTaxonomies.modalSections.local')}
+          label={t('overview.partyDetail.geographicTaxonomies.modalSections.local')}
+        />
       </RadioGroup>
       {isLocalAreaVisible && (
         <>
@@ -254,6 +261,14 @@ export default function GeoTaxonomySection({
                         }
                       />
                     )}
+                    slotProps={{
+                      clearIndicator: {
+                        tabIndex: 0,
+                        sx: {
+                          visibility: 'visible',
+                        },
+                      },
+                    }}
                   />
                 </Box>
               </Box>
