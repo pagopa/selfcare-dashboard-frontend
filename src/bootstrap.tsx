@@ -13,7 +13,7 @@ import reportWebVitals from './reportWebVitals';
 import { store } from './redux/store';
 import { MOCK_USER } from './utils/constants';
 import { ENV } from './utils/env';
-import './consentAndAnalyticsConfiguration.ts';
+import './consentAndAnalyticsConfiguration';
 import './locale';
 
 const onSuccessEncoded = encodeURIComponent(location.pathname + location.search);
