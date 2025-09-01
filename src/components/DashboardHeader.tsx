@@ -87,7 +87,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   return (
     <div>
       <Header
-        onExit={() => setOpenExitModal(true)}
+        onExit={onExit}
+        onLogoutClick={() => setOpenExitModal(true)}
         withSecondHeader={!!party}
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
