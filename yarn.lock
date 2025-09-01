@@ -2178,10 +2178,10 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.30.0.tgz#3a42c4c475482f2ec87c12aad98832dc0087dc9a"
   integrity sha512-4VlGgo32k2EQ2wcCY3vEU28A0O13aOtHz3Xt2/2U5FAh9EfhD6t6DqL5Z6yAnRCntbTFDU4YfbpyzSlHNWycPw==
 
-"@pagopa/mui-italia@^1.6.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-1.6.1.tgz#ffeb35bc58ee4702b4d9a7b5e7fe6b1634cd0902"
-  integrity sha512-v3O16kSn4JHDJiNVOHKYklIeVRACKpmxnqrj6o6Y8qtURycVJmiMHAGW7uoNbw2yK1+ymJ+C7MSoZphXijKPFA==
+"@pagopa/mui-italia@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-1.7.0.tgz#85d578f759ea86a5620585442484fd1d16f8830e"
+  integrity sha512-w0+qdNcVnKVyR+6511sa1+/xKBcHQcd+gXM/Kj7ZbcNJ96PsAnA7dWzrNDPZzczdkPlltobAKacnrJ/eK41FgQ==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"
@@ -2204,10 +2204,10 @@
     write-yaml-file "^4.1.3"
     yargs "^15.0.1"
 
-"@pagopa/selfcare-common-frontend@^1.34.58":
-  version "1.34.58"
-  resolved "https://registry.yarnpkg.com/@pagopa/selfcare-common-frontend/-/selfcare-common-frontend-1.34.58.tgz#6037fc72669974e56152e42014ef183ebce9a973"
-  integrity sha512-AyiyvO2v6p57vN43TxkizquwJZkwN3Ckq21judMs/a2cK6aAktvcwgIqA7x1q6Dsd1hMcS4TFfHkBYypMIyUWg==
+"@pagopa/selfcare-common-frontend@^1.34.66":
+  version "1.34.66"
+  resolved "https://registry.yarnpkg.com/@pagopa/selfcare-common-frontend/-/selfcare-common-frontend-1.34.66.tgz#ca1b83a5ac8b7f17344f757fd20b34d262f6e7e4"
+  integrity sha512-fchvFLT/P3y9+xOgbw7HlV3tSJ5d4H8xRSMsyQ10P7dz4jrF2I1eQUMeiDtqQ+nLoq0SKilSXwlAVLTXSOQQtQ==
   dependencies:
     "@emotion/react" "^11.11.1"
     "@emotion/styled" "^11.11.0"
@@ -2215,7 +2215,7 @@
     "@mui/lab" "^5.0.0-alpha.137"
     "@mui/material" "^5.14.1"
     "@mui/system" "^5.14.1"
-    "@pagopa/mui-italia" "^1.6.1"
+    "@pagopa/mui-italia" "^1.7.0"
     "@pagopa/ts-commons" "^13.1.2"
     "@reduxjs/toolkit" "^1.6.2"
     async "3.2.4"
@@ -2237,7 +2237,6 @@
     react-router-dom "^5.2.0"
     react-scripts "5.0.1"
     redux-logger "^3.0.6"
-    typescript "^4.3.5"
     validator "13.11.0"
     web-vitals "^1.1.2"
 
@@ -12108,10 +12107,10 @@ typedarray.prototype.slice@^1.0.5:
     typed-array-buffer "^1.0.3"
     typed-array-byte-offset "^1.0.4"
 
-typescript@^4.3.5:
-  version "4.9.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
-  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
+typescript@^5.9.2:
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.2.tgz#d93450cddec5154a2d5cabe3b8102b83316fb2a6"
+  integrity sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==
 
 ulid@^2.3.0:
   version "2.3.0"
