@@ -65,7 +65,7 @@ export default function DashboardSideMenu({
   const { getAllProductsWithPermission } = usePermissions();
 
   const canSeeUsers = getAllProductsWithPermission(Actions.ListProductUsers).length > 0;
-  const canSeeGroups = getAllProductsWithPermission(Actions.ManageProductGroups).length > 0;
+  const canSeeGroups = getAllProductsWithPermission(Actions.ListProductGroups).length > 0;
 
   // Helper to resolve paths with party ID
   const resolvePath = useCallback(
