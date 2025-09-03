@@ -342,6 +342,7 @@ export const mockedParties: Array<Party> = [
           Actions.AccessProductBackoffice,
           Actions.ManageProductUsers,
           Actions.ListProductUsers,
+          Actions.ListProductGroups,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
