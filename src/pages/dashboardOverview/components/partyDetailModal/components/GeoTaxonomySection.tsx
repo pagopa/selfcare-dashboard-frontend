@@ -240,9 +240,9 @@ export default function GeoTaxonomySection({
                     }
                     value={val?.desc?.toLowerCase()}
                     renderOption={(props, option) => (
-                      <span style={{ textTransform: 'capitalize' }} {...props}>
+                      <li style={{ textTransform: 'capitalize' }} {...props}>
                         {option ? option.toLocaleLowerCase() : ''}
-                      </span>
+                      </li>
                     )}
                     renderInput={(params) => (
                       <TextField
