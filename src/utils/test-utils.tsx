@@ -1,7 +1,7 @@
-import { Router } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
 import { createStore } from '../redux/store';
 
 export const renderWithProviders = (
@@ -11,6 +11,7 @@ export const renderWithProviders = (
 ) => {
   const store = injectedStore || createStore();
   const history = injectedHistory || createMemoryHistory();
+
   render(
     <Router history={history}>
       <Provider store={store}>{component}</Provider>
