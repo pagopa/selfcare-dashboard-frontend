@@ -62,6 +62,9 @@ export default {
         overview: {
           title: 'Panoramica',
         },
+        overviewInstitutions: {
+          title: 'Panoramica Enti',
+        },
         delegations: {
           title: 'Deleghe',
         },
