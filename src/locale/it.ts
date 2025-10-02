@@ -205,6 +205,7 @@ export default {
         CON: 'Consolidatore',
         PRV: 'Privato',
         GPU: 'Gestore di pubblica utilità e/o di interesse generale',
+        SCEC: 'Società in conto economico consolidato',
       },
       delegationBanner: {
         title: 'Delega la gestione dei prodotti a un Partner o a un Intermediario',
