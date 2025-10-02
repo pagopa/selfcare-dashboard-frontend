@@ -1,32 +1,38 @@
-import DehazeIcon from '@mui/icons-material/Dehaze';
-import { Box, Button, Divider, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
-import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
 import { Route, Switch, matchPath, useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
+
+import { useAppSelector } from '../../redux/hooks';
+import { partiesSelectors } from '../../redux/slices/partiesSlice';
+import { DASHBOARD_ROUTES } from '../../routes';
+import { ENV } from '../../utils/env';
+
 import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
 import withSelectedProductRoles from '../../decorators/withSelectedPartyProductAndRoles';
+
 import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
-import { Party } from '../../model/Party';
-import { Product, ProductsMap, buildProductsMap } from '../../model/Product';
-import { useAppSelector } from '../../redux/hooks';
-import { partiesSelectors } from '../../redux/slices/partiesSlice';
-import { DASHBOARD_ROUTES, RouteConfig, RoutesObject } from '../../routes';
-import { ENV } from '../../utils/env';
+
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
 import DashboardDocuments from '../dashboardDocuments/DashboardDocumentsPage';
 import DashboardDocumentsDetail from '../dashboardDocumentsDetail/DashboardDocumentsDetailPage';
 import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
-import DashboardSideMenu from './components/dashboardSideMenu/DashboardSideMenu';
+
+import { Party } from '../../model/Party';
+import { Product, ProductsMap } from '../../model/Product';
+import DashboardSideMenuDesktop from './components/dashboardSideMenu/DashboardSideMenuDesktop';
+import DashboardSideMenuMobile from './components/dashboardSideMenu/DashboardSideMenuMobile';
+import { useDashboardData } from './hooks/useDashboardData';
+import { buildRoutes } from './utils/dashboard-utils';
 
 export type DashboardPageProps = {
   party: Party;
@@ -34,7 +40,6 @@ export type DashboardPageProps = {
   activeProducts: Array<Product>;
   productsMap: ProductsMap;
 };
-
 export type DashboardDecoratorsType = {
   withProductRolesMap: (WrappedComponent: React.ComponentType<any>) => React.ComponentType<any>;
   withSelectedProduct: (WrappedComponent: React.ComponentType<any>) => React.ComponentType<any>;
@@ -43,54 +48,8 @@ export type DashboardDecoratorsType = {
   ) => React.ComponentType<any>;
 };
 
-const reduceDecorators = (
-  decorators: DashboardDecoratorsType,
-  route: RouteConfig
-): ((WrappedComponent: React.ComponentType<any>) => React.ComponentType<any>) =>
-  ['withProductRolesMap', 'withSelectedProductRoles', 'withSelectedProduct'].reduce(
-    (out, decorator) =>
-      (route as any)[decorator]
-        ? (WrappedComponent: React.ComponentType<any>) =>
-            (decorators as any)[decorator](out(WrappedComponent))
-        : out,
-    (WrappedComponent: React.ComponentType<any>) => WrappedComponent
-  );
-
-export const buildRoutes = (
-  party: Party,
-  products: Array<Product>,
-  activeProducts: Array<Product>,
-  productsMap: ProductsMap,
-  decorators: DashboardDecoratorsType,
-  rs: RoutesObject
-) =>
-  Object.values(rs).map((route, i) => {
-    const { path, exact, component: Component, subRoutes } = route;
-    const decoratorResult = Component ? reduceDecorators(decorators, route) : undefined;
-    const WrappedComponent = Component && decoratorResult ? decoratorResult(Component) : undefined;
-    return (
-      <Route path={path} exact={exact} key={i}>
-        {WrappedComponent && (
-          <WrappedComponent
-            party={party}
-            products={products}
-            activeProducts={activeProducts}
-            productsMap={productsMap}
-          />
-        )}
-        {subRoutes && (
-          <Switch>
-            {buildRoutes(party, products, activeProducts, productsMap, decorators, subRoutes)}
-          </Switch>
-        )}
-      </Route>
-    );
-  });
-
-// eslint-disable-next-line sonarjs/cognitive-complexity
-const Dashboard = () => {
-  const { getAllProductsWithPermission, hasPermission } = usePermissions();
-  const { i18n, t } = useTranslation();
+const Dashboard: React.FC = () => {
+  const { i18n } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 
@@ -99,59 +58,37 @@ const Dashboard = () => {
 
   const history = useHistory();
   const location = useLocation();
-
   const store = useStore();
+
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const institutionTypes = useAppSelector(partiesSelectors.selectPartySelectedInstitutionTypes);
 
-  const uniqueInstitutionTypesList = [...new Set(institutionTypes)];
-  const isPTTheOnlyType =
-    uniqueInstitutionTypesList.length === 1 && uniqueInstitutionTypesList?.includes('PT');
-  const isPTOnAnyOnboarding = institutionTypes?.includes('PT') ?? false;
-  const hasDelegation = Boolean(party?.delegation);
-
-  const activeOnboardings =
-    party?.products?.filter((p) => p.productOnBoardingStatus === 'ACTIVE') ?? [];
-
-  const productsMap: ProductsMap =
-    useMemo(() => buildProductsMap(products ?? []), [products]) ?? [];
+  const {
+    activeOnboardings,
+    productsMap,
+    activeProducts,
+    delegableProducts,
+    authorizedDelegableProducts,
+    isPTTheOnlyType,
+    isPTOnAnyOnboarding,
+    hasDelegation,
+    getAllProductsWithPermission,
+    hasPermission,
+  } = useDashboardData(party, products, institutionTypes);
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
-
-  const activeProducts: Array<Product> =
-    useMemo(
-      () =>
-        products?.filter((p) =>
-          activeOnboardings.some((ap) => ap.productId === p.id && p.status !== 'INACTIVE')
-        ),
-      [products, party]
-    ) ?? [];
-
-  const delegableProducts: Array<Product> = activeProducts.filter((product) =>
-    activeOnboardings.some(
-      (partyProduct) => partyProduct.productId === product.id && product.delegable
-    )
-  );
-
-  const authorizedDelegableProducts: Array<Product> = delegableProducts.filter(
-    (ap) =>
-      hasPermission(ap.id ?? '', Actions.AccessProductBackoffice) &&
-      activeOnboardings.some(
-        (partyProduct) => partyProduct.productId === ap.id && partyProduct.institutionType !== 'PT'
-      )
-  );
 
   const canAggregatorSeeHandleDelegations = useMemo(() => {
     const aggregatorProduct = activeOnboardings.find(
       (product) =>
-        product.isAggregator &&
-        hasPermission(product.productId ?? '', Actions.ViewManagedInstitutions)
+        (product as any)?.isAggregator &&
+        hasPermission(product.productId || '', Actions.ViewManagedInstitutions)
     );
     return Boolean(aggregatorProduct && hasDelegation);
-  }, [party, hasDelegation]);
+  }, [activeOnboardings, hasDelegation, hasPermission]);
 
-  const isInvoiceSectionVisible = !!products?.some(
+  const isInvoiceSectionVisible = !!(products ?? []).some(
     (prod) =>
       prod.invoiceable &&
       activeOnboardings.some(
@@ -162,7 +99,7 @@ const Dashboard = () => {
 
   const isDocumentsSectionVisible =
     ENV.SHOW_DOCUMENTS &&
-    !!activeProducts.some((partyProd) => hasPermission(partyProd.id ?? '', Actions.ViewContract));
+    activeProducts.some((p) => hasPermission(p.id ?? '', Actions.ViewContract));
 
   const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
@@ -170,49 +107,27 @@ const Dashboard = () => {
     !isPTTheOnlyType &&
     getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
 
-  const isHandleDelegationsVisible = useMemo(() => {
-    const canDelegateSeeHandleDelegations =
-      delegableProducts.length > 0 &&
-      (isPTOnAnyOnboarding || hasDelegation) &&
-      getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
+  const canDelegateSeeHandleDelegations =
+    delegableProducts.length > 0 &&
+    (isPTOnAnyOnboarding || hasDelegation) &&
+    getAllProductsWithPermission(Actions.ViewManagedInstitutions).length > 0;
 
-    return canDelegateSeeHandleDelegations || canAggregatorSeeHandleDelegations;
-  }, [
-    authorizedDelegableProducts,
-    isPTOnAnyOnboarding,
-    hasDelegation,
-    canAggregatorSeeHandleDelegations,
-    delegableProducts,
-  ]);
+  const isHandleDelegationsVisible =
+    canDelegateSeeHandleDelegations || canAggregatorSeeHandleDelegations;
 
-  // Check if the current route matches any path in the array
   const paths = [
     DASHBOARD_ROUTES.ADD_DELEGATE.path,
     `${ENV.ROUTES.USERS}/add`,
     `${ENV.ROUTES.USERS}/:userId/edit`,
     `${ENV.ROUTES.USERS}/:userId/add-product`,
   ];
+  const match = matchPath(location.pathname, { path: paths, exact: true, strict: false });
 
-  const match = matchPath(location.pathname, {
-    path: paths,
-    exact: true,
-    strict: false,
-  });
+  if (!party || !products) {
+    return <></>;
+  }
 
-  const getButtonText = (pathname: string): string => {
-    const pathMap: Record<string, string> = {
-      users: 'overview.sideMenu.institutionManagement.referents.title',
-      groups: 'overview.sideMenu.institutionManagement.groups.title',
-      delegations: 'overview.sideMenu.institutionManagement.delegations.title',
-      delegate: 'overview.ptPage.title',
-      documents: 'overview.sideMenu.institutionManagement.documents.title',
-    };
-
-    const key = Object.keys(pathMap).find((key) => pathname.includes(key));
-    return key ? t(pathMap[key]) : t('overview.sideMenu.institutionManagement.overview.title');
-  };
-
-  return party && products ? (
+  return (
     <Grid
       container
       item
@@ -224,77 +139,28 @@ const Dashboard = () => {
     >
       {!match &&
         (isMobile ? (
-          <>
-            <Button
-              fullWidth
-              disableRipple
-              sx={{
-                height: '59px',
-                justifyContent: 'left',
-                boxShadow:
-                  'rgba(0, 43, 85, 0.1) 0px 2px 4px -1px, rgba(0, 43, 85, 0.05) 0px 4px 5px !important',
-              }}
-              onClick={() => setDrawerOpen(true)}
-            >
-              <DehazeIcon sx={{ marginRight: 2 }} />
-              {getButtonText(location.pathname)}
-            </Button>
-            <Grid>
-              <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-                <Grid item xs={2} component="nav" display={'inline-grid'}>
-                  <DashboardSideMenu
-                    party={party}
-                    isAddDelegateSectionVisible={isAddDelegateSectionVisible}
-                    isInvoiceSectionVisible={isInvoiceSectionVisible}
-                    isHandleDelegationsVisible={isHandleDelegationsVisible}
-                    isDocumentsSectionVisible={isDocumentsSectionVisible}
-                    setDrawerOpen={setDrawerOpen}
-                    hideLabels={hideLabels}
-                  />
-                </Grid>
-              </Drawer>
-            </Grid>
-          </>
+          <DashboardSideMenuMobile
+            party={party}
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+            hideLabels={hideLabels}
+            isAddDelegateSectionVisible={isAddDelegateSectionVisible}
+            isInvoiceSectionVisible={isInvoiceSectionVisible}
+            isHandleDelegationsVisible={isHandleDelegationsVisible}
+            isDocumentsSectionVisible={isDocumentsSectionVisible}
+            currentPathname={location.pathname}
+          />
         ) : (
-          <Grid
-            component="nav"
-            item
-            xs={hideLabels ? 1 : 2}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              height: '100%',
-            }}
-          >
-            <Box sx={{ flexGrow: 1 }}>
-              <DashboardSideMenu
-                party={party}
-                isAddDelegateSectionVisible={isAddDelegateSectionVisible}
-                isInvoiceSectionVisible={isInvoiceSectionVisible}
-                isHandleDelegationsVisible={isHandleDelegationsVisible}
-                isDocumentsSectionVisible={isDocumentsSectionVisible}
-                setDrawerOpen={setDrawerOpen}
-                hideLabels={hideLabels}
-              />
-            </Box>
-
-            <Box>
-              <Divider sx={{ marginTop: '80px' }} />
-              <Button
-                fullWidth
-                sx={{
-                  height: '59px',
-                  display: 'flex',
-                  justifyContent: hideLabels ? 'center' : 'left',
-                  my: 3,
-                  color: 'text.primary',
-                }}
-                onClick={() => setHideLabels(!hideLabels)}
-              >
-                <DehazeIcon sx={{ marginRight: 2 }} />
-              </Button>
-            </Box>
-          </Grid>
+          <DashboardSideMenuDesktop
+            party={party}
+            hideLabels={hideLabels}
+            setHideLabels={setHideLabels}
+            setDrawerOpen={setDrawerOpen}
+            isAddDelegateSectionVisible={isAddDelegateSectionVisible}
+            isInvoiceSectionVisible={isInvoiceSectionVisible}
+            isHandleDelegationsVisible={isHandleDelegationsVisible}
+            isDocumentsSectionVisible={isDocumentsSectionVisible}
+          />
         ))}
 
       <Grid
@@ -317,6 +183,7 @@ const Dashboard = () => {
               decorators={decorators}
             />
           </Route>
+
           <Route path={ENV.ROUTES.USERS} exact={false}>
             <RemoteRoutingUsers
               party={party}
@@ -330,6 +197,7 @@ const Dashboard = () => {
               decorators={decorators}
             />
           </Route>
+
           <Route path={ENV.ROUTES.PRODUCT_USERS} exact={false}>
             <RemoteRoutingProductUsers
               party={party}
@@ -343,6 +211,7 @@ const Dashboard = () => {
               decorators={decorators}
             />
           </Route>
+
           <Route path={ENV.ROUTES.GROUPS} exact={false}>
             <RemoteRoutingGroups
               party={party}
@@ -356,33 +225,37 @@ const Dashboard = () => {
               decorators={decorators}
             />
           </Route>
-          <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact={true}>
+
+          <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact>
             <AddDelegationPage
               authorizedDelegableProducts={authorizedDelegableProducts}
               party={party}
             />
           </Route>
-          <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact={true}>
+
+          <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact>
             <DashboardDelegationsPage
               party={party}
               authorizedDelegableProducts={authorizedDelegableProducts}
             />
           </Route>
-          <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact={true}>
+
+          <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact>
             <DashboardHandleDelegatesPage party={party} />
           </Route>
+
           <Route path={DASHBOARD_ROUTES.DOCUMENTS.path} exact>
             <DashboardDocuments party={party} products={products} />
           </Route>
+
           <Route path={DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path} exact>
             <DashboardDocumentsDetail party={party} products={products} />
           </Route>
+
           {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
         </Switch>
       </Grid>
     </Grid>
-  ) : (
-    <> </>
   );
 };
 
