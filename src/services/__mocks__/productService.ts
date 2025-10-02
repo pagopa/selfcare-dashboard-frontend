@@ -250,6 +250,7 @@ export const mockedCategories: ProductInstitutionMap = {
     SCP: {},
     AS: {},
     PRV: {},
+    SCEC: {},
   },
   'prod-pn': {
     PA: {
