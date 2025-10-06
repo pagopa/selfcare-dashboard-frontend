@@ -1,6 +1,7 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import ArticleIcon from '@mui/icons-material/Article';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import DnsIcon from '@mui/icons-material/Dns';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
@@ -38,7 +39,7 @@ type MenuItem = {
 };
 
 type Props = {
-  party: Party;
+  party?: Party;
   isAddDelegateSectionVisible?: boolean;
   isInvoiceSectionVisible: boolean;
   isHandleDelegationsVisible?: boolean;
@@ -66,11 +67,14 @@ export default function DashboardSideMenu({
 
   const canSeeUsers = getAllProductsWithPermission(Actions.ListProductUsers).length > 0;
   const canSeeGroups = getAllProductsWithPermission(Actions.ListProductGroups).length > 0;
+  const isPagoPaUser = false;
+  const isPagoPaOverviewVisible = false;
 
   // Helper to resolve paths with party ID
   const resolvePath = useCallback(
-    (path: string) => resolvePathVariables(path, { partyId: party.partyId ?? '' }),
-    [party.partyId]
+    (path: string, InstitutionId?: string) =>
+      resolvePathVariables(path, { partyId: party?.partyId || InstitutionId || '' }),
+    [party]
   );
 
   // Handle navigation with unload event
@@ -89,25 +93,25 @@ export default function DashboardSideMenu({
     const lang = i18n.language;
     setLoading(true);
 
-    getBillingToken(party.partyId, undefined, lang)
+    getBillingToken(party?.partyId || '', undefined, lang)
       .then((result) => {
         window.location.assign(result);
       })
       .catch((error) => {
         addError({
-          id: `TokenExchangeInvoiceError-${party.partyId}`,
+          id: `TokenExchangeInvoiceError-${party?.partyId}`,
           blocking: false,
           error,
-          techDescription: `Something gone wrong retrieving token exchange on click of invoice button ${party.partyId}`,
+          techDescription: `Something gone wrong retrieving token exchange on click of invoice button ${party?.partyId}`,
           toNotify: true,
         });
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [party.partyId, setLoading, addError]);
+  }, [party, setLoading, addError]);
 
-  const menuItems: Array<MenuItem> = [
+  const spidUserFlow: Array<MenuItem> = [
     {
       key: 'techpartner',
       title: t('overview.ptPage.title'),
@@ -140,7 +144,7 @@ export default function DashboardSideMenu({
       isVisible: isDocumentsSectionVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
       action: () => {
-        trackEvent('DASHBOARD_OPEN_DOCUMENT', { party_id: party.partyId });
+        trackEvent('DASHBOARD_OPEN_DOCUMENT', { party_id: party?.partyId });
         navigateTo(resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path));
       },
     },
@@ -171,29 +175,47 @@ export default function DashboardSideMenu({
     },
   ];
 
+  const pagoPaAdminFlow: Array<MenuItem> = [
+    {
+      key: 'adminPage',
+      title: t('overview.sideMenu.institutionManagement.adminPage.title'),
+      icon: DashboardIcon,
+      path: ENV.ROUTES.ADMIN,
+      isVisible: true,
+      isSelected: location.pathname === ENV.ROUTES.ADMIN,
+    },
+    {
+      key: 'overview',
+      title: t('overview.sideMenu.institutionManagement.overview.title'),
+      icon: ViewSidebarIcon,
+      path: resolvePath(DASHBOARD_ROUTES.OVERVIEW.path, 'onboarded'),
+      isVisible: isPagoPaOverviewVisible,
+      isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.OVERVIEW.path),
+    },
+  ];
+
+  const sideBarItems = isPagoPaUser ? pagoPaAdminFlow : spidUserFlow;
+
+  const visibleMenuItems = sideBarItems.filter((item) => item.isVisible === true);
+
   return (
     <Grid container item mt={1} width="100%">
       <Grid item xs={12}>
         <List>
-          {menuItems.map((item) => {
-            if (!item.isVisible) {
-              return null;
-            }
+          {visibleMenuItems.map((item) => (
+            <Box key={item.key} mb={item.key === 'techpartner' ? 2 : 0}>
+              <DashboardSideNavItem
+                title={hideLabels ? '' : item.title}
+                icon={item.icon}
+                handleClick={item.action || (() => navigateTo(item.path))}
+                isSelected={item.isSelected}
+                hideLabels={hideLabels}
+              />
 
-            return (
-              <Box key={item.key} mb={item.key === 'techpartner' ? 2 : 0}>
-                <DashboardSideNavItem
-                  title={hideLabels ? '' : item.title}
-                  icon={item.icon}
-                  handleClick={item.action || (() => navigateTo(item.path))}
-                  isSelected={item.isSelected}
-                  hideLabels={hideLabels}
-                />
-
-                {item.key === 'techpartner' && <Divider />}
-              </Box>
-            );
-          })}
+              {item.key === 'techpartner' ||
+                (isPagoPaOverviewVisible && item.key === 'adminPage' && <Divider />)}
+            </Box>
+          ))}
         </List>
       </Grid>
     </Grid>

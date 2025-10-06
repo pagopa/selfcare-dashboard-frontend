@@ -1,18 +1,19 @@
+import { useTheme } from '@mui/material';
 import {
   ErrorBoundary,
   LoadingOverlay,
   UnloadEventHandler,
   UserNotifyHandle,
 } from '@pagopa/selfcare-common-frontend/lib';
-import { Redirect, Route, Switch, useHistory } from 'react-router';
 import withLogin from '@pagopa/selfcare-common-frontend/lib/decorators/withLogin';
-import { useStore } from 'react-redux';
-import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useStore } from 'react-redux';
+import { Redirect, Route, Switch, useHistory } from 'react-router';
 import Layout from './components/Layout/Layout';
+import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
+import DashboardAdminPage from './pages/dashboardAdmin/dasboardAdmin';
 import routes, { RoutesObject } from './routes';
 import { ENV } from './utils/env';
-import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
 
 const buildRoutes = (rs: RoutesObject) =>
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
@@ -27,6 +28,8 @@ const App = () => {
   const theme = useTheme();
   const { i18n } = useTranslation();
   const history = useHistory();
+  // TODO fix token iss
+  const isPagoPaUser = false;
 
   return (
     <ErrorBoundary>
@@ -36,13 +39,20 @@ const App = () => {
         <UnloadEventHandler />
 
         <Switch>
-          <Route path={ENV.ROUTES.ADMIN} exact={false}>
+          <Route path={ENV.ROUTES.ADMIN_PARTY_DETAIL} exact={false}>
             <RemoteRoutingAdmin store={store} theme={theme} i18n={i18n} history={history} />
+          </Route>
+          <Route path={ENV.ROUTES.ADMIN_SEARCH} exact={false}>
+            <DashboardAdminPage />
+          </Route>
+
+          <Route exact path="/dashboard">
+            <Redirect to={isPagoPaUser ? ENV.ROUTES.ADMIN_SEARCH : routes.PARTY_SELECTION.path} />
           </Route>
           {buildRoutes(routes)}
 
           <Route path="*">
-            <Redirect to={routes.PARTY_SELECTION.path} />
+            <Redirect to={isPagoPaUser ? ENV.ROUTES.ADMIN_SEARCH : routes.PARTY_SELECTION.path} />
           </Route>
         </Switch>
       </Layout>

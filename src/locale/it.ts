@@ -62,7 +62,7 @@ export default {
         overview: {
           title: 'Panoramica',
         },
-        overviewInstitutions: {
+        adminPage: {
           title: 'Panoramica Enti',
         },
         delegations: {
@@ -273,6 +273,14 @@ export default {
       <1/>
       Ti chiediamo di riprovare più tardi.`,
       backAction: 'Chiudi',
+    },
+  },
+  adminPage: {
+    title: 'Panoramica enti',
+    subtitle: 'Cerca, visualizza e gestisci gli enti aderenti ai prodotti PagoPA.',
+    autocomplete: {
+      title: 'Visualizza ente',
+      placeholder: 'Cerca ente per Ragione sociale o Codice Fiscale',
     },
   },
   addDelegationPage: {
