@@ -6,7 +6,7 @@ import { Party } from '../../../../model/Party';
 import DashboardSideMenu from './DashboardSideMenu';
 
 type Props = {
-  party: Party;
+  party?: Party;
   isAddDelegateSectionVisible: boolean;
   isInvoiceSectionVisible: boolean;
   isHandleDelegationsVisible: boolean;

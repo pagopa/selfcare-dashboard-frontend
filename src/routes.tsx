@@ -38,7 +38,7 @@ const buildRedirectToBasePath = (basePath: string): RoutesObject => ({
 
 const ROUTES = {
   PARTY_SELECTION: {
-    path: `${BASE_ROUTE}`,
+    path: `${BASE_ROUTE}/party-selection`,
     exact: true,
     component: PartySelectionContainer,
   },

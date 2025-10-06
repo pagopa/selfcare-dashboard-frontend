@@ -61,10 +61,12 @@ test('Test rendering dashboard parties loaded', () => {
 
 test('Test routing ', async () => {
   const { history, store } = renderApp();
-  await waitFor(() => expect(history.location.pathname).toBe('/dashboard'));
+
+  await waitFor(() => expect(history.location.pathname).toBe('/dashboard/party-selection'));
 
   await waitFor(() => history.push('/dashboard/1'));
   expect(history.location.pathname).toBe('/dashboard/1');
 
   verifySelectedPartyMockExecution(store.getState());
 });
+
