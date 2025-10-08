@@ -11,7 +11,7 @@ import { useStore } from 'react-redux';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
 import Layout from './components/Layout/Layout';
 import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
-import DashboardAdminPage from './pages/dashboardAdmin/TestFileName';
+import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';
 import routes, { RoutesObject } from './routes';
 import { ENV } from './utils/env';
 
