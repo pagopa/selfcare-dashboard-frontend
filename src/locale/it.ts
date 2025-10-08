@@ -204,6 +204,7 @@ export default {
         REC: 'Recapitista',
         CON: 'Consolidatore',
         PRV: 'Privato',
+        PRV_PF: 'Privato',
         GPU: 'Gestore di pubblica utilità e/o di interesse generale',
         SCEC: 'Società in conto economico consolidato',
       },
