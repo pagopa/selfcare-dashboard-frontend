@@ -183,7 +183,7 @@ export default function DashboardSideMenu({
       icon: DashboardIcon,
       path: ENV.ROUTES.ADMIN,
       isVisible: true,
-      isSelected: location.pathname === ENV.ROUTES.ADMIN,
+      isSelected: location.pathname === ENV.ROUTES.ADMIN_SEARCH,
     },
     {
       key: 'overview',
