@@ -21,18 +21,10 @@ const DashboardAdminPage: React.FC = () => {
   const store = useStore();
   const { i18n } = useTranslation();
   const history = useHistory();
+  const location = useLocation();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hideLabels, setHideLabels] = useState(false);
-
-  const location = useLocation();
-  // TODO remove true default
-  // parseJwt(storageTokenOps.read)?.iss ||
-
-  // const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
-
-  // For PagoPA users, we don't show the side menu sections that require party data
-  // Only Admin section is visible
 
   return (
     <Grid
@@ -73,7 +65,7 @@ const DashboardAdminPage: React.FC = () => {
         sx={{ backgroundColor: 'background.default' }}
         display="flex"
         justifyContent="flex-start"
-        flexDirection="column" 
+        flexDirection="column"
         alignItems="flex-start"
         pb={8}
         xs={12}

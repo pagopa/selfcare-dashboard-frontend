@@ -6,6 +6,7 @@ import {
   UserNotifyHandle,
 } from '@pagopa/selfcare-common-frontend/lib';
 import withLogin from '@pagopa/selfcare-common-frontend/lib/decorators/withLogin';
+import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
@@ -28,8 +29,7 @@ const App = () => {
   const theme = useTheme();
   const { i18n } = useTranslation();
   const history = useHistory();
-  // TODO fix token iss
-  const isPagoPaUser = false;
+  const isPagoPaUser = storageUserOps.read()?.iss === 'PAGOPA';
 
   return (
     <ErrorBoundary>
