@@ -14,6 +14,7 @@ import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
 import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';
 import routes, { RoutesObject } from './routes';
 import { ENV } from './utils/env';
+import { isPagoPaUser } from './utils/helperFunctions';
 
 const buildRoutes = (rs: RoutesObject) =>
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
@@ -28,8 +29,6 @@ const App = () => {
   const theme = useTheme();
   const { i18n } = useTranslation();
   const history = useHistory();
-  // TODO fix token iss
-  const isPagoPaUser = false;
 
   return (
     <ErrorBoundary>

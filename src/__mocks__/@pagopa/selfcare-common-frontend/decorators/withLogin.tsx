@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
 import {
   userActions,
@@ -14,6 +13,7 @@ export const mockedUser: User = {
   uid: 'UID',
   taxCode: 'AAAAAA00A00A000A',
   email: 'a@a.aa',
+  iss: 'PAGOPA',
 };
 
 export const verifyMockExecution = (state: RootState) => {
@@ -23,8 +23,8 @@ export const verifyMockExecution = (state: RootState) => {
 export default (WrappedComponent: React.ComponentType<any>) => () => {
   const dispatch = useAppDispatch();
   const loggedUser = useSelector(userSelectors.selectLoggedUser);
-  useEffect(() => {
-    dispatch(userActions.setLoggedUser(mockedUser));
-  }, []);
+
+  dispatch(userActions.setLoggedUser(mockedUser));
+
   return loggedUser ? <WrappedComponent /> : <></>;
 };

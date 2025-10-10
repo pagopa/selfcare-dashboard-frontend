@@ -2,12 +2,13 @@ import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 import { render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
-import { verifyMockExecution as verifyLoginMockExecution } from '../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
 import App from '../App';
-import { verifyMockExecution as verifyPartiesMockExecution } from '../decorators/__mocks__/withParties';
+import {
+  verifyMockExecution as verifyLoginMockExecution,
+  verifyMockExecution as verifyPartiesMockExecution,
+} from '../decorators/__mocks__/withParties';
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
 import { BaseParty } from '../model/Party';
 import { createStore } from '../redux/store';
@@ -69,4 +70,3 @@ test('Test routing ', async () => {
 
   verifySelectedPartyMockExecution(store.getState());
 });
-

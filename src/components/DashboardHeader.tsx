@@ -49,7 +49,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     setShowDocBtn(i18n.language === 'it');
   }, [i18n.language]);
 
-  const parties2Show = parties.filter((party) => party.status === 'ACTIVE');
+  const parties2Show = parties?.filter((party) => party.status === 'ACTIVE');
 
   const findAuthorizedProduct = (productId: string) =>
     party?.products.find(
@@ -106,7 +106,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             linkType: p?.backOfficeEnvironmentConfigurations ? 'external' : 'internal',
           }))}
         partyList={
-          parties2Show.map((party) => ({
+          parties2Show?.map((party) => ({
             id: party.partyId ?? '',
             name: party.description ?? '',
             productRole: t(roleLabels[party.userRole]?.longLabelKey),

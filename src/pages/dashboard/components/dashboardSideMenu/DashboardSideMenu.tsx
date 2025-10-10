@@ -26,6 +26,7 @@ import { DASHBOARD_ROUTES } from '../../../../routes';
 import { getBillingToken } from '../../../../services/tokenExchangeService';
 import { LOADING_TASK_TOKEN_EXCHANGE_INVOICE } from '../../../../utils/constants';
 import { ENV } from '../../../../utils/env';
+import { isPagoPaUser } from '../../../../utils/helperFunctions';
 import DashboardSideNavItem from './DashboardSidenavItem';
 
 type MenuItem = {
@@ -67,7 +68,6 @@ export default function DashboardSideMenu({
 
   const canSeeUsers = getAllProductsWithPermission(Actions.ListProductUsers).length > 0;
   const canSeeGroups = getAllProductsWithPermission(Actions.ListProductGroups).length > 0;
-  const isPagoPaUser = false;
   const isPagoPaOverviewVisible = false;
 
   // Helper to resolve paths with party ID
@@ -182,7 +182,7 @@ export default function DashboardSideMenu({
       icon: DashboardIcon,
       path: ENV.ROUTES.ADMIN,
       isVisible: true,
-      isSelected: location.pathname === ENV.ROUTES.ADMIN,
+      isSelected: location.pathname === ENV.ROUTES.ADMIN_SEARCH,
     },
     {
       key: 'overview',
