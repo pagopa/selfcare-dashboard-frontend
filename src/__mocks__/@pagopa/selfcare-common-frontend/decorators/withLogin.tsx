@@ -13,7 +13,7 @@ export const mockedUser: User = {
   uid: 'UID',
   taxCode: 'AAAAAA00A00A000A',
   email: 'a@a.aa',
-  iss: 'SPID',
+  iss: 'PAGOPA',
 };
 
 export const verifyMockExecution = (state: RootState) => {
