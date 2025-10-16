@@ -180,7 +180,7 @@ export default function DashboardSideMenu({
       key: 'adminPage',
       title: t('overview.sideMenu.institutionManagement.adminPage.title'),
       icon: DashboardIcon,
-      path: ENV.ROUTES.ADMIN,
+      path: ENV.ROUTES.ADMIN_SEARCH,
       isVisible: true,
       isSelected: location.pathname === ENV.ROUTES.ADMIN_SEARCH,
     },
