@@ -64,6 +64,7 @@ const DashboardAdminPage: React.FC = () => {
         component="main"
         sx={{ backgroundColor: 'background.default' }}
         display="flex"
+        minHeight="100vh"
         justifyContent="flex-start"
         flexDirection="column"
         alignItems="flex-start"
