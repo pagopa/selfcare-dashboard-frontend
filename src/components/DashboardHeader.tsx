@@ -18,7 +18,7 @@ import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
 import { INTEROP_PRODUCT_ENUM, interopProductIdList } from '../utils/constants';
-import { startWithProductInterop } from '../utils/helperFunctions';
+import { isPagoPaUser, startWithProductInterop } from '../utils/helperFunctions';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -46,8 +46,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const { hasPermission } = usePermissions();
 
   useEffect(() => {
+    if (isPagoPaUser) {
+      setShowDocBtn(false);
+      return;
+    }
     setShowDocBtn(i18n.language === 'it');
-  }, [i18n.language]);
+  }, [i18n.language, isPagoPaUser]);
 
   const parties2Show = parties?.filter((party) => party.status === 'ACTIVE');
 
@@ -124,7 +128,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               }
             : false
         }
-        enableAssistanceButton={ENV.ENV !== 'UAT'}
+        enableAssistanceButton={ENV.ENV !== 'UAT' && !isPagoPaUser}
         assistanceEmail={ENV.ASSISTANCE.EMAIL}
         onDocumentationClick={
           showDocBtn
