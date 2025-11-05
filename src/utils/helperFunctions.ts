@@ -1,4 +1,3 @@
-import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { INTEROP_PRODUCT_ENUM } from './constants';
 
 export const compareDates = (
