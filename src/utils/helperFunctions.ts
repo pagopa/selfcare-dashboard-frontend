@@ -36,5 +36,3 @@ export const addCacheBuster = (url?: string) => {
   const separator = baseUrl.includes('?') ? '&' : '?';
   return `${baseUrl}${separator}t=${new Date().getTime()}`;
 };
-
-export const isPagoPaUser = storageUserOps.read()?.iss === 'PAGOPA';
