@@ -5,6 +5,7 @@ import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions, roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -18,7 +19,7 @@ import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
 import { INTEROP_PRODUCT_ENUM, interopProductIdList } from '../utils/constants';
-import { isPagoPaUser, startWithProductInterop } from '../utils/helperFunctions';
+import { startWithProductInterop } from '../utils/helperFunctions';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {

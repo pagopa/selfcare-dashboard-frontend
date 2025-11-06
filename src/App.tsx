@@ -6,6 +6,7 @@ import {
   UserNotifyHandle,
 } from '@pagopa/selfcare-common-frontend/lib';
 import withLogin from '@pagopa/selfcare-common-frontend/lib/decorators/withLogin';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
@@ -14,7 +15,6 @@ import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
 import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';
 import routes, { RoutesObject } from './routes';
 import { ENV } from './utils/env';
-import { isPagoPaUser } from './utils/helperFunctions';
 
 const buildRoutes = (rs: RoutesObject) =>
   Object.values(rs).map(({ path, exact, component: Component, subRoutes }, i) => (
