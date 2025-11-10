@@ -1,5 +1,6 @@
 import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { ProductsRolesMap } from '../model/ProductRole';
@@ -26,8 +27,8 @@ export const useSelectedParty = (): {
   const fetchParty = (partyId: string): Promise<Party | null> =>
     fetchPartyDetails(partyId).then((party) => {
       if (party) {
-        const selectedParty = parties?.find((p) => p.partyId === partyId);
-        if (selectedParty && selectedParty.status !== 'ACTIVE') {
+        const selectedParty = isPagoPaUser ? party : parties?.find((p) => p.partyId === partyId);
+        if (!isPagoPaUser && selectedParty && selectedParty.status !== 'ACTIVE') {
           throw new Error(`INVALID_PARTY_STATE_${selectedParty.status}`);
         }
         const partyWithUserRoleAndStatus = {
@@ -56,6 +57,7 @@ export const useSelectedParty = (): {
         throw new Error(`Cannot find partyId ${partyId}`);
       }
     });
+    
   const fetchProductLists = () =>
     fetchProducts().then((products) => {
       if (products) {
