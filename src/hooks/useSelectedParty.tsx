@@ -28,7 +28,7 @@ export const useSelectedParty = (): {
     fetchPartyDetails(partyId).then((party) => {
       if (party) {
         const selectedParty = isPagoPaUser ? party : parties?.find((p) => p.partyId === partyId);
-        if (selectedParty && selectedParty.status !== 'ACTIVE') {
+        if (!isPagoPaUser && selectedParty && selectedParty.status !== 'ACTIVE') {
           throw new Error(`INVALID_PARTY_STATE_${selectedParty.status}`);
         }
         const partyWithUserRoleAndStatus = {
@@ -57,6 +57,7 @@ export const useSelectedParty = (): {
         throw new Error(`Cannot find partyId ${partyId}`);
       }
     });
+    
   const fetchProductLists = () =>
     fetchProducts().then((products) => {
       if (products) {
