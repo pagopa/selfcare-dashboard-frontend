@@ -54,7 +54,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     setShowDocBtn(i18n.language === 'it');
   }, [i18n.language, isPagoPaUser]);
 
-  const parties2Show = parties?.filter((party) => party.status === 'ACTIVE');
+  const parties2Show = isPagoPaUser
+    ? [party]
+    : parties?.filter((party) => party.status === 'ACTIVE');
 
   const findAuthorizedProduct = (productId: string) =>
     party?.products.find(
@@ -112,11 +114,13 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           }))}
         partyList={
           parties2Show?.map((party) => ({
-            id: party.partyId ?? '',
-            name: party.description ?? '',
-            productRole: t(roleLabels[party.userRole]?.longLabelKey),
-            logoUrl: party.urlLogo,
-            parentName: party.parentDescription,
+            id: party?.partyId ?? '',
+            name: party?.description ?? '',
+            productRole: t(
+              roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey
+            ),
+            logoUrl: party?.urlLogo,
+            parentName: party?.parentDescription,
           })) ?? []
         }
         loggedUser={
