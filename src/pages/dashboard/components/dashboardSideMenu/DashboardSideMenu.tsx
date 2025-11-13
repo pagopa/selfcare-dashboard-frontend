@@ -23,6 +23,8 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
 import { Party } from '../../../../model/Party';
+import { useAppDispatch } from '../../../../redux/hooks';
+import { partiesActions } from '../../../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES } from '../../../../routes';
 import { getBillingToken } from '../../../../services/tokenExchangeService';
 import { LOADING_TASK_TOKEN_EXCHANGE_INVOICE } from '../../../../utils/constants';
@@ -65,10 +67,11 @@ export default function DashboardSideMenu({
   const addError = useErrorDispatcher();
   const setLoading = useLoading(LOADING_TASK_TOKEN_EXCHANGE_INVOICE);
   const { getAllProductsWithPermission } = usePermissions();
+  const dispatch = useAppDispatch();
 
   const canSeeUsers = getAllProductsWithPermission(Actions.ListProductUsers).length > 0;
   const canSeeGroups = getAllProductsWithPermission(Actions.ListProductGroups).length > 0;
-  const isPagoPaOverviewVisible = false;
+  const isPagoPaOverviewVisible = !location.pathname.includes('admin');
 
   // Helper to resolve paths with party ID
   const resolvePath = useCallback(
@@ -183,6 +186,10 @@ export default function DashboardSideMenu({
       path: ENV.ROUTES.ADMIN_SEARCH,
       isVisible: true,
       isSelected: location.pathname === ENV.ROUTES.ADMIN_SEARCH,
+      action: () => {
+        dispatch(partiesActions.setPartySelected(undefined));
+        navigateTo(ENV.ROUTES.ADMIN_SEARCH);
+      },
     },
     {
       key: 'overview',
@@ -191,6 +198,18 @@ export default function DashboardSideMenu({
       path: resolvePath(DASHBOARD_ROUTES.OVERVIEW.path, 'onboarded'),
       isVisible: isPagoPaOverviewVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.OVERVIEW.path),
+    },
+    {
+      key: 'documents',
+      title: t('overview.sideMenu.institutionManagement.documents.title'),
+      icon: ArticleIcon,
+      path: resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
+      isVisible: isPagoPaOverviewVisible,
+      isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
+      action: () => {
+        trackEvent('DASHBOARD_OPEN_DOCUMENT', { party_id: party?.partyId });
+        navigateTo(resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path));
+      },
     },
   ];
 
@@ -203,17 +222,20 @@ export default function DashboardSideMenu({
       <Grid item xs={12}>
         <List>
           {visibleMenuItems.map((item) => (
-            <Box key={item.key} mb={item.key === 'techpartner' ? 2 : 0}>
+            <Box key={item.key}>
               <DashboardSideNavItem
                 title={hideLabels ? '' : item.title}
                 icon={item.icon}
                 handleClick={item.action || (() => navigateTo(item.path))}
                 isSelected={item.isSelected}
                 hideLabels={hideLabels}
+                itemKey={item.key}
               />
 
               {item.key === 'techpartner' ||
-                (isPagoPaOverviewVisible && item.key === 'adminPage' && <Divider />)}
+                (isPagoPaOverviewVisible && item.key === 'adminPage' && (
+                  <Divider sx={{ mt: 2, mb: 2 }} />
+                ))}
             </Box>
           ))}
         </List>

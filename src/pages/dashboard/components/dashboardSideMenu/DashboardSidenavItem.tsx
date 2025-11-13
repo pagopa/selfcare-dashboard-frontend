@@ -1,9 +1,9 @@
-import { SvgIconComponent } from '@mui/icons-material';
+import { ExitToApp, SvgIconComponent } from '@mui/icons-material';
 import {
+  Icon,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Icon,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
@@ -14,6 +14,7 @@ type SideNavItemProps = {
   handleClick: () => void;
   isSelected?: boolean;
   hideLabels?: boolean;
+  itemKey: string;
 };
 
 /**
@@ -25,6 +26,7 @@ export default function DashboardSideNavItem({
   handleClick,
   isSelected = false,
   hideLabels = false,
+  itemKey,
 }: Readonly<SideNavItemProps>) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
@@ -44,8 +46,13 @@ export default function DashboardSideNavItem({
       <ListItemIcon>
         <Icon component={icon} />
       </ListItemIcon>
-      
+
       {!hideLabels && <ListItemText primary={title} />}
+      {itemKey === 'adminPage' && !hideLabels && (
+        <ListItemIcon>
+          <ExitToApp />
+        </ListItemIcon>
+      )}
     </ListItemButton>
   );
 }

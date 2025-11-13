@@ -43,6 +43,7 @@ export const getButtonText = (pathname: string, t: (key: string) => string): str
     delegations: 'overview.sideMenu.institutionManagement.delegations.title',
     delegate: 'overview.ptPage.title',
     documents: 'overview.sideMenu.institutionManagement.documents.title',
+    search: 'overview.sideMenu.institutionManagement.adminPage.title',
   };
 
   const key = Object.keys(pathMap).find((key) => pathname.includes(key));
