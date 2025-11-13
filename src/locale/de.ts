@@ -18,6 +18,9 @@ export default {
     label: 'Körperschaft suchen',
     notFoundResults: 'Kein Ergebnis',
   },
+  searchBackstagePage:{
+    supportRole: 'Support'
+  },
   noActiveParty: {
     pending: {
       title: 'Es liegen keine <1 /> Beitrittsanträge für diese Körperschaft vor',

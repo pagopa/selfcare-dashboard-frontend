@@ -91,12 +91,21 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const lang = i18n.language;
 
+  const pagoPaInstitution: PartySwitchItem = {
+    id: 'pagoPA1231313',
+    name: 'PagoPA S.p.A.',
+    logoUrl: 'icons/icon-48x48.png',
+    productRole: t('searchBackstagePage.supportRole'),
+  };
+
+  const fixedParty = isPagoPaUser && location.pathname?.includes('admin') ? pagoPaInstitution : undefined;
+
   return (
     <div>
       <Header
         onExit={onExit}
         onLogoutClick={() => setOpenExitModal(true)}
-        withSecondHeader={!!party}
+        withSecondHeader={!!party || !!fixedParty}
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>
@@ -123,6 +132,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             parentName: party?.parentDescription,
           })) ?? []
         }
+        fixedParty={fixedParty}
         loggedUser={
           loggedUser
             ? {

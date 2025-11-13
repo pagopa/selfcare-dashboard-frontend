@@ -18,6 +18,9 @@ export default {
     label: 'Poiščite organizacijo',
     notFoundResults: 'Brez rezultatov',
   },
+  searchBackstagePage:{
+    supportRole: 'Podpora'
+  },
   noActiveParty: {
     pending: {
       title: 'Za to organizacijo ni prošenj za <1 /> članstvo',

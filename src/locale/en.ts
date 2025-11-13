@@ -18,6 +18,9 @@ export default {
     label: 'Search for the institution',
     notFoundResults: 'No result',
   },
+  searchBackstagePage:{
+    supportRole: 'Support'
+  },
   noActiveParty: {
     pending: {
       title: 'There are no registration requests <1 /> for this institution',

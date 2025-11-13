@@ -27,6 +27,9 @@ export default {
     label: 'Cerca ente',
     notFoundResults: 'Nessun risultato',
   },
+  searchBackstagePage:{
+    supportRole: 'Supporto'
+  },
   noActiveParty: {
     pending: {
       title: 'Non risultano richieste di <1 /> adesione per questo ente',
