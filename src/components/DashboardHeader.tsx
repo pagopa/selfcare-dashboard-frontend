@@ -129,7 +129,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             productRole:
               isPagoPaUser && !location.pathname?.includes('admin')
                 ? undefined
-                : t(roleLabels[(party?.userRole ?? '') as keyof typeof roleLabels].longLabelKey),
+                : t(roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey),
             logoUrl: party?.urlLogo,
             parentName: party?.parentDescription,
           })) ?? []
