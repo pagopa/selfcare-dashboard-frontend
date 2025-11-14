@@ -18,6 +18,9 @@ export default {
     label: 'Chercher un organisme',
     notFoundResults: 'Aucun résultat',
   },
+  searchBackstagePage:{
+    supportRole: 'Support'
+  },
   noActiveParty: {
     pending: {
       title: 'Aucune demande d’<1 />adhésion pour cet organisme',
