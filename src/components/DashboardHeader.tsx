@@ -98,7 +98,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     productRole: t('searchBackstagePage.supportRole'),
   };
 
-  const fixedParty = isPagoPaUser && location.pathname?.includes('admin') ? pagoPaInstitution : undefined;
+  const fixedParty =
+    isPagoPaUser && location.pathname?.includes('admin') ? pagoPaInstitution : undefined;
 
   return (
     <div>
@@ -125,9 +126,10 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           parties2Show?.map((party) => ({
             id: party?.partyId ?? '',
             name: party?.description ?? '',
-            productRole: t(
-              roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey
-            ),
+            productRole:
+              isPagoPaUser && !location.pathname?.includes('admin')
+                ? undefined
+                : t(roleLabels[(party?.userRole ?? '') as keyof typeof roleLabels].longLabelKey),
             logoUrl: party?.urlLogo,
             parentName: party?.parentDescription,
           })) ?? []
