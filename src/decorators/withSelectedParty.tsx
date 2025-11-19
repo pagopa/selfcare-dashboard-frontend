@@ -1,9 +1,11 @@
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { uniqueId } from 'lodash';
 import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
 import { useSelectedParty } from '../hooks/useSelectedParty';
 import ROUTES from '../routes';
+import { ENV } from '../utils/env';
 
 type DashboardUrlParams = {
   partyId: string;
@@ -22,6 +24,7 @@ export default function withSelectedParty<T>(
     const addError = useErrorDispatcher();
 
     const doFetch = (): void => {
+      const redirectPath = isPagoPaUser ? ENV.ROUTES.ADMIN_SEARCH : ROUTES.PARTY_SELECTION.path;
       fetchSelectedParty(partyId).catch((reason) => {
         const invalidState =
           reason instanceof Error && reason.message.startsWith('INVALID_PARTY_STATE_')
@@ -36,7 +39,7 @@ export default function withSelectedParty<T>(
             ? `Requested a party (${partyId}) with a not handled state ${invalidState}`
             : `An error occurred while retrieving selected party having IPACode ${partyId} in component ${ComponentWithSelectedParty.displayName}`,
           onRetry: !invalidState ? doFetch : undefined,
-          onClose: () => history.push(ROUTES.PARTY_SELECTION.path),
+          onClose: () => history.push(redirectPath),
           toNotify: !invalidState,
         });
       });

@@ -108,6 +108,21 @@ export const DashboardApi = {
     return extractResponse(result, 200, onRedirectToLogin);
   },
 
+  tokenExchangeAdmin: async (
+    institutionId: string,
+    productId: string,
+    environment?: string,
+    lang?: string
+  ): Promise<string> => {
+    const result = await apiClient.v2ExchangeBackofficeAdmin({
+      institutionId,
+      productId,
+      environment,
+      lang,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
   getDelegatingInstitutions: async (institutionId: string): Promise<DelegationWithPagination> => {
     const result = await apiClient.getDelegationsUsingToUsingGET_1({ institutionId });
     return extractResponse(result, 200, onRedirectToLogin);

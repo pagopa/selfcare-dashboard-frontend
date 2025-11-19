@@ -1708,6 +1708,89 @@
         "summary": "Service create an 'Identity Token' based on a Self Care session token"
       }
     },
+    "/v2/token/exchange/back-office/admin": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "query",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "query",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Back Office environment",
+            "in": "query",
+            "name": "environment",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Selected language",
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/STRINGWrapper"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "token"
+        ],
+        "description": "Service to create an 'Identity Token' based on a Self Care backoffice admin session token",
+        "operationId": "v2ExchangeBackofficeAdmin",
+        "summary": "Service to create an 'Identity Token' based on a Self Care backoffice admin session token"
+      }
+    },
     "/v2/token/exchange/fatturazione": {
       "get": {
         "produces": [
@@ -3023,7 +3106,7 @@
       }
     }
   },
-  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"OnboardingInfoArray":{"type": "array", "items": {"$ref": "#/definitions/OnboardingInfo"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
+  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"OnboardingInfoArray":{"type": "array", "items": {"$ref": "#/definitions/OnboardingInfo"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -3770,6 +3853,10 @@
         "billing": {
           "$ref": "#/definitions/Billing"
         },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
         "institutionType": {
           "enum": [
             "AS",
@@ -3832,6 +3919,10 @@
         },
         "billing": {
           "$ref": "#/definitions/Billing"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
         },
         "institutionType": {
           "enum": [

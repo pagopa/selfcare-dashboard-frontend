@@ -1,3 +1,4 @@
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { DashboardApi } from '../api/DashboardApiClient';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
@@ -7,8 +8,23 @@ export const retrieveBackOfficeUrl = (
   product?: Product,
   environment?: string,
   lang?: string
-): Promise<string> =>
-  DashboardApi.getBackOfficeUrl(selectedParty?.partyId ?? '', product?.id ?? '', environment, lang);
+): Promise<string> => {
+  if (isPagoPaUser) {
+    return DashboardApi.tokenExchangeAdmin(
+      selectedParty?.partyId ?? '',
+      product?.id ?? '',
+      environment,
+      lang
+    );
+  } else {
+    return DashboardApi.getBackOfficeUrl(
+      selectedParty?.partyId ?? '',
+      product?.id ?? '',
+      environment,
+      lang
+    );
+  }
+};
 
 export const getBillingToken = (
   partyId: string,
