@@ -129,7 +129,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             productRole:
               isPagoPaUser && !location.pathname?.includes('admin')
                 ? undefined
-                : t(roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey),
+                : t(
+                    roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey
+                  ),
             logoUrl: party?.urlLogo,
             parentName: party?.parentDescription,
           })) ?? []
@@ -209,7 +211,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         onConfirm={() => {
           setOpenExitModal(false);
-          window.location.assign(ENV.URL_FE.LOGOUT);
+          window.location.assign(isPagoPaUser ? ENV.URL_FE.LOGIN_GOOGLE : ENV.URL_FE.LOGOUT);
         }}
       />
       <SessionModalInteropProduct

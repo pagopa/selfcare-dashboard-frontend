@@ -37,6 +37,7 @@ export const ENV = {
     ONBOARDING: env.get('REACT_APP_URL_FE_ONBOARDING').required().asString(),
     LANDING: env.get('REACT_APP_URL_FE_LANDING').required().asString(),
     ASSISTANCE: env.get('REACT_APP_URL_FE_ASSISTANCE').required().asString(),
+    LOGIN_GOOGLE: env.get('REACT_APP_GOOGLE_LOGIN_URL').asString() || '/auth/google'
   },
 
   URL_API: {
