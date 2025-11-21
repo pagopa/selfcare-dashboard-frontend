@@ -48,7 +48,7 @@ export default function DashboardSideNavItem({
       </ListItemIcon>
 
       {!hideLabels && <ListItemText primary={title} />}
-      {itemKey === 'adminPage' && !hideLabels && (
+      {itemKey === 'adminPage' && !location.pathname?.includes('admin') && !hideLabels && (
         <ListItemIcon>
           <ExitToApp />
         </ListItemIcon>
