@@ -211,7 +211,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         onConfirm={() => {
           setOpenExitModal(false);
-          window.location.assign(isPagoPaUser ? ENV.URL_FE.LOGIN_GOOGLE : ENV.URL_FE.LOGOUT);
+          // window.location.assign(isPagoPaUser ? ENV.URL_FE.LOGIN_GOOGLE : ENV.URL_FE.LOGOUT);
+          window.location.assign(ENV.URL_FE.LOGOUT);
         }}
       />
       <SessionModalInteropProduct
