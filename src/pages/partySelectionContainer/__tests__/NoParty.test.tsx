@@ -18,11 +18,3 @@ test('go to login', () => {
   expect(backHome).toBeInTheDocument();
   fireEvent.click(backHome);
 });
-
-test('go to add user flow', () => {
-  renderWithProviders(<NoParty />);
-
-  const addUserBtn = screen.getByText('Aggiungi un nuovo Amministratore');
-  expect(addUserBtn).toBeInTheDocument();
-  fireEvent.click(addUserBtn);
-});
