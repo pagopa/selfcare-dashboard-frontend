@@ -18,3 +18,11 @@ test('go to login', () => {
   expect(backHome).toBeInTheDocument();
   fireEvent.click(backHome);
 });
+
+test('go to add user flow', () => {
+  renderWithProviders(<NoParty />);
+
+  const addUserBtn = screen.getByText('Contatta l’Assistenza.');
+  expect(addUserBtn).toBeInTheDocument();
+  fireEvent.click(addUserBtn);
+});
