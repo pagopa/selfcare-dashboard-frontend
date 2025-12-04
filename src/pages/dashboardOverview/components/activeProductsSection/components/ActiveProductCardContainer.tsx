@@ -1,15 +1,15 @@
 import { Grid } from '@mui/material';
 import { SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
-import { Party, OnboardedProduct } from '../../../../../model/Party';
+import { OnboardedProduct, Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
-import { INTEROP_PRODUCT_ENUM, PRODUCT_IDS } from '../../../../../utils/constants';
+import { INTEROP_PRODUCT_ENUM } from '../../../../../utils/constants';
 import { ENV } from '../../../../../utils/env';
 import { startWithProductInterop } from '../../../../../utils/helperFunctions';
 import ActiveProductCard from './ActiveProductCard';

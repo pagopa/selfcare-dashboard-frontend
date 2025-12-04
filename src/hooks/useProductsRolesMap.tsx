@@ -1,6 +1,6 @@
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import useReduxCachedValue from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useMemo } from 'react';
 import { Party } from '../model/Party';
 import {
@@ -12,7 +12,6 @@ import { useAppSelector } from '../redux/hooks';
 import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
 import { RootState } from '../redux/store';
 import { fetchProductRoles } from '../services/productService';
-import { PRODUCT_IDS } from '../utils/constants';
 
 export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
   const party = useAppSelector(partiesSelectors.selectPartySelected);
