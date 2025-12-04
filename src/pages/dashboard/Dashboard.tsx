@@ -1,5 +1,5 @@
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
@@ -97,8 +97,13 @@ const Dashboard: React.FC = () => {
       )
   );
 
+  const isPSPOnPagopa = activeOnboardings.some(
+    (product) => product.productId === PRODUCT_IDS.PAGOPA && product.institutionType === 'PSP'
+  );
+
   const isDocumentsSectionVisible =
     ENV.SHOW_DOCUMENTS &&
+    isPSPOnPagopa &&
     activeProducts.some((p) => hasPermission(p.id ?? '', Actions.ViewContract));
 
   const isAddDelegateSectionVisible =
