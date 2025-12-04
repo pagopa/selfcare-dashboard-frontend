@@ -1,14 +1,14 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Drawer, Grid, IconButton, Typography, styled } from '@mui/material';
+import { Drawer, Grid, IconButton, Link, Typography, styled } from '@mui/material';
 import { useLoading } from '@pagopa/selfcare-common-frontend/lib';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
+import { DashboardInfoBanner } from './components/DashboardInfoBanner';
 import PartyDetail from './components/PartyDetail';
 import { PartyLogoUploader } from './components/partyLogoUploader/PartyLogoUploader';
-import { DashboardInfoBanner } from './components/DashboardInfoBanner';
 
 type Props = {
   open: boolean;
@@ -96,6 +96,23 @@ export const PartyDetailModal = ({
             canUploadLogo={canUploadLogo}
             setclearCache={setclearCache}
           />
+        </Grid>
+        <Grid item xs={12} mb={1}>
+          <Typography
+            sx={{ fontSize: '14px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
+          >
+            <Trans i18nKey="overview.partyModal.uploadSendLogoGuide">
+              Per un corretto caricamento del logo,{' '}
+              <Link
+                href="https://developer.pagopa.it/send/guides/requisiti-corretto-caricamento-loghi"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ fontWeight: 'fontWeightMedium' }}
+              >
+                consulta le linee guida
+              </Link>
+            </Trans>
+          </Typography>
         </Grid>
         {showInfoBanner && (
           <Grid item xs={12} my={2}>
