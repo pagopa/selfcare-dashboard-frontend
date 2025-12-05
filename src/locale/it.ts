@@ -144,8 +144,11 @@ export default {
         title: 'Caricamento non riuscito',
         description:
           'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo',
-        uploadSendLogoGuide: 'Per un corretto caricamento del logo, <1>consulta le linee guida</1>',
       },
+      uploadSendLogoGuide: 'Per un corretto caricamento del logo, <1>consulta le linee guida</1>',
+      uploadSendLogoBanner:
+        'Carica il logo ufficiale del tuo ente per mostrarlo nelle comunicazioni istituzionali e nei servizi pubblici online. Per un corretto caricamento, <1>consulta le linee guida.<1/>',
+      uploadTheLogoButton: 'Carica logo',
       modifyError: {
         title: 'Caricamento non riuscito',
         description: 'Spiacenti, qualcosa è andato storto. Riprova più tardi',
@@ -153,7 +156,7 @@ export default {
       size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
       info: 'Inserisci solo il logo del tuo ente. Sarai responsabile dell’inserimento di immagini diverse da quella indicata.',
       infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
-      uploadSendLogoGuide: 'Per un corretto caricamento del logo, <1> consulta le linee guida</1>',
+
     },
     changeDetails: 'Gestisci i dati dell’ente',
     partyDetail: {

@@ -1,4 +1,5 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Link, Typography } from '@mui/material';
+import { EnvironmentBanner } from '@pagopa/mui-italia';
 import {
   SessionModal,
   useErrorDispatcher,
@@ -8,18 +9,23 @@ import {
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { GeographicTaxonomyDto } from '../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
 import { GeographicTaxonomyResource } from '../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
+import { UploadIcon } from '../../components/icons/UploadIcon';
+import { useLogoExists } from '../../hooks/useLogoExist';
 import { Party } from '../../model/Party';
 import { Product, ProductInstitutionMap } from '../../model/Product';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../redux/slices/partiesSlice';
 import { mockedCategories } from '../../services/__mocks__/productService';
-import { LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES } from '../../utils/constants';
+import {
+  LINK_UPLOAD_GUIDELINES_SEND,
+  LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES,
+} from '../../utils/constants';
 import { ENV } from '../../utils/env';
 import ActiveProductsSection from './components/activeProductsSection/ActiveProductsSection';
 import { filterProducts } from './components/notActiveProductsSection/components/productFilters';
@@ -67,6 +73,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const canSeeNotActiveProductsList =
     getAllProductsWithPermission(Actions.ListAvailableProducts).length > 0;
+  const logoExists = useLogoExists(party.urlLogo ?? '');
 
   const getOnboardingAllowedByInstitutionType = async () => {
     if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
@@ -223,7 +230,45 @@ const DashboardOverview = ({ party, products }: Props) => {
         showGeoTaxonomyForInstitutionType={showGeoTaxonomyForInstitutionType}
       />
       <WelcomeDashboard setOpen={setOpen} />
-
+      {canUploadLogoOnSendProduct && !logoExists && (
+        <Box mt={5} sx={{ '& button': { fontSize: '16px !important' } }}>
+          <EnvironmentBanner
+            bgColor="info"
+            message={
+              (
+                <Typography>
+                  <Trans
+                    i18nKey="overview.partyLogo.uploadSendLogoBanner"
+                    components={{
+                      1: (
+                        <Link
+                          href={LINK_UPLOAD_GUIDELINES_SEND}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{
+                            color: '#0E0F13',
+                            fontWeight: '700',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            verticalAlign: 'baseline',
+                            display: 'inline',
+                            lineHeight: 'inherit',
+                          }}
+                        />
+                      ),
+                    }}
+                  />
+                </Typography>
+              ) as unknown as string
+            }
+            actionButton={{
+              label: t('overview.partyLogo.uploadTheLogoButton'),
+              onClick: () => setOpen(true),
+            }}
+            icon={<UploadIcon size={20} />}
+          />
+        </Box>
+      )}
       <Grid item xs={12} mb={2} mt={5}>
         {canSeeActiveProductsList && <ActiveProductsSection products={products} party={party} />}
         {canSeeNotActiveProductsList && filteredProducts.length > 0 && (

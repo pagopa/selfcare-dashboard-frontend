@@ -31,3 +31,5 @@ export const PRODUCT_IDS = {
   PAGOPA_DASHBOARD_PSP: 'prod-dashboard-psp',
   IO: 'prod-io',
 } as const;
+
+export const LINK_UPLOAD_GUIDELINES_SEND = 'https://developer.pagopa.it/send/guides/requisiti-corretto-caricamento-loghi';
