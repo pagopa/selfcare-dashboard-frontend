@@ -27,8 +27,8 @@ export default {
     label: 'Cerca ente',
     notFoundResults: 'Nessun risultato',
   },
-  searchBackstagePage:{
-    supportRole: 'Supporto'
+  searchBackstagePage: {
+    supportRole: 'Supporto',
   },
   noActiveParty: {
     pending: {
@@ -144,6 +144,7 @@ export default {
         title: 'Caricamento non riuscito',
         description:
           'Il caricamento del logo non è andato a buon fine. Verifica che il formato e la dimensione siano corretti e caricalo di nuovo',
+        uploadSendLogoGuide: 'Per un corretto caricamento del logo, <1>consulta le linee guida</1>',
       },
       modifyError: {
         title: 'Caricamento non riuscito',
@@ -152,6 +153,7 @@ export default {
       size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
       info: 'Inserisci solo il logo del tuo ente. Sarai responsabile dell’inserimento di immagini diverse da quella indicata.',
       infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
+      uploadSendLogoGuide: 'Per un corretto caricamento del logo, <1> consulta le linee guida</1>',
     },
     changeDetails: 'Gestisci i dati dell’ente',
     partyDetail: {

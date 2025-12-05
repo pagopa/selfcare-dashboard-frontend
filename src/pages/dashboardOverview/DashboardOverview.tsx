@@ -6,7 +6,7 @@ import {
   usePermissions,
 } from '@pagopa/selfcare-common-frontend/lib';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../api/DashboardApiClient';
@@ -58,8 +58,9 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const { t } = useTranslation();
 
-  const { getAllProductsWithPermission } = usePermissions();
+  const { getAllProductsWithPermission, hasPermission } = usePermissions();
   const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
+  const canUploadLogoOnSendProduct = hasPermission(PRODUCT_IDS.SEND, Actions.UploadLogo);
 
   const canSeeActiveProductsList =
     getAllProductsWithPermission(Actions.ListActiveProducts).length > 0;
@@ -217,6 +218,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         open={open}
         setOpen={setOpen}
         canUploadLogo={canUploadLogo}
+        canUploadLogoOnSendProduct={canUploadLogoOnSendProduct}
         setOpenModalAddNewGeographicTaxonomies={setOpenModalAddNewGeographicTaxonomies}
         showGeoTaxonomyForInstitutionType={showGeoTaxonomyForInstitutionType}
       />
