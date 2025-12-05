@@ -15,6 +15,7 @@ type Props = {
   setOpen: (open: boolean) => void;
   party: Party;
   canUploadLogo: boolean;
+  canUploadLogoOnSendProduct: boolean;
   showGeoTaxonomyForInstitutionType: boolean;
   setOpenModalAddNewGeographicTaxonomies: (open: boolean) => void;
 };
@@ -40,6 +41,7 @@ export const PartyDetailModal = ({
   open,
   setOpen,
   canUploadLogo,
+  canUploadLogoOnSendProduct,
   showGeoTaxonomyForInstitutionType,
   setOpenModalAddNewGeographicTaxonomies,
 }: Props) => {
@@ -97,23 +99,25 @@ export const PartyDetailModal = ({
             setclearCache={setclearCache}
           />
         </Grid>
-        <Grid item xs={12} mb={1}>
-          <Typography
-            sx={{ fontSize: '14px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
-          >
-            <Trans i18nKey="overview.partyModal.uploadSendLogoGuide">
-              Per un corretto caricamento del logo,{' '}
-              <Link
-                href="https://developer.pagopa.it/send/guides/requisiti-corretto-caricamento-loghi"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ fontWeight: 'fontWeightMedium' }}
-              >
-                consulta le linee guida
-              </Link>
-            </Trans>
-          </Typography>
-        </Grid>
+        {canUploadLogoOnSendProduct && (
+          <Grid item xs={12} mb={1}>
+            <Typography
+              sx={{ fontSize: '14px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
+            >
+              <Trans i18nKey="overview.partyModal.uploadSendLogoGuide">
+                Per un corretto caricamento del logo,{' '}
+                <Link
+                  href="https://developer.pagopa.it/send/guides/requisiti-corretto-caricamento-loghi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ fontWeight: 'fontWeightMedium' }}
+                >
+                  consulta le linee guida
+                </Link>
+              </Trans>
+            </Typography>
+          </Grid>
+        )}
         {showInfoBanner && (
           <Grid item xs={12} my={2}>
             <DashboardInfoBanner />
