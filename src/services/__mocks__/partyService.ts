@@ -518,6 +518,7 @@ export const mockedParties: Array<Party> = [
           Actions.ViewDelegations,
           Actions.ViewBilling,
           Actions.ViewContract,
+          Actions.UploadLogo,
         ],
         institutionType: 'GPU',
         origin: 'IVASS',
