@@ -6,6 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
+import { LINK_UPLOAD_GUIDELINES_SEND } from '../../../../utils/constants';
 import { DashboardInfoBanner } from './components/DashboardInfoBanner';
 import PartyDetail from './components/PartyDetail';
 import { PartyLogoUploader } from './components/partyLogoUploader/PartyLogoUploader';
@@ -104,17 +105,19 @@ export const PartyDetailModal = ({
             <Typography
               sx={{ fontSize: '14px', fontWeight: 'fontWeightRegular', color: 'text.secondary' }}
             >
-              <Trans i18nKey="overview.partyModal.uploadSendLogoGuide">
-                Per un corretto caricamento del logo,{' '}
-                <Link
-                  href="https://developer.pagopa.it/send/guides/requisiti-corretto-caricamento-loghi"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{ fontWeight: 'fontWeightMedium' }}
-                >
-                  consulta le linee guida
-                </Link>
-              </Trans>
+              <Trans
+                i18nKey="overview.partyLogo.uploadSendLogoGuide"
+                components={{
+                  1: (
+                    <Link
+                      href={LINK_UPLOAD_GUIDELINES_SEND}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ fontWeight: 'fontWeightMedium' }}
+                    />
+                  ),
+                }}
+              />
             </Typography>
           </Grid>
         )}
