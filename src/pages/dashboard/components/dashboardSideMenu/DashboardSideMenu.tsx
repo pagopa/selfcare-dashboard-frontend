@@ -211,6 +211,17 @@ export default function DashboardSideMenu({
         navigateTo(resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path));
       },
     },
+    {
+      key: 'contractPage',
+      title: t('overview.sideMenu.institutionManagement.contracts.title'),
+      icon: DashboardIcon,
+      path: ENV.ROUTES.ADMIN_CONTRACTS,
+      isVisible: true,
+      isSelected: location.pathname === ENV.ROUTES.ADMIN_CONTRACTS,
+      action: () => {
+        navigateTo(resolvePath(ENV.ROUTES.ADMIN_CONTRACTS));
+      },
+    },
   ];
 
   const sideBarItems = isPagoPaUser ? pagoPaAdminFlow : spidUserFlow;

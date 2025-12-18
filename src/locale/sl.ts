@@ -68,6 +68,9 @@ export default {
         invoices: {
           title: 'Obračunavanje',
         },
+        contracts: {
+          title: 'Pogodbe',
+        }
       },
       product: {
         overview: 'Pregled',
