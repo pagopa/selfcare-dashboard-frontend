@@ -29,7 +29,7 @@ export const ENV = {
     ADMIN: `${PUBLIC_URL_INNER}/admin`,
     ADMIN_PARTY_DETAIL: `${PUBLIC_URL_INNER}/admin/onboarding/:tokenId`,
     ADMIN_SEARCH: `${PUBLIC_URL_INNER}/admin/search`,
-    ADMIN_CONTRACTS: `${PUBLIC_URL_INNER}/admin/contract`,
+    ADMIN_CONTRACT: `${PUBLIC_URL_INNER}/admin/contract`,
   },
 
   URL_FE: {

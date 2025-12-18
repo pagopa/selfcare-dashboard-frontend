@@ -44,6 +44,9 @@ const App = () => {
           <Route path={ENV.ROUTES.ADMIN_SEARCH} exact={false}>
             <DashboardAdminPage />
           </Route>
+          <Route path={ENV.ROUTES.ADMIN_CONTRACT} exact={false}>
+            <DashboardAdminPage />
+          </Route>
 
           <Route exact path="/dashboard">
             <Redirect to={isPagoPaUser ? ENV.ROUTES.ADMIN_SEARCH : routes.PARTY_SELECTION.path} />
