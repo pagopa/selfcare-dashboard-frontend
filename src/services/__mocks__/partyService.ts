@@ -206,7 +206,7 @@ export const mockedBaseParties: Array<BaseParty> = [
   },
 ];
 
-const COMMON_ADMIN_ACTIONS = [
+export const COMMON_ADMIN_ACTIONS = [
   Actions.AccessProductBackoffice,
   Actions.CreateProductUsers,
   Actions.UpdateProductUsers,
