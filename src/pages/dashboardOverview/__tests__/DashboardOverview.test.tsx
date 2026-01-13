@@ -1,6 +1,7 @@
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen } from '@testing-library/react';
 import '../../../locale';
+import { Party } from '../../../model/Party';
 import { partiesActions } from '../../../redux/slices/partiesSlice';
 import { store } from '../../../redux/store';
 import { mockedParties } from '../../../services/__mocks__/partyService';
@@ -125,4 +126,24 @@ test('should render component DashboardOverview with geoTaxonomy', async () => {
   const closeModal = await screen.findByTestId('close-modal-test');
 
   fireEvent.click(closeModal);
+});
+
+test('should render banner DORA for PSP for product pagoPA', async () => {
+  const mockedPSPwithPagoPA = mockedParties.find(
+    (party) => party.description === 'Prova PSP'
+  ) as Party;
+
+  console.log('mockedPSPwithPagoPA', mockedPSPwithPagoPA);
+
+  renderWithProviders(
+    <DashboardOverview party={mockedPSPwithPagoPA} products={mockedPartyProducts} />
+  );
+
+  const bannerDORATitle = await screen.findByText('Nuovo addendum DORA');
+  expect(bannerDORATitle).toBeInTheDocument();
+
+  const downloadButton = await screen.findByText('Scarica il documento');
+  expect(downloadButton).toBeInTheDocument();
+
+  fireEvent.click(downloadButton);
 });

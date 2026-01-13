@@ -135,8 +135,6 @@ const Dashboard: React.FC = () => {
     return <></>;
   }
 
-  console.log('LogoExists???', logoExists);
-
   return (
     <Grid
       container
