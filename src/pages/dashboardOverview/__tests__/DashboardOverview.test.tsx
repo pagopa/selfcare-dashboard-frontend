@@ -1,9 +1,11 @@
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { fireEvent, screen } from '@testing-library/react';
 import '../../../locale';
+import { Party } from '../../../model/Party';
 import { partiesActions } from '../../../redux/slices/partiesSlice';
 import { store } from '../../../redux/store';
-import { mockedParties } from '../../../services/__mocks__/partyService';
+import { COMMON_ADMIN_ACTIONS, mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardOverview from '../DashboardOverview';
@@ -125,4 +127,30 @@ test('should render component DashboardOverview with geoTaxonomy', async () => {
   const closeModal = await screen.findByTestId('close-modal-test');
 
   fireEvent.click(closeModal);
+});
+
+test('should render banner DORA for PSP for product pagoPA', async () => {
+  const mockedPSPwithPagoPA = mockedParties.find(
+    (party) => party.description === 'Prova PSP'
+  ) as Party;
+
+  const { store } = renderWithProviders(
+    <DashboardOverview party={mockedPSPwithPagoPA} products={mockedPartyProducts} />
+  );
+  store.dispatch(
+    setProductPermissions([
+      {
+        productId: 'prod-pagopa',
+        actions: COMMON_ADMIN_ACTIONS,
+      },
+    ])
+  );
+
+  const bannerDORATitle = await screen.findByText('Nuovo addendum DORA');
+  expect(bannerDORATitle).toBeInTheDocument();
+
+  const downloadButton = await screen.findByText('Scarica il documento');
+  expect(downloadButton).toBeInTheDocument();
+
+  fireEvent.click(downloadButton);
 });

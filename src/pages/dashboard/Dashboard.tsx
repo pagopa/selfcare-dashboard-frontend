@@ -27,7 +27,6 @@ import DashboardDocuments from '../dashboardDocuments/DashboardDocumentsPage';
 import DashboardDocumentsDetail from '../dashboardDocumentsDetail/DashboardDocumentsDetailPage';
 import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 
-import { useLogoExists } from '../../hooks/useLogoExist';
 import { Party } from '../../model/Party';
 import { Product, ProductsMap } from '../../model/Product';
 import DashboardSideMenuDesktop from './components/dashboardSideMenu/DashboardSideMenuDesktop';
@@ -77,8 +76,6 @@ const Dashboard: React.FC = () => {
     getAllProductsWithPermission,
     hasPermission,
   } = useDashboardData(party, products, institutionTypes);
-
-  const logoExists = useLogoExists(party?.urlLogo);
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
 
@@ -134,8 +131,6 @@ const Dashboard: React.FC = () => {
   if (!party || !products) {
     return <></>;
   }
-
-  console.log('LogoExists???', logoExists);
 
   return (
     <Grid

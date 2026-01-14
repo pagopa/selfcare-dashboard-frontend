@@ -15,6 +15,7 @@ import { GeographicTaxonomyDto } from '../../api/generated/b4f-dashboard/Geograp
 import { GeographicTaxonomyResource } from '../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
+import { NotificationsActiveIcon } from '../../components/icons/NotificationActive';
 import { UploadIcon } from '../../components/icons/UploadIcon';
 import { useLogoExists } from '../../hooks/useLogoExist';
 import { Party } from '../../model/Party';
@@ -67,13 +68,25 @@ const DashboardOverview = ({ party, products }: Props) => {
   const { getAllProductsWithPermission, hasPermission } = usePermissions();
   const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
   const canUploadLogoOnSendProduct = hasPermission(PRODUCT_IDS.SEND, Actions.UploadLogo);
+  const PSPOnPagoPA = party.products.find(
+    (product) =>
+      product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
+      product.productId === PRODUCT_IDS.PAGOPA &&
+      product.institutionType === 'PSP'
+  );
+  const canUploadDoraAddendum =
+    hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract) && !!PSPOnPagoPA;
+  const pagoPATokenIDPSP = PSPOnPagoPA?.tokenId;
 
   const canSeeActiveProductsList =
     getAllProductsWithPermission(Actions.ListActiveProducts).length > 0;
 
   const canSeeNotActiveProductsList =
     getAllProductsWithPermission(Actions.ListAvailableProducts).length > 0;
+
   const logoExists = useLogoExists(party.urlLogo ?? '');
+
+  const doraAddendumAlreadyUploaded = false; // TODO: to be implemented
 
   const getOnboardingAllowedByInstitutionType = async () => {
     if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
@@ -266,6 +279,23 @@ const DashboardOverview = ({ party, products }: Props) => {
               onClick: () => setOpen(true),
             }}
             icon={<UploadIcon size={20} />}
+          />
+        </Box>
+      )}
+      {canUploadDoraAddendum && !doraAddendumAlreadyUploaded && (
+        <Box mt={5} sx={{ '& button': { fontSize: '16px !important' } }}>
+          <EnvironmentBanner
+            bgColor="info"
+            title={t('overview.dora.title')}
+            message={(<Typography>{t('overview.dora.message')}</Typography>) as unknown as string}
+            actionButton={{
+              label: t('overview.dora.downloadButton'),
+              onClick: () =>
+                globalThis.location.assign(
+                  `${ENV.URL_FE.ONBOARDING}/${pagoPATokenIDPSP}/attachments`
+                ),
+            }}
+            icon={<NotificationsActiveIcon size={20} />}
           />
         </Box>
       )}
