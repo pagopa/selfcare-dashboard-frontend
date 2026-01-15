@@ -1,4 +1,4 @@
-import { Box, Grid, Link, Typography } from '@mui/material';
+import { Box, Button, Grid, Link, Typography } from '@mui/material';
 import { EnvironmentBanner } from '@pagopa/mui-italia';
 import {
   SessionModal,
@@ -25,6 +25,7 @@ import { partiesActions, partiesSelectors } from '../../redux/slices/partiesSlic
 import { mockedCategories } from '../../services/__mocks__/productService';
 import {
   LINK_UPLOAD_GUIDELINES_SEND,
+  LOADING_TASK_FETCH_ATTACHMENT_STATUS,
   LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES,
 } from '../../utils/constants';
 import { ENV } from '../../utils/env';
@@ -52,8 +53,10 @@ const DashboardOverview = ({ party, products }: Props) => {
     party.geographicTaxonomies ? party.geographicTaxonomies : [{ code: '', desc: '' }]
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
+  const [isDoraAddendumSigned, setIsDoraAddendumSigned] = useState<boolean>(false);
 
   const setLoadingSaveGeotaxonomies = useLoading(LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES);
+  const setLoadingGetAttachmentStatus = useLoading(LOADING_TASK_FETCH_ATTACHMENT_STATUS);
   const addError = useErrorDispatcher();
 
   const dispatch = useAppDispatch();
@@ -70,8 +73,8 @@ const DashboardOverview = ({ party, products }: Props) => {
   const canUploadLogoOnSendProduct = hasPermission(PRODUCT_IDS.SEND, Actions.UploadLogo);
   const PSPOnPagoPA = party.products.find(
     (product) =>
-      product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
       product.productId === PRODUCT_IDS.PAGOPA &&
+      product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
       product.institutionType === 'PSP'
   );
   const canUploadDoraAddendum =
@@ -85,8 +88,6 @@ const DashboardOverview = ({ party, products }: Props) => {
     getAllProductsWithPermission(Actions.ListAvailableProducts).length > 0;
 
   const logoExists = useLogoExists(party.urlLogo ?? '');
-
-  const doraAddendumAlreadyUploaded = false; // TODO: to be implemented
 
   const getOnboardingAllowedByInstitutionType = async () => {
     if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
@@ -182,8 +183,37 @@ const DashboardOverview = ({ party, products }: Props) => {
       });
   };
 
+  const getAttachmentStatus = () => {
+    setLoadingGetAttachmentStatus(true);
+    DashboardApi.getAttachmentStatus(
+      party.partyId,
+      PRODUCT_IDS.PAGOPA,
+      'Dichiarazione_sostitutiva_certificazione'
+    )
+      .then((response) => {
+        setIsDoraAddendumSigned(!!response.isAttachmentAvailable);
+      })
+      .catch((error) =>
+        addError({
+          id: 'UNSUCCESS_GET_ATTACHMENT_STATUS',
+          blocking: false,
+          techDescription: `An error occured while getting attachment status for party id ${party.partyId}`,
+          toNotify: false,
+          error,
+        })
+      )
+      .finally(() => {
+        setLoadingGetAttachmentStatus(false);
+      });
+  };
+
+  useEffect(() => {
+    getAttachmentStatus();
+  }, [party.partyId]);
+
   return (
     <Box p={3} sx={{ width: '100%' }}>
+      <Button onClick={() => getAttachmentStatus()}>Test API</Button>
       <SessionModal
         open={openModalFirstTimeAddGeographicTaxonomies}
         title={t(
@@ -282,7 +312,7 @@ const DashboardOverview = ({ party, products }: Props) => {
           />
         </Box>
       )}
-      {canUploadDoraAddendum && !doraAddendumAlreadyUploaded && (
+      {canUploadDoraAddendum && !isDoraAddendumSigned && (
         <Box mt={5} sx={{ '& button': { fontSize: '16px !important' } }}>
           <EnvironmentBanner
             bgColor="info"

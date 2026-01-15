@@ -10,6 +10,7 @@ import { Product } from '../model/Product';
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
 import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
+import { CheckAttachmentResponse } from './generated/b4f-dashboard/CheckAttachmentResponse';
 import { WithDefaultsT, createClient } from './generated/b4f-dashboard/client';
 import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
 import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
@@ -191,6 +192,20 @@ export const DashboardApi = {
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
+
+  getAttachmentStatus: async (
+    institutionId: string,
+    productId: string,
+    name: string
+  ): Promise<CheckAttachmentResponse> => {
+    const result = await apiClient.v2CheckAttachment({
+      institutionId,
+      productId,
+      name,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
   /*
   TODO used fetch in place of codegen to handle issue with base64 file
   getContract: async (institutionId: string, productId: string): Promise<ContractData> => {

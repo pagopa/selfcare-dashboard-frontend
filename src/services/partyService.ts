@@ -1,6 +1,7 @@
 import { mockedBrokerResource } from '../api/__mocks__/DashboardApiClient';
 import { DashboardApi } from '../api/DashboardApiClient';
 import { BrokerResource } from '../api/generated/b4f-dashboard/BrokerResource';
+import { CheckAttachmentResponse } from '../api/generated/b4f-dashboard/CheckAttachmentResponse';
 import { DelegationIdResource } from '../api/generated/b4f-dashboard/DelegationIdResource';
 import { OnboardingInfo } from '../api/generated/b4f-dashboard/OnboardingInfo';
 import {
@@ -74,6 +75,20 @@ export const getOnboardingInfo = (
     return DashboardApi.getOnboardingInfo(institutionId, products);
   }
 };
+
+export const getAttachmentStatusService = (
+  institutionId: string,
+  productId: string,
+  name: string
+): Promise<CheckAttachmentResponse> => {
+  /* istanbul ignore if */
+  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+    return Promise.resolve({ isAttachmentAvailable: false });
+  } else {
+    return DashboardApi.getAttachmentStatus(institutionId, productId, name);
+  }
+};
+
 /* 
   TODO used fetch in place of codegen to handle issue with base64 file
 export const getContract = (institutionId: string, productId: string): Promise<ContractData> => {

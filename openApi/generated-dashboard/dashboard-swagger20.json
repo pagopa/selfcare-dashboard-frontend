@@ -1175,6 +1175,82 @@
         "summary": "getOnboardingsInfo"
       }
     },
+    "/v2/institutions/{institutionId}/product/{productId}/attachment/status": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "name",
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CheckAttachmentResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to verify if the attachment is already uploaded or not",
+        "operationId": "v2CheckAttachment",
+        "summary": "checkAttachmentStatus"
+      }
+    },
     "/v2/institutions/{institutionId}/product/{productId}/check-user": {
       "post": {
         "consumes": [
@@ -3183,6 +3259,17 @@
         }
       },
       "title": "CertifiedFieldResourceOfstring",
+      "type": "object"
+    },
+    "CheckAttachmentResponse": {
+      "properties": {
+        "isAttachmentAvailable": {
+          "description": "Boolean indicating the presence of an uploaded attachment given its name, institutionId and productId",
+          "example": false,
+          "type": "boolean"
+        }
+      },
+      "title": "CheckAttachmentResponse",
       "type": "object"
     },
     "CheckUserResponse": {
