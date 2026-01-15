@@ -25,6 +25,8 @@ import { OnboardingInfo } from '../../api/generated/b4f-dashboard/OnboardingInfo
 import { ReactComponent as FileCopyOff } from '../../assets/file_copy_off.svg';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
+import { useAppSelector } from '../../redux/hooks';
+import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES } from '../../routes';
 import { getOnboardingInfo } from '../../services/partyService';
 import {
@@ -44,6 +46,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
   const history = useHistory();
   const showBackComponent = useMediaQuery('@media (max-width: 600px)');
   const addError = useErrorDispatcher();
+  const isAttachmentAvailable = useAppSelector(partiesSelectors.selectIsAttachmentAvailable);
   const setLoadingOnboardingInfo = useLoading(LOADING_TASK_FETCH_ONBOARDING_INFO);
   const setLoadigContract = useLoading(LOADING_TASK_FETCH_CONTRACT);
 
@@ -279,6 +282,44 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
               </Grid>
             ))}
           </Grid>
+          <Grid mt={3} spacing={1}>
+            {isAttachmentAvailable && (
+              <Grid container alignItems="center" spacing={1} marginBottom={3}>
+                <Grid item ml={4}>
+                  <Grid display="flex">
+                    <InsertDriveFileIcon color="primary" />
+                  </Grid>
+                </Grid>
+
+                <Grid item xs>
+                  <Box display="flex" flexDirection="column">
+                    <Typography variant="body1" fontWeight={'fontWeightMedium'}>
+                      {mapProductIdToTitle(PRODUCT_IDS.PAGOPA)}
+                    </Typography>
+                    <ButtonNaked
+                      color="primary"
+                      onClick={() => openContractFile('Dichiarazione_sostitutiva_certificazione')}
+                      sx={{ textAlign: 'start', justifyContent: 'flex-start' }}
+                      component={'a'}
+                      size="medium"
+                    >
+                      {'Addendum_dora_prestatori_aderenti'}
+                    </ButtonNaked>
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Box display="flex" alignItems="center" height="100%">
+                    <IconButton
+                      onClick={() => openContractFile('Dichiarazione_sostitutiva_certificazione')}
+                    >
+                      <OpenInNew />
+                    </IconButton>
+                  </Box>
+                </Grid>
+              </Grid>
+            )}
+          </Grid>
+          <Grid></Grid>
         </Grid>
       </Grid>
     </Grid>

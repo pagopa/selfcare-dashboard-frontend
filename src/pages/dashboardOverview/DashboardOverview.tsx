@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Link, Typography } from '@mui/material';
+import { Box, Grid, Link, Typography } from '@mui/material';
 import { EnvironmentBanner } from '@pagopa/mui-italia';
 import {
   SessionModal,
@@ -23,6 +23,7 @@ import { Product, ProductInstitutionMap } from '../../model/Product';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../redux/slices/partiesSlice';
 import { mockedCategories } from '../../services/__mocks__/productService';
+import { getAttachmentStatusService } from '../../services/partyService';
 import {
   LINK_UPLOAD_GUIDELINES_SEND,
   LOADING_TASK_FETCH_ATTACHMENT_STATUS,
@@ -185,12 +186,13 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const getAttachmentStatus = () => {
     setLoadingGetAttachmentStatus(true);
-    DashboardApi.getAttachmentStatus(
+    getAttachmentStatusService(
       party.partyId,
       PRODUCT_IDS.PAGOPA,
       'Dichiarazione_sostitutiva_certificazione'
     )
       .then((response) => {
+        dispatch(partiesActions.setIsAttachmentAvailable(!!response.isAttachmentAvailable));
         setIsDoraAddendumSigned(!!response.isAttachmentAvailable);
       })
       .catch((error) =>
@@ -213,7 +215,6 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
-      <Button onClick={() => getAttachmentStatus()}>Test API</Button>
       <SessionModal
         open={openModalFirstTimeAddGeographicTaxonomies}
         title={t(
