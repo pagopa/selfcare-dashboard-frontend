@@ -186,11 +186,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const getAttachmentStatus = () => {
     setLoadingGetAttachmentStatus(true);
-    getAttachmentStatusService(
-      party.partyId,
-      PRODUCT_IDS.PAGOPA,
-      'Dichiarazione_sostitutiva_certificazione'
-    )
+    getAttachmentStatusService(party.partyId, PRODUCT_IDS.PAGOPA, 'Addendum')
       .then((response) => {
         dispatch(partiesActions.setIsAttachmentAvailable(!!response.isAttachmentAvailable));
         setIsDoraAddendumSigned(!!response.isAttachmentAvailable);
@@ -210,6 +206,9 @@ const DashboardOverview = ({ party, products }: Props) => {
   };
 
   useEffect(() => {
+    if (!canUploadDoraAddendum) {
+      return;
+    }
     getAttachmentStatus();
   }, [party.partyId]);
 
