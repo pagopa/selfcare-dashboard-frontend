@@ -12,12 +12,9 @@ interface PartiesState {
   selectedProducts?: Array<Product>;
   selectedProductsRolesMap?: ProductsRolesMap;
   selectedPartyInstitutionTypes?: Array<string | undefined>;
-  isAttachmentAvailable: boolean;
 }
 
-const initialState: PartiesState = {
-  isAttachmentAvailable: false,
-};
+const initialState: PartiesState = {};
 
 /* eslint-disable functional/immutable-data */
 export const partiesSlice = createSlice({
@@ -58,10 +55,6 @@ export const partiesSlice = createSlice({
     setPartySelectedInstitutionTypes: (state, action: PayloadAction<Array<string | undefined>>) => {
       state.selectedPartyInstitutionTypes = action.payload;
     },
-
-    setIsAttachmentAvailable: (state, action: PayloadAction<boolean>) => {
-      state.isAttachmentAvailable = action.payload;
-    },
   },
 });
 
@@ -87,6 +80,4 @@ export const partiesSelectors = {
 
   selectPartySelectedInstitutionTypes: (state: RootState): Array<string> =>
     (state.parties.selectedPartyInstitutionTypes ?? []).filter((t): t is string => t !== undefined),
-
-  selectIsAttachmentAvailable: (state: RootState): boolean => state.parties.isAttachmentAvailable,
 };
