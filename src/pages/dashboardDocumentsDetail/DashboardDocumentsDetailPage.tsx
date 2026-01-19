@@ -31,11 +31,10 @@ import { OnboardingInfo } from '../../api/generated/b4f-dashboard/OnboardingInfo
 import { ReactComponent as FileCopyOff } from '../../assets/file_copy_off.svg';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
-import { useAppSelector } from '../../redux/hooks';
-import { partiesSelectors } from '../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES } from '../../routes';
-import { getOnboardingInfo } from '../../services/partyService';
+import { getAttachmentStatusService, getOnboardingInfo } from '../../services/partyService';
 import {
+  LOADING_TASK_FETCH_ATTACHMENT_STATUS,
   LOADING_TASK_FETCH_CONTRACT,
   LOADING_TASK_FETCH_ONBOARDING_INFO,
   PRODUCT_IDS,
@@ -52,12 +51,13 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
   const history = useHistory();
   const showBackComponent = useMediaQuery('@media (max-width: 600px)');
   const addError = useErrorDispatcher();
-  const isAttachmentAvailable = useAppSelector(partiesSelectors.selectIsAttachmentAvailable);
   const setLoadingOnboardingInfo = useLoading(LOADING_TASK_FETCH_ONBOARDING_INFO);
   const setLoadigContract = useLoading(LOADING_TASK_FETCH_CONTRACT);
+  const setLoadingGetAttachmentStatus = useLoading(LOADING_TASK_FETCH_ATTACHMENT_STATUS);
   const { hasPermission } = usePermissions();
 
   const [documents, setDocuments] = useState<Array<OnboardingInfo>>([]);
+  const [isDoraAddendumSigned, setIsDoraAddendumSigned] = useState<boolean>(false);
 
   const productTitle = new URLSearchParams(window.location.search).get('productTitle');
   const productId = new URLSearchParams(window.location.search).get('productId');
@@ -172,6 +172,33 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
       })
       .finally(() => setLoadigContract(false));
   };
+
+  const getAttachmentStatus = () => {
+    setLoadingGetAttachmentStatus(true);
+    getAttachmentStatusService(party.partyId, PRODUCT_IDS.PAGOPA, 'Addendum')
+      .then((response) => {
+        setIsDoraAddendumSigned(!!response.isAttachmentAvailable);
+      })
+      .catch((error) =>
+        addError({
+          id: 'UNSUCCESS_GET_ATTACHMENT_STATUS',
+          blocking: false,
+          techDescription: `An error occured while getting attachment status for party id ${party.partyId}`,
+          toNotify: false,
+          error,
+        })
+      )
+      .finally(() => {
+        setLoadingGetAttachmentStatus(false);
+      });
+  };
+
+  useEffect(() => {
+    if (!canUploadDoraAddendum) {
+      return;
+    }
+    getAttachmentStatus();
+  }, [party.partyId]);
 
   return (
     <Grid sx={{ width: '100%', px: 3, mt: 3 }}>
@@ -300,7 +327,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
             ))}
           </Grid>
           <Grid mt={3} spacing={1}>
-            {canUploadDoraAddendum && isAttachmentAvailable && productId === PRODUCT_IDS.PAGOPA && (
+            {canUploadDoraAddendum && isDoraAddendumSigned && productId === PRODUCT_IDS.PAGOPA && (
               <Grid container alignItems="center" spacing={1} marginBottom={3}>
                 <Grid item ml={4}>
                   <Grid display="flex">

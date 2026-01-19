@@ -188,7 +188,6 @@ const DashboardOverview = ({ party, products }: Props) => {
     setLoadingGetAttachmentStatus(true);
     getAttachmentStatusService(party.partyId, PRODUCT_IDS.PAGOPA, 'Addendum')
       .then((response) => {
-        dispatch(partiesActions.setIsAttachmentAvailable(!!response.isAttachmentAvailable));
         setIsDoraAddendumSigned(!!response.isAttachmentAvailable);
       })
       .catch((error) =>
