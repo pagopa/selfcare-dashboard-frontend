@@ -79,7 +79,7 @@ const DashboardOverview = ({ party, products }: Props) => {
       product.institutionType === 'PSP'
   );
   const canUploadDoraAddendum =
-    hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract) && !!PSPOnPagoPA;
+    ENV.ENABLE_DORA && hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract) && !!PSPOnPagoPA;
   const pagoPATokenIDPSP = PSPOnPagoPA?.tokenId;
 
   const canSeeActiveProductsList =
@@ -208,7 +208,9 @@ const DashboardOverview = ({ party, products }: Props) => {
     if (!canUploadDoraAddendum) {
       return;
     }
-    getAttachmentStatus();
+    if (PSPOnPagoPA) {
+      getAttachmentStatus();
+    }
   }, [party.partyId]);
 
   return (
