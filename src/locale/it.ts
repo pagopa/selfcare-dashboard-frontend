@@ -161,7 +161,7 @@ export default {
     dora: {
       title: 'Nuovo addendum DORA',
       message:
-        'Abbiamo reso disponibile il nuovo addendum DORA, che introduce le regole europee per rendere più sicuri i servizi di pagamento. Puoi scaricare il documento per prenderne visione e procedere alla sottoscrizione.',
+        'Abbiamo reso disponibile il nuovo addendum DORA. Puoi scaricare il documento per prenderne visione e procedere alla sottoscrizione.',
       downloadButton: 'Scarica il documento',
     },
     changeDetails: 'Gestisci i dati dell’ente',
