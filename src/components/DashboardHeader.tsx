@@ -202,7 +202,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       />
       <SessionModal
         open={openExitModal}
-        title={t('exitModal.title')}
+        title={isPagoPaUser ? t('exitModal.titleBackstage') : t('exitModal.title')}
         message=""
         onConfirmLabel={t('exitModal.confirm')}
         onCloseLabel={t('exitModal.cancel')}
