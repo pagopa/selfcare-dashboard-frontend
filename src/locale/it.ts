@@ -5,6 +5,7 @@ export default {
   },
   exitModal: {
     title: 'Confermi di voler uscire da Area Riservata?',
+    titleBackstage: 'Confermi di voler uscire da Area Riservata Backstage?',
     confirm: 'Esci',
     cancel: 'Annulla',
   },
