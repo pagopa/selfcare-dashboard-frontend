@@ -251,7 +251,11 @@ export const mockedParties: Array<Party> = [
           recipientCode: 'FLGKROWP',
           publicServices: true,
         },
-        userProductActions: [Actions.AccessProductBackoffice, Actions.ListAvailableProducts],
+        userProductActions: [
+          Actions.AccessProductBackoffice,
+          Actions.ListAvailableProducts,
+          Actions.UpdateGeoTaxonomy,
+        ],
         institutionType: 'PA',
         origin: 'IVASS',
         originId: '20128',
@@ -309,7 +313,7 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
         userProductActions: [
-          Actions.ListActiveProducts,
+          Actions.UpdateGeoTaxonomy,
           Actions.ListAvailableProducts,
           Actions.ManageProductGroups,
           Actions.ListProductUsers,
@@ -363,6 +367,7 @@ export const mockedParties: Array<Party> = [
           publicServices: true,
         },
         userProductActions: [
+          Actions.UpdateGeoTaxonomy,
           Actions.AccessProductBackoffice,
           Actions.CreateProductUsers,
           Actions.UpdateProductUsers,

@@ -142,12 +142,14 @@ const DashboardOverview = ({ party, products }: Props) => {
     (type) => !['PT', 'SA', 'AS'].includes(type)
   );
 
+  const canSeeGeoTaxonomyModal =
+    ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
+    getAllProductsWithPermission(Actions.UpdateGeoTaxonomy).length > 0 &&
+    (!party.geographicTaxonomies || party?.geographicTaxonomies?.length === 0) &&
+    showGeoTaxonomyForInstitutionType;
+
   useEffect(() => {
-    if (
-      ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
-      (!party.geographicTaxonomies || party?.geographicTaxonomies?.length === 0) &&
-      showGeoTaxonomyForInstitutionType
-    ) {
+    if (canSeeGeoTaxonomyModal) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     } else if (party.geographicTaxonomies && party?.geographicTaxonomies?.length > 0) {
       setOptionsSelected(party?.geographicTaxonomies);
