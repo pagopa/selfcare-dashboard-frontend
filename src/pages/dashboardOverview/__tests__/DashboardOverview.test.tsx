@@ -7,7 +7,7 @@ import { partiesActions } from '../../../redux/slices/partiesSlice';
 import { store } from '../../../redux/store';
 import { COMMON_ADMIN_ACTIONS, mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
-import { renderWithProviders } from '../../../utils/test-utils';
+import { renderWithProviders, setPermissionsForParty } from '../../../utils/test-utils';
 import DashboardOverview from '../DashboardOverview';
 
 beforeAll(() => {
@@ -90,13 +90,14 @@ test('should render component DashboardOverview with no geoTaxonomy', async () =
   const mockedPAWithNoGeoTax = mockedParties[0];
 
   store.dispatch(partiesActions.setPartySelectedInstitutionTypes(['PA', 'GSP']));
+  setPermissionsForParty(store, mockedPAWithNoGeoTax);
 
   renderWithProviders(
     <DashboardOverview party={mockedPAWithNoGeoTax} products={mockedPartyProducts} />,
     store
   );
 
-  // geo tax modal is visile bc mockedPAWithNoGeoTax has no geoTaxonomies
+  // geo tax modal is visile bc mockedPAWithNoGeoTax has no geoTaxonomies and has action UpdateGeoTaxonomies
   const partyDetailModal = await screen.findByText('Gestisci i dati dell’ente');
 
   fireEvent.click(partyDetailModal);
