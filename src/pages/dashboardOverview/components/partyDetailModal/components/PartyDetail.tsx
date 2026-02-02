@@ -2,6 +2,8 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Divider, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 import { useAppSelector } from '../../../../../redux/hooks';
@@ -40,6 +42,7 @@ export default function PartyDetail({
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const theme = useTheme();
+  const { hasPermission } = usePermissions();
 
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
 
@@ -67,6 +70,8 @@ export default function PartyDetail({
   const formattedForeignAddress = `${party.registeredOffice}, ${capitalizeFirstLetter(
     party.city
   )} ${getCountryNameByAlpha2(countries, party.country)}`;
+
+  const canModifyGeographicTaxonomy = hasPermission(PRODUCT_IDS.PAGOPA, Actions.UpdateGeoTaxonomy);
 
   return (
     <Grid container spacing={1}>
@@ -146,7 +151,8 @@ export default function PartyDetail({
                 </Grid>
               </Grid>
               <Grid item xs={3} display="flex" justifyContent="flex-end">
-                {partyUpdated?.geographicTaxonomies &&
+                {canModifyGeographicTaxonomy &&
+                  partyUpdated?.geographicTaxonomies &&
                   partyUpdated.geographicTaxonomies.length >= 1 && (
                     <ButtonNaked
                       component="button"
@@ -155,9 +161,9 @@ export default function PartyDetail({
                       sx={{ color: 'primary.main', flexDirection: 'row' }}
                       weight="default"
                     >
-                      {partyUpdated?.geographicTaxonomies.length !== 1
-                        ? '+' + `${partyUpdated.geographicTaxonomies.length - 1}`
-                        : undefined}
+                      {partyUpdated?.geographicTaxonomies.length === 1
+                        ? undefined
+                        : '+' + `${partyUpdated.geographicTaxonomies.length - 1}`}
                     </ButtonNaked>
                   )}
               </Grid>
