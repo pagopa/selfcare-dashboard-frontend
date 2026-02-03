@@ -132,6 +132,7 @@ export default {
       infoEditLabel: 'Genaue Größe 300 x  300px - Format .jpg oder .png',
     },
     changeDetails: 'Daten der Körperschaft verwalten',
+    viewDetails: 'Siehe die Daten der Einrichtung',
     partyDetail: {
       institutionType: 'Typ',
       category: 'Kategorie',

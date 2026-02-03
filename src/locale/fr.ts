@@ -132,6 +132,7 @@ export default {
       infoEditLabel: 'Dimension exacte 300 x 300px - Format .png',
     },
     changeDetails: 'Gérer les données de l’organisme',
+    viewDetails: 'Voir les données de l’organisme',
     partyDetail: {
       institutionType: 'Typologie',
       category: 'Catégorie',

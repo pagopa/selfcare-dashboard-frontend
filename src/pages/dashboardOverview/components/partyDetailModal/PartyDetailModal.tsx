@@ -1,6 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Drawer, Grid, IconButton, Link, Typography, styled } from '@mui/material';
 import { useLoading } from '@pagopa/selfcare-common-frontend/lib';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';
@@ -91,7 +92,7 @@ export const PartyDetailModal = ({
         </Grid>
 
         <Typography variant="h6" sx={{ fontWeight: '700' }} pb={3}>
-          {t('overview.changeDetails')}
+          {isPagoPaUser ? t('overview.viewDetails') : t('overview.changeDetails')}
         </Typography>
         <Grid item xs={12}>
           <PartyLogoUploader

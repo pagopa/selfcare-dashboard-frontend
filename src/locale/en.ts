@@ -132,6 +132,7 @@ export default {
       infoEditLabel: 'Exact dimensions 300 x 300px - Format .jpg or .png',
     },
     changeDetails: 'Manage the institution data',
+    viewDetails: 'See the entity’s data',
     partyDetail: {
       institutionType: 'Type',
       category: 'Category',

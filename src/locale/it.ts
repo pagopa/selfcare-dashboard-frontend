@@ -161,10 +161,11 @@ export default {
     dora: {
       title: 'Nuovo addendum DORA',
       message:
-        'Abbiamo reso disponibile il nuovo addendum DORA. Puoi scaricare il documento per prenderne visione e procedere alla sottoscrizione.',
+        "Ritieni che ai sensi del Reg. DORA PagoPA rivesta il ruolo di fornitore TIC? Se ritieni di sì, puoi scaricare l'Addendum contrattuale standard che abbiamo reso disponibile per tutti i PSP per prenderne visione e procedere alla relativa sottoscrizione.",
       downloadButton: 'Scarica il documento',
     },
     changeDetails: 'Gestisci i dati dell’ente',
+    viewDetails: 'Vedi i dati dell’ente',
     partyDetail: {
       institutionType: 'Tipologia',
       category: 'Categoria',

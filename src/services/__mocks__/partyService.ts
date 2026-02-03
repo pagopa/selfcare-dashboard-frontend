@@ -220,6 +220,7 @@ export const COMMON_ADMIN_ACTIONS = [
   Actions.ListAvailableProducts,
   Actions.CreateDelegation,
   Actions.ViewContract,
+  Actions.UpdateGeoTaxonomy,
 ];
 
 export const mockedParties: Array<Party> = [

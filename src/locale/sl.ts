@@ -132,6 +132,7 @@ export default {
       infoEditLabel: 'Natančna velikost 300 x 300px – Format .jpg ali .png',
     },
     changeDetails: 'Upravljajte podatke organizacije',
+    viewDetails: 'Oglejte si podatke organa',
     partyDetail: {
       institutionType: 'Tipologija',
       category: 'Kategorija',
