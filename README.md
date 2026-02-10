@@ -1,13 +1,127 @@
 # selfcare-dashboard-frontend 
+
 SelfCare's application which allows users to see the parties to which belongs and their configured products:
 * Admin users can list, add and edit other users.
 * Admin users can list, add and edit groups of users.
 
-This application makes use of some micro-frontends built using Webpack 5's module federation.
+**Status:** This project has been migrated from **Create React App (CRA)** to **Vite** with Module Federation support.
+
+This application makes use of some micro-frontends built using **Vite Module Federation**.
 
 The micro-frontends used are:
 * (selfcare-dashboard-users-microfrontend)[https://github.com/pagopa/selfcare-dashboard-users-microfrontend] to handle the management of the users
 * (selfcare-dashboard-groups-microfrontend)[https://github.com/pagopa/selfcare-dashboard-groups-microfrontend] to handle the management of the groups of users
+
+## Development
+
+### Prerequisites
+- Node.js 18+ and Yarn
+
+### Setup
+
+1. Install dependencies:
+```bash
+yarn install
+```
+
+2. Start the development server:
+```bash
+yarn dev
+```
+
+The app will start at `http://localhost:3000` (or the port specified in `vite.config.ts`).
+
+**Note:** Environment variables are read directly from your system environment (see [Environment Variables](#environment-variables) below).
+
+### Available Commands
+
+| Command | Purpose |
+|---------|---------|
+| `yarn dev` | Start Vite dev server |
+| `yarn build` | Build for production (TypeScript check + Vite bundle) |
+| `yarn preview` | Preview production build locally |
+| `yarn test` | Run Vitest unit tests |
+| `yarn test:ui` | Run Vitest with UI |
+| `yarn test:coverage` | Generate test coverage report |
+| `yarn lint` | Run ESLint (replaces react-scripts lint) |
+| `yarn generate:api-*` | Generate API types from OpenAPI specs |
+
+### Build Output
+
+- **Directory:** `build/` (not `public/`)
+- **Analyze:** Run `yarn build` and check `build/` folder for bundle analysis
+
+## Environment Variables
+
+Environment variables are read directly from your system environment at build time and at runtime. All variables must be prefixed with `VITE_` to be accessible in the browser (Vite convention).
+
+### Setting Environment Variables
+
+**For development:**
+```bash
+# Inline (one-off runs)
+VITE_ENV=development VITE_URL_API_DASHBOARD=http://localhost:8080 yarn dev
+
+# Or set in shell
+export VITE_ENV=development
+export VITE_URL_API_DASHBOARD=http://localhost:8080
+yarn dev
+```
+
+**For CI/CD:**
+Set `VITE_*` variables in your CI/CD pipeline (GitHub Actions, GitLab CI, etc.).
+
+### Required Variables
+
+- `VITE_ENV`: Environment (development/uat/production)
+- `VITE_URL_API_DASHBOARD`: Dashboard API endpoint
+- `VITE_URL_API_PARTY_REGISTRY_PROXY`: Party registry proxy API endpoint
+- `VITE_URL_API_ONBOARDING_V2`: Onboarding API endpoint
+- `VITE_URL_FE_LOGIN`, `VITE_URL_FE_LOGOUT`: Frontend redirect URLs
+- `VITE_URL_CDN`: CDN base URL for assets
+- `MICROFRONTEND_URL_USERS`, `MICROFRONTEND_URL_GROUPS`, `MICROFRONTEND_URL_ADMIN`: Micro-frontend remote URLs
+
+## Module Federation
+
+This application hosts multiple micro-frontends using Vite Module Federation:
+
+- **Host config:** See `vite.config.ts` in the `federation()` plugin
+- **Remotes:** Users, Groups, and Admin components are loaded dynamically
+- **Shared singletons:** React, React-DOM, MUI, and PagoPA libraries are shared to avoid duplicates
+
+For remotes to load correctly in dev:
+1. Ensure remotes are running on their configured `MICROFRONTEND_URL_*` ports
+2. Check browser console for federation errors
+3. Verify `vite.config.ts` remote URLs match remote deployment URLs
+
+## Migration from Create React App
+
+This project was migrated from CRA to Vite. Key changes:
+
+| Aspect | CRA | Vite |
+|--------|-----|------|
+| Dev Server | `REACT_APP_*` via webpack env | `VITE_*` via Vite |
+| Build Tool | `react-scripts` + CRACO | Vite + plugins |
+| Entry Point | `src/index.js` (synchronous) | `src/index.js` + Module Federation |
+| Module Federation | `craco-module-federation` | `@originjs/vite-plugin-federation` |
+| Env Variables | `process.env.REACT_APP_*` | `import.meta.env.VITE_*` |
+| Type Definitions | `react-app-env.d.ts` (CRA types) | `react-app-env.d.ts` (Vite types) |
+
+### Notes for Contributors
+
+- **SVGR imports** are supported if `vite-plugin-svgr` is installed (see `vite.config.ts`)
+- **Polyfills** are loaded before the app in `src/index.js`
+- **ESLint** now uses standard configs (`@typescript-eslint/*`, `eslint-plugin-react`) instead of `react-app`
+- **Tests** use `vitest` (not jest-dom specific; compatible with Jest APIs)
+- **Playwright** e2e tests use the dev server or preview build (see `e2e/playwright.config.ts`)
+
+### Removed Files/References
+
+- ❌ `craco.config.js` → Replaced by `vite.config.ts`
+- ❌ `modulefederation.config.js` (webpack) → Now in `vite.config.ts` federation plugin
+- ❌ `react-scripts` dependency → Replaced by `vite` + plugins
+- ❌ CRA ESLint presets (`react-app`) → Replaced by standard configs
+- ✅ See `craco.config.disabled.js` for reference to the old configuration
 
 ## Data and model/types shared with remotes micro-frontend
 This application represents the container app for some remotes pages/components and provide to them some shared data having shared types.
@@ -20,34 +134,7 @@ An enum containing the possible onboarding status for the parties/users/products
 |-------|-------------|
 | PENDING | An onboarding has been requested, but not completed |
 | ACTIVE | A complete and valid onboarding |
-| SUSPENDED | The relationship between party/product/user has been suspended |[](#data)
-
-#### UserRole
-An enum containing the possible Selc roles:
-
-| Value | Description |
-|-------|-------------|
-| ADMIN | Users having admin rights on the party/product |
-| LIMITED | Users having limited rights on the party/product (tech operators) |
-
-#### PartyRole
-An enum containing the possible Party roles:
-
-| Value | Description |
-|-------|-------------|
-| MANAGER | The manager, or the person having firm and ADMIN rights |
-| DELEGATE | A delegate of the manager having ADMIN rights |
-| SUB_DELEGATE | A delegate having ADMIN rights |
-| OPERATOR | An allowed user having LIMITED rights |
-
-#### Party
-It contains party's info, onboarding status and the selc role of the current user:
-
-| Field | Type | Mandatory | Description |
-|-------|------|-----------|-------------|
-| partyId | string | Y | The party's id |
-| externalId | string | Y | The external id |
-| originId | string | Y | The origin id |
+| SUSPENDED | The relationship between party/product/user has been suspended |
 | description | string | Y | The party's name |
 | digitalAddress | string | Y | The party's PEC |
 | fiscalCode | string | Y | The party's tax code |

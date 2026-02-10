@@ -3,6 +3,7 @@
   "version": "1.6.0",
   "homepage": "dashboard",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@mui/icons-material": "^5.8.2",
     "@mui/lab": "^5.0.0-alpha.80",
@@ -15,6 +16,7 @@
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-router-hash-link": "^2.4.5",
+    "D": "^1.0.0",
     "formik": "^2.2.9",
     "i18next": "^25.4.2",
     "react": "^18.2.0",
@@ -22,21 +24,22 @@
     "react-dropzone": "^11.4.2",
     "react-i18next": "^15.1.2",
     "react-router-dom": "^5.3.4",
-    "react-scripts": "5.0.0",
     "url": "^0.11.0"
   },
   "scripts": {
     "clean": "npm-run-all clean:*",
-    "start": "craco start",
+    "dev": "vite",
+    "start": "vite",
     "prebuild": "npm run generate",
-    "build": "craco build",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
     "clean:build": "rimraf build",
-    "test": "craco test -i",
-    "test:coverage": "craco test -i --coverage",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
     "clean:coverage": "rimraf coverage",
-    "eject": "react-scripts eject",
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
-    "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",
+    "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx",
     "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
     "generate": "npm-run-all generate:*",
     "clean:api-b4f-dashboard": "rimraf src/api/generated/b4f-dashboard && rimraf openApi/generated-dashboard",
@@ -45,10 +48,34 @@
     "generate:api-party-registry-proxy": "yarn run clean:api-party-registry-proxy && mkdirp openApi/generated-party-registry-proxy && api-spec-converter --from=openapi_3 --to=swagger_2 openApi/party-registry-proxy-api-docs.json > openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json && node openApi/scripts/api-party-registry-proxy_fixPreGen.js && node ./node_modules/@pagopa/selfcare-common-frontend/utils/fixSwagger20ArraySchemaDef.js openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json && gen-api-models --api-spec openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json --out-dir src/api/generated/party-registry-proxy --no-strict --request-types --response-decoders --client && node openApi/scripts/api-party-registry-proxy_fixPostGen.js"
   },
   "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
     "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "prettier"
+    ],
+    "plugins": [
+      "@typescript-eslint",
+      "react",
+      "react-hooks"
+    ],
+    "rules": {
+      "react/react-in-jsx-scope": "off"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   },
   "browserslist": {
     "production": [
@@ -64,17 +91,19 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@craco/craco": "^6.4.3",
+    "@originjs/vite-plugin-federation": "^1.4.1",
     "@pagopa/openapi-codegen-ts": "^14.2.0",
-    "@testing-library/jest-dom": "^5.16.3",
-    "@testing-library/react": "12.1.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.0.4",
     "@types/lodash": "^4.17.13",
+    "@types/node": "^25.2.2",
     "@types/redux-logger": "^3.0.13",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "@vitejs/plugin-react": "^5.1.4",
+    "@vitest/ui": "^4.0.18",
     "api-spec-converter": "^2.12.0",
-    "craco-module-federation": "^1.1.0",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-functional": "^4.2.1",
@@ -82,11 +111,17 @@
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-sonarjs": "^0.13.0",
+    "jsdom": "^28.0.0",
     "mkdirp": "^1.0.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "regex-replace": "^2.3.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-tsconfig-paths": "^6.1.0",
+    "vitest": "^4.0.18"
   },
   "resolutions": {
     "static-eval": "^2.0.2",
@@ -99,15 +134,5 @@
     "node-fetch": "^2.7.0",
     "@types/react": "18.3.16",
     "form-data": "^4.0.4"
-  },
-  "jest": {
-    "restoreMocks": true,
-    "clearMocks": true,
-    "resetMocks": true,
-    "coveragePathIgnorePatterns": [
-      "src/index.tsx",
-      "src/reportWebVitals.ts",
-      "src/api/generated"
-    ]
   }
 }
