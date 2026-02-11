@@ -1,17 +1,11 @@
-import { defineConfig } from 'vite';
-import path from 'path';
-import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import federation from '@originjs/vite-plugin-federation';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
-// Optional: SVG component loader
-// To enable SVG React component imports (import { ReactComponent as Icon } from './icon.svg'):
-// 1. Install plugin: npm install -D vite-plugin-svgr
-// 2. Uncomment the svgrPlugin() line in the plugins array below
-// import svgr from 'vite-plugin-svgr';
-// const svgrPlugin = svgr({ exportAsDefault: false });
 
-// Helper to build remote URLs based on environment
+
+
 const buildRemoteUrl = (mfeUrlEnv: string, adminPath = ''): string => {
   const url = process.env[mfeUrlEnv] || '';
   return `${url}${adminPath}/remoteEntry.js`;
@@ -57,9 +51,13 @@ export default defineConfig({
       ],
     }),
   ],
+  base: '/',
   server: {
     port: 3000,
     open: true,
+  },
+  optimizeDeps: {
+    exclude: ['@pagopa/selfcare-common-frontend'],
   },
   build: {
     outDir: 'build',
@@ -77,22 +75,13 @@ export default defineConfig({
     // Prefer ESM `module` field but fall back to `main` if needed
     mainFields: ['module', 'main'],
   },
-  // Ensure Vite pre-bundles and SSR handling include the problematic package
-  ssr: {
-    noExternal: ['@pagopa/selfcare-common-frontend'],
+  define: {
+    'process.env': {},
   },
-  optimizeDeps: {
-    // Explicitly include dependencies to pre-bundle
-    include: [
-      '@pagopa/selfcare-common-frontend',
-      'react',
-      'react-dom',
-      'react-router-dom',
-      'react-redux',
-      'redux',
-      '@mui/material',
-      '@emotion/react',
-      '@emotion/styled',
-    ],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
 });

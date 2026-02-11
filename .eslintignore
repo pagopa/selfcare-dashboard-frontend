@@ -7,4 +7,4 @@ Dangerfile.ts
 src/reportWebVitals.ts
 **/generated/**
 vite.config.ts
-craco.config.js
+vitest.config.ts
