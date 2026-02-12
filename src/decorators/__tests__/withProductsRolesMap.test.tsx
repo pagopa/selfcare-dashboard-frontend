@@ -1,6 +1,6 @@
-import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { MockInstance } from 'vitest';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { createStore } from '../../redux/store';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
@@ -9,7 +9,7 @@ import withProductsRolesMap from '../withProductsRolesMap';
 vi.mock('../../services/productService');
 
 const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
-  const store = injectedStore ? injectedStore : createStore();
+  const store = injectedStore ?? createStore();
   const Component = () => <>RENDERED</>;
   const DecoratedComponent = withProductsRolesMap(Component);
   render(
@@ -20,7 +20,7 @@ const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
   return store;
 };
 
-let fetchProductRolesSpy: vi.SpyInstance;
+let fetchProductRolesSpy: MockInstance;
 
 beforeEach(() => {
   fetchProductRolesSpy = vi.spyOn(require('../../services/productService'), 'fetchProductRoles');
@@ -58,7 +58,7 @@ const checkProductsRolesMapLength = async (
   store: ReturnType<typeof createStore>
 ) => {
   await waitFor(() =>
-    expect(Object.keys(store.getState().parties.selectedProductsRolesMap).length).toBe(
+    expect(Object.keys(store.getState().parties?.selectedProductsRolesMap || {}).length).toBe(
       expectedProductCached
     )
   );

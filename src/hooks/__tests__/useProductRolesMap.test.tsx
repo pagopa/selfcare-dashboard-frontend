@@ -26,7 +26,6 @@ vi.mock('react', () => ({
 describe('useProductsRolesMap', () => {
   const mockHasPermission = vi.fn();
   const mockUseReduxCachedValue = vi.fn();
-  const mockFetchProductRoles = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();

@@ -1,8 +1,9 @@
 import { render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
+import { BaseParty, Party } from '../../model/Party';
+import { Product } from '../../model/Product';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { RootState, createStore } from '../../redux/store';
 import {
@@ -17,12 +18,9 @@ vi.mock('../../services/productService');
 
 const expectedPartyId: string = '1';
 
-let fetchPartyDetailsSpy: vi.SpyInstance;
-let fetchPartyProductsSpy: vi.SpyInstance;
-
 beforeEach(() => {
-  fetchPartyDetailsSpy = vi.spyOn(require('../../services/partyService'), 'fetchPartyDetails');
-  fetchPartyProductsSpy = vi.spyOn(require('../../services/productService'), 'fetchProducts');
+  vi.spyOn(require('../../services/partyService'), 'fetchPartyDetails');
+  vi.spyOn(require('../../services/productService'), 'fetchProducts');
 });
 
 const renderApp = async (
@@ -70,7 +68,7 @@ test('Test default behavior when no parties', async () => {
 test('Test party not active', async () => {
   const store = createStore();
   const history = createMemoryHistory();
-  store.dispatch(partiesActions.setPartiesList(mockedParties));
+  store.dispatch(partiesActions.setPartiesList(mockedParties as BaseParty[]));
   await renderApp(false, store, history);
   history.push(`/2`);
 
@@ -81,10 +79,10 @@ test('Test party not active', async () => {
 const checkSelectedParty = (state: RootState) => {
   const party = state.parties.selected;
   const partyProducts = state.parties.selectedProducts;
-  verifyFetchPartyDetailsMockExecution(party);
-  verifyFetchPartyProductsMockExecution(partyProducts);
+  verifyFetchPartyDetailsMockExecution(party as Party);
+  verifyFetchPartyProductsMockExecution(partyProducts as Array<Product>);
 };
-
+/*
 const checkMockInvocation = (expectedCallsNumber: number) => {
   expect(fetchPartyDetailsSpy).toBeCalledTimes(expectedCallsNumber);
   expect(fetchPartyDetailsSpy).toBeCalledWith(expectedPartyId);
@@ -92,3 +90,4 @@ const checkMockInvocation = (expectedCallsNumber: number) => {
   expect(fetchPartyProductsSpy).toBeCalledTimes(expectedCallsNumber);
   expect(fetchPartyProductsSpy).toBeCalledWith(expectedPartyId);
 };
+*/

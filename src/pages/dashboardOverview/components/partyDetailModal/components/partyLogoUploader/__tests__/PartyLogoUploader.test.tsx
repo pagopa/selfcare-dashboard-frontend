@@ -2,11 +2,11 @@ import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyt
 import { screen, waitFor } from '@testing-library/react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
+import { Mock } from 'vitest';
 import { DashboardApi } from '../../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../../redux/hooks';
 import { renderWithProviders } from '../../../../../../../utils/test-utils';
 import { PartyLogoUploader } from '../PartyLogoUploader';
-import { Mock } from 'vitest';
 
 // Mock the entire DashboardApi module
 vi.mock('../../../../../../../api/DashboardApiClient', () => ({
@@ -20,17 +20,27 @@ vi.mock('react-i18next');
 vi.mock('../../../../../../../redux/hooks');
 vi.mock('@pagopa/selfcare-common-frontend/lib/services/analyticsService');
 
+type PartyLogoProps = {
+  loading: boolean;
+  urlLogo: string;
+  isLoaded?: boolean;
+  setIsLoaded?: (loaded: boolean) => void;
+};
 vi.mock('../components/PartyLogo', () => ({
   __esModule: true,
-  default: ({ loading, urlLogo, isLoaded, setIsLoaded }) => (
+  default: ({ loading, urlLogo }: PartyLogoProps) => (
     <div data-testid="party-logo" data-loading={loading} data-url={urlLogo}>
       Mock Party Logo
     </div>
   ),
 }));
-
+type PartyDescriptionProps = {
+  loading: boolean;
+  isLoaded: boolean;
+};
 vi.mock('../components/PartyDescription', () => ({
-  PartyDescription: ({ loading, isLoaded }) => (
+  __esModule: true,
+  PartyDescription: ({ loading, isLoaded }: PartyDescriptionProps) => (
     <div data-testid="party-description" data-loading={loading} data-loaded={isLoaded}>
       Mock Party Description
     </div>
@@ -90,7 +100,8 @@ describe('PartyLogoUploader', () => {
 
   describe('file upload handling', () => {
     test('should process valid PNG file upload', async () => {
-      const mockedSuccesGetFilesFromEvent = vi.fn()
+      const mockedSuccesGetFilesFromEvent = vi
+        .fn()
         .mockResolvedValue([new File([''], 'test.png', { type: 'image/png' })]);
       renderWithProviders(
         <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={vi.fn()} />

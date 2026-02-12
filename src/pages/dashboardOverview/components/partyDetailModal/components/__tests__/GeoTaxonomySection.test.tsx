@@ -91,6 +91,7 @@ describe('GeoTaxonomySection', () => {
       />
     );
 
+    screen.debug(undefined, 100000);
     const localGeoTax = screen.getByRole('radio', { name: /Locale/i });
     expect(localGeoTax).toBeInTheDocument();
     fireEvent.click(localGeoTax);

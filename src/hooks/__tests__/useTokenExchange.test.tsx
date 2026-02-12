@@ -1,12 +1,13 @@
 import { render, waitFor } from '@testing-library/react';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
+import { MockInstance } from 'vitest';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { createStore } from '../../redux/store';
-import { useTokenExchange, validateUrlBO } from '../useTokenExchange';
-import { mockedPartyProducts } from '../../services/__mocks__/productService';
 import { mockedParties } from '../../services/__mocks__/partyService';
+import { mockedPartyProducts } from '../../services/__mocks__/productService';
+import { useTokenExchange, validateUrlBO } from '../useTokenExchange';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
@@ -26,7 +27,7 @@ afterAll(() => {
 
 vi.mock('../../services/tokenExchangeService');
 
-let retrieveBackOfficeUrlSpy;
+let retrieveBackOfficeUrlSpy: MockInstance;
 
 beforeEach(() => {
   retrieveBackOfficeUrlSpy = vi.spyOn(
@@ -57,7 +58,7 @@ describe('useTokenExchange', () => {
   const expectedParty: Party = mockedParties[0];
 
   const renderApp = (urlBO: string, injectedStore?: ReturnType<typeof createStore>) => {
-    const store = injectedStore ? injectedStore : createStore();
+    const store = injectedStore ?? createStore();
 
     expectedProduct = {
       ...mockedPartyProducts[0],

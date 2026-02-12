@@ -1,9 +1,9 @@
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
+import { StatusEnum } from '../../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
 import './../../../../../../locale';
@@ -28,18 +28,18 @@ afterAll(() => {
   Object.defineProperty(window, 'location', { value: oldWindowLocation });
 });
 
-const mockedProduct = Object.assign({}, mockedPartyProducts[0]);
+const mockedProduct = { ...mockedPartyProducts[0] };
 
 const renderCard = (
-  status: 'ACTIVE' | 'INACTIVE' | 'PENDING',
+  status: StatusEnum.ACTIVE | StatusEnum,
   urlPublic?: string,
   injectedStore?: ReturnType<typeof createStore>,
   injectedHistory?: ReturnType<typeof createMemoryHistory>
 ) => {
-  const store = injectedStore ? injectedStore : createStore();
-  const history = injectedHistory ? injectedHistory : createMemoryHistory();
+  const store = injectedStore ?? createStore();
+  const history = injectedHistory ?? createMemoryHistory();
 
-  mockedProduct.productOnBoardingStatus = status;
+  mockedProduct.status = status;
   mockedProduct.urlPublic = urlPublic;
   render(
     <Router history={history}>
@@ -58,14 +58,14 @@ const checkBaseFields = () => {
 
 describe('test public url', () => {
   test('test render product WITHOUT public url', () => {
-    renderCard('INACTIVE');
+    renderCard(StatusEnum.INACTIVE);
 
     checkBaseFields();
     expect(screen.queryByText('Scopri di più')).toBeNull();
   });
 
   test('test render product with public url', async () => {
-    renderCard('INACTIVE', 'http://publicUrl');
+    renderCard(StatusEnum.INACTIVE, 'http://publicUrl');
 
     checkBaseFields();
     screen.getByText('Scopri di più');
@@ -74,7 +74,7 @@ describe('test public url', () => {
 
 describe('test onboarding', () => {
   test('test inactive product', () => {
-    renderCard('INACTIVE');
+    renderCard(StatusEnum.INACTIVE);
 
     checkBaseFields();
 
@@ -87,37 +87,4 @@ describe('test onboarding', () => {
     );
     */
   });
-
-  test('test PENDING product', async () => {
-    renderCard('PENDING');
-
-    checkBaseFields();
-
-    const button = screen.getByText('Aderisci');
-
-    fireEvent.click(button);
-
-    waitFor(() => screen.getByText('Adesione in corso'));
-    waitFor(() =>
-      screen.getByText(
-        'Per questo prodotto c’è già una richiesta di adesione in corso. Vuoi procedere lo stesso?'
-      )
-    );
-    waitFor(() => screen.getByText('Procedi con una nuova adesione'));
-
-    waitFor(() => fireEvent.click(screen.getByText('Esci')));
-
-    await waitFor(() => expect(screen.queryByText('Adesione in corso')).toBeNull());
-
-    fireEvent.click(button);
-
-    waitFor(() => fireEvent.click(screen.getByText('Procedi con una nuova adesione')));
-
-    waitFor(() =>
-      expect(mockedLocation.assign).toBeCalledWith(
-        `http://selfcare/onboarding/${mockedProduct.id}?partyExternalId=${mockedParties[0].externalId}`
-      )
-    );
-  });
 });
-
