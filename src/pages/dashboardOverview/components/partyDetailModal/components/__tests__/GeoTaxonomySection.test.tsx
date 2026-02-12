@@ -5,8 +5,8 @@ import { GeographicTaxonomyResource } from '../../../../../../api/generated/b4f-
 import { renderWithProviders } from '../../../../../../utils/test-utils';
 import GeoTaxonomySection from '../GeoTaxonomySection';
 
-const mockSetOptionsSelected = jest.fn();
-const mockSetIsAddNewAutocompleteEnabled = jest.fn();
+const mockSetOptionsSelected = vi.fn();
+const mockSetIsAddNewAutocompleteEnabled = vi.fn();
 
 const mockGeographicTaxonomies: Array<GeographicTaxonomyResource> = [
   { code: '001', desc: 'Area 1' },
@@ -14,7 +14,7 @@ const mockGeographicTaxonomies: Array<GeographicTaxonomyResource> = [
 ];
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 beforeAll(() => {

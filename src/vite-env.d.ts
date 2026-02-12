@@ -7,7 +7,6 @@ declare namespace NodeJS {
 }
 
 interface ImportMetaEnv {
-  readonly VITE_ENV: string;
   readonly VITE_COUNTRY_DATA: string;
   readonly VITE_URL_CDN: string;
   readonly VITE_ENABLE_ASSISTANCE: string;
@@ -37,6 +36,12 @@ interface ImportMetaEnv {
   readonly VITE_PUBLIC_URL?: string;
   readonly VITE_ONE_TRUST_BASE_URL?: string;
   readonly VITE_ONETRUST_DOMAIN_ID?: string;
+  VITE_API_MOCK_PARTIES?: string;
+  VITE_API_MOCK_PRODUCTS?: string;
+  VITE_ENV?: string;
+  VITE_MICROFRONTEND_URL_USERS?: string;
+  VITE_MICROFRONTEND_URL_GROUPS?: string;
+  VITE_MICROFRONTEND_URL_ADMIN?: string;
 }
 
 interface ImportMeta {

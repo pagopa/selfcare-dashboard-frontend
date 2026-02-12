@@ -10,7 +10,7 @@ import { mockedParties } from '../../services/__mocks__/partyService';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
-  assign: jest.fn(),
+  assign: vi.fn(),
   pathname: '',
   origin: 'MOCKED_ORIGIN',
   search: '',
@@ -24,12 +24,12 @@ afterAll(() => {
   Object.defineProperty(window, 'location', { value: oldWindowLocation });
 });
 
-jest.mock('../../services/tokenExchangeService');
+vi.mock('../../services/tokenExchangeService');
 
 let retrieveBackOfficeUrlSpy;
 
 beforeEach(() => {
-  retrieveBackOfficeUrlSpy = jest.spyOn(
+  retrieveBackOfficeUrlSpy = vi.spyOn(
     require('../../services/tokenExchangeService'),
     'retrieveBackOfficeUrl'
   );

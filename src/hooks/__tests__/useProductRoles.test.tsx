@@ -10,7 +10,7 @@ import { mockedParties } from '../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
 import { useProductRoles } from '../useProductRoles';
 
-jest.mock('../../services/productService');
+vi.mock('../../services/productService');
 
 const renderApp = (product: Product, injectedStore?: ReturnType<typeof createStore>) => {
   const store = injectedStore ? injectedStore : createStore();
@@ -51,10 +51,10 @@ const renderWithProductsRolesMapDecorated = (injectedStore?: ReturnType<typeof c
   return store;
 };
 
-let fetchProductRolesSpy: jest.SpyInstance;
+let fetchProductRolesSpy: vi.SpyInstance;
 
 beforeEach(() => {
-  fetchProductRolesSpy = jest.spyOn(require('../../services/productService'), 'fetchProductRoles');
+  fetchProductRolesSpy = vi.spyOn(require('../../services/productService'), 'fetchProductRoles');
 });
 
 test.skip('Test', async () => {

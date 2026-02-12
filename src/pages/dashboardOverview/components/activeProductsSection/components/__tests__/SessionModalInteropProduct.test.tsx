@@ -4,8 +4,8 @@ import { mockedPartyProducts } from '../../../../../../services/__mocks__/produc
 import { renderWithProviders } from '../../../../../../utils/test-utils';
 import SessionModalInteropProduct from '../SessionModalInteropProduct';
 
-const mockHandleClose = jest.fn();
-const mockOnConfirm = jest.fn();
+const mockHandleClose = vi.fn();
+const mockOnConfirm = vi.fn();
 
 const defaultProps = {
   open: true,

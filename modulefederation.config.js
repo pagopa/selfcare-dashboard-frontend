@@ -14,7 +14,7 @@ module.exports = {
     selfcareUsers: `selfcareUsers@${process.env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
     selfcareGroups: `selfcareGroups@${process.env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
     selfcareAdmin: `selfcareAdmin@${
-      process.env.REACT_APP_ENV === 'LOCAL_DEV'
+      process.env.VITE_ENV === 'LOCAL_DEV'
         ? process.env.MICROFRONTEND_URL_ADMIN
         : process.env.MICROFRONTEND_URL_ADMIN + '/onboarding'
     }/remoteEntry.js`,

@@ -9,7 +9,7 @@ Steps
    - Confirm entry ordering and polyfills: `src/index.js`, `src/bootstrap.tsx`.
 
 2. Choose and implement env strategy (build-time VITE_)
-   - Replace `REACT_APP_*` usage with `VITE_*` names.
+   - Replace `VITE_*` usage with `VITE_*` names.
    - Update `src/utils/env.ts` to read from `import.meta.env` and fallback to defaults.
    - Update CI/deploy to inject `VITE_*` envs at build time.
    - Edit `public/index.html` to remove CRA placeholders and use Vite-friendly approach.
