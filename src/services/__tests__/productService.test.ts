@@ -1,3 +1,4 @@
+import { Mock } from 'vitest';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/ProductsResource';
 import { Product, productResource2Product } from '../../model/Product';
@@ -10,31 +11,31 @@ import {
 } from './../__mocks__/productService';
 
 // Mock the DashboardApi methods
-jest.mock('../../api/DashboardApiClient', () => ({
+vi.mock('../../api/DashboardApiClient', () => ({
   DashboardApi: {
-    getProducts: jest.fn(),
-    getProductRoles: jest.fn(),
+    getProducts: vi.fn(),
+    getProductRoles: vi.fn(),
   },
 }));
 
-jest.mock('../__mocks__/productService', () => ({
-  fetchProductRoles: jest.fn(),
+vi.mock('../__mocks__/productService', () => ({
+  fetchProductRoles: vi.fn(),
 }));
 
 describe('productService tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('fetchProducts', () => {
-    test('returns mocked products when REACT_APP_API_MOCK_PRODUCTS is true', async () => {
-      process.env.REACT_APP_API_MOCK_PRODUCTS = 'true';
+    test('returns mocked products when VITE_API_MOCK_PRODUCTS is true', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'true';
       const result = await fetchProducts();
       expect(result).toEqual(mockedPartyProducts);
     });
 
-    test('calls DashboardApi.getProducts and maps the result when REACT_APP_API_MOCK_PRODUCTS is false', async () => {
-      process.env.REACT_APP_API_MOCK_PRODUCTS = 'false';
+    test('calls DashboardApi.getProducts and maps the result when VITE_API_MOCK_PRODUCTS is false', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
       const mockProductResources = [
         {
           id: 'prod1',
@@ -72,7 +73,7 @@ describe('productService tests', () => {
         },
       ];
 
-      (DashboardApi.getProducts as jest.Mock).mockResolvedValue(mockProductResources);
+      (DashboardApi.getProducts as Mock).mockResolvedValue(mockProductResources);
 
       const expectedProducts = mockProductResources.map(productResource2Product);
       const result = await fetchProducts();
@@ -93,8 +94,8 @@ describe('productService tests', () => {
       delegable: true,
     };
 
-    test('returns mocked product roles when REACT_APP_API_MOCK_PRODUCTS is true', async () => {
-      process.env.REACT_APP_API_MOCK_PRODUCTS = 'true';
+    test('returns mocked product roles when VITE_API_MOCK_PRODUCTS is true', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'true';
       const mockRoles = [
         {
           productId: 'prod1',
@@ -106,15 +107,15 @@ describe('productService tests', () => {
           description: 'Admin Role Description',
         },
       ];
-      (fetchProductRolesMocked as jest.Mock).mockResolvedValue(mockRoles);
+      (fetchProductRolesMocked as Mock).mockResolvedValue(mockRoles);
 
       const result = await fetchProductRoles(mockProduct, mockedParties[0]);
       expect(fetchProductRolesMocked).toHaveBeenCalledWith(mockProduct, mockedParties[0]);
       expect(result).toEqual(mockRoles);
     });
 
-    test('calls DashboardApi.getProductRoles and maps the result when REACT_APP_API_MOCK_PRODUCTS is false', async () => {
-      process.env.REACT_APP_API_MOCK_PRODUCTS = 'false';
+    test('calls DashboardApi.getProductRoles and maps the result when VITE_API_MOCK_PRODUCTS is false', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
       const mockApiResponse = [
         {
           partyRole: 'Admin',
@@ -129,7 +130,7 @@ describe('productService tests', () => {
           ],
         },
       ];
-      (DashboardApi.getProductRoles as jest.Mock).mockResolvedValue(mockApiResponse);
+      (DashboardApi.getProductRoles as Mock).mockResolvedValue(mockApiResponse);
 
       const expectedRoles = [
         {

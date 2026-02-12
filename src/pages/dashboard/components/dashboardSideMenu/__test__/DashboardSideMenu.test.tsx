@@ -16,7 +16,7 @@ test('Test: Access to the dashboard side menu voices', async () => {
       isInvoiceSectionVisible={true}
       isAddDelegateSectionVisible={true}
       isHandleDelegationsVisible={false}
-      setDrawerOpen={jest.fn()}
+      setDrawerOpen={vi.fn()}
     />,
     store
   );
@@ -41,7 +41,7 @@ test('Test: render with props false', async () => {
       isInvoiceSectionVisible={false}
       isAddDelegateSectionVisible={false}
       isHandleDelegationsVisible={false}
-      setDrawerOpen={jest.fn()}
+      setDrawerOpen={vi.fn()}
     />
   );
   const institutionsListVoice = screen.queryByText('Enti gestiti');
@@ -58,7 +58,7 @@ test('Test: The techpartner has not been delegated by any body, he will see the 
       isInvoiceSectionVisible={false}
       isAddDelegateSectionVisible={false}
       isHandleDelegationsVisible={true}
-      setDrawerOpen={jest.fn()}
+      setDrawerOpen={vi.fn()}
     />
   );
 
@@ -78,7 +78,7 @@ test('Test: The Aggregator has been delegated will see the menu section and will
       isInvoiceSectionVisible={false}
       isAddDelegateSectionVisible={false}
       isHandleDelegationsVisible={true}
-      setDrawerOpen={jest.fn()}
+      setDrawerOpen={vi.fn()}
     />
   );
 

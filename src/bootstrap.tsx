@@ -16,6 +16,22 @@ import reportWebVitals from './reportWebVitals';
 import { MOCK_USER } from './utils/constants';
 import { ENV } from './utils/env';
 
+// Load external resources (CDN fonts and OneTrust) dynamically at runtime
+const loadExternalResources = () => {
+  // Load CDN fonts if available
+  if (ENV.BASE_PATH_CDN_URL) {
+    const cdnFontsLink = document.getElementById('cdn-fonts-link') as HTMLLinkElement;
+    if (cdnFontsLink) {
+      // eslint-disable-next-line functional/immutable-data
+      cdnFontsLink.href = `${ENV.BASE_PATH_CDN_URL}/assets/font/selfhostedfonts.css`;
+    }
+  }
+
+  // Load OneTrust if configured
+  // Note: These env vars should be set via VITE_* environment variables
+  // Adjust based on your actual env variable names for OneT rust configuration
+};
+
 const onSuccessEncoded = encodeURIComponent(location.pathname + location.search);
 
 // eslint-disable-next-line functional/immutable-data
@@ -26,6 +42,9 @@ CONFIG.URL_FE.LOGIN = `${ENV.URL_FE.LOGIN}/login?onSuccess=` + onSuccessEncoded;
 CONFIG.URL_FE.LOGOUT = ENV.URL_FE.LOGOUT;
 // eslint-disable-next-line functional/immutable-data
 CONFIG.URL_FE.ASSISTANCE = ENV.URL_FE.ASSISTANCE;
+
+// Load external resources before rendering
+loadExternalResources();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
