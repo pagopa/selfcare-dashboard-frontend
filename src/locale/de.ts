@@ -18,8 +18,8 @@ export default {
     label: 'Körperschaft suchen',
     notFoundResults: 'Kein Ergebnis',
   },
-  searchBackstagePage:{
-    supportRole: 'Support'
+  searchBackstagePage: {
+    supportRole: 'Support',
   },
   noActiveParty: {
     pending: {
@@ -51,6 +51,8 @@ export default {
     subTitle:
       'Du verwaltest die aktiven PagoPA-Produkte und kannst, sofern im Besitz der Berechtigungen, neuen Produkten beitreten.',
     sideMenu: {
+      titleExpand: 'Seitenmenü erweitern',
+      titleCollapse: 'Seitenmenü reduzieren',
       institutionManagement: {
         title: 'Körperschaftsverwaltung',
         overview: {

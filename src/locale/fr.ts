@@ -18,8 +18,8 @@ export default {
     label: 'Chercher un organisme',
     notFoundResults: 'Aucun résultat',
   },
-  searchBackstagePage:{
-    supportRole: 'Support'
+  searchBackstagePage: {
+    supportRole: 'Support',
   },
   noActiveParty: {
     pending: {
@@ -51,6 +51,8 @@ export default {
     subTitle:
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
+      titleExpand: 'Développer le menu latéral',
+      titleCollapse: 'Réduire le menu latéral',
       institutionManagement: {
         title: 'Gestion Organisme',
         overview: {
