@@ -1,7 +1,6 @@
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../../../utils/test-utils';

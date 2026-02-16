@@ -14,9 +14,9 @@ import { BaseParty } from '../model/Party';
 import { createStore } from '../redux/store';
 import { mockedBaseParties } from '../services/__mocks__/partyService';
 
-jest.mock('@pagopa/selfcare-common-frontend/lib/decorators/withLogin');
-jest.mock('../decorators/withParties');
-jest.mock('../decorators/withSelectedParty');
+vi.mock('@pagopa/selfcare-common-frontend/lib/decorators/withLogin');
+vi.mock('../decorators/withParties');
+vi.mock('../decorators/withSelectedParty');
 
 const renderApp = (
   injectedStore?: ReturnType<typeof createStore>,

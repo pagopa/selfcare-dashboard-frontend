@@ -1,6 +1,5 @@
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, getByText, render, screen, waitFor } from '@testing-library/react';
-import React from 'react';
 import { BaseParty, UserStatus } from '../../../model/Party';
 import { renderWithProviders } from '../../../utils/test-utils';
 import PartyAccountItemSelection from '../PartyAccountItemSelection';
@@ -157,7 +156,7 @@ test('Test selection when there are > 3 parties', async () => {
 });
 
 test('Select a party, then clear the selection', async () => {
-  const mockClearFunction = jest.fn();
+  const mockClearFunction = vi.fn();
   render(<PartyAccountItemSelection selectedParty={selectedParty} clearField={mockClearFunction} />);
 
   const clearSelection = screen.getByTestId('ClearOutlinedIcon');

@@ -1,4 +1,4 @@
-const regexReplace = require('regex-replace');
+import regexReplace from 'regex-replace';
 
 regexReplace(
   'readonly sort\\?: array;',

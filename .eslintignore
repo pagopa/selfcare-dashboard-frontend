@@ -6,3 +6,7 @@ src/react-app-env.d.ts
 Dangerfile.ts
 src/reportWebVitals.ts
 **/generated/**
+vite.config.ts
+vitest.config.ts
+vite-env.d.ts
+e2e/

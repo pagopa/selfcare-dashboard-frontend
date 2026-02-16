@@ -1,13 +1,11 @@
-import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, screen } from '@testing-library/react';
-import React from 'react';
 import { mockedParties } from '../../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../../../../utils/test-utils';
 import SessionModalInteropProduct from '../SessionModalInteropProduct';
 
-const mockHandleClose = jest.fn();
-const mockOnConfirm = jest.fn();
+const mockHandleClose = vi.fn();
+const mockOnConfirm = vi.fn();
 
 const defaultProps = {
   open: true,
