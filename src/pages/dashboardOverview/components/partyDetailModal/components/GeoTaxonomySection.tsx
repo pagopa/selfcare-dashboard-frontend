@@ -192,7 +192,7 @@ export default function GeoTaxonomySection({
         <FormControlLabel
           checked={isNationalAreaVisible}
           value={'national'}
-          control={<Radio disableRipple={true} />}
+          control={<Radio />}
           aria-label={t('overview.partyDetail.geographicTaxonomies.modalSections.national')}
           label={t('overview.partyDetail.geographicTaxonomies.modalSections.national')}
           sx={{ mr: 3, ml: 1 }}
@@ -201,7 +201,7 @@ export default function GeoTaxonomySection({
           id={'geographicTaxonomies'}
           checked={isLocalAreaVisible}
           value={'local'}
-          control={<Radio disableRipple={true} />}
+          control={<Radio />}
           aria-label={t('overview.partyDetail.geographicTaxonomies.modalSections.local')}
           label={t('overview.partyDetail.geographicTaxonomies.modalSections.local')}
         />
