@@ -18,8 +18,8 @@ export default {
     label: 'Search for the institution',
     notFoundResults: 'No result',
   },
-  searchBackstagePage:{
-    supportRole: 'Support'
+  searchBackstagePage: {
+    supportRole: 'Support',
   },
   noActiveParty: {
     pending: {
@@ -51,6 +51,8 @@ export default {
     subTitle:
       'Manage the active PagoPA products and, if you have permissions, you can register for new products.',
     sideMenu: {
+      titleExpand: 'Expand side menu',
+      titleCollapse: 'Collapse side menu',
       institutionManagement: {
         title: 'Institution management',
         overview: {

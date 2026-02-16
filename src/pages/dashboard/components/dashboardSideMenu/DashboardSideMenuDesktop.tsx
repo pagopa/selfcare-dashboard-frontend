@@ -1,6 +1,7 @@
 // src/pages/dashboard/components/DashboardSideMenuDesktop.tsx
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import { Box, Button, Divider, Grid } from '@mui/material';
+import { t } from 'i18next';
 import { Dispatch, SetStateAction } from 'react';
 import { Party } from '../../../../model/Party';
 import DashboardSideMenu from './DashboardSideMenu';
@@ -27,6 +28,7 @@ const DashboardSideMenuDesktop: React.FC<Props> = ({
   setHideLabels,
 }) => (
   <Grid
+    id="dashboard-sidebar"
     component="nav"
     item
     xs={hideLabels ? 1 : 2}
@@ -52,6 +54,11 @@ const DashboardSideMenuDesktop: React.FC<Props> = ({
       <Divider sx={{ marginTop: '80px' }} />
       <Button
         fullWidth
+        aria-label={
+          hideLabels ? t('overview.sideMenu.titleExpand') : t('overview.sideMenu.titleCollapse')
+        }
+        aria-pressed={!hideLabels}
+        aria-controls="dashboard-sidebar"
         sx={{
           height: '59px',
           display: 'flex',

@@ -61,6 +61,8 @@ export default {
     subTitle:
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
+      titleExpand: 'Espandi menu laterale',
+      titleCollapse: 'Comprimi menu laterale',
       institutionManagement: {
         title: 'Gestione Ente',
         overview: {
