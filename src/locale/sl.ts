@@ -18,8 +18,8 @@ export default {
     label: 'Poiščite organizacijo',
     notFoundResults: 'Brez rezultatov',
   },
-  searchBackstagePage:{
-    supportRole: 'Podpora'
+  searchBackstagePage: {
+    supportRole: 'Podpora',
   },
   noActiveParty: {
     pending: {
@@ -51,6 +51,8 @@ export default {
     subTitle:
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
+      titleExpand: 'Razširi stranski meni',
+      titleCollapse: 'Strni stranski meni',
       institutionManagement: {
         title: 'Upravljanje organizacije',
         overview: {
