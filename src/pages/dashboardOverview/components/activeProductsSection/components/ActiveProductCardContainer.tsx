@@ -1,8 +1,13 @@
 import { Grid } from '@mui/material';
 import { SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import {
+  Actions,
+  ALLOWED_PRODUCT_IDS,
+  PRODUCT_IDS,
+} from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -45,11 +50,13 @@ export default function ActiveProductCardContainer({
     partyId: party.partyId ?? '',
   })}#${PRODUCT_IDS.PAGOPA}`;
 
-  const isDisabled = !!party.products.find(
-    (p) =>
-      p.productId === product.productId &&
-      hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
-  );
+  const isDisabled = isPagoPaUser
+    ? !ALLOWED_PRODUCT_IDS.includes(product.productId || '')
+    : !!party.products.find(
+        (p) =>
+          p.productId === product.productId &&
+          hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
+      );
 
   const productOnboarded = products.find((p) => p.id === product.productId);
   const interopProduction = products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP);
