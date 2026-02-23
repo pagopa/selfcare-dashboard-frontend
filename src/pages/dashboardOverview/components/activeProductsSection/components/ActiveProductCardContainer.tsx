@@ -45,11 +45,13 @@ export default function ActiveProductCardContainer({
     partyId: party.partyId ?? '',
   })}#${PRODUCT_IDS.PAGOPA}`;
 
-  const isDisabled = !!party.products.find(
-    (p) =>
-      p.productId === product.productId &&
-      hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
-  );
+  const isDisabled = isPagoPaUser
+    ? !ALLOWED_PRODUCT_IDS.includes(product.productId || '')
+    : !!party.products.find(
+        (p) =>
+          p.productId === product.productId &&
+          hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
+      );
 
   const productOnboarded = products.find((p) => p.id === product.productId);
   const interopProduction = products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP);
