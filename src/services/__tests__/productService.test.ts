@@ -27,14 +27,14 @@ describe('productService tests', () => {
   });
 
   describe('fetchProducts', () => {
-    test('returns mocked products when REACT_APP_API_MOCK_PRODUCTS is true', async () => {
-      process.env.REACT_APP_API_MOCK_PRODUCTS = 'true';
+    test('returns mocked products when VITE_API_MOCK_PRODUCTS is true', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'true';
       const result = await fetchProducts();
       expect(result).toEqual(mockedPartyProducts);
     });
 
-    test('calls DashboardApi.getProducts and maps the result when REACT_APP_API_MOCK_PRODUCTS is false', async () => {
-      process.env.REACT_APP_API_MOCK_PRODUCTS = 'false';
+    test('calls DashboardApi.getProducts and maps the result when VITE_API_MOCK_PRODUCTS is false', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
       const mockProductResources = [
         {
           id: 'prod1',
@@ -93,8 +93,8 @@ describe('productService tests', () => {
       delegable: true,
     };
 
-    test('returns mocked product roles when REACT_APP_API_MOCK_PRODUCTS is true', async () => {
-      process.env.REACT_APP_API_MOCK_PRODUCTS = 'true';
+    test('returns mocked product roles when VITE_API_MOCK_PRODUCTS is true', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'true';
       const mockRoles = [
         {
           productId: 'prod1',
@@ -113,8 +113,8 @@ describe('productService tests', () => {
       expect(result).toEqual(mockRoles);
     });
 
-    test('calls DashboardApi.getProductRoles and maps the result when REACT_APP_API_MOCK_PRODUCTS is false', async () => {
-      process.env.REACT_APP_API_MOCK_PRODUCTS = 'false';
+    test('calls DashboardApi.getProductRoles and maps the result when VITE_API_MOCK_PRODUCTS is false', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
       const mockApiResponse = [
         {
           partyRole: 'Admin',

@@ -11,12 +11,12 @@ const dependencies = {
 module.exports = {
   name: 'host',
   remotes: {
-    selfcareUsers: `selfcareUsers@${process.env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
-    selfcareGroups: `selfcareGroups@${process.env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
-    selfcareAdmin: `selfcareAdmin@${
-      process.env.REACT_APP_ENV === 'LOCAL_DEV'
-        ? process.env.MICROFRONTEND_URL_ADMIN
-        : process.env.MICROFRONTEND_URL_ADMIN + '/onboarding'
+    selfcareUser: `${env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
+    selfcareGroups: `${import.meta.env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
+    selfcareAdmin: `${
+      import.meta.env.VITE_ENV === 'LOCAL_DEV'
+        ? import.meta.env.MICROFRONTEND_URL_ADMIN
+        : import.meta.env.MICROFRONTEND_URL_ADMIN + '/onboarding'
     }/remoteEntry.js`,
   },
   shared: {
