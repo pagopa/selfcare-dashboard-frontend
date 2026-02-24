@@ -1,3 +1,4 @@
+import path from 'path';
 import federation from '@originjs/vite-plugin-federation';
 import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
@@ -23,6 +24,7 @@ export default defineConfig(({ mode }) => {
           }/remoteEntry.js`,
         },
         shared: [
+          '@pagopa/selfcare-common-frontend',
           'react',
           'react-dom',
           'react-redux',
@@ -66,6 +68,9 @@ export default defineConfig(({ mode }) => {
         Object.entries(env).filter(([key]) => key.startsWith('VITE_'))
       ),
     },
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react-redux'],
+    },
     server: {
       port: 3000,
       cors: true,
@@ -75,7 +80,15 @@ export default defineConfig(({ mode }) => {
       cors: true,
     },
     resolve: {
-      dedupe: ['react', 'react-dom'],
+      dedupe: ['react', 'react-dom', 'react-redux'],
+      alias: [
+        {
+          find: /^@pagopa\/selfcare-common-frontend$/,
+          replacement: path.resolve(
+            './node_modules/@pagopa/selfcare-common-frontend/lib/index.js'
+          ),
+        },
+      ],
     },
   };
 });
