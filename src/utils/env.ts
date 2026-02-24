@@ -1,6 +1,4 @@
-import { from } from 'env-var';
 
-const env = from(import.meta.env as unknown as Record<string, string>);
 
 const PUBLIC_URL_INNER = import.meta.env.PUBLIC_URL || '/dashboard';
 export const ENV = {
@@ -11,11 +9,11 @@ export const ENV = {
     COUNTRIES: import.meta.env.VITE_COUNTRY_DATA,
   },
 
-  BASE_PATH_CDN_URL: env.get('VITE_URL_CDN').required().asString(),
+  BASE_PATH_CDN_URL: import.meta.env.VITE_URL_CDN,
 
   ASSISTANCE: {
-    ENABLE: env.get('VITE_ENABLE_ASSISTANCE').required().asBool(),
-    EMAIL: env.get('VITE_PAGOPA_HELP_EMAIL').required().asString(),
+    ENABLE: import.meta.env.VITE_ENABLE_ASSISTANCE === 'true',
+    EMAIL: import.meta.env.VITE_PAGOPA_HELP_EMAIL,
   },
 
   URL_DOCUMENTATION: 'https://docs.pagopa.it/area-riservata/',
