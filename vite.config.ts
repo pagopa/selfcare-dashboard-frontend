@@ -59,8 +59,6 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       target: 'esnext',
-      modulePreload: false,
-      cssCodeSplit: false,
       sourcemap: true,
       minify: false,
     },

@@ -49,6 +49,7 @@ export default defineConfig(
                     provider: 'v8',
                     reporter: ['text', 'json', 'html'],
                     exclude: [
+                        'src/index.tsx',
                         'src/reportWebVitals.ts',
                         'src/setupTests.ts',
                         '**/*.spec.{ts,tsx}',
