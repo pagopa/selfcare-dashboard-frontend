@@ -10,20 +10,20 @@ import {
 } from './../__mocks__/productService';
 
 // Mock the DashboardApi methods
-jest.mock('../../api/DashboardApiClient', () => ({
+vi.mock('../../api/DashboardApiClient', () => ({
   DashboardApi: {
-    getProducts: jest.fn(),
-    getProductRoles: jest.fn(),
+    getProducts: vi.fn(),
+    getProductRoles: vi.fn(),
   },
 }));
 
-jest.mock('../__mocks__/productService', () => ({
-  fetchProductRoles: jest.fn(),
+vi.mock('../__mocks__/productService', () => ({
+  fetchProductRoles: vi.fn(),
 }));
 
 describe('productService tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('fetchProducts', () => {
@@ -72,7 +72,7 @@ describe('productService tests', () => {
         },
       ];
 
-      (DashboardApi.getProducts as jest.Mock).mockResolvedValue(mockProductResources);
+      (DashboardApi.getProducts as vi.Mock).mockResolvedValue(mockProductResources);
 
       const expectedProducts = mockProductResources.map(productResource2Product);
       const result = await fetchProducts();
@@ -106,7 +106,7 @@ describe('productService tests', () => {
           description: 'Admin Role Description',
         },
       ];
-      (fetchProductRolesMocked as jest.Mock).mockResolvedValue(mockRoles);
+      (fetchProductRolesMocked as vi.Mock).mockResolvedValue(mockRoles);
 
       const result = await fetchProductRoles(mockProduct, mockedParties[0]);
       expect(fetchProductRolesMocked).toHaveBeenCalledWith(mockProduct, mockedParties[0]);
@@ -129,7 +129,7 @@ describe('productService tests', () => {
           ],
         },
       ];
-      (DashboardApi.getProductRoles as jest.Mock).mockResolvedValue(mockApiResponse);
+      (DashboardApi.getProductRoles as vi.Mock).mockResolvedValue(mockApiResponse);
 
       const expectedRoles = [
         {

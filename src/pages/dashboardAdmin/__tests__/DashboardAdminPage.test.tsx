@@ -5,25 +5,25 @@ import DashboardAdminPage from '../DasboardAdmin';
 
 // --- Mock external modules ---
 
-jest.mock('@mui/material/useMediaQuery');
+vi.mock('@mui/material/useMediaQuery');
 
 describe('DashboardAdminPage', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders without crashing', () => {
-    (useMediaQuery as jest.Mock).mockReturnValue(false);
+    (useMediaQuery as vi.Mock).mockReturnValue(false);
     renderWithProviders(<DashboardAdminPage />);
   });
 
   it('renders mobile menu when isMobile is true', () => {
-    (useMediaQuery as jest.Mock).mockReturnValue(true);
+    (useMediaQuery as vi.Mock).mockReturnValue(true);
     renderWithProviders(<DashboardAdminPage />);
   });
 
   it('renders desktop menu when isMobile is false', () => {
-    (useMediaQuery as jest.Mock).mockReturnValue(false);
+    (useMediaQuery as vi.Mock).mockReturnValue(false);
     renderWithProviders(<DashboardAdminPage />);
   });
 });

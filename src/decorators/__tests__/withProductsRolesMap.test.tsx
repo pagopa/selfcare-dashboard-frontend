@@ -6,7 +6,7 @@ import { createStore } from '../../redux/store';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
 import withProductsRolesMap from '../withProductsRolesMap';
 
-jest.mock('../../services/productService');
+vi.mock('../../services/productService');
 
 const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
   const store = injectedStore ? injectedStore : createStore();
@@ -20,10 +20,10 @@ const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
   return store;
 };
 
-let fetchProductRolesSpy: jest.SpyInstance;
+let fetchProductRolesSpy: vi.SpyInstance;
 
 beforeEach(() => {
-  fetchProductRolesSpy = jest.spyOn(require('../../services/productService'), 'fetchProductRoles');
+  fetchProductRolesSpy = vi.spyOn(require('../../services/productService'), 'fetchProductRoles');
 });
 
 test.skip('Test', async () => {

@@ -10,18 +10,18 @@ import {
 import { mockedBaseParties, mockedParties } from './../__mocks__/partyService';
 
 // Mock the DashboardApi methods
-jest.mock('../../api/DashboardApiClient', () => ({
+vi.mock('../../api/DashboardApiClient', () => ({
   DashboardApi: {
-    getInstitutions: jest.fn(),
-    getInstitution: jest.fn(),
-    getProductBrokers: jest.fn(),
-    createDelegation: jest.fn()
+    getInstitutions: vi.fn(),
+    getInstitution: vi.fn(),
+    getProductBrokers: vi.fn(),
+    createDelegation: vi.fn()
   }
 }));
 
 describe('yourModuleFile tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('fetchParties', () => {
@@ -35,7 +35,7 @@ describe('yourModuleFile tests', () => {
     test('calls DashboardApi.getInstitutions and maps the result', async () => {
       import.meta.env.VITE_API_MOCK_PARTIES = 'false';
       const mockedInstitutions = [{ id: '1', name: 'Institution 1' }];
-      (DashboardApi.getInstitutions as jest.Mock).mockResolvedValue(mockedInstitutions);
+      (DashboardApi.getInstitutions as vi.Mock).mockResolvedValue(mockedInstitutions);
 
       const result = await fetchParties();
       expect(DashboardApi.getInstitutions).toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe('yourModuleFile tests', () => {
       import.meta.env.VITE_API_MOCK_PARTIES = 'false';
       const partyId = '1';
       const mockedInstitution = { id: '1', name: 'Institution 1' };
-      (DashboardApi.getInstitution as jest.Mock).mockResolvedValue(mockedInstitution);
+      (DashboardApi.getInstitution as vi.Mock).mockResolvedValue(mockedInstitution);
 
       const result = await fetchPartyDetails(partyId);
       expect(DashboardApi.getInstitution).toHaveBeenCalledWith(partyId);
@@ -79,7 +79,7 @@ describe('yourModuleFile tests', () => {
       const partyId = '1';
       const institutionType = 'PA';
       const mockedBrokers = [{ id: 'broker1', name: 'Broker 1' }];
-      (DashboardApi.getProductBrokers as jest.Mock).mockResolvedValue(mockedBrokers);
+      (DashboardApi.getProductBrokers as vi.Mock).mockResolvedValue(mockedBrokers);
 
       const result = await getProductBrokers(partyId, institutionType);
       expect(DashboardApi.getProductBrokers).toHaveBeenCalledWith(partyId, institutionType);
@@ -104,7 +104,7 @@ describe('yourModuleFile tests', () => {
       const product = { productId: 'product1' } as any;
       const techPartner = { brokerId: 'broker1' } as any;
       const mockDelegationId = { id: 'realRelId' };
-      (DashboardApi.createDelegation as jest.Mock).mockResolvedValue(mockDelegationId);
+      (DashboardApi.createDelegation as vi.Mock).mockResolvedValue(mockDelegationId);
 
       const result = await createDelegation(party, product, techPartner);
       expect(DashboardApi.createDelegation).toHaveBeenCalledWith(party, product, techPartner);

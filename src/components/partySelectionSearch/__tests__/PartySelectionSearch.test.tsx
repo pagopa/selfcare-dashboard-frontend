@@ -157,7 +157,7 @@ test('Test selection when there are > 3 parties', async () => {
 });
 
 test('Select a party, then clear the selection', async () => {
-  const mockClearFunction = jest.fn();
+  const mockClearFunction = vi.fn();
   render(<PartyAccountItemSelection selectedParty={selectedParty} clearField={mockClearFunction} />);
 
   const clearSelection = screen.getByTestId('ClearOutlinedIcon');

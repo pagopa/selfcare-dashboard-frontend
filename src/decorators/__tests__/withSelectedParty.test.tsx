@@ -12,17 +12,17 @@ import {
 import { verifyFetchPartyProductsMockExecution } from '../../services/__mocks__/productService';
 import withSelectedParty from '../withSelectedParty';
 
-jest.mock('../../services/partyService');
-jest.mock('../../services/productService');
+vi.mock('../../services/partyService');
+vi.mock('../../services/productService');
 
 const expectedPartyId: string = '1';
 
-let fetchPartyDetailsSpy: jest.SpyInstance;
-let fetchPartyProductsSpy: jest.SpyInstance;
+let fetchPartyDetailsSpy: vi.SpyInstance;
+let fetchPartyProductsSpy: vi.SpyInstance;
 
 beforeEach(() => {
-  fetchPartyDetailsSpy = jest.spyOn(require('../../services/partyService'), 'fetchPartyDetails');
-  fetchPartyProductsSpy = jest.spyOn(require('../../services/productService'), 'fetchProducts');
+  fetchPartyDetailsSpy = vi.spyOn(require('../../services/partyService'), 'fetchPartyDetails');
+  fetchPartyProductsSpy = vi.spyOn(require('../../services/productService'), 'fetchProducts');
 });
 
 const renderApp = async (

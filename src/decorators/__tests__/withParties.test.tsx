@@ -5,7 +5,7 @@ import withParties from '../withParties';
 import { verifyFetchPartiesMockExecution } from '../../services/__mocks__/partyService';
 import React from 'react';
 
-jest.mock('../../services/partyService');
+vi.mock('../../services/partyService');
 
 const renderApp = (injectedStore?: any) => {
   const store = injectedStore ? injectedStore : createStore();
@@ -19,10 +19,10 @@ const renderApp = (injectedStore?: any) => {
   return store;
 };
 
-let fetchPartiesSpy: jest.SpyInstance;
+let fetchPartiesSpy: vi.SpyInstance;
 
 beforeEach(() => {
-  fetchPartiesSpy = jest.spyOn(require('../../services/partyService'), 'fetchParties');
+  fetchPartiesSpy = vi.spyOn(require('../../services/partyService'), 'fetchParties');
 });
 
 test('Test', async () => {
