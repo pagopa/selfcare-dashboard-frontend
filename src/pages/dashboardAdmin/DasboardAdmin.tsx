@@ -73,7 +73,7 @@ const DashboardAdminPage: React.FC = () => {
         lg={hideLabels ? 11 : 10}
       >
         <Switch>
-          <Route path={ENV.ROUTES.ADMIN_SEARCH} exact={false}>
+          <Route path={[ENV.ROUTES.ADMIN_SEARCH, ENV.ROUTES.ADMIN_CONTRACT]} exact={false}>
             {<RemoteRoutingAdmin history={history} store={store} theme={theme} i18n={i18n} />}
           </Route>
         </Switch>
