@@ -54,7 +54,7 @@ export const mockedDelegations: Array<DelegationResource> = [
 
 export const fetchDelegations = (partyId: string): Promise<Array<DelegationResource>> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PRODUCTS === 'true') {
     return new Promise((resolve) =>
       resolve(mockedDelegations.filter((d) => d.institutionId === partyId))
     );

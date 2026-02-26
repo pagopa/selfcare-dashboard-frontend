@@ -1,20 +1,21 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
+import { Mock } from 'vitest';
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../../../decorators/__mocks__/withSelectedParty';
 import { createStore } from '../../../redux/store';
 import Dashboard from '../Dashboard';
 import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 
-jest.mock('../../../decorators/withSelectedParty');
-jest.mock('@mui/material/useMediaQuery');
+vi.mock('../../../decorators/withSelectedParty');
+vi.mock('@mui/material/useMediaQuery');
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
-  assign: jest.fn(),
+  assign: vi.fn(),
   pathname: '',
   origin: 'MOCKED_ORIGIN',
   search: '',
@@ -31,7 +32,7 @@ afterAll(() => {
 });
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   cleanup();
 });
 
@@ -85,7 +86,7 @@ test('Test routing', async () => {
 });
 
 test('Test rendering on mobile', async () => {
-  (useMediaQuery as jest.Mock).mockReturnValue(true);
+  (useMediaQuery as Mock).mockReturnValue(true);
 
   renderDashboard();
 
@@ -110,7 +111,7 @@ test('Test rendering on mobile', async () => {
 });
 
 test('Test rendering on desktop', async () => {
-  (useMediaQuery as jest.Mock).mockReturnValue(false);
+  (useMediaQuery as Mock).mockReturnValue(false);
 
   renderDashboard();
 

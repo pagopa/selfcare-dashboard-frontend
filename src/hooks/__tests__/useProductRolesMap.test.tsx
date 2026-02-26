@@ -4,40 +4,38 @@ import { useAppSelector } from '../../redux/hooks';
 import { fetchProductRoles } from '../../services/productService';
 import { useProductsRolesMap } from '../useProductsRolesMap';
 
-jest.mock('../../redux/hooks', () => ({
-  useAppSelector: jest.fn(),
+vi.mock('../../redux/hooks', () => ({
+  useAppSelector: vi.fn(),
 }));
 
-jest.mock('@pagopa/selfcare-common-frontend/lib', () => ({
-  usePermissions: jest.fn(),
+vi.mock('@pagopa/selfcare-common-frontend/lib', () => ({
+  usePermissions: vi.fn(),
 }));
 
-jest.mock('@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue', () => jest.fn());
+vi.mock('@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue', () => vi.fn());
 
-jest.mock('../../services/productService', () => ({
-  fetchProductRoles: jest.fn(),
+vi.mock('../../services/productService', () => ({
+  fetchProductRoles: vi.fn(),
 }));
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useMemo: jest.fn((fn) => fn()),
+vi.mock('react', () => ({
+  useMemo: vi.fn((fn) => fn()),
 }));
 
 describe('useProductsRolesMap', () => {
-  const mockHasPermission = jest.fn();
-  const mockUseReduxCachedValue = jest.fn();
-  const mockFetchProductRoles = jest.fn();
+  const mockHasPermission = vi.fn();
+  const mockUseReduxCachedValue = vi.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    (usePermissions as jest.Mock).mockReturnValue({
+    (usePermissions as Mock).mockReturnValue({
       hasPermission: mockHasPermission,
     });
-    (useReduxCachedValue as jest.Mock).mockImplementation(mockUseReduxCachedValue);
-    (fetchProductRoles as jest.Mock).mockResolvedValue([]);
+    (useReduxCachedValue as Mock).mockImplementation(mockUseReduxCachedValue);
+    (fetchProductRoles as Mock).mockResolvedValue([]);
 
-    (useAppSelector as jest.Mock)
+    (useAppSelector as Mock)
       .mockImplementationOnce(() => ({
         id: 'test-party',
         products: [
@@ -57,7 +55,7 @@ describe('useProductsRolesMap', () => {
   });
 
   it('should skip product role fetch if no active and accessible products', async () => {
-    (useAppSelector as jest.Mock)
+    (useAppSelector as Mock)
       .mockImplementationOnce(() => ({ products: [] }))
       .mockImplementationOnce(() => [])
       .mockImplementationOnce(() => ({}));

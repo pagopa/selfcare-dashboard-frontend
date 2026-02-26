@@ -10,7 +10,7 @@ const mockProps = {
   open: true,
   title: 'Test Title',
   message: 'Test Message',
-  handleClose: jest.fn(),
+  handleClose: vi.fn(),
   t: (key: string) => key,
   productEnvironments: [
     { environment: 'Collaudo', url: 'http://example.com/collaudo' },
@@ -38,8 +38,8 @@ test('renders and selects environment radio buttons correctly', () => {
 });
 
 test('enviroment collaudo', () => {
-  const handleClose = jest.fn();
-  const handleConfirm = jest.fn();
+  const handleClose = vi.fn();
+  const handleConfirm = vi.fn();
 
   const mockProps = {
     open: true,
@@ -60,8 +60,8 @@ test('enviroment collaudo', () => {
 });
 
 test('enviroment attestazione', () => {
-  const handleClose = jest.fn();
-  const handleConfirm = jest.fn();
+  const handleClose = vi.fn();
+  const handleConfirm = vi.fn();
 
   const mockProps = {
     open: true,

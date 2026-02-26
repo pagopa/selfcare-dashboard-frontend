@@ -1,4 +1,3 @@
-import React from 'react';
 import { renderWithProviders } from '../../../../utils/test-utils';
 import AddDelegationPage from '../AddDelegationPage';
 import { mockedParties } from '../../../../services/__mocks__/partyService';

@@ -1,3 +1,4 @@
+import { Mock } from 'vitest';
 import { mockedBrokerResource } from '../../api/__mocks__/DashboardApiClient';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { institutionBaseResource2BaseParty, institutionResource2Party } from '../../model/Party';
@@ -10,32 +11,32 @@ import {
 import { mockedBaseParties, mockedParties } from './../__mocks__/partyService';
 
 // Mock the DashboardApi methods
-jest.mock('../../api/DashboardApiClient', () => ({
+vi.mock('../../api/DashboardApiClient', () => ({
   DashboardApi: {
-    getInstitutions: jest.fn(),
-    getInstitution: jest.fn(),
-    getProductBrokers: jest.fn(),
-    createDelegation: jest.fn()
+    getInstitutions: vi.fn(),
+    getInstitution: vi.fn(),
+    getProductBrokers: vi.fn(),
+    createDelegation: vi.fn()
   }
 }));
 
 describe('yourModuleFile tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('fetchParties', () => {
-    test('returns mockedBaseParties when REACT_APP_API_MOCK_PARTIES is true', async () => {
-      process.env.REACT_APP_API_MOCK_PARTIES = 'true';
+    test('returns mockedBaseParties when VITE_API_MOCK_PARTIES is true', async () => {
+      import.meta.env.VITE_API_MOCK_PARTIES = 'true';
 
       const result = await fetchParties();
       expect(result).toEqual(mockedBaseParties);
     });
 
     test('calls DashboardApi.getInstitutions and maps the result', async () => {
-      process.env.REACT_APP_API_MOCK_PARTIES = 'false';
+      import.meta.env.VITE_API_MOCK_PARTIES = 'false';
       const mockedInstitutions = [{ id: '1', name: 'Institution 1' }];
-      (DashboardApi.getInstitutions as jest.Mock).mockResolvedValue(mockedInstitutions);
+      (DashboardApi.getInstitutions as Mock).mockResolvedValue(mockedInstitutions);
 
       const result = await fetchParties();
       expect(DashboardApi.getInstitutions).toHaveBeenCalled();
@@ -44,8 +45,8 @@ describe('yourModuleFile tests', () => {
   });
 
   describe('fetchPartyDetails', () => {
-    test('returns the matching party from mockedParties when REACT_APP_API_MOCK_PARTIES is true', async () => {
-      process.env.REACT_APP_API_MOCK_PARTIES = 'true';
+    test('returns the matching party from mockedParties when VITE_API_MOCK_PARTIES is true', async () => {
+      import.meta.env.VITE_API_MOCK_PARTIES = 'true';
       const partyId = '1';
 
       const result = await fetchPartyDetails(partyId);
@@ -53,10 +54,10 @@ describe('yourModuleFile tests', () => {
     });
 
     test('calls DashboardApi.getInstitution and maps the result', async () => {
-      process.env.REACT_APP_API_MOCK_PARTIES = 'false';
+      import.meta.env.VITE_API_MOCK_PARTIES = 'false';
       const partyId = '1';
       const mockedInstitution = { id: '1', name: 'Institution 1' };
-      (DashboardApi.getInstitution as jest.Mock).mockResolvedValue(mockedInstitution);
+      (DashboardApi.getInstitution as Mock).mockResolvedValue(mockedInstitution);
 
       const result = await fetchPartyDetails(partyId);
       expect(DashboardApi.getInstitution).toHaveBeenCalledWith(partyId);
@@ -65,8 +66,8 @@ describe('yourModuleFile tests', () => {
   });
 
   describe('getProductBrokers', () => {
-    test('returns mockedBrokerResource when REACT_APP_API_MOCK_PARTIES is true', async () => {
-      process.env.REACT_APP_API_MOCK_PARTIES = 'true';
+    test('returns mockedBrokerResource when VITE_API_MOCK_PARTIES is true', async () => {
+      import.meta.env.VITE_API_MOCK_PARTIES = 'true';
       const partyId = '1';
       const institutionType = 'SCP';
 
@@ -75,11 +76,11 @@ describe('yourModuleFile tests', () => {
     });
 
     test('calls DashboardApi.getProductBrokers', async () => {
-      process.env.REACT_APP_API_MOCK_PARTIES = 'false';
+      import.meta.env.VITE_API_MOCK_PARTIES = 'false';
       const partyId = '1';
       const institutionType = 'PA';
       const mockedBrokers = [{ id: 'broker1', name: 'Broker 1' }];
-      (DashboardApi.getProductBrokers as jest.Mock).mockResolvedValue(mockedBrokers);
+      (DashboardApi.getProductBrokers as Mock).mockResolvedValue(mockedBrokers);
 
       const result = await getProductBrokers(partyId, institutionType);
       expect(DashboardApi.getProductBrokers).toHaveBeenCalledWith(partyId, institutionType);
@@ -88,8 +89,8 @@ describe('yourModuleFile tests', () => {
   });
 
   describe('createDelegation', () => {
-    test('returns a mock delegation ID when REACT_APP_API_MOCK_PARTIES is true', async () => {
-      process.env.REACT_APP_API_MOCK_PARTIES = 'true';
+    test('returns a mock delegation ID when VITE_API_MOCK_PARTIES is true', async () => {
+      import.meta.env.VITE_API_MOCK_PARTIES = 'true';
       const party = { partyId: 'party1' } as any;
       const product = { productId: 'product1' } as any;
       const techPartner = { brokerId: 'broker1' } as any;
@@ -99,12 +100,12 @@ describe('yourModuleFile tests', () => {
     });
 
     test('calls DashboardApi.createDelegation', async () => {
-      process.env.REACT_APP_API_MOCK_PARTIES = 'false';
+      import.meta.env.VITE_API_MOCK_PARTIES = 'false';
       const party = { partyId: 'party1' } as any;
       const product = { productId: 'product1' } as any;
       const techPartner = { brokerId: 'broker1' } as any;
       const mockDelegationId = { id: 'realRelId' };
-      (DashboardApi.createDelegation as jest.Mock).mockResolvedValue(mockDelegationId);
+      (DashboardApi.createDelegation as Mock).mockResolvedValue(mockDelegationId);
 
       const result = await createDelegation(party, product, techPartner);
       expect(DashboardApi.createDelegation).toHaveBeenCalledWith(party, product, techPartner);

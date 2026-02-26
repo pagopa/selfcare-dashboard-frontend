@@ -22,6 +22,7 @@ const loadExternalResources = () => {
   if (ENV.BASE_PATH_CDN_URL) {
     const cdnFontsLink = document.getElementById('cdn-fonts-link') as HTMLLinkElement;
     if (cdnFontsLink) {
+      // eslint-disable-next-line functional/immutable-data
       cdnFontsLink.href = `${ENV.BASE_PATH_CDN_URL}/assets/font/selfhostedfonts.css`;
     }
   }

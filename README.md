@@ -100,11 +100,11 @@ This project was migrated from CRA to Vite. Key changes:
 
 | Aspect | CRA | Vite |
 |--------|-----|------|
-| Dev Server | `REACT_APP_*` via webpack env | `VITE_*` via Vite |
+| Dev Server | `VITE_*` via webpack env | `VITE_*` via Vite |
 | Build Tool | `react-scripts` + CRACO | Vite + plugins |
 | Entry Point | `src/index.js` (synchronous) | `src/index.js` + Module Federation |
 | Module Federation | `craco-module-federation` | `@originjs/vite-plugin-federation` |
-| Env Variables | `process.env.REACT_APP_*` | `import.meta.env.VITE_*` |
+| Env Variables | `process.env.VITE_*` | `import.meta.env.VITE_*` |
 | Type Definitions | `react-app-env.d.ts` (CRA types) | `react-app-env.d.ts` (Vite types) |
 
 ### Notes for Contributors
@@ -247,8 +247,8 @@ The remote components should be put into execution locally or use the following 
 - MICROFRONTEND_URL_ADMIN
 
 ## To execute locally mocking REST invocation, modify the file .env.development.local setting
-- REACT_APP_API_MOCK_PARTIES=true
-- REACT_APP_API_MOCK_PRODUCTS=true
+- VITE_API_MOCK_PARTIES=true
+- VITE_API_MOCK_PRODUCTS=true
 
 ## To build a configured workspace execute the following command
 - yarn build

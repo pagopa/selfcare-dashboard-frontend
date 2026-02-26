@@ -8,3 +8,5 @@ src/reportWebVitals.ts
 **/generated/**
 vite.config.ts
 vitest.config.ts
+vite-env.d.ts
+e2e/

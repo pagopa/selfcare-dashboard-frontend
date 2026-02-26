@@ -1,5 +1,5 @@
-/// <reference types="vitest" />
-/// <reference types="@testing-library/jest-dom" />
+import 'vitest';
+import '@testing-library/jest-dom';
 
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:

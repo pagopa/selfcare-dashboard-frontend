@@ -1,18 +1,7 @@
-// Read environment variables set by Vite at build time (`import.meta.env.VITE_*`).
-// Variables are injected from the system environment during build.
-// For dev, set VITE_* environment variables directly (e.g., export VITE_ENV=development).
-// Keep a compatibility layer so code can still rely on old REACT_APP_* key names.
-
-type RawEnv = Record<string, unknown>;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const metaEnv: Record<string, any> = (import.meta.env || {}) as any;
-const viteEnv = ((globalThis as any).viteEnv as RawEnv) || {};
-
-function raw(key: string): string | undefined {
-  // Map CRA-style keys to Vite-style `VITE_` keys when possible
-  if (key === 'PUBLIC_URL') {
-    return metaEnv.VITE_PUBLIC_URL ?? (viteEnv.PUBLIC_URL as string | undefined);
+const getEnvVar = (key: string, required = true): string => {
+  const value = import.meta.env[key];
+  if (required && !value) {
+    throw new Error(`Missing required env var: ${key}`);
   }
   if (key.startsWith('REACT_APP_')) {
     const suffix = key.substring('REACT_APP_'.length);
@@ -22,112 +11,85 @@ function raw(key: string): string | undefined {
   return metaEnv[key] ?? (viteEnv as any)[key];
 }
 
-function getString(key: string, required = false, defaultValue?: string): string {
-  const value = raw(key);
-  if ((value === undefined || value === '') && required && defaultValue === undefined) {
-    throw new TypeError(`Environment variable ${key} is required but was not provided`);
-  }
-  return (value ?? defaultValue) as string;
-}
+const getEnvBool = (key: string, defaultValue = false): boolean => {
+  const value = import.meta.env[key];
+  return value ? value === 'true' : defaultValue;
+};
 
-function getBool(key: string, defaultValue = false): boolean {
-  const value = raw(key);
-  if (value === undefined) {
-    return defaultValue;
-  }
-  const s = String(value).toLowerCase();
-  return s === 'true' || s === '1' || s === 'yes';
-}
-
-function getInt(key: string, required = false, defaultValue?: number): number {
-  const value = raw(key);
-  if ((value === undefined || value === '') && required && defaultValue === undefined) {
-    throw new TypeError(`Environment variable ${key} is required but was not provided`);
-  }
-  if (value === undefined || value === '') {
-    return defaultValue as number;
-  }
-  const n = Number.parseInt(String(value), 10);
-  if (Number.isNaN(n)) {
-    throw new TypeError(`Environment variable ${key} is not a valid int`);
-  }
-  return n;
-}
-
-const PUBLIC_URL_INNER: string = getString('PUBLIC_URL', false, '/dashboard');
+const getEnvInt = (key: string): number => parseInt(getEnvVar(key), 10);
 
 export const ENV = {
-  ENV: getString('REACT_APP_ENV', true),
-  PUBLIC_URL: PUBLIC_URL_INNER,
+  ENV: getEnvVar('VITE_ENV'),
+  PUBLIC_URL: '/dashboard',
 
   JSON_URL: {
-    COUNTRIES: getString('REACT_APP_COUNTRY_DATA', true),
+    COUNTRIES: getEnvVar('VITE_COUNTRY_DATA'),
   },
 
-  BASE_PATH_CDN_URL: getString('REACT_APP_URL_CDN', true),
+  BASE_PATH_CDN_URL: getEnvVar('VITE_URL_CDN'),
 
   ASSISTANCE: {
-    ENABLE: getBool('REACT_APP_ENABLE_ASSISTANCE', false),
-    EMAIL: getString('REACT_APP_PAGOPA_HELP_EMAIL', true),
+    ENABLE: getEnvBool('VITE_ENABLE_ASSISTANCE', false),
+    EMAIL: getEnvVar('VITE_PAGOPA_HELP_EMAIL'),
   },
 
   URL_DOCUMENTATION: 'https://docs.pagopa.it/area-riservata/',
 
   ROUTES: {
-    OVERVIEW: `${PUBLIC_URL_INNER}/:partyId`,
-    USERS: `${PUBLIC_URL_INNER}/:partyId/users`,
-    USERS_DETAIL: `${PUBLIC_URL_INNER}/:partyId/users/:userId`,
-    PRODUCT_USERS: `${PUBLIC_URL_INNER}/:partyId/:productId/users`,
-    GROUPS: `${PUBLIC_URL_INNER}/:partyId/groups`,
-    GROUP_DETAIL: `${PUBLIC_URL_INNER}/:partyId/groups/:groupId`,
+    OVERVIEW: `/dashboard/:partyId`,
+    USERS: `/dashboard/:partyId/users`,
+    USERS_DETAIL: `/dashboard/:partyId/users/:userId`,
+    PRODUCT_USERS: `/dashboard/:partyId/:productId/users`,
+    GROUPS: `/dashboard/:partyId/groups`,
+    GROUP_DETAIL: `/dashboard/:partyId/groups/:groupId`,
 
-    ADMIN: `${PUBLIC_URL_INNER}/admin`,
-    ADMIN_PARTY_DETAIL: `${PUBLIC_URL_INNER}/admin/onboarding/:tokenId`,
-    ADMIN_SEARCH: `${getString('PUBLIC_URL', false, '')}/admin/search`,
+    ADMIN: `/dashboard/admin`,
+    ADMIN_PARTY_DETAIL: `/dashboard/admin/onboarding/:tokenId`,
+    ADMIN_SEARCH: `/dashboard/admin/search`,
   },
 
   URL_FE: {
-    LOGIN: getString('REACT_APP_URL_FE_LOGIN', true),
-    LOGOUT: getString('REACT_APP_URL_FE_LOGOUT', true),
-    ONBOARDING: getString('REACT_APP_URL_FE_ONBOARDING', true),
-    LANDING: getString('REACT_APP_URL_FE_LANDING', true),
-    ASSISTANCE: getString('REACT_APP_URL_FE_ASSISTANCE', true),
-    LOGIN_GOOGLE: getString('REACT_APP_GOOGLE_LOGIN_URL', false, '/auth/google'),
+    LOGIN: getEnvVar('VITE_URL_FE_LOGIN'),
+    LOGOUT: getEnvVar('VITE_URL_FE_LOGOUT'),
+    ONBOARDING: getEnvVar('VITE_URL_FE_ONBOARDING'),
+    LANDING: getEnvVar('VITE_URL_FE_LANDING'),
+    ASSISTANCE: getEnvVar('VITE_URL_FE_ASSISTANCE'),
+    LOGIN_GOOGLE: getEnvVar('VITE_GOOGLE_LOGIN_URL', false),
   },
 
   URL_API: {
-    API_DASHBOARD: getString('REACT_APP_URL_API_DASHBOARD', true),
-    PARTY_REGISTRY_PROXY: getString('REACT_APP_URL_API_PARTY_REGISTRY_PROXY', true),
-    ONBOARDING_V2: getString('REACT_APP_URL_API_ONBOARDING_V2', true),
+    API_DASHBOARD: getEnvVar('VITE_URL_API_DASHBOARD'),
+    PARTY_REGISTRY_PROXY: getEnvVar('VITE_URL_API_PARTY_REGISTRY_PROXY'),
+    ONBOARDING_V2: getEnvVar('VITE_URL_API_ONBOARDING_V2'),
   },
 
   GEOTAXONOMY: {
-    SHOW_GEOTAXONOMY: getBool('REACT_APP_ENABLE_GEOTAXONOMY', false),
+    SHOW_GEOTAXONOMY: getEnvBool('VITE_ENABLE_GEOTAXONOMY', false),
   },
 
   API_TIMEOUT_MS: {
-    DASHBOARD: getInt('REACT_APP_API_DASHBOARD_TIMEOUT_MS', true),
+    DASHBOARD: getEnvInt('VITE_API_DASHBOARD_TIMEOUT_MS'),
   },
 
   URL_INSTITUTION_LOGO: {
-    PREFIX: getString('REACT_APP_URL_INSTITUTION_LOGO_PREFIX', true),
-    SUFFIX: getString('REACT_APP_URL_INSTITUTION_LOGO_SUFFIX', true),
+    PREFIX: getEnvVar('VITE_URL_INSTITUTION_LOGO_PREFIX'),
+    SUFFIX: getEnvVar('VITE_URL_INSTITUTION_LOGO_SUFFIX'),
   },
 
   ANALYTCS: {
-    ENABLE: getBool('REACT_APP_ANALYTICS_ENABLE', false),
-    MOCK: getBool('REACT_APP_ANALYTICS_MOCK', false),
-    DEBUG: getBool('REACT_APP_ANALYTICS_DEBUG', false),
-    TOKEN: getString('REACT_APP_MIXPANEL_TOKEN', true),
-    API_HOST: getString('REACT_APP_MIXPANEL_API_HOST', false, 'https://api-eu.mixpanel.com'),
+    ENABLE: getEnvBool('VITE_ANALYTICS_ENABLE', false),
+    MOCK: getEnvBool('VITE_ANALYTICS_MOCK', false),
+    DEBUG: getEnvBool('VITE_ANALYTICS_DEBUG', false),
+    TOKEN: getEnvVar('VITE_MIXPANEL_TOKEN'),
+    API_HOST: getEnvVar('VITE_MIXPANEL_API_HOST', false) || 'https://api-eu.mixpanel.com',
   },
 
   DELEGATIONS: {
-    ENABLE: getBool('REACT_APP_DELEGATIONS_ENABLE', false),
+    ENABLE: getEnvBool('VITE_DELEGATIONS_ENABLE', false),
   },
 
-  MAX_ADMIN_COUNT: getString('REACT_APP_MAX_ADMIN_COUNT', false, '4'),
+  MAX_ADMIN_COUNT: getEnvVar('VITE_MAX_ADMIN_COUNT', false) || '4',
 
-  SHOW_DOCUMENTS: getBool('REACT_APP_SHOW_DOCUMENTS', false),
-  ENABLE_DORA: getBool('REACT_APP_ENABLE_DORA', false),
+  SHOW_DOCUMENTS: getEnvBool('VITE_SHOW_DOCUMENTS', false),
+  ENABLE_DORA: getEnvBool('VITE_ENABLE_DORA', false),
 };

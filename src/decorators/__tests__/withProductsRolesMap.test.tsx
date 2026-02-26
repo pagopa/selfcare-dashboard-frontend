@@ -1,15 +1,15 @@
-import { appStateActions } from '@pagopa/selfcare-common-frontend/redux/slices/appStateSlice';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { MockInstance } from 'vitest';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { createStore } from '../../redux/store';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
 import withProductsRolesMap from '../withProductsRolesMap';
 
-jest.mock('../../services/productService');
+vi.mock('../../services/productService');
 
 const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
-  const store = injectedStore ? injectedStore : createStore();
+  const store = injectedStore ?? createStore();
   const Component = () => <>RENDERED</>;
   const DecoratedComponent = withProductsRolesMap(Component);
   render(
@@ -20,10 +20,10 @@ const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
   return store;
 };
 
-let fetchProductRolesSpy: jest.SpyInstance;
+let fetchProductRolesSpy: MockInstance;
 
 beforeEach(() => {
-  fetchProductRolesSpy = jest.spyOn(require('../../services/productService'), 'fetchProductRoles');
+  fetchProductRolesSpy = vi.spyOn(require('../../services/productService'), 'fetchProductRoles');
 });
 
 test.skip('Test', async () => {
@@ -58,7 +58,7 @@ const checkProductsRolesMapLength = async (
   store: ReturnType<typeof createStore>
 ) => {
   await waitFor(() =>
-    expect(Object.keys(store.getState().parties.selectedProductsRolesMap).length).toBe(
+    expect(Object.keys(store.getState().parties?.selectedProductsRolesMap || {}).length).toBe(
       expectedProductCached
     )
   );

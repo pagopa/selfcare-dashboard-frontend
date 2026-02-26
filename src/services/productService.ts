@@ -9,7 +9,7 @@ import {
 
 export const fetchProducts = (): Promise<Array<Product>> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PRODUCTS === 'true') {
     return Promise.resolve(mockedPartyProducts);
   } else {
     return DashboardApi.getProducts().then((productResources) =>
@@ -24,7 +24,7 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
     activeOnboardings.find((p) => p.productId === product.id)?.institutionType ?? '';
 
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PRODUCTS === 'true') {
     return fetchProductRolesMocked(product, party);
   } else {
     return DashboardApi.getProductRoles(product.id, institutionTypeOnActiveOnboarding)
