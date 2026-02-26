@@ -55,6 +55,7 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
+    base: '/dashboard/',
     build: {
       outDir: 'dist',
       target: 'esnext',
