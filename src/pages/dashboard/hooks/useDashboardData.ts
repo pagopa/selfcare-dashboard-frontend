@@ -1,6 +1,6 @@
 // src/pages/dashboard/useDashboardData.ts
-import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { usePermissions } from '@pagopa/selfcare-common-frontend';
+import { Actions } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useMemo } from 'react';
 import { Party } from '../../../model/Party';
 import { Product, ProductsMap, buildProductsMap } from '../../../model/Product';

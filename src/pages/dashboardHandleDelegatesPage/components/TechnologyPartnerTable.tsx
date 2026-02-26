@@ -1,7 +1,7 @@
 import { CircularProgress } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend/lib';
+import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DelegationWithInfo } from '../../../api/generated/b4f-dashboard/DelegationWithInfo';

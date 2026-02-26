@@ -16,7 +16,7 @@ function raw(key: string): string | undefined {
   }
   if (key.startsWith('REACT_APP_')) {
     const suffix = key.substring('REACT_APP_'.length);
-    return metaEnv[`VITE_${suffix}`] ?? (viteEnv as any)[key];
+    return metaEnv[`VITE_${suffix}`] ?? metaEnv[key] ?? (viteEnv as any)[key];
   }
   // Fallback to direct VITE_ key if provided
   return metaEnv[key] ?? (viteEnv as any)[key];

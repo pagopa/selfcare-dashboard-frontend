@@ -1,4 +1,4 @@
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GeographicTaxonomyResource } from '../../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';

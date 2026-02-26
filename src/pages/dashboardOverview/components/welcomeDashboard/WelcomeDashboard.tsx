@@ -1,8 +1,8 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Grid } from '@mui/material';
-import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
+import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
 import { useTranslation } from 'react-i18next';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/utils/storage';
 
 type Props = {
   setOpen: (open: boolean) => void;

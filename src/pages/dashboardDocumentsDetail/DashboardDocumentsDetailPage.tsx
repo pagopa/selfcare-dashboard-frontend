@@ -17,12 +17,12 @@ import {
   useErrorDispatcher,
   useLoading,
   usePermissions,
-} from '@pagopa/selfcare-common-frontend/lib';
-import BackComponent from '@pagopa/selfcare-common-frontend/lib/components/BackComponent';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+} from '@pagopa/selfcare-common-frontend';
+import BackComponent from '@pagopa/selfcare-common-frontend/components/BackComponent';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { Actions } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';

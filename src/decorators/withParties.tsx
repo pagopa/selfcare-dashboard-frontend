@@ -1,5 +1,5 @@
-import withRetrievedValue from '@pagopa/selfcare-common-frontend/lib/decorators/withRetrievedValue';
-import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import withRetrievedValue from '@pagopa/selfcare-common-frontend/decorators/withRetrievedValue';
+import { storageUserOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import React from 'react';
 import { useParties } from '../hooks/useParties';
 import { BaseParty } from '../model/Party';

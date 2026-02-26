@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DelegationWithInfo } from '../../../api/generated/b4f-dashboard/DelegationWithInfo';

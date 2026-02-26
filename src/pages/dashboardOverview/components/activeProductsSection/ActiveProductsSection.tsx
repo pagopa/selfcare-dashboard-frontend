@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
-import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { usePermissions } from '@pagopa/selfcare-common-frontend';
+import TitleBox from '@pagopa/selfcare-common-frontend/components/TitleBox';
+import { Actions } from '@pagopa/selfcare-common-frontend/utils/constants';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';

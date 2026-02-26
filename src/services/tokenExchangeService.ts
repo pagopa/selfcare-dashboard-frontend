@@ -1,4 +1,4 @@
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { DashboardApi } from '../api/DashboardApiClient';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';

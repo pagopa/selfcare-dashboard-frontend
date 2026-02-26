@@ -1,6 +1,6 @@
 import NavigationBar, {
   NavigationPath,
-} from '@pagopa/selfcare-common-frontend/lib/components/NavigationBar';
+} from '@pagopa/selfcare-common-frontend/components/NavigationBar';
 import { useMemo } from 'react';
 import { Product } from '../model/Product';
 

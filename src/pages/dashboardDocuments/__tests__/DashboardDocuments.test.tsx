@@ -1,4 +1,4 @@
-import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/redux/slices/permissionsSlice';
 import { fireEvent, screen } from '@testing-library/react';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';

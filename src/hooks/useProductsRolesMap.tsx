@@ -1,6 +1,6 @@
-import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import useReduxCachedValue from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { usePermissions } from '@pagopa/selfcare-common-frontend';
+import useReduxCachedValue from '@pagopa/selfcare-common-frontend/hooks/useReduxCachedValue';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useMemo } from 'react';
 import { Party } from '../model/Party';
 import {
@@ -55,11 +55,11 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
     fetchProductRolesNotYetCached,
     (state: RootState) =>
       !activeAndAccessibleProducts ||
-      (state.parties.selectedProductsRolesMap &&
-        !activeAndAccessibleProducts.find(
-          (p) =>
-            !state.parties.selectedProductsRolesMap?.[p.id] || productsRolesMap[PRODUCT_IDS.PAGOPA]
-        ))
+        (state.parties.selectedProductsRolesMap &&
+          !activeAndAccessibleProducts.find(
+            (p) =>
+              !state.parties.selectedProductsRolesMap?.[p.id] || productsRolesMap[PRODUCT_IDS.PAGOPA]
+          ))
         ? state.parties.selectedProductsRolesMap
         : undefined,
     partiesActions.setPartySelectedProductsRolesMap

@@ -1,5 +1,5 @@
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { uniqueId } from 'lodash';
 import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';

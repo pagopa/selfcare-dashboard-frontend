@@ -5,9 +5,9 @@ import {
   useErrorDispatcher,
   useLoading,
   usePermissions,
-} from '@pagopa/selfcare-common-frontend/lib';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+} from '@pagopa/selfcare-common-frontend';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../api/DashboardApiClient';
@@ -238,7 +238,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         onConfirm={() => handleAddNewTaxonomies()}
         onConfirmEnabled={isAddNewAutocompleteEnabled}
         showCloseButton={false}
-        handleClose={() => {}}
+        handleClose={() => { }}
       />
 
       <SessionModal

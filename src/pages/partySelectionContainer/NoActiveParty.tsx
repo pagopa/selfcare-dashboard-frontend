@@ -1,5 +1,5 @@
 import { Grid, Button, Typography, Box, Paper, useTheme } from '@mui/material';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { Trans, useTranslation } from 'react-i18next';
 import { ENV } from '../../utils/env';
 import { BaseParty } from '../../model/Party';
@@ -79,8 +79,8 @@ export default function NoActiveParty({ parties }: Props) {
                     party.status === 'PENDING'
                       ? t('partySelection.partyStatus.pending')
                       : party.status === 'TOBEVALIDATED'
-                      ? t('partySelection.partyStatus.toBeValidated')
-                      : ''
+                        ? t('partySelection.partyStatus.toBeValidated')
+                        : ''
                   }
                   parentPartyName={party.parentDescription}
                 />

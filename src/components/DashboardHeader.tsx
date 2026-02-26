@@ -1,11 +1,11 @@
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { Header, SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { Actions, roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { Header, SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
+import { User } from '@pagopa/selfcare-common-frontend/model/User';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { Actions, roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -130,8 +130,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               isPagoPaUser && !location.pathname?.includes('admin')
                 ? undefined
                 : t(
-                    roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey
-                  ),
+                  roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey
+                ),
             logoUrl: party?.urlLogo,
             parentName: party?.parentDescription,
           })) ?? []
@@ -140,11 +140,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         loggedUser={
           loggedUser
             ? {
-                id: loggedUser ? loggedUser.uid : '',
-                name: loggedUser?.name,
-                surname: loggedUser?.surname,
-                email: loggedUser?.email,
-              }
+              id: loggedUser ? loggedUser.uid : '',
+              name: loggedUser?.name,
+              surname: loggedUser?.surname,
+              email: loggedUser?.email,
+            }
             : false
         }
         enableAssistanceButton={ENV.ENV !== 'UAT' && !isPagoPaUser}
@@ -152,11 +152,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         onDocumentationClick={
           showDocBtn
             ? () => {
-                trackEvent('OPEN_OPERATIVE_MANUAL', {
-                  from: 'dashboard',
-                });
-                window.open(ENV.URL_DOCUMENTATION, '_blank');
-              }
+              trackEvent('OPEN_OPERATIVE_MANUAL', {
+                from: 'dashboard',
+              });
+              window.open(ENV.URL_DOCUMENTATION, '_blank');
+            }
             : undefined
         }
         enableLogin={true}

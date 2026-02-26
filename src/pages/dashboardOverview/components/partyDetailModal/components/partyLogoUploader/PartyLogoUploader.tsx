@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { uniqueId } from 'lodash';
 import { useState } from 'react';
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';

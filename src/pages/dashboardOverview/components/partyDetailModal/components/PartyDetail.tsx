@@ -2,8 +2,8 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Divider, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { usePermissions } from '@pagopa/selfcare-common-frontend';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 import { useAppSelector } from '../../../../../redux/hooks';
@@ -250,11 +250,11 @@ export default function PartyDetail({
             isForeignInsurence
               ? formattedForeignAddress
               : party.zipCode
-              ? `${party.registeredOffice} - ${party.zipCode} ${getCountryNameByAlpha2(
+                ? `${party.registeredOffice} - ${party.zipCode} ${getCountryNameByAlpha2(
                   countries,
                   party.country
                 )}`
-              : `${party.registeredOffice} ${getCountryNameByAlpha2(countries, party.country)}`
+                : `${party.registeredOffice} ${getCountryNameByAlpha2(countries, party.country)}`
           }
           tooltipText={getTooltipText(
             isForeignInsurence,

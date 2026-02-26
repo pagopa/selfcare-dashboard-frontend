@@ -1,5 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 import { store } from '../../../../../redux/store';
 import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { renderWithProviders } from '../../../../../utils/test-utils';

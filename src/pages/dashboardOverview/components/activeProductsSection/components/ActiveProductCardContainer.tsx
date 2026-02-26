@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material';
-import { SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -105,8 +105,8 @@ export default function ActiveProductCardContainer({
               : productOnboarded?.backOfficeEnvironmentConfigurations &&
                 productOnboarded.backOfficeEnvironmentConfigurations.length > 0 &&
                 productOnboarded.id !== INTEROP_PRODUCT_ENUM.INTEROP
-              ? setOpenGenericEnvProductModal(true)
-              : invokeProductBo(productOnboarded, party, undefined, lang)
+                ? setOpenGenericEnvProductModal(true)
+                : invokeProductBo(productOnboarded, party, undefined, lang)
           }
           party={party}
           product={productOnboarded}

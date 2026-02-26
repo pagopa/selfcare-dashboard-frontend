@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
-import { useErrorDispatcher, useUserNotify } from '@pagopa/selfcare-common-frontend/lib';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { useErrorDispatcher, useUserNotify } from '@pagopa/selfcare-common-frontend';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
@@ -58,8 +58,7 @@ export default function NotActiveProductCardContainer({ party, product }: Readon
     }
 
     window.location.assign(
-      `${ENV.URL_FE.ONBOARDING}/${product.id}${
-        baseProductWithExistingSubProductNotOnboarded ? `/${existingSubProductNotOnboarded.id}` : ''
+      `${ENV.URL_FE.ONBOARDING}/${product.id}${baseProductWithExistingSubProductNotOnboarded ? `/${existingSubProductNotOnboarded.id}` : ''
       }${queryParam}${subUnitType}${subUnitCode}`
     );
   };

@@ -1,6 +1,6 @@
-import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
-import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/redux/slices/permissionsSlice';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { ProductsRolesMap } from '../model/ProductRole';
@@ -57,7 +57,7 @@ export const useSelectedParty = (): {
         throw new Error(`Cannot find partyId ${partyId}`);
       }
     });
-    
+
   const fetchProductLists = () =>
     fetchProducts().then((products) => {
       if (products) {

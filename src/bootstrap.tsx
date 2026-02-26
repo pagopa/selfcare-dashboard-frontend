@@ -1,8 +1,8 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 import '@pagopa/selfcare-common-frontend/index.css';
-import LoadingOverlay from '@pagopa/selfcare-common-frontend/lib/components/Loading/LoadingOverlay';
-import { CONFIG } from '@pagopa/selfcare-common-frontend/lib/config/env';
+import LoadingOverlay from '@pagopa/selfcare-common-frontend/components/Loading/LoadingOverlay';
+import { CONFIG } from '@pagopa/selfcare-common-frontend/config/env';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';

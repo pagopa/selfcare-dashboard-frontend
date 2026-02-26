@@ -12,13 +12,13 @@ import {
   useErrorDispatcher,
   useLoading,
   usePermissions,
-} from '@pagopa/selfcare-common-frontend/lib';
-import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib/hooks/useUnloadEventInterceptor';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+} from '@pagopa/selfcare-common-frontend';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { Actions } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';

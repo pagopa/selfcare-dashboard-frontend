@@ -8,11 +8,11 @@
 import '@testing-library/jest-dom';
 import './locale';
 import { vi, beforeEach, beforeAll } from 'vitest';
-import i18n from '@pagopa/selfcare-common-frontend/dist/locale/locale-utils';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 
 beforeEach(() => {
-  vi.spyOn(console, 'warn').mockImplementation(() => {});
-  vi.spyOn(console, 'error').mockImplementation(() => {});
+  vi.spyOn(console, 'warn').mockImplementation(() => { });
+  vi.spyOn(console, 'error').mockImplementation(() => { });
 });
 
 beforeAll(async () => {

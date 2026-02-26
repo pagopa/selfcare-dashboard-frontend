@@ -1,5 +1,5 @@
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/redux/slices/permissionsSlice';
 import { fireEvent, screen } from '@testing-library/react';
 import '../../../locale';
 import { Party } from '../../../model/Party';

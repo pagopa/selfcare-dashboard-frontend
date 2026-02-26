@@ -1,10 +1,10 @@
 import { ArrowForward } from '@mui/icons-material';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/hooks/usePermissions';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
+import { Actions } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';

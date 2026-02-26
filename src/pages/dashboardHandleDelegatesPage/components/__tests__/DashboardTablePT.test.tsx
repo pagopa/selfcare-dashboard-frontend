@@ -9,7 +9,7 @@ import { DelegationWithInfo } from '../../../../api/generated/b4f-dashboard/Dele
 import { DelegationWithPagination } from '../../../../api/generated/b4f-dashboard/DelegationWithPagination';
 import { createStore } from '../../../../redux/store';
 import TechPartnersTable from '../TechPartnersTable';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 
 beforeAll(() => {
   i18n.changeLanguage('it');

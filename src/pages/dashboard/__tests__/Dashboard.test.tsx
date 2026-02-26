@@ -7,7 +7,7 @@ import { Router } from 'react-router';
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../../../decorators/__mocks__/withSelectedParty';
 import { createStore } from '../../../redux/store';
 import Dashboard from '../Dashboard';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 
 jest.mock('../../../decorators/withSelectedParty');
 jest.mock('@mui/material/useMediaQuery');

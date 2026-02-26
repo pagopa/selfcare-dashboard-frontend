@@ -1,8 +1,8 @@
-import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
+import { User } from '@pagopa/selfcare-common-frontend/model/User';
 import {
   userActions,
   userSelectors,
-} from '@pagopa/selfcare-common-frontend/lib/redux/slices/userSlice';
+} from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { RootState } from '../../../../redux/store';

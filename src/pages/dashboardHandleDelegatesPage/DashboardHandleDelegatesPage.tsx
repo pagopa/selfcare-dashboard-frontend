@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
-import { TitleBox } from '@pagopa/selfcare-common-frontend/lib';
+import { TitleBox } from '@pagopa/selfcare-common-frontend';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../model/Party';
 import TechnologyPartnerTable from './components/TechnologyPartnerTable';
@@ -33,7 +33,7 @@ export default function DashboardHandleDelegatesPage({ party }: Readonly<Props>)
           </Grid>
           {/* Table */}
           <Grid item xs={12}>
-            <TechnologyPartnerTable party={party}/>
+            <TechnologyPartnerTable party={party} />
           </Grid>
         </Grid>
       </Grid>

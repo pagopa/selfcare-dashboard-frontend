@@ -1,4 +1,4 @@
-import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/redux/slices/permissionsSlice';
 import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';

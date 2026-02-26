@@ -5,9 +5,9 @@ import {
   useErrorDispatcher,
   usePermissions,
   useUnloadEventOnExit,
-} from '@pagopa/selfcare-common-frontend/lib';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+} from '@pagopa/selfcare-common-frontend';
+import { Actions } from '@pagopa/selfcare-common-frontend/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';

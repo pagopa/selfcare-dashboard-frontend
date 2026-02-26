@@ -10,7 +10,7 @@ import {
   TextField,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend/lib';
+import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { GeographicTaxonomyResource } from '../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';

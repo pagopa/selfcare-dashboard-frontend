@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import GenericEnvProductModal from '../GenericEnvProductModal'; // Adjust the import as needed
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import i18n from '@pagopa/selfcare-common-frontend/locale/locale-utils';
 
 beforeAll(() => {
   i18n.changeLanguage('it');

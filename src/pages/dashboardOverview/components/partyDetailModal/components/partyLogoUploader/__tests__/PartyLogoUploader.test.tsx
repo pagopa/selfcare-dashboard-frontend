@@ -1,4 +1,4 @@
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
+import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { screen, waitFor } from '@testing-library/react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';

@@ -22,8 +22,8 @@ import {
   useLoading,
   useUnloadEventOnExit,
   useUserNotify,
-} from '@pagopa/selfcare-common-frontend/lib';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+} from '@pagopa/selfcare-common-frontend';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -336,9 +336,9 @@ export default function AddDelegationForm({
               }}
               sx={{
                 '.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot':
-                  {
-                    paddingRight: 2,
-                  },
+                {
+                  paddingRight: 2,
+                },
               }}
               ListboxProps={{
                 style: {
@@ -377,7 +377,7 @@ export default function AddDelegationForm({
                     '.MuiAutocomplete-noOptions': () => ({
                       display:
                         (selectedRadioValue === 'fiscalCode' && !inputValue.length) ||
-                        techPartnerSelected
+                          techPartnerSelected
                           ? 'none'
                           : 'block',
                     }),

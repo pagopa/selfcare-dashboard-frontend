@@ -1,4 +1,4 @@
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { GeographicTaxonomy } from '../../api/generated/b4f-dashboard/GeographicTaxonomy';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { BaseParty, Party } from '../../model/Party';

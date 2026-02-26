@@ -1,5 +1,5 @@
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';

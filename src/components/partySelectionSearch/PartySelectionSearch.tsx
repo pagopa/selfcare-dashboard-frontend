@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { roleLabels } from '@pagopa/selfcare-common-frontend/utils/constants';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BaseParty } from '../../model/Party';
@@ -56,7 +56,7 @@ export default function PartySelectionSearch({
       if (
         containerRef.current &&
         containerRef.current.scrollHeight - containerRef.current.scrollTop <=
-          containerRef.current.clientHeight + 20 &&
+        containerRef.current.clientHeight + 20 &&
         filteredParties.length > visibleParties.length
       ) {
         // User has scrolled to the bottom, load more parties
@@ -173,8 +173,8 @@ export default function PartySelectionSearch({
                               party.status === 'PENDING'
                                 ? t('partySelection.partyStatus.pending')
                                 : party.status === 'TOBEVALIDATED'
-                                ? t('partySelection.partyStatus.toBeValidated')
-                                : ''
+                                  ? t('partySelection.partyStatus.toBeValidated')
+                                  : ''
                             }
                             action={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
                               handleListItemClick(event, party)

@@ -4,9 +4,9 @@ import {
   LoadingOverlay,
   UnloadEventHandler,
   UserNotifyHandle,
-} from '@pagopa/selfcare-common-frontend/lib';
-import withLogin from '@pagopa/selfcare-common-frontend/lib/decorators/withLogin';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+} from '@pagopa/selfcare-common-frontend';
+import { withLogin } from '@pagopa/selfcare-common-frontend';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
@@ -31,7 +31,7 @@ const App = () => {
   const history = useHistory();
 
   return (
-    <ErrorBoundary>
+    <ErrorBoundary t={i18n.t}>
       <Layout>
         <LoadingOverlay />
         <UserNotifyHandle />

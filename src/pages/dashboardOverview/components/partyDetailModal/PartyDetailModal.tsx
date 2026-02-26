@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Drawer, Grid, IconButton, Link, Typography, styled } from '@mui/material';
-import { useLoading } from '@pagopa/selfcare-common-frontend/lib';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { useLoading } from '@pagopa/selfcare-common-frontend';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Party } from '../../../../model/Party';

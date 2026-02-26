@@ -1,6 +1,6 @@
-import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
-import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/hooks/useErrorDispatcher';
+import useLoading from '@pagopa/selfcare-common-frontend/hooks/useLoading';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/utils/routes-utils';
 import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useProductRoles } from '../hooks/useProductRoles';
@@ -58,7 +58,7 @@ export default function withSelectedPartyProduct<T extends WrappedComponentProps
 
     const doFetchProductRoles = (onRetry?: () => void): Promise<ProductRolesLists> => {
       setLoading_fetchProductRoles(true);
-      return fetchSelectedProductRoles({product:selectedPartyProduct as Product, party: party as Party})
+      return fetchSelectedProductRoles({ product: selectedPartyProduct as Product, party: party as Party })
         .catch((reason) => {
           addError({
             id: `FETCH_PRODUCT_ROLES_ERROR_${selectedPartyProduct?.id}`,

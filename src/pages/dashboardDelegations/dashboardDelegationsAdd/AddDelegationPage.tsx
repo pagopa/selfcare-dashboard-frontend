@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import { TitleBox, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { TitleBox, usePermissions } from '@pagopa/selfcare-common-frontend';
+import { Actions } from '@pagopa/selfcare-common-frontend/utils/constants';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import ProductNavigationBar from '../../../components/ProductNavigationBar';

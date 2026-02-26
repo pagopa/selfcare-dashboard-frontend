@@ -1,7 +1,7 @@
 import { Box, Grid } from '@mui/material';
-import { Footer } from '@pagopa/selfcare-common-frontend/lib';
-import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib/hooks/useUnloadEventInterceptor';
-import { userSelectors } from '@pagopa/selfcare-common-frontend/lib/redux/slices/userSlice';
+import { Footer } from '@pagopa/selfcare-common-frontend';
+import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/hooks/useUnloadEventInterceptor';
+import { userSelectors } from '@pagopa/selfcare-common-frontend/redux/slices/userSlice';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import withParties from '../../decorators/withParties';

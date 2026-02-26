@@ -1,5 +1,5 @@
-import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import useReduxCachedValue from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
+import { usePermissions } from '@pagopa/selfcare-common-frontend';
+import useReduxCachedValue from '@pagopa/selfcare-common-frontend/hooks/useReduxCachedValue';
 import { useAppSelector } from '../../redux/hooks';
 import { fetchProductRoles } from '../../services/productService';
 import { useProductsRolesMap } from '../useProductsRolesMap';
