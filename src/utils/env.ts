@@ -28,7 +28,7 @@ export const ENV = {
 
     ADMIN: `${PUBLIC_URL_INNER}/admin`,
     ADMIN_PARTY_DETAIL: `${PUBLIC_URL_INNER}/admin/onboarding/:tokenId`,
-    ADMIN_SEARCH: `${import.meta.env.PUBLIC_URL}/admin/search`,
+    ADMIN_SEARCH: `${PUBLIC_URL_INNER}/admin/search`,
   },
 
   URL_FE: {

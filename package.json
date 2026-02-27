@@ -4,6 +4,7 @@
   "homepage": "dashboard",
   "private": true,
   "dependencies": {
+    "@module-federation/vite": "^1.11.0",
     "@mui/icons-material": "^5.8.2",
     "@mui/lab": "^5.0.0-alpha.80",
     "@mui/material": "^5.8.2",
@@ -46,7 +47,6 @@
     "generate:api-party-registry-proxy": "yarn run clean:api-party-registry-proxy && mkdirp openApi/generated-party-registry-proxy && api-spec-converter --from=openapi_3 --to=swagger_2 openApi/party-registry-proxy-api-docs.json > openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json && node openApi/scripts/api-party-registry-proxy_fixPreGen.js && node ./node_modules/@pagopa/selfcare-common-frontend/utils/fixSwagger20ArraySchemaDef.js openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json && gen-api-models --api-spec openApi/generated-party-registry-proxy/party-registry-proxy-swagger20.json --out-dir src/api/generated/party-registry-proxy --no-strict --request-types --response-decoders --client && node openApi/scripts/api-party-registry-proxy_fixPostGen.js"
   },
   "devDependencies": {
-    "@originjs/vite-plugin-federation": "^1.4.1",
     "@pagopa/openapi-codegen-ts": "^14.2.0",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "12.1.2",
