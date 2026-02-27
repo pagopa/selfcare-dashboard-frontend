@@ -29,11 +29,15 @@ export default defineConfig(({ mode }) => {
         remotes: {
           selfcareUsers: `${env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
           selfcareGroups: `${env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
-          selfcareAdmin: `${
-            env.VITE_ENV === 'LOCAL_DEV'
-              ? env.MICROFRONTEND_URL_ADMIN
-              : env.MICROFRONTEND_URL_ADMIN + '/onboarding'
-          }/remoteEntry.js`,
+          selfcareAdmin: {
+            type: 'module',
+            name: 'selfcareAdmin',
+            entry: `${
+              env.VITE_ENV === 'LOCAL_DEV'
+                ? env.MICROFRONTEND_URL_ADMIN
+                : env.MICROFRONTEND_URL_ADMIN + '/onboarding'
+            }/remoteEntry.js`,
+          },
         },
         shared: {
           '@pagopa/selfcare-common-frontend': {
