@@ -7,4 +7,5 @@ Dangerfile.ts
 src/reportWebVitals.ts
 **/generated/**
 e2e
+vite.config.ts
 vitest.config.ts
