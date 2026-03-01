@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
+import { Router } from 'react-router-dom';
 import { TypeEnum } from '../../../../api/generated/b4f-dashboard/DelegationResource';
 import { DelegationWithInfo } from '../../../../api/generated/b4f-dashboard/DelegationWithInfo';
 import { DelegationWithPagination } from '../../../../api/generated/b4f-dashboard/DelegationWithPagination';

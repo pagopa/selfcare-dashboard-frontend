@@ -3,7 +3,7 @@ import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
-import { Route, Switch, matchPath, useHistory } from 'react-router';
+import { Route, Switch, matchPath, useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import { useAppSelector } from '../../redux/hooks';

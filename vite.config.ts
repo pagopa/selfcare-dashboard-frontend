@@ -27,16 +27,19 @@ export default defineConfig(({ mode }) => {
       federation({
         name: 'host',
         remotes: {
-          selfcareUsers: `${env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
+          selfcareUsers: {
+            type: 'module',
+            name: 'selfcareUsers',
+            entry: `${env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
+          },
           selfcareGroups: `${env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
           selfcareAdmin: {
             type: 'module',
             name: 'selfcareAdmin',
-            entry: `${
-              env.VITE_ENV === 'LOCAL_DEV'
-                ? env.MICROFRONTEND_URL_ADMIN
-                : env.MICROFRONTEND_URL_ADMIN + '/onboarding'
-            }/remoteEntry.js`,
+            entry: `${env.VITE_ENV === 'LOCAL_DEV'
+              ? env.MICROFRONTEND_URL_ADMIN
+              : env.MICROFRONTEND_URL_ADMIN + '/onboarding'
+              }/remoteEntry.js`,
           },
         },
         shared: {
@@ -125,6 +128,7 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
+
     base: '/dashboard/',
     build: {
       outDir: 'dist',
@@ -136,6 +140,12 @@ export default defineConfig(({ mode }) => {
       'process.env': Object.fromEntries(
         Object.entries(env).filter(([key]) => key.startsWith('VITE_'))
       ),
+    },
+    resolve: {
+      dedupe: ['react', 'react-dom', 'react-router-dom']
+    },
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react-router-dom']
     },
     server: {
       port: 3000,

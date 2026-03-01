@@ -2,7 +2,7 @@ import { render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Route, Router, Switch } from 'react-router';
+import { Route, Router, Switch } from 'react-router-dom';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { RootState, createStore } from '../../redux/store';
 import {

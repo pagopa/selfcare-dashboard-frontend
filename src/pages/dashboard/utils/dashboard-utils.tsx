@@ -1,6 +1,6 @@
 // src/pages/dashboard/dashboard.utils.ts
 import React from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 import { Party } from '../../../model/Party';
 import { Product, ProductsMap } from '../../../model/Product';
 import { RouteConfig, RoutesObject } from '../../../routes';
@@ -27,7 +27,7 @@ export const reduceDecorators = (
     (out, decorator) =>
       (route as any)[decorator]
         ? (WrappedComponent: React.ComponentType<any>) =>
-            (decorators as any)[decorator](out(WrappedComponent))
+          (decorators as any)[decorator](out(WrappedComponent))
         : out,
     (WrappedComponent: React.ComponentType<any>) => WrappedComponent
   );

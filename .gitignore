@@ -60,3 +60,6 @@ yarn-error.log
 
 # Local .terraform directories
 **/.terraform/*
+
+# Microfrontend temp
+.__mf__temp

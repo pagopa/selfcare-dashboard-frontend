@@ -3,7 +3,7 @@ import { theme } from '@pagopa/mui-italia';
 import { render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
+import { Router } from 'react-router-dom';
 import App from '../App';
 import {
   verifyMockExecution as verifyLoginMockExecution,
