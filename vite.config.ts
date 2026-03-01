@@ -26,6 +26,7 @@ export default defineConfig(({ mode }) => {
       svgr(),
       federation({
         name: 'host',
+        dts: false,
         remotes: {
           selfcareUsers: {
             type: 'module',

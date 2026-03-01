@@ -27,6 +27,7 @@ generated
 build
 local
 dist
+/openApi/generated-dashboard
 
 # Local python packages
 .python_packages/
