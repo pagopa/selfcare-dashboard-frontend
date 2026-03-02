@@ -60,3 +60,5 @@ yarn-error.log
 
 # Local .terraform directories
 **/.terraform/*
+
+.DS_Store
