@@ -33,14 +33,19 @@ export default defineConfig(({ mode }) => {
             name: 'selfcareUsers',
             entry: `${env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
           },
-          selfcareGroups: `${env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
+          selfcareGroups: {
+            type: 'module',
+            name: 'selfcareGroups',
+            entry: `${env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
+          },
           selfcareAdmin: {
             type: 'module',
             name: 'selfcareAdmin',
-            entry: `${env.VITE_ENV === 'LOCAL_DEV'
-              ? env.MICROFRONTEND_URL_ADMIN
-              : env.MICROFRONTEND_URL_ADMIN + '/onboarding'
-              }/remoteEntry.js`,
+            entry: `${
+              env.VITE_ENV === 'LOCAL_DEV'
+                ? env.MICROFRONTEND_URL_ADMIN
+                : env.MICROFRONTEND_URL_ADMIN + '/onboarding'
+            }/remoteEntry.js`,
           },
         },
         shared: {
@@ -143,10 +148,10 @@ export default defineConfig(({ mode }) => {
       ),
     },
     resolve: {
-      dedupe: ['react', 'react-dom', 'react-router-dom']
+      dedupe: ['react', 'react-dom', 'react-router-dom'],
     },
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react-router-dom']
+      include: ['react', 'react-dom', 'react-router-dom'],
     },
     server: {
       port: 3000,
