@@ -97,6 +97,7 @@ const DashboardOverview = ({ party, products }: Props) => {
     } else {
       try {
         const response = await fetch(
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           ENV.BASE_PATH_CDN_URL + '/assets/product_institution_types.json'
         );
 
