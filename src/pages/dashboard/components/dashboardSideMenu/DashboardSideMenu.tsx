@@ -71,7 +71,10 @@ export default function DashboardSideMenu({
 
   const canSeeUsers = getAllProductsWithPermission(Actions.ListProductUsers).length > 0;
   const canSeeGroups = getAllProductsWithPermission(Actions.ListProductGroups).length > 0;
+  const canSeeDocuments = getAllProductsWithPermission(Actions.ViewContract).length > 0;
   const isPagoPaOverviewVisible = !location.pathname.includes('admin');
+  const isDocumentsBackstageVisible =
+    ENV.SHOW_DOCUMENTS && canSeeDocuments && isPagoPaOverviewVisible;
 
   // Helper to resolve paths with party ID
   const resolvePath = useCallback(
@@ -204,7 +207,7 @@ export default function DashboardSideMenu({
       title: t('overview.sideMenu.institutionManagement.documents.title'),
       icon: ArticleIcon,
       path: resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
-      isVisible: isPagoPaOverviewVisible,
+      isVisible: isDocumentsBackstageVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
       action: () => {
         trackEvent('DASHBOARD_OPEN_DOCUMENT', { party_id: party?.partyId });
