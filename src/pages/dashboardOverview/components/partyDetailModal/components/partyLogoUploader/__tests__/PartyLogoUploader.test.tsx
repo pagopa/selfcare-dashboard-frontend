@@ -22,7 +22,7 @@ vi.mock('@pagopa/selfcare-common-frontend/lib/services/analyticsService');
 
 vi.mock('../components/PartyLogo', () => ({
   __esModule: true,
-  default: ({ loading, urlLogo }) => (
+  default: ({ loading, urlLogo }: any) => (
     <div data-testid="party-logo" data-loading={loading} data-url={urlLogo}>
       Mock Party Logo
     </div>
@@ -30,7 +30,7 @@ vi.mock('../components/PartyLogo', () => ({
 }));
 
 vi.mock('../components/PartyDescription', () => ({
-  PartyDescription: ({ loading, isLoaded }) => (
+  PartyDescription: ({ loading, isLoaded }: any) => (
     <div data-testid="party-description" data-loading={loading} data-loaded={isLoaded}>
       Mock Party Description
     </div>

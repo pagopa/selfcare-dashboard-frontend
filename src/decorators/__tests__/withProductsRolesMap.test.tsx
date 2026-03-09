@@ -63,7 +63,7 @@ const checkProductsRolesMapLength = async (
   store: ReturnType<typeof createStore>
 ) => {
   await waitFor(() =>
-    expect(Object.keys(store.getState().parties.selectedProductsRolesMap).length).toBe(
+    expect(Object.keys(store.getState().parties.selectedProductsRolesMap || {}).length).toBe(
       expectedProductCached
     )
   );

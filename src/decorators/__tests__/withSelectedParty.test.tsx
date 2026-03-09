@@ -3,6 +3,8 @@ import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
 import type { Mock } from 'vitest';
+import { BaseParty, Party } from '../../model/Party';
+import { Product } from '../../model/Product';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { RootState, createStore } from '../../redux/store';
 import {
@@ -77,7 +79,7 @@ test('Test default behavior when no parties', async () => {
 test('Test party not active', async () => {
   const store = createStore();
   const history = createMemoryHistory();
-  store.dispatch(partiesActions.setPartiesList(mockedParties));
+  store.dispatch(partiesActions.setPartiesList(mockedParties as Array<BaseParty>));
   await renderApp(false, store, history);
   history.push(`/2`);
 
@@ -86,8 +88,8 @@ test('Test party not active', async () => {
 });
 
 const checkSelectedParty = (state: RootState) => {
-  const party = state.parties.selected;
-  const partyProducts = state.parties.selectedProducts;
+  const party = state.parties.selected as Party;
+  const partyProducts = state.parties.selectedProducts as Array<Product>;
   verifyFetchPartyDetailsMockExecution(party);
   verifyFetchPartyProductsMockExecution(partyProducts);
 };
