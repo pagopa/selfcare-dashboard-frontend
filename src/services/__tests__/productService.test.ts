@@ -1,3 +1,4 @@
+import { Mock } from 'vitest';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/ProductsResource';
 import { Product, productResource2Product } from '../../model/Product';
@@ -17,9 +18,15 @@ vi.mock('../../api/DashboardApiClient', () => ({
   },
 }));
 
-vi.mock('../__mocks__/productService', () => ({
-  fetchProductRoles: vi.fn(),
-}));
+vi.mock('../__mocks__/productService', async (importOriginal) => {
+  // Import the actual module to retain its original exports
+  const actual = await importOriginal<typeof import('../__mocks__/productService')>();
+
+  return {
+    ...actual, // Spread the original exports (which includes mockedPartyProducts)
+    fetchProductRoles: vi.fn(), // Override specific functions as needed
+  };
+});
 
 describe('productService tests', () => {
   beforeEach(() => {
@@ -72,7 +79,7 @@ describe('productService tests', () => {
         },
       ];
 
-      (DashboardApi.getProducts as vi.Mock).mockResolvedValue(mockProductResources);
+      (DashboardApi.getProducts as Mock).mockResolvedValue(mockProductResources);
 
       const expectedProducts = mockProductResources.map(productResource2Product);
       const result = await fetchProducts();
@@ -106,7 +113,7 @@ describe('productService tests', () => {
           description: 'Admin Role Description',
         },
       ];
-      (fetchProductRolesMocked as vi.Mock).mockResolvedValue(mockRoles);
+      (fetchProductRolesMocked as Mock).mockResolvedValue(mockRoles);
 
       const result = await fetchProductRoles(mockProduct, mockedParties[0]);
       expect(fetchProductRolesMocked).toHaveBeenCalledWith(mockProduct, mockedParties[0]);
@@ -129,7 +136,7 @@ describe('productService tests', () => {
           ],
         },
       ];
-      (DashboardApi.getProductRoles as vi.Mock).mockResolvedValue(mockApiResponse);
+      (DashboardApi.getProductRoles as Mock).mockResolvedValue(mockApiResponse);
 
       const expectedRoles = [
         {

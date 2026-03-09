@@ -1,14 +1,9 @@
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import AddDelegationForm from '../AddDelegationForm';
-
-beforeAll(() => {
-  i18n.changeLanguage('it');
-});
 
 test('render the form correctly woth empty props', () => {
   renderWithProviders(

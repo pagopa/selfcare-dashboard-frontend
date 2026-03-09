@@ -1,7 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { TypeEnum } from '../../../../api/generated/b4f-dashboard/DelegationResource';
@@ -9,11 +8,6 @@ import { DelegationWithInfo } from '../../../../api/generated/b4f-dashboard/Dele
 import { DelegationWithPagination } from '../../../../api/generated/b4f-dashboard/DelegationWithPagination';
 import { createStore } from '../../../../redux/store';
 import TechPartnersTable from '../TechPartnersTable';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-
-beforeAll(() => {
-  i18n.changeLanguage('it');
-});
 
 const mockedDelegation: DelegationWithPagination = {
   delegations: [

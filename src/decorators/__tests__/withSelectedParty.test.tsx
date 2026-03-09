@@ -1,8 +1,8 @@
 import { render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
+import type { Mock } from 'vitest';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { RootState, createStore } from '../../redux/store';
 import {
@@ -10,19 +10,26 @@ import {
   verifyFetchPartyDetailsMockExecution,
 } from '../../services/__mocks__/partyService';
 import { verifyFetchPartyProductsMockExecution } from '../../services/__mocks__/productService';
+import { fetchPartyDetails } from '../../services/partyService';
+import { fetchProducts } from '../../services/productService';
 import withSelectedParty from '../withSelectedParty';
 
-vi.mock('../../services/partyService');
-vi.mock('../../services/productService');
+vi.mock('../../services/partyService', () => ({
+  fetchPartyDetails: vi.fn(),
+}));
+
+vi.mock('../../services/productService', () => ({
+  fetchProducts: vi.fn(),
+}));
 
 const expectedPartyId: string = '1';
 
-let fetchPartyDetailsSpy: vi.SpyInstance;
-let fetchPartyProductsSpy: vi.SpyInstance;
+const mockedFetchPartyDetails = fetchPartyDetails as Mock;
+const mockedFetchProducts = fetchProducts as Mock;
 
 beforeEach(() => {
-  fetchPartyDetailsSpy = vi.spyOn(require('../../services/partyService'), 'fetchPartyDetails');
-  fetchPartyProductsSpy = vi.spyOn(require('../../services/productService'), 'fetchProducts');
+  mockedFetchPartyDetails.mockReset();
+  mockedFetchProducts.mockReset();
 });
 
 const renderApp = async (
@@ -30,8 +37,8 @@ const renderApp = async (
   injectedStore?: ReturnType<typeof createStore>,
   injectedHistory?: ReturnType<typeof createMemoryHistory>
 ) => {
-  const store = injectedStore ? injectedStore : createStore();
-  const history = injectedHistory ? injectedHistory : createMemoryHistory();
+  const store = injectedStore ?? createStore();
+  const history = injectedHistory ?? createMemoryHistory();
 
   if (!injectedHistory) {
     history.push(`/${expectedPartyId}`);
@@ -83,12 +90,4 @@ const checkSelectedParty = (state: RootState) => {
   const partyProducts = state.parties.selectedProducts;
   verifyFetchPartyDetailsMockExecution(party);
   verifyFetchPartyProductsMockExecution(partyProducts);
-};
-
-const checkMockInvocation = (expectedCallsNumber: number) => {
-  expect(fetchPartyDetailsSpy).toBeCalledTimes(expectedCallsNumber);
-  expect(fetchPartyDetailsSpy).toBeCalledWith(expectedPartyId);
-
-  expect(fetchPartyProductsSpy).toBeCalledTimes(expectedCallsNumber);
-  expect(fetchPartyProductsSpy).toBeCalledWith(expectedPartyId);
 };

@@ -1,4 +1,3 @@
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GeographicTaxonomyResource } from '../../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
@@ -15,10 +14,6 @@ const mockGeographicTaxonomies: Array<GeographicTaxonomyResource> = [
 
 beforeEach(() => {
   vi.clearAllMocks();
-});
-
-beforeAll(() => {
-  i18n.changeLanguage('it');
 });
 
 describe('GeoTaxonomySection', () => {

@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@mui/material';
-import { screen } from '@testing-library/react';
+import { Mock } from 'vitest';
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardAdminPage from '../DasboardAdmin';
 
@@ -13,17 +13,17 @@ describe('DashboardAdminPage', () => {
   });
 
   it('renders without crashing', () => {
-    (useMediaQuery as vi.Mock).mockReturnValue(false);
+    (useMediaQuery as Mock).mockReturnValue(false);
     renderWithProviders(<DashboardAdminPage />);
   });
 
   it('renders mobile menu when isMobile is true', () => {
-    (useMediaQuery as vi.Mock).mockReturnValue(true);
+    (useMediaQuery as Mock).mockReturnValue(true);
     renderWithProviders(<DashboardAdminPage />);
   });
 
   it('renders desktop menu when isMobile is false', () => {
-    (useMediaQuery as vi.Mock).mockReturnValue(false);
+    (useMediaQuery as Mock).mockReturnValue(false);
     renderWithProviders(<DashboardAdminPage />);
   });
 });

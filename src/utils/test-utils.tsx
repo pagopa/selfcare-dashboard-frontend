@@ -2,9 +2,10 @@ import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redu
 import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom'; // ← use MemoryRouter instead of Router+history
 import { Party } from '../model/Party';
 import { createStore } from '../redux/store';
+
 
 export const renderWithProviders = (
   component: React.ReactElement,
@@ -15,9 +16,9 @@ export const renderWithProviders = (
   const history = injectedHistory || createMemoryHistory();
 
   render(
-    <Router history={history}>
+    <MemoryRouter initialEntries={history.entries ?? ['/']}>
       <Provider store={store}>{component}</Provider>
-    </Router>
+    </MemoryRouter>
   );
   return { store, history };
 };

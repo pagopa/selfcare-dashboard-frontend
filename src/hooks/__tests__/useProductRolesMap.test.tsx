@@ -1,43 +1,43 @@
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import useReduxCachedValue from '@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue';
+import { Mock } from 'vitest';
 import { useAppSelector } from '../../redux/hooks';
 import { fetchProductRoles } from '../../services/productService';
 import { useProductsRolesMap } from '../useProductsRolesMap';
-
+// ---- redux hook
 vi.mock('../../redux/hooks', () => ({
   useAppSelector: vi.fn(),
 }));
 
+// ---- selfcare common frontend (preserve other exports!)
 vi.mock('@pagopa/selfcare-common-frontend/lib', () => ({
   usePermissions: vi.fn(),
 }));
 
-vi.mock('@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue', () => vi.fn());
-
-vi.mock('../../services/productService', () => ({
-  fetchProductRoles: vi.fn(),
+// ---- redux cached value hook (default export!)
+vi.mock('@pagopa/selfcare-common-frontend/lib/hooks/useReduxCachedValue', () => ({
+  default: vi.fn(),
 }));
 
-vi.mock('react', () => ({
-  ...vi.requireActual('react'),
-  useMemo: vi.fn((fn) => fn()),
+// ---- service
+vi.mock('../../services/productService', () => ({
+  fetchProductRoles: vi.fn(),
 }));
 
 describe('useProductsRolesMap', () => {
   const mockHasPermission = vi.fn();
   const mockUseReduxCachedValue = vi.fn();
-  const mockFetchProductRoles = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    (usePermissions as vi.Mock).mockReturnValue({
+    (usePermissions as Mock).mockReturnValue({
       hasPermission: mockHasPermission,
     });
-    (useReduxCachedValue as vi.Mock).mockImplementation(mockUseReduxCachedValue);
-    (fetchProductRoles as vi.Mock).mockResolvedValue([]);
+    (useReduxCachedValue as Mock).mockImplementation(mockUseReduxCachedValue);
+    (fetchProductRoles as Mock).mockResolvedValue([]);
 
-    (useAppSelector as vi.Mock)
+    (useAppSelector as Mock)
       .mockImplementationOnce(() => ({
         id: 'test-party',
         products: [
@@ -57,7 +57,7 @@ describe('useProductsRolesMap', () => {
   });
 
   it('should skip product role fetch if no active and accessible products', async () => {
-    (useAppSelector as vi.Mock)
+    (useAppSelector as Mock)
       .mockImplementationOnce(() => ({ products: [] }))
       .mockImplementationOnce(() => [])
       .mockImplementationOnce(() => ({}));

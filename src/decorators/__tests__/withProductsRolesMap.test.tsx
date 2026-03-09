@@ -1,29 +1,34 @@
-import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { createStore } from '../../redux/store';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
 import withProductsRolesMap from '../withProductsRolesMap';
+import { fetchProductRoles } from '../../services/productService';
+import type { Mock } from 'vitest';
 
-vi.mock('../../services/productService');
+vi.mock('../../services/productService', () => ({
+  fetchProductRoles: vi.fn(),
+}));
+
+const mockedFetchProductRoles = fetchProductRoles as Mock;
 
 const renderApp = (injectedStore?: ReturnType<typeof createStore>) => {
-  const store = injectedStore ? injectedStore : createStore();
+  const store = injectedStore || createStore();
   const Component = () => <>RENDERED</>;
   const DecoratedComponent = withProductsRolesMap(Component);
+
   render(
     <Provider store={store}>
       <DecoratedComponent />
     </Provider>
   );
+
   return store;
 };
 
-let fetchProductRolesSpy: vi.SpyInstance;
-
 beforeEach(() => {
-  fetchProductRolesSpy = vi.spyOn(require('../../services/productService'), 'fetchProductRoles');
+  mockedFetchProductRoles.mockReset();
 });
 
 test.skip('Test', async () => {
@@ -48,7 +53,7 @@ test.skip('Test', async () => {
     store
   );
 
-  expect(fetchProductRolesSpy).toBeCalledTimes(
+  expect(mockedFetchProductRoles).toBeCalledTimes(
     mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length
   );
 });

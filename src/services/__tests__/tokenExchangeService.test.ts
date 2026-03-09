@@ -1,28 +1,40 @@
 import { mockedParties } from '../__mocks__/partyService';
-import { getBillingToken, retrieveBackOfficeUrl } from '../tokenExchangeService';
 import { mockedPartyProducts } from '../__mocks__/productService';
+import { getBillingToken, retrieveBackOfficeUrl } from '../tokenExchangeService';
+import type { Mock } from 'vitest';
 
-vi.mock('../tokenExchangeService');
+vi.mock('../tokenExchangeService', () => ({
+  retrieveBackOfficeUrl: vi.fn(),
+  getBillingToken: vi.fn(),
+}));
 
-const tokenExchangeService = require('../tokenExchangeService');
+const mockedRetrieveBackOfficeUrl = retrieveBackOfficeUrl as Mock;
+const mockedGetBillingToken = getBillingToken as Mock;
 
 beforeEach(() => {
-  vi.spyOn(tokenExchangeService, 'retrieveBackOfficeUrl');
-  vi.spyOn(tokenExchangeService, 'getBillingToken');
+  mockedRetrieveBackOfficeUrl.mockReset();
+  mockedGetBillingToken.mockReset();
 });
 
 test('Test retrieveTokenExchange', async () => {
-  const url = await retrieveBackOfficeUrl(mockedParties[0], mockedPartyProducts[0]);
+  mockedRetrieveBackOfficeUrl.mockResolvedValue(
+    'https://hostname/path?id=DUMMYTOKEN'
+  );
+
+  const url = await retrieveBackOfficeUrl(
+    mockedParties[0],
+    mockedPartyProducts[0]
+  );
 
   expect(url).toBe('https://hostname/path?id=DUMMYTOKEN');
-
-  expect(retrieveBackOfficeUrl).toBeCalledTimes(1);
+  expect(mockedRetrieveBackOfficeUrl).toHaveBeenCalledTimes(1);
 });
 
 test('getBillingToken', async () => {
+  mockedGetBillingToken.mockResolvedValue('DUMMYTOKEN');
+
   const url = await getBillingToken(mockedParties[0].partyId);
 
   expect(url).toBe('DUMMYTOKEN');
-
-  expect(getBillingToken).toBeCalledTimes(1);
+  expect(mockedGetBillingToken).toHaveBeenCalledTimes(1);
 });

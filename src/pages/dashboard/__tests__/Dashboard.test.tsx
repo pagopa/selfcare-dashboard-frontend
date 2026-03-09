@@ -1,13 +1,12 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../../../decorators/__mocks__/withSelectedParty';
 import { createStore } from '../../../redux/store';
 import Dashboard from '../Dashboard';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { Mock } from 'vitest';
 
 vi.mock('../../../decorators/withSelectedParty');
 vi.mock('@mui/material/useMediaQuery');
@@ -23,7 +22,6 @@ const mockedLocation = {
 
 beforeAll(() => {
   Object.defineProperty(window, 'location', { value: mockedLocation });
-  i18n.changeLanguage('it');
 });
 
 afterAll(() => {
@@ -85,7 +83,7 @@ test('Test routing', async () => {
 });
 
 test('Test rendering on mobile', async () => {
-  (useMediaQuery as vi.Mock).mockReturnValue(true);
+  (useMediaQuery as Mock).mockReturnValue(true);
 
   renderDashboard();
 
@@ -110,7 +108,7 @@ test('Test rendering on mobile', async () => {
 });
 
 test('Test rendering on desktop', async () => {
-  (useMediaQuery as vi.Mock).mockReturnValue(false);
+  (useMediaQuery as Mock).mockReturnValue(false);
 
   renderDashboard();
 

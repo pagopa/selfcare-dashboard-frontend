@@ -1,14 +1,15 @@
 import { render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { MockInstance } from 'vitest';
 import { createStore } from '../../redux/store';
-import withParties from '../withParties';
 import { verifyFetchPartiesMockExecution } from '../../services/__mocks__/partyService';
-import React from 'react';
+import withParties from '../withParties';
+import * as partyService from '../../services/partyService';
 
 vi.mock('../../services/partyService');
 
 const renderApp = (injectedStore?: any) => {
-  const store = injectedStore ? injectedStore : createStore();
+  const store = injectedStore || createStore();
   const Component = () => <></>;
   const DecoratedComponent = withParties(Component);
   render(
@@ -19,10 +20,12 @@ const renderApp = (injectedStore?: any) => {
   return store;
 };
 
-let fetchPartiesSpy: vi.SpyInstance;
+let fetchPartiesSpy:
+  | MockInstance<(this: unknown, ...args: unknown[]) => unknown>
+  | MockInstance<any>;
 
 beforeEach(() => {
-  fetchPartiesSpy = vi.spyOn(require('../../services/partyService'), 'fetchParties');
+  fetchPartiesSpy = vi.spyOn(partyService, 'fetchParties');
 });
 
 test('Test', async () => {

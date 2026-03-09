@@ -1,10 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import GenericEnvProductModal from '../GenericEnvProductModal'; // Adjust the import as needed
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 
-beforeAll(() => {
-  i18n.changeLanguage('it');
-});
 
 const mockProps = {
   open: true,

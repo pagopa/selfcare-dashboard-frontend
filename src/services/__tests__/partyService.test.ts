@@ -1,3 +1,4 @@
+import { Mock } from 'vitest';
 import { mockedBrokerResource } from '../../api/__mocks__/DashboardApiClient';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { institutionBaseResource2BaseParty, institutionResource2Party } from '../../model/Party';
@@ -6,7 +7,7 @@ import {
   fetchParties,
   fetchPartyDetails,
   getProductBrokers,
-} from '../partyService'; 
+} from '../partyService';
 import { mockedBaseParties, mockedParties } from './../__mocks__/partyService';
 
 // Mock the DashboardApi methods
@@ -15,8 +16,8 @@ vi.mock('../../api/DashboardApiClient', () => ({
     getInstitutions: vi.fn(),
     getInstitution: vi.fn(),
     getProductBrokers: vi.fn(),
-    createDelegation: vi.fn()
-  }
+    createDelegation: vi.fn(),
+  },
 }));
 
 describe('yourModuleFile tests', () => {
@@ -35,7 +36,7 @@ describe('yourModuleFile tests', () => {
     test('calls DashboardApi.getInstitutions and maps the result', async () => {
       import.meta.env.VITE_API_MOCK_PARTIES = 'false';
       const mockedInstitutions = [{ id: '1', name: 'Institution 1' }];
-      (DashboardApi.getInstitutions as vi.Mock).mockResolvedValue(mockedInstitutions);
+      (DashboardApi.getInstitutions as Mock).mockResolvedValue(mockedInstitutions);
 
       const result = await fetchParties();
       expect(DashboardApi.getInstitutions).toHaveBeenCalled();
@@ -56,7 +57,7 @@ describe('yourModuleFile tests', () => {
       import.meta.env.VITE_API_MOCK_PARTIES = 'false';
       const partyId = '1';
       const mockedInstitution = { id: '1', name: 'Institution 1' };
-      (DashboardApi.getInstitution as vi.Mock).mockResolvedValue(mockedInstitution);
+      (DashboardApi.getInstitution as Mock).mockResolvedValue(mockedInstitution);
 
       const result = await fetchPartyDetails(partyId);
       expect(DashboardApi.getInstitution).toHaveBeenCalledWith(partyId);
@@ -79,7 +80,7 @@ describe('yourModuleFile tests', () => {
       const partyId = '1';
       const institutionType = 'PA';
       const mockedBrokers = [{ id: 'broker1', name: 'Broker 1' }];
-      (DashboardApi.getProductBrokers as vi.Mock).mockResolvedValue(mockedBrokers);
+      (DashboardApi.getProductBrokers as Mock).mockResolvedValue(mockedBrokers);
 
       const result = await getProductBrokers(partyId, institutionType);
       expect(DashboardApi.getProductBrokers).toHaveBeenCalledWith(partyId, institutionType);
@@ -104,7 +105,7 @@ describe('yourModuleFile tests', () => {
       const product = { productId: 'product1' } as any;
       const techPartner = { brokerId: 'broker1' } as any;
       const mockDelegationId = { id: 'realRelId' };
-      (DashboardApi.createDelegation as vi.Mock).mockResolvedValue(mockDelegationId);
+      (DashboardApi.createDelegation as Mock).mockResolvedValue(mockDelegationId);
 
       const result = await createDelegation(party, product, techPartner);
       expect(DashboardApi.createDelegation).toHaveBeenCalledWith(party, product, techPartner);

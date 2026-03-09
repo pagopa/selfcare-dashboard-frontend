@@ -6,6 +6,7 @@ import { DashboardApi } from '../../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../../redux/hooks';
 import { renderWithProviders } from '../../../../../../../utils/test-utils';
 import { PartyLogoUploader } from '../PartyLogoUploader';
+import { Mock } from 'vitest';
 
 // Mock the entire DashboardApi module
 vi.mock('../../../../../../../api/DashboardApiClient', () => ({
@@ -21,7 +22,7 @@ vi.mock('@pagopa/selfcare-common-frontend/lib/services/analyticsService');
 
 vi.mock('../components/PartyLogo', () => ({
   __esModule: true,
-  default: ({ loading, urlLogo, isLoaded, setIsLoaded }) => (
+  default: ({ loading, urlLogo }) => (
     <div data-testid="party-logo" data-loading={loading} data-url={urlLogo}>
       Mock Party Logo
     </div>
@@ -47,15 +48,15 @@ describe('PartyLogoUploader', () => {
     vi.clearAllMocks();
 
     // Mock hooks
-    (useAppDispatch as vi.Mock).mockReturnValue(mockDispatch);
-    (useAppSelector as vi.Mock).mockReturnValue('mock-logo-url');
-    (useTranslation as vi.Mock).mockReturnValue({ t: mockTranslate });
+    (useAppDispatch as Mock).mockReturnValue(mockDispatch);
+    (useAppSelector as Mock).mockReturnValue('mock-logo-url');
+    (useTranslation as Mock).mockReturnValue({ t: mockTranslate });
 
     // Reset uploadLogo mock to success by default
-    (DashboardApi.uploadLogo as vi.Mock).mockImplementation(() => Promise.resolve(true));
+    (DashboardApi.uploadLogo as Mock).mockImplementation(() => Promise.resolve(true));
 
     // Capture the dropzone callbacks when useDropzone is called
-    (useDropzone as vi.Mock).mockImplementation((options) => {
+    (useDropzone as Mock).mockImplementation((options) => {
       mockOnDropAccepted = options.onDropAccepted;
       mockGetFilesFromEvent = options.getFilesFromEvent;
       return {
@@ -89,7 +90,7 @@ describe('PartyLogoUploader', () => {
 
   describe('file upload handling', () => {
     test('should process valid PNG file upload', async () => {
-      const mockedSuccesGetFilesFromEvent = jest
+      const mockedSuccesGetFilesFromEvent = vi
         .fn()
         .mockResolvedValue([new File([''], 'test.png', { type: 'image/png' })]);
       renderWithProviders(
@@ -147,7 +148,7 @@ describe('PartyLogoUploader', () => {
     });
 
     test('should handle upload failure', async () => {
-      (DashboardApi.uploadLogo as vi.Mock).mockImplementation(() =>
+      (DashboardApi.uploadLogo as Mock).mockImplementation(() =>
         Promise.reject(new Error('Upload failed'))
       );
 
