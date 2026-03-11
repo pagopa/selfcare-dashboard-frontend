@@ -17,7 +17,8 @@ beforeEach(() => {
 });
 
 describe('GeoTaxonomySection', () => {
-  test('renders component with Local options selected', () => {
+  test('renders component with Local options selected', async () => {
+    const user = userEvent.setup();
     renderWithProviders(
       <GeoTaxonomySection
         geographicTaxonomies={mockGeographicTaxonomies}
@@ -37,7 +38,7 @@ describe('GeoTaxonomySection', () => {
     expect(autocomplete[0]).toBeInTheDocument();
     fireEvent.click(autocomplete[0]);
 
-    userEvent.type(autocomplete[0], 'Rom');
+    await user.type(autocomplete[0], 'Rom');
 
     const addButton = screen.getByText('Aggiungi area');
     expect(addButton).toBeInTheDocument();

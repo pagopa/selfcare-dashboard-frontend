@@ -7,6 +7,8 @@ import { Router } from 'react-router-dom';
 import App from '../App';
 import {
   verifyMockExecution as verifyLoginMockExecution,
+} from '../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin';
+import {
   verifyMockExecution as verifyPartiesMockExecution,
 } from '../decorators/__mocks__/withParties';
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
@@ -14,7 +16,13 @@ import { BaseParty } from '../model/Party';
 import { createStore } from '../redux/store';
 import { mockedBaseParties } from '../services/__mocks__/partyService';
 
-vi.mock('@pagopa/selfcare-common-frontend/lib/decorators/withLogin');
+vi.mock('@pagopa/selfcare-common-frontend/lib/decorators/withLogin', async () => {
+  const actual = await vi.importActual('../__mocks__/@pagopa/selfcare-common-frontend/decorators/withLogin');
+  return {
+    default: (actual as any).default,
+    __esModule: true,
+  };
+});
 vi.mock('../decorators/withParties');
 vi.mock('../decorators/withSelectedParty');
 

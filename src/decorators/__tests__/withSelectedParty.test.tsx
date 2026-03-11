@@ -11,7 +11,10 @@ import {
   mockedParties,
   verifyFetchPartyDetailsMockExecution,
 } from '../../services/__mocks__/partyService';
-import { verifyFetchPartyProductsMockExecution } from '../../services/__mocks__/productService';
+import {
+  mockedPartyProducts,
+  verifyFetchPartyProductsMockExecution,
+} from '../../services/__mocks__/productService';
 import { fetchPartyDetails } from '../../services/partyService';
 import { fetchProducts } from '../../services/productService';
 import withSelectedParty from '../withSelectedParty';
@@ -32,6 +35,8 @@ const mockedFetchProducts = fetchProducts as Mock;
 beforeEach(() => {
   mockedFetchPartyDetails.mockReset();
   mockedFetchProducts.mockReset();
+  mockedFetchPartyDetails.mockResolvedValue(mockedParties[0]);
+  mockedFetchProducts.mockResolvedValue(mockedPartyProducts);
 });
 
 const renderApp = async (

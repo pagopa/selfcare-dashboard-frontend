@@ -1,4 +1,5 @@
-import { Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';

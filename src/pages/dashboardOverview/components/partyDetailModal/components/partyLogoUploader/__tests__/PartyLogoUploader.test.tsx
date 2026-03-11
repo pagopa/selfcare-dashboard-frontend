@@ -1,5 +1,5 @@
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { DashboardApi } from '../../../../../../../api/DashboardApiClient';
@@ -134,7 +134,9 @@ describe('PartyLogoUploader', () => {
       Object.defineProperty(mockFile, 'width', { value: 350 });
       Object.defineProperty(mockFile, 'height', { value: 350 });
 
-      mockOnDropAccepted([mockFile]);
+      await act(async () => {
+        mockOnDropAccepted([mockFile]);
+      });
 
       expect(trackEvent).toHaveBeenCalledWith('DASHBOARD_PARTY_CHANGE_LOGO', expect.any(Object));
       expect(DashboardApi.uploadLogo).toHaveBeenCalledWith('123', mockFile);
@@ -161,7 +163,9 @@ describe('PartyLogoUploader', () => {
       Object.defineProperty(mockFile, 'width', { value: 350 });
       Object.defineProperty(mockFile, 'height', { value: 350 });
 
-      mockOnDropAccepted([mockFile]);
+      await act(async () => {
+        mockOnDropAccepted([mockFile]);
+      });
 
       await waitFor(() => {
         expect(trackEvent).toHaveBeenCalledWith(
@@ -172,6 +176,13 @@ describe('PartyLogoUploader', () => {
     });
 
     test('should update loading state during upload', async () => {
+      let resolveUpload: (value: boolean) => void = () => { };
+      (DashboardApi.uploadLogo as Mock).mockReturnValue(
+        new Promise((resolve) => {
+          resolveUpload = resolve;
+        })
+      );
+
       renderWithProviders(
         <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={vi.fn()} />
       );
@@ -181,10 +192,14 @@ describe('PartyLogoUploader', () => {
       Object.defineProperty(mockFile, 'width', { value: 350 });
       Object.defineProperty(mockFile, 'height', { value: 350 });
 
-      mockOnDropAccepted([mockFile]);
+      await act(async () => {
+        mockOnDropAccepted([mockFile]);
+      });
 
       const logo = screen.getByTestId('party-logo');
       expect(logo).toHaveAttribute('data-loading', 'true');
+
+      resolveUpload(true);
 
       await waitFor(() => {
         expect(logo).toHaveAttribute('data-loading', 'false');

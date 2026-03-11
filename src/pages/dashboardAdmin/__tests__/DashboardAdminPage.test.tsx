@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { Mock } from 'vitest';
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardAdminPage from '../DasboardAdmin';

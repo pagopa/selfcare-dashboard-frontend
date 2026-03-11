@@ -63,19 +63,20 @@ test('Test rendering renderDashboardTablePT', () => {
 });
 
 test('test input field change and filter on click and search by name', async () => {
+  const user = userEvent.setup();
   renderDashboardTablePT();
 
   const select = screen.getByLabelText('Cerca per');
   expect(select).toBeInTheDocument();
 
-  userEvent.click(select);
+  await user.click(select);
 
   const option = await screen.findByText('Nome');
-  userEvent.click(option);
+  await user.click(option);
 
   const inputField = (await waitFor(() => screen.getByLabelText('Nome'))) as HTMLInputElement;
 
-  userEvent.clear(inputField);
+  await user.clear(inputField);
   expect(inputField).toBeEnabled();
   fireEvent.change(inputField, { target: { value: 'Broker 1' } });
 
@@ -83,9 +84,9 @@ test('test input field change and filter on click and search by name', async () 
 
   const filterButton = screen.getByText('Filtra');
   expect(filterButton).toBeEnabled();
-  userEvent.click(filterButton);
+  await user.click(filterButton);
 
-  const removeFiltersButton = screen.getByText('Rimuovi filtri');
+  const removeFiltersButton = screen.getAllByText('Rimuovi filtri')[0];
   expect(removeFiltersButton).toBeEnabled();
   fireEvent.click(removeFiltersButton);
 });

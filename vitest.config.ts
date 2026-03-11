@@ -1,39 +1,35 @@
-import { defineConfig as defineViteConfig, mergeConfig } from 'vite';
-import { defineConfig as defineVitestConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { resolve } from 'path';
+import { defineConfig } from 'vitest/config';
 import svgr from 'vite-plugin-svgr';
 
-export default mergeConfig(
-  // Vite's defineConfig handles plugins — no type conflict
-  defineViteConfig({
-    plugins: [react(), svgr(), tsconfigPaths()],
-  }),
-  defineVitestConfig({
-    test: {
-      globals: true,
-      environment: 'jsdom',
-      setupFiles: ['./src/setupTests.ts'],
-      pool: 'threads',
-      maxWorkers: 3,
-      fileParallelism: true,
-      testTimeout: 15000,
-      hookTimeout: 15000,
-      restoreMocks: true,
-      clearMocks: true,
-      isolate: true,
-      exclude: [
-        '**/node_modules/**',
-        '**/dist/**',
-        'coverage/*',
-        'e2e/**',
-        '**/*.spec.ts',
-        '**/__mf__temp/**',
-      ],
-      coverage: {
-        provider: 'v8',
-        exclude: ['src/index.js', 'src/reportWebVitals.ts', 'src/api/generated/**', "e2e/**"],
-      },
+export default defineConfig({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  plugins: [svgr() as any],
+  resolve: {
+    alias: {
+      i18next: resolve('node_modules/i18next/dist/esm/i18next.js'),
+      'selfcareAdmin/RoutingAdmin': resolve('src/__mocks__/federation-env.tsx'),
+      'selfcareUsers/RoutingUsers': resolve('src/__mocks__/federation-env.tsx'),
+      'selfcareGroups/RoutingGroups': resolve('src/__mocks__/federation-env.tsx'),
+      'selfcareUsers/RoutingProductUsers': resolve('src/__mocks__/federation-env.tsx'),
     },
-  })
-);
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/setupTests.ts'],
+    exclude: ['**/node_modules/**', '**/e2e/**'],
+    coverage: {
+      provider: 'v8',
+      exclude: [
+        'src/index.tsx',
+        'src/reportWebVitals.ts',
+        'src/utils/constants.ts',
+        'src/consentAndAnalyticsConfiguration.ts',
+        'src/model',
+        'src/views/onboardingPremium/components/subProductStepPricingPlan/*',
+        'e2e/**',
+      ],
+    },
+  },
+});

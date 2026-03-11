@@ -1,5 +1,6 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
@@ -83,24 +84,25 @@ test('Test routing', async () => {
 });
 
 test('Test rendering on mobile', async () => {
+  const user = userEvent.setup();
   (useMediaQuery as Mock).mockReturnValue(true);
 
   renderDashboard();
 
-  const overviewButton = await waitFor(() => screen.getByText('Panoramica'));
-  fireEvent.click(overviewButton);
+  const overviewButton = await screen.findByText('Panoramica');
+  await user.click(overviewButton);
 
-  const drawer = await waitFor(() => screen.getByRole('presentation'));
+  const drawer = await screen.findByRole('presentation');
   expect(drawer).toBeInTheDocument();
 
-  fireEvent.click(drawer);
+  await user.click(drawer);
 
   const drawerNav = within(drawer).getByRole('navigation');
 
   const overviewButtonInDrawer = within(drawerNav).getByText('Panoramica');
-  fireEvent.click(overviewButtonInDrawer);
+  await user.click(overviewButtonInDrawer);
 
-  fireEvent.keyDown(drawer, { key: 'Escape' });
+  await user.keyboard('{Escape}');
 
   await waitFor(() => {
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
@@ -108,11 +110,12 @@ test('Test rendering on mobile', async () => {
 });
 
 test('Test rendering on desktop', async () => {
+  const user = userEvent.setup();
   (useMediaQuery as Mock).mockReturnValue(false);
 
   renderDashboard();
 
   const sideBarCloseIcon = await screen.findByTestId('DehazeIcon');
 
-  fireEvent.click(sideBarCloseIcon);
+  await user.click(sideBarCloseIcon);
 });
