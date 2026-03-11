@@ -6,6 +6,7 @@ import { Router } from 'react-router-dom';
 import { Party } from '../model/Party';
 import { createStore } from '../redux/store';
 
+
 export const renderWithProviders = (
   component: React.ReactElement,
   injectedStore?: ReturnType<typeof createStore>,

@@ -2,7 +2,7 @@ import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useEr
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { uniqueId } from 'lodash';
 import { useEffect } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelectedParty } from '../hooks/useSelectedParty';
 import ROUTES from '../routes';
 import { ENV } from '../utils/env';

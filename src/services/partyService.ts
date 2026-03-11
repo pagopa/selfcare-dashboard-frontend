@@ -15,7 +15,7 @@ import { mockedBaseParties, mockedParties } from './__mocks__/partyService';
 
 export const fetchParties = (): Promise<Array<BaseParty>> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve(mockedBaseParties);
   } else {
     return DashboardApi.getInstitutions().then((institutionResources) =>
@@ -26,7 +26,7 @@ export const fetchParties = (): Promise<Array<BaseParty>> => {
 
 export const fetchPartyDetails = (partyId: string): Promise<Party | null> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve(mockedParties.find((p) => p.partyId === partyId) ?? null);
   } else {
     return DashboardApi.getInstitution(partyId).then((institutionResource) =>
@@ -40,7 +40,7 @@ export const getProductBrokers = (
   institutionType: string
 ): Promise<Array<BrokerResource>> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve(mockedBrokerResource);
   } else {
     return DashboardApi.getProductBrokers(partyId, institutionType);
@@ -53,7 +53,7 @@ export const createDelegation = (
   techPartner: BrokerResource
 ): Promise<DelegationIdResource> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve({ id: 'mockRelId' });
   } else {
     return DashboardApi.createDelegation(party, product, techPartner);
@@ -65,7 +65,7 @@ export const getOnboardingInfo = (
   products: string
 ): Promise<Array<OnboardingInfo>> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve([
       { productId: 'prod-io', status: 'ACTIVE', contractAvailable: true },
       { productId: 'prod-io-premium', status: 'ACTIVE', contractAvailable: false },
@@ -82,7 +82,7 @@ export const getAttachmentStatusService = (
   name: string
 ): Promise<CheckAttachmentResponse> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve({ isAttachmentAvailable: false });
   } else {
     return DashboardApi.getAttachmentStatus(institutionId, productId, name);
@@ -93,7 +93,7 @@ export const getAttachmentStatusService = (
   TODO used fetch in place of codegen to handle issue with base64 file
 export const getContract = (institutionId: string, productId: string): Promise<ContractData> => {
 
-  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve({ contract: '' });
   } else {
     return DashboardApi.getContract(institutionId, productId);

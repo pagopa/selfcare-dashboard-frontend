@@ -1,15 +1,9 @@
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import AddDelegationForm from '../AddDelegationForm';
-
-beforeAll(() => {
-  i18n.changeLanguage('it');
-});
 
 test('render the form correctly woth empty props', () => {
   renderWithProviders(
@@ -21,6 +15,7 @@ test('render the form correctly woth empty props', () => {
 });
 
 test('search by name', async () => {
+  const user = userEvent.setup();
   renderWithProviders(
     <AddDelegationForm
       productsWithCreateDelegationAction={[mockedPartyProducts[2]]}
@@ -35,13 +30,9 @@ test('search by name', async () => {
   ) as HTMLInputElement;
   expect(autocompleteInput).toBeInTheDocument();
 
-  userEvent.type(autocompleteInput, 'Random');
-  fireEvent.change(autocompleteInput, { target: { value: 'Random' } });
-
-  userEvent.clear(autocompleteInput);
-
-  userEvent.type(autocompleteInput, 'Maggi');
-  fireEvent.change(autocompleteInput, { target: { value: 'Maggi' } });
+  await user.type(autocompleteInput, 'Random');
+  await user.clear(autocompleteInput);
+  await user.type(autocompleteInput, 'Maggi');
 
   const confirmDelegationBtn = await screen.findByText('Conferma');
   expect(confirmDelegationBtn).toBeInTheDocument();
@@ -49,6 +40,7 @@ test('search by name', async () => {
 });
 
 test('search by fiscal code', async () => {
+  const user = userEvent.setup();
   renderWithProviders(
     <AddDelegationForm
       productsWithCreateDelegationAction={[mockedPartyProducts[0]]}
@@ -68,10 +60,7 @@ test('search by fiscal code', async () => {
 
   fireEvent.click(insertCFCodeInput);
 
-  fireEvent.change(insertCFCodeInput, { target: { value: '1234567891' } });
-
-  userEvent.type(insertCFCodeInput, '12345678914');
-  fireEvent.change(insertCFCodeInput, { target: { value: '12345678914' } });
+  await user.type(insertCFCodeInput, '12345678914');
 
   const exitButton = screen.getByText('Esci');
   expect(exitButton).toBeInTheDocument();

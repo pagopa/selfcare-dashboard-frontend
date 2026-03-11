@@ -1,13 +1,8 @@
 import { fireEvent, screen } from '@testing-library/react';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { store } from '../../../../../redux/store';
 import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import DashboardSideMenu from '../DashboardSideMenu';
-
-beforeAll(() => {
-  void i18n.changeLanguage('it');
-});
 
 test('Test: Access to the dashboard side menu voices', async () => {
   const { history } = renderWithProviders(
@@ -16,7 +11,7 @@ test('Test: Access to the dashboard side menu voices', async () => {
       isInvoiceSectionVisible={true}
       isAddDelegateSectionVisible={true}
       isHandleDelegationsVisible={false}
-      setDrawerOpen={jest.fn()}
+      setDrawerOpen={vi.fn()}
     />,
     store
   );
@@ -41,7 +36,7 @@ test('Test: render with props false', async () => {
       isInvoiceSectionVisible={false}
       isAddDelegateSectionVisible={false}
       isHandleDelegationsVisible={false}
-      setDrawerOpen={jest.fn()}
+      setDrawerOpen={vi.fn()}
     />
   );
   const institutionsListVoice = screen.queryByText('Enti gestiti');
@@ -58,7 +53,7 @@ test('Test: The techpartner has not been delegated by any body, he will see the 
       isInvoiceSectionVisible={false}
       isAddDelegateSectionVisible={false}
       isHandleDelegationsVisible={true}
-      setDrawerOpen={jest.fn()}
+      setDrawerOpen={vi.fn()}
     />
   );
 
@@ -78,7 +73,7 @@ test('Test: The Aggregator has been delegated will see the menu section and will
       isInvoiceSectionVisible={false}
       isAddDelegateSectionVisible={false}
       isHandleDelegationsVisible={true}
-      setDrawerOpen={jest.fn()}
+      setDrawerOpen={vi.fn()}
     />
   );
 

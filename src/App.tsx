@@ -9,7 +9,7 @@ import withLogin from '@pagopa/selfcare-common-frontend/lib/decorators/withLogin
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
-import { Redirect, Route, Switch, useHistory } from 'react-router';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
 import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';

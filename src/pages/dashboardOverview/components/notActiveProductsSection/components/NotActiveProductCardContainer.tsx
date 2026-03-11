@@ -67,7 +67,6 @@ export default function NotActiveProductCardContainer({ party, product }: Readon
   const getOnboardingStatus = async (productId: string) => {
     const token = storageTokenOps.read();
     const subUnitCode = party.subunitCode ? `&subunitCode=${party.subunitCode}` : '';
-
     void fetch(
       `${ENV.URL_API.API_DASHBOARD}/v2/institutions/onboardings/${productId}/pending?taxCode=${party.fiscalCode}${subUnitCode}`,
       {

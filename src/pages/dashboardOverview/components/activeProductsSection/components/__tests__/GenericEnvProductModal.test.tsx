@@ -1,16 +1,12 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import GenericEnvProductModal from '../GenericEnvProductModal'; // Adjust the import as needed
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 
-beforeAll(() => {
-  i18n.changeLanguage('it');
-});
 
 const mockProps = {
   open: true,
   title: 'Test Title',
   message: 'Test Message',
-  handleClose: jest.fn(),
+  handleClose: vi.fn(),
   t: (key: string) => key,
   productEnvironments: [
     { environment: 'Collaudo', url: 'http://example.com/collaudo' },
@@ -38,8 +34,8 @@ test('renders and selects environment radio buttons correctly', () => {
 });
 
 test('enviroment collaudo', () => {
-  const handleClose = jest.fn();
-  const handleConfirm = jest.fn();
+  const handleClose = vi.fn();
+  const handleConfirm = vi.fn();
 
   const mockProps = {
     open: true,
@@ -60,8 +56,8 @@ test('enviroment collaudo', () => {
 });
 
 test('enviroment attestazione', () => {
-  const handleClose = jest.fn();
-  const handleConfirm = jest.fn();
+  const handleClose = vi.fn();
+  const handleConfirm = vi.fn();
 
   const mockProps = {
     open: true,

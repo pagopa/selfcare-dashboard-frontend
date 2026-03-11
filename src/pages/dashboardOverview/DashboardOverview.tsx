@@ -91,12 +91,13 @@ const DashboardOverview = ({ party, products }: Props) => {
   const logoExists = useLogoExists(party.urlLogo ?? '');
 
   const getOnboardingAllowedByInstitutionType = async () => {
-    if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+    if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
       setAllowedInstitutionTypes(mockedCategories);
       await Promise.resolve(mockedCategories);
     } else {
       try {
         const response = await fetch(
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           ENV.BASE_PATH_CDN_URL + '/assets/product_institution_types.json'
         );
 
