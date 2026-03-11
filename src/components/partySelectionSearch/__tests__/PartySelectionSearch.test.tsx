@@ -1,4 +1,4 @@
-import { fireEvent, getByText, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { BaseParty, UserStatus } from '../../../model/Party';
 import { renderWithProviders } from '../../../utils/test-utils';
 import PartyAccountItemSelection from '../PartyAccountItemSelection';
