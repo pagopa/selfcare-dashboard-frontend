@@ -1,6 +1,4 @@
-const FederationMock = () => {
-    return <div data-testid="federation-mock" />;
-};
+const FederationMock = () => <div data-testid="federation-mock" />;
 
 export default FederationMock;
 
