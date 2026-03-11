@@ -1,46 +1,8 @@
-import { SvgIconComponent } from '@mui/icons-material';
-import ArticleIcon from '@mui/icons-material/Article';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import DnsIcon from '@mui/icons-material/Dns';
-import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
-import PeopleAlt from '@mui/icons-material/PeopleAlt';
-import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
-import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
 import { Box, Divider, Grid, List } from '@mui/material';
-import {
-  useErrorDispatcher,
-  useLoading,
-  usePermissions,
-} from '@pagopa/selfcare-common-frontend/lib';
-import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib/hooks/useUnloadEventInterceptor';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useHistory, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 import { Party } from '../../../../model/Party';
-import { useAppDispatch } from '../../../../redux/hooks';
-import { partiesActions } from '../../../../redux/slices/partiesSlice';
-import { DASHBOARD_ROUTES } from '../../../../routes';
-import { getBillingToken } from '../../../../services/tokenExchangeService';
-import { LOADING_TASK_TOKEN_EXCHANGE_INVOICE } from '../../../../utils/constants';
-import { ENV } from '../../../../utils/env';
 import DashboardSideNavItem from './DashboardSidenavItem';
 import { useDashboardMenuItems } from './hooks/useDashboardMenuItems';
-
-type MenuItem = {
-  key: string;
-  title: string;
-  icon: SvgIconComponent;
-  path: string;
-  isVisible: boolean;
-  isSelected: boolean;
-  action?: () => void;
-};
 
 type Props = {
   party?: Party;
