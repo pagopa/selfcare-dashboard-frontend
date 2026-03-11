@@ -1,4 +1,3 @@
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { fireEvent, screen } from '@testing-library/react';
 import '../../../locale';
@@ -9,10 +8,6 @@ import { COMMON_ADMIN_ACTIONS, mockedParties } from '../../../services/__mocks__
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders, setPermissionsForParty } from '../../../utils/test-utils';
 import DashboardOverview from '../DashboardOverview';
-
-beforeAll(() => {
-  i18n.changeLanguage('it');
-});
 
 test('should render component DashboardOverview with empty party', async () => {
   renderWithProviders(

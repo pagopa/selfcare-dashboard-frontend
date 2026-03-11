@@ -1,5 +1,4 @@
 import { fireEvent, screen } from '@testing-library/react';
-import React from 'react';
 import { mockedBaseParties } from '../../../services/__mocks__/partyService';
 import { renderWithProviders } from '../../../utils/test-utils';
 import NoActiveParty from '../NoActiveParty';
