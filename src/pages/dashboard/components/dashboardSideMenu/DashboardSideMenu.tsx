@@ -1,5 +1,5 @@
 import { Box, Divider, Grid, List } from '@mui/material';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { Party } from '../../../../model/Party';
 import DashboardSideNavItem from './DashboardSidenavItem';
 import { useDashboardMenuItems } from './hooks/useDashboardMenuItems';
