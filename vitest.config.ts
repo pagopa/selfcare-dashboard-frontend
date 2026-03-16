@@ -23,7 +23,6 @@ export default defineConfig({
       provider: 'v8',
       exclude: [
         'src/index.tsx',
-        'src/reportWebVitals.ts',
         'src/utils/constants.ts',
         'src/consentAndAnalyticsConfiguration.ts',
         'src/model',
