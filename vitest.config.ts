@@ -17,6 +17,11 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    server: {
+      deps: {
+        inline: ['@pagopa/mui-italia'],
+      },
+    },
     setupFiles: ['./src/setupTests.ts'],
     exclude: ['**/node_modules/**', '**/e2e/**'],
     coverage: {
