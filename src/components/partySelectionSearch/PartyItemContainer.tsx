@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
-import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
+import { PartyAccountItemButton } from '@pagopa/mui-italia/components/PartyAccountItemButton';
+import { Tag } from '@pagopa/mui-italia/components/Tag';
 import React from 'react';
 import { UserStatus } from '../../model/Party';
 
@@ -51,7 +51,7 @@ export default function PartyItemContainer({
         disabled={isDisabled}
         endSlot={
           isDisabled ? (
-            <Tag value={chip} color={status === 'TOBEVALIDATED' ? 'info' : 'warning'} />
+            <Tag value={chip} />
           ) : undefined
         }
         maxCharactersNumberMultiLine={20}

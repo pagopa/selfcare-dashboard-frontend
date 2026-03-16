@@ -12,7 +12,7 @@ import {
   useTheme,
 } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
-import { ProductAvatar } from '@pagopa/mui-italia/dist/components/ProductAvatar/ProductAvatar';
+import { ProductAvatar } from '@pagopa/mui-italia/components/ProductAvatar';
 import { Trans, useTranslation } from 'react-i18next';
 import { SubProductResource } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Product } from '../../../../../model/Product';
