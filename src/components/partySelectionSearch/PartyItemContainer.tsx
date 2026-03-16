@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import { PartyAccountItemButton } from '@pagopa/mui-italia/dist/components/PartyAccountItemButton';
-import { Tag } from '@pagopa/mui-italia/dist/components/Tag';
+import { PartyAccountItemButton } from '@pagopa/mui-italia/components/PartyAccountItemButton';
+import { Tag } from '@pagopa/mui-italia/components/Tag';
 import React from 'react';
 import { UserStatus } from '../../model/Party';
 
@@ -26,8 +26,7 @@ export default function PartyItemContainer({
   action,
   moreThan3Parties,
   parentPartyName,
-  status,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <Grid
       className={moreThan3Parties ? 'selectedMoreThen3' : 'selectedLessThen3'}
@@ -49,11 +48,7 @@ export default function PartyItemContainer({
         selectedItem={moreThan3Parties ? false : selectedItem}
         action={!isDisabled ? action : undefined}
         disabled={isDisabled}
-        endSlot={
-          isDisabled ? (
-            <Tag value={chip} color={status === 'TOBEVALIDATED' ? 'info' : 'warning'} />
-          ) : undefined
-        }
+        endSlot={isDisabled ? <Tag value={chip} /> : undefined}
         maxCharactersNumberMultiLine={20}
         parentPartyName={parentPartyName as string}
       />
