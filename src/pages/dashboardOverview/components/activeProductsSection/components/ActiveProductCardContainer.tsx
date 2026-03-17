@@ -51,7 +51,7 @@ export default function ActiveProductCardContainer({
   })}#${PRODUCT_IDS.PAGOPA}`;
 
   const isDisabled = isPagoPaUser
-    ? isProductAllowed(product.productId || '')
+    ? !isProductAllowed(product.productId || '')
     : party.products.some(
         (p) =>
           p.productId === product.productId &&
