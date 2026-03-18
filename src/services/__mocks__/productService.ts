@@ -177,6 +177,20 @@ export const mockedPartyProducts: Array<Product> = [
     delegable: false,
     invoiceable: false,
   },
+  {
+    id: 'prod-fd-garantito',
+    logo: 'https://selcucheckoutsa.z6.web.core.windows.net/resources/products/default/logo.png',
+    logoBgColor: '#000000',
+    imageUrl:
+      'https://selcucheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
+    title: 'Prod Fideiussioni Digitali Garantito',
+    description: 'Fideiussioni Digitali Garantito',
+    urlPublic: 'string',
+    urlBO: 'https://fid00001fe.siachain.ti.sia.eu:30008/api/callback?token=<IdentityToken>',
+    status: StatusEnum.INACTIVE,
+    delegable: false,
+    invoiceable: false,
+  },
 ];
 
 export const mockedProductRoles: Array<ProductRole> = [
@@ -250,11 +264,10 @@ export const mockedCategories: ProductInstitutionMap = {
     SCP: {},
     AS: {},
     PRV: {},
-    SCEC: {},
   },
   'prod-pn': {
     PA: {
-      categories: 'L6,L4,L45,L35,L5,L17,L15,L7,L22',
+      categories: 'L6,L4,L45,L35,L5,L17,L15,L7,L22,L8,C14',
     },
   },
   'prod-idpay': {
@@ -263,15 +276,10 @@ export const mockedCategories: ProductInstitutionMap = {
   'prod-io': {
     PA: {},
     GSP: {},
-    PT: {},
   },
   'prod-pagopa': {
     PA: {},
     GSP: {},
-    PSP: {},
-    PT: {},
-    PRV: {},
-    GPU: {},
   },
   'prod-io-sign': {
     PA: {},
