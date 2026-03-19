@@ -92,7 +92,7 @@ export const PartyDetailModal = ({
         </Grid>
 
         <Typography variant="h6" sx={{ fontWeight: '700' }} pb={3}>
-          {isPagoPaUser ? t('overview.viewDetails') : t('overview.changeDetails')}
+          {isPagoPaUser() ? t('overview.viewDetails') : t('overview.changeDetails')}
         </Typography>
         <Grid item xs={12}>
           <PartyLogoUploader

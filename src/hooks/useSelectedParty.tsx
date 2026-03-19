@@ -27,8 +27,8 @@ export const useSelectedParty = (): {
   const fetchParty = (partyId: string): Promise<Party | null> =>
     fetchPartyDetails(partyId).then((party) => {
       if (party) {
-        const selectedParty = isPagoPaUser ? party : parties?.find((p) => p.partyId === partyId);
-        if (!isPagoPaUser && selectedParty && selectedParty.status !== 'ACTIVE') {
+        const selectedParty = isPagoPaUser() ? party : parties?.find((p) => p.partyId === partyId);
+        if (!isPagoPaUser() && selectedParty && selectedParty.status !== 'ACTIVE') {
           throw new Error(`INVALID_PARTY_STATE_${selectedParty.status}`);
         }
         const partyWithUserRoleAndStatus = {

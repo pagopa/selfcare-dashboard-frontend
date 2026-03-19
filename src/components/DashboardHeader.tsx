@@ -47,14 +47,14 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const { hasPermission } = usePermissions();
 
   useEffect(() => {
-    if (isPagoPaUser) {
+    if (isPagoPaUser()) {
       setShowDocBtn(false);
       return;
     }
     setShowDocBtn(i18n.language === 'it');
   }, [i18n.language, isPagoPaUser]);
 
-  const parties2Show = isPagoPaUser
+  const parties2Show = isPagoPaUser()
     ? [party]
     : parties?.filter((party) => party.status === 'ACTIVE');
 
@@ -99,7 +99,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   };
 
   const fixedParty =
-    isPagoPaUser && location.pathname?.includes('admin') ? pagoPaInstitution : undefined;
+    isPagoPaUser() && location.pathname?.includes('admin') ? pagoPaInstitution : undefined;
 
   return (
     <div>
@@ -127,7 +127,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             id: party?.partyId ?? '',
             name: party?.description ?? '',
             productRole:
-              isPagoPaUser && !location.pathname?.includes('admin')
+              isPagoPaUser() && !location.pathname?.includes('admin')
                 ? undefined
                 : t(
                     roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey
@@ -202,7 +202,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       />
       <SessionModal
         open={openExitModal}
-        title={isPagoPaUser ? t('exitModal.titleBackstage') : t('exitModal.title')}
+        title={isPagoPaUser() ? t('exitModal.titleBackstage') : t('exitModal.title')}
         message=""
         onConfirmLabel={t('exitModal.confirm')}
         onCloseLabel={t('exitModal.cancel')}
@@ -211,7 +211,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         onConfirm={() => {
           setOpenExitModal(false);
-          window.location.assign(isPagoPaUser ? `${ENV.URL_FE.LOGOUT}/google` : ENV.URL_FE.LOGOUT);
+          window.location.assign(isPagoPaUser() ? `${ENV.URL_FE.LOGOUT}/google` : ENV.URL_FE.LOGOUT);
         }}
       />
       <SessionModalInteropProduct

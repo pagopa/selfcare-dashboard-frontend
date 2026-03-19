@@ -8,9 +8,9 @@ import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
 import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
 import {
-    useErrorDispatcher,
-    useLoading,
-    usePermissions,
+  useErrorDispatcher,
+  useLoading,
+  usePermissions,
 } from '@pagopa/selfcare-common-frontend/lib';
 import { useUnloadEventOnExit } from '@pagopa/selfcare-common-frontend/lib/hooks/useUnloadEventInterceptor';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
@@ -65,7 +65,10 @@ export function useDashboardMenuItems({
   const { getAllProductsWithPermission } = usePermissions();
   const dispatch = useAppDispatch();
 
-  const canSeeUsers = getAllProductsWithPermission(Actions.ListProductUsers).length > 0;
+  const canSeeUsers =
+    getAllProductsWithPermission(
+      isPagoPaUser() ? Actions.ListAllProductUsers : Actions.ListProductUsers
+    ).length > 0;
   const canSeeGroups = getAllProductsWithPermission(Actions.ListProductGroups).length > 0;
   const canSeeDocuments = getAllProductsWithPermission(Actions.ViewContract).length > 0;
   const isPagoPaOverviewVisible = !location.pathname.includes('admin');
@@ -226,6 +229,6 @@ export function useDashboardMenuItems({
     },
   ];
 
-  const allItems = isPagoPaUser ? pagoPaAdminFlow : spidUserFlow;
+  const allItems = isPagoPaUser() ? pagoPaAdminFlow : spidUserFlow;
   return allItems.filter((item) => item.isVisible);
 }
