@@ -24,7 +24,7 @@ export default function withSelectedParty<T>(
     const addError = useErrorDispatcher();
 
     const doFetch = (): void => {
-      const redirectPath = isPagoPaUser ? ENV.ROUTES.ADMIN_SEARCH : ROUTES.PARTY_SELECTION.path;
+      const redirectPath = isPagoPaUser() ? ENV.ROUTES.ADMIN_SEARCH : ROUTES.PARTY_SELECTION.path;
       fetchSelectedParty(partyId).catch((reason) => {
         const invalidState =
           reason instanceof Error && reason.message.startsWith('INVALID_PARTY_STATE_')

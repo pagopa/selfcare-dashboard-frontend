@@ -50,9 +50,9 @@ export default function ActiveProductCardContainer({
     partyId: party.partyId ?? '',
   })}#${PRODUCT_IDS.PAGOPA}`;
 
-  const isDisabled = isPagoPaUser
+  const isDisabled = isPagoPaUser()
     ? !isProductAllowed(product.productId || '')
-    : party.products.some(
+    : !!party.products.find(
         (p) =>
           p.productId === product.productId &&
           hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false

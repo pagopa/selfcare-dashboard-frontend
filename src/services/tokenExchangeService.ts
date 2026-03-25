@@ -9,7 +9,7 @@ export const retrieveBackOfficeUrl = (
   environment?: string,
   lang?: string
 ): Promise<string> => {
-  if (isPagoPaUser) {
+  if (isPagoPaUser()) {
     return DashboardApi.tokenExchangeAdmin(
       selectedParty?.partyId ?? '',
       product?.id ?? '',

@@ -45,7 +45,7 @@ export default function WelcomeDashboard({ setOpen }: Readonly<Props>) {
               fontSize: '16px',
             }}
           >
-            {isPagoPaUser ? t('overview.viewDetails') : t('overview.changeDetails')}
+            {isPagoPaUser() ? t('overview.viewDetails') : t('overview.changeDetails')}
           </Button>
         </Box>
       </Grid>
