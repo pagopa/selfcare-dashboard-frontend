@@ -1,14 +1,15 @@
 /// <reference types="vite/client" />
 /// <reference types="vitest/globals" />
 
-declare namespace NodeJS {
-  interface ProcessEnv {
-    NODE_ENV: 'development' | 'uat' | 'production';
-
-    VITE_API_MOCK_PARTIES: string;
-    VITE_API_MOCK_PRODUCTS: string;
-  }
+interface ImportMetaEnv {
+  readonly VITE_ALLOWED_PRODUCTS_BACKSTAGE: string;
+  readonly NODE_ENV: 'development' | 'uat' | 'production';
+  readonly VITE_API_MOCK_REQUEST_DATA: string;
+  readonly NODE_ENV: 'development' | 'uat' | 'production';
+  readonly VITE_API_MOCK_PARTIES: string;
+  readonly VITE_API_MOCK_PRODUCTS: string;
 }
-interface Window {
-  Stripe: any;
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
