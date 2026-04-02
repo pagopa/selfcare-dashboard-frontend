@@ -75,4 +75,6 @@ export const ENV = {
 
   SHOW_DOCUMENTS: import.meta.env.VITE_SHOW_DOCUMENTS === 'true',
   ENABLE_DORA: import.meta.env.VITE_ENABLE_DORA === 'true',
+
+  ALLOWED_PREFIXES: import.meta.env.VITE_ALLOWED_PRODUCTS_BACKSTAGE || '',
 };

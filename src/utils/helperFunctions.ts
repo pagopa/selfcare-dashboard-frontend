@@ -1,4 +1,5 @@
 import { INTEROP_PRODUCT_ENUM } from './constants';
+import { ENV } from './env';
 
 export const compareDates = (
   dateA?: Date,
@@ -35,3 +36,10 @@ export const addCacheBuster = (url?: string) => {
   const separator = baseUrl.includes('?') ? '&' : '?';
   return `${baseUrl}${separator}t=${new Date().getTime()}`;
 };
+
+const ALLOWED_PREFIXES: Array<string> = ENV.ALLOWED_PREFIXES.split(',')
+  .map((p: string) => p.trim())
+  .filter(Boolean); // Removes empty strings if the env is malformed
+
+export const isProductAllowed = (productId: string): boolean =>
+  ALLOWED_PREFIXES.some((prefix) => productId.startsWith(prefix));
