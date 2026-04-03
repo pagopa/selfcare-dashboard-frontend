@@ -1,3 +1,4 @@
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { mockedBrokerResource } from '../api/__mocks__/DashboardApiClient';
 import { DashboardApi } from '../api/DashboardApiClient';
 import { BrokerResource } from '../api/generated/b4f-dashboard/BrokerResource';
@@ -29,7 +30,10 @@ export const fetchPartyDetails = (partyId: string): Promise<Party | null> => {
   if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve(mockedParties.find((p) => p.partyId === partyId) ?? null);
   } else {
-    return DashboardApi.getInstitution(partyId).then((institutionResource) =>
+    const apiToCall = isPagoPaUser()
+      ? DashboardApi.getAllInstituionById
+      : DashboardApi.getInstitution;
+    return apiToCall(partyId).then((institutionResource) =>
       institutionResource ? institutionResource2Party(institutionResource) : null
     );
   }
