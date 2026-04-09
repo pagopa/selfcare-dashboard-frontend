@@ -133,6 +133,13 @@ export default {
       info: 'Enter only the logo of your institution. You will be responsible for entering images different than the one indicated.',
       infoEditLabel: 'Exact dimensions 300 x 300px - Format .jpg or .png',
     },
+    pecOtp: {
+      title: 'Update your email address',
+      message:
+        'You have entered a PEC address. These addresses cannot receive the verification codes (OTP) required for login. Please use a standard email address to ensure uninterrupted access.',
+      modifyButton: 'Change email',
+      badgeLabel: 'Important notice',
+    },
     changeDetails: 'Manage the institution data',
     viewDetails: 'See the entity’s data',
     partyDetail: {

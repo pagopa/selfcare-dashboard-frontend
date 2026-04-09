@@ -166,6 +166,13 @@ export default {
         "Ritieni che ai sensi del Reg. DORA PagoPA rivesta il ruolo di fornitore TIC? Se ritieni di sì, puoi scaricare l'Addendum contrattuale standard che abbiamo reso disponibile per tutti i PSP per prenderne visione e procedere alla relativa sottoscrizione.",
       downloadButton: 'Scarica il documento',
     },
+    pecOtp: {
+      title: 'Aggiorna il tuo indirizzo email',
+      message:
+        "Hai inserito un indirizzo PEC come recapito email. Questo indirizzo non riceve i codici di verifica (OTP), necessari per accedere. Usa un'email ordinaria per continuare ad accedere senza problemi.",
+      modifyButton: 'Modifica email',
+      badgeLabel: 'Avviso importante',
+    },
     changeDetails: 'Gestisci i dati dell’ente',
     viewDetails: 'Vedi i dati dell’ente',
     partyDetail: {
