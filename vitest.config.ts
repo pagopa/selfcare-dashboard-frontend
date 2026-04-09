@@ -14,6 +14,9 @@ export default defineConfig({
       'selfcareUsers/RoutingProductUsers': resolve('src/__mocks__/federation-env.tsx'),
     },
   },
+  optimizeDeps: {
+    include: ['@pagopa/selfcare-common-frontend', '@pagopa/mui-italia'],
+  },
   test: {
     globals: true,
     environment: 'jsdom',

@@ -1,5 +1,5 @@
 import { Box, Grid, Link, Typography } from '@mui/material';
-import { EnvironmentBanner } from '@pagopa/mui-italia';
+import { Banner, EnvironmentBanner } from '@pagopa/mui-italia';
 import {
   SessionModal,
   useErrorDispatcher,
@@ -8,15 +8,18 @@ import {
 } from '@pagopa/selfcare-common-frontend/lib';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { GeographicTaxonomyDto } from '../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
 import { GeographicTaxonomyResource } from '../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
-import { NotificationsActiveIcon } from '../../components/icons/NotificationActive';
-import { UploadIcon } from '../../components/icons/UploadIcon';
+import EnvelopeNotification from '../../assets/envelope-notification.svg?react';
+import { NotificationsActiveIcon } from '../../assets/icons/NotificationActive';
+import { UploadIcon } from '../../assets/icons/UploadIcon';
 import { useLogoExists } from '../../hooks/useLogoExist';
 import { Party } from '../../model/Party';
 import { Product, ProductInstitutionMap } from '../../model/Product';
@@ -59,7 +62,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   const setLoadingSaveGeotaxonomies = useLoading(LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES);
   const setLoadingGetAttachmentStatus = useLoading(LOADING_TASK_FETCH_ATTACHMENT_STATUS);
   const addError = useErrorDispatcher();
-
+  const history = useHistory();
   const dispatch = useAppDispatch();
   const setPartyUpdated = (partyUpdated: Party) => {
     dispatch(partiesActions.setPartySelected(partyUpdated));
@@ -216,6 +219,8 @@ const DashboardOverview = ({ party, products }: Props) => {
     }
   }, [party.partyId]);
 
+  const currentUserId = storageUserOps.read()?.uid || '';
+
   return (
     <Box p={3} sx={{ width: '100%' }}>
       <SessionModal
@@ -277,6 +282,31 @@ const DashboardOverview = ({ party, products }: Props) => {
         showGeoTaxonomyForInstitutionType={showGeoTaxonomyForInstitutionType}
       />
       <WelcomeDashboard setOpen={setOpen} />
+      {
+        // eslint-disable-next-line sonarjs/no-redundant-boolean
+        true && (
+          <Banner
+            variant="primary"
+            color="info"
+            title={t('overview.pecOtp.title')}
+            message={t('overview.pecOtp.message')}
+            badge={t('overview.pecOtp.badgeLabel')}
+            illustration={
+              <div style={{ width: 60, height: 50 }}>
+                <EnvelopeNotification />
+              </div>
+            }
+            cta={{
+              label: t('overview.pecOtp.modifyButton'),
+              onClick: () => {
+                history.push(
+                  `${import.meta.env.BASE_URL}/${party.partyId}/users/${currentUserId}/edit`
+                );
+              },
+            }}
+          />
+        )
+      }
       {canUploadLogoOnSendProduct && !logoExists && (
         <Box mt={5} sx={{ '& button': { fontSize: '16px !important' } }}>
           <EnvironmentBanner
