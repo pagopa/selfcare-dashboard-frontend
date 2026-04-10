@@ -19,6 +19,7 @@ import { GeographicTaxonomyDto } from '../../api/generated/b4f-dashboard/Geograp
 import { GeographicTaxonomyResource } from '../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
+import { UserOtpEmailInfo } from '../../api/generated/b4f-dashboard/UserOtpEmailInfo';
 import EnvelopeNotification from '../../assets/envelope-notification.svg?react';
 import { NotificationsActiveIcon } from '../../assets/icons/NotificationActive';
 import { UploadIcon } from '../../assets/icons/UploadIcon';
@@ -64,7 +65,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
   const [isDoraAddendumSigned, setIsDoraAddendumSigned] = useState<boolean>(false);
-  const [isPecEmailRegex, setIsPecEmailRegex] = useState<boolean>(false);
+  const [userOtpEmailInfo, setUserOtpEmailInfo] = useState<UserOtpEmailInfo | null>(null);
 
   const setLoadingSaveGeotaxonomies = useLoading(LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES);
   const setLoadingGetAttachmentStatus = useLoading(LOADING_TASK_FETCH_ATTACHMENT_STATUS);
@@ -234,7 +235,7 @@ const DashboardOverview = ({ party, products }: Props) => {
       setLoadingGetUserOtpEmailInfo(true);
       getUserOtpEmailInfoService()
         .then((userOtpEmailInfo) => {
-          setIsPecEmailRegex(isPecEmail(userOtpEmailInfo?.otpEmail ?? ''));
+          setUserOtpEmailInfo(userOtpEmailInfo);
         })
         .catch((error) => {
           addError({
@@ -250,6 +251,11 @@ const DashboardOverview = ({ party, products }: Props) => {
         });
     }
   }, [currentUserId]);
+
+  const canSeePecBanner = () =>
+    userOtpEmailInfo?.canUserChangeOtpEmail === true &&
+    party.partyId === userOtpEmailInfo?.otpReferenceInstitutionId &&
+    isPecEmail(userOtpEmailInfo?.otpEmail ?? '');
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
@@ -312,7 +318,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         showGeoTaxonomyForInstitutionType={showGeoTaxonomyForInstitutionType}
       />
       <WelcomeDashboard setOpen={setOpen} />
-      {isPecEmailRegex && (
+      {canSeePecBanner() && (
         <Box mt={5}>
           <Banner
             variant="primary"
