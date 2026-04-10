@@ -21,6 +21,7 @@ import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResour
 import { OnboardingInfo } from './generated/b4f-dashboard/OnboardingInfo';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
+import { UserOtpEmailInfo } from './generated/b4f-dashboard/UserOtpEmailInfo';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -210,6 +211,11 @@ export const DashboardApi = {
       productId,
       name,
     });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getUserOtpEmailInfo: async (): Promise<UserOtpEmailInfo> => {
+    const result = await apiClient.getUserOtpEmailInfoUsingGET({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
 

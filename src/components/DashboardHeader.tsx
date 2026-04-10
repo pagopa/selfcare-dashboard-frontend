@@ -94,7 +94,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const pagoPaInstitution: PartySwitchItem = {
     id: 'pagoPA1231313',
     name: 'PagoPA S.p.A.',
-    logoUrl: 'icons/icon-48x48.png',
+    logoUrl: '/dashboard/icons/icon-48x48.png',
     productRole: t('searchBackstagePage.supportRole'),
   };
 
@@ -211,7 +211,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         onConfirm={() => {
           setOpenExitModal(false);
-          window.location.assign(isPagoPaUser() ? `${ENV.URL_FE.LOGOUT}/google` : ENV.URL_FE.LOGOUT);
+          window.location.assign(
+            isPagoPaUser() ? `${ENV.URL_FE.LOGOUT}/google` : ENV.URL_FE.LOGOUT
+          );
         }}
       />
       <SessionModalInteropProduct

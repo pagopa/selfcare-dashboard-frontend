@@ -6,9 +6,11 @@ import {
   useLoading,
   usePermissions,
 } from '@pagopa/selfcare-common-frontend/lib';
+
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { isPagoPaUser, storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { isPecEmail } from '@pagopa/selfcare-common-frontend/lib/utils/utils';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -17,6 +19,7 @@ import { GeographicTaxonomyDto } from '../../api/generated/b4f-dashboard/Geograp
 import { GeographicTaxonomyResource } from '../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
+import { UserOtpEmailInfo } from '../../api/generated/b4f-dashboard/UserOtpEmailInfo';
 import EnvelopeNotification from '../../assets/envelope-notification.svg?react';
 import { NotificationsActiveIcon } from '../../assets/icons/NotificationActive';
 import { UploadIcon } from '../../assets/icons/UploadIcon';
@@ -26,10 +29,14 @@ import { Product, ProductInstitutionMap } from '../../model/Product';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../redux/slices/partiesSlice';
 import { mockedCategories } from '../../services/__mocks__/productService';
-import { getAttachmentStatusService } from '../../services/partyService';
+import {
+  getAttachmentStatusService,
+  getUserOtpEmailInfoService,
+} from '../../services/partyService';
 import {
   LINK_UPLOAD_GUIDELINES_SEND,
   LOADING_TASK_FETCH_ATTACHMENT_STATUS,
+  LOADING_TASK_FETCH_USER_OTP_EMAIL_INFO,
   LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES,
 } from '../../utils/constants';
 import { ENV } from '../../utils/env';
@@ -58,9 +65,11 @@ const DashboardOverview = ({ party, products }: Props) => {
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
   const [isDoraAddendumSigned, setIsDoraAddendumSigned] = useState<boolean>(false);
+  const [userOtpEmailInfo, setUserOtpEmailInfo] = useState<UserOtpEmailInfo | null>(null);
 
   const setLoadingSaveGeotaxonomies = useLoading(LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES);
   const setLoadingGetAttachmentStatus = useLoading(LOADING_TASK_FETCH_ATTACHMENT_STATUS);
+  const setLoadingGetUserOtpEmailInfo = useLoading(LOADING_TASK_FETCH_USER_OTP_EMAIL_INFO);
   const addError = useErrorDispatcher();
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -90,6 +99,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const canSeeNotActiveProductsList =
     getAllProductsWithPermission(Actions.ListAvailableProducts).length > 0;
+  const canUpdateUsers = getAllProductsWithPermission(Actions.UpdateProductUsers).length > 0;
 
   const logoExists = useLogoExists(party.urlLogo ?? '');
 
@@ -221,6 +231,33 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const currentUserId = storageUserOps.read()?.uid || '';
 
+  useEffect(() => {
+    if (isPagoPaUser() === false && canUpdateUsers) {
+      setLoadingGetUserOtpEmailInfo(true);
+      getUserOtpEmailInfoService()
+        .then((userOtpEmailInfo) => {
+          setUserOtpEmailInfo(userOtpEmailInfo);
+        })
+        .catch((error) => {
+          addError({
+            id: 'UNSUCCESS_GET_USER_OTP_EMAIL_INFO',
+            blocking: false,
+            techDescription: `An error occurred while fetching user OTP email info for user id ${currentUserId}`,
+            toNotify: false,
+            error,
+          });
+        })
+        .finally(() => {
+          setLoadingGetUserOtpEmailInfo(false);
+        });
+    }
+  }, [canUpdateUsers]);
+
+  const canSeePecBanner = () =>
+    userOtpEmailInfo?.canUserChangeOtpEmail === true &&
+    party.partyId === userOtpEmailInfo?.otpReferenceInstitutionId &&
+    isPecEmail(userOtpEmailInfo?.otpEmail ?? '');
+
   return (
     <Box p={3} sx={{ width: '100%' }}>
       <SessionModal
@@ -282,9 +319,8 @@ const DashboardOverview = ({ party, products }: Props) => {
         showGeoTaxonomyForInstitutionType={showGeoTaxonomyForInstitutionType}
       />
       <WelcomeDashboard setOpen={setOpen} />
-      {
-        // eslint-disable-next-line sonarjs/no-redundant-boolean
-        true && (
+      {canSeePecBanner() && (
+        <Box mt={5}>
           <Banner
             variant="primary"
             color="info"
@@ -300,13 +336,15 @@ const DashboardOverview = ({ party, products }: Props) => {
               label: t('overview.pecOtp.modifyButton'),
               onClick: () => {
                 history.push(
-                  `${import.meta.env.BASE_URL}/${party.partyId}/users/${currentUserId}/edit`
+                  `${import.meta.env.BASE_URL}/${
+                    userOtpEmailInfo?.otpReferenceInstitutionId
+                  }/users/${userOtpEmailInfo?.userId}/edit`
                 );
               },
             }}
           />
-        )
-      }
+        </Box>
+      )}
       {canUploadLogoOnSendProduct && !logoExists && (
         <Box mt={5} sx={{ '& button': { fontSize: '16px !important' } }}>
           <EnvironmentBanner
