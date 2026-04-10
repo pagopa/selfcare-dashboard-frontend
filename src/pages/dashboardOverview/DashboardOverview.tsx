@@ -99,6 +99,7 @@ const DashboardOverview = ({ party, products }: Props) => {
 
   const canSeeNotActiveProductsList =
     getAllProductsWithPermission(Actions.ListAvailableProducts).length > 0;
+  const canUpdateUsers = getAllProductsWithPermission(Actions.UpdateProductUsers).length > 0;
 
   const logoExists = useLogoExists(party.urlLogo ?? '');
 
@@ -231,7 +232,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   const currentUserId = storageUserOps.read()?.uid || '';
 
   useEffect(() => {
-    if (isPagoPaUser() === false) {
+    if (isPagoPaUser() === false && canUpdateUsers) {
       setLoadingGetUserOtpEmailInfo(true);
       getUserOtpEmailInfoService()
         .then((userOtpEmailInfo) => {
@@ -250,7 +251,7 @@ const DashboardOverview = ({ party, products }: Props) => {
           setLoadingGetUserOtpEmailInfo(false);
         });
     }
-  }, [currentUserId]);
+  }, [canUpdateUsers]);
 
   const canSeePecBanner = () =>
     userOtpEmailInfo?.canUserChangeOtpEmail === true &&
@@ -335,7 +336,9 @@ const DashboardOverview = ({ party, products }: Props) => {
               label: t('overview.pecOtp.modifyButton'),
               onClick: () => {
                 history.push(
-                  `${import.meta.env.BASE_URL}/${party.partyId}/users/${currentUserId}/edit`
+                  `${import.meta.env.BASE_URL}/${
+                    userOtpEmailInfo?.otpReferenceInstitutionId
+                  }/users/${userOtpEmailInfo?.userId}/edit`
                 );
               },
             }}
