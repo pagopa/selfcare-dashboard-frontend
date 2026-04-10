@@ -14,6 +14,7 @@ export const LOADING_TASK_DELEGATION_FORM = 'DELEGATION_FORM';
 export const LOADING_TASK_FETCH_ONBOARDING_INFO = 'FETCH_ONBOARDING_INFO';
 export const LOADING_TASK_FETCH_CONTRACT = 'FETCH_CONTRACT';
 export const LOADING_TASK_FETCH_ATTACHMENT_STATUS = 'FETCH_ATTACHMENT_STATUS';
+export const LOADING_TASK_FETCH_USER_OTP_EMAIL_INFO = 'FETCH_USER_OTP_EMAIL_INFO';
 
 export enum INTEROP_PRODUCT_ENUM {
   INTEROP = 'prod-interop',
@@ -33,4 +34,5 @@ export const PRODUCT_IDS = {
   IO: 'prod-io',
 } as const;
 
-export const LINK_UPLOAD_GUIDELINES_SEND = 'https://developer.pagopa.it/send/guides/requisiti-corretto-caricamento-loghi';
+export const LINK_UPLOAD_GUIDELINES_SEND =
+  'https://developer.pagopa.it/send/guides/requisiti-corretto-caricamento-loghi';
