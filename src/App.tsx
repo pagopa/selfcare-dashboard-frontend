@@ -45,9 +45,6 @@ const App = () => {
             <DashboardAdminPage />
           </Route>
 
-          <Route exact path="/dashboard">
-            <Redirect to={isPagoPaUser() ? ENV.ROUTES.ADMIN_SEARCH : routes.PARTY_SELECTION.path} />
-          </Route>
           {buildRoutes(routes)}
 
           <Route path="*">
