@@ -241,6 +241,6 @@ export function useDashboardMenuItems({
     },
   ];
 
-  const allItems = true ? pagoPaAdminFlow : spidUserFlow;
+  const allItems = isPagoPaUser() ? pagoPaAdminFlow : spidUserFlow;
   return allItems.filter((item) => item.isVisible);
 }
