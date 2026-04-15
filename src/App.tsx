@@ -41,7 +41,7 @@ const App = () => {
           <Route path={ENV.ROUTES.ADMIN_PARTY_DETAIL} exact={false}>
             <RemoteRoutingAdmin store={store} theme={theme} i18n={i18n} history={history} />
           </Route>
-          <Route path={ENV.ROUTES.ADMIN_SEARCH} exact={false}>
+          <Route path={ENV.ROUTES.ADMIN} exact={false}>
             <DashboardAdminPage />
           </Route>
 

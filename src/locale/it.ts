@@ -69,7 +69,10 @@ export default {
           title: 'Panoramica',
         },
         adminPage: {
-          title: 'Panoramica Enti',
+          title: 'Dashboard',
+        },
+        institutionOnboardings: {
+          title: 'Enti e adesioni',
         },
         delegations: {
           title: 'Deleghe',
