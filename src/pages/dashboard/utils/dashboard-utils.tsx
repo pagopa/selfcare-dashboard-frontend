@@ -38,6 +38,8 @@ export const reduceDecorators = (
  */
 export const getButtonText = (pathname: string, t: (key: string) => string): string => {
   const pathMap: Record<string, string> = {
+    'institution-onboardings':
+      'overview.sideMenu.institutionManagement.institutionOnboardings.title',
     users: 'overview.sideMenu.institutionManagement.referents.title',
     groups: 'overview.sideMenu.institutionManagement.groups.title',
     delegations: 'overview.sideMenu.institutionManagement.delegations.title',

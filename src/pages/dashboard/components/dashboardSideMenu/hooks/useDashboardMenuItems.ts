@@ -1,7 +1,8 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import ArticleIcon from '@mui/icons-material/Article';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+import DnsOutlinedIcon from '@mui/icons-material/DnsOutlined';
 import DnsIcon from '@mui/icons-material/Dns';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
@@ -179,13 +180,24 @@ export function useDashboardMenuItems({
     {
       key: 'adminPage',
       title: t('overview.sideMenu.institutionManagement.adminPage.title'),
-      icon: DashboardIcon,
+      icon: DashboardOutlinedIcon,
       path: ENV.ROUTES.ADMIN_SEARCH,
       isVisible: true,
       isSelected: location.pathname === ENV.ROUTES.ADMIN_SEARCH,
       action: () => {
         dispatch(partiesActions.setPartySelected(undefined));
         navigateTo(ENV.ROUTES.ADMIN_SEARCH);
+      },
+    },
+    {
+      key: 'institutionOnboardings',
+      title: t('overview.sideMenu.institutionManagement.institutionOnboardings.title'),
+      icon: DnsOutlinedIcon,
+      path: ENV.ROUTES.ADMIN_INSTITUTION_ONBOARDINGS,
+      isVisible: true,
+      isSelected: location.pathname.startsWith(ENV.ROUTES.ADMIN_INSTITUTION_ONBOARDINGS),
+      action: () => {
+        navigateTo(ENV.ROUTES.ADMIN_INSTITUTION_ONBOARDINGS);
       },
     },
     {
