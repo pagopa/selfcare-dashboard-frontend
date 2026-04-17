@@ -19,7 +19,9 @@ export const useTokenExchange = () => {
     lang?: string
   ): Promise<void> => {
     const selectedEnvironmentUrl = product.backOfficeEnvironmentConfigurations?.find(
-      (p) => p.environment === selectedEnvironment
+      (p) =>
+        p.environment !== undefined &&
+        p.environment.toLowerCase() === selectedEnvironment?.toLowerCase()
     )?.url;
     const result = selectedEnvironmentUrl
       ? validateUrlBO(selectedEnvironmentUrl)
