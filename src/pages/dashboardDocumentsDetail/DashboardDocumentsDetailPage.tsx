@@ -28,7 +28,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { OnboardingInfo } from '../../api/generated/b4f-dashboard/OnboardingInfo';
-import  FileCopyOff from '../../assets/file_copy_off.svg';
+import FileCopyOff from '../../assets/file_copy_off.svg?react';
 import { Party } from '../../model/Party';
 import { Product } from '../../model/Product';
 import { DASHBOARD_ROUTES } from '../../routes';
