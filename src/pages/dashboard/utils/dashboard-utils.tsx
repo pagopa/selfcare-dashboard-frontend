@@ -27,7 +27,7 @@ export const reduceDecorators = (
     (out, decorator) =>
       (route as any)[decorator]
         ? (WrappedComponent: React.ComponentType<any>) =>
-          (decorators as any)[decorator](out(WrappedComponent))
+            (decorators as any)[decorator](out(WrappedComponent))
         : out,
     (WrappedComponent: React.ComponentType<any>) => WrappedComponent
   );
@@ -38,8 +38,7 @@ export const reduceDecorators = (
  */
 export const getButtonText = (pathname: string, t: (key: string) => string): string => {
   const pathMap: Record<string, string> = {
-    'institution-onboardings':
-      'overview.sideMenu.institutionManagement.institutionOnboardings.title',
+    onboardings: 'overview.sideMenu.institutionManagement.onboardings.title',
     users: 'overview.sideMenu.institutionManagement.referents.title',
     groups: 'overview.sideMenu.institutionManagement.groups.title',
     delegations: 'overview.sideMenu.institutionManagement.delegations.title',

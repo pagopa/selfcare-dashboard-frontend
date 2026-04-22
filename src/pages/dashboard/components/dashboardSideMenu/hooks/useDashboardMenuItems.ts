@@ -70,7 +70,11 @@ export function useDashboardMenuItems({
     getAllProductsWithPermission(
       isPagoPaUser() ? Actions.ListAllProductUsers : Actions.ListProductUsers
     ).length > 0;
-  const canSeeGroups = getAllProductsWithPermission(Actions.ListProductGroups).length > 0;
+
+  const canSeeGroups =
+    getAllProductsWithPermission(Actions.ListProductGroups).length > 0 ||
+    getAllProductsWithPermission(Actions.ListAllProductGroups).length > 0;
+
   const canSeeDocuments = getAllProductsWithPermission(Actions.ViewContract).length > 0;
   const isPagoPaOverviewVisible = !location.pathname.includes('admin');
 
@@ -190,8 +194,8 @@ export function useDashboardMenuItems({
       },
     },
     {
-      key: 'institutionOnboardings',
-      title: t('overview.sideMenu.institutionManagement.institutionOnboardings.title'),
+      key: 'onboardings',
+      title: t('overview.sideMenu.institutionManagement.onboardings.title'),
       icon: DnsOutlinedIcon,
       path: ENV.ROUTES.ADMIN_INSTITUTION_ONBOARDINGS,
       isVisible: true,

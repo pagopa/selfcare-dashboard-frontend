@@ -50,7 +50,7 @@ export default function DashboardSideMenu({
                 itemKey={item.key}
               />
               {(item.key === 'techpartner' ||
-                (isPagoPaOverviewVisible && item.key === 'institutionOnboardings')) && (
+                (isPagoPaOverviewVisible && item.key === 'onboardings')) && (
                 <Divider sx={{ mt: 2, mb: 2 }} />
               )}
             </Box>

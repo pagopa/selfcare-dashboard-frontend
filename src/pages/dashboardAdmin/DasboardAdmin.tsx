@@ -63,7 +63,7 @@ const DashboardAdminPage: React.FC = () => {
       <Grid
         item
         component="main"
-        sx={{ backgroundColor: 'background.default' }}
+        sx={{ backgroundColor: '#F4F5F8' }}
         display="flex"
         minHeight="100vh"
         justifyContent="flex-start"

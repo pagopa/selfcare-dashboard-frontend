@@ -71,8 +71,8 @@ export default {
         adminPage: {
           title: 'Dashboard',
         },
-        institutionOnboardings: {
-          title: 'Enti e adesioni',
+        onboardings: {
+          title: 'Adesioni',
         },
         delegations: {
           title: 'Deleghe',
