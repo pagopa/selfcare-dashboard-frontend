@@ -375,6 +375,7 @@ export const mockedParties: Array<Party> = [
           Actions.DeleteProductUsers,
           Actions.ListProductUsers,
           Actions.ListProductGroups,
+          Actions.ListAllProductGroups,
           Actions.ManageProductGroups,
           Actions.ViewDelegations,
           Actions.ViewBilling,
