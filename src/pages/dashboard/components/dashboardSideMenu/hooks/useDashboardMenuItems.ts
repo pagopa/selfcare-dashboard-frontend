@@ -198,7 +198,7 @@ export function useDashboardMenuItems({
       title: t('overview.sideMenu.institutionManagement.onboardings.title'),
       icon: DnsOutlinedIcon,
       path: ENV.ROUTES.ADMIN_ONBOARDINGS,
-      isVisible: true,
+      isVisible: false,
       isSelected: location.pathname.startsWith(ENV.ROUTES.ADMIN_ONBOARDINGS),
       action: () => {
         navigateTo(ENV.ROUTES.ADMIN_ONBOARDINGS);
