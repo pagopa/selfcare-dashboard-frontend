@@ -5,6 +5,9 @@ import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
+import withProductRolesMap from '../../decorators/withProductsRolesMap';
+import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
+import withSelectedProductRoles from '../../decorators/withSelectedPartyProductAndRoles';
 import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
 import { ENV } from '../../utils/env';
 import DashboardSideMenuDesktop from '../dashboard/components/dashboardSideMenu/DashboardSideMenuDesktop';
@@ -22,6 +25,11 @@ const DashboardAdminPage: React.FC = () => {
   const { i18n } = useTranslation();
   const history = useHistory();
   const location = useLocation();
+  const decorators = {
+    withProductRolesMap,
+    withSelectedProduct,
+    withSelectedProductRoles,
+  };
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hideLabels, setHideLabels] = useState(false);
@@ -74,7 +82,15 @@ const DashboardAdminPage: React.FC = () => {
       >
         <Switch>
           <Route path={[ENV.ROUTES.ADMIN_SEARCH, ENV.ROUTES.ADMIN_CONTRACT]} exact={false}>
-            {<RemoteRoutingAdmin history={history} store={store} theme={theme} i18n={i18n} />}
+            {
+              <RemoteRoutingAdmin
+                history={history}
+                store={store}
+                theme={theme}
+                i18n={i18n}
+                decorators={decorators}
+              />
+            }
           </Route>
         </Switch>
       </Grid>
