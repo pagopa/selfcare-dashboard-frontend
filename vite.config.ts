@@ -142,11 +142,6 @@ export default defineConfig(({ mode }) => {
       sourcemap: true,
       minify: false,
     },
-    define: {
-      'process.env': Object.fromEntries(
-        Object.entries(env).filter(([key]) => key.startsWith('VITE_'))
-      ),
-    },
     resolve: {
       dedupe: ['react', 'react-dom', 'react-router-dom'],
     },

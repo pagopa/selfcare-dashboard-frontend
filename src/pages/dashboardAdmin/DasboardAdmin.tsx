@@ -1,11 +1,13 @@
-import { Grid, useTheme } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useState } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
+import withProductRolesMap from '../../decorators/withProductsRolesMap';
+import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
+import withSelectedProductRoles from '../../decorators/withSelectedPartyProductAndRoles';
 import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
 import { ENV } from '../../utils/env';
 import DashboardSideMenuDesktop from '../dashboard/components/dashboardSideMenu/DashboardSideMenuDesktop';
@@ -23,6 +25,11 @@ const DashboardAdminPage: React.FC = () => {
   const { i18n } = useTranslation();
   const history = useHistory();
   const location = useLocation();
+  const decorators = {
+    withProductRolesMap,
+    withSelectedProduct,
+    withSelectedProductRoles,
+  };
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hideLabels, setHideLabels] = useState(false);
@@ -63,7 +70,7 @@ const DashboardAdminPage: React.FC = () => {
       <Grid
         item
         component="main"
-        sx={{ backgroundColor: '#F4F5F8' }}
+        sx={{ backgroundColor: 'background.default' }}
         display="flex"
         minHeight="100vh"
         justifyContent="flex-start"
@@ -74,8 +81,16 @@ const DashboardAdminPage: React.FC = () => {
         lg={hideLabels ? 11 : 10}
       >
         <Switch>
-          <Route path={ENV.ROUTES.ADMIN} exact={false}>
-            {<RemoteRoutingAdmin history={history} store={store} theme={theme} i18n={i18n} />}
+          <Route path={[ENV.ROUTES.ADMIN_SEARCH, ENV.ROUTES.ADMIN_CONTRACT]} exact={false}>
+            {
+              <RemoteRoutingAdmin
+                history={history}
+                store={store}
+                theme={theme}
+                i18n={i18n}
+                decorators={decorators}
+              />
+            }
           </Route>
         </Switch>
       </Grid>

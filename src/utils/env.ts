@@ -1,17 +1,37 @@
-const PUBLIC_URL_INNER = import.meta.env.PUBLIC_URL || '/dashboard';
+import { i18n } from 'i18next';
+import { Store } from 'redux';
+
+const requiredEnv = (name: string, value: string | undefined): string => {
+  if (!value) {
+    throw new Error(`${name} is required`);
+  }
+
+  return value;
+};
+
+const optionalBoolEnv = (value: string | undefined, defaultValue = 'false'): boolean =>
+  (value ?? defaultValue) === 'true';
+
+const optionalStringEnv = (value: string | undefined, defaultValue: string): string =>
+  value ?? defaultValue;
+
+const PUBLIC_URL_INNER = import.meta.env.VITE_PUBLIC_URL || '/dashboard';
+
 export const ENV = {
-  ENV: import.meta.env.VITE_ENV,
+  STORE: {} as Store,
+  i18n: {} as i18n,
+  ENV: requiredEnv('VITE_ENV', import.meta.env.VITE_ENV),
   PUBLIC_URL: PUBLIC_URL_INNER,
 
   JSON_URL: {
-    COUNTRIES: import.meta.env.VITE_COUNTRY_DATA,
+    COUNTRIES: requiredEnv('VITE_COUNTRY_DATA', import.meta.env.VITE_COUNTRY_DATA),
   },
 
-  BASE_PATH_CDN_URL: import.meta.env.VITE_URL_CDN,
+  BASE_PATH_CDN_URL: requiredEnv('VITE_URL_CDN', import.meta.env.VITE_URL_CDN),
 
   ASSISTANCE: {
-    ENABLE: import.meta.env.VITE_ENABLE_ASSISTANCE === 'true',
-    EMAIL: import.meta.env.VITE_PAGOPA_HELP_EMAIL,
+    ENABLE: optionalBoolEnv(import.meta.env.VITE_ENABLE_ASSISTANCE),
+    EMAIL: requiredEnv('VITE_PAGOPA_HELP_EMAIL', import.meta.env.VITE_PAGOPA_HELP_EMAIL),
   },
 
   URL_DOCUMENTATION: 'https://docs.pagopa.it/area-riservata/',
@@ -27,53 +47,61 @@ export const ENV = {
     ADMIN: `${PUBLIC_URL_INNER}/admin`,
     ADMIN_PARTY_DETAIL: `${PUBLIC_URL_INNER}/admin/onboarding/:tokenId`,
     ADMIN_SEARCH: `${PUBLIC_URL_INNER}/admin/search`,
-    ADMIN_ONBOARDINGS: `${PUBLIC_URL_INNER}/admin/onboardings`,
+    ADMIN_CONTRACT: `${PUBLIC_URL_INNER}/admin/contract`,
   },
 
   URL_FE: {
-    LOGIN: import.meta.env.VITE_URL_FE_LOGIN,
-    LOGOUT: import.meta.env.VITE_URL_FE_LOGOUT,
-    ONBOARDING: import.meta.env.VITE_URL_FE_ONBOARDING,
-    LANDING: import.meta.env.VITE_URL_FE_LANDING,
-    ASSISTANCE: import.meta.env.VITE_URL_FE_ASSISTANCE,
-    LOGIN_GOOGLE: import.meta.env.VITE_GOOGLE_LOGIN_URL || '/auth/google',
+    LOGIN: requiredEnv('VITE_URL_FE_LOGIN', import.meta.env.VITE_URL_FE_LOGIN),
+    LOGOUT: requiredEnv('VITE_URL_FE_LOGOUT', import.meta.env.VITE_URL_FE_LOGOUT),
+    ONBOARDING: requiredEnv('VITE_URL_FE_ONBOARDING', import.meta.env.VITE_URL_FE_ONBOARDING),
+    LANDING: requiredEnv('VITE_URL_FE_LANDING', import.meta.env.VITE_URL_FE_LANDING),
+    ASSISTANCE: requiredEnv('VITE_URL_FE_ASSISTANCE', import.meta.env.VITE_URL_FE_ASSISTANCE),
+    LOGIN_GOOGLE: optionalStringEnv(import.meta.env.VITE_GOOGLE_LOGIN_URL, '/auth/google'),
   },
 
   URL_API: {
-    API_DASHBOARD: import.meta.env.VITE_URL_API_DASHBOARD,
-    PARTY_REGISTRY_PROXY: import.meta.env.VITE_URL_API_PARTY_REGISTRY_PROXY,
-    ONBOARDING_V2: import.meta.env.VITE_URL_API_ONBOARDING_V2,
+    API_DASHBOARD: requiredEnv('VITE_URL_API_DASHBOARD', import.meta.env.VITE_URL_API_DASHBOARD),
+    PARTY_REGISTRY_PROXY: requiredEnv(
+      'VITE_URL_API_PARTY_REGISTRY_PROXY',
+      import.meta.env.VITE_URL_API_PARTY_REGISTRY_PROXY
+    ),
   },
 
   GEOTAXONOMY: {
-    SHOW_GEOTAXONOMY: import.meta.env.VITE_ENABLE_GEOTAXONOMY === 'true',
+    SHOW_GEOTAXONOMY: optionalBoolEnv(import.meta.env.VITE_ENABLE_GEOTAXONOMY),
   },
 
   API_TIMEOUT_MS: {
-    DASHBOARD: parseInt(import.meta.env.VITE_API_DASHBOARD_TIMEOUT_MS || '30000', 10),
+    DASHBOARD: Number.parseInt(
+      requiredEnv('VITE_API_DASHBOARD_TIMEOUT_MS', import.meta.env.VITE_API_DASHBOARD_TIMEOUT_MS),
+      10
+    ),
   },
 
   URL_INSTITUTION_LOGO: {
-    PREFIX: import.meta.env.VITE_URL_INSTITUTION_LOGO_PREFIX,
-    SUFFIX: import.meta.env.VITE_URL_INSTITUTION_LOGO_SUFFIX,
+    PREFIX: requiredEnv(
+      'VITE_URL_INSTITUTION_LOGO_PREFIX',
+      import.meta.env.VITE_URL_INSTITUTION_LOGO_PREFIX
+    ),
+    SUFFIX: requiredEnv(
+      'VITE_URL_INSTITUTION_LOGO_SUFFIX',
+      import.meta.env.VITE_URL_INSTITUTION_LOGO_SUFFIX
+    ),
   },
 
   ANALYTCS: {
-    ENABLE: import.meta.env.VITE_ANALYTICS_ENABLE === 'true',
-    MOCK: import.meta.env.VITE_ANALYTICS_MOCK === 'true',
-    DEBUG: import.meta.env.VITE_ANALYTICS_DEBUG === 'true',
-    TOKEN: import.meta.env.VITE_MIXPANEL_TOKEN,
-    API_HOST: import.meta.env.VITE_MIXPANEL_API_HOST || 'https://api-eu.mixpanel.com',
+    ENABLE: optionalBoolEnv(import.meta.env.VITE_ANALYTICS_ENABLE),
+    MOCK: optionalBoolEnv(import.meta.env.VITE_ANALYTICS_MOCK),
+    DEBUG: optionalBoolEnv(import.meta.env.VITE_ANALYTICS_DEBUG),
+    TOKEN: requiredEnv('VITE_MIXPANEL_TOKEN', import.meta.env.VITE_MIXPANEL_TOKEN),
+    API_HOST: optionalStringEnv(import.meta.env.VITE_MIXPANEL_API_HOST, 'https://api-eu.mixpanel.com'),
   },
 
   DELEGATIONS: {
-    ENABLE: import.meta.env.VITE_DELEGATIONS_ENABLE === 'true',
+    ENABLE: optionalBoolEnv(import.meta.env.VITE_DELEGATIONS_ENABLE),
   },
 
-  MAX_ADMIN_COUNT: parseInt(import.meta.env.VITE_MAX_ADMIN_COUNT || '4', 10),
+  MAX_ADMIN_COUNT: optionalStringEnv(import.meta.env.VITE_MAX_ADMIN_COUNT, '4'),
 
-  SHOW_DOCUMENTS: import.meta.env.VITE_SHOW_DOCUMENTS === 'true',
-  ENABLE_DORA: import.meta.env.VITE_ENABLE_DORA === 'true',
-
-  ALLOWED_PREFIXES: import.meta.env.VITE_ALLOWED_PRODUCTS_BACKSTAGE || '',
+  SHOW_DOCUMENTS: optionalBoolEnv(import.meta.env.VITE_SHOW_DOCUMENTS),
 };

@@ -44,6 +44,9 @@ const App = () => {
           <Route path={ENV.ROUTES.ADMIN} exact={false}>
             <DashboardAdminPage />
           </Route>
+          <Route path={ENV.ROUTES.ADMIN_CONTRACT} exact={false}>
+            <DashboardAdminPage />
+          </Route>
 
           {buildRoutes(routes)}
 
