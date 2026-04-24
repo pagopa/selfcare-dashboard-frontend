@@ -1,19 +1,37 @@
-import * as env from 'env-var';
+import { i18n } from 'i18next';
+import { Store } from 'redux';
 
-const PUBLIC_URL_INNER: string | undefined = env.get('PUBLIC_URL').asString() || '/dashboard';
+const requiredEnv = (name: string, value: string | undefined): string => {
+  if (!value) {
+    throw new Error(`${name} is required`);
+  }
+
+  return value;
+};
+
+const optionalBoolEnv = (value: string | undefined, defaultValue = 'false'): boolean =>
+  (value ?? defaultValue) === 'true';
+
+const optionalStringEnv = (value: string | undefined, defaultValue: string): string =>
+  value ?? defaultValue;
+
+const PUBLIC_URL_INNER = import.meta.env.VITE_PUBLIC_URL || '/dashboard';
+
 export const ENV = {
-  ENV: env.get('REACT_APP_ENV').required().asString(),
+  STORE: {} as Store,
+  i18n: {} as i18n,
+  ENV: requiredEnv('VITE_ENV', import.meta.env.VITE_ENV),
   PUBLIC_URL: PUBLIC_URL_INNER,
 
   JSON_URL: {
-    COUNTRIES: env.get('REACT_APP_COUNTRY_DATA').required().asString(),
+    COUNTRIES: requiredEnv('VITE_COUNTRY_DATA', import.meta.env.VITE_COUNTRY_DATA),
   },
 
-  BASE_PATH_CDN_URL: env.get('REACT_APP_URL_CDN').required().asString(),
+  BASE_PATH_CDN_URL: requiredEnv('VITE_URL_CDN', import.meta.env.VITE_URL_CDN),
 
   ASSISTANCE: {
-    ENABLE: env.get('REACT_APP_ENABLE_ASSISTANCE').required().asBool(),
-    EMAIL: env.get('REACT_APP_PAGOPA_HELP_EMAIL').required().asString(),
+    ENABLE: optionalBoolEnv(import.meta.env.VITE_ENABLE_ASSISTANCE),
+    EMAIL: requiredEnv('VITE_PAGOPA_HELP_EMAIL', import.meta.env.VITE_PAGOPA_HELP_EMAIL),
   },
 
   URL_DOCUMENTATION: 'https://docs.pagopa.it/area-riservata/',
@@ -33,48 +51,57 @@ export const ENV = {
   },
 
   URL_FE: {
-    LOGIN: env.get('REACT_APP_URL_FE_LOGIN').required().asString(),
-    LOGOUT: env.get('REACT_APP_URL_FE_LOGOUT').required().asString(),
-    ONBOARDING: env.get('REACT_APP_URL_FE_ONBOARDING').required().asString(),
-    LANDING: env.get('REACT_APP_URL_FE_LANDING').required().asString(),
-    ASSISTANCE: env.get('REACT_APP_URL_FE_ASSISTANCE').required().asString(),
-    LOGIN_GOOGLE: env.get('REACT_APP_GOOGLE_LOGIN_URL').asString() || '/auth/google'
+    LOGIN: requiredEnv('VITE_URL_FE_LOGIN', import.meta.env.VITE_URL_FE_LOGIN),
+    LOGOUT: requiredEnv('VITE_URL_FE_LOGOUT', import.meta.env.VITE_URL_FE_LOGOUT),
+    ONBOARDING: requiredEnv('VITE_URL_FE_ONBOARDING', import.meta.env.VITE_URL_FE_ONBOARDING),
+    LANDING: requiredEnv('VITE_URL_FE_LANDING', import.meta.env.VITE_URL_FE_LANDING),
+    ASSISTANCE: requiredEnv('VITE_URL_FE_ASSISTANCE', import.meta.env.VITE_URL_FE_ASSISTANCE),
+    LOGIN_GOOGLE: optionalStringEnv(import.meta.env.VITE_GOOGLE_LOGIN_URL, '/auth/google'),
   },
 
   URL_API: {
-    API_DASHBOARD: env.get('REACT_APP_URL_API_DASHBOARD').required().asString(),
-    PARTY_REGISTRY_PROXY: env.get('REACT_APP_URL_API_PARTY_REGISTRY_PROXY').required().asString(),
+    API_DASHBOARD: requiredEnv('VITE_URL_API_DASHBOARD', import.meta.env.VITE_URL_API_DASHBOARD),
+    PARTY_REGISTRY_PROXY: requiredEnv(
+      'VITE_URL_API_PARTY_REGISTRY_PROXY',
+      import.meta.env.VITE_URL_API_PARTY_REGISTRY_PROXY
+    ),
   },
 
   GEOTAXONOMY: {
-    SHOW_GEOTAXONOMY: env.get('REACT_APP_ENABLE_GEOTAXONOMY').default('false').asBool(),
+    SHOW_GEOTAXONOMY: optionalBoolEnv(import.meta.env.VITE_ENABLE_GEOTAXONOMY),
   },
 
   API_TIMEOUT_MS: {
-    DASHBOARD: env.get('REACT_APP_API_DASHBOARD_TIMEOUT_MS').required().asInt(),
+    DASHBOARD: Number.parseInt(
+      requiredEnv('VITE_API_DASHBOARD_TIMEOUT_MS', import.meta.env.VITE_API_DASHBOARD_TIMEOUT_MS),
+      10
+    ),
   },
 
   URL_INSTITUTION_LOGO: {
-    PREFIX: env.get('REACT_APP_URL_INSTITUTION_LOGO_PREFIX').required().asString(),
-    SUFFIX: env.get('REACT_APP_URL_INSTITUTION_LOGO_SUFFIX').required().asString(),
+    PREFIX: requiredEnv(
+      'VITE_URL_INSTITUTION_LOGO_PREFIX',
+      import.meta.env.VITE_URL_INSTITUTION_LOGO_PREFIX
+    ),
+    SUFFIX: requiredEnv(
+      'VITE_URL_INSTITUTION_LOGO_SUFFIX',
+      import.meta.env.VITE_URL_INSTITUTION_LOGO_SUFFIX
+    ),
   },
 
   ANALYTCS: {
-    ENABLE: env.get('REACT_APP_ANALYTICS_ENABLE').default('false').asBool(),
-    MOCK: env.get('REACT_APP_ANALYTICS_MOCK').default('false').asBool(),
-    DEBUG: env.get('REACT_APP_ANALYTICS_DEBUG').default('false').asBool(),
-    TOKEN: env.get('REACT_APP_MIXPANEL_TOKEN').required().asString(),
-    API_HOST: env
-      .get('REACT_APP_MIXPANEL_API_HOST')
-      .default('https://api-eu.mixpanel.com')
-      .asString(),
+    ENABLE: optionalBoolEnv(import.meta.env.VITE_ANALYTICS_ENABLE),
+    MOCK: optionalBoolEnv(import.meta.env.VITE_ANALYTICS_MOCK),
+    DEBUG: optionalBoolEnv(import.meta.env.VITE_ANALYTICS_DEBUG),
+    TOKEN: requiredEnv('VITE_MIXPANEL_TOKEN', import.meta.env.VITE_MIXPANEL_TOKEN),
+    API_HOST: optionalStringEnv(import.meta.env.VITE_MIXPANEL_API_HOST, 'https://api-eu.mixpanel.com'),
   },
 
   DELEGATIONS: {
-    ENABLE: env.get('REACT_APP_DELEGATIONS_ENABLE').default('false').asBool(),
+    ENABLE: optionalBoolEnv(import.meta.env.VITE_DELEGATIONS_ENABLE),
   },
 
-  MAX_ADMIN_COUNT: env.get('REACT_APP_MAX_ADMIN_COUNT').default('4').asString(),
+  MAX_ADMIN_COUNT: optionalStringEnv(import.meta.env.VITE_MAX_ADMIN_COUNT, '4'),
 
-  SHOW_DOCUMENTS: env.get('REACT_APP_SHOW_DOCUMENTS').default('false').asBool(),
+  SHOW_DOCUMENTS: optionalBoolEnv(import.meta.env.VITE_SHOW_DOCUMENTS),
 };
