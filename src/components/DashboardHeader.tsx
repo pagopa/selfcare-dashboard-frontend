@@ -147,7 +147,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               }
             : false
         }
-        enableAssistanceButton={ENV.ENV !== 'UAT' && !isPagoPaUser}
+        enableAssistanceButton={ENV.ENV !== 'UAT' && !isPagoPaUser()}
         assistanceEmail={ENV.ASSISTANCE.EMAIL}
         onDocumentationClick={
           showDocBtn
