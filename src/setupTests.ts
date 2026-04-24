@@ -1,16 +1,20 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-import './locale';
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
+import { cleanup } from '@testing-library/react';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import it from './locale/it';
 
-beforeEach(() => {
-  jest.spyOn(console, 'warn').mockImplementation(() => {});
-  jest.spyOn(console, 'error').mockImplementation(() => {});
+void i18n.use(initReactI18next).init({
+  resources: {
+    it: { translation: it },
+  },
+  lng: 'it',
+  fallbackLng: 'it',
+  initImmediate: false,
+  interpolation: { escapeValue: false },
 });
 
-beforeAll(async () => {
-  await i18n.changeLanguage('it');
+afterEach(() => {
+  cleanup();
+  vi.clearAllMocks();
 });

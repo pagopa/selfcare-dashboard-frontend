@@ -1,21 +1,28 @@
 import { Box, Grid, Link, Typography } from '@mui/material';
-import { EnvironmentBanner } from '@pagopa/mui-italia';
+import { Banner, EnvironmentBanner } from '@pagopa/mui-italia';
 import {
   SessionModal,
   useErrorDispatcher,
   useLoading,
   usePermissions,
 } from '@pagopa/selfcare-common-frontend/lib';
+
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { isPagoPaUser, storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { isPecEmail } from '@pagopa/selfcare-common-frontend/lib/utils/utils';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { GeographicTaxonomyDto } from '../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
 import { GeographicTaxonomyResource } from '../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
-import { UploadIcon } from '../../components/icons/UploadIcon';
+import { UserOtpEmailInfo } from '../../api/generated/b4f-dashboard/UserOtpEmailInfo';
+import EnvelopeNotification from '../../assets/envelope-notification.svg?react';
+import { NotificationsActiveIcon } from '../../assets/icons/NotificationActive';
+import { UploadIcon } from '../../assets/icons/UploadIcon';
 import { useLogoExists } from '../../hooks/useLogoExist';
 import { Party } from '../../model/Party';
 import { Product, ProductInstitutionMap } from '../../model/Product';
@@ -23,7 +30,13 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../redux/slices/partiesSlice';
 import { mockedCategories } from '../../services/__mocks__/productService';
 import {
+  getAttachmentStatusService,
+  getUserOtpEmailInfoService,
+} from '../../services/partyService';
+import {
   LINK_UPLOAD_GUIDELINES_SEND,
+  LOADING_TASK_FETCH_ATTACHMENT_STATUS,
+  LOADING_TASK_FETCH_USER_OTP_EMAIL_INFO,
   LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES,
 } from '../../utils/constants';
 import { ENV } from '../../utils/env';
@@ -51,10 +64,14 @@ const DashboardOverview = ({ party, products }: Props) => {
     party.geographicTaxonomies ? party.geographicTaxonomies : [{ code: '', desc: '' }]
   );
   const [isAddNewAutocompleteEnabled, setIsAddNewAutocompleteEnabled] = useState<boolean>(false);
+  const [isDoraAddendumSigned, setIsDoraAddendumSigned] = useState<boolean>(false);
+  const [userOtpEmailInfo, setUserOtpEmailInfo] = useState<UserOtpEmailInfo | null>(null);
 
   const setLoadingSaveGeotaxonomies = useLoading(LOADING_TASK_SAVE_PARTY_GEOTAXONOMIES);
+  const setLoadingGetAttachmentStatus = useLoading(LOADING_TASK_FETCH_ATTACHMENT_STATUS);
+  const setLoadingGetUserOtpEmailInfo = useLoading(LOADING_TASK_FETCH_USER_OTP_EMAIL_INFO);
   const addError = useErrorDispatcher();
-
+  const history = useHistory();
   const dispatch = useAppDispatch();
   const setPartyUpdated = (partyUpdated: Party) => {
     dispatch(partiesActions.setPartySelected(partyUpdated));
@@ -67,21 +84,33 @@ const DashboardOverview = ({ party, products }: Props) => {
   const { getAllProductsWithPermission, hasPermission } = usePermissions();
   const canUploadLogo = getAllProductsWithPermission(Actions.UploadLogo).length > 0;
   const canUploadLogoOnSendProduct = hasPermission(PRODUCT_IDS.SEND, Actions.UploadLogo);
+  const PSPOnPagoPA = party.products.find(
+    (product) =>
+      product.productId === PRODUCT_IDS.PAGOPA &&
+      product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
+      product.institutionType === 'PSP'
+  );
+  const canUploadDoraAddendum =
+    ENV.ENABLE_DORA && hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract) && !!PSPOnPagoPA;
+  const pagoPATokenIDPSP = PSPOnPagoPA?.tokenId;
 
   const canSeeActiveProductsList =
     getAllProductsWithPermission(Actions.ListActiveProducts).length > 0;
 
   const canSeeNotActiveProductsList =
     getAllProductsWithPermission(Actions.ListAvailableProducts).length > 0;
+  const canUpdateUsers = getAllProductsWithPermission(Actions.UpdateProductUsers).length > 0;
+
   const logoExists = useLogoExists(party.urlLogo ?? '');
 
   const getOnboardingAllowedByInstitutionType = async () => {
-    if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+    if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
       setAllowedInstitutionTypes(mockedCategories);
       await Promise.resolve(mockedCategories);
     } else {
       try {
         const response = await fetch(
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           ENV.BASE_PATH_CDN_URL + '/assets/product_institution_types.json'
         );
 
@@ -127,12 +156,14 @@ const DashboardOverview = ({ party, products }: Props) => {
     (type) => !['PT', 'SA', 'AS'].includes(type)
   );
 
+  const canSeeGeoTaxonomyModal =
+    ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
+    getAllProductsWithPermission(Actions.UpdateGeoTaxonomy).length > 0 &&
+    (!party.geographicTaxonomies || party?.geographicTaxonomies?.length === 0) &&
+    showGeoTaxonomyForInstitutionType;
+
   useEffect(() => {
-    if (
-      ENV.GEOTAXONOMY.SHOW_GEOTAXONOMY &&
-      (!party.geographicTaxonomies || party?.geographicTaxonomies?.length === 0) &&
-      showGeoTaxonomyForInstitutionType
-    ) {
+    if (canSeeGeoTaxonomyModal) {
       setOpenModalFirstTimeAddGeographicTaxonomies(true);
     } else if (party.geographicTaxonomies && party?.geographicTaxonomies?.length > 0) {
       setOptionsSelected(party?.geographicTaxonomies);
@@ -168,6 +199,64 @@ const DashboardOverview = ({ party, products }: Props) => {
         setOpenModalFirstTimeAddGeographicTaxonomies(false);
       });
   };
+
+  const getAttachmentStatus = () => {
+    setLoadingGetAttachmentStatus(true);
+    getAttachmentStatusService(party.partyId, PRODUCT_IDS.PAGOPA, 'Addendum')
+      .then((response) => {
+        setIsDoraAddendumSigned(!!response.isAttachmentAvailable);
+      })
+      .catch((error) =>
+        addError({
+          id: 'UNSUCCESS_GET_ATTACHMENT_STATUS',
+          blocking: false,
+          techDescription: `An error occured while getting attachment status for party id ${party.partyId}`,
+          toNotify: false,
+          error,
+        })
+      )
+      .finally(() => {
+        setLoadingGetAttachmentStatus(false);
+      });
+  };
+
+  useEffect(() => {
+    if (!canUploadDoraAddendum) {
+      return;
+    }
+    if (PSPOnPagoPA) {
+      getAttachmentStatus();
+    }
+  }, [party.partyId]);
+
+  const currentUserId = storageUserOps.read()?.uid || '';
+
+  useEffect(() => {
+    if (isPagoPaUser() === false && canUpdateUsers) {
+      setLoadingGetUserOtpEmailInfo(true);
+      getUserOtpEmailInfoService()
+        .then((userOtpEmailInfo) => {
+          setUserOtpEmailInfo(userOtpEmailInfo);
+        })
+        .catch((error) => {
+          addError({
+            id: 'UNSUCCESS_GET_USER_OTP_EMAIL_INFO',
+            blocking: false,
+            techDescription: `An error occurred while fetching user OTP email info for user id ${currentUserId}`,
+            toNotify: false,
+            error,
+          });
+        })
+        .finally(() => {
+          setLoadingGetUserOtpEmailInfo(false);
+        });
+    }
+  }, [canUpdateUsers]);
+
+  const canSeePecBanner = () =>
+    userOtpEmailInfo?.canUserChangeOtpEmail === true &&
+    party.partyId === userOtpEmailInfo?.otpReferenceInstitutionId &&
+    isPecEmail(userOtpEmailInfo?.otpEmail ?? '');
 
   return (
     <Box p={3} sx={{ width: '100%' }}>
@@ -230,6 +319,32 @@ const DashboardOverview = ({ party, products }: Props) => {
         showGeoTaxonomyForInstitutionType={showGeoTaxonomyForInstitutionType}
       />
       <WelcomeDashboard setOpen={setOpen} />
+      {canSeePecBanner() && (
+        <Box mt={5}>
+          <Banner
+            variant="primary"
+            color="info"
+            title={t('overview.pecOtp.title')}
+            message={t('overview.pecOtp.message')}
+            badge={t('overview.pecOtp.badgeLabel')}
+            illustration={
+              <div style={{ width: 60, height: 50 }}>
+                <EnvelopeNotification />
+              </div>
+            }
+            cta={{
+              label: t('overview.pecOtp.modifyButton'),
+              onClick: () => {
+                history.push(
+                  `${import.meta.env.BASE_URL}/${
+                    userOtpEmailInfo?.otpReferenceInstitutionId
+                  }/users/${userOtpEmailInfo?.userId}/edit`
+                );
+              },
+            }}
+          />
+        </Box>
+      )}
       {canUploadLogoOnSendProduct && !logoExists && (
         <Box mt={5} sx={{ '& button': { fontSize: '16px !important' } }}>
           <EnvironmentBanner
@@ -266,6 +381,23 @@ const DashboardOverview = ({ party, products }: Props) => {
               onClick: () => setOpen(true),
             }}
             icon={<UploadIcon size={20} />}
+          />
+        </Box>
+      )}
+      {canUploadDoraAddendum && !isDoraAddendumSigned && (
+        <Box mt={5} sx={{ '& button': { fontSize: '16px !important' } }}>
+          <EnvironmentBanner
+            bgColor="info"
+            title={t('overview.dora.title')}
+            message={(<Typography>{t('overview.dora.message')}</Typography>) as unknown as string}
+            actionButton={{
+              label: t('overview.dora.downloadButton'),
+              onClick: () =>
+                globalThis.location.assign(
+                  `${ENV.URL_FE.ONBOARDING}/${pagoPATokenIDPSP}/attachments`
+                ),
+            }}
+            icon={<NotificationsActiveIcon size={20} />}
           />
         </Box>
       )}

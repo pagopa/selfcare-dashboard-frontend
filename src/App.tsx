@@ -9,7 +9,7 @@ import withLogin from '@pagopa/selfcare-common-frontend/lib/decorators/withLogin
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
-import { Redirect, Route, Switch, useHistory } from 'react-router';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
 import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';
@@ -41,20 +41,17 @@ const App = () => {
           <Route path={ENV.ROUTES.ADMIN_PARTY_DETAIL} exact={false}>
             <RemoteRoutingAdmin store={store} theme={theme} i18n={i18n} history={history} />
           </Route>
-          <Route path={ENV.ROUTES.ADMIN_SEARCH} exact={false}>
+          <Route path={ENV.ROUTES.ADMIN} exact={false}>
             <DashboardAdminPage />
           </Route>
           <Route path={ENV.ROUTES.ADMIN_CONTRACT} exact={false}>
             <DashboardAdminPage />
           </Route>
 
-          <Route exact path="/dashboard">
-            <Redirect to={isPagoPaUser ? ENV.ROUTES.ADMIN_SEARCH : routes.PARTY_SELECTION.path} />
-          </Route>
           {buildRoutes(routes)}
 
           <Route path="*">
-            <Redirect to={isPagoPaUser ? ENV.ROUTES.ADMIN_SEARCH : routes.PARTY_SELECTION.path} />
+            <Redirect to={isPagoPaUser() ? ENV.ROUTES.ADMIN_SEARCH : routes.PARTY_SELECTION.path} />
           </Route>
         </Switch>
       </Layout>

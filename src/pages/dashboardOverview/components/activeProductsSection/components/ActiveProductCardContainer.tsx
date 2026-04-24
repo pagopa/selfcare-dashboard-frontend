@@ -3,6 +3,7 @@ import { SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/l
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -11,7 +12,7 @@ import { OnboardedProduct, Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { INTEROP_PRODUCT_ENUM } from '../../../../../utils/constants';
 import { ENV } from '../../../../../utils/env';
-import { startWithProductInterop } from '../../../../../utils/helperFunctions';
+import { isProductAllowed, startWithProductInterop } from '../../../../../utils/helperFunctions';
 import ActiveProductCard from './ActiveProductCard';
 import GenericEnvProductModal from './GenericEnvProductModal';
 import SessionModalInteropProduct from './SessionModalInteropProduct';
@@ -45,11 +46,13 @@ export default function ActiveProductCardContainer({
     partyId: party.partyId ?? '',
   })}#${PRODUCT_IDS.PAGOPA}`;
 
-  const isDisabled = !!party.products.find(
-    (p) =>
-      p.productId === product.productId &&
-      hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
-  );
+  const isDisabled = isPagoPaUser()
+    ? !isProductAllowed(product.productId || '')
+    : !!party.products.find(
+        (p) =>
+          p.productId === product.productId &&
+          hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
+      );
 
   const productOnboarded = products.find((p) => p.id === product.productId);
   const interopProduction = products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP);

@@ -2,7 +2,6 @@ import { ProductsResource, StatusEnum } from '../../api/generated/b4f-dashboard/
 import { productResource2Product } from '../Product';
 
 test('Test institutionInfo2Party', () => {
-  const date = new Date();
 
   const productResource: ProductsResource = {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',

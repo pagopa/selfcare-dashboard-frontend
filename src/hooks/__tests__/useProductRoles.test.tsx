@@ -1,19 +1,26 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
+import type { Mock } from 'vitest';
 import withProductsRolesMap from '../../decorators/withProductsRolesMap';
 import { Product } from '../../model/Product';
-import { ProductRole } from '../../model/ProductRole';
+import { ProductRole, ProductsRolesMap } from '../../model/ProductRole';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { createStore } from '../../redux/store';
 import { mockedParties } from '../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
+import { fetchProductRoles } from '../../services/productService';
 import { useProductRoles } from '../useProductRoles';
 
-jest.mock('../../services/productService');
+vi.mock('../../services/productService', () => ({
+  fetchProductRoles: vi.fn(),
+}));
+
+const mockedFetchProductRoles = fetchProductRoles as Mock;
 
 const renderApp = (product: Product, injectedStore?: ReturnType<typeof createStore>) => {
-  const store = injectedStore ? injectedStore : createStore();
+  const store = injectedStore ?? createStore();
+
   const Component = () => {
     const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
     const fetchProductRoles = useProductRoles();
@@ -36,45 +43,58 @@ const renderApp = (product: Product, injectedStore?: ReturnType<typeof createSto
       <Component />
     </Provider>
   );
+
   return store;
 };
 
 const renderWithProductsRolesMapDecorated = (injectedStore?: ReturnType<typeof createStore>) => {
-  const store = injectedStore ? injectedStore : createStore();
+  const store = injectedStore ?? createStore();
   const Component = () => <>RENDERED using withProductsRolesMap</>;
   const DecoratedComponent = withProductsRolesMap(Component);
+
   render(
     <Provider store={store}>
       <DecoratedComponent />
     </Provider>
   );
+
   return store;
 };
 
-let fetchProductRolesSpy: jest.SpyInstance;
-
 beforeEach(() => {
-  fetchProductRolesSpy = jest.spyOn(require('../../services/productService'), 'fetchProductRoles');
+  mockedFetchProductRoles.mockReset();
+  mockedFetchProductRoles.mockResolvedValue({
+    list: [{ id: 'role-1' }],
+  });
 });
 
 test.skip('Test', async () => {
   const store = renderApp(mockedPartyProducts[0]);
+
   await waitFor(() =>
-    screen.getByText(`RENDERED using useProductRoles and fetching ${mockedPartyProducts[0].id}`)
+    expect(
+      screen.getByText(`RENDERED using useProductRoles and fetching ${mockedPartyProducts[0].id}`)
+    ).toBeInTheDocument()
   );
-  await (
-    await waitFor(() => expect(store.getState().parties.selectedProductsRolesMap))
-  ).not.toBeUndefined();
+
+  await waitFor(() =>
+    expect(store.getState().parties.selectedProductsRolesMap).not.toBeUndefined()
+  );
 
   await checkProductsRolesMapLength(1, store);
 
   renderApp(mockedPartyProducts[1], store);
+
   await waitFor(() =>
-    screen.getByText(`RENDERED using useProductRoles and fetching ${mockedPartyProducts[1].id}`)
+    expect(
+      screen.getByText(`RENDERED using useProductRoles and fetching ${mockedPartyProducts[1].id}`)
+    ).toBeInTheDocument()
   );
+
   await checkProductsRolesMapLength(2, store);
 
   renderApp(mockedPartyProducts[0], store);
+
   await waitFor(() =>
     expect(
       screen.getAllByText(
@@ -82,23 +102,33 @@ test.skip('Test', async () => {
       ).length
     ).toBe(2)
   );
+
   await checkProductsRolesMapLength(2, store);
 
   store.dispatch(partiesActions.setPartySelectedProducts(mockedPartyProducts));
   renderWithProductsRolesMapDecorated(store);
-  await waitFor(() => screen.getByText('RENDERED using withProductsRolesMap'));
+
+  await waitFor(() =>
+    expect(screen.getByText('RENDERED using withProductsRolesMap')).toBeInTheDocument()
+  );
 
   await checkProductsRolesMapLength(
-    mockedPartyProducts.filter((p) => p.productOnBoardingStatus === 'ACTIVE').length,
+    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
     store
   );
 
   renderApp(mockedPartyProducts[2], store);
+
   await waitFor(() =>
-    screen.getAllByText(`RENDERED using useProductRoles and fetching ${mockedPartyProducts[2].id}`)
+    expect(
+      screen.getAllByText(
+        `RENDERED using useProductRoles and fetching ${mockedPartyProducts[2].id}`
+      ).length
+    ).toBeGreaterThan(0)
   );
 
   renderApp(mockedPartyProducts[0], store);
+
   await waitFor(() =>
     expect(
       screen.getAllByText(
@@ -108,12 +138,12 @@ test.skip('Test', async () => {
   );
 
   await checkProductsRolesMapLength(
-    mockedPartyProducts.filter((p) => p.productOnBoardingStatus === 'ACTIVE').length,
+    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
     store
   );
 
-  expect(fetchProductRolesSpy).toBeCalledTimes(
-    mockedPartyProducts.filter((p) => p.productOnBoardingStatus === 'ACTIVE').length
+  expect(mockedFetchProductRoles).toHaveBeenCalledTimes(
+    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length
   );
 });
 
@@ -122,8 +152,8 @@ const checkProductsRolesMapLength = async (
   store: ReturnType<typeof createStore>
 ) => {
   await waitFor(() =>
-    expect(Object.keys(store.getState().parties.selectedProductsRolesMap).length).toBe(
-      expectedProductCached
-    )
+    expect(
+      Object.keys(store.getState().parties.selectedProductsRolesMap as ProductsRolesMap).length
+    ).toBe(expectedProductCached)
   );
 };

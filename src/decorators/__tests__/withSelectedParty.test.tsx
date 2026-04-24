@@ -1,28 +1,42 @@
 import { render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
-import { Route, Router, Switch } from 'react-router';
+import { Route, Router, Switch } from 'react-router-dom';
+import type { Mock } from 'vitest';
+import { BaseParty, Party } from '../../model/Party';
+import { Product } from '../../model/Product';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { RootState, createStore } from '../../redux/store';
 import {
   mockedParties,
   verifyFetchPartyDetailsMockExecution,
 } from '../../services/__mocks__/partyService';
-import { verifyFetchPartyProductsMockExecution } from '../../services/__mocks__/productService';
+import {
+  mockedPartyProducts,
+  verifyFetchPartyProductsMockExecution,
+} from '../../services/__mocks__/productService';
+import { fetchPartyDetails } from '../../services/partyService';
+import { fetchProducts } from '../../services/productService';
 import withSelectedParty from '../withSelectedParty';
 
-jest.mock('../../services/partyService');
-jest.mock('../../services/productService');
+vi.mock('../../services/partyService', () => ({
+  fetchPartyDetails: vi.fn(),
+}));
+
+vi.mock('../../services/productService', () => ({
+  fetchProducts: vi.fn(),
+}));
 
 const expectedPartyId: string = '1';
 
-let fetchPartyDetailsSpy: jest.SpyInstance;
-let fetchPartyProductsSpy: jest.SpyInstance;
+const mockedFetchPartyDetails = fetchPartyDetails as Mock;
+const mockedFetchProducts = fetchProducts as Mock;
 
 beforeEach(() => {
-  fetchPartyDetailsSpy = jest.spyOn(require('../../services/partyService'), 'fetchPartyDetails');
-  fetchPartyProductsSpy = jest.spyOn(require('../../services/productService'), 'fetchProducts');
+  mockedFetchPartyDetails.mockReset();
+  mockedFetchProducts.mockReset();
+  mockedFetchPartyDetails.mockResolvedValue(mockedParties[0]);
+  mockedFetchProducts.mockResolvedValue(mockedPartyProducts);
 });
 
 const renderApp = async (
@@ -30,8 +44,8 @@ const renderApp = async (
   injectedStore?: ReturnType<typeof createStore>,
   injectedHistory?: ReturnType<typeof createMemoryHistory>
 ) => {
-  const store = injectedStore ? injectedStore : createStore();
-  const history = injectedHistory ? injectedHistory : createMemoryHistory();
+  const store = injectedStore ?? createStore();
+  const history = injectedHistory ?? createMemoryHistory();
 
   if (!injectedHistory) {
     history.push(`/${expectedPartyId}`);
@@ -70,7 +84,7 @@ test('Test default behavior when no parties', async () => {
 test('Test party not active', async () => {
   const store = createStore();
   const history = createMemoryHistory();
-  store.dispatch(partiesActions.setPartiesList(mockedParties));
+  store.dispatch(partiesActions.setPartiesList(mockedParties as Array<BaseParty>));
   await renderApp(false, store, history);
   history.push(`/2`);
 
@@ -79,16 +93,8 @@ test('Test party not active', async () => {
 });
 
 const checkSelectedParty = (state: RootState) => {
-  const party = state.parties.selected;
-  const partyProducts = state.parties.selectedProducts;
+  const party = state.parties.selected as Party;
+  const partyProducts = state.parties.selectedProducts as Array<Product>;
   verifyFetchPartyDetailsMockExecution(party);
   verifyFetchPartyProductsMockExecution(partyProducts);
-};
-
-const checkMockInvocation = (expectedCallsNumber: number) => {
-  expect(fetchPartyDetailsSpy).toBeCalledTimes(expectedCallsNumber);
-  expect(fetchPartyDetailsSpy).toBeCalledWith(expectedPartyId);
-
-  expect(fetchPartyProductsSpy).toBeCalledTimes(expectedCallsNumber);
-  expect(fetchPartyProductsSpy).toBeCalledWith(expectedPartyId);
 };

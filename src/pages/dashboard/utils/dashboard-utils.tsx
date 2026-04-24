@@ -1,6 +1,6 @@
 // src/pages/dashboard/dashboard.utils.ts
 import React from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 import { Party } from '../../../model/Party';
 import { Product, ProductsMap } from '../../../model/Product';
 import { RouteConfig, RoutesObject } from '../../../routes';
@@ -38,6 +38,7 @@ export const reduceDecorators = (
  */
 export const getButtonText = (pathname: string, t: (key: string) => string): string => {
   const pathMap: Record<string, string> = {
+    onboardings: 'overview.sideMenu.institutionManagement.onboardings.title',
     users: 'overview.sideMenu.institutionManagement.referents.title',
     groups: 'overview.sideMenu.institutionManagement.groups.title',
     delegations: 'overview.sideMenu.institutionManagement.delegations.title',

@@ -156,6 +156,12 @@ export default function ActiveProductCard({
             id={`forward_${product.id}`}
             color="primary"
             aria-label={`Accedi alla piattaforma del prodotto ${product.title}`}
+            sx={{
+              '&:focus-visible': {
+                outline: () => `2px solid #000000`,
+                outlineOffset: '2px',
+              },
+            }}
           >
             <ArrowForward />
           </IconButton>

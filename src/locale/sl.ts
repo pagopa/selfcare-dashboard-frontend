@@ -18,8 +18,8 @@ export default {
     label: 'Poiščite organizacijo',
     notFoundResults: 'Brez rezultatov',
   },
-  searchBackstagePage:{
-    supportRole: 'Podpora'
+  searchBackstagePage: {
+    supportRole: 'Podpora',
   },
   noActiveParty: {
     pending: {
@@ -51,6 +51,8 @@ export default {
     subTitle:
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
+      titleExpand: 'Razširi stranski meni',
+      titleCollapse: 'Strni stranski meni',
       institutionManagement: {
         title: 'Upravljanje organizacije',
         overview: {
@@ -134,7 +136,15 @@ export default {
       info: 'Vnesite samo logotip svoje organizacije. Prevzemate odgovornost za vstavljanje slik, ki so drugačne od navedenih.',
       infoEditLabel: 'Natančna velikost 300 x 300px – Format .jpg ali .png',
     },
+    pecOtp: {
+      title: 'Posodobite svoj e-poštni naslov',
+      message:
+        'Vnesli ste naslov PEC. Ta naslov ne more prejemati verifikacijskih kod (OTP), ki so potrebne za prijavo. Za nemoten dostop uporabite običajen e-poštni naslov.',
+      modifyButton: 'Spremeni e-pošto',
+      badgeLabel: 'Pomembno obvestilo',
+    },
     changeDetails: 'Upravljajte podatke organizacije',
+    viewDetails: 'Oglejte si podatke organa',
     partyDetail: {
       institutionType: 'Tipologija',
       category: 'Kategorija',

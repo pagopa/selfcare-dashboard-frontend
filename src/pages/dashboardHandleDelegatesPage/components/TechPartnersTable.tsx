@@ -1,7 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import {
   Button,
-  Divider,
   FormControl,
   Grid,
   InputAdornment,
@@ -214,58 +213,55 @@ export default function TechPartnersTable({ delegationsWithoutDuplicates }: Read
               <TableBody sx={{ backgroundColor: 'background.paper' }}>
                 {getSortedData(tableData)
                   .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-                  .map((item, _index) => {
+                  .map((item) => {
                     const isClickable = item.type === 'EA' && partyIdsSet.has(item.institutionId);
 
                     return (
-                      <>
-                        <TableRow key={item.id}>
-                          <TableCellWithStyle
-                            text={
-                              isClickable ? (
-                                <ButtonNaked
-                                  color="primary"
-                                  component="button"
-                                  sx={{
-                                    fontWeight: 700,
-                                    fontSize: '16px',
-                                    textAlign: 'left',
-                                  }}
-                                  onClick={() => {
-                                    window.location.assign(
-                                      resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
-                                        partyId: item?.institutionId ?? '',
-                                      })
-                                    );
-                                  }}
-                                >
-                                  {getInstitutionDisplayName(
-                                    item.institutionName,
-                                    item.institutionRootName
-                                  )}
-                                </ButtonNaked>
-                              ) : (
-                                getInstitutionDisplayName(
+                      <TableRow key={item.id}>
+                        <TableCellWithStyle
+                          text={
+                            isClickable ? (
+                              <ButtonNaked
+                                color="primary"
+                                component="button"
+                                sx={{
+                                  fontWeight: 700,
+                                  fontSize: '16px',
+                                  textAlign: 'left',
+                                }}
+                                onClick={() => {
+                                  window.location.assign(
+                                    resolvePathVariables(ROUTES.PARTY_DASHBOARD.path, {
+                                      partyId: item?.institutionId ?? '',
+                                    })
+                                  );
+                                }}
+                              >
+                                {getInstitutionDisplayName(
                                   item.institutionName,
                                   item.institutionRootName
-                                )
+                                )}
+                              </ButtonNaked>
+                            ) : (
+                              getInstitutionDisplayName(
+                                item.institutionName,
+                                item.institutionRootName
                               )
-                            }
-                          />
-                          <TableCell>
-                            <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
-                              {item.taxCode?.toUpperCase() ?? '-'}
-                            </Typography>
-                          </TableCell>
-                          <TableCell>
-                            {prodIdToProdTitle(item.productId as string) ?? '-'}
-                          </TableCell>
-                          <TableCell>
-                            <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
-                          </TableCell>
-                        </TableRow>
-                        <Divider />
-                      </>
+                            )
+                          }
+                        />
+                        <TableCell>
+                          <Typography variant="body2" sx={{ fontFamily: 'DM Mono' }}>
+                            {item.taxCode?.toUpperCase() ?? '-'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          {prodIdToProdTitle(item.productId as string) ?? '-'}
+                        </TableCell>
+                        <TableCell>
+                          <Typography>{item.createdAt?.toLocaleDateString() ?? '-'}</Typography>
+                        </TableCell>
+                      </TableRow>
                     );
                   })}
               </TableBody>

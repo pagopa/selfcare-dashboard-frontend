@@ -84,7 +84,7 @@ export default function NoParty() {
             prodotti?
             <Link
               color="#0073E6"
-              href={`${ENV.URL_FE.ONBOARDING}/user`}
+              href={ENV.URL_FE.ASSISTANCE}
               underline="none"
               sx={{ fontSize: '18px', cursor: 'pointer' }}
             >

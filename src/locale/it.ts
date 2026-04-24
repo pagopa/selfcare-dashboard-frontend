@@ -5,6 +5,7 @@ export default {
   },
   exitModal: {
     title: 'Confermi di voler uscire da Area Riservata?',
+    titleBackstage: 'Confermi di voler uscire da Area Riservata Backstage?',
     confirm: 'Esci',
     cancel: 'Annulla',
   },
@@ -60,13 +61,18 @@ export default {
     subTitle:
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
+      titleExpand: 'Espandi menu laterale',
+      titleCollapse: 'Comprimi menu laterale',
       institutionManagement: {
         title: 'Gestione Ente',
         overview: {
           title: 'Panoramica',
         },
         adminPage: {
-          title: 'Panoramica Enti',
+          title: 'Dashboard',
+        },
+        onboardings: {
+          title: 'Adesioni',
         },
         delegations: {
           title: 'Deleghe',
@@ -159,9 +165,22 @@ export default {
       size: 'Dimensione esatta 300 x <1/> 300px - Formato .png',
       info: 'Inserisci solo il logo del tuo ente. Sarai responsabile dell’inserimento di immagini diverse da quella indicata.',
       infoEditLabel: 'Dimensione esatta 300 x 300px - Formato .jpg o .png',
-
+    },
+    dora: {
+      title: 'Nuovo addendum DORA',
+      message:
+        "Ritieni che ai sensi del Reg. DORA PagoPA rivesta il ruolo di fornitore TIC? Se ritieni di sì, puoi scaricare l'Addendum contrattuale standard che abbiamo reso disponibile per tutti i PSP per prenderne visione e procedere alla relativa sottoscrizione.",
+      downloadButton: 'Scarica il documento',
+    },
+    pecOtp: {
+      title: 'Aggiorna il tuo indirizzo email',
+      message:
+        "Hai inserito un indirizzo PEC come recapito email. Questo indirizzo non riceve i codici di verifica (OTP), necessari per accedere. Usa un'email ordinaria per continuare ad accedere senza problemi.",
+      modifyButton: 'Modifica email',
+      badgeLabel: 'Avviso importante',
     },
     changeDetails: 'Gestisci i dati dell’ente',
+    viewDetails: 'Vedi i dati dell’ente',
     partyDetail: {
       institutionType: 'Tipologia',
       category: 'Categoria',

@@ -280,7 +280,7 @@ export const mockedDelegationsWithPagination: DelegationWithPagination = {
 
 export const getDelegatingInstitutions = (partyId: string): Promise<DelegationWithPagination> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PRODUCTS === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PRODUCTS === 'true') {
     return Promise.resolve(mockedDelegationsWithPagination);
   } else {
     return DashboardApi.getDelegatingInstitutions(partyId).then(

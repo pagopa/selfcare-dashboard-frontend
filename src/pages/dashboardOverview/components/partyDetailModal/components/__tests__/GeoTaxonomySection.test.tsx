@@ -1,12 +1,11 @@
-import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GeographicTaxonomyResource } from '../../../../../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { renderWithProviders } from '../../../../../../utils/test-utils';
 import GeoTaxonomySection from '../GeoTaxonomySection';
 
-const mockSetOptionsSelected = jest.fn();
-const mockSetIsAddNewAutocompleteEnabled = jest.fn();
+const mockSetOptionsSelected = vi.fn();
+const mockSetIsAddNewAutocompleteEnabled = vi.fn();
 
 const mockGeographicTaxonomies: Array<GeographicTaxonomyResource> = [
   { code: '001', desc: 'Area 1' },
@@ -14,15 +13,12 @@ const mockGeographicTaxonomies: Array<GeographicTaxonomyResource> = [
 ];
 
 beforeEach(() => {
-  jest.clearAllMocks();
-});
-
-beforeAll(() => {
-  i18n.changeLanguage('it');
+  vi.clearAllMocks();
 });
 
 describe('GeoTaxonomySection', () => {
-  test('renders component with Local options selected', () => {
+  test('renders component with Local options selected', async () => {
+    const user = userEvent.setup();
     renderWithProviders(
       <GeoTaxonomySection
         geographicTaxonomies={mockGeographicTaxonomies}
@@ -42,7 +38,7 @@ describe('GeoTaxonomySection', () => {
     expect(autocomplete[0]).toBeInTheDocument();
     fireEvent.click(autocomplete[0]);
 
-    userEvent.type(autocomplete[0], 'Rom');
+    await user.type(autocomplete[0], 'Rom');
 
     const addButton = screen.getByText('Aggiungi area');
     expect(addButton).toBeInTheDocument();

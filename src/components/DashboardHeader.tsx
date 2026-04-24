@@ -1,4 +1,4 @@
-import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
+import { PartySwitchItem } from '@pagopa/mui-italia/components/PartySwitch';
 import { Header, SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
@@ -47,14 +47,14 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const { hasPermission } = usePermissions();
 
   useEffect(() => {
-    if (isPagoPaUser) {
+    if (isPagoPaUser()) {
       setShowDocBtn(false);
       return;
     }
     setShowDocBtn(i18n.language === 'it');
   }, [i18n.language, isPagoPaUser]);
 
-  const parties2Show = isPagoPaUser
+  const parties2Show = isPagoPaUser()
     ? [party]
     : parties?.filter((party) => party.status === 'ACTIVE');
 
@@ -94,12 +94,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const pagoPaInstitution: PartySwitchItem = {
     id: 'pagoPA1231313',
     name: 'PagoPA S.p.A.',
-    logoUrl: 'icons/icon-48x48.png',
+    logoUrl: '/dashboard/icons/icon-48x48.png',
     productRole: t('searchBackstagePage.supportRole'),
   };
 
   const fixedParty =
-    isPagoPaUser && location.pathname?.includes('admin') ? pagoPaInstitution : undefined;
+    isPagoPaUser() && location.pathname?.includes('admin') ? pagoPaInstitution : undefined;
 
   return (
     <div>
@@ -127,7 +127,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             id: party?.partyId ?? '',
             name: party?.description ?? '',
             productRole:
-              isPagoPaUser && !location.pathname?.includes('admin')
+              isPagoPaUser() && !location.pathname?.includes('admin')
                 ? undefined
                 : t(
                     roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey
@@ -202,7 +202,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       />
       <SessionModal
         open={openExitModal}
-        title={t('exitModal.title')}
+        title={isPagoPaUser() ? t('exitModal.titleBackstage') : t('exitModal.title')}
         message=""
         onConfirmLabel={t('exitModal.confirm')}
         onCloseLabel={t('exitModal.cancel')}
@@ -211,8 +211,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         onConfirm={() => {
           setOpenExitModal(false);
-          // window.location.assign(isPagoPaUser ? ENV.URL_FE.LOGIN_GOOGLE : ENV.URL_FE.LOGOUT);
-          window.location.assign(ENV.URL_FE.LOGOUT);
+          window.location.assign(
+            isPagoPaUser() ? `${ENV.URL_FE.LOGOUT}/google` : ENV.URL_FE.LOGOUT
+          );
         }}
       />
       <SessionModalInteropProduct

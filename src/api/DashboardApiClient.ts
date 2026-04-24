@@ -10,6 +10,7 @@ import { Product } from '../model/Product';
 import { store } from '../redux/store';
 import { ENV } from '../utils/env';
 import { BrokerResource } from './generated/b4f-dashboard/BrokerResource';
+import { CheckAttachmentResponse } from './generated/b4f-dashboard/CheckAttachmentResponse';
 import { WithDefaultsT, createClient } from './generated/b4f-dashboard/client';
 import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
 import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
@@ -20,6 +21,7 @@ import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResour
 import { OnboardingInfo } from './generated/b4f-dashboard/OnboardingInfo';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
+import { UserOtpEmailInfo } from './generated/b4f-dashboard/UserOtpEmailInfo';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
   const token = storageTokenOps.read();
@@ -57,6 +59,13 @@ export const DashboardApi = {
 
   getInstitution: async (institutionId: string): Promise<InstitutionResource> => {
     const result = await apiClient.v2GetInstitution({
+      institutionId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getAllInstituionById: async (institutionId: string): Promise<InstitutionResource | null> => {
+    const result = await apiClient.v2GetAllInstitution({
       institutionId,
     });
     return extractResponse(result, 200, onRedirectToLogin);
@@ -191,6 +200,25 @@ export const DashboardApi = {
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },
+
+  getAttachmentStatus: async (
+    institutionId: string,
+    productId: string,
+    name: string
+  ): Promise<CheckAttachmentResponse> => {
+    const result = await apiClient.v2CheckAttachment({
+      institutionId,
+      productId,
+      name,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getUserOtpEmailInfo: async (): Promise<UserOtpEmailInfo> => {
+    const result = await apiClient.getUserOtpEmailInfoUsingGET({});
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
   /*
   TODO used fetch in place of codegen to handle issue with base64 file
   getContract: async (institutionId: string, productId: string): Promise<ContractData> => {

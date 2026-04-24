@@ -1,5 +1,5 @@
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { Redirect, useParams } from 'react-router';
+import { Redirect, useParams } from 'react-router-dom';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from './pages/dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';

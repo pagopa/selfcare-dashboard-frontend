@@ -7,10 +7,12 @@ import { createStore } from '../../redux/store';
 import { useTokenExchange, validateUrlBO } from '../useTokenExchange';
 import { mockedPartyProducts } from '../../services/__mocks__/productService';
 import { mockedParties } from '../../services/__mocks__/partyService';
+// 1. Import the module namespace directly
+import * as tokenExchangeService from '../../services/tokenExchangeService';
 
-const oldWindowLocation = global.window.location;
+const oldWindowLocation = globalThis.window.location;
 const mockedLocation = {
-  assign: jest.fn(),
+  assign: vi.fn(),
   pathname: '',
   origin: 'MOCKED_ORIGIN',
   search: '',
@@ -18,19 +20,21 @@ const mockedLocation = {
 };
 
 beforeAll(() => {
-  Object.defineProperty(window, 'location', { value: mockedLocation });
+  Object.defineProperty(globalThis, 'location', { value: mockedLocation });
 });
+
 afterAll(() => {
-  Object.defineProperty(window, 'location', { value: oldWindowLocation });
+  Object.defineProperty(globalThis, 'location', { value: oldWindowLocation });
 });
 
-jest.mock('../../services/tokenExchangeService');
+vi.mock('../../services/tokenExchangeService');
 
-let retrieveBackOfficeUrlSpy;
+let retrieveBackOfficeUrlSpy: any; 
 
 beforeEach(() => {
-  retrieveBackOfficeUrlSpy = jest.spyOn(
-    require('../../services/tokenExchangeService'),
+  // 3. Spy on the imported ES module
+  retrieveBackOfficeUrlSpy = vi.spyOn(
+    tokenExchangeService,
     'retrieveBackOfficeUrl'
   );
 });

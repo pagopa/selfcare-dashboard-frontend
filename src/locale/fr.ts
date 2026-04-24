@@ -18,8 +18,8 @@ export default {
     label: 'Chercher un organisme',
     notFoundResults: 'Aucun résultat',
   },
-  searchBackstagePage:{
-    supportRole: 'Support'
+  searchBackstagePage: {
+    supportRole: 'Support',
   },
   noActiveParty: {
     pending: {
@@ -51,6 +51,8 @@ export default {
     subTitle:
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
     sideMenu: {
+      titleExpand: 'Développer le menu latéral',
+      titleCollapse: 'Réduire le menu latéral',
       institutionManagement: {
         title: 'Gestion Organisme',
         overview: {
@@ -134,7 +136,15 @@ export default {
       info: 'N’entrez que le logo de votre organisme. Vous serez responsable de l’insertion d’images autres que celle indiquée.',
       infoEditLabel: 'Dimension exacte 300 x 300px - Format .png',
     },
+    pecOtp: {
+      title: 'Mettez à jour votre adresse e-mail',
+      message:
+        "Vous avez saisi une adresse PEC. Ce type d'adresse ne reçoit pas les codes de vérification (OTP) nécessaires à la connexion. Utilisez une adresse e-mail standard pour continuer à accéder au service sans problème.",
+      modifyButton: 'Modifier l’e-mail',
+      badgeLabel: 'Avis important',
+    },
     changeDetails: 'Gérer les données de l’organisme',
+    viewDetails: 'Voir les données de l’organisme',
     partyDetail: {
       institutionType: 'Typologie',
       category: 'Catégorie',

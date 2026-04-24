@@ -18,8 +18,8 @@ export default {
     label: 'Search for the institution',
     notFoundResults: 'No result',
   },
-  searchBackstagePage:{
-    supportRole: 'Support'
+  searchBackstagePage: {
+    supportRole: 'Support',
   },
   noActiveParty: {
     pending: {
@@ -51,6 +51,8 @@ export default {
     subTitle:
       'Manage the active PagoPA products and, if you have permissions, you can register for new products.',
     sideMenu: {
+      titleExpand: 'Expand side menu',
+      titleCollapse: 'Collapse side menu',
       institutionManagement: {
         title: 'Institution management',
         overview: {
@@ -134,7 +136,15 @@ export default {
       info: 'Enter only the logo of your institution. You will be responsible for entering images different than the one indicated.',
       infoEditLabel: 'Exact dimensions 300 x 300px - Format .jpg or .png',
     },
+    pecOtp: {
+      title: 'Update your email address',
+      message:
+        'You have entered a PEC address. These addresses cannot receive the verification codes (OTP) required for login. Please use a standard email address to ensure uninterrupted access.',
+      modifyButton: 'Change email',
+      badgeLabel: 'Important notice',
+    },
     changeDetails: 'Manage the institution data',
+    viewDetails: 'See the entity’s data',
     partyDetail: {
       institutionType: 'Type',
       category: 'Category',

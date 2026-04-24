@@ -1,9 +1,10 @@
-import { Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
-import { Route, Switch, matchPath, useHistory } from 'react-router';
+import { Route, Switch, matchPath, useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -27,7 +28,6 @@ import DashboardDocuments from '../dashboardDocuments/DashboardDocumentsPage';
 import DashboardDocumentsDetail from '../dashboardDocumentsDetail/DashboardDocumentsDetailPage';
 import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 
-import { useLogoExists } from '../../hooks/useLogoExist';
 import { Party } from '../../model/Party';
 import { Product, ProductsMap } from '../../model/Product';
 import DashboardSideMenuDesktop from './components/dashboardSideMenu/DashboardSideMenuDesktop';
@@ -77,8 +77,6 @@ const Dashboard: React.FC = () => {
     getAllProductsWithPermission,
     hasPermission,
   } = useDashboardData(party, products, institutionTypes);
-
-  const logoExists = useLogoExists(party?.urlLogo);
 
   const decorators = { withProductRolesMap, withSelectedProduct, withSelectedProductRoles };
 
@@ -134,8 +132,6 @@ const Dashboard: React.FC = () => {
   if (!party || !products) {
     return <></>;
   }
-
-  console.log('LogoExists???', logoExists);
 
   return (
     <Grid

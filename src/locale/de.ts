@@ -18,8 +18,8 @@ export default {
     label: 'Körperschaft suchen',
     notFoundResults: 'Kein Ergebnis',
   },
-  searchBackstagePage:{
-    supportRole: 'Support'
+  searchBackstagePage: {
+    supportRole: 'Support',
   },
   noActiveParty: {
     pending: {
@@ -51,6 +51,8 @@ export default {
     subTitle:
       'Du verwaltest die aktiven PagoPA-Produkte und kannst, sofern im Besitz der Berechtigungen, neuen Produkten beitreten.',
     sideMenu: {
+      titleExpand: 'Seitenmenü erweitern',
+      titleCollapse: 'Seitenmenü reduzieren',
       institutionManagement: {
         title: 'Körperschaftsverwaltung',
         overview: {
@@ -134,7 +136,15 @@ export default {
       info: 'Füg nur das Logo deiner Körperschaft ein. Du bist für das Einfügen anderer Bilder als der angegebenen verantwortlich.',
       infoEditLabel: 'Genaue Größe 300 x  300px - Format .jpg oder .png',
     },
+    pecOtp: {
+      title: 'E-Mail-Adresse aktualisieren',
+      message:
+        'Sie haben eine PEC-Adresse angegeben. Diese Adressen können keine Bestätigungscodes (OTP) empfangen, die für die Anmeldung erforderlich sind. Bitte verwenden Sie eine Standard-E-Mail-Adresse, um einen reibungslosen Zugriff zu gewährleisten.',
+      modifyButton: 'E-Mail ändern',
+      badgeLabel: 'Wichtiger Hinweis',
+    },
     changeDetails: 'Daten der Körperschaft verwalten',
+    viewDetails: 'Siehe die Daten der Einrichtung',
     partyDetail: {
       institutionType: 'Typ',
       category: 'Kategorie',

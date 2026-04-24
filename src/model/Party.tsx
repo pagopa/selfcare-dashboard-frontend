@@ -29,6 +29,7 @@ export type OnboardedProduct = {
   institutionType?: string;
   origin?: string;
   originId?: string;
+  tokenId?: string;
 };
 
 export type Party = {

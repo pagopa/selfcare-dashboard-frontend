@@ -27,6 +27,7 @@ generated
 build
 local
 dist
+/openApi/generated-dashboard
 
 # Local python packages
 .python_packages/
@@ -52,7 +53,7 @@ yarn-error.log
 
 *.zip
 
-!jest.config.js
+!vitest.config.js
 !.release-it.js
 .idea
 .vscode
@@ -61,4 +62,5 @@ yarn-error.log
 # Local .terraform directories
 **/.terraform/*
 
-.DS_Store
+# Microfrontend temp
+.__mf__temp

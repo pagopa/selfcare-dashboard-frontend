@@ -160,8 +160,8 @@ The remote components should be put into execution locally or use the following 
 - MICROFRONTEND_URL_ADMIN
 
 ## To execute locally mocking REST invocation, modify the file .env.development.local setting
-- REACT_APP_API_MOCK_PARTIES=true
-- REACT_APP_API_MOCK_PRODUCTS=true
+- VITE_API_MOCK_PARTIES=true
+- VITE_API_MOCK_PRODUCTS=true
 
 ## To build a configured workspace execute the following command
 - yarn build

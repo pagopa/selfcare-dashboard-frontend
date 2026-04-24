@@ -9,7 +9,7 @@ export const retrieveBackOfficeUrl = (
   environment?: string,
   lang?: string
 ): Promise<string> => {
-  if (isPagoPaUser) {
+  if (isPagoPaUser()) {
     return DashboardApi.tokenExchangeAdmin(
       selectedParty?.partyId ?? '',
       product?.id ?? '',
@@ -31,7 +31,7 @@ export const getBillingToken = (
   environment?: string,
   lang?: string
 ): Promise<string> => {
-  if (process.env.REACT_APP_API_MOCK_PARTIES === 'true') {
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return new Promise((resolve) => resolve('DUMMYTOKEN'));
   } else {
     return DashboardApi.getBillingToken(partyId, environment, lang);
