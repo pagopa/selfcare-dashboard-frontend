@@ -15,11 +15,12 @@ import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import GenericEnvProductModal from '../pages/dashboardOverview/components/activeProductsSection/components/GenericEnvProductModal';
 import SessionModalInteropProduct from '../pages/dashboardOverview/components/activeProductsSection/components/SessionModalInteropProduct';
+import BackofficeNotIntegratedModal from '../pages/dashboardOverview/components/BackofficeNotIntegratedModal/BackofficeNotIntegratedModal';
 import { useAppSelector } from '../redux/hooks';
 import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
 import { INTEROP_PRODUCT_ENUM, interopProductIdList } from '../utils/constants';
-import { startWithProductInterop } from '../utils/helperFunctions';
+import { isProductAllowed, startWithProductInterop } from '../utils/helperFunctions';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -38,6 +39,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
+  const [openBackofficeNotIntegratedModal, setOpenBackofficeNotIntegratedModal] =
+    useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<Product>();
   const [openExitModal, setOpenExitModal] = useState<boolean>(false);
 
@@ -45,6 +48,9 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const actualSelectedParty = useRef<Party>();
   const [showDocBtn, setShowDocBtn] = useState(false);
   const { hasPermission } = usePermissions();
+  const hasBackofficePermission = (productId: string) =>
+    hasPermission(productId, Actions.AccessProductBackoffice) ||
+    hasPermission(productId, Actions.AccessProductBackofficeAdmin);
 
   useEffect(() => {
     if (isPagoPaUser()) {
@@ -60,8 +66,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const findAuthorizedProduct = (productId: string) =>
     party?.products.find(
-      (p) =>
-        p.productId === productId && hasPermission(p.productId, Actions.AccessProductBackoffice)
+      (p) => p.productId === productId && hasBackofficePermission(p.productId ?? '')
     );
 
   const authorizedInteropProducts = interopProductIdList
@@ -74,7 +79,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const authorizedPartyProducts = party?.products.filter(
     (pp) =>
       pp.productOnBoardingStatus === 'ACTIVE' &&
-      (hasPermission(pp.productId ?? '', Actions.AccessProductBackoffice) ||
+      (hasBackofficePermission(pp.productId ?? '') ||
         (hasMoreThanOneInteropEnv && pp.productId === INTEROP_PRODUCT_ENUM.INTEROP))
   );
 
@@ -164,6 +169,12 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           onExit(() => {
             const selectedProduct = actualActiveProducts.current.find((ap) => ap.id === p.id);
             setProductSelected(selectedProduct);
+
+            if (isPagoPaUser() && isProductAllowed(selectedProduct?.id ?? '') === false) {
+              setOpenBackofficeNotIntegratedModal(true);
+              return;
+            }
+
             if (
               actualSelectedParty.current &&
               hasMoreThanOneInteropEnv &&
@@ -275,6 +286,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
           setOpenGenericEnvProductModal(false);
         }}
         productEnvironments={productSelected?.backOfficeEnvironmentConfigurations as any} // TODO Modify the prop expected type
+      />
+      <BackofficeNotIntegratedModal
+        open={openBackofficeNotIntegratedModal}
+        productName={productSelected?.title ?? ''}
+        onClose={() => setOpenBackofficeNotIntegratedModal(false)}
       />
     </div>
   );

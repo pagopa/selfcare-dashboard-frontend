@@ -1,18 +1,16 @@
 import { Grid } from '@mui/material';
-import { SessionModal, usePermissions } from '@pagopa/selfcare-common-frontend/lib';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { OnboardedProduct, Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { INTEROP_PRODUCT_ENUM } from '../../../../../utils/constants';
-import { ENV } from '../../../../../utils/env';
 import { isProductAllowed, startWithProductInterop } from '../../../../../utils/helperFunctions';
+import BackofficeNotIntegratedModal from '../../BackofficeNotIntegratedModal/BackofficeNotIntegratedModal';
 import ActiveProductCard from './ActiveProductCard';
 import GenericEnvProductModal from './GenericEnvProductModal';
 import SessionModalInteropProduct from './SessionModalInteropProduct';
@@ -35,24 +33,20 @@ export default function ActiveProductCardContainer({
 }: Props) {
   const [openCustomEnvInteropModal, setOpenCustomEnvInteropModal] = useState<boolean>(false);
   const [openGenericEnvProductModal, setOpenGenericEnvProductModal] = useState<boolean>(false);
-  const [openAminMaxLimitsModal, setOpenAminMaxLimitsModal] = useState<boolean>(false);
+  const [openBackofficeNotIntegratedModal, setOpenBackofficeNotIntegratedModal] =
+    useState<boolean>(false);
 
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
   const { hasPermission } = usePermissions();
-  const history = useHistory();
 
-  const usersPathWithProduct = `${resolvePathVariables(ENV.ROUTES.USERS, {
-    partyId: party.partyId ?? '',
-  })}#${PRODUCT_IDS.PAGOPA}`;
-
-  const isDisabled = isPagoPaUser()
-    ? !isProductAllowed(product.productId || '')
-    : !!party.products.find(
-        (p) =>
-          p.productId === product.productId &&
-          hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
-      );
+  const isDisabled =
+    isPagoPaUser() === false &&
+    !!party.products.find(
+      (p) =>
+        p.productId === product.productId &&
+        hasPermission(p.productId ?? '', Actions.AccessProductBackoffice) === false
+    );
 
   const productOnboarded = products.find((p) => p.id === product.productId);
   const interopProduction = products.find((p) => p.id === INTEROP_PRODUCT_ENUM.INTEROP);
@@ -61,33 +55,32 @@ export default function ActiveProductCardContainer({
 
   const lang = i18n.language;
 
+  const handleProductAction = () => {
+    if (!productOnboarded) {
+      return;
+    }
+
+    if (isPagoPaUser() && isProductAllowed(productOnboarded.id ?? '') === false) {
+      return setOpenBackofficeNotIntegratedModal(true);
+    }
+
+    if (hasMoreThanOneInteropEnv && startWithProductInterop(productOnboarded.id)) {
+      return setOpenCustomEnvInteropModal(true);
+    }
+
+    if (
+      productOnboarded.backOfficeEnvironmentConfigurations &&
+      productOnboarded.backOfficeEnvironmentConfigurations.length > 0 &&
+      productOnboarded.id !== INTEROP_PRODUCT_ENUM.INTEROP
+    ) {
+      return setOpenGenericEnvProductModal(true);
+    }
+
+    void invokeProductBo(productOnboarded, party, undefined, lang);
+  };
+
   return productOnboarded && !isOperatorWithNoAuthorizedProduct ? (
     <>
-      <SessionModal
-        open={openAminMaxLimitsModal}
-        title={t('overview.activeProducts.adminLimit.title')}
-        message={
-          <Trans
-            i18nKey="overview.activeProducts.adminLimit.message"
-            values={{ adminLimit: ENV.MAX_ADMIN_COUNT }}
-            components={{
-              1: <strong />,
-              3: <strong />,
-              5: <div style={{ marginTop: '8px' }} />,
-            }}
-          >
-            {`Il tuo ente ha <1>superato il limite</1> di {{adminLimit}} Amministratori, che è il numero massimo consentito per accedere alla <3>Piattaforma pagoPA.</3><5 /> Per accedere, modifica l’elenco degli Amministratori per questo prodotto.`}
-          </Trans>
-        }
-        onConfirmLabel={t('overview.activeProducts.adminLimit.modifyButton')}
-        onConfirm={() => {
-          history.push(usersPathWithProduct);
-          setOpenAminMaxLimitsModal(false);
-        }}
-        onCloseLabel={t('overview.activeProducts.adminLimit.backButton')}
-        handleClose={() => setOpenAminMaxLimitsModal(false)}
-      />
-
       <Grid item xs={12} sm={6} md={6} lg={4}>
         <ActiveProductCard
           disableBtn={
@@ -102,15 +95,7 @@ export default function ActiveProductCardContainer({
           }
           buttonLabel={t('overview.activeProducts.manageButton')}
           urlLogo={productOnboarded?.logo ?? ''}
-          btnAction={() =>
-            hasMoreThanOneInteropEnv && startWithProductInterop(productOnboarded.id)
-              ? setOpenCustomEnvInteropModal(true)
-              : productOnboarded?.backOfficeEnvironmentConfigurations &&
-                productOnboarded.backOfficeEnvironmentConfigurations.length > 0 &&
-                productOnboarded.id !== INTEROP_PRODUCT_ENUM.INTEROP
-              ? setOpenGenericEnvProductModal(true)
-              : invokeProductBo(productOnboarded, party, undefined, lang)
-          }
+          btnAction={handleProductAction}
           party={party}
           product={productOnboarded}
         />
@@ -163,6 +148,11 @@ export default function ActiveProductCardContainer({
           setOpenGenericEnvProductModal(false);
         }}
         productEnvironments={productOnboarded?.backOfficeEnvironmentConfigurations as any}
+      />
+      <BackofficeNotIntegratedModal
+        open={openBackofficeNotIntegratedModal}
+        productName={productOnboarded?.title}
+        onClose={() => setOpenBackofficeNotIntegratedModal(false)}
       />
     </>
   ) : (

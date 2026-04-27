@@ -304,11 +304,16 @@ export default {
     },
   },
   adminPage: {
-    title: 'Panoramica enti',
+    title: 'Dashboard',
     subtitle: 'Cerca, visualizza e gestisci gli enti aderenti ai prodotti PagoPA.',
     autocomplete: {
       title: 'Visualizza ente',
       placeholder: 'Cerca ente per Ragione sociale o Codice Fiscale',
+    },
+    backofficeNotIntegratedModal: {
+      title: 'Il back-office non è ancora integrato.',
+      description: "Ci dispiace, ma <1>{{productName}}</1> non è ancora disponibile nell'Area Riservata Backstage.",
+      close: 'Chiudi',
     },
   },
   addDelegationPage: {
