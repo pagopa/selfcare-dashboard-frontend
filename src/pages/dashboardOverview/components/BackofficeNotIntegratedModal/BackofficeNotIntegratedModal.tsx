@@ -67,7 +67,7 @@ export default function BackofficeNotIntegratedModal({
               1: <strong />,
             }}
           >
-            {`Ci dispiace, ma <1>{{productName}}</1> non è ancora disponibile nell'Area Riservata Backstage.`}
+            {`Ci dispiace, <1>{{productName}}</1> non è disponibile al momento.`}
           </Trans>
         </Typography>
         <Button variant="contained" onClick={onClose} sx={{ borderRadius: 2, px: 4 }}>
