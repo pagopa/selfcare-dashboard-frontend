@@ -13,6 +13,7 @@ import * as tokenExchangeService from '../../services/tokenExchangeService';
 const oldWindowLocation = globalThis.window.location;
 const mockedLocation = {
   assign: vi.fn(),
+  hostname: 'localhost',
   pathname: '',
   origin: 'MOCKED_ORIGIN',
   search: '',
