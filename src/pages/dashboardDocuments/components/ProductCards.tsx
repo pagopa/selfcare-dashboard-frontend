@@ -13,6 +13,7 @@ import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { PRODUCT_IDS } from '../../../utils/constants';
+import { getAppArea } from '../../../utils/helperFunctions';
 
 type ProductCardsProps = {
   party: Party;
@@ -72,6 +73,7 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
       product_role: party.products.find((p) => p.productId === product.id)?.userRole,
       product_id: product.id,
       party_id: party.partyId,
+      from: getAppArea(),
     });
     const baseUrl = resolvePathVariables(DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path, {
       partyId: party.partyId,
