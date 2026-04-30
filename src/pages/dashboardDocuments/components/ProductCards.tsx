@@ -73,7 +73,6 @@ const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
       product_role: party.products.find((p) => p.productId === product.id)?.userRole,
       product_id: product.id,
       party_id: party.partyId,
-      from: getAppArea(),
     });
     const baseUrl = resolvePathVariables(DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path, {
       partyId: party.partyId,
