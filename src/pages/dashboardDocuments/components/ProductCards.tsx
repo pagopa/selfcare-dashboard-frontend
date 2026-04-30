@@ -13,7 +13,6 @@ import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { PRODUCT_IDS } from '../../../utils/constants';
-import { getAppArea } from '../../../utils/helperFunctions';
 
 type ProductCardsProps = {
   party: Party;
