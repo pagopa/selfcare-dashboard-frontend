@@ -96,9 +96,9 @@ export const getAttachmentStatusService = (
 export const getUserOtpEmailInfoService = (): Promise<UserOtpEmailInfo> => {
   if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
     return Promise.resolve({
-      email: 'mock@example.com',
-      isOtpEnabled: true,
-      isOtpEmailVerified: true,
+      otpEmail: 'mock@pec.com',
+      otpReferenceInstitutionId: 'onboarded',
+      canUserChangeOtpEmail: true,
       userId: 'mockUserId',
     });
   } else {

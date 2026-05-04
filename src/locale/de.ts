@@ -133,6 +133,13 @@ export default {
       info: 'Füg nur das Logo deiner Körperschaft ein. Du bist für das Einfügen anderer Bilder als der angegebenen verantwortlich.',
       infoEditLabel: 'Genaue Größe 300 x  300px - Format .jpg oder .png',
     },
+    goToPecInstituion: {
+      badgeLabel: 'Wichtiger Hinweis',
+      title: 'Aktualisieren Sie Ihre E-Mail-Adresse',
+      message:
+        'Sie haben eine PEC-Adresse als E-Mail für die Institution {{nome}} angegeben. Diese Adresse empfängt keine Bestätigungscodes (OTP), die für die Anmeldung erforderlich sind. Sie müssen sie durch eine reguläre E-Mail-Adresse ersetzen, um weiterhin problemlos zugreifen zu können.',
+      changeButton: 'Institution wechseln',
+    },
     pecOtp: {
       title: 'E-Mail-Adresse aktualisieren',
       message:
