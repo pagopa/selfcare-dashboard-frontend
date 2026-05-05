@@ -9,6 +9,7 @@ import {
 
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { isPagoPaUser, storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { isPecEmail } from '@pagopa/selfcare-common-frontend/lib/utils/utils';
 import { useEffect, useState } from 'react';
@@ -28,6 +29,7 @@ import { Party } from '../../model/Party';
 import { Product, ProductInstitutionMap } from '../../model/Product';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { partiesActions, partiesSelectors } from '../../redux/slices/partiesSlice';
+import { DASHBOARD_ROUTES } from '../../routes';
 import { mockedCategories } from '../../services/__mocks__/productService';
 import {
   getAttachmentStatusService,
@@ -78,6 +80,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   };
   const institutionTypesList = useAppSelector(partiesSelectors.selectPartySelectedInstitutionTypes);
   const partyUpdated = useAppSelector(partiesSelectors.selectPartySelected);
+  const partiesList = useAppSelector(partiesSelectors.selectPartiesList);
 
   const { t } = useTranslation();
 
@@ -258,6 +261,11 @@ const DashboardOverview = ({ party, products }: Props) => {
     party.partyId === userOtpEmailInfo?.otpReferenceInstitutionId &&
     isPecEmail(userOtpEmailInfo?.otpEmail ?? '');
 
+  const canSeeBannerGoToPecInstituion = () =>
+    userOtpEmailInfo?.canUserChangeOtpEmail === true &&
+    party.partyId !== userOtpEmailInfo?.otpReferenceInstitutionId &&
+    isPecEmail(userOtpEmailInfo?.otpEmail ?? '');
+
   return (
     <Box p={3} sx={{ width: '100%' }}>
       <SessionModal
@@ -319,10 +327,41 @@ const DashboardOverview = ({ party, products }: Props) => {
         showGeoTaxonomyForInstitutionType={showGeoTaxonomyForInstitutionType}
       />
       <WelcomeDashboard setOpen={setOpen} />
-      {canSeePecBanner() && (
+
+      {canSeeBannerGoToPecInstituion() && (
         <Box mt={5}>
           <Banner
             variant="primary"
+            color="info"
+            title={t('overview.goToPecInstituion.title')}
+            message={t('overview.goToPecInstituion.message', {
+              nome: partiesList?.find(
+                (party) => party?.partyId === userOtpEmailInfo?.otpReferenceInstitutionId
+              )?.description,
+            })}
+            badge={t('overview.goToPecInstituion.badgeLabel')}
+            illustration={
+              <div style={{ width: 60, height: 50 }}>
+                <EnvelopeNotification />
+              </div>
+            }
+            cta={{
+              label: t('overview.goToPecInstituion.changeButton'),
+              onClick: () => {
+                window.location.assign(
+                  resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, {
+                    partyId: userOtpEmailInfo?.otpReferenceInstitutionId || '',
+                  })
+                );
+              },
+            }}
+          />
+        </Box>
+      )}
+      {canSeePecBanner() && (
+        <Box mt={5}>
+          <Banner
+            variant="secondary"
             color="info"
             title={t('overview.pecOtp.title')}
             message={t('overview.pecOtp.message')}
@@ -347,8 +386,10 @@ const DashboardOverview = ({ party, products }: Props) => {
       )}
       {canUploadLogoOnSendProduct && !logoExists && (
         <Box mt={5} sx={{ '& button': { fontSize: '16px !important' } }}>
-          <EnvironmentBanner
-            bgColor="info"
+          <Banner
+            variant="primary"
+            color="info"
+            title=""
             message={
               (
                 <Typography>
@@ -376,7 +417,7 @@ const DashboardOverview = ({ party, products }: Props) => {
                 </Typography>
               ) as unknown as string
             }
-            actionButton={{
+            cta={{
               label: t('overview.partyLogo.uploadTheLogoButton'),
               onClick: () => setOpen(true),
             }}
