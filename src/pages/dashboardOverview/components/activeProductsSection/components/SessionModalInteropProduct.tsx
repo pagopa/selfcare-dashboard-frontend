@@ -12,6 +12,7 @@ import {
 import Dialog from '@mui/material/Dialog';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { TFunction } from 'i18next';
 import * as React from 'react';
 import { withTranslation } from 'react-i18next';
@@ -80,17 +81,19 @@ function SessionModalInteropProduct({
   const [selectedEnviroment, setSelectedEnviroment] = React.useState<string>('');
   const { invokeProductBo } = useTokenExchange();
 
+  const lang = i18n.language;
+
   const handleTokenExchange = async (prodEnv: string): Promise<void> => {
     if (products && party) {
       if (prodEnv === 'Collaudo') {
         const productInteropColl = products.find((p) => p.id === 'prod-interop-coll');
         if (productInteropColl) {
-          return invokeProductBo(productInteropColl, party);
+          return invokeProductBo(productInteropColl, party, undefined, lang);
         }
       } else {
         const productInteropAtst = products.find((p) => p.id === 'prod-interop-atst');
         if (productInteropAtst) {
-          return invokeProductBo(productInteropAtst, party);
+          return invokeProductBo(productInteropAtst, party, undefined, lang);
         }
       }
     }
