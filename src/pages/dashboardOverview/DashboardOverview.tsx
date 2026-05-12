@@ -93,8 +93,14 @@ const DashboardOverview = ({ party, products }: Props) => {
       product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
       product.institutionType === 'PSP'
   );
+  const isBackstageUser = isPagoPaUser();
+
   const canUploadDoraAddendum =
-    ENV.ENABLE_DORA && hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract) && !!PSPOnPagoPA;
+    !isBackstageUser &&
+    ENV.ENABLE_DORA &&
+    hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract) &&
+    !!PSPOnPagoPA;
+
   const pagoPATokenIDPSP = PSPOnPagoPA?.tokenId;
 
   const canSeeActiveProductsList =
@@ -235,7 +241,7 @@ const DashboardOverview = ({ party, products }: Props) => {
   const currentUserId = storageUserOps.read()?.uid || '';
 
   useEffect(() => {
-    if (isPagoPaUser() === false && canUpdateUsers) {
+    if (isBackstageUser === false && canUpdateUsers) {
       setLoadingGetUserOtpEmailInfo(true);
       getUserOtpEmailInfoService()
         .then((userOtpEmailInfo) => {
