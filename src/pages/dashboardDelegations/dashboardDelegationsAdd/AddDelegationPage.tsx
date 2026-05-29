@@ -9,18 +9,18 @@ import { Product } from '../../../model/Product';
 import AddDelegationForm from './components/AddDelegationForm';
 
 type Props = {
-  authorizedDelegableProducts: Array<Product>;
+  delegableProducts: Array<Product>;
   party: Party;
 };
 
-export default function AddDelegationPage({ authorizedDelegableProducts, party }: Readonly<Props>) {
+export default function AddDelegationPage({ delegableProducts, party }: Readonly<Props>) {
   const history = useHistory();
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
   const productIdByQuery = new URLSearchParams(window.location.search).get('productId');
 
-  const productsWithCreateDelegationAction = authorizedDelegableProducts.filter((ap) =>
+  const productsWithCreateDelegationAction = delegableProducts.filter((ap) =>
     hasPermission(ap.id, Actions.CreateDelegation)
   );
 

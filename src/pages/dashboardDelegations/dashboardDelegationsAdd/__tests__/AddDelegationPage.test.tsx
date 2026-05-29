@@ -6,7 +6,7 @@ import AddDelegationPage from '../AddDelegationPage';
 test('should render component AddDelegationPage empty props', () => {
   const mockedAgencyOnboarded = mockedParties[4];
   renderWithProviders(
-    <AddDelegationPage authorizedDelegableProducts={[]} party={mockedAgencyOnboarded} />
+    <AddDelegationPage delegableProducts={[]} party={mockedAgencyOnboarded} />
   );
 });
 
@@ -14,7 +14,7 @@ test('should render component AddDelegationPage with populated props', () => {
   const mockedAgencyOnboarded = mockedParties[4];
   renderWithProviders(
     <AddDelegationPage
-      authorizedDelegableProducts={mockedPartyProducts.filter((p) => p.delegable)}
+      delegableProducts={mockedPartyProducts.filter((p) => p.delegable)}
       party={mockedAgencyOnboarded}
     />
   );
