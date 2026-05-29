@@ -2,8 +2,8 @@ import { SvgIconComponent } from '@mui/icons-material';
 import ArticleIcon from '@mui/icons-material/Article';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import DnsOutlinedIcon from '@mui/icons-material/DnsOutlined';
 import DnsIcon from '@mui/icons-material/Dns';
+import DnsOutlinedIcon from '@mui/icons-material/DnsOutlined';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
@@ -205,6 +205,15 @@ export function useDashboardMenuItems({
       },
     },
     {
+      key: 'techpartner',
+      title: t('overview.ptPage.title'),
+      icon: DnsIcon,
+      path: resolvePath(DASHBOARD_ROUTES.TECHPARTNER.path),
+      isVisible: isPagoPaOverviewVisible && isHandleDelegationsVisible,
+      isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.TECHPARTNER.path),
+      action: () => navigateTo(resolvePath(DASHBOARD_ROUTES.TECHPARTNER.path)),
+    },
+    {
       key: 'overview',
       title: t('overview.sideMenu.institutionManagement.overview.title'),
       icon: ViewSidebarIcon,
@@ -212,6 +221,15 @@ export function useDashboardMenuItems({
       isVisible: isPagoPaOverviewVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.OVERVIEW.path),
       action: () => navigateTo(resolvePath(DASHBOARD_ROUTES.OVERVIEW.path)),
+    },
+    {
+      key: 'delegations',
+      title: t('overview.sideMenu.institutionManagement.delegations.title'),
+      icon: AssignmentIcon,
+      path: resolvePath(DASHBOARD_ROUTES.DELEGATIONS.path),
+      isVisible: isPagoPaOverviewVisible && isAddDelegateSectionVisible,
+      isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DELEGATIONS.path),
+      action: () => navigateTo(resolvePath(DASHBOARD_ROUTES.DELEGATIONS.path)),
     },
     {
       key: 'documents',
