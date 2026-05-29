@@ -11,6 +11,6 @@ afterEach(() => {
 test('Should render component DashboardDelegationsPage with populated props and isAddDelegateSectionVisible is true', async () => {
   const mockedGsp = mockedParties[11];
   renderWithProviders(
-    <DashboardDelegationsPage party={mockedGsp} authorizedDelegableProducts={mockedPartyProducts} />
+    <DashboardDelegationsPage party={mockedGsp} delegableProducts={mockedPartyProducts} />
   );
 });

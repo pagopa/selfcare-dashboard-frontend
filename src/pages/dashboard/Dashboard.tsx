@@ -70,7 +70,6 @@ const Dashboard: React.FC = () => {
     productsMap,
     activeProducts,
     delegableProducts,
-    authorizedDelegableProducts,
     isPTTheOnlyType,
     isPTOnAnyOnboarding,
     hasDelegation,
@@ -109,7 +108,7 @@ const Dashboard: React.FC = () => {
 
   const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
-    authorizedDelegableProducts.length > 0 &&
+    delegableProducts.length > 0 &&
     !isPTTheOnlyType &&
     getAllProductsWithPermission(Actions.ViewDelegations).length > 0;
 
@@ -234,7 +233,7 @@ const Dashboard: React.FC = () => {
 
           <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact>
             <AddDelegationPage
-              authorizedDelegableProducts={authorizedDelegableProducts}
+              delegableProducts={delegableProducts}
               party={party}
             />
           </Route>
@@ -242,7 +241,7 @@ const Dashboard: React.FC = () => {
           <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact>
             <DashboardDelegationsPage
               party={party}
-              authorizedDelegableProducts={authorizedDelegableProducts}
+              delegableProducts={delegableProducts}
             />
           </Route>
 
