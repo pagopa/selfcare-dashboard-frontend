@@ -77,7 +77,7 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-svgr": "^4.5.0",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^3.0.0"
+    "vitest": "^4.0.0"
   },
   "resolutions": {
     "static-eval": "^2.0.2",
