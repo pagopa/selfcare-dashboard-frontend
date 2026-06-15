@@ -46,11 +46,11 @@ export const ENV = {
 
     ADMIN: `${PUBLIC_URL_INNER}/admin`,
     ADMIN_PARTY_DETAIL: `${PUBLIC_URL_INNER}/admin/onboarding/:tokenId`,
-    ADMIN_SEARCH: `/admin/search`,
-    ADMIN_SEARCH_DETAIL: `/admin/search/:partyId`,
-    ADMIN_ONBOARDINGS: `/admin/onboardings`,
-    ADMIN_ONBOARDINGS_DETAIL: `/admin/onboardings/:partyId`,
-    ADMIN_CONTRACT: `/admin/contract`,
+    ADMIN_SEARCH: `${PUBLIC_URL_INNER}/admin/search`,
+    ADMIN_SEARCH_DETAIL: `${PUBLIC_URL_INNER}/admin/search/:partyId`,
+    ADMIN_ONBOARDINGS: `${PUBLIC_URL_INNER}/admin/onboardings`,
+    ADMIN_ONBOARDINGS_DETAIL: `${PUBLIC_URL_INNER}/admin/onboardings/:partyId`,
+    ADMIN_CONTRACT: `${PUBLIC_URL_INNER}/admin/contract`,
   },
 
   URL_FE: {
