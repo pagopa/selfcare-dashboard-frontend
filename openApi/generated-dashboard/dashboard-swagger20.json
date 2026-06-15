@@ -2958,6 +2958,60 @@
         "summary": "getUsers"
       }
     },
+    "/v2/users/otp-info": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserOtpEmailInfo"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "description": "Service to get the otp info for the current user",
+        "operationId": "getUserOtpEmailInfoUsingGET",
+        "summary": "getUserOtpEmailInfo"
+      }
+    },
     "/v2/users/search": {
       "post": {
         "consumes": [
@@ -3395,7 +3449,7 @@
       }
     }
   },
-  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"UserInstitutionRoleArray":{"type": "array", "items": {"$ref": "#/definitions/UserInstitutionRole"}},"OnboardingInfoArray":{"type": "array", "items": {"$ref": "#/definitions/OnboardingInfo"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
+  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"UserInstitutionRoleArray":{"type": "array", "items": {"$ref": "#/definitions/UserInstitutionRole"}},"OnboardingInfoArray":{"type": "array", "items": {"$ref": "#/definitions/OnboardingInfo"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -5081,6 +5135,23 @@
           "type": "string"
         },
         "surname": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserOtpEmailInfo": {
+      "properties": {
+        "canUserChangeOtpEmail": {
+          "type": "boolean"
+        },
+        "otpEmail": {
+          "type": "string"
+        },
+        "otpReferenceInstitutionId": {
+          "type": "string"
+        },
+        "userId": {
           "type": "string"
         }
       },

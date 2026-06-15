@@ -81,7 +81,16 @@ const DashboardAdminPage: React.FC = () => {
         lg={hideLabels ? 11 : 10}
       >
         <Switch>
-          <Route path={[ENV.ROUTES.ADMIN_SEARCH, ENV.ROUTES.ADMIN_CONTRACT]} exact={false}>
+          <Route
+            path={[
+              ENV.ROUTES.ADMIN_SEARCH,
+              ENV.ROUTES.ADMIN_SEARCH_DETAIL,
+              ENV.ROUTES.ADMIN_ONBOARDINGS,
+              ENV.ROUTES.ADMIN_ONBOARDINGS_DETAIL,
+              ENV.ROUTES.ADMIN_CONTRACT,
+            ]}
+            exact={false}
+          >
             {
               <RemoteRoutingAdmin
                 history={history}

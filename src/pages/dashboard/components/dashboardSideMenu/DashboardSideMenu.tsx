@@ -221,10 +221,10 @@ export default function DashboardSideMenu({
       action: () => {
         navigateTo(resolvePath(ENV.ROUTES.ADMIN_CONTRACT));
       },
-    }
+    },
   ];
 
-  const sideBarItems = isPagoPaUser ? pagoPaAdminFlow : spidUserFlow;
+  const sideBarItems: Array<MenuItem> = isPagoPaUser() ? pagoPaAdminFlow : spidUserFlow;
 
   const visibleMenuItems = sideBarItems.filter((item) => item.isVisible === true);
 

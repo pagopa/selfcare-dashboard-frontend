@@ -16,8 +16,10 @@ interface ImportMetaEnv {
   readonly VITE_URL_FE_ASSISTANCE: string;
   readonly VITE_GOOGLE_LOGIN_URL?: string;
   readonly VITE_URL_API_DASHBOARD: string;
+  readonly VITE_URL_API_ONBOARDING_V2: string;
   readonly VITE_URL_API_PARTY_REGISTRY_PROXY: string;
   readonly VITE_ENABLE_GEOTAXONOMY?: string;
+  readonly VITE_ENABLE_DORA?: string;
   readonly VITE_API_DASHBOARD_TIMEOUT_MS: string;
   readonly VITE_URL_INSTITUTION_LOGO_PREFIX: string;
   readonly VITE_URL_INSTITUTION_LOGO_SUFFIX: string;
@@ -31,8 +33,8 @@ interface ImportMetaEnv {
   readonly VITE_SHOW_DOCUMENTS?: string;
   readonly VITE_API_MOCK_REQUEST_DATA: string;
   readonly VITE_ALLOWED_PRODUCTS_BACKSTAGE: string;
-  readonly VITE_API_MOCK_PARTIES: string;
-  readonly VITE_API_MOCK_PRODUCTS: string;
+  VITE_API_MOCK_PARTIES: string;
+  VITE_API_MOCK_PRODUCTS: string;
 }
 
 interface ImportMeta {

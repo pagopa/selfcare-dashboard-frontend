@@ -46,8 +46,11 @@ export const ENV = {
 
     ADMIN: `${PUBLIC_URL_INNER}/admin`,
     ADMIN_PARTY_DETAIL: `${PUBLIC_URL_INNER}/admin/onboarding/:tokenId`,
-    ADMIN_SEARCH: `${PUBLIC_URL_INNER}/admin/search`,
-    ADMIN_CONTRACT: `${PUBLIC_URL_INNER}/admin/contract`,
+    ADMIN_SEARCH: `/admin/search`,
+    ADMIN_SEARCH_DETAIL: `/admin/search/:partyId`,
+    ADMIN_ONBOARDINGS: `/admin/onboardings`,
+    ADMIN_ONBOARDINGS_DETAIL: `/admin/onboardings/:partyId`,
+    ADMIN_CONTRACT: `/admin/contract`,
   },
 
   URL_FE: {
@@ -61,6 +64,10 @@ export const ENV = {
 
   URL_API: {
     API_DASHBOARD: requiredEnv('VITE_URL_API_DASHBOARD', import.meta.env.VITE_URL_API_DASHBOARD),
+    ONBOARDING_V2: requiredEnv(
+      'VITE_URL_API_ONBOARDING_V2',
+      import.meta.env.VITE_URL_API_ONBOARDING_V2
+    ),
     PARTY_REGISTRY_PROXY: requiredEnv(
       'VITE_URL_API_PARTY_REGISTRY_PROXY',
       import.meta.env.VITE_URL_API_PARTY_REGISTRY_PROXY
@@ -94,7 +101,10 @@ export const ENV = {
     MOCK: optionalBoolEnv(import.meta.env.VITE_ANALYTICS_MOCK),
     DEBUG: optionalBoolEnv(import.meta.env.VITE_ANALYTICS_DEBUG),
     TOKEN: requiredEnv('VITE_MIXPANEL_TOKEN', import.meta.env.VITE_MIXPANEL_TOKEN),
-    API_HOST: optionalStringEnv(import.meta.env.VITE_MIXPANEL_API_HOST, 'https://api-eu.mixpanel.com'),
+    API_HOST: optionalStringEnv(
+      import.meta.env.VITE_MIXPANEL_API_HOST,
+      'https://api-eu.mixpanel.com'
+    ),
   },
 
   DELEGATIONS: {
@@ -104,4 +114,8 @@ export const ENV = {
   MAX_ADMIN_COUNT: optionalStringEnv(import.meta.env.VITE_MAX_ADMIN_COUNT, '4'),
 
   SHOW_DOCUMENTS: optionalBoolEnv(import.meta.env.VITE_SHOW_DOCUMENTS),
+
+  ENABLE_DORA: optionalBoolEnv(import.meta.env.VITE_ENABLE_DORA),
+
+  ALLOWED_PREFIXES: optionalStringEnv(import.meta.env.VITE_ALLOWED_PRODUCTS_BACKSTAGE, ''),
 };
