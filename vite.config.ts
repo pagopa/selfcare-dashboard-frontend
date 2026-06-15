@@ -31,20 +31,20 @@ export default defineConfig(({ mode }) => {
           selfcareUsers: {
             type: 'module',
             name: 'selfcareUsers',
-            entry: `${env.MICROFRONTEND_URL_USERS}/remoteEntry.js`,
+            entry: `${env.VITE_URL_FE_DASHBOARD_USERS}/remoteEntry.js`,
           },
           selfcareGroups: {
             type: 'module',
             name: 'selfcareGroups',
-            entry: `${env.MICROFRONTEND_URL_GROUPS}/remoteEntry.js`,
+            entry: `${env.VITE_URL_FE_DASHBOARD_GROUPS}/remoteEntry.js`,
           },
           selfcareAdmin: {
             type: 'module',
             name: 'selfcareAdmin',
             entry: `${
               env.VITE_ENV === 'LOCAL_DEV'
-                ? env.MICROFRONTEND_URL_ADMIN
-                : env.MICROFRONTEND_URL_ADMIN + '/onboarding'
+                ? env.VITE_URL_FE_DASHBOARD_ADMIN
+                : env.VITE_URL_FE_DASHBOARD_ADMIN + '/onboarding'
             }/remoteEntry.js`,
           },
         },
