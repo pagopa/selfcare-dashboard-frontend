@@ -21,7 +21,7 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Party } from '../../../../model/Party';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { partiesActions } from '../../../../redux/slices/partiesSlice';

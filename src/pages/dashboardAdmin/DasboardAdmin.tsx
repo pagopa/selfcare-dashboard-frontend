@@ -1,6 +1,6 @@
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useState } from 'react';
-import { Route, Switch, useHistory } from 'react-router';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
