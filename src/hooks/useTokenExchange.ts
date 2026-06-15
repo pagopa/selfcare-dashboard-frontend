@@ -5,6 +5,7 @@ import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { retrieveBackOfficeUrl } from '../services/tokenExchangeService';
 import { LOADING_TASK_TOKEN_EXCHANGE } from '../utils/constants';
+import { getAppArea } from '../utils/helperFunctions';
 
 const hostnameRegexp = /^(?:https?:\/\/)([-.a-zA-Z0-9_]+)/;
 
@@ -49,6 +50,7 @@ export const useTokenExchange = () => {
                 product_id: product.id,
                 product_role: selectedParty.userRole,
                 target: selectedEnvironment,
+                from: getAppArea(),
               },
               () => window.location.assign(url)
             );
@@ -73,6 +75,7 @@ export const useTokenExchange = () => {
                 product_id: product.id,
                 // product_role: product.userRole, TODO
                 target: 'prod',
+                from: getAppArea(),
               },
               () => window.location.assign(url)
             );

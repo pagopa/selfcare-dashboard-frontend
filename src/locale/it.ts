@@ -172,6 +172,13 @@ export default {
         "Ritieni che ai sensi del Reg. DORA PagoPA rivesta il ruolo di fornitore TIC? Se ritieni di sì, puoi scaricare l'Addendum contrattuale standard che abbiamo reso disponibile per tutti i PSP per prenderne visione e procedere alla relativa sottoscrizione.",
       downloadButton: 'Scarica il documento',
     },
+    goToPecInstituion: {
+      badgeLabel: 'Avviso importante',
+      title: 'Aggiorna il tuo indirizzo email',
+      message:
+        "Hai inserito un indirizzo PEC come email per l’ente {{nome}}. Questo indirizzo non riceve i codici di verifica (OTP) necessari per accedere.  È necessario sostituirlo con un'email ordinaria per continuare ad accedere senza problemi.",
+      changeButton: 'Cambia ente',
+    },
     pecOtp: {
       title: 'Aggiorna il tuo indirizzo email',
       message:
@@ -307,11 +314,16 @@ export default {
     },
   },
   adminPage: {
-    title: 'Panoramica enti',
+    title: 'Dashboard',
     subtitle: 'Cerca, visualizza e gestisci gli enti aderenti ai prodotti PagoPA.',
     autocomplete: {
       title: 'Visualizza ente',
       placeholder: 'Cerca ente per Ragione sociale o Codice Fiscale',
+    },
+    backofficeNotIntegratedModal: {
+      title: 'Il back-office non è ancora integrato in Area Riservata Backstage.',
+      description: 'Ci dispiace, <1>{{productName}}</1> non è disponibile al momento.',
+      close: 'Chiudi',
     },
   },
   addDelegationPage: {

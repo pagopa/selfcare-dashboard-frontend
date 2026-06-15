@@ -19,12 +19,12 @@ import { fetchDelegations } from '../../services/delegationServices';
 
 type Props = {
   party: Readonly<Party>;
-  authorizedDelegableProducts: Readonly<Array<Product>>;
+  delegableProducts: Readonly<Array<Product>>;
 };
 
 export default function DashboardDelegationsPage({
   party,
-  authorizedDelegableProducts,
+  delegableProducts,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
@@ -35,7 +35,7 @@ export default function DashboardDelegationsPage({
   const [delegationsList, setDelegationsList] = useState<Array<DelegationResource>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const canCreateDelegation = authorizedDelegableProducts.some((p) =>
+  const canCreateDelegation = delegableProducts.some((p) =>
     hasPermission(p.id, Actions.CreateDelegation)
   );
 
@@ -132,7 +132,7 @@ export default function DashboardDelegationsPage({
                   )}
                 </Box>
               </Grid>
-              {authorizedDelegableProducts.map((product) => {
+              {delegableProducts.map((product) => {
                 const delegatesByProduct = delegationsList.filter(
                   (dl) => dl.productId === product.id
                 );

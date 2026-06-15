@@ -18,6 +18,9 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
   const { hasPermission } = usePermissions();
+  const hasBackofficePermission = (productId: string) =>
+    hasPermission(productId, Actions.AccessProductBackoffice) ||
+    hasPermission(productId, Actions.AccessProductBackofficeAdmin);
 
   const activeAndAccessibleProducts = useMemo(
     () =>
@@ -26,7 +29,7 @@ export const useProductsRolesMap = (): (() => Promise<ProductsRolesMap>) => {
           (us) =>
             us.productId === p.id &&
             us.productOnBoardingStatus === 'ACTIVE' &&
-            hasPermission(us.productId ?? '', Actions.AccessProductBackoffice)
+            hasBackofficePermission(us.productId ?? '')
         )
       ),
     [products, party?.products]

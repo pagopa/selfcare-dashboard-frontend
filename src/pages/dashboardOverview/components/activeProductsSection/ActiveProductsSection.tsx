@@ -18,6 +18,10 @@ export default function ActiveProductsSection({ party, products }: Readonly<Prop
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
+  const hasBackofficePermission = (productId: string) =>
+    hasPermission(productId, Actions.AccessProductBackoffice) ||
+    hasPermission(productId, Actions.AccessProductBackofficeAdmin);
+
   const interopProducts = party?.products
     .filter(
       (product) =>
@@ -29,7 +33,7 @@ export default function ActiveProductsSection({ party, products }: Readonly<Prop
     .filter(
       (product) =>
         startWithProductInterop(product.productId) &&
-        hasPermission(product.productId ?? '', Actions.AccessProductBackoffice)
+        hasBackofficePermission(product.productId ?? '')
     )
     .map((p) => p.productId ?? '');
 
@@ -63,14 +67,8 @@ export default function ActiveProductsSection({ party, products }: Readonly<Prop
               isRelevantInteropProduct(us.productId ?? '')
           )
           .sort((a, b) => {
-            const aHasPermission = hasPermission(
-              a.productId ?? '',
-              Actions.AccessProductBackoffice
-            );
-            const bHasPermission = hasPermission(
-              b.productId ?? '',
-              Actions.AccessProductBackoffice
-            );
+            const aHasPermission = hasBackofficePermission(a.productId ?? '');
+            const bHasPermission = hasBackofficePermission(b.productId ?? '');
 
             if (aHasPermission === bHasPermission) {
               return 0;

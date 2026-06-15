@@ -1,6 +1,5 @@
 // src/pages/dashboard/useDashboardData.ts
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
-import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useMemo } from 'react';
 import { Party } from '../../../model/Party';
 import { Product, ProductsMap, buildProductsMap } from '../../../model/Product';
@@ -10,7 +9,6 @@ type UseDashboardDataResult = {
   productsMap: ProductsMap;
   activeProducts: Array<Product>;
   delegableProducts: Array<Product>;
-  authorizedDelegableProducts: Array<Product>;
   isPTTheOnlyType: boolean;
   isPTOnAnyOnboarding: boolean;
   hasDelegation: boolean;
@@ -52,19 +50,6 @@ export const useDashboardData = (
     [activeProducts, activeOnboardings]
   );
 
-  const authorizedDelegableProducts: Array<Product> = useMemo(
-    () =>
-      delegableProducts.filter(
-        (ap) =>
-          hasPermission(ap.id ?? '', Actions.AccessProductBackoffice) &&
-          activeOnboardings.some(
-            (partyProduct) =>
-              partyProduct.productId === ap.id && partyProduct.institutionType !== 'PT'
-          )
-      ),
-    [delegableProducts, activeOnboardings, hasPermission]
-  );
-
   const uniqueInstitutionTypesList = useMemo(
     () => [...new Set(institutionTypes ?? [])],
     [institutionTypes]
@@ -80,7 +65,6 @@ export const useDashboardData = (
     productsMap,
     activeProducts,
     delegableProducts,
-    authorizedDelegableProducts,
     isPTTheOnlyType,
     isPTOnAnyOnboarding,
     hasDelegation,

@@ -1,3 +1,4 @@
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { INTEROP_PRODUCT_ENUM } from './constants';
 import { ENV } from './env';
 
@@ -43,3 +44,20 @@ const ALLOWED_PREFIXES: Array<string> = ENV.ALLOWED_PREFIXES.split(',')
 
 export const isProductAllowed = (productId: string): boolean =>
   ALLOWED_PREFIXES.some((prefix) => productId.startsWith(prefix));
+
+export const isPnpgOrImprese = () =>
+  window.location.hostname.startsWith('pnpg.') || window.location.hostname.startsWith('imprese.');
+
+type AppArea = 'imprese' | 'ar_backstage' | 'area_riservata';
+
+export const getAppArea = (): AppArea => {
+  if (isPnpgOrImprese()) {
+    return 'imprese';
+  }
+
+  if (isPagoPaUser()) {
+    return 'ar_backstage';
+  }
+
+  return 'area_riservata';
+};
