@@ -2,11 +2,11 @@
   "swagger": "2.0",
   "info": {
     "description": "Self Care Dashboard API documentation",
-    "title": "${openapi_title}",
+    "title": "Dashboard BFF API",
     "version": "0.0.1-SNAPSHOT"
   },
   "host": "localhost:80",
-  "basePath": "%7BbasePath%7D",
+  "basePath": "/",
   "schemes": [
     "http"
   ],
@@ -553,6 +553,60 @@
         "description": "Retrieve institution's delegations",
         "operationId": "getDelegationsUsingFromUsingGET",
         "summary": "Retrieve institution's delegations"
+      }
+    },
+    "/v1/products/my-permissions": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductRolePermissionsList"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "products"
+        ],
+        "description": "Service to retrieve the logged user's permissions for all products",
+        "operationId": "getMyPermissions",
+        "summary": "Service to retrieve the logged user's permissions for all products"
       }
     },
     "/v1/products/{productId}/brokers/{institutionType}": {
@@ -2958,6 +3012,60 @@
         "summary": "getUsers"
       }
     },
+    "/v2/users/otp-info": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/problem+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserOtpEmailInfo"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "description": "Service to get the otp info for the current user",
+        "operationId": "getUserOtpEmailInfoUsingGET",
+        "summary": "getUserOtpEmailInfo"
+      }
+    },
     "/v2/users/search": {
       "post": {
         "consumes": [
@@ -3395,7 +3503,7 @@
       }
     }
   },
-  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"UserInstitutionRoleArray":{"type": "array", "items": {"$ref": "#/definitions/UserInstitutionRole"}},"OnboardingInfoArray":{"type": "array", "items": {"$ref": "#/definitions/OnboardingInfo"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
+  "definitions" : {"ProductUserResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductUserResource"}},"UserInstitutionRoleArray":{"type": "array", "items": {"$ref": "#/definitions/UserInstitutionRole"}},"OnboardingInfoArray":{"type": "array", "items": {"$ref": "#/definitions/OnboardingInfo"}},"InstitutionBaseResourceArray":{"type": "array", "items": {"$ref": "#/definitions/InstitutionBaseResource"}},"ProductRoleMappingsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductRoleMappingsResource"}},"BrokerResourceArray":{"type": "array", "items": {"$ref": "#/definitions/BrokerResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"DelegationResourceArray":{"type": "array", "items": {"$ref": "#/definitions/DelegationResource"}},"STRINGWrapper":{"type": "string"},"STRINGArray":{"type": "array", "items": {"type": "string"}},"ProductsResourceArray":{"type": "array", "items": {"$ref": "#/definitions/ProductsResource"}},
     "Attribute": {
       "properties": {
         "code": {
@@ -4504,10 +4612,6 @@
     },
     "ProductRoleMappingsResource": {
       "properties": {
-        "multiroleAllowed": {
-          "description": "Indicates if an User can have more than one product role",
-          "type": "boolean"
-        },
         "partyRole": {
           "description": "Party role, available values: MANAGER, DELEGATE, SUB_DELEGATE, OPERATOR, ADMIN_EA",
           "type": "string"
@@ -4539,6 +4643,37 @@
       },
       "type": "object"
     },
+    "ProductRolePermissions": {
+      "properties": {
+        "group": {
+          "type": "string"
+        },
+        "permissions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ProductRolePermissionsList": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/ProductRolePermissions"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "ProductRoleResource": {
       "description": "Available product roles",
       "properties": {
@@ -4553,6 +4688,14 @@
         "label": {
           "description": "Product role label",
           "type": "string"
+        },
+        "multiroleGroups": {
+          "description": "Product role groups that allow to assign multiple roles to the same user",
+          "items": {
+            "description": "Product role groups that allow to assign multiple roles to the same user",
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -5081,6 +5224,23 @@
           "type": "string"
         },
         "surname": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserOtpEmailInfo": {
+      "properties": {
+        "canUserChangeOtpEmail": {
+          "type": "boolean"
+        },
+        "otpEmail": {
+          "type": "string"
+        },
+        "otpReferenceInstitutionId": {
+          "type": "string"
+        },
+        "userId": {
           "type": "string"
         }
       },

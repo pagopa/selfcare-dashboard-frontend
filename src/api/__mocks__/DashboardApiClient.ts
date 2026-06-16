@@ -213,29 +213,30 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
   {
     partyRole: 'SUB_DELEGATE',
     selcRole: SelcRoleEnum.ADMIN,
-    multiroleAllowed: false,
     productRoles: [
       {
         code: 'incaricato-ente-creditore',
         description: 'Descrizione incaricato-ente-creditore',
         label: 'Incaricato Ente Creditore',
+        multiroleGroups: ['group1', 'group2'],
       },
     ],
   },
   {
     partyRole: 'OPERATOR',
     selcRole: SelcRoleEnum.LIMITED,
-    multiroleAllowed: true,
     productRoles: [
       {
         code: 'referente-dei-pagamenti',
         description: 'Descrizione referente-dei-pagamenti',
         label: 'Referente dei Pagamenti',
+        multiroleGroups: ['group1', 'group2'],
       },
       {
         code: 'referente-tecnico',
         description: 'Descrizione referente-tecnico',
         label: 'Referente Tecnico',
+        multiroleGroups: ['group1', 'group2'],
       },
     ],
   },
