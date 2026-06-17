@@ -107,7 +107,7 @@ describe('productService tests', () => {
           productId: 'prod1',
           partyRole: 'Admin',
           selcRole: 'User',
-          multiroleAllowed: true,
+          multiroleGroups: ['group1', 'group2'],
           productRole: 'admin',
           title: 'Admin Role',
           description: 'Admin Role Description',
@@ -126,12 +126,12 @@ describe('productService tests', () => {
         {
           partyRole: 'Admin',
           selcRole: 'User',
-          multiroleAllowed: true,
           productRoles: [
             {
               code: 'admin',
               label: 'Admin Role',
               description: 'Admin Role Description',
+              multiroleGroups: ['group1', 'group2'],
             },
           ],
         },
@@ -143,7 +143,7 @@ describe('productService tests', () => {
           productId: 'prod-pagopa',
           partyRole: 'Admin',
           selcRole: 'User',
-          multiroleAllowed: true,
+          multiroleGroups: ['group1', 'group2'],
           productRole: 'admin',
           title: 'Admin Role',
           description: 'Admin Role Description',

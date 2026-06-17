@@ -198,7 +198,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productId: 'PRODID',
     partyRole: 'MANAGER',
     selcRole: 'ADMIN',
-    multiroleAllowed: false,
+    multiroleGroups: [],
     productRole: 'referente-legale',
     title: 'Referente Legale',
     description: 'Descrizione referente-legale',
@@ -208,7 +208,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productId: 'PRODID',
     partyRole: 'DELEGATE',
     selcRole: 'ADMIN',
-    multiroleAllowed: false,
+    multiroleGroups: [],
     productRole: 'referente-amministrativo',
     title: 'Amministratore',
     description: 'Descrizione referente-amministrativo',
@@ -218,7 +218,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productId: 'PRODID',
     partyRole: 'SUB_DELEGATE',
     selcRole: 'ADMIN',
-    multiroleAllowed: false,
+    multiroleGroups: [],
     productRole: 'incaricato-ente-creditore',
     title: 'Incaricato Ente Creditore',
     description: 'Descrizione incaricato-ente-creditore',
@@ -228,7 +228,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productId: 'PRODID',
     partyRole: 'OPERATOR',
     selcRole: 'LIMITED',
-    multiroleAllowed: true,
+    multiroleGroups: ['group1', 'group2'],
     productRole: 'referente-dei-pagamenti',
     title: 'Referente dei Pagamenti',
     description: 'Descrizione referente-dei-pagamenti',
@@ -238,7 +238,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productId: 'PRODID',
     partyRole: 'OPERATOR',
     selcRole: 'LIMITED',
-    multiroleAllowed: true,
+    multiroleGroups: ['group1', 'group2'],
     productRole: 'referente-tecnico',
     title: 'Referente Tecnico',
     description: 'Descrizione referente-tecnico',
@@ -248,7 +248,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productId: 'PRODID',
     partyRole: 'ADMIN_EA_IO',
     selcRole: 'ADMIN_EA',
-    multiroleAllowed: true,
+    multiroleGroups: [],
     productRole: 'Amministratore-ea-io',
     title: 'Amministratore Ea IO',
     description: 'Descrizione amministratore-ea-io',
@@ -309,7 +309,7 @@ export const fetchProductRoles = (product: Product, _party: Party): Promise<Arra
       {},
       r,
       { productId: product.id },
-      { multiroleAllowed: product.id === 'prod-interop' && r.partyRole === 'OPERATOR' }
+      { multiroleGroups: product.id === 'prod-interop' && r.partyRole === 'OPERATOR' ? ['group1', 'group2'] : [] }
     )
   );
   return Promise.resolve(out);
