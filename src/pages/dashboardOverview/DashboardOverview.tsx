@@ -140,7 +140,8 @@ const DashboardOverview = ({ party, products }: Props) => {
   }, []);
 
   useEffect(() => {
-    const excludeProductsList = ['prod-idpay-merchant', 'prod-idpay-gi', 'prod-idpay'];
+    const excludeProductsList = ['prod-idpay-merchant', 'prod-idpay-gi', 'prod-idpay', 'prod-registro-beni'];
+
     if (canSeeNotActiveProductsList && allowedInstitutionTypes && party) {
       const filterByConfig = {
         institutionTypesList: institutionTypesList || [],
