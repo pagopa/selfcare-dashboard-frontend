@@ -140,6 +140,8 @@ const DashboardOverview = ({ party, products }: Props) => {
   }, []);
 
   useEffect(() => {
+    const excludeProductsList = ['prod-idpay-merchant', 'prod-idpay-gi', 'prod-idpay', 'prod-registro-beni'];
+
     if (canSeeNotActiveProductsList && allowedInstitutionTypes && party) {
       const filterByConfig = {
         institutionTypesList: institutionTypesList || [],
@@ -147,7 +149,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         allowedInstitutionTypes,
       };
 
-      const productsWithStatusActive = products.filter((p) => p.status === StatusEnum.ACTIVE);
+      const productsWithStatusActive = products.filter((p) => p.status === StatusEnum.ACTIVE && !excludeProductsList.includes(p.id ?? ''));
       const onboardedProducts = party.products.filter(
         (p) => p.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE
       );
@@ -295,7 +297,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         onConfirm={() => handleAddNewTaxonomies()}
         onConfirmEnabled={isAddNewAutocompleteEnabled}
         showCloseButton={false}
-        handleClose={() => {}}
+        handleClose={() => { }}
       />
 
       <SessionModal
@@ -381,8 +383,7 @@ const DashboardOverview = ({ party, products }: Props) => {
               label: t('overview.pecOtp.modifyButton'),
               onClick: () => {
                 history.push(
-                  `${import.meta.env.BASE_URL}/${
-                    userOtpEmailInfo?.otpReferenceInstitutionId
+                  `${import.meta.env.BASE_URL}/${userOtpEmailInfo?.otpReferenceInstitutionId
                   }/users/${userOtpEmailInfo?.userId}/edit`
                 );
               },
