@@ -77,6 +77,7 @@ const onboardingStatusFilter = (
  * @param onboardedProducts - The list of products that are already onboarded
  * @returns The filtered list of products
  */
+
 export const filterProducts = (
   productsWithStatusActive: Array<Product>,
   filterByConfig: FilterConfig,
