@@ -89,6 +89,9 @@ export default {
         documents: {
           title: 'Documenti',
         },
+        contracts: {
+          title: 'Contratti',
+        },
       },
       product: {
         overview: 'Panoramica',

@@ -155,9 +155,9 @@ It can be combined with [withSelectedProduct](#withselectedproduct) in the follo
 - yarn start
 
 The remote components should be put into execution locally or use the following environment variable to customize their URL:
-- MICROFRONTEND_URL_USERS
-- MICROFRONTEND_URL_GROUPS
-- MICROFRONTEND_URL_ADMIN
+- VITE_URL_FE_DASHBOARD_USERS
+- VITE_URL_FE_DASHBOARD_GROUPS
+- VITE_URL_FE_DASHBOARD_ADMIN
 
 ## To execute locally mocking REST invocation, modify the file .env.development.local setting
 - VITE_API_MOCK_PARTIES=true

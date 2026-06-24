@@ -70,6 +70,9 @@ export default {
         invoices: {
           title: 'Rechnungsstellung',
         },
+        contracts: {
+          title: 'Verträge',
+        }
       },
       product: {
         overview: 'Übersicht',
