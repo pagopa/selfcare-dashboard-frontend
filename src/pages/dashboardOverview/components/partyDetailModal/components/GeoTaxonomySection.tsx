@@ -21,6 +21,8 @@ type Error = {
   [index: number]: boolean;
 };
 
+type GeographicTaxonomyType = 'national' | 'local' | '';
+
 type Props = {
   geographicTaxonomies?: Array<GeographicTaxonomyResource>;
   notFoundAnyTaxonomies: boolean;
@@ -42,14 +44,15 @@ export default function GeoTaxonomySection({
   const addError = useErrorDispatcher();
 
   const [options, setOptions] = useState<Array<GeographicTaxonomyResource>>([]);
-  const [isNationalAreaVisible, setIsNationalAreaVisible] = useState<boolean>(false);
-  const [isLocalAreaVisible, setIsLocalAreaVisible] = useState<boolean>(false);
+  const [geographicTaxonomyType, setGeographicTaxonomyType] = useState<GeographicTaxonomyType>('');
   const [input, setInput] = useState<string>('');
   const [error, setError] = useState<Error>();
 
   const [localOptionsSelected, setLocalOptionsSelected] = useState<
     Array<GeographicTaxonomyResource>
   >([{ code: '', desc: '' }]);
+
+  const isLocalAreaVisible = geographicTaxonomyType === 'local';
 
   useEffect(() => {
     const emptyField = !optionsSelected.find((o) => o?.desc === '');
@@ -141,10 +144,10 @@ export default function GeoTaxonomySection({
 
   useEffect(() => {
     if (geographicTaxonomies && geographicTaxonomies[0]?.code === nationalValue) {
-      setIsNationalAreaVisible(true);
+      setGeographicTaxonomyType('national');
       setOptionsSelected([{ code: nationalValue, desc: 'ITALIA' }]);
     } else if (geographicTaxonomies && geographicTaxonomies.length > 0) {
-      setIsLocalAreaVisible(true);
+      setGeographicTaxonomyType('local');
       setOptionsSelected(geographicTaxonomies);
       setIsAddNewAutocompleteEnabled(true);
     }
@@ -170,14 +173,12 @@ export default function GeoTaxonomySection({
       <RadioGroup
         name="geographicTaxonomy"
         row
+        value={geographicTaxonomyType}
         sx={{ mt: 4 }}
-        onChange={(e) => {
-          const value = e.target.value;
-
+        onChange={(_event, value) => {
           const isNational = value === 'national';
 
-          setIsNationalAreaVisible(isNational);
-          setIsLocalAreaVisible(!isNational);
+          setGeographicTaxonomyType(value as GeographicTaxonomyType);
           setIsAddNewAutocompleteEnabled(true);
 
           if (isNational) {
@@ -190,19 +191,14 @@ export default function GeoTaxonomySection({
         }}
       >
         <FormControlLabel
-          checked={isNationalAreaVisible}
-          value={'national'}
+          value="national"
           control={<Radio />}
-          aria-label={t('overview.partyDetail.geographicTaxonomies.modalSections.national')}
           label={t('overview.partyDetail.geographicTaxonomies.modalSections.national')}
           sx={{ mr: 3, ml: 1 }}
         />
         <FormControlLabel
-          id={'geographicTaxonomies'}
-          checked={isLocalAreaVisible}
-          value={'local'}
+          value="local"
           control={<Radio />}
-          aria-label={t('overview.partyDetail.geographicTaxonomies.modalSections.local')}
           label={t('overview.partyDetail.geographicTaxonomies.modalSections.local')}
         />
       </RadioGroup>
