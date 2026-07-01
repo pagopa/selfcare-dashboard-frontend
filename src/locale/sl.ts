@@ -152,6 +152,11 @@ export default {
       uniqueCode: 'Edinstvena koda',
       geographicTaxonomies: {
         label: 'Geografsko območje',
+        ariaLabelEdit_zero: 'Uredi geografsko območje',
+        ariaLabelEdit_one: 'Uredi geografsko območje, prisotno še {{count}} drugo',
+        ariaLabelEdit_two: 'Uredi geografsko območje, prisotni še {{count}} drugi',
+        ariaLabelEdit_few: 'Uredi geografsko območje, prisotna še {{count}} druga',
+        ariaLabelEdit_other: 'Uredi geografsko območje, prisotnih še {{count}} drugih',
         modalSections: {
           national: 'Nacionalno',
           local: 'Lokalno',

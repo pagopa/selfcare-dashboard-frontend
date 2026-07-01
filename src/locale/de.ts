@@ -159,6 +159,9 @@ export default {
       uniqueCode: 'Eindeutiger Code',
       geographicTaxonomies: {
         label: 'Geografisches Gebiet',
+        ariaLabelEdit_zero: 'Geografisches Gebiet bearbeiten',
+        ariaLabelEdit_one: 'Geografisches Gebiet bearbeiten, {{count}} weiteres vorhanden',
+        ariaLabelEdit_other: 'Geografisches Gebiet bearbeiten, {{count}} weitere vorhanden',
         modalSections: {
           national: 'National',
           local: 'Lokal',
