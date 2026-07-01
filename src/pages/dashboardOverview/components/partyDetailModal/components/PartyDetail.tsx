@@ -160,6 +160,9 @@ export default function PartyDetail({
                       endIcon={<EditIcon sx={{ height: '18px', width: '18px' }} />}
                       sx={{ color: 'primary.main', flexDirection: 'row' }}
                       weight="default"
+                      aria-label={t('overview.partyDetail.geographicTaxonomies.ariaLabelEdit', {
+                        count: (partyUpdated?.geographicTaxonomies.length ?? 1) - 1
+                      })}
                     >
                       {partyUpdated?.geographicTaxonomies.length === 1
                         ? undefined
@@ -250,11 +253,11 @@ export default function PartyDetail({
             isForeignInsurence
               ? formattedForeignAddress
               : party.zipCode
-              ? `${party.registeredOffice} - ${party.zipCode} ${getCountryNameByAlpha2(
+                ? `${party.registeredOffice} - ${party.zipCode} ${getCountryNameByAlpha2(
                   countries,
                   party.country
                 )}`
-              : `${party.registeredOffice} ${getCountryNameByAlpha2(countries, party.country)}`
+                : `${party.registeredOffice} ${getCountryNameByAlpha2(countries, party.country)}`
           }
           tooltipText={getTooltipText(
             isForeignInsurence,

@@ -158,7 +158,10 @@ export default {
       structure: 'Structure',
       uniqueCode: 'Univocal code',
       geographicTaxonomies: {
-        label: 'Geographical area',
+        label: 'Geographic area',
+        ariaLabelEdit_zero: 'Edit geographic area',
+        ariaLabelEdit_one: 'Edit geographic area, {{count}} other present',
+        ariaLabelEdit_other: 'Edit geographic area, {{count}} others present',
         modalSections: {
           national: 'National',
           local: 'Local',

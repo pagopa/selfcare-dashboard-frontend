@@ -195,6 +195,9 @@ export default {
       uniqueCode: 'Codice Univoco',
       geographicTaxonomies: {
         label: 'Area geografica',
+        ariaLabelEdit_zero: 'Modifica area geografica',
+        ariaLabelEdit_one: 'Modifica area geografica, {{count}} altra presente',
+        ariaLabelEdit_other: 'Modifica area geografica, altre {{count}} presenti',
         modalSections: {
           national: 'Nazionale',
           local: 'Locale',

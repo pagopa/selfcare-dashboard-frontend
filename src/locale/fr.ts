@@ -159,6 +159,9 @@ export default {
       uniqueCode: 'Code Unique',
       geographicTaxonomies: {
         label: 'Zone géographique',
+        ariaLabelEdit_zero: 'Modifier la zone géographique',
+        ariaLabelEdit_one: 'Modifier la zone géographique, {{count}} autre présente',
+        ariaLabelEdit_other: 'Modifier la zone géographique, {{count}} autres présentes',
         modalSections: {
           national: 'Nationale',
           local: 'Locale',
