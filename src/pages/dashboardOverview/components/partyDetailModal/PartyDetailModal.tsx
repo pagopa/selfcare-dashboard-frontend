@@ -64,6 +64,7 @@ export const PartyDetailModal = ({
       open={open}
       anchor="right"
       tabIndex={0}
+      disableEnforceFocus={true}
       onClose={() => {
         setLoading(true);
         setOpen(false);
