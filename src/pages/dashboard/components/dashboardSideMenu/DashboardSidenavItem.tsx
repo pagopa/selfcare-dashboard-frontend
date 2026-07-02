@@ -35,6 +35,8 @@ export default function DashboardSideNavItem({
     <ListItemButton
       selected={isSelected}
       onClick={handleClick}
+      aria-label={title}
+      aria-current={isSelected ? 'page' : undefined}
       sx={{
         height: '100%',
         backgroundColor: 'background.paper',

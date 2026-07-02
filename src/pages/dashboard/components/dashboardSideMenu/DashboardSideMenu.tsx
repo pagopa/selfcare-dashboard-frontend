@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, List } from '@mui/material';
+import { Divider, Grid, List, ListItem } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { Party } from '../../../../model/Party';
 import DashboardSideNavItem from './DashboardSidenavItem';
@@ -40,9 +40,9 @@ export default function DashboardSideMenu({
       <Grid item xs={12}>
         <List>
           {visibleMenuItems.map((item) => (
-            <Box key={item.key}>
+            <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
               <DashboardSideNavItem
-                title={hideLabels ? '' : item.title}
+                title={item.title}
                 icon={item.icon}
                 handleClick={item.action}
                 isSelected={item.isSelected}
@@ -51,9 +51,9 @@ export default function DashboardSideMenu({
               />
               {(item.key === 'techpartner' ||
                 (isPagoPaOverviewVisible && item.key === 'onboardings')) && (
-                <Divider sx={{ mt: 2, mb: 2 }} />
-              )}
-            </Box>
+                  <Divider sx={{ mt: 2, mb: 2 }} />
+                )}
+            </ListItem>
           ))}
         </List>
       </Grid>
