@@ -247,24 +247,19 @@ export default function AddDelegationForm({
             <InputLabel
               id="select-product-label"
               size="small"
-              sx={{
-                '.MuiInputLabel-root.Mui-focused': {
-                  color: 'text.primary',
-                  fontWeight: 'fontWeightBold',
-                },
-              }}
+
             >
               {t('addDelegationPage.chooseProduct')}
             </InputLabel>
             <Select
               id="select-product-choose"
               size="small"
-              disabled={productsWithCreateDelegationAction.length === 1 || !!selectedProductByQuery}
+              readOnly={productsWithCreateDelegationAction.length === 1 || !!selectedProductByQuery}
               fullWidth
               value={productSelected ? productSelected?.title : ''}
               displayEmpty
               variant="outlined"
-              labelId="select-label-products"
+              labelId="select-product-label"
               label={t('addDelegationPage.chooseProduct')}
               input={<OutlinedInput label={t('addDelegationPage.chooseProduct')} />}
               renderValue={(productSelected) => (
@@ -272,6 +267,16 @@ export default function AddDelegationForm({
                   {productSelected}
                 </Typography>
               )}
+              sx={{
+                ...(productsWithCreateDelegationAction.length === 1 || !!selectedProductByQuery
+                  ? {
+                    opacity: 0.5,
+                    '& .MuiSelect-select': {
+                      cursor: 'default',
+                    },
+                  }
+                  : {}),
+              }}
             >
               {productsWithCreateDelegationAction.map((p: Product, index) => (
                 <MenuItem
@@ -336,9 +341,9 @@ export default function AddDelegationForm({
               }}
               sx={{
                 '.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot':
-                  {
-                    paddingRight: 2,
-                  },
+                {
+                  paddingRight: 2,
+                },
               }}
               ListboxProps={{
                 style: {
@@ -377,7 +382,7 @@ export default function AddDelegationForm({
                     '.MuiAutocomplete-noOptions': () => ({
                       display:
                         (selectedRadioValue === 'fiscalCode' && !inputValue.length) ||
-                        techPartnerSelected
+                          techPartnerSelected
                           ? 'none'
                           : 'block',
                     }),
