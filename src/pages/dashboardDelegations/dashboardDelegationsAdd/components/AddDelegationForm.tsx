@@ -307,6 +307,7 @@ export default function AddDelegationForm({
           <RadioGroup
             row
             name="techPartnerRadio"
+            aria-label={t('addDelegationPage.selectTechPartner.title')}
             value={selectedRadioValue}
             onChange={(_e, selectedValue: string) => {
               setSelectedRadioValue(selectedValue);
