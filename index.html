@@ -35,13 +35,17 @@
     ></script>
 
     <!-- Fix: OneTrust sometimes leaves overflow:hidden on body/html after banner dismissal,
-         blocking page scroll. This observer unlocks scroll once the banner is gone,
-         then disconnects itself. Safety timeout at 15s. -->
+         blocking page scroll. Uses OneTrust's OptanonWrapper callback + fallback checks.
+         Only acts when consent cookie exists AND banner is not visible. -->
     <script>
       (function () {
-        function isOneTrustBannerGone() {
+        function hasConsent() {
+          return document.cookie.indexOf('OptanonAlertBoxClosed=') !== -1;
+        }
+
+        function isBannerVisible() {
           var banner = document.getElementById('onetrust-banner-sdk');
-          return !banner || getComputedStyle(banner).display === 'none';
+          return banner && getComputedStyle(banner).display !== 'none';
         }
 
         function unlockScroll() {
@@ -54,18 +58,34 @@
         }
 
         function tryFix() {
-          if (isOneTrustBannerGone()) {
+          if (hasConsent() && !isBannerVisible()) {
             unlockScroll();
           }
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-          var observer = new MutationObserver(tryFix);
-          observer.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
-          observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'class'] });
+        // OneTrust calls this after SDK initializes — official hook
+        window.OptanonWrapper = function () {
+          setTimeout(tryFix, 300);
+        };
+
+        // Fallback: staggered checks after page load in case OptanonWrapper
+        // fires before the scroll lock is applied
+        window.addEventListener('load', function () {
+          setTimeout(tryFix, 500);
+          setTimeout(tryFix, 1500);
+          setTimeout(tryFix, 3000);
         });
 
-        window.addEventListener('load', function () { setTimeout(tryFix, 500); });
+        // Persistent watcher for OneTrust-specific class only.
+        // Does NOT touch inline overflow style — avoids breaking MUI modals/dialogs.
+        document.addEventListener('DOMContentLoaded', function () {
+          new MutationObserver(function () {
+            if (hasConsent()) {
+              document.body.classList.remove('ot-overflow-hidden');
+              document.documentElement.classList.remove('ot-overflow-hidden');
+            }
+          }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        });
       })();
     </script>
   </head>
