@@ -33,6 +33,48 @@
       charset="UTF-8"
       data-domain-script="<%- VITE_ONETRUST_DOMAIN_ID %>"
     ></script>
+
+    <!-- Fix: OneTrust sometimes leaves overflow:hidden on body/html after banner dismissal,
+         blocking page scroll. This observer unlocks scroll once the banner is gone,
+         then disconnects itself. Safety timeout at 15s. -->
+    <script>
+      (function () {
+        function isOneTrustBannerGone() {
+          var banner = document.getElementById('onetrust-banner-sdk');
+          return !banner || getComputedStyle(banner).display === 'none';
+        }
+
+        function unlockScroll() {
+          document.body.style.removeProperty('overflow');
+          document.documentElement.style.removeProperty('overflow');
+          document.body.classList.remove('ot-overflow-hidden');
+          document.documentElement.classList.remove('ot-overflow-hidden');
+        }
+
+        var observer;
+        var safetyTimeout;
+
+        function tryFix() {
+          if (isOneTrustBannerGone()) {
+            unlockScroll();
+            if (observer) { observer.disconnect(); observer = null; }
+            if (safetyTimeout) { clearTimeout(safetyTimeout); safetyTimeout = null; }
+          }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+          observer = new MutationObserver(tryFix);
+          observer.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
+          observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'class'] });
+
+          safetyTimeout = setTimeout(function () {
+            if (observer) { observer.disconnect(); observer = null; }
+          }, 15000);
+        });
+
+        window.addEventListener('load', function () { setTimeout(tryFix, 500); });
+      })();
+    </script>
   </head>
   <body>
     <noscript>Abilita JavaScript per utilizzare quest'applicazione</noscript>
