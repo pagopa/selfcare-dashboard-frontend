@@ -39,8 +39,10 @@
          Only acts when consent cookie exists AND banner is not visible. -->
     <script>
       (function () {
-        function hasConsent() {
-          return document.cookie.indexOf('OptanonAlertBoxClosed=') !== -1;
+        function hasBannerBeenDismissed() {
+          var c = document.cookie;
+          return c.indexOf('OptanonAlertBoxClosed=') !== -1
+              || c.indexOf('OptanonConsent=') !== -1;
         }
 
         function isBannerVisible() {
@@ -57,30 +59,27 @@
           html.classList.remove('ot-overflow-hidden');
         }
 
-        function tryFix() {
-          if (hasConsent() && !isBannerVisible()) {
-            unlockScroll();
-          }
-        }
-
-        // OneTrust calls this after SDK initializes — official hook
+        // OneTrust calls this on SDK init AND on every consent change (accept/reject/close)
         window.OptanonWrapper = function () {
-          setTimeout(tryFix, 300);
+          setTimeout(function () {
+            if (!isBannerVisible()) unlockScroll();
+          }, 300);
         };
 
-        // Fallback: staggered checks after page load in case OptanonWrapper
-        // fires before the scroll lock is applied
+        // Fallback: staggered checks after page load
         window.addEventListener('load', function () {
+          function tryFix() {
+            if (hasBannerBeenDismissed() && !isBannerVisible()) unlockScroll();
+          }
           setTimeout(tryFix, 500);
           setTimeout(tryFix, 1500);
           setTimeout(tryFix, 3000);
         });
 
-        // Persistent watcher for OneTrust-specific class only.
-        // Does NOT touch inline overflow style — avoids breaking MUI modals/dialogs.
+        // Persistent watcher for OneTrust-specific class only (safe from MUI conflicts)
         document.addEventListener('DOMContentLoaded', function () {
           new MutationObserver(function () {
-            if (hasConsent()) {
+            if (hasBannerBeenDismissed()) {
               document.body.classList.remove('ot-overflow-hidden');
               document.documentElement.classList.remove('ot-overflow-hidden');
             }
