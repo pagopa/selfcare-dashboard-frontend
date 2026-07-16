@@ -45,31 +45,24 @@
         }
 
         function unlockScroll() {
-          document.body.style.removeProperty('overflow');
-          document.documentElement.style.removeProperty('overflow');
-          document.body.classList.remove('ot-overflow-hidden');
-          document.documentElement.classList.remove('ot-overflow-hidden');
+          var body = document.body;
+          var html = document.documentElement;
+          if (body.style.overflow === 'hidden') body.style.removeProperty('overflow');
+          if (html.style.overflow === 'hidden') html.style.removeProperty('overflow');
+          body.classList.remove('ot-overflow-hidden');
+          html.classList.remove('ot-overflow-hidden');
         }
-
-        var observer;
-        var safetyTimeout;
 
         function tryFix() {
           if (isOneTrustBannerGone()) {
             unlockScroll();
-            if (observer) { observer.disconnect(); observer = null; }
-            if (safetyTimeout) { clearTimeout(safetyTimeout); safetyTimeout = null; }
           }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-          observer = new MutationObserver(tryFix);
+          var observer = new MutationObserver(tryFix);
           observer.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
           observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'class'] });
-
-          safetyTimeout = setTimeout(function () {
-            if (observer) { observer.disconnect(); observer = null; }
-          }, 15000);
         });
 
         window.addEventListener('load', function () { setTimeout(tryFix, 500); });
