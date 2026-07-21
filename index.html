@@ -34,57 +34,41 @@
       data-domain-script="<%- VITE_ONETRUST_DOMAIN_ID %>"
     ></script>
 
-    <!-- Fix: OneTrust sometimes leaves overflow:hidden on body/html after banner dismissal,
-         blocking page scroll. Uses OneTrust's OptanonWrapper callback + fallback checks.
-         Only acts when consent cookie exists AND banner is not visible. -->
+    <!-- Fix: Periodically attempts to unlock body/html scroll by removing overflow:hidden if blocked. -->
     <script>
       (function () {
-        function hasBannerBeenDismissed() {
-          var c = document.cookie;
-          return c.indexOf('OptanonAlertBoxClosed=') !== -1
-              || c.indexOf('OptanonConsent=') !== -1;
-        }
-
-        function isBannerVisible() {
-          var banner = document.getElementById('onetrust-banner-sdk');
-          return banner && getComputedStyle(banner).display !== 'none';
-        }
-
         function unlockScroll() {
           var body = document.body;
           var html = document.documentElement;
-          if (body.style.overflow === 'hidden') body.style.removeProperty('overflow');
-          if (html.style.overflow === 'hidden') html.style.removeProperty('overflow');
-          body.classList.remove('ot-overflow-hidden');
-          html.classList.remove('ot-overflow-hidden');
+          if (body && body.style.overflow === 'hidden') {
+            body.style.removeProperty('overflow');
+          }
+          if (html && html.style.overflow === 'hidden') {
+            html.style.removeProperty('overflow');
+          }
         }
 
-        // OneTrust calls this on SDK init AND on every consent change (accept/reject/close)
-        window.OptanonWrapper = function () {
+        function startUnlockChecks() {
+          // Staggered checks for immediate responsiveness
+          setTimeout(unlockScroll, 500);
+          setTimeout(unlockScroll, 1500);
+          setTimeout(unlockScroll, 3000);
+          
+          // Periodic check every 2 seconds to ensure scroll isn't blocked
+          var intervalId = setInterval(unlockScroll, 2000);
+
+          // Stop checking after 10 seconds to avoid infinite polling
           setTimeout(function () {
-            if (!isBannerVisible()) unlockScroll();
-          }, 300);
-        };
+            clearInterval(intervalId);
+          }, 10000);
+        }
 
-        // Fallback: staggered checks after page load
-        window.addEventListener('load', function () {
-          function tryFix() {
-            if (hasBannerBeenDismissed() && !isBannerVisible()) unlockScroll();
-          }
-          setTimeout(tryFix, 500);
-          setTimeout(tryFix, 1500);
-          setTimeout(tryFix, 3000);
-        });
-
-        // Persistent watcher for OneTrust-specific class only (safe from MUI conflicts)
-        document.addEventListener('DOMContentLoaded', function () {
-          new MutationObserver(function () {
-            if (hasBannerBeenDismissed()) {
-              document.body.classList.remove('ot-overflow-hidden');
-              document.documentElement.classList.remove('ot-overflow-hidden');
-            }
-          }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
-        });
+        // Start checks as soon as the DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', startUnlockChecks);
+        } else {
+          startUnlockChecks();
+        }
       })();
     </script>
   </head>
