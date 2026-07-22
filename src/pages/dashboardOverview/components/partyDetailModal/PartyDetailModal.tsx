@@ -53,7 +53,7 @@ export const PartyDetailModal = ({
 
   const [clearCache, setclearCache] = useState(false);
 
-  const showInfoBanner = institutionTypesList?.includes('PA');
+  const showInfoBanner = institutionTypesList?.includes('PA') && !isPagoPaUser();
 
   const reloadPage = () => {
     setclearCache(false);
