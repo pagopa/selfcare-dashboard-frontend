@@ -43,7 +43,7 @@ const App = () => {
 
     const isOverview = !!matchPath(location.pathname, {
       path: ENV.ROUTES.OVERVIEW,
-      exact: false,
+      exact: true,
     });
 
     if (isPartyDetail || isOverview) {
