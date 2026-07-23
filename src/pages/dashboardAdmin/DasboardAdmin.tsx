@@ -1,5 +1,4 @@
 import { useTheme } from '@mui/material';
-import { Route, Switch, useHistory, useLocation, matchPath } from 'react-router-dom';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import {
   resetPermissions,
@@ -8,12 +7,19 @@ import {
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {
+  resetAdminProductRoles,
+  selectAdminRolesNeedsReload,
+  selectAdminRolesStatus,
+  setAdminProductRoles,
+  setAdminRolesStatus,
+} from '../../redux/slices/adminRolesSlice';
 import { getPermissionsAdminService } from '../../services/adminService';
 import { ENV } from '../../utils/env';
 import DashboardShell from '../dashboard/DashboardShell';
-import { setAdminProductRoles, resetAdminProductRoles } from '../../redux/slices/adminRolesSlice';
 
 /**
  * DashboardAdminPage - Dashboard for PagoPA authenticated users
@@ -28,24 +34,23 @@ const DashboardAdminPage: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const addError = useErrorDispatcher();
-  const location = useLocation();
+  const status = useAppSelector(selectAdminRolesStatus);
+  const needsReload = useAppSelector(selectAdminRolesNeedsReload);
+  const permissions = useAppSelector((s: any) => s.permissions?.items ?? []);
 
   useEffect(() => {
-    const isAdminSection = !!matchPath(location.pathname, {
-      path: ENV.ROUTES.ADMIN,
-      exact: false,
-    });
-    const isPartyDetail = !!matchPath(location.pathname, {
-      path: ENV.ROUTES.ADMIN_PARTY_DETAIL,
-      exact: false,
-    });
-
-    if (!isAdminSection || isPartyDetail) {
+    // only fetch when explicitly reloading or when we don't have permissions yet
+    const shouldFetch = needsReload || (status !== 'succeeded' && permissions.length === 0);
+    if (status === 'pending' || !shouldFetch) {
       return;
     }
 
-    dispatch(resetPermissions());
-    dispatch(resetAdminProductRoles());
+    // avoid wiping existing permissions unless a reload was requested
+    if (needsReload) {
+      dispatch(resetPermissions());
+      dispatch(resetAdminProductRoles());
+    }
+    dispatch(setAdminRolesStatus('pending'));
 
     getPermissionsAdminService()
       .then((res) => {
@@ -55,7 +60,6 @@ const DashboardAdminPage: React.FC = () => {
         }));
         dispatch(setProductPermissions(payload));
 
-        // collect roles from service items and store them for the admin microfrontend
         const rolesPayload = (res.items || []).map((i) => ({
           productId: i.productId ?? '',
           role: i.role ?? '',
@@ -63,6 +67,7 @@ const DashboardAdminPage: React.FC = () => {
         dispatch(setAdminProductRoles(rolesPayload));
       })
       .catch((error) => {
+        dispatch(setAdminRolesStatus('failed'));
         addError({
           id: 'getPermissionsList-api-error',
           blocking: false,
@@ -71,7 +76,7 @@ const DashboardAdminPage: React.FC = () => {
           error: error as Error,
         });
       });
-  }, [location.pathname, dispatch, addError]);
+  }, [needsReload, status, permissions]);
 
   return (
     <DashboardShell
