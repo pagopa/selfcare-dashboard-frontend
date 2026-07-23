@@ -7,12 +7,15 @@ import {
 } from '@pagopa/selfcare-common-frontend/lib';
 import withLogin from '@pagopa/selfcare-common-frontend/lib/decorators/withLogin';
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { matchPath, Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import RemoteRoutingAdmin from './microcomponents/admin/RemoteRoutingAdmin';
 import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';
+import { useAppDispatch } from './redux/hooks';
+import { markAdminPermissionsStale } from './redux/slices/adminRolesSlice';
 import routes, { RoutesObject } from './routes';
 import { ENV } from './utils/env';
 
@@ -29,6 +32,24 @@ const App = () => {
   const theme = useTheme();
   const { i18n } = useTranslation();
   const history = useHistory();
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const isPartyDetail = !!matchPath(location.pathname, {
+      path: ENV.ROUTES.ADMIN_PARTY_DETAIL,
+      exact: false,
+    });
+
+    const isOverview = !!matchPath(location.pathname, {
+      path: ENV.ROUTES.OVERVIEW,
+      exact: true,
+    });
+
+    if (isPartyDetail || isOverview) {
+      dispatch(markAdminPermissionsStale());
+    }
+  }, [dispatch, location.pathname]);
 
   return (
     <ErrorBoundary>

@@ -20,6 +20,7 @@ import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBa
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { OnboardingInfo } from './generated/b4f-dashboard/OnboardingInfo';
 import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
+import { ProductRolePermissionsList } from './generated/b4f-dashboard/ProductRolePermissionsList';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { UserOtpEmailInfo } from './generated/b4f-dashboard/UserOtpEmailInfo';
 
@@ -216,6 +217,11 @@ export const DashboardApi = {
 
   getUserOtpEmailInfo: async (): Promise<UserOtpEmailInfo> => {
     const result = await apiClient.getUserOtpEmailInfoUsingGET({});
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  myPermissionsAdmin: async (): Promise<ProductRolePermissionsList> => {
+    const result = await apiClient.getMyPermissions({});
     return extractResponse(result, 200, onRedirectToLogin);
   },
 

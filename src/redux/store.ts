@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
 import { partiesReducer } from './slices/partiesSlice';
+import { adminRolesReducer } from './slices/adminRolesSlice';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined];
 
@@ -15,6 +16,7 @@ export const createStore = () =>
       user: userReducer,
       permissions: permissionsReducer,
       appState: appStateReducer,
+      adminRoles: adminRolesReducer,
     },
     middleware: (getDefaultMiddleware: any) =>
       additionalMiddlewares.reduce(
