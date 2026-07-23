@@ -1,7 +1,6 @@
-import { Grid, useTheme } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
 import { Route, Switch, matchPath, useHistory } from 'react-router-dom';
@@ -17,7 +16,6 @@ import withSelectedParty from '../../decorators/withSelectedParty';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
 import withSelectedProductRoles from '../../decorators/withSelectedPartyProductAndRoles';
 
-import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
 import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
@@ -30,8 +28,7 @@ import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/Dashbo
 
 import { Party } from '../../model/Party';
 import { Product, ProductsMap } from '../../model/Product';
-import DashboardSideMenuDesktop from './components/dashboardSideMenu/DashboardSideMenuDesktop';
-import DashboardSideMenuMobile from './components/dashboardSideMenu/DashboardSideMenuMobile';
+import DashboardShell from './DashboardShell';
 import { useDashboardData } from './hooks/useDashboardData';
 import { buildRoutes } from './utils/dashboard-utils';
 
@@ -52,10 +49,6 @@ export type DashboardDecoratorsType = {
 const Dashboard: React.FC = () => {
   const { i18n } = useTranslation();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [hideLabels, setHideLabels] = useState(false);
 
   const history = useHistory();
   const location = useLocation();
@@ -133,134 +126,95 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <Grid
-      container
-      item
-      xs={12}
-      sx={{
+    <DashboardShell
+      party={party}
+      isAddDelegateSectionVisible={isAddDelegateSectionVisible}
+      isInvoiceSectionVisible={isInvoiceSectionVisible}
+      isHandleDelegationsVisible={isHandleDelegationsVisible}
+      isDocumentsSectionVisible={isDocumentsSectionVisible}
+      hideSideMenu={Boolean(match)}
+      containerSx={{
         backgroundColor: match ? 'background.default' : 'background.paper',
-        justifyContent: match && 'center',
+        justifyContent: match ? 'center' : 'flex-start',
+      }}
+      mainSx={{
+        backgroundColor: 'background.default',
+        justifyContent: match ? 'center' : 'flex-start',
+        minHeight: '100%',
       }}
     >
-      {!match &&
-        (isMobile ? (
-          <DashboardSideMenuMobile
+      <Switch>
+        <Route path={ENV.ROUTES.USERS} exact={false}>
+          <RemoteRoutingUsers
             party={party}
-            drawerOpen={drawerOpen}
-            setDrawerOpen={setDrawerOpen}
-            hideLabels={hideLabels}
-            isAddDelegateSectionVisible={isAddDelegateSectionVisible}
-            isInvoiceSectionVisible={isInvoiceSectionVisible}
-            isHandleDelegationsVisible={isHandleDelegationsVisible}
-            isDocumentsSectionVisible={isDocumentsSectionVisible}
-            currentPathname={location.pathname}
+            products={products}
+            activeProducts={activeProducts}
+            productsMap={productsMap}
+            history={history}
+            store={store}
+            theme={theme}
+            i18n={i18n}
+            decorators={decorators}
           />
-        ) : (
-          <DashboardSideMenuDesktop
+        </Route>
+
+        <Route path={ENV.ROUTES.PRODUCT_USERS} exact={false}>
+          <RemoteRoutingProductUsers
             party={party}
-            hideLabels={hideLabels}
-            setHideLabels={setHideLabels}
-            setDrawerOpen={setDrawerOpen}
-            isAddDelegateSectionVisible={isAddDelegateSectionVisible}
-            isInvoiceSectionVisible={isInvoiceSectionVisible}
-            isHandleDelegationsVisible={isHandleDelegationsVisible}
-            isDocumentsSectionVisible={isDocumentsSectionVisible}
+            products={products}
+            activeProducts={activeProducts}
+            productsMap={productsMap}
+            history={history}
+            store={store}
+            theme={theme}
+            i18n={i18n}
+            decorators={decorators}
           />
-        ))}
+        </Route>
 
-      <Grid
-        item
-        component="main"
-        sx={{ backgroundColor: 'background.default', minHeight: '100%' }}
-        display="flex"
-        justifyContent={match ? 'center' : 'flex-start'}
-        pb={8}
-        xs={12}
-        lg={hideLabels ? 11 : 10}
-      >
-        <Switch>
-          <Route path={ENV.ROUTES.ADMIN} exact={false}>
-            <RemoteRoutingAdmin
-              history={history}
-              store={store}
-              theme={theme}
-              i18n={i18n}
-              decorators={decorators}
-            />
-          </Route>
+        <Route path={ENV.ROUTES.GROUPS} exact={false}>
+          <RemoteRoutingGroups
+            party={party}
+            products={products}
+            activeProducts={activeProducts}
+            productsMap={productsMap}
+            history={history}
+            store={store}
+            theme={theme}
+            i18n={i18n}
+            decorators={decorators}
+          />
+        </Route>
 
-          <Route path={ENV.ROUTES.USERS} exact={false}>
-            <RemoteRoutingUsers
-              party={party}
-              products={products}
-              activeProducts={activeProducts}
-              productsMap={productsMap}
-              history={history}
-              store={store}
-              theme={theme}
-              i18n={i18n}
-              decorators={decorators}
-            />
-          </Route>
+        <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact>
+          <AddDelegationPage
+            delegableProducts={delegableProducts}
+            party={party}
+          />
+        </Route>
 
-          <Route path={ENV.ROUTES.PRODUCT_USERS} exact={false}>
-            <RemoteRoutingProductUsers
-              party={party}
-              products={products}
-              activeProducts={activeProducts}
-              productsMap={productsMap}
-              history={history}
-              store={store}
-              theme={theme}
-              i18n={i18n}
-              decorators={decorators}
-            />
-          </Route>
+        <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact>
+          <DashboardDelegationsPage
+            party={party}
+            delegableProducts={delegableProducts}
+          />
+        </Route>
 
-          <Route path={ENV.ROUTES.GROUPS} exact={false}>
-            <RemoteRoutingGroups
-              party={party}
-              products={products}
-              activeProducts={activeProducts}
-              productsMap={productsMap}
-              history={history}
-              store={store}
-              theme={theme}
-              i18n={i18n}
-              decorators={decorators}
-            />
-          </Route>
+        <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact>
+          <DashboardHandleDelegatesPage party={party} />
+        </Route>
 
-          <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact>
-            <AddDelegationPage
-              delegableProducts={delegableProducts}
-              party={party}
-            />
-          </Route>
+        <Route path={DASHBOARD_ROUTES.DOCUMENTS.path} exact>
+          <DashboardDocuments party={party} products={products} />
+        </Route>
 
-          <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact>
-            <DashboardDelegationsPage
-              party={party}
-              delegableProducts={delegableProducts}
-            />
-          </Route>
+        <Route path={DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path} exact>
+          <DashboardDocumentsDetail party={party} products={products} />
+        </Route>
 
-          <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact>
-            <DashboardHandleDelegatesPage party={party} />
-          </Route>
-
-          <Route path={DASHBOARD_ROUTES.DOCUMENTS.path} exact>
-            <DashboardDocuments party={party} products={products} />
-          </Route>
-
-          <Route path={DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path} exact>
-            <DashboardDocumentsDetail party={party} products={products} />
-          </Route>
-
-          {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
-        </Switch>
-      </Grid>
-    </Grid>
+        {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
+      </Switch>
+    </DashboardShell>
   );
 };
 
