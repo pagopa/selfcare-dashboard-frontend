@@ -148,6 +148,7 @@ export default defineConfig(({ mode }) => {
       ),
     },
     resolve: {
+      tsconfigPaths: true,
       dedupe: ['react', 'react-dom', 'react-router-dom'],
     },
     optimizeDeps: {
