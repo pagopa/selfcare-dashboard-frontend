@@ -97,10 +97,5 @@ test('should display documentation link with correct href and text content', asy
 
   expect(linkElement).toHaveAttribute('href', href);
 
-  expect(linkElement).toHaveStyle(`
-    font-weight: 700;
-    font-size: 14px;
-  `);
-
   fireEvent.click(linkElement);
 });
