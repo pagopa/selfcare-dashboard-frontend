@@ -22,7 +22,7 @@ type ProductCardsProps = {
 const isProductEligible = (
   product: Product,
   party: Party,
-  hasPermission: (productId: string, action: Actions) => boolean
+  hasPermission: (productId: string, action: string) => boolean
 ): Product | SubProductResource | null => {
   const baseInstitutionProduct = party.products.find(
     (ip) =>
