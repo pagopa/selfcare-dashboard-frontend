@@ -3,7 +3,6 @@ import { theme } from '@pagopa/mui-italia';
 import '@pagopa/selfcare-common-frontend/index.css';
 import LoadingOverlay from '@pagopa/selfcare-common-frontend/lib/components/Loading/LoadingOverlay';
 import { CONFIG } from '@pagopa/selfcare-common-frontend/lib/config/env';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
