@@ -27,13 +27,6 @@ CONFIG.URL_FE.LOGOUT = ENV.URL_FE.LOGOUT;
 // eslint-disable-next-line functional/immutable-data
 CONFIG.URL_FE.ASSISTANCE = ENV.URL_FE.ASSISTANCE;
 
-if (isPagoPaUser()) {
-  // eslint-disable-next-line functional/immutable-data
-  CONFIG.FOOTER.LINK.PRIVACYPOLICY = `${CONFIG.FOOTER.LINK.PRIVACYPOLICY}?origin=backstage`;
-  // eslint-disable-next-line functional/immutable-data
-  CONFIG.FOOTER.LINK.TERMSANDCONDITIONS = `${CONFIG.FOOTER.LINK.TERMSANDCONDITIONS}?origin=backstage`;
-}
-
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
