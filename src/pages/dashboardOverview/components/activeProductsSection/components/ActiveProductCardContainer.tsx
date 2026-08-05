@@ -41,7 +41,6 @@ export default function ActiveProductCardContainer({
   const { hasPermission } = usePermissions();
 
   const isDisabled =
-    isPagoPaUser() === false &&
     !!party.products.find(
       (p) =>
         p.productId === product.productId &&
