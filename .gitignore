@@ -64,3 +64,5 @@ yarn-error.log
 
 # Microfrontend temp
 .__mf__temp
+# graphify-axet
+.graphify/
