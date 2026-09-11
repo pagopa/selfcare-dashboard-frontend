@@ -26,8 +26,6 @@ CONFIG.URL_FE.LOGOUT = ENV.URL_FE.LOGOUT;
 // eslint-disable-next-line functional/immutable-data
 CONFIG.URL_FE.ASSISTANCE = ENV.URL_FE.ASSISTANCE;
 
-console.log('ENV', ENV, ' ENV: import.meta.env.VITE_ENV', import.meta.env.VITE_ENV);
-
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
