@@ -5,6 +5,10 @@ import {
   extractResponse,
 } from '@pagopa/selfcare-common-frontend/lib/utils/api-utils';
 import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import {
+  LegacyProductRolesApiResponse,
+  ProductRolesApiResponse,
+} from '../model/ProductRolesApiResponse';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { store } from '../redux/store';
@@ -19,7 +23,6 @@ import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxon
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { OnboardingInfo } from './generated/b4f-dashboard/OnboardingInfo';
-import { ProductRoleMappingsResource } from './generated/b4f-dashboard/ProductRoleMappingsResource';
 import { ProductRolePermissionsList } from './generated/b4f-dashboard/ProductRolePermissionsList';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { UserOtpEmailInfo } from './generated/b4f-dashboard/UserOtpEmailInfo';
@@ -141,12 +144,14 @@ export const DashboardApi = {
   getProductRoles: async (
     productId: string,
     institutionType: string
-  ): Promise<Array<ProductRoleMappingsResource>> => {
+  ): Promise<ProductRolesApiResponse | LegacyProductRolesApiResponse> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
       institutionType,
     });
-    return extractResponse(result, 200, onRedirectToLogin);
+    return extractResponse(result, 200, onRedirectToLogin) as unknown as
+      | ProductRolesApiResponse
+      | LegacyProductRolesApiResponse;
   },
 
   updateInstitutionGeographicTaxonomy: async (
