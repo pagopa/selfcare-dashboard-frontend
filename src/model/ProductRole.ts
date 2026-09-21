@@ -10,17 +10,47 @@ export type ProductRole = {
   title: string;
   description: string;
   phasesAdditionAllowed: Array<string>;
+  /**
+   * Identifies roles coming from the partner-tech role mapping.
+   * Optional to keep compatibility with legacy API responses and mocks.
+   */
+  partnerTechRole?: boolean;
+};
+
+export type CurrentUserProductRoleContext = {
+  hasStandardRole: boolean;
+  hasPartnerTechRole: boolean;
 };
 
 export type ProductRolesLists = {
   list: Array<ProductRole>;
+  standardList: Array<ProductRole>;
+  partnerTechList: Array<ProductRole>;
   groupByPartyRole: ProductRolesByPartyRoleType;
   groupBySelcRole: ProductRolesBySelcRoleType;
   groupByProductRole: ProductRolesByProductRoleType;
 };
 
+export const selectProductRolesForCurrentUser = (
+  standardRoles: Array<ProductRole>,
+  partnerTechRoles: Array<ProductRole>,
+  currentUserRoles: CurrentUserProductRoleContext
+): Array<ProductRole> => {
+  if (currentUserRoles.hasStandardRole && currentUserRoles.hasPartnerTechRole) {
+    return [...standardRoles, ...partnerTechRoles];
+  }
+
+  if (currentUserRoles.hasPartnerTechRole) {
+    return partnerTechRoles;
+  }
+
+  return standardRoles;
+};
+
 export const buildEmptyProductRolesLists = (): ProductRolesLists => ({
   list: [],
+  standardList: [],
+  partnerTechList: [],
   groupBySelcRole: { ADMIN: [], LIMITED: [], ADMIN_EA: [] },
   groupByProductRole: {},
   groupByPartyRole: { MANAGER: [], DELEGATE: [], SUB_DELEGATE: [], OPERATOR: [], ADMIN_EA: [], ADMIN_EA_IO: [] },
@@ -34,12 +64,19 @@ export type ProductsRolesMap = {
   [productId: string]: ProductRolesLists;
 };
 
-export const productRoles2ProductRolesList = (roles: Array<ProductRole>): ProductRolesLists => ({
-  list: roles,
-  groupByPartyRole: productRolesGroupByPartyRole(roles),
-  groupBySelcRole: productRolesGroupBySelcRole(roles),
-  groupByProductRole: productRolesGroupByProductRole(roles),
-});
+export const productRoles2ProductRolesList = (roles: Array<ProductRole>): ProductRolesLists => {
+  const standardList = roles.filter((role) => !role.partnerTechRole);
+  const partnerTechList = roles.filter((role) => role.partnerTechRole === true);
+
+  return {
+    list: roles,
+    standardList,
+    partnerTechList,
+    groupByPartyRole: productRolesGroupByPartyRole(roles),
+    groupBySelcRole: productRolesGroupBySelcRole(roles),
+    groupByProductRole: productRolesGroupByProductRole(roles),
+  };
+};
 
 export const productRolesGroupBySelcRole = (
   roles: Array<ProductRole>

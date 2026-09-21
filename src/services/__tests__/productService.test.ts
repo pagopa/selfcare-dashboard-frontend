@@ -2,6 +2,11 @@ import { Mock } from 'vitest';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/ProductsResource';
 import { Product, productResource2Product } from '../../model/Product';
+import {
+  mockedMultiRoleProductRolesResponse,
+  mockedPartnerTechOnlyProductRolesResponse,
+  mockedStandardProductRolesResponse,
+} from '../../model/__mocks__/ProductRolesApiResponse';
 
 import { mockedParties } from '../__mocks__/partyService';
 import { fetchProductRoles, fetchProducts } from '../productService';
@@ -143,10 +148,12 @@ describe('productService tests', () => {
           productId: 'prod-pagopa',
           partyRole: 'Admin',
           selcRole: 'User',
+          phasesAdditionAllowed: [],
           multiroleGroups: ['group1', 'group2'],
           productRole: 'admin',
           title: 'Admin Role',
           description: 'Admin Role Description',
+          partnerTechRole: false,
         },
       ];
       const result = await fetchProductRoles(mockProduct, mockedParties[0]);
@@ -155,6 +162,34 @@ describe('productService tests', () => {
         mockedParties[0].products[0].institutionType
       );
       expect(result).toEqual(expectedRoles);
+    });
+
+    test.each([
+      {
+        name: 'standard user',
+        response: mockedStandardProductRolesResponse,
+        expectedRoles: ['admin'],
+      },
+      {
+        name: 'partner tech only user',
+        response: mockedPartnerTechOnlyProductRolesResponse,
+        expectedRoles: ['admin-pt'],
+      },
+      {
+        name: 'multi-role user',
+        response: mockedMultiRoleProductRolesResponse,
+        expectedRoles: ['admin', 'admin-pt'],
+      },
+    ])('filters roles for a $name', async ({ response, expectedRoles }) => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
+      (DashboardApi.getProductRoles as Mock).mockResolvedValue(response);
+
+      const result = await fetchProductRoles(mockProduct, mockedParties[0]);
+
+      expect(result.map((role) => role.productRole)).toEqual(expectedRoles);
+      expect(result.map((role) => role.partnerTechRole)).toEqual(
+        expectedRoles.map((role) => role === 'admin-pt')
+      );
     });
   });
 });

@@ -33,6 +33,7 @@ export const partiesSlice = createSlice({
       state.selectedPartyLogoUrl = action.payload?.urlLogo
         ? addCacheBuster(action.payload.urlLogo)
         : undefined;
+      state.selectedProductsRolesMap = {};
     },
 
     setPartySelectedPartyLogo: (state, action: PayloadAction<string | undefined>) => {

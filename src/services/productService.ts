@@ -1,11 +1,49 @@
 import { DashboardApi } from '../api/DashboardApiClient';
 import { Party } from '../model/Party';
 import { Product, productResource2Product } from '../model/Product';
-import { ProductRole } from '../model/ProductRole';
+import {
+  CurrentUserProductRoleContext,
+  ProductRole,
+  selectProductRolesForCurrentUser,
+} from '../model/ProductRole';
+import {
+  LegacyProductRolesApiResponse,
+  ProductRolesApiResponse,
+} from '../model/ProductRolesApiResponse';
 import {
   fetchProductRoles as fetchProductRolesMocked,
   mockedPartyProducts,
 } from './__mocks__/productService';
+
+const isProductRolesApiResponse = (
+  response: ProductRolesApiResponse | LegacyProductRolesApiResponse
+): response is ProductRolesApiResponse => !Array.isArray(response);
+
+const mapProductRoleMappings = (
+  mappings: ProductRolesApiResponse['roleMappings'],
+  productId: string,
+  partnerTechRole: boolean
+): Array<ProductRole> =>
+  mappings.flatMap((mapping) =>
+    (mapping.productRoles ?? []).map((role) => ({
+      productId,
+      partyRole: mapping.partyRole as ProductRole['partyRole'],
+      selcRole: mapping.selcRole as ProductRole['selcRole'],
+      phasesAdditionAllowed: Array.from(mapping.phasesAdditionAllowed ?? []),
+      multiroleGroups: Array.from(role.multiroleGroups ?? []),
+      productRole: role.code ?? '',
+      title: role.label ?? '',
+      description: role.description ?? '',
+      partnerTechRole,
+    }))
+  );
+
+const getCurrentUserRoleContext = (
+  currentUserRoles: ProductRolesApiResponse['currentUserRoles'] = []
+): CurrentUserProductRoleContext => ({
+  hasStandardRole: currentUserRoles.some((role) => role.partnerTechRole !== true),
+  hasPartnerTechRole: currentUserRoles.some((role) => role.partnerTechRole === true),
+});
 
 export const fetchProducts = (): Promise<Array<Product>> => {
   /* istanbul ignore if */
@@ -28,22 +66,28 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
     return fetchProductRolesMocked(product, party);
   } else {
     return DashboardApi.getProductRoles(product.id, institutionTypeOnActiveOnboarding)
-      .then((roles) =>
-        roles
-          ?.map((pr) =>
-            pr?.productRoles?.map((r) => ({
-              productId: product.id,
-              partyRole: pr.partyRole,
-              selcRole: pr.selcRole,
-              phasesAdditionAllowed: pr.phasesAdditionAllowed,
-              multiroleGroups: r.multiroleGroups,
-              productRole: r.code ?? '',
-              title: r.label ?? '',
-              description: r.description ?? '',
-            }))
-          )
-          .flatMap((x) => x)
-      )
+      .then((response) => {
+        if (!isProductRolesApiResponse(response)) {
+          return mapProductRoleMappings(response, product.id, false);
+        }
+
+        const standardRoles = mapProductRoleMappings(
+          response.roleMappings,
+          product.id,
+          false
+        );
+        const partnerTechRoles = mapProductRoleMappings(
+          response.partnerTechRoleMappings ?? [],
+          product.id,
+          true
+        );
+
+        return selectProductRolesForCurrentUser(
+          standardRoles,
+          partnerTechRoles,
+          getCurrentUserRoleContext(response.currentUserRoles)
+        );
+      })
       .catch((reason) => reason);
   }
 };

@@ -1,10 +1,15 @@
 import { mockedProductRoles } from '../../services/__mocks__/productService';
-import { productRoles2ProductRolesList } from '../ProductRole';
+import {
+  productRoles2ProductRolesList,
+  selectProductRolesForCurrentUser,
+} from '../ProductRole';
 
 test('Test productRoles2ProductRolesList', () => {
   const rolesList = productRoles2ProductRolesList(mockedProductRoles);
   expect(rolesList).toStrictEqual({
     list: mockedProductRoles,
+    standardList: mockedProductRoles,
+    partnerTechList: [],
     groupBySelcRole: {
       ADMIN: [
         {
@@ -209,4 +214,51 @@ test('Test productRoles2ProductRolesList', () => {
       },
     },
   });
+});
+
+test('splits standard and partner tech roles', () => {
+  const partnerTechRole = {
+    ...mockedProductRoles[0],
+    productRole: 'partner-tech-role',
+    partnerTechRole: true,
+  };
+
+  const rolesList = productRoles2ProductRolesList([...mockedProductRoles, partnerTechRole]);
+
+  expect(rolesList.standardList).toEqual(mockedProductRoles);
+  expect(rolesList.partnerTechList).toEqual([partnerTechRole]);
+});
+
+test.each([
+  {
+    name: 'standard user',
+    context: { hasStandardRole: true, hasPartnerTechRole: false },
+    expected: ['standard-role'],
+  },
+  {
+    name: 'partner tech user',
+    context: { hasStandardRole: false, hasPartnerTechRole: true },
+    expected: ['partner-tech-role'],
+  },
+  {
+    name: 'multi-role user',
+    context: { hasStandardRole: true, hasPartnerTechRole: true },
+    expected: ['standard-role', 'partner-tech-role'],
+  },
+  {
+    name: 'legacy or unknown user',
+    context: { hasStandardRole: false, hasPartnerTechRole: false },
+    expected: ['standard-role'],
+  },
+])('selects the correct role mapping for a $name', ({ context, expected }) => {
+  const standardRole = { ...mockedProductRoles[0], productRole: 'standard-role' };
+  const partnerTechRole = {
+    ...mockedProductRoles[0],
+    productRole: 'partner-tech-role',
+    partnerTechRole: true,
+  };
+
+  expect(selectProductRolesForCurrentUser([standardRole], [partnerTechRole], context)).toEqual(
+    expected.map((productRole) => (productRole === 'standard-role' ? standardRole : partnerTechRole))
+  );
 });
