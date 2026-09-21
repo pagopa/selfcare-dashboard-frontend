@@ -4298,6 +4298,9 @@
           "originId" : {
             "type" : "string"
           },
+          "isPartnerTech" : {
+            "type" : "boolean"
+          },
           "institutionType" : {
             "type" : "string",
             "enum" : [ "PA", "PG", "GSP", "SA", "PT", "SCP", "PSP", "AS", "REC", "CON", "PRV", "PRV_PF", "GPU", "SCEC" ]
@@ -4700,6 +4703,10 @@
             "type" : "string",
             "description" : "User's role last update date",
             "format" : "date-time"
+          },
+          "excludeRoleFromUserGroups" : {
+            "type" : "boolean",
+            "description" : "Boolean indicating if the current product role should be excluded from the user groups"
           }
         },
         "description" : "User's role infos in product"
@@ -5135,6 +5142,9 @@
           "originId" : {
             "type" : "string"
           },
+          "isPartnerTech" : {
+            "type" : "boolean"
+          },
           "institutionType" : {
             "type" : "string",
             "enum" : [ "PA", "PG", "GSP", "SA", "PT", "SCP", "PSP", "AS", "REC", "CON", "PRV", "PRV_PF", "GPU", "SCEC" ]
@@ -5452,6 +5462,9 @@
           "productId" : {
             "type" : "string"
           },
+          "tenantId" : {
+            "type" : "string"
+          },
           "role" : {
             "type" : "string"
           },
@@ -5469,6 +5482,18 @@
       "ProductRolePermissionsList" : {
         "type" : "object",
         "properties" : {
+          "userId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "familyName" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
           "items" : {
             "type" : "array",
             "items" : {

@@ -83,6 +83,12 @@ test('Test institutionResource2Party', () => {
     aooParentCode: 'aooParentCode',
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
+    products: [
+      {
+        productId: 'partner-tech-product',
+        isPartnerTech: true,
+      },
+    ],
   };
 
   const party = institutionResource2Party(institutionResource);
@@ -111,7 +117,12 @@ test('Test institutionResource2Party', () => {
     subunitType: 'subunitType',
     subunitCode: 'subunitCode',
     parentDescription: undefined,
-    products: undefined,
+    products: [
+      {
+        productId: 'partner-tech-product',
+        isPartnerTech: true,
+      },
+    ],
     city: '',
     country: '',
   });
