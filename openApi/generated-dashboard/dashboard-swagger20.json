@@ -4258,6 +4258,9 @@
         "isAggregator": {
           "type": "boolean"
         },
+        "isPartnerTech": {
+          "type": "boolean"
+        },
         "origin": {
           "type": "string"
         },
@@ -4326,6 +4329,9 @@
           "type": "string"
         },
         "isAggregator": {
+          "type": "boolean"
+        },
+        "isPartnerTech": {
           "type": "boolean"
         },
         "origin": {
@@ -4577,6 +4583,10 @@
           "format": "date-time",
           "type": "string"
         },
+        "excludeRoleFromUserGroups": {
+          "description": "Boolean indicating if the current product role should be excluded from the user groups",
+          "type": "boolean"
+        },
         "partyRole": {
           "description": "User's role, available values: [MANAGER, DELEGATE, SUB_DELEGATE, OPERATOR, ADMIN_EA]",
           "type": "string"
@@ -4659,17 +4669,32 @@
         },
         "role": {
           "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
         }
       },
       "type": "object"
     },
     "ProductRolePermissionsList": {
       "properties": {
+        "email": {
+          "type": "string"
+        },
+        "familyName": {
+          "type": "string"
+        },
         "items": {
           "items": {
             "$ref": "#/definitions/ProductRolePermissions"
           },
           "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
         }
       },
       "type": "object"
