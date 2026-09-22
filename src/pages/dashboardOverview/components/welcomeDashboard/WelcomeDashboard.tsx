@@ -1,8 +1,9 @@
+import { Visibility } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
-import { useTranslation } from 'react-i18next';
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   setOpen: (open: boolean) => void;
@@ -10,8 +11,9 @@ type Props = {
 
 export default function WelcomeDashboard({ setOpen }: Readonly<Props>) {
   const { t } = useTranslation();
+  const isPagoPa = isPagoPaUser();
   const title = t('overview.title');
-  const subTitle = t('overview.subTitle');
+  const subTitle = isPagoPa ? t('overview.backstageSubTitle') : t('overview.subTitle');
 
   return (
     <Grid
@@ -34,7 +36,7 @@ export default function WelcomeDashboard({ setOpen }: Readonly<Props>) {
           <Button
             variant="outlined"
             onClick={() => setOpen(true)}
-            startIcon={<EditIcon />}
+            startIcon={isPagoPa ? <Visibility /> : <EditIcon />}
             size="small"
             sx={{
               color: 'primary.main',
@@ -45,7 +47,7 @@ export default function WelcomeDashboard({ setOpen }: Readonly<Props>) {
               fontSize: '16px',
             }}
           >
-            {isPagoPaUser() ? t('overview.viewDetails') : t('overview.changeDetails')}
+            {isPagoPa ? t('overview.viewDetails') : t('overview.changeDetails')}
           </Button>
         </Box>
       </Grid>

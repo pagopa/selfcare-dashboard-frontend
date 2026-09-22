@@ -1,4 +1,14 @@
 export default {
+  customAlert: {
+    message:
+      '<1>Neuigkeit!</1><br />Ab dem 31.03.2025 ermöglicht die <2>Gruppen</2>-Funktion für IO die Verwaltung von Diensten, indem der Zugriff auf bestimmte Benutzergruppen beschränkt wird. <3>Wie funktioniert das?</3>',
+  },
+  exitModal: {
+    title: 'Möchtest du den reservierten Bereich wirklich verlassen?',
+    titleBackstage: 'Möchtest du den reservierten Bereich Backstage wirklich verlassen?',
+    confirm: 'Verlassen',
+    cancel: 'Abbrechen',
+  },
   session: {
     expired: {
       title: 'Sitzung abgelaufen',

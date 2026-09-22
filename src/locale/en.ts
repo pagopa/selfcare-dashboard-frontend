@@ -1,4 +1,14 @@
 export default {
+  customAlert: {
+    message:
+      '<1>What’s new!</1><br />Available from 31/03/2025, the <2>Groups</2> feature for IO allows you to manage services by limiting access to specific groups of users. <3>How does it work?</3>',
+  },
+  exitModal: {
+    title: 'Do you confirm that you want to leave the Reserved Area?',
+    titleBackstage: 'Do you confirm that you want to leave the Reserved Area Backstage?',
+    confirm: 'Exit',
+    cancel: 'Cancel',
+  },
   session: {
     expired: {
       title: 'Session expired',

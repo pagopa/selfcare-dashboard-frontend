@@ -1,4 +1,14 @@
 export default {
+  customAlert: {
+    message:
+      '<1>Novost!</1><br />Funkcionalnost <2>Skupine</2> za IO, ki omogoča upravljanje storitev z omejevanjem dostopa na določene skupine uporabnikov, je na voljo od 31. 3. 2025. <3>Kako deluje?</3>',
+  },
+  exitModal: {
+    title: 'Ali ste prepričani, da želite zapustiti omejeno območje?',
+    titleBackstage: 'Ali ste prepričani, da želite zapustiti omejeno območje Backstage?',
+    confirm: 'Izhod',
+    cancel: 'Prekliči',
+  },
   session: {
     expired: {
       title: 'Seja je potekla',

@@ -60,6 +60,7 @@ export default {
     title: 'Panoramica',
     subTitle:
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
+    backstageSubTitle:"Consulta le informazioni dell'ente e accedi al backoffice dei prodotti",
     sideMenu: {
       titleExpand: 'Espandi menu laterale',
       titleCollapse: 'Comprimi menu laterale',
