@@ -51,5 +51,3 @@ export const mockedMultiRoleProductRolesResponse: ProductRolesApiResponse = {
     { code: 'admin-pt', partyRole: 'DELEGATE', partnerTechRole: true },
   ],
 };
-
-export const mockedLegacyProductRolesResponse = standardMappings;

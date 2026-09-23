@@ -11,9 +11,3 @@ export type ProductRolesApiResponse = {
   partnerTechRoleMappings?: Array<ProductRoleMappingsResource>;
   currentUserRoles?: Array<CurrentUserProductRole>;
 };
-
-/**
- * Temporary compatibility type for the period before the backend OpenAPI is
- * available. The concrete property names must be aligned with the BE contract.
- */
-export type LegacyProductRolesApiResponse = Array<ProductRoleMappingsResource>;

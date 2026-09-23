@@ -6,18 +6,11 @@ import {
   ProductRole,
   selectProductRolesForCurrentUser,
 } from '../model/ProductRole';
-import {
-  LegacyProductRolesApiResponse,
-  ProductRolesApiResponse,
-} from '../model/ProductRolesApiResponse';
+import { ProductRolesApiResponse } from '../model/ProductRolesApiResponse';
 import {
   fetchProductRoles as fetchProductRolesMocked,
   mockedPartyProducts,
 } from './__mocks__/productService';
-
-const isProductRolesApiResponse = (
-  response: ProductRolesApiResponse | LegacyProductRolesApiResponse
-): response is ProductRolesApiResponse => !Array.isArray(response);
 
 const mapProductRoleMappings = (
   mappings: ProductRolesApiResponse['roleMappings'],
@@ -66,11 +59,7 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
     return fetchProductRolesMocked(product, party);
   } else {
     return DashboardApi.getProductRoles(product.id, institutionTypeOnActiveOnboarding)
-      .then((response) => {
-        if (!isProductRolesApiResponse(response)) {
-          return mapProductRoleMappings(response, product.id, false);
-        }
-
+      .then((response: ProductRolesApiResponse) => {
         const standardRoles = mapProductRoleMappings(
           response.roleMappings,
           product.id,

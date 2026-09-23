@@ -6,7 +6,7 @@ import {
   InstitutionResource,
 } from '../generated/b4f-dashboard/InstitutionResource';
 import { SelcRoleEnum } from '../generated/b4f-dashboard/ProductRoleInfoResource';
-import { ProductRoleMappingsResource } from '../generated/b4f-dashboard/ProductRoleMappingsResource';
+import { ProductRolesResource } from '../generated/b4f-dashboard/ProductRolesResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from '../generated/b4f-dashboard/ProductUserResource';
 import { UserResource } from '../generated/b4f-dashboard/UserResource';
@@ -209,7 +209,8 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
   },
 ];
 
-export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
+export const mockedProductRoles: ProductRolesResource = {
+  roleMappings: [
   {
     partyRole: 'SUB_DELEGATE',
     selcRole: SelcRoleEnum.ADMIN,
@@ -240,7 +241,8 @@ export const mockedProductRoles: Array<ProductRoleMappingsResource> = [
       },
     ],
   },
-];
+  ],
+};
 
 export const mockedUserResource: UserResource = {
   id: 'id1',
@@ -312,11 +314,13 @@ export const DashboardApi = {
   getBillingToken: async (_partyId: string, _environment?: string, _lang?: string): Promise<string> =>
     new Promise((resolve) => resolve('DUMMYTOKEN')),
 
-  getProductRoles: async (_productId: string, _institutionType: string): Promise<Array<ProductRoleMappingsResource>> =>
-    new Promise((resolve) => resolve(mockedProductRoles)),
+  getProductRoles: async (
+    _productId: string,
+    _institutionType: string
+  ): Promise<ProductRolesResource> => new Promise((resolve) => resolve(mockedProductRoles)),
 
   getProductBrokers: async (
     _productId: string,
     _institutionType: string
-  ): Promise<Array<BrokerResource>> => new Promise((resolve) => resolve(mockedProductRoles)),
+  ): Promise<Array<BrokerResource>> => new Promise((resolve) => resolve(mockedBrokerResource)),
 };

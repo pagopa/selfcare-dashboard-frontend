@@ -127,20 +127,22 @@ describe('productService tests', () => {
 
     test('calls DashboardApi.getProductRoles and maps the result when VITE_API_MOCK_PRODUCTS is false', async () => {
       import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
-      const mockApiResponse = [
-        {
-          partyRole: 'Admin',
-          selcRole: 'User',
-          productRoles: [
-            {
-              code: 'admin',
-              label: 'Admin Role',
-              description: 'Admin Role Description',
-              multiroleGroups: ['group1', 'group2'],
-            },
-          ],
-        },
-      ];
+      const mockApiResponse = {
+        roleMappings: [
+          {
+            partyRole: 'Admin',
+            selcRole: 'User',
+            productRoles: [
+              {
+                code: 'admin',
+                label: 'Admin Role',
+                description: 'Admin Role Description',
+                multiroleGroups: ['group1', 'group2'],
+              },
+            ],
+          },
+        ],
+      };
       (DashboardApi.getProductRoles as Mock).mockResolvedValue(mockApiResponse);
 
       const expectedRoles = [
@@ -162,6 +164,19 @@ describe('productService tests', () => {
         mockedParties[0].products[0].institutionType
       );
       expect(result).toEqual(expectedRoles);
+    });
+
+    test('returns standard roles when currentUserRoles is not provided', async () => {
+      import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
+      (DashboardApi.getProductRoles as Mock).mockResolvedValue({
+        roleMappings: mockedStandardProductRolesResponse.roleMappings,
+        partnerTechRoleMappings: mockedStandardProductRolesResponse.partnerTechRoleMappings,
+      });
+
+      const result = await fetchProductRoles(mockProduct, mockedParties[0]);
+
+      expect(result.map((role) => role.productRole)).toEqual(['admin']);
+      expect(result.map((role) => role.partnerTechRole)).toEqual([false]);
     });
 
     test.each([
