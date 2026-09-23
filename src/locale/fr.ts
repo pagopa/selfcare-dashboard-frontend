@@ -1,4 +1,14 @@
 export default {
+  customAlert: {
+    message:
+      '<1>Nouveauté !</1><br />Disponible à partir du 31/03/2025, la fonctionnalité des <2>Groupes</2> pour IO permet de gérer les services en limitant l’accès à des groupes spécifiques d’utilisateurs. <3>Comment ça marche ?</3>',
+  },
+  exitModal: {
+    title: 'Confirmez-vous vouloir quitter l’Espace réservé ?',
+    titleBackstage: 'Confirmez-vous vouloir quitter l’Espace réservé Backstage ?',
+    confirm: 'Quitter',
+    cancel: 'Annuler',
+  },
   session: {
     expired: {
       title: 'Session expirée',
