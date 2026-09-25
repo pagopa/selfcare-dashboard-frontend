@@ -5139,7 +5139,10 @@
           "originId" : {
             "type" : "string"
           },
-          "isPartnerTech" : {
+          "partnerTechRolesEnabled" : {
+            "type" : "boolean"
+          },
+          "userPartnerTechRole" : {
             "type" : "boolean"
           },
           "institutionType" : {
