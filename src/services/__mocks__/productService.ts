@@ -1,3 +1,4 @@
+import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../model/Party';
 import { Product, ProductInstitutionMap } from '../../model/Product';
@@ -256,6 +257,31 @@ export const mockedProductRoles: Array<ProductRole> = [
   },
 ];
 
+export const mockedPartnerTechProductRoles: Array<ProductRole> = [
+  {
+    productId: 'PRODID',
+    partyRole: 'DELEGATE',
+    selcRole: 'ADMIN',
+    multiroleGroups: [],
+    productRole: 'partner-tech-admin',
+    title: 'Partner Tech Administrator',
+    description: 'Descrizione partner tech administrator',
+    phasesAdditionAllowed: ['dashboard'],
+    partnerTechRole: true,
+  },
+  {
+    productId: 'PRODID',
+    partyRole: 'OPERATOR',
+    selcRole: 'LIMITED',
+    multiroleGroups: ['partner-tech-group'],
+    productRole: 'partner-tech-operator',
+    title: 'Partner Tech Operator',
+    description: 'Descrizione partner tech operator',
+    phasesAdditionAllowed: ['dashboard'],
+    partnerTechRole: true,
+  },
+];
+
 export const mockedCategories: ProductInstitutionMap = {
   'prod-interop': {
     PA: {},
@@ -303,14 +329,23 @@ export const verifyFetchPartyProductsMockExecution = (partyProducts: Array<Produ
 
 export const fetchProducts = () => Promise.resolve(mockedPartyProducts);
 
-export const fetchProductRoles = (product: Product, _party: Party): Promise<Array<ProductRole>> => {
-  const out = mockedProductRoles.map((r) =>
-    Object.assign(
-      {},
-      r,
-      { productId: product.id },
-      { multiroleGroups: product.id === 'prod-interop' && r.partyRole === 'OPERATOR' ? ['group1', 'group2'] : [] }
-    )
+export const fetchProductRoles = (product: Product, party: Party): Promise<Array<ProductRole>> => {
+  const onboarding = party.products.find(
+    ({ productId, productOnBoardingStatus }) =>
+      productId === product.id && productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE
   );
+  const roles = onboarding?.partnerTechRolesEnabled
+    ? mockedPartnerTechProductRoles
+    : mockedProductRoles;
+
+  const out = roles.map((role) => ({
+    ...role,
+    productId: product.id,
+    multiroleGroups:
+      product.id === 'prod-interop' && role.partyRole === 'OPERATOR'
+        ? ['group1', 'group2']
+        : role.multiroleGroups,
+  }));
+
   return Promise.resolve(out);
 };

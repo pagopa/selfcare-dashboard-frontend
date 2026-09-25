@@ -392,6 +392,8 @@ export const mockedParties: Array<Party> = [
         authorized: false,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
+        partnerTechRolesEnabled: true,
+        userPartnerTechRole: false,
         billing: {
           vatNumber: '11111111111',
           recipientCode: 'CH435V',

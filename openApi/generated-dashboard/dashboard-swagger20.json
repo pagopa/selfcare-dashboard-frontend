@@ -4260,14 +4260,14 @@
         "isAggregator": {
           "type": "boolean"
         },
-        "isPartnerTech": {
-          "type": "boolean"
-        },
         "origin": {
           "type": "string"
         },
         "originId": {
           "type": "string"
+        },
+        "partnerTechRolesEnabled": {
+          "type": "boolean"
         },
         "productId": {
           "type": "string"
@@ -4285,6 +4285,9 @@
         },
         "tokenId": {
           "type": "string"
+        },
+        "userPartnerTechRole": {
+          "type": "boolean"
         },
         "userProductActions": {
           "items": {
@@ -4333,14 +4336,14 @@
         "isAggregator": {
           "type": "boolean"
         },
-        "isPartnerTech": {
-          "type": "boolean"
-        },
         "origin": {
           "type": "string"
         },
         "originId": {
           "type": "string"
+        },
+        "partnerTechRolesEnabled": {
+          "type": "boolean"
         },
         "productId": {
           "type": "string"
@@ -4358,6 +4361,9 @@
         },
         "tokenId": {
           "type": "string"
+        },
+        "userPartnerTechRole": {
+          "type": "boolean"
         },
         "userProductActions": {
           "items": {
