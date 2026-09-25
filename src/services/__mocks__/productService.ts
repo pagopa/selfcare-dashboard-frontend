@@ -203,7 +203,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-legale',
     title: 'Referente Legale',
     description: 'Descrizione referente-legale',
-    phasesAdditionAllowed: ['dashboard'],
+    phasesAdditionAllowed: ['onboarding'],
   },
   {
     productId: 'PRODID',
@@ -213,7 +213,7 @@ export const mockedProductRoles: Array<ProductRole> = [
     productRole: 'referente-amministrativo',
     title: 'Amministratore',
     description: 'Descrizione referente-amministrativo',
-    phasesAdditionAllowed: ['dashboard'],
+    phasesAdditionAllowed: ['onboarding'],
   },
   {
     productId: 'PRODID',
@@ -334,9 +334,12 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
     ({ productId, productOnBoardingStatus }) =>
       productId === product.id && productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE
   );
-  const roles = onboarding?.partnerTechRolesEnabled
-    ? mockedPartnerTechProductRoles
-    : mockedProductRoles;
+  const roles =
+    onboarding?.partnerTechRolesEnabled === true
+      ? onboarding.userPartnerTechRole === true
+        ? mockedPartnerTechProductRoles
+        : [...mockedProductRoles, ...mockedPartnerTechProductRoles]
+      : mockedProductRoles;
 
   const out = roles.map((role) => ({
     ...role,

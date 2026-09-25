@@ -10,10 +10,6 @@ export type ProductRole = {
   title: string;
   description: string;
   phasesAdditionAllowed: Array<string>;
-  /**
-   * Identifies roles coming from the partner-tech role mapping.
-   * Optional to keep compatibility with legacy API responses and mocks.
-   */
   partnerTechRole?: boolean;
 };
 

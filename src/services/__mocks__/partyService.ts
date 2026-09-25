@@ -1410,6 +1410,8 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-pagopa',
         userRole: 'ADMIN',
         authorized: true,
+        partnerTechRolesEnabled: true,
+        userPartnerTechRole: false,
         billing: {
           vatNumber: '94287592749',
           recipientCode: 'c_b988',

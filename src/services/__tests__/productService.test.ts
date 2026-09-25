@@ -125,6 +125,40 @@ describe('productService tests', () => {
       expect(result).toEqual(mockRoles);
     });
 
+    test.each([
+      {
+        name: 'standard-only',
+        partyId: '1',
+        expectedPartnerTechFlags: [false, false, false, false, false, false],
+      },
+      {
+        name: 'partner-tech-only',
+        partyId: '98123',
+        expectedPartnerTechFlags: [true, true],
+      },
+      {
+        name: 'multi-role',
+        partyId: '3',
+        expectedPartnerTechFlags: [false, false, false, false, false, false, true, true],
+      },
+    ])('uses the local mock for the $name case', async ({ partyId, expectedPartnerTechFlags }) => {
+      const party = mockedParties.find(({ partyId: currentPartyId }) => currentPartyId === partyId);
+      const product = mockedPartyProducts.find(({ id }) => id === 'prod-pagopa');
+
+      expect(party).toBeDefined();
+      expect(product).toBeDefined();
+
+      const { fetchProductRoles: fetchProductRolesImplementation } =
+        await vi.importActual<typeof import('../__mocks__/productService')>(
+          '../__mocks__/productService'
+        );
+      const roles = await fetchProductRolesImplementation(product!, party!);
+
+      expect(roles.map(({ partnerTechRole }) => partnerTechRole ?? false)).toEqual(
+        expectedPartnerTechFlags
+      );
+    });
+
     test('calls DashboardApi.getProductRoles and maps the result when VITE_API_MOCK_PRODUCTS is false', async () => {
       import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
       const mockApiResponse = {
