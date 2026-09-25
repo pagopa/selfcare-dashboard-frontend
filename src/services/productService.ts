@@ -10,7 +10,8 @@ import {
 
 const mapProductRoleMappings = (
   mappings: ProductRolesApiResponse['roleMappings'],
-  productId: string
+  productId: string,
+  isPartnerTech = false
 ): Array<ProductRole> =>
   mappings.flatMap((mapping) =>
     (mapping.productRoles ?? []).map((role) => ({
@@ -22,6 +23,7 @@ const mapProductRoleMappings = (
       productRole: role.code ?? '',
       title: role.label ?? '',
       description: role.description ?? '',
+      ...(isPartnerTech ? { isPartnerTech: true } : {}),
     }))
   );
 
@@ -50,14 +52,16 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
         const onboarding = activeOnboardings.find((p) => p.productId === product.id);
         const standardMappings = response.roleMappings;
         const partnerTechMappings = response.partnerTechRoleMappings ?? [];
-        const mappings =
-          onboarding?.partnerTechRolesEnabled === true
-            ? onboarding.userPartnerTechRole === true
-              ? partnerTechMappings
-              : [...standardMappings, ...partnerTechMappings]
-            : standardMappings;
+        if (onboarding?.partnerTechRolesEnabled === true && onboarding.userPartnerTechRole === true) {
+          return mapProductRoleMappings(partnerTechMappings, product.id, true);
+        }
 
-        return mapProductRoleMappings(mappings, product.id);
+        return [
+          ...mapProductRoleMappings(standardMappings, product.id),
+          ...(onboarding?.partnerTechRolesEnabled === true
+            ? mapProductRoleMappings(partnerTechMappings, product.id, true)
+            : []),
+        ];
       })
       .catch((reason) => reason);
   }

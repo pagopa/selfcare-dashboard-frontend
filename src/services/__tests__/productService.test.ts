@@ -116,6 +116,7 @@ describe('productService tests', () => {
           productRole: 'admin',
           title: 'Admin Role',
           description: 'Admin Role Description',
+          isPartnerTech: false,
         },
       ];
       (fetchProductRolesMocked as Mock).mockResolvedValue(mockRoles);
@@ -230,6 +231,9 @@ describe('productService tests', () => {
       const result = await fetchProductRoles(mockProduct, party);
 
       expect(result.map((role) => role.productRole)).toEqual(expectedRoles);
+      expect(result.map((role) => role.isPartnerTech)).toEqual(
+        expectedRoles.map((role) => (role.endsWith('-pt') ? true : undefined))
+      );
     });
   });
 });
