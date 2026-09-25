@@ -267,7 +267,6 @@ export const mockedPartnerTechProductRoles: Array<ProductRole> = [
     title: 'Partner Tech Administrator',
     description: 'Descrizione partner tech administrator',
     phasesAdditionAllowed: ['dashboard'],
-    partnerTechRole: true,
   },
   {
     productId: 'PRODID',
@@ -278,7 +277,6 @@ export const mockedPartnerTechProductRoles: Array<ProductRole> = [
     title: 'Partner Tech Operator',
     description: 'Descrizione partner tech operator',
     phasesAdditionAllowed: ['dashboard'],
-    partnerTechRole: true,
   },
 ];
 

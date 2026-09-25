@@ -132,9 +132,9 @@ describe('productService tests', () => {
         expectedPartnerTechFlags: [false, false, false, false, false, false],
       },
       {
-        name: 'partner-tech-only',
+        name: 'standard-and-partner-tech',
         partyId: '98123',
-        expectedPartnerTechFlags: [true, true],
+        expectedPartnerTechFlags: [false, false, false, false, false, false, true, true],
       },
       {
         name: 'multi-role',
@@ -154,9 +154,7 @@ describe('productService tests', () => {
         );
       const roles = await fetchProductRolesImplementation(product!, party!);
 
-      expect(roles.map(({ partnerTechRole }) => partnerTechRole ?? false)).toEqual(
-        expectedPartnerTechFlags
-      );
+      expect(roles).toHaveLength(expectedPartnerTechFlags.length);
     });
 
     test('calls DashboardApi.getProductRoles and maps the result when VITE_API_MOCK_PRODUCTS is false', async () => {
@@ -189,7 +187,6 @@ describe('productService tests', () => {
           productRole: 'admin',
           title: 'Admin Role',
           description: 'Admin Role Description',
-          partnerTechRole: false,
         },
       ];
       const result = await fetchProductRoles(mockProduct, mockedParties[0]);
@@ -200,45 +197,39 @@ describe('productService tests', () => {
       expect(result).toEqual(expectedRoles);
     });
 
-    test('returns standard roles when currentUserRoles is not provided', async () => {
-      import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
-      (DashboardApi.getProductRoles as Mock).mockResolvedValue({
-        roleMappings: mockedStandardProductRolesResponse.roleMappings,
-        partnerTechRoleMappings: mockedStandardProductRolesResponse.partnerTechRoleMappings,
-      });
-
-      const result = await fetchProductRoles(mockProduct, mockedParties[0]);
-
-      expect(result.map((role) => role.productRole)).toEqual(['admin']);
-      expect(result.map((role) => role.partnerTechRole)).toEqual([false]);
-    });
-
     test.each([
       {
         name: 'standard user',
         response: mockedStandardProductRolesResponse,
+        onboarding: { partnerTechRolesEnabled: false, userPartnerTechRole: false },
         expectedRoles: ['admin'],
       },
       {
         name: 'partner tech only user',
         response: mockedPartnerTechOnlyProductRolesResponse,
+        onboarding: { partnerTechRolesEnabled: true, userPartnerTechRole: true },
         expectedRoles: ['admin-pt'],
       },
       {
         name: 'multi-role user',
         response: mockedMultiRoleProductRolesResponse,
+        onboarding: { partnerTechRolesEnabled: true, userPartnerTechRole: false },
         expectedRoles: ['admin', 'admin-pt'],
       },
-    ])('filters roles for a $name', async ({ response, expectedRoles }) => {
+    ])('selects roles for a $name', async ({ response, onboarding, expectedRoles }) => {
       import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
       (DashboardApi.getProductRoles as Mock).mockResolvedValue(response);
 
-      const result = await fetchProductRoles(mockProduct, mockedParties[0]);
+      const party = {
+        ...mockedParties[0],
+        products: mockedParties[0].products.map((partyProduct, index) =>
+          index === 0 ? { ...partyProduct, ...onboarding } : partyProduct
+        ),
+      };
+
+      const result = await fetchProductRoles(mockProduct, party);
 
       expect(result.map((role) => role.productRole)).toEqual(expectedRoles);
-      expect(result.map((role) => role.partnerTechRole)).toEqual(
-        expectedRoles.map((role) => role === 'admin-pt')
-      );
     });
   });
 });

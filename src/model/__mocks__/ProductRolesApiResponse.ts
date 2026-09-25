@@ -34,20 +34,14 @@ const partnerTechMappings = [
 export const mockedStandardProductRolesResponse: ProductRolesApiResponse = {
   roleMappings: standardMappings,
   partnerTechRoleMappings: partnerTechMappings,
-  currentUserRoles: [{ code: 'admin', partyRole: 'DELEGATE', partnerTechRole: false }],
 };
 
 export const mockedPartnerTechOnlyProductRolesResponse: ProductRolesApiResponse = {
   roleMappings: standardMappings,
   partnerTechRoleMappings: partnerTechMappings,
-  currentUserRoles: [{ code: 'admin-pt', partyRole: 'DELEGATE', partnerTechRole: true }],
 };
 
 export const mockedMultiRoleProductRolesResponse: ProductRolesApiResponse = {
   roleMappings: standardMappings,
   partnerTechRoleMappings: partnerTechMappings,
-  currentUserRoles: [
-    { code: 'admin', partyRole: 'DELEGATE', partnerTechRole: false },
-    { code: 'admin-pt', partyRole: 'DELEGATE', partnerTechRole: true },
-  ],
 };

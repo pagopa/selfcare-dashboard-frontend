@@ -1,11 +1,7 @@
 import { DashboardApi } from '../api/DashboardApiClient';
 import { Party } from '../model/Party';
 import { Product, productResource2Product } from '../model/Product';
-import {
-  CurrentUserProductRoleContext,
-  ProductRole,
-  selectProductRolesForCurrentUser,
-} from '../model/ProductRole';
+import { ProductRole } from '../model/ProductRole';
 import { ProductRolesApiResponse } from '../model/ProductRolesApiResponse';
 import {
   fetchProductRoles as fetchProductRolesMocked,
@@ -14,8 +10,7 @@ import {
 
 const mapProductRoleMappings = (
   mappings: ProductRolesApiResponse['roleMappings'],
-  productId: string,
-  partnerTechRole: boolean
+  productId: string
 ): Array<ProductRole> =>
   mappings.flatMap((mapping) =>
     (mapping.productRoles ?? []).map((role) => ({
@@ -27,16 +22,8 @@ const mapProductRoleMappings = (
       productRole: role.code ?? '',
       title: role.label ?? '',
       description: role.description ?? '',
-      partnerTechRole,
     }))
   );
-
-const getCurrentUserRoleContext = (
-  currentUserRoles: ProductRolesApiResponse['currentUserRoles'] = []
-): CurrentUserProductRoleContext => ({
-  hasStandardRole: currentUserRoles.some((role) => role.partnerTechRole !== true),
-  hasPartnerTechRole: currentUserRoles.some((role) => role.partnerTechRole === true),
-});
 
 export const fetchProducts = (): Promise<Array<Product>> => {
   /* istanbul ignore if */
@@ -60,22 +47,17 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
   } else {
     return DashboardApi.getProductRoles(product.id, institutionTypeOnActiveOnboarding)
       .then((response: ProductRolesApiResponse) => {
-        const standardRoles = mapProductRoleMappings(
-          response.roleMappings,
-          product.id,
-          false
-        );
-        const partnerTechRoles = mapProductRoleMappings(
-          response.partnerTechRoleMappings ?? [],
-          product.id,
-          true
-        );
+        const onboarding = activeOnboardings.find((p) => p.productId === product.id);
+        const standardMappings = response.roleMappings;
+        const partnerTechMappings = response.partnerTechRoleMappings ?? [];
+        const mappings =
+          onboarding?.partnerTechRolesEnabled === true
+            ? onboarding.userPartnerTechRole === true
+              ? partnerTechMappings
+              : [...standardMappings, ...partnerTechMappings]
+            : standardMappings;
 
-        return selectProductRolesForCurrentUser(
-          standardRoles,
-          partnerTechRoles,
-          getCurrentUserRoleContext(response.currentUserRoles)
-        );
+        return mapProductRoleMappings(mappings, product.id);
       })
       .catch((reason) => reason);
   }
