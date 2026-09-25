@@ -5,10 +5,7 @@ import {
   extractResponse,
 } from '@pagopa/selfcare-common-frontend/lib/utils/api-utils';
 import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
-import {
-  LegacyProductRolesApiResponse,
-  ProductRolesApiResponse,
-} from '../model/ProductRolesApiResponse';
+import { ProductRolesApiResponse } from '../model/ProductRolesApiResponse';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { store } from '../redux/store';
@@ -144,14 +141,12 @@ export const DashboardApi = {
   getProductRoles: async (
     productId: string,
     institutionType: string
-  ): Promise<ProductRolesApiResponse | LegacyProductRolesApiResponse> => {
+  ): Promise<ProductRolesApiResponse> => {
     const result = await apiClient.getProductRolesUsingGET({
       productId,
       institutionType,
     });
-    return extractResponse(result, 200, onRedirectToLogin) as unknown as
-      | ProductRolesApiResponse
-      | LegacyProductRolesApiResponse;
+    return extractResponse(result, 200, onRedirectToLogin);
   },
 
   updateInstitutionGeographicTaxonomy: async (

@@ -26,7 +26,8 @@ export type OnboardedProduct = {
   userProductActions?: Array<string>;
   userRole?: string;
   isAggregator?: boolean;
-  isPartnerTech?: boolean;
+  partnerTechRolesEnabled?: boolean;
+  userPartnerTechRole?: boolean;
   institutionType?: string;
   origin?: string;
   originId?: string;

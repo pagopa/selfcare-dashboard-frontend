@@ -1,28 +1,17 @@
 import { DashboardApi } from '../api/DashboardApiClient';
 import { Party } from '../model/Party';
 import { Product, productResource2Product } from '../model/Product';
-import {
-  CurrentUserProductRoleContext,
-  ProductRole,
-  selectProductRolesForCurrentUser,
-} from '../model/ProductRole';
-import {
-  LegacyProductRolesApiResponse,
-  ProductRolesApiResponse,
-} from '../model/ProductRolesApiResponse';
+import { ProductRole } from '../model/ProductRole';
+import { ProductRolesApiResponse } from '../model/ProductRolesApiResponse';
 import {
   fetchProductRoles as fetchProductRolesMocked,
   mockedPartyProducts,
 } from './__mocks__/productService';
 
-const isProductRolesApiResponse = (
-  response: ProductRolesApiResponse | LegacyProductRolesApiResponse
-): response is ProductRolesApiResponse => !Array.isArray(response);
-
 const mapProductRoleMappings = (
   mappings: ProductRolesApiResponse['roleMappings'],
   productId: string,
-  partnerTechRole: boolean
+  isPartnerTech = false
 ): Array<ProductRole> =>
   mappings.flatMap((mapping) =>
     (mapping.productRoles ?? []).map((role) => ({
@@ -34,16 +23,9 @@ const mapProductRoleMappings = (
       productRole: role.code ?? '',
       title: role.label ?? '',
       description: role.description ?? '',
-      partnerTechRole,
+      ...(isPartnerTech ? { isPartnerTech: true } : {}),
     }))
   );
-
-const getCurrentUserRoleContext = (
-  currentUserRoles: ProductRolesApiResponse['currentUserRoles'] = []
-): CurrentUserProductRoleContext => ({
-  hasStandardRole: currentUserRoles.some((role) => role.partnerTechRole !== true),
-  hasPartnerTechRole: currentUserRoles.some((role) => role.partnerTechRole === true),
-});
 
 export const fetchProducts = (): Promise<Array<Product>> => {
   /* istanbul ignore if */
@@ -66,27 +48,20 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
     return fetchProductRolesMocked(product, party);
   } else {
     return DashboardApi.getProductRoles(product.id, institutionTypeOnActiveOnboarding)
-      .then((response) => {
-        if (!isProductRolesApiResponse(response)) {
-          return mapProductRoleMappings(response, product.id, false);
+      .then((response: ProductRolesApiResponse) => {
+        const onboarding = activeOnboardings.find((p) => p.productId === product.id);
+        const standardMappings = response.roleMappings;
+        const partnerTechMappings = response.partnerTechRoleMappings ?? [];
+        if (onboarding?.partnerTechRolesEnabled === true && onboarding.userPartnerTechRole === true) {
+          return mapProductRoleMappings(partnerTechMappings, product.id, true);
         }
 
-        const standardRoles = mapProductRoleMappings(
-          response.roleMappings,
-          product.id,
-          false
-        );
-        const partnerTechRoles = mapProductRoleMappings(
-          response.partnerTechRoleMappings ?? [],
-          product.id,
-          true
-        );
-
-        return selectProductRolesForCurrentUser(
-          standardRoles,
-          partnerTechRoles,
-          getCurrentUserRoleContext(response.currentUserRoles)
-        );
+        return [
+          ...mapProductRoleMappings(standardMappings, product.id),
+          ...(onboarding?.partnerTechRolesEnabled === true
+            ? mapProductRoleMappings(partnerTechMappings, product.id, true)
+            : []),
+        ];
       })
       .catch((reason) => reason);
   }
