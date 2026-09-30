@@ -86,7 +86,8 @@ test('Test institutionResource2Party', () => {
     products: [
       {
         productId: 'partner-tech-product',
-        isPartnerTech: true,
+        partnerTechRolesEnabled: true,
+        userPartnerTechRole: true,
       },
     ],
   };
@@ -120,7 +121,8 @@ test('Test institutionResource2Party', () => {
     products: [
       {
         productId: 'partner-tech-product',
-        isPartnerTech: true,
+        partnerTechRolesEnabled: true,
+        userPartnerTechRole: true,
       },
     ],
     city: '',

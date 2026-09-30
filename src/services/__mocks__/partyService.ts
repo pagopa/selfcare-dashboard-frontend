@@ -392,6 +392,8 @@ export const mockedParties: Array<Party> = [
         authorized: false,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
         userRole: 'ADMIN',
+        partnerTechRolesEnabled: true,
+        userPartnerTechRole: false,
         billing: {
           vatNumber: '11111111111',
           recipientCode: 'CH435V',
@@ -1408,6 +1410,8 @@ export const mockedParties: Array<Party> = [
         productId: 'prod-pagopa',
         userRole: 'ADMIN',
         authorized: true,
+        partnerTechRolesEnabled: true,
+        userPartnerTechRole: false,
         billing: {
           vatNumber: '94287592749',
           recipientCode: 'c_b988',
