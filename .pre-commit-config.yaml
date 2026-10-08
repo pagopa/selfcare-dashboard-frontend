@@ -1,4 +1,22 @@
 repos:
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: yarn prettier --check
+        language: system
+        files: \.(ts|tsx)$
+      - id: eslint
+        name: eslint
+        entry: yarn eslint -c .eslintrc.js
+        language: system
+        files: \.(ts|tsx)$
+      - id: typecheck
+        name: typecheck
+        entry: yarn typecheck
+        language: system
+        pass_filenames: false
+        files: \.(ts|tsx)$
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.83.0
     hooks:

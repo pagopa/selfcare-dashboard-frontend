@@ -35,6 +35,7 @@
     "clean": "npm-run-all clean:*",
     "prebuild": "npm run generate",
     "clean:build": "rimraf build",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
