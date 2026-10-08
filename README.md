@@ -3,11 +3,11 @@ SelfCare's application which allows users to see the parties to which belongs an
 * Admin users can list, add and edit other users.
 * Admin users can list, add and edit groups of users.
 
-This application makes use of some micro-frontends built using Webpack 5's module federation.
+This application makes use of some micro-frontends built using Vite and module federation (`@module-federation/vite`).
 
 The micro-frontends used are:
-* (selfcare-dashboard-users-microfrontend)[https://github.com/pagopa/selfcare-dashboard-users-microfrontend] to handle the management of the users
-* (selfcare-dashboard-groups-microfrontend)[https://github.com/pagopa/selfcare-dashboard-groups-microfrontend] to handle the management of the groups of users
+* [selfcare-dashboard-users-microfrontend](https://github.com/pagopa/selfcare-dashboard-users-microfrontend) to handle the management of the users
+* [selfcare-dashboard-groups-microfrontend](https://github.com/pagopa/selfcare-dashboard-groups-microfrontend) to handle the management of the groups of users
 
 ## Data and model/types shared with remotes micro-frontend
 This application represents the container app for some remotes pages/components and provide to them some shared data having shared types.
