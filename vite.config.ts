@@ -86,10 +86,6 @@ export default defineConfig(({ mode }) => {
             singleton: true,
             requiredVersion: dependencies['@emotion/styled'],
           },
-          '@mui/icons-material': {
-            singleton: true,
-            requiredVersion: dependencies['@mui/icons-material'],
-          },
           '@mui/material': {
             singleton: true,
             requiredVersion: dependencies['@mui/material'],
