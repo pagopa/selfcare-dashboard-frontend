@@ -8,7 +8,7 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
 import { useTokenExchange } from '../hooks/useTokenExchange';
 import { Party } from '../model/Party';
@@ -32,6 +32,11 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
   const { invokeProductBo } = useTokenExchange();
   const { t } = useTranslation();
   const history = useHistory();
+  const location = useLocation();
+  const isContractUpdateWizard = !!matchPath(location.pathname, {
+    path: ENV.ROUTES.CONTRACT_UPDATE,
+    exact: true,
+  });
 
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
@@ -111,7 +116,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       <Header
         onExit={onExit}
         onLogoutClick={() => setOpenExitModal(true)}
-        withSecondHeader={!!party || !!fixedParty}
+        withSecondHeader={!isContractUpdateWizard && (!!party || !!fixedParty)}
         selectedPartyId={selectedParty?.partyId}
         productsList={activeProducts
           .filter((p) =>

@@ -1,4 +1,27 @@
 export default {
+  contractUpdateWizard: {
+    openDevelopment: 'Try contract update',
+    exit: 'Exit',
+    back: 'Back',
+    continue: 'Continue',
+    steps: {
+      information: 'Information',
+      details: 'Details',
+      additionalDetails: 'Additional details',
+    },
+    informationContent:
+      'Information about updating the contract will be shown here. This step is read-only.',
+    detailsField: 'Sample field',
+    additionalDetailsField: 'Additional sample field',
+    fieldHint: 'Temporary field: do not enter personal data. The value is not saved.',
+    submitUnavailable: 'Submission is not available yet. You can go back and edit the data.',
+    exitModal: {
+      title: 'Do you want to leave the contract update?',
+      message: 'You will lose the data you entered and return to the Documents page.',
+      confirm: 'Confirm exit',
+      cancel: 'Cancel',
+    },
+  },
   customAlert: {
     message:
       '<1>What’s new!</1><br />Available from 31/03/2025, the <2>Groups</2> feature for IO allows you to manage services by limiting access to specific groups of users. <3>How does it work?</3>',

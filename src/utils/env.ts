@@ -1,6 +1,7 @@
 const PUBLIC_URL_INNER = import.meta.env.PUBLIC_URL || '/dashboard';
 export const ENV = {
   ENV: import.meta.env.VITE_ENV,
+  IS_DEVELOPMENT: import.meta.env.DEV,
   PUBLIC_URL: PUBLIC_URL_INNER,
 
   JSON_URL: {
@@ -17,6 +18,7 @@ export const ENV = {
   URL_DOCUMENTATION: 'https://docs.pagopa.it/area-riservata/',
 
   ROUTES: {
+    CONTRACT_UPDATE: `${PUBLIC_URL_INNER}/:partyId/documents/update-contract`,
     OVERVIEW: `${PUBLIC_URL_INNER}/:partyId`,
     USERS: `${PUBLIC_URL_INNER}/:partyId/users`,
     USERS_DETAIL: `${PUBLIC_URL_INNER}/:partyId/users/:userId`,

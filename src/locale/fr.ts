@@ -1,4 +1,29 @@
 export default {
+  contractUpdateWizard: {
+    openDevelopment: 'Essayer la mise à jour du contrat',
+    exit: 'Quitter',
+    back: 'Retour',
+    continue: 'Continuer',
+    steps: {
+      information: 'Informations',
+      details: 'Données',
+      additionalDetails: 'Données supplémentaires',
+    },
+    informationContent:
+      'Les informations pour mettre à jour le contrat seront affichées ici. Cette étape est en lecture seule.',
+    detailsField: 'Champ de démonstration',
+    additionalDetailsField: 'Champ de démonstration supplémentaire',
+    fieldHint:
+      'Champ provisoire : ne saisissez pas de données personnelles. La valeur n’est pas enregistrée.',
+    submitUnavailable:
+      'L’envoi n’est pas encore disponible. Vous pouvez revenir en arrière et modifier les données.',
+    exitModal: {
+      title: 'Voulez-vous quitter la mise à jour du contrat ?',
+      message: 'Vous perdrez les données saisies et reviendrez à la page Documents.',
+      confirm: 'Confirmer la sortie',
+      cancel: 'Annuler',
+    },
+  },
   customAlert: {
     message:
       '<1>Nouveauté !</1><br />Disponible à partir du 31/03/2025, la fonctionnalité des <2>Groupes</2> pour IO permet de gérer les services en limitant l’accès à des groupes spécifiques d’utilisateurs. <3>Comment ça marche ?</3>',
