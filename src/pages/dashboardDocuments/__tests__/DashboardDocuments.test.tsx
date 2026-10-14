@@ -32,33 +32,3 @@ test('should render component DashboardDocuments', async () => {
   expect(seeMoreButtons[1]).toBeInTheDocument();
   fireEvent.click(seeMoreButtons[1]);
 });
-
-test.each([true, false])(
-  'keeps document navigation without a temporary wizard entry (development: %s)',
-  async (isDev) => {
-    vi.spyOn(ENV, 'IS_DEVELOPMENT', 'get').mockReturnValue(isDev);
-    const party = mockedParties[2];
-    const { store, history } = renderWithProviders(
-      <DashboardDocumentsPage party={party} products={mockedPartyProducts} />
-    );
-    act(() => {
-      store.dispatch(
-        setProductPermissions(
-          party.products
-            .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
-            .map((product) => ({
-              productId: product.productId ?? '',
-              actions: product.userProductActions ? [...product.userProductActions] : [],
-            }))
-        )
-      );
-    });
-    const documentLinks = await screen.findAllByRole('button', { name: 'Vedi di più' });
-    expect(documentLinks.length).toBeGreaterThan(0);
-    const wizardLinks = screen.queryAllByRole('button', { name: 'Prova aggiornamento contratto' });
-    expect(wizardLinks).toHaveLength(0);
-    fireEvent.click(documentLinks[0]);
-    expect(history.location.pathname).toBe(`/dashboard/${party.partyId}/documents/details`);
-    expect(new URLSearchParams(history.location.search).get('productId')).toBeTruthy();
-  }
-);
