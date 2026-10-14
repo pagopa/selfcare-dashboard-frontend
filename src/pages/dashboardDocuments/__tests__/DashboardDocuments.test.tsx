@@ -19,7 +19,9 @@ test('should render component DashboardDocuments', async () => {
       productId: product.productId ?? '',
       actions: product.userProductActions ? [...product.userProductActions] : [],
     }));
-  store.dispatch(setProductPermissions(mockedActions));
+  act(() => {
+    store.dispatch(setProductPermissions(mockedActions));
+  });
 
   const documenTitle = await screen.findByText('Documenti');
 
@@ -32,7 +34,7 @@ test('should render component DashboardDocuments', async () => {
 });
 
 test.each([true, false])(
-  'shows the temporary wizard entry only in development (%s)',
+  'keeps document navigation without a temporary wizard entry (development: %s)',
   async (isDev) => {
     vi.spyOn(ENV, 'IS_DEVELOPMENT', 'get').mockReturnValue(isDev);
     const party = mockedParties[2];
@@ -54,23 +56,9 @@ test.each([true, false])(
     const documentLinks = await screen.findAllByRole('button', { name: 'Vedi di più' });
     expect(documentLinks.length).toBeGreaterThan(0);
     const wizardLinks = screen.queryAllByRole('button', { name: 'Prova aggiornamento contratto' });
-    if (isDev) {
-      expect(wizardLinks).toHaveLength(documentLinks.length);
-      fireEvent.click(documentLinks[0]);
-      const documentParams = new URLSearchParams(history.location.search);
-      const documentProductId =
-        documentParams.get('subProductId') ?? documentParams.get('productId');
-      expect(history.location.pathname).toBe(`/dashboard/${party.partyId}/documents/details`);
-      const entryUrl = `/dashboard/${party.partyId}/documents?filter=contracts#product`;
-      act(() => history.push(entryUrl));
-      fireEvent.click(wizardLinks[0]);
-      expect(history.location.pathname).toBe(
-        `/dashboard/${party.partyId}/documents/update-contract`
-      );
-      expect(new URLSearchParams(history.location.search).get('productId')).toBe(documentProductId);
-      expect(history.location.state).toEqual({ returnTo: entryUrl });
-    } else {
-      expect(wizardLinks).toHaveLength(0);
-    }
+    expect(wizardLinks).toHaveLength(0);
+    fireEvent.click(documentLinks[0]);
+    expect(history.location.pathname).toBe(`/dashboard/${party.partyId}/documents/details`);
+    expect(new URLSearchParams(history.location.search).get('productId')).toBeTruthy();
   }
 );
