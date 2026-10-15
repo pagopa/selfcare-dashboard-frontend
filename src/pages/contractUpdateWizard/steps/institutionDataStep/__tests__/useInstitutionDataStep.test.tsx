@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
+import { MemoryRouter, Route } from 'react-router-dom';
 import { Party } from '../../../../../model/Party';
 import { partiesActions } from '../../../../../redux/slices/partiesSlice';
 import { createStore } from '../../../../../redux/store';
@@ -8,11 +9,19 @@ import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { ENV } from '../../../../../utils/env';
 import { EMPTY_FIELD_VALUE, useInstitutionDataStep } from '../useInstitutionDataStep';
 
-const renderWithParty = (party?: Party) => {
+const renderWithParty = (party?: Party, productId?: string) => {
   const store = createStore();
   store.dispatch(partiesActions.setPartySelected(party));
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <Provider store={store}>{children}</Provider>
+    <Provider store={store}>
+      <MemoryRouter
+        initialEntries={[
+          productId ? `/dashboard/party-1/documents/${productId}/update-contract` : '/',
+        ]}
+      >
+        <Route path={productId ? ENV.ROUTES.CONTRACT_UPDATE : '/'}>{children}</Route>
+      </MemoryRouter>
+    </Provider>
   );
   return renderHook(() => useInstitutionDataStep(), { wrapper }).result.current;
 };
@@ -99,4 +108,47 @@ test('shows a dash for missing, empty or blank values', () => {
 test('shows a dash for every field when no party is selected', () => {
   const { fields } = renderWithParty(undefined);
   expect(fields.every(({ value }) => value === EMPTY_FIELD_VALUE)).toBe(true);
+});
+
+test('reads vat number and recipient code from the billing of the product in the url', () => {
+  const party: Party = {
+    ...mockedParties[0],
+    vatNumber: undefined,
+    recipientCode: undefined,
+    products: [
+      {
+        ...mockedParties[0].products[0],
+        productId: 'prod-io',
+        billing: { vatNumber: '11111111111', recipientCode: 'IO00000' },
+      },
+      {
+        ...mockedParties[0].products[0],
+        productId: 'prod-pagopa',
+        billing: { vatNumber: '02599341209', recipientCode: 'adas' },
+      },
+    ],
+  };
+
+  expect(valuesById(renderWithParty(party, 'prod-pagopa').fields)).toMatchObject({
+    vatNumber: '02599341209',
+    recipientCode: 'adas',
+  });
+  expect(valuesById(renderWithParty(party).fields)).toMatchObject({
+    vatNumber: EMPTY_FIELD_VALUE,
+    recipientCode: EMPTY_FIELD_VALUE,
+  });
+});
+
+test('falls back to the institution vat number and recipient code without product billing', () => {
+  const party: Party = {
+    ...mockedParties[0],
+    vatNumber: '01199250158',
+    recipientCode: 'ABC1234',
+    products: [{ ...mockedParties[0].products[0], productId: 'prod-io', billing: undefined }],
+  };
+
+  expect(valuesById(renderWithParty(party, 'prod-io').fields)).toMatchObject({
+    vatNumber: '01199250158',
+    recipientCode: 'ABC1234',
+  });
 });

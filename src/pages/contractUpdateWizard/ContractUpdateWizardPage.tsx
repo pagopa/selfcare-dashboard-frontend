@@ -1,15 +1,13 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import { ContractUpdateWizardLayout } from './components/ContractUpdateWizardLayout';
 import { ContractUpdateWizardProvider } from './ContractUpdateWizardContext';
 
 export const ContractUpdateWizardPage = () => {
-  const { partyId } = useParams<{ partyId: string }>();
-  const { search } = useLocation();
-  const productId = new URLSearchParams(search).get('productId');
+  const { partyId, productId } = useParams<{ partyId: string; productId: string }>();
 
   return (
-    <ContractUpdateWizardProvider key={`${partyId}/${productId ?? ''}`}>
+    <ContractUpdateWizardProvider key={`${partyId}/${productId}`}>
       <ContractUpdateWizardLayout />
     </ContractUpdateWizardProvider>
   );

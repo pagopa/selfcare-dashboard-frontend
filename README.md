@@ -11,7 +11,7 @@ The micro-frontends used are:
 
 ## Contract update wizard (scaffold)
 
-The route `/dashboard/:partyId/documents/update-contract?productId=...` opens a
+The route `/dashboard/:partyId/documents/:productId/update-contract` opens a
 three-step wizard outside the dashboard side menu, with the secondary institution
 header hidden. In development (`yarn start`), product cards in Documents include
 a temporary entry button; the existing document link is unchanged.

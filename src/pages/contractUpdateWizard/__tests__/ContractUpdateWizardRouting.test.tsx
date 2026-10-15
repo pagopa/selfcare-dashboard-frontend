@@ -26,7 +26,7 @@ vi.mock('@pagopa/selfcare-common-frontend/lib', async (importOriginal) => ({
 
 test('routes outside the dashboard shell and hides only the secondary header during the wizard', () => {
   const history = createMemoryHistory({
-    initialEntries: ['/dashboard/party-1/documents/update-contract?productId=product-1'],
+    initialEntries: ['/dashboard/party-1/documents/product-1/update-contract'],
   });
   const store = createStore();
   store.dispatch(partiesActions.setPartySelected(mockedParties[0]));

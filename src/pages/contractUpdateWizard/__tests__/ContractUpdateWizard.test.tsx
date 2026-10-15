@@ -11,7 +11,7 @@ import {
   initialWizardState,
 } from '../ContractUpdateWizardContext';
 
-const wizardPath = '/dashboard/party-1/documents/update-contract?productId=product-1';
+const wizardPath = '/dashboard/party-1/documents/product-1/update-contract';
 
 const renderWizard = (returnTo?: string) => {
   const history = createMemoryHistory({ initialEntries: [wizardPath] });
@@ -103,7 +103,7 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   expect(modal).toHaveAccessibleDescription(
     'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.'
   );
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents/update-contract');
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-1/update-contract');
   await user.click(within(modal).getByRole('button', { name: 'Continua' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(
@@ -118,7 +118,7 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
     within(await screen.findByRole('dialog')).getByRole('button', { name: 'Chiudi' })
   );
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents/update-contract');
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-1/update-contract');
 
   await user.click(screen.getByRole('button', { name: 'Esci' }));
   await user.click(
@@ -136,8 +136,8 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
 });
 
 test.each([
-  '/dashboard/party-1/documents/update-contract?productId=product-2',
-  '/dashboard/party-2/documents/update-contract?productId=product-1',
+  '/dashboard/party-1/documents/product-2/update-contract',
+  '/dashboard/party-2/documents/product-1/update-contract',
 ])('starts a fresh draft when the scope changes to %s', async (path) => {
   const { history, user } = renderWizard();
   await user.click(next());

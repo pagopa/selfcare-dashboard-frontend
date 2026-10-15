@@ -17,7 +17,7 @@ export const ENV = {
   URL_DOCUMENTATION: 'https://docs.pagopa.it/area-riservata/',
 
   ROUTES: {
-    CONTRACT_UPDATE: `${PUBLIC_URL_INNER}/:partyId/documents/update-contract`,
+    CONTRACT_UPDATE: `${PUBLIC_URL_INNER}/:partyId/documents/:productId/update-contract`,
     OVERVIEW: `${PUBLIC_URL_INNER}/:partyId`,
     USERS: `${PUBLIC_URL_INNER}/:partyId/users`,
     USERS_DETAIL: `${PUBLIC_URL_INNER}/:partyId/users/:userId`,
