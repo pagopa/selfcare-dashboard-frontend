@@ -60,7 +60,7 @@ export const ContractUpdateWizardLayout = () => {
         variant="h4"
         ref={stepHeading}
         tabIndex={-1}
-        sx={{ mt: 2, mb: 2, color: colors.textPrimary }}
+        sx={{ mt: 2, mb: 2, color: colors.textPrimary, '&:focus': { outline: 'none' } }}
       >
         {t(`contractUpdateWizard.steps.${stepId}`)}
       </Typography>
