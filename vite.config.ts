@@ -26,6 +26,7 @@ export default defineConfig(({ mode }) => {
       svgr(),
       federation({
         name: 'host',
+        shareStrategy: 'loaded-first',
         dts: false,
         remotes: {
           selfcareUsers: {
@@ -85,10 +86,6 @@ export default defineConfig(({ mode }) => {
             singleton: true,
             requiredVersion: dependencies['@emotion/styled'],
           },
-          '@mui/icons-material': {
-            singleton: true,
-            requiredVersion: dependencies['@mui/icons-material'],
-          },
           '@mui/material': {
             singleton: true,
             requiredVersion: dependencies['@mui/material'],
@@ -136,7 +133,7 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       target: 'esnext',
       sourcemap: true,
-      minify: false,
+      minify: true,
     },
     define: {
       'process.env': Object.fromEntries(
