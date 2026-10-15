@@ -1,8 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, Dialog, IconButton, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Dialog, IconButton, Typography } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
-import { contractUpdateWizardColors as colors } from '../contractUpdateWizardColors';
 
 type Props = {
   open: boolean;
@@ -36,7 +35,7 @@ export const ContractUpdateExitDialog = ({ open, onStay, onExit }: Props) => {
           variant="h6"
           sx={{
             flex: 1,
-            color: colors.textPrimary,
+            color: (theme) => theme.colors.neutral.black,
             fontWeight: 'fontWeightBold',
             lineHeight: '32px',
           }}
@@ -46,7 +45,7 @@ export const ContractUpdateExitDialog = ({ open, onStay, onExit }: Props) => {
         <IconButton
           aria-label={t('contractUpdateWizard.exitModal.close')}
           onClick={onStay}
-          sx={{ p: 0.5, color: colors.textPrimary }}
+          sx={{ p: 0.5, color: (theme) => theme.colors.neutral.black }}
         >
           <CloseIcon />
         </IconButton>
@@ -54,34 +53,19 @@ export const ContractUpdateExitDialog = ({ open, onStay, onExit }: Props) => {
       <Typography
         id="contract-update-exit-description"
         variant="body2"
-        sx={{ mt: 1, color: colors.textSecondary }}
+        sx={{ mt: 1, color: (theme) => theme.colors.neutral.grey[700] }}
       >
         {t('contractUpdateWizard.exitModal.message')}
       </Typography>
       <Box
         sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2, mt: 3 }}
       >
-        <ButtonNaked
-          component="button"
-          size="medium"
-          onClick={onExit}
-          sx={{ color: colors.primary, '&:hover': { color: colors.primaryHover } }}
-        >
+        <MIButton variant="text" onClick={onExit}>
           {t('contractUpdateWizard.exitModal.exit')}
-        </ButtonNaked>
-        <Button
-          variant="contained"
-          onClick={onStay}
-          sx={{
-            minHeight: 48,
-            px: 3,
-            borderRadius: '8px',
-            bgcolor: colors.primary,
-            '&:hover': { bgcolor: colors.primaryHover },
-          }}
-        >
+        </MIButton>
+        <MIButton variant="contained" onClick={onStay}>
           {t('contractUpdateWizard.exitModal.stay')}
-        </Button>
+        </MIButton>
       </Box>
     </Dialog>
   );

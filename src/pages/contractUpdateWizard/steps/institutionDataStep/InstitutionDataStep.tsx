@@ -1,7 +1,6 @@
-import { Alert, Box, Paper, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Typography } from '@mui/material';
+import { MIAlert, MIPaper } from '@pagopa/mui-italia';
 import { useTranslation } from 'react-i18next';
-import { contractUpdateWizardColors as colors } from '../../contractUpdateWizardColors';
 import { useInstitutionDataStep } from './useInstitutionDataStep';
 
 export const InstitutionDataStep = () => {
@@ -10,39 +9,36 @@ export const InstitutionDataStep = () => {
 
   return (
     <>
-      <Typography variant="body2" color={colors.textSecondary}>
+      <Typography variant="body2" sx={{ color: (theme) => theme.colors.neutral.grey[700] }}>
         {t('contractUpdateWizard.institutionData.description')}
       </Typography>
-      <Alert
+      <MIAlert
         severity="info"
-        sx={{ mt: 4, alignItems: 'center', border: 1, borderColor: colors.infoBorder }}
-        action={
-          <ButtonNaked
-            component="a"
-            href={assistanceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            color="primary"
-            sx={{ color: 'inherit', fontWeight: 'fontWeightBold' }}
-          >
-            {t('contractUpdateWizard.institutionData.contactSupport')}
-          </ButtonNaked>
-        }
+        sx={{ mt: 4 }}
+        action={{
+          label: t('contractUpdateWizard.institutionData.contactSupport'),
+          href: assistanceUrl,
+          target: '_blank',
+        }}
       >
         {t('contractUpdateWizard.institutionData.alert')}
-      </Alert>
-      <Paper elevation={0} sx={{ mt: 4, p: 3, borderRadius: 2 }}>
+      </MIAlert>
+      <MIPaper padding={24} sx={{ mt: 4 }}>
         <Box component="dl" sx={{ m: 0 }}>
           {fields.map(({ id, label, value }, index) => (
             <Box
               key={id}
-              sx={{ py: 1.5, borderTop: index > 0 ? 1 : 0, borderColor: colors.divider }}
+              sx={{
+                py: 1.5,
+                borderTop: index > 0 ? 1 : 0,
+                borderColor: (theme) => theme.colors.neutral.grey[100],
+              }}
             >
               <Typography
                 component="dt"
                 variant="caption"
                 display="block"
-                color={colors.textSecondary}
+                sx={{ color: (theme) => theme.colors.neutral.grey[700] }}
               >
                 {label}
               </Typography>
@@ -51,7 +47,7 @@ export const InstitutionDataStep = () => {
                 variant="body2"
                 sx={{
                   m: 0,
-                  color: colors.textPrimary,
+                  color: (theme) => theme.colors.neutral.black,
                   fontWeight: 'fontWeightMedium',
                   wordBreak: 'break-word',
                 }}
@@ -61,7 +57,7 @@ export const InstitutionDataStep = () => {
             </Box>
           ))}
         </Box>
-      </Paper>
+      </MIPaper>
     </>
   );
 };
