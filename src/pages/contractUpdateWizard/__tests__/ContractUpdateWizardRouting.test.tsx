@@ -44,7 +44,7 @@ test('routes outside the dashboard shell and hides only the secondary header dur
     history
   );
 
-  expect(screen.getByRole('heading', { level: 1, name: 'Informazioni' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   expect(screen.getByText('Header principale')).toBeInTheDocument();
   expect(screen.getByText('Footer')).toBeInTheDocument();
   expect(screen.queryByText('Header ente')).not.toBeInTheDocument();

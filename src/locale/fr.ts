@@ -5,12 +5,30 @@ export default {
     back: 'Retour',
     continue: 'Continuer',
     steps: {
-      information: 'Informations',
-      details: 'Données',
-      additionalDetails: 'Données supplémentaires',
+      institutionData: 'Données de l’organisme',
+      addLR: 'Données',
+      addUsers: 'Données supplémentaires',
     },
-    informationContent:
-      'Les informations pour mettre à jour le contrat seront affichées ici. Cette étape est en lecture seule.',
+    institutionData: {
+      description:
+        'Vérifiez et confirmez les données de l’organisme en vous assurant qu’elles sont correctes.',
+      alert:
+        'Les données de votre organisme sont incorrectes ou obsolètes ? Signalez-le à l’assistance pour procéder à la modification.',
+      contactSupport: 'Contacter l’assistance',
+      fields: {
+        businessName: 'Raison sociale',
+        registeredOffice: 'Adresse et numéro du siège social',
+        zipCode: 'Code postal',
+        city: 'Ville',
+        county: 'Province',
+        digitalAddress: 'Adresse PEC',
+        fiscalCode: 'Code fiscal',
+        vatNumber: 'Numéro de TVA',
+        recipientCode: 'Code SDI',
+        supportEmail: 'Adresse e-mail visible par les citoyens',
+        geographicTaxonomies: 'Zone géographique',
+      },
+    },
     detailsField: 'Champ de démonstration',
     additionalDetailsField: 'Champ de démonstration supplémentaire',
     fieldHint:

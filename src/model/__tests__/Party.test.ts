@@ -72,6 +72,7 @@ test('Test institutionResource2Party', () => {
     institutionType: 'PA',
     address: 'address',
     zipCode: '20121',
+    county: 'BA',
     recipientCode: 'MC45KDSX',
     geographicTaxonomies: [],
     delegation: false,
@@ -126,6 +127,7 @@ test('Test institutionResource2Party', () => {
       },
     ],
     city: '',
+    county: 'BA',
     country: '',
   });
 });

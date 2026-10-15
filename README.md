@@ -19,7 +19,9 @@ Each step has its own main heading, without a step indicator or counter.
 Back navigates to the previous step; on the first step it leaves immediately and
 returns to the entry URL (including query and hash), or Documents for direct links.
 
-The first step is read-only; the other two contain editable sample fields. A
+The first step ("Dati dell’ente") shows the selected institution data read from
+redux (loaded by `withSelectedParty` via `fetchPartyDetails`), with `-` for missing
+values; the other two contain editable sample fields. A
 wizard-scoped Context and reducer retain values between steps, without storing
 them in Redux, browser storage or an API. Refreshing, changing institution/product,
 or leaving the page resets the draft. The Exit button opens a confirmation modal:

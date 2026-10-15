@@ -1,6 +1,6 @@
 import { useContractUpdateWizard } from '../../ContractUpdateWizardContext';
 
-export const useAdditionalDetailsStep = () => {
+export const useAddUsersStep = () => {
   const { state, dispatch } = useContractUpdateWizard();
 
   const setAdditionalDetails = (value: string) =>

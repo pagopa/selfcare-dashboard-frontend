@@ -39,7 +39,7 @@ const back = () => screen.getByRole('button', { name: 'Indietro' });
 test('starts with a read-only step, its own main heading and enabled back navigation', () => {
   renderWizard();
 
-  expect(screen.getByRole('heading', { level: 1, name: 'Informazioni' })).toHaveFocus();
+  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toHaveFocus();
   expect(screen.getAllByRole('heading')).toHaveLength(1);
   expect(screen.queryByText(/Step \d di \d/)).not.toBeInTheDocument();
   expect(screen.queryByText('Dati')).not.toBeInTheDocument();
@@ -104,7 +104,7 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   await user.click(within(modal).getByRole('button', { name: 'Annulla' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(
-    screen.getByRole('heading', { level: 1, name: ['Informazioni', 'Dati', 'Altri dati'][step] })
+    screen.getByRole('heading', { level: 1, name: ['Dati dell’ente', 'Dati', 'Altri dati'][step] })
   ).toBeInTheDocument();
   if (step > 0) {
     expect(screen.getByRole('textbox')).toHaveValue(step === 1 ? 'keep me' : 'keep me too');
@@ -118,7 +118,7 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   expect(screen.getByText('Elenco documenti')).toBeInTheDocument();
 
   act(() => history.push(wizardPath));
-  expect(screen.getByRole('heading', { level: 1, name: 'Informazioni' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   await user.click(next());
   expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('');
   await user.click(next());
@@ -133,7 +133,7 @@ test.each([
   await user.click(next());
   await user.type(screen.getByLabelText('Dato dimostrativo'), 'old draft');
   act(() => history.push(path));
-  expect(screen.getByRole('heading', { level: 1, name: 'Informazioni' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   await user.click(next());
   expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('');
 });

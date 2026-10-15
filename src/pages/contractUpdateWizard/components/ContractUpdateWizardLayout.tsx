@@ -1,12 +1,15 @@
-import { Box, Button, Container, Paper, Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box, Button, Container, Typography } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { SessionModal } from '@pagopa/selfcare-common-frontend/lib';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import ProductNavigationBar from '../../../components/ProductNavigationBar';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { CONTRACT_UPDATE_STEPS, useContractUpdateWizard } from '../ContractUpdateWizardContext';
+import { contractUpdateWizardColors as colors } from '../contractUpdateWizardColors';
 import { stepComponents } from '../steps';
 
 export const ContractUpdateWizardLayout = () => {
@@ -42,37 +45,57 @@ export const ContractUpdateWizardLayout = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" sx={{ py: 3 }}>
-      <ProductNavigationBar
-        showBackComponent
-        goBack={() => setExitModalOpen(true)}
-        backLabel={t('contractUpdateWizard.exit')}
-        colorBackComponent="primary.main"
-      />
-      <Typography component="h1" variant="h4" ref={stepHeading} tabIndex={-1} sx={{ mt: 3, mb: 4 }}>
+    <Container component="main" maxWidth={false} sx={{ maxWidth: 1032, py: 5 }}>
+      <ButtonNaked
+        component="button"
+        color="text"
+        size="medium"
+        startIcon={<CloseIcon />}
+        onClick={() => setExitModalOpen(true)}
+      >
+        {t('contractUpdateWizard.exit')}
+      </ButtonNaked>
+      <Typography
+        component="h1"
+        variant="h4"
+        ref={stepHeading}
+        tabIndex={-1}
+        sx={{ mt: 2, mb: 2, color: colors.textPrimary }}
+      >
         {t(`contractUpdateWizard.steps.${stepId}`)}
       </Typography>
-      <Paper sx={{ p: { xs: 3, md: 5 } }}>
-        <StepContent />
-        {isLastStep && (
-          <Typography id="contract-update-submit-unavailable" sx={{ mt: 3 }}>
-            {t('contractUpdateWizard.submitUnavailable')}
-          </Typography>
-        )}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, mt: 5 }}>
-          <Button variant="outlined" onClick={goBack}>
-            {t('contractUpdateWizard.back')}
-          </Button>
-          <Button
-            variant="contained"
-            disabled={isLastStep}
-            aria-describedby={isLastStep ? 'contract-update-submit-unavailable' : undefined}
-            onClick={() => dispatch({ type: 'next' })}
-          >
-            {t('contractUpdateWizard.continue')}
-          </Button>
-        </Box>
-      </Paper>
+      <StepContent />
+      {isLastStep && (
+        <Typography id="contract-update-submit-unavailable" sx={{ mt: 3 }}>
+          {t('contractUpdateWizard.submitUnavailable')}
+        </Typography>
+      )}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 3, mt: 6 }}>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={goBack}
+          sx={{
+            color: colors.primary,
+            borderColor: colors.primary,
+            '&:hover': { color: colors.primaryHover, borderColor: colors.primaryHover },
+          }}
+        >
+          {t('contractUpdateWizard.back')}
+        </Button>
+        <Button
+          variant="contained"
+          disabled={isLastStep}
+          aria-describedby={isLastStep ? 'contract-update-submit-unavailable' : undefined}
+          onClick={() => dispatch({ type: 'next' })}
+          sx={{
+            bgcolor: colors.primary,
+            '&:hover': { bgcolor: colors.primaryHover },
+          }}
+        >
+          {t('contractUpdateWizard.continue')}
+        </Button>
+      </Box>
       <SessionModal
         open={exitModalOpen}
         title={t('contractUpdateWizard.exitModal.title')}
