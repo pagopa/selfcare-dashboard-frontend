@@ -36,10 +36,12 @@ export default {
     submitUnavailable:
       'L’envoi n’est pas encore disponible. Vous pouvez revenir en arrière et modifier les données.',
     exitModal: {
-      title: 'Voulez-vous quitter la mise à jour du contrat ?',
-      message: 'Vous perdrez les données saisies et reviendrez à la page Documents.',
-      confirm: 'Confirmer la sortie',
-      cancel: 'Annuler',
+      title: 'Voulez-vous vraiment quitter ?',
+      message:
+        'Si vous quittez, la demande sera annulée et vous devrez recommencer depuis le début.',
+      exit: 'Retour aux Documents',
+      stay: 'Continuer',
+      close: 'Fermer',
     },
   },
   customAlert: {

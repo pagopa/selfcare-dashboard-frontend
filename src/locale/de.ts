@@ -36,10 +36,11 @@ export default {
     submitUnavailable:
       'Das Absenden ist noch nicht verfügbar. Du kannst zurückgehen und die Daten ändern.',
     exitModal: {
-      title: 'Möchtest du die Vertragsaktualisierung verlassen?',
-      message: 'Die eingegebenen Daten gehen verloren und du kehrst zur Seite Dokumente zurück.',
-      confirm: 'Verlassen bestätigen',
-      cancel: 'Abbrechen',
+      title: 'Möchtest du wirklich verlassen?',
+      message: 'Wenn du verlässt, wird die Anfrage abgebrochen und du musst von vorne beginnen.',
+      exit: 'Zurück zu Dokumente',
+      stay: 'Weiter',
+      close: 'Schließen',
     },
   },
   customAlert: {

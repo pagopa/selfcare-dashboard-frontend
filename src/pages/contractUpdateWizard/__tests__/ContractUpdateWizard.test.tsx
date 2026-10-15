@@ -99,9 +99,12 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   }
 
   await user.click(screen.getByRole('button', { name: 'Esci' }));
-  const modal = await screen.findByRole('dialog');
+  const modal = await screen.findByRole('dialog', { name: 'Vuoi davvero uscire?' });
+  expect(modal).toHaveAccessibleDescription(
+    'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.'
+  );
   expect(history.location.pathname).toBe('/dashboard/party-1/documents/update-contract');
-  await user.click(within(modal).getByRole('button', { name: 'Annulla' }));
+  await user.click(within(modal).getByRole('button', { name: 'Continua' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(
     screen.getByRole('heading', { level: 1, name: ['Dati dell’ente', 'Dati', 'Altri dati'][step] })
@@ -112,7 +115,14 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
 
   await user.click(screen.getByRole('button', { name: 'Esci' }));
   await user.click(
-    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Conferma uscita' })
+    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Chiudi' })
+  );
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents/update-contract');
+
+  await user.click(screen.getByRole('button', { name: 'Esci' }));
+  await user.click(
+    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Torna a Documenti' })
   );
   expect(history.location.pathname).toBe('/dashboard/party-1/documents');
   expect(screen.getByText('Elenco documenti')).toBeInTheDocument();

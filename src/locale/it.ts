@@ -34,10 +34,11 @@ export default {
     fieldHint: 'Campo provvisorio: non inserire dati personali. Il valore non viene salvato.',
     submitUnavailable: 'L’invio non è ancora disponibile. Puoi tornare indietro e modificare i dati.',
     exitModal: {
-      title: 'Vuoi uscire dall’aggiornamento del contratto?',
-      message: 'Uscendo perderai i dati inseriti e tornerai alla pagina Documenti.',
-      confirm: 'Conferma uscita',
-      cancel: 'Annulla',
+      title: 'Vuoi davvero uscire?',
+      message: 'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.',
+      exit: 'Torna a Documenti',
+      stay: 'Continua',
+      close: 'Chiudi',
     },
   },
   customAlert: {

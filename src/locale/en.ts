@@ -33,10 +33,11 @@ export default {
     fieldHint: 'Temporary field: do not enter personal data. The value is not saved.',
     submitUnavailable: 'Submission is not available yet. You can go back and edit the data.',
     exitModal: {
-      title: 'Do you want to leave the contract update?',
-      message: 'You will lose the data you entered and return to the Documents page.',
-      confirm: 'Confirm exit',
-      cancel: 'Cancel',
+      title: 'Do you really want to leave?',
+      message: 'If you leave, the request will be cancelled and you will have to start over.',
+      exit: 'Back to Documents',
+      stay: 'Continue',
+      close: 'Close',
     },
   },
   customAlert: {

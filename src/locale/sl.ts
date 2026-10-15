@@ -33,10 +33,11 @@ export default {
     fieldHint: 'Začasno polje: ne vnašajte osebnih podatkov. Vrednost se ne shrani.',
     submitUnavailable: 'Oddaja še ni na voljo. Lahko se vrnete in spremenite podatke.',
     exitModal: {
-      title: 'Ali želite zapustiti posodobitev pogodbe?',
-      message: 'Vneseni podatki bodo izgubljeni in vrnili se boste na stran Dokumenti.',
-      confirm: 'Potrdi izhod',
-      cancel: 'Prekliči',
+      title: 'Ali res želite zapustiti?',
+      message: 'Če zapustite, bo zahteva preklicana in boste morali začeti znova.',
+      exit: 'Nazaj na Dokumente',
+      stay: 'Nadaljuj',
+      close: 'Zapri',
     },
   },
   customAlert: {

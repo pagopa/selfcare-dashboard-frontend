@@ -2,7 +2,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { SessionModal } from '@pagopa/selfcare-common-frontend/lib';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +10,7 @@ import { DASHBOARD_ROUTES } from '../../../routes';
 import { CONTRACT_UPDATE_STEPS, useContractUpdateWizard } from '../ContractUpdateWizardContext';
 import { contractUpdateWizardColors as colors } from '../contractUpdateWizardColors';
 import { stepComponents } from '../steps';
+import { ContractUpdateExitDialog } from './ContractUpdateExitDialog';
 
 export const ContractUpdateWizardLayout = () => {
   const { t } = useTranslation();
@@ -96,14 +96,10 @@ export const ContractUpdateWizardLayout = () => {
           {t('contractUpdateWizard.continue')}
         </Button>
       </Box>
-      <SessionModal
+      <ContractUpdateExitDialog
         open={exitModalOpen}
-        title={t('contractUpdateWizard.exitModal.title')}
-        message={t('contractUpdateWizard.exitModal.message')}
-        onConfirmLabel={t('contractUpdateWizard.exitModal.confirm')}
-        onCloseLabel={t('contractUpdateWizard.exitModal.cancel')}
-        handleClose={() => setExitModalOpen(false)}
-        onConfirm={confirmExit}
+        onStay={() => setExitModalOpen(false)}
+        onExit={confirmExit}
       />
     </Container>
   );
