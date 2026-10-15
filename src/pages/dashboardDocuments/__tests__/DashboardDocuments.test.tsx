@@ -1,9 +1,11 @@
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
-import { fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { mockedParties } from '../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../utils/test-utils';
 import DashboardDocumentsPage from '../DashboardDocumentsPage';
+
+afterEach(() => vi.restoreAllMocks());
 
 test('should render component DashboardDocuments', async () => {
   const { store } = renderWithProviders(
@@ -16,7 +18,9 @@ test('should render component DashboardDocuments', async () => {
       productId: product.productId ?? '',
       actions: product.userProductActions ? [...product.userProductActions] : [],
     }));
-  store.dispatch(setProductPermissions(mockedActions));
+  act(() => {
+    store.dispatch(setProductPermissions(mockedActions));
+  });
 
   const documenTitle = await screen.findByText('Documenti');
 

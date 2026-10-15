@@ -1,5 +1,6 @@
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { Redirect, useParams } from 'react-router-dom';
+import ContractUpdateWizardPage from './pages/contractUpdateWizard/ContractUpdateWizardPage';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from './pages/dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
@@ -41,6 +42,11 @@ const ROUTES = {
     path: `${BASE_ROUTE}/party-selection`,
     exact: true,
     component: PartySelectionContainer,
+  },
+  CONTRACT_UPDATE: {
+    path: ENV.ROUTES.CONTRACT_UPDATE,
+    exact: true,
+    component: ContractUpdateWizardPage,
   },
   PARTY_DASHBOARD: {
     path: `${BASE_ROUTE}/:partyId`,

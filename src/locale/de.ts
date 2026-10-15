@@ -1,4 +1,29 @@
 export default {
+  contractUpdateWizard: {
+    openDevelopment: 'Vertragsaktualisierung ausprobieren',
+    exit: 'Verlassen',
+    back: 'Zurück',
+    continue: 'Weiter',
+    steps: {
+      information: 'Informationen',
+      details: 'Daten',
+      additionalDetails: 'Weitere Daten',
+    },
+    informationContent:
+      'Hier werden Informationen zur Aktualisierung des Vertrags angezeigt. Dieser Schritt ist schreibgeschützt.',
+    detailsField: 'Beispielfeld',
+    additionalDetailsField: 'Zusätzliches Beispielfeld',
+    fieldHint:
+      'Vorläufiges Feld: Gib keine personenbezogenen Daten ein. Der Wert wird nicht gespeichert.',
+    submitUnavailable:
+      'Das Absenden ist noch nicht verfügbar. Du kannst zurückgehen und die Daten ändern.',
+    exitModal: {
+      title: 'Möchtest du die Vertragsaktualisierung verlassen?',
+      message: 'Die eingegebenen Daten gehen verloren und du kehrst zur Seite Dokumente zurück.',
+      confirm: 'Verlassen bestätigen',
+      cancel: 'Abbrechen',
+    },
+  },
   customAlert: {
     message:
       '<1>Neuigkeit!</1><br />Ab dem 31.03.2025 ermöglicht die <2>Gruppen</2>-Funktion für IO die Verwaltung von Diensten, indem der Zugriff auf bestimmte Benutzergruppen beschränkt wird. <3>Wie funktioniert das?</3>',

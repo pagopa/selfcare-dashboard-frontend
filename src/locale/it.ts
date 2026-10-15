@@ -1,4 +1,27 @@
 export default {
+  contractUpdateWizard: {
+    openDevelopment: 'Prova aggiornamento contratto',
+    exit: 'Esci',
+    back: 'Indietro',
+    continue: 'Continua',
+    steps: {
+      information: 'Informazioni',
+      details: 'Dati',
+      additionalDetails: 'Altri dati',
+    },
+    informationContent:
+      'Qui saranno mostrate le informazioni per aggiornare il contratto. Questo step è di sola lettura.',
+    detailsField: 'Dato dimostrativo',
+    additionalDetailsField: 'Dato aggiuntivo dimostrativo',
+    fieldHint: 'Campo provvisorio: non inserire dati personali. Il valore non viene salvato.',
+    submitUnavailable: 'L’invio non è ancora disponibile. Puoi tornare indietro e modificare i dati.',
+    exitModal: {
+      title: 'Vuoi uscire dall’aggiornamento del contratto?',
+      message: 'Uscendo perderai i dati inseriti e tornerai alla pagina Documenti.',
+      confirm: 'Conferma uscita',
+      cancel: 'Annulla',
+    },
+  },
   customAlert: {
     message:
       '<1>Novità!</1><br />Disponibile dal 31/03/2025 la funzionalità dei <2>Gruppi</2> per IO. Permette di gestire i servizi limitando l’accesso a gruppi specifici di utenti. <3>Come funziona?</3>',

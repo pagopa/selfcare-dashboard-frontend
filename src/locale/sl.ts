@@ -1,4 +1,27 @@
 export default {
+  contractUpdateWizard: {
+    openDevelopment: 'Preizkusi posodobitev pogodbe',
+    exit: 'Izhod',
+    back: 'Nazaj',
+    continue: 'Nadaljuj',
+    steps: {
+      information: 'Informacije',
+      details: 'Podatki',
+      additionalDetails: 'Dodatni podatki',
+    },
+    informationContent:
+      'Tukaj bodo prikazane informacije za posodobitev pogodbe. Ta korak je samo za branje.',
+    detailsField: 'Vzorčno polje',
+    additionalDetailsField: 'Dodatno vzorčno polje',
+    fieldHint: 'Začasno polje: ne vnašajte osebnih podatkov. Vrednost se ne shrani.',
+    submitUnavailable: 'Oddaja še ni na voljo. Lahko se vrnete in spremenite podatke.',
+    exitModal: {
+      title: 'Ali želite zapustiti posodobitev pogodbe?',
+      message: 'Vneseni podatki bodo izgubljeni in vrnili se boste na stran Dokumenti.',
+      confirm: 'Potrdi izhod',
+      cancel: 'Prekliči',
+    },
+  },
   customAlert: {
     message:
       '<1>Novost!</1><br />Funkcionalnost <2>Skupine</2> za IO, ki omogoča upravljanje storitev z omejevanjem dostopa na določene skupine uporabnikov, je na voljo od 31. 3. 2025. <3>Kako deluje?</3>',

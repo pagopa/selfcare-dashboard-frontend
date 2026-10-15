@@ -9,6 +9,28 @@ The micro-frontends used are:
 * [selfcare-dashboard-users-microfrontend](https://github.com/pagopa/selfcare-dashboard-users-microfrontend) to handle the management of the users
 * [selfcare-dashboard-groups-microfrontend](https://github.com/pagopa/selfcare-dashboard-groups-microfrontend) to handle the management of the groups of users
 
+## Contract update wizard (scaffold)
+
+The route `/dashboard/:partyId/documents/update-contract?productId=...` opens a
+three-step wizard outside the dashboard side menu, with the secondary institution
+header hidden. In development (`yarn start`), product cards in Documents include
+a temporary entry button; the existing document link is unchanged.
+Each step has its own main heading, without a step indicator or counter.
+Back navigates to the previous step; on the first step it leaves immediately and
+returns to the entry URL (including query and hash), or Documents for direct links.
+
+The first step is read-only; the other two contain editable sample fields. A
+wizard-scoped Context and reducer retain values between steps, without storing
+them in Redux, browser storage or an API. Refreshing, changing institution/product,
+or leaving the page resets the draft. The Exit button opens a confirmation modal:
+cancelling keeps the draft, confirming clears it and returns to Documents.
+The last Continue button is disabled until submission is implemented.
+
+Step IDs and state transitions live in `src/pages/contractUpdateWizard/ContractUpdateWizardContext.tsx`;
+step components live in `ContractUpdateSteps.tsx` and their rendering map in
+`ContractUpdateWizardPage.tsx`. Contract eligibility, real fields, validation and
+submission are intentionally not implemented.
+
 ## Data and model/types shared with remotes micro-frontend
 This application represents the container app for some remotes pages/components and provide to them some shared data having shared types.
 
