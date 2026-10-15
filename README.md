@@ -27,8 +27,10 @@ cancelling keeps the draft, confirming clears it and returns to Documents.
 The last Continue button is disabled until submission is implemented.
 
 Step IDs and state transitions live in `src/pages/contractUpdateWizard/ContractUpdateWizardContext.tsx`;
-step components live in `ContractUpdateSteps.tsx` and their rendering map in
-`ContractUpdateWizardPage.tsx`. Contract eligibility, real fields, validation and
+the shared shell (heading, Back/Continue, exit modal) lives in
+`components/ContractUpdateWizardLayout.tsx`. Each step has its own folder under
+`steps/` with a layout-only component and a `use<Step>` hook holding its logic;
+the step-to-component map is `steps/index.ts`. Contract eligibility, real fields, validation and
 submission are intentionally not implemented.
 
 ## Data and model/types shared with remotes micro-frontend
