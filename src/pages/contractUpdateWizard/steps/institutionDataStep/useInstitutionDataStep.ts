@@ -55,5 +55,11 @@ export const useInstitutionDataStep = () => {
     value: getValue(party, billing)?.trim() || EMPTY_FIELD_VALUE,
   }));
 
-  return { fields, assistanceUrl: ENV.URL_FE.ASSISTANCE };
+  const assistanceParams = new URLSearchParams({
+    ...(productId && { productId }),
+    cat: 'contract-update',
+  });
+  const assistanceUrl = `${ENV.URL_FE.ASSISTANCE}?${assistanceParams.toString()}`;
+
+  return { fields, assistanceUrl };
 };

@@ -76,7 +76,12 @@ test('maps the selected party to the institution data fields in display order', 
     supportEmail: 'info@comune.milano.it',
     geographicTaxonomies: 'Milano - Comune, Milano - Provincia',
   });
-  expect(assistanceUrl).toBe(ENV.URL_FE.ASSISTANCE);
+  expect(assistanceUrl).toBe(`${ENV.URL_FE.ASSISTANCE}?cat=contract-update`);
+});
+
+test('builds the assistance url with the product in the url and the contract-update category', () => {
+  const { assistanceUrl } = renderWithParty(mockedParties[0], 'prod-pagopa');
+  expect(assistanceUrl).toBe(`${ENV.URL_FE.ASSISTANCE}?productId=prod-pagopa&cat=contract-update`);
 });
 
 test('shows a dash for missing, empty or blank values', () => {

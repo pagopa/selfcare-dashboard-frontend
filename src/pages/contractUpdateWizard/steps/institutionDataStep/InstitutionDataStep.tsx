@@ -20,6 +20,8 @@ export const InstitutionDataStep = () => {
           <ButtonNaked
             component="a"
             href={assistanceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             color="primary"
             sx={{ color: 'inherit', fontWeight: 'fontWeightBold' }}
           >

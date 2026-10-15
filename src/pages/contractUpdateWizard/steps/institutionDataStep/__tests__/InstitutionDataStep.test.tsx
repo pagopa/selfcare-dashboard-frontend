@@ -22,10 +22,10 @@ test('renders description, support alert and the institution data list', () => {
 
   const alert = screen.getByRole('alert');
   expect(alert).toHaveTextContent(/I dati del tuo ente non sono corretti o aggiornati\?/);
-  expect(within(alert).getByRole('link', { name: 'Contatta l’assistenza' })).toHaveAttribute(
-    'href',
-    ENV.URL_FE.ASSISTANCE
-  );
+  const assistanceLink = within(alert).getByRole('link', { name: 'Contatta l’assistenza' });
+  expect(assistanceLink).toHaveAttribute('href', `${ENV.URL_FE.ASSISTANCE}?cat=contract-update`);
+  expect(assistanceLink).toHaveAttribute('target', '_blank');
+  expect(assistanceLink).toHaveAttribute('rel', 'noopener noreferrer');
 
   const terms = screen.getAllByRole('term');
   const definitions = screen.getAllByRole('definition');
