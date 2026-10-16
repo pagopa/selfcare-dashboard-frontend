@@ -5,12 +5,30 @@ export default {
     back: 'Retour',
     continue: 'Continuer',
     steps: {
-      information: 'Informations',
-      details: 'Données',
-      additionalDetails: 'Données supplémentaires',
+      institutionData: 'Données de l’organisme',
+      addLR: 'Données',
+      addUsers: 'Données supplémentaires',
     },
-    informationContent:
-      'Les informations pour mettre à jour le contrat seront affichées ici. Cette étape est en lecture seule.',
+    institutionData: {
+      description:
+        'Vérifiez et confirmez les données de l’organisme en vous assurant qu’elles sont correctes.',
+      alert:
+        'Les données de votre organisme sont incorrectes ou obsolètes ? Signalez-le à l’assistance pour procéder à la modification.',
+      contactSupport: 'Contacter l’assistance',
+      fields: {
+        businessName: 'Raison sociale',
+        registeredOffice: 'Adresse et numéro du siège social',
+        zipCode: 'Code postal',
+        city: 'Ville',
+        county: 'Province',
+        digitalAddress: 'Adresse PEC',
+        fiscalCode: 'Code fiscal',
+        vatNumber: 'Numéro de TVA',
+        recipientCode: 'Code SDI',
+        supportEmail: 'Adresse e-mail visible par les citoyens',
+        geographicTaxonomies: 'Zone géographique',
+      },
+    },
     detailsField: 'Champ de démonstration',
     additionalDetailsField: 'Champ de démonstration supplémentaire',
     fieldHint:
@@ -18,10 +36,12 @@ export default {
     submitUnavailable:
       'L’envoi n’est pas encore disponible. Vous pouvez revenir en arrière et modifier les données.',
     exitModal: {
-      title: 'Voulez-vous quitter la mise à jour du contrat ?',
-      message: 'Vous perdrez les données saisies et reviendrez à la page Documents.',
-      confirm: 'Confirmer la sortie',
-      cancel: 'Annuler',
+      title: 'Voulez-vous vraiment quitter ?',
+      message:
+        'Si vous quittez, la demande sera annulée et vous devrez recommencer depuis le début.',
+      exit: 'Retour aux Documents',
+      stay: 'Continuer',
+      close: 'Fermer',
     },
   },
   customAlert: {

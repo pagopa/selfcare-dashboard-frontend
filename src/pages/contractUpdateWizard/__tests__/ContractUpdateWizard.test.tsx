@@ -11,7 +11,7 @@ import {
   initialWizardState,
 } from '../ContractUpdateWizardContext';
 
-const wizardPath = '/dashboard/party-1/documents/update-contract?productId=product-1';
+const wizardPath = '/dashboard/party-1/documents/product-1/update-contract';
 
 const renderWizard = (returnTo?: string) => {
   const history = createMemoryHistory({ initialEntries: [wizardPath] });
@@ -39,7 +39,7 @@ const back = () => screen.getByRole('button', { name: 'Indietro' });
 test('starts with a read-only step, its own main heading and enabled back navigation', () => {
   renderWizard();
 
-  expect(screen.getByRole('heading', { level: 1, name: 'Informazioni' })).toHaveFocus();
+  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toHaveFocus();
   expect(screen.getAllByRole('heading')).toHaveLength(1);
   expect(screen.queryByText(/Step \d di \d/)).not.toBeInTheDocument();
   expect(screen.queryByText('Dati')).not.toBeInTheDocument();
@@ -99,12 +99,15 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   }
 
   await user.click(screen.getByRole('button', { name: 'Esci' }));
-  const modal = await screen.findByRole('dialog');
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents/update-contract');
-  await user.click(within(modal).getByRole('button', { name: 'Annulla' }));
+  const modal = await screen.findByRole('dialog', { name: 'Vuoi davvero uscire?' });
+  expect(modal).toHaveAccessibleDescription(
+    'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.'
+  );
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-1/update-contract');
+  await user.click(within(modal).getByRole('button', { name: 'Continua' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(
-    screen.getByRole('heading', { level: 1, name: ['Informazioni', 'Dati', 'Altri dati'][step] })
+    screen.getByRole('heading', { level: 1, name: ['Dati dell’ente', 'Dati', 'Altri dati'][step] })
   ).toBeInTheDocument();
   if (step > 0) {
     expect(screen.getByRole('textbox')).toHaveValue(step === 1 ? 'keep me' : 'keep me too');
@@ -112,13 +115,20 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
 
   await user.click(screen.getByRole('button', { name: 'Esci' }));
   await user.click(
-    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Conferma uscita' })
+    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Chiudi' })
+  );
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-1/update-contract');
+
+  await user.click(screen.getByRole('button', { name: 'Esci' }));
+  await user.click(
+    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Torna a Documenti' })
   );
   expect(history.location.pathname).toBe('/dashboard/party-1/documents');
   expect(screen.getByText('Elenco documenti')).toBeInTheDocument();
 
   act(() => history.push(wizardPath));
-  expect(screen.getByRole('heading', { level: 1, name: 'Informazioni' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   await user.click(next());
   expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('');
   await user.click(next());
@@ -126,14 +136,14 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
 });
 
 test.each([
-  '/dashboard/party-1/documents/update-contract?productId=product-2',
-  '/dashboard/party-2/documents/update-contract?productId=product-1',
+  '/dashboard/party-1/documents/product-2/update-contract',
+  '/dashboard/party-2/documents/product-1/update-contract',
 ])('starts a fresh draft when the scope changes to %s', async (path) => {
   const { history, user } = renderWizard();
   await user.click(next());
   await user.type(screen.getByLabelText('Dato dimostrativo'), 'old draft');
   act(() => history.push(path));
-  expect(screen.getByRole('heading', { level: 1, name: 'Informazioni' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   await user.click(next());
   expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('');
 });

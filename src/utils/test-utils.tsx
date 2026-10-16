@@ -1,11 +1,12 @@
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { ThemeProvider } from '@mui/material';
+import { theme } from '@pagopa/mui-italia';
 import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { Party } from '../model/Party';
 import { createStore } from '../redux/store';
-
 
 export const renderWithProviders = (
   component: React.ReactElement,
@@ -17,7 +18,9 @@ export const renderWithProviders = (
 
   render(
     <Router history={history}>
-      <Provider store={store}>{component}</Provider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>{component}</ThemeProvider>
+      </Provider>
     </Router>
   );
   return { store, history };

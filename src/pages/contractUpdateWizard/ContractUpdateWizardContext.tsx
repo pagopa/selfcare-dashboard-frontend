@@ -1,6 +1,6 @@
 import { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react';
 
-export const CONTRACT_UPDATE_STEPS = ['information', 'details', 'additionalDetails'] as const;
+export const CONTRACT_UPDATE_STEPS = ['institutionData', 'addLR', 'addUsers'] as const;
 
 type ContractUpdateDraft = {
   details: string;

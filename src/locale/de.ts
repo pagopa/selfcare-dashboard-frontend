@@ -5,12 +5,30 @@ export default {
     back: 'Zurück',
     continue: 'Weiter',
     steps: {
-      information: 'Informationen',
-      details: 'Daten',
-      additionalDetails: 'Weitere Daten',
+      institutionData: 'Daten der Einrichtung',
+      addLR: 'Daten',
+      addUsers: 'Weitere Daten',
     },
-    informationContent:
-      'Hier werden Informationen zur Aktualisierung des Vertrags angezeigt. Dieser Schritt ist schreibgeschützt.',
+    institutionData: {
+      description:
+        'Überprüfen und bestätigen Sie die Daten der Einrichtung und stellen Sie sicher, dass sie korrekt sind.',
+      alert:
+        'Die Daten Ihrer Einrichtung sind nicht korrekt oder nicht aktuell? Melden Sie dies dem Support, um die Änderung zu veranlassen.',
+      contactSupport: 'Support kontaktieren',
+      fields: {
+        businessName: 'Firmenname',
+        registeredOffice: 'Adresse und Hausnummer des Rechtssitzes',
+        zipCode: 'PLZ',
+        city: 'Stadt',
+        county: 'Provinz',
+        digitalAddress: 'PEC-Adresse',
+        fiscalCode: 'Steuernummer',
+        vatNumber: 'MwSt.-Nummer',
+        recipientCode: 'SDI-Code',
+        supportEmail: 'Für Bürger sichtbare E-Mail-Adresse',
+        geographicTaxonomies: 'Geografisches Gebiet',
+      },
+    },
     detailsField: 'Beispielfeld',
     additionalDetailsField: 'Zusätzliches Beispielfeld',
     fieldHint:
@@ -18,10 +36,11 @@ export default {
     submitUnavailable:
       'Das Absenden ist noch nicht verfügbar. Du kannst zurückgehen und die Daten ändern.',
     exitModal: {
-      title: 'Möchtest du die Vertragsaktualisierung verlassen?',
-      message: 'Die eingegebenen Daten gehen verloren und du kehrst zur Seite Dokumente zurück.',
-      confirm: 'Verlassen bestätigen',
-      cancel: 'Abbrechen',
+      title: 'Möchtest du wirklich verlassen?',
+      message: 'Wenn du verlässt, wird die Anfrage abgebrochen und du musst von vorne beginnen.',
+      exit: 'Zurück zu Dokumente',
+      stay: 'Weiter',
+      close: 'Schließen',
     },
   },
   customAlert: {

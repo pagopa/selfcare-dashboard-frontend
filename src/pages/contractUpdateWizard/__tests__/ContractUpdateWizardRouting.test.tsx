@@ -26,7 +26,7 @@ vi.mock('@pagopa/selfcare-common-frontend/lib', async (importOriginal) => ({
 
 test('routes outside the dashboard shell and hides only the secondary header during the wizard', () => {
   const history = createMemoryHistory({
-    initialEntries: ['/dashboard/party-1/documents/update-contract?productId=product-1'],
+    initialEntries: ['/dashboard/party-1/documents/product-1/update-contract'],
   });
   const store = createStore();
   store.dispatch(partiesActions.setPartySelected(mockedParties[0]));
@@ -44,7 +44,7 @@ test('routes outside the dashboard shell and hides only the secondary header dur
     history
   );
 
-  expect(screen.getByRole('heading', { level: 1, name: 'Informazioni' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   expect(screen.getByText('Header principale')).toBeInTheDocument();
   expect(screen.getByText('Footer')).toBeInTheDocument();
   expect(screen.queryByText('Header ente')).not.toBeInTheDocument();
