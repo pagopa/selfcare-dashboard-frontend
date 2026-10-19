@@ -2,13 +2,24 @@ import { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } f
 
 export const CONTRACT_UPDATE_STEPS = ['institutionData', 'addLR', 'addUsers'] as const;
 
-type ContractUpdateDraft = {
-  details: string;
+export type ContractUpdateStepId = (typeof CONTRACT_UPDATE_STEPS)[number];
+
+export type LegalRepresentative = {
+  name: string;
+  surname: string;
+  taxCode: string;
+  email: string;
+};
+
+export type ContractUpdateDraft = {
+  legalRepresentative: LegalRepresentative;
   additionalDetails: string;
 };
 
 type ContractUpdateWizardState = {
   activeStep: number;
+  // true after the user tried to continue from a step with invalid data
+  showErrors: boolean;
   draft: ContractUpdateDraft;
 };
 
@@ -16,11 +27,17 @@ type ContractUpdateWizardAction =
   | { type: 'next' }
   | { type: 'back' }
   | { type: 'reset' }
-  | { type: 'updateDraft'; field: keyof ContractUpdateDraft; value: string };
+  | { type: 'showErrors' }
+  | { type: 'updateDraft'; field: 'additionalDetails'; value: string }
+  | { type: 'updateLegalRepresentative'; field: keyof LegalRepresentative; value: string };
 
 export const initialWizardState: ContractUpdateWizardState = {
   activeStep: 0,
-  draft: { details: '', additionalDetails: '' },
+  showErrors: false,
+  draft: {
+    legalRepresentative: { name: '', surname: '', taxCode: '', email: '' },
+    additionalDetails: '',
+  },
 };
 
 export const contractUpdateWizardReducer = (
@@ -31,12 +48,26 @@ export const contractUpdateWizardReducer = (
     case 'next':
       return {
         ...state,
+        showErrors: false,
         activeStep: Math.min(state.activeStep + 1, CONTRACT_UPDATE_STEPS.length - 1),
       };
     case 'back':
-      return { ...state, activeStep: Math.max(state.activeStep - 1, 0) };
+      return { ...state, showErrors: false, activeStep: Math.max(state.activeStep - 1, 0) };
+    case 'showErrors':
+      return { ...state, showErrors: true };
     case 'updateDraft':
       return { ...state, draft: { ...state.draft, [action.field]: action.value } };
+    case 'updateLegalRepresentative':
+      return {
+        ...state,
+        draft: {
+          ...state.draft,
+          legalRepresentative: {
+            ...state.draft.legalRepresentative,
+            [action.field]: action.value,
+          },
+        },
+      };
     case 'reset':
       return initialWizardState;
   }

@@ -6,7 +6,7 @@ export default {
     continue: 'Weiter',
     steps: {
       institutionData: 'Daten der Einrichtung',
-      addLR: 'Daten',
+      addLR: 'Gib den Rechtsvertreter an',
       addUsers: 'Weitere Daten',
     },
     institutionData: {
@@ -29,7 +29,28 @@ export default {
         geographicTaxonomies: 'Geografisches Gebiet',
       },
     },
-    detailsField: 'Beispielfeld',
+    addLR: {
+      description:
+        'Gib die Daten des Rechtsvertreters oder Bevollmächtigten deiner Körperschaft ein. Er ist für die Unterzeichnung des Vertrags für {{productName}} verantwortlich und erhält die Rolle des Administrators für dieses Produkt im reservierten Bereich.',
+      rolesInfo: 'Weitere Informationen zu den Rollen',
+      fields: {
+        name: 'Vorname',
+        surname: 'Nachname',
+        taxCode: 'Steuernummer',
+        email: 'Geschäftliche E-Mail',
+      },
+      emailHint:
+        'Bitte geben Sie die institutionelle E-Mail-Adresse der Organisation ein. PEC-E-Mail-Adressen sind nicht zulässig.',
+      errors: {
+        required: 'Pflichtfeld',
+        nameMismatch: 'Name falsch oder stimmt nicht mit der Steuernummer überein',
+        surnameMismatch: 'Nachname falsch oder stimmt nicht mit der Steuernummer überein',
+        invalidTaxCode: 'Die eingegebene Steuernummer ist ungültig',
+        invalidEmail: 'Die E-Mail-Adresse ist ungültig',
+        pecEmail:
+          'PEC-E-Mail-Adresse nicht akzeptiert. Bitte geben Sie die institutionelle E-Mail-Adresse der Organisation ein.',
+      },
+    },
     additionalDetailsField: 'Zusätzliches Beispielfeld',
     fieldHint:
       'Vorläufiges Feld: Gib keine personenbezogenen Daten ein. Der Wert wird nicht gespeichert.',

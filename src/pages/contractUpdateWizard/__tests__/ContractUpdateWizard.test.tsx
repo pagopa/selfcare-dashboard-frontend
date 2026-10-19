@@ -36,13 +36,27 @@ const renderWizard = (returnTo?: string) => {
 const next = () => screen.getByRole('button', { name: 'Continua' });
 const back = () => screen.getByRole('button', { name: 'Indietro' });
 
+const lrTitle = 'Indica il Legale Rappresentante';
+const validLR = {
+  Nome: 'Mario',
+  Cognome: 'Rossi',
+  'Codice Fiscale': 'RSSMRA80A01H501U',
+  'Email istituzionale': 'mario.rossi@comune.it',
+};
+
+const fillLR = async (user: ReturnType<typeof userEvent.setup>) => {
+  for (const [label, value] of Object.entries(validLR)) {
+    await user.type(screen.getByLabelText(label), value);
+  }
+};
+
 test('starts with a read-only step, its own main heading and enabled back navigation', () => {
   renderWizard();
 
   expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toHaveFocus();
   expect(screen.getAllByRole('heading')).toHaveLength(1);
   expect(screen.queryByText(/Step \d di \d/)).not.toBeInTheDocument();
-  expect(screen.queryByText('Dati')).not.toBeInTheDocument();
+  expect(screen.queryByText(lrTitle)).not.toBeInTheDocument();
   expect(screen.queryByText('Altri dati')).not.toBeInTheDocument();
   expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   expect(back()).toBeEnabled();
@@ -63,11 +77,26 @@ test.each([undefined, '/dashboard/party-1/documents?filter=contracts#product-1']
   }
 );
 
+test('blocks the Legal Representative step until the data is valid', async () => {
+  const { user } = renderWizard();
+  await user.click(next());
+  expect(screen.getByRole('heading', { level: 1, name: lrTitle })).toHaveFocus();
+  expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
+
+  await user.click(next());
+  expect(screen.getByRole('heading', { level: 1, name: lrTitle })).toBeInTheDocument();
+  expect(screen.getAllByText('Campo obbligatorio')).toHaveLength(4);
+
+  await fillLR(user);
+  expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
+  await user.click(next());
+  expect(screen.getByRole('heading', { level: 1, name: 'Altri dati' })).toHaveFocus();
+});
+
 test('preserves editable data in both steps and disables submission in the last step', async () => {
   const { user } = renderWizard();
   await user.click(next());
-  expect(screen.getByRole('heading', { level: 1, name: 'Dati' })).toHaveFocus();
-  await user.type(screen.getByLabelText('Dato dimostrativo'), 'demo step 2');
+  await fillLR(user);
 
   await user.click(next());
   expect(screen.getByRole('heading', { level: 1, name: 'Altri dati' })).toHaveFocus();
@@ -76,13 +105,13 @@ test('preserves editable data in both steps and disables submission in the last 
   expect(screen.getByText(/L’invio non è ancora disponibile/)).toBeInTheDocument();
 
   await user.click(back());
-  expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('demo step 2');
-  await user.type(screen.getByLabelText('Dato dimostrativo'), ' aggiornato');
+  expect(screen.getByLabelText('Nome')).toHaveValue('Mario');
+  expect(screen.getByLabelText('Email istituzionale')).toHaveValue('mario.rossi@comune.it');
   await user.click(back());
   expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
 
   await user.click(next());
-  expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('demo step 2 aggiornato');
+  expect(screen.getByLabelText('Codice Fiscale')).toHaveValue('RSSMRA80A01H501U');
   await user.click(next());
   expect(screen.getByLabelText('Dato aggiuntivo dimostrativo')).toHaveValue('demo step 3');
 });
@@ -91,7 +120,7 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   const { history, user } = renderWizard();
   if (step > 0) {
     await user.click(next());
-    await user.type(screen.getByLabelText('Dato dimostrativo'), 'keep me');
+    await fillLR(user);
   }
   if (step > 1) {
     await user.click(next());
@@ -107,10 +136,13 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   await user.click(within(modal).getByRole('button', { name: 'Continua' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(
-    screen.getByRole('heading', { level: 1, name: ['Dati dell’ente', 'Dati', 'Altri dati'][step] })
+    screen.getByRole('heading', { level: 1, name: ['Dati dell’ente', lrTitle, 'Altri dati'][step] })
   ).toBeInTheDocument();
-  if (step > 0) {
-    expect(screen.getByRole('textbox')).toHaveValue(step === 1 ? 'keep me' : 'keep me too');
+  if (step === 1) {
+    expect(screen.getByLabelText('Nome')).toHaveValue('Mario');
+  }
+  if (step === 2) {
+    expect(screen.getByRole('textbox')).toHaveValue('keep me too');
   }
 
   await user.click(screen.getByRole('button', { name: 'Esci' }));
@@ -130,7 +162,8 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   act(() => history.push(wizardPath));
   expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   await user.click(next());
-  expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('');
+  expect(screen.getByLabelText('Nome')).toHaveValue('');
+  await fillLR(user);
   await user.click(next());
   expect(screen.getByLabelText('Dato aggiuntivo dimostrativo')).toHaveValue('');
 });
@@ -141,11 +174,11 @@ test.each([
 ])('starts a fresh draft when the scope changes to %s', async (path) => {
   const { history, user } = renderWizard();
   await user.click(next());
-  await user.type(screen.getByLabelText('Dato dimostrativo'), 'old draft');
+  await user.type(screen.getByLabelText('Nome'), 'old draft');
   act(() => history.push(path));
   expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   await user.click(next());
-  expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('');
+  expect(screen.getByLabelText('Nome')).toHaveValue('');
 });
 
 test('bounds navigation and resets the entire shared state without mutating the draft', () => {
@@ -155,11 +188,14 @@ test('bounds navigation and resets the entire shared state without mutating the 
     CONTRACT_UPDATE_STEPS.length - 1
   );
   const edited = contractUpdateWizardReducer(lastStep, {
-    type: 'updateDraft',
-    field: 'details',
+    type: 'updateLegalRepresentative',
+    field: 'name',
     value: 'new value',
   });
-  expect(initialWizardState.draft.details).toBe('');
-  expect(edited.draft.details).toBe('new value');
+  expect(initialWizardState.draft.legalRepresentative.name).toBe('');
+  expect(edited.draft.legalRepresentative.name).toBe('new value');
+  const withErrors = contractUpdateWizardReducer(edited, { type: 'showErrors' });
+  expect(withErrors.showErrors).toBe(true);
+  expect(contractUpdateWizardReducer(withErrors, { type: 'back' }).showErrors).toBe(false);
   expect(contractUpdateWizardReducer(edited, { type: 'reset' })).toEqual(initialWizardState);
 });
