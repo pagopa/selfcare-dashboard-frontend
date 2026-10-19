@@ -1,4 +1,4 @@
-import { ArrowForward } from '@mui/icons-material';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 import { Box, Card, Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';

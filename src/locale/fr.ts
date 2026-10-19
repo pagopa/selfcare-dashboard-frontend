@@ -6,7 +6,7 @@ export default {
     continue: 'Continuer',
     steps: {
       institutionData: 'Données de l’organisme',
-      addLR: 'Données',
+      addLR: 'Indiquez le Représentant Légal',
       addUsers: 'Données supplémentaires',
     },
     institutionData: {
@@ -29,7 +29,28 @@ export default {
         geographicTaxonomies: 'Zone géographique',
       },
     },
-    detailsField: 'Champ de démonstration',
+    addLR: {
+      description:
+        "Saisissez les données du Représentant Légal ou du mandataire de votre organisme. Il sera responsable de la signature du contrat pour {{productName}} et aura le rôle d'Administrateur pour ce produit dans l'Espace Réservé.",
+      rolesInfo: "Plus d'informations sur les rôles",
+      fields: {
+        name: 'Prénom',
+        surname: 'Nom de famille',
+        taxCode: 'Code Fiscal',
+        email: 'Email institutionnel',
+      },
+      emailHint:
+        "Veuillez saisir l'adresse e-mail institutionnelle utilisée pour l'entité. Les adresses PEC ne sont pas autorisées.",
+      errors: {
+        required: 'Champ obligatoire',
+        nameMismatch: 'Nom incorrect ou différent par rapport au Code Fiscal',
+        surnameMismatch: 'Nom de famille incorrect ou différent par rapport au Code Fiscal',
+        invalidTaxCode: 'Le Code Fiscal saisi est invalide',
+        invalidEmail: 'L’adresse mail est invalide',
+        pecEmail:
+          "Adresse PEC non acceptée. Veuillez saisir l'adresse e-mail institutionnelle utilisée pour l'entité.",
+      },
+    },
     additionalDetailsField: 'Champ de démonstration supplémentaire',
     fieldHint:
       'Champ provisoire : ne saisissez pas de données personnelles. La valeur n’est pas enregistrée.',

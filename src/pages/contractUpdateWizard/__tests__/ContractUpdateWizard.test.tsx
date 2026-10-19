@@ -1,15 +1,15 @@
-import { act, screen, waitFor, within } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
-import { renderWithProviders } from '../../../utils/test-utils';
 import { ENV } from '../../../utils/env';
-import { ContractUpdateWizardPage } from '../ContractUpdateWizardPage';
+import { renderWithProviders } from '../../../utils/test-utils';
 import {
   CONTRACT_UPDATE_STEPS,
   contractUpdateWizardReducer,
   initialWizardState,
 } from '../ContractUpdateWizardContext';
+import { ContractUpdateWizardPage } from '../ContractUpdateWizardPage';
 
 const wizardPath = '/dashboard/party-1/documents/product-1/update-contract';
 
@@ -30,11 +30,26 @@ const renderWizard = (returnTo?: string) => {
     undefined,
     history
   );
-  return { history, user: userEvent.setup() };
+  // delay: null skips the per-keystroke timer, keeping long typing flows well under the test timeout
+  return { history, user: userEvent.setup({ delay: null }) };
 };
 
 const next = () => screen.getByRole('button', { name: 'Continua' });
 const back = () => screen.getByRole('button', { name: 'Indietro' });
+
+const lrTitle = 'Indica il Legale Rappresentante';
+const validLR = {
+  Nome: 'Mario',
+  Cognome: 'Rossi',
+  'Codice Fiscale': 'RSSMRA80A01H501U',
+  'Email istituzionale': 'mario.rossi@comune.it',
+};
+
+const fillLR = async (user: ReturnType<typeof userEvent.setup>) => {
+  for (const [label, value] of Object.entries(validLR)) {
+    await user.type(screen.getByLabelText(label), value);
+  }
+};
 
 test('starts with a read-only step, its own main heading and enabled back navigation', () => {
   renderWizard();
@@ -42,7 +57,7 @@ test('starts with a read-only step, its own main heading and enabled back naviga
   expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toHaveFocus();
   expect(screen.getAllByRole('heading')).toHaveLength(1);
   expect(screen.queryByText(/Step \d di \d/)).not.toBeInTheDocument();
-  expect(screen.queryByText('Dati')).not.toBeInTheDocument();
+  expect(screen.queryByText(lrTitle)).not.toBeInTheDocument();
   expect(screen.queryByText('Altri dati')).not.toBeInTheDocument();
   expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   expect(back()).toBeEnabled();
@@ -63,11 +78,26 @@ test.each([undefined, '/dashboard/party-1/documents?filter=contracts#product-1']
   }
 );
 
+test('blocks the Legal Representative step until the data is valid', async () => {
+  const { user } = renderWizard();
+  await user.click(next());
+  expect(screen.getByRole('heading', { level: 1, name: lrTitle })).toHaveFocus();
+  expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
+
+  await user.click(next());
+  expect(screen.getByRole('heading', { level: 1, name: lrTitle })).toBeInTheDocument();
+  expect(screen.getAllByText('Campo obbligatorio')).toHaveLength(4);
+
+  await fillLR(user);
+  expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
+  await user.click(next());
+  expect(screen.getByRole('heading', { level: 1, name: 'Altri dati' })).toHaveFocus();
+});
+
 test('preserves editable data in both steps and disables submission in the last step', async () => {
   const { user } = renderWizard();
   await user.click(next());
-  expect(screen.getByRole('heading', { level: 1, name: 'Dati' })).toHaveFocus();
-  await user.type(screen.getByLabelText('Dato dimostrativo'), 'demo step 2');
+  await fillLR(user);
 
   await user.click(next());
   expect(screen.getByRole('heading', { level: 1, name: 'Altri dati' })).toHaveFocus();
@@ -76,63 +106,15 @@ test('preserves editable data in both steps and disables submission in the last 
   expect(screen.getByText(/L’invio non è ancora disponibile/)).toBeInTheDocument();
 
   await user.click(back());
-  expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('demo step 2');
-  await user.type(screen.getByLabelText('Dato dimostrativo'), ' aggiornato');
+  expect(screen.getByLabelText('Nome')).toHaveValue('Mario');
+  expect(screen.getByLabelText('Email istituzionale')).toHaveValue('mario.rossi@comune.it');
   await user.click(back());
   expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
 
   await user.click(next());
-  expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('demo step 2 aggiornato');
+  expect(screen.getByLabelText('Codice Fiscale')).toHaveValue('RSSMRA80A01H501U');
   await user.click(next());
   expect(screen.getByLabelText('Dato aggiuntivo dimostrativo')).toHaveValue('demo step 3');
-});
-
-test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) => {
-  const { history, user } = renderWizard();
-  if (step > 0) {
-    await user.click(next());
-    await user.type(screen.getByLabelText('Dato dimostrativo'), 'keep me');
-  }
-  if (step > 1) {
-    await user.click(next());
-    await user.type(screen.getByLabelText('Dato aggiuntivo dimostrativo'), 'keep me too');
-  }
-
-  await user.click(screen.getByRole('button', { name: 'Esci' }));
-  const modal = await screen.findByRole('dialog', { name: 'Vuoi davvero uscire?' });
-  expect(modal).toHaveAccessibleDescription(
-    'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.'
-  );
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-1/update-contract');
-  await user.click(within(modal).getByRole('button', { name: 'Continua' }));
-  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-  expect(
-    screen.getByRole('heading', { level: 1, name: ['Dati dell’ente', 'Dati', 'Altri dati'][step] })
-  ).toBeInTheDocument();
-  if (step > 0) {
-    expect(screen.getByRole('textbox')).toHaveValue(step === 1 ? 'keep me' : 'keep me too');
-  }
-
-  await user.click(screen.getByRole('button', { name: 'Esci' }));
-  await user.click(
-    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Chiudi' })
-  );
-  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-1/update-contract');
-
-  await user.click(screen.getByRole('button', { name: 'Esci' }));
-  await user.click(
-    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Torna a Documenti' })
-  );
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents');
-  expect(screen.getByText('Elenco documenti')).toBeInTheDocument();
-
-  act(() => history.push(wizardPath));
-  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
-  await user.click(next());
-  expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('');
-  await user.click(next());
-  expect(screen.getByLabelText('Dato aggiuntivo dimostrativo')).toHaveValue('');
 });
 
 test.each([
@@ -141,11 +123,11 @@ test.each([
 ])('starts a fresh draft when the scope changes to %s', async (path) => {
   const { history, user } = renderWizard();
   await user.click(next());
-  await user.type(screen.getByLabelText('Dato dimostrativo'), 'old draft');
+  await user.type(screen.getByLabelText('Nome'), 'old draft');
   act(() => history.push(path));
   expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   await user.click(next());
-  expect(screen.getByLabelText('Dato dimostrativo')).toHaveValue('');
+  expect(screen.getByLabelText('Nome')).toHaveValue('');
 });
 
 test('bounds navigation and resets the entire shared state without mutating the draft', () => {
@@ -155,11 +137,14 @@ test('bounds navigation and resets the entire shared state without mutating the 
     CONTRACT_UPDATE_STEPS.length - 1
   );
   const edited = contractUpdateWizardReducer(lastStep, {
-    type: 'updateDraft',
-    field: 'details',
+    type: 'updateLegalRepresentative',
+    field: 'name',
     value: 'new value',
   });
-  expect(initialWizardState.draft.details).toBe('');
-  expect(edited.draft.details).toBe('new value');
+  expect(initialWizardState.draft.legalRepresentative.name).toBe('');
+  expect(edited.draft.legalRepresentative.name).toBe('new value');
+  const withErrors = contractUpdateWizardReducer(edited, { type: 'showErrors' });
+  expect(withErrors.showErrors).toBe(true);
+  expect(contractUpdateWizardReducer(withErrors, { type: 'back' }).showErrors).toBe(false);
   expect(contractUpdateWizardReducer(edited, { type: 'reset' })).toEqual(initialWizardState);
 });

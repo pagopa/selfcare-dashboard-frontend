@@ -1,4 +1,4 @@
-import { CloudUpload } from '@mui/icons-material';
+import CloudUpload from '@mui/icons-material/CloudUpload';
 import { Grid, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { ButtonNaked, theme } from '@pagopa/mui-italia';

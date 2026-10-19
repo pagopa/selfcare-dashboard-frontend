@@ -6,7 +6,7 @@ export default {
     continue: 'Continue',
     steps: {
       institutionData: 'Institution data',
-      addLR: 'Details',
+      addLR: 'Enter the Legal Representative',
       addUsers: 'Additional details',
     },
     institutionData: {
@@ -28,7 +28,28 @@ export default {
         geographicTaxonomies: 'Geographic area',
       },
     },
-    detailsField: 'Sample field',
+    addLR: {
+      description:
+        "Enter the details of your institution's Legal Representative or attorney. They will be responsible for signing the contract for {{productName}} and will have the Admin role for this product in the Reserved Area.",
+      rolesInfo: 'More information on roles',
+      fields: {
+        name: 'Name',
+        surname: 'Surname',
+        taxCode: 'Tax code',
+        email: 'Institutional email',
+      },
+      emailHint:
+        'Please enter the institutional email address used for the entity. PEC addresses are not allowed.',
+      errors: {
+        required: 'Required field',
+        nameMismatch: 'Incorrect or different than the fiscal code',
+        surnameMismatch: 'Incorrect or different than the fiscal code',
+        invalidTaxCode: 'The entered fiscal code is not valid',
+        invalidEmail: 'The email address is not valid',
+        pecEmail:
+          'PEC email address not accepted. Please enter the institutional email address used for the entity.',
+      },
+    },
     additionalDetailsField: 'Additional sample field',
     fieldHint: 'Temporary field: do not enter personal data. The value is not saved.',
     submitUnavailable: 'Submission is not available yet. You can go back and edit the data.',

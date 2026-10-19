@@ -1,4 +1,4 @@
-import { ArrowForward } from '@mui/icons-material';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';

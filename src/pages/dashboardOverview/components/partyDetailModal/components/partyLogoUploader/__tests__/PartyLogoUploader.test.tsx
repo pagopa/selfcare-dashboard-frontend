@@ -1,12 +1,15 @@
+/* eslint-disable functional/no-let, functional/immutable-data */
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { act, screen, waitFor } from '@testing-library/react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
+import { Mock } from 'vitest';
 import { DashboardApi } from '../../../../../../../api/DashboardApiClient';
 import { useAppDispatch, useAppSelector } from '../../../../../../../redux/hooks';
 import { renderWithProviders } from '../../../../../../../utils/test-utils';
 import { PartyLogoUploader } from '../PartyLogoUploader';
-import { Mock } from 'vitest';
+
+const mockAddError = vi.hoisted(() => vi.fn());
 
 // Mock the entire DashboardApi module
 vi.mock('../../../../../../../api/DashboardApiClient', () => ({
@@ -19,6 +22,9 @@ vi.mock('react-dropzone');
 vi.mock('react-i18next');
 vi.mock('../../../../../../../redux/hooks');
 vi.mock('@pagopa/selfcare-common-frontend/lib/services/analyticsService');
+vi.mock('@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher', () => ({
+  default: () => mockAddError,
+}));
 
 vi.mock('../components/PartyLogo', () => ({
   __esModule: true,
@@ -43,6 +49,8 @@ describe('PartyLogoUploader', () => {
   const mockOpen = vi.fn();
   let mockOnDropAccepted: (files: Array<File>) => void;
   let mockGetFilesFromEvent: (event: any) => Promise<Array<File>>;
+  let mockOnDropRejected: (files: Array<any>) => void;
+  let mockValidator: (file: any) => { code: string; message: string } | null;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -59,6 +67,8 @@ describe('PartyLogoUploader', () => {
     (useDropzone as Mock).mockImplementation((options) => {
       mockOnDropAccepted = options.onDropAccepted;
       mockGetFilesFromEvent = options.getFilesFromEvent;
+      mockOnDropRejected = options.onDropRejected;
+      mockValidator = options.validator;
       return {
         getRootProps: () => ({ onClick: vi.fn() }),
         getInputProps: () => ({}),
@@ -176,7 +186,7 @@ describe('PartyLogoUploader', () => {
     });
 
     test('should update loading state during upload', async () => {
-      let resolveUpload: (value: boolean) => void = () => { };
+      let resolveUpload: (value: boolean) => void = () => {};
       (DashboardApi.uploadLogo as Mock).mockReturnValue(
         new Promise((resolve) => {
           resolveUpload = resolve;
@@ -205,5 +215,131 @@ describe('PartyLogoUploader', () => {
         expect(logo).toHaveAttribute('data-loading', 'false');
       });
     });
+  });
+
+  describe('dropzone configuration', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    test('returns no files when the event has no file', async () => {
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={vi.fn()} />
+      );
+
+      await expect(mockGetFilesFromEvent({ target: { files: [] } })).resolves.toEqual([]);
+      expect(mockAddError).not.toHaveBeenCalled();
+    });
+
+    test('reads png image dimensions from an input change event', async () => {
+      // eslint-disable-next-line functional/no-class
+      class MockImage {
+        public onload: () => void = () => undefined;
+        public width = 320;
+        public height = 300;
+        set src(_value: string) {
+          setTimeout(() => this.onload());
+        }
+      }
+      vi.stubGlobal('Image', MockImage);
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={vi.fn()} />
+      );
+
+      const mockFile = new File([''], 'logo.png', { type: 'image/png' });
+      const files = await mockGetFilesFromEvent({ target: { files: [mockFile] } });
+
+      expect(files).toEqual([mockFile]);
+      expect((files[0] as any).width).toBe(320);
+      expect((files[0] as any).height).toBe(300);
+      expect(URL.createObjectURL).toHaveBeenCalledWith(mockFile);
+    });
+
+    test('notifies a wrong file extension error for non png files', async () => {
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={vi.fn()} />
+      );
+
+      const mockFile = new File([''], 'test.jpg', { type: 'image/jpeg' });
+      await mockGetFilesFromEvent({ dataTransfer: { files: [mockFile] } });
+
+      expect(mockAddError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'WRONG_FILE_EXTENSION',
+          blocking: false,
+          toNotify: false,
+          displayableTitle: 'overview.partyLogo.uploadError.title',
+          onRetry: mockOpen,
+        })
+      );
+    });
+
+    test('notifies an error when the dropped file is rejected', () => {
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={vi.fn()} />
+      );
+
+      mockOnDropRejected([{ file: new File([''], 'big.png'), errors: [] }]);
+
+      expect(mockAddError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'WRONG_FILE_EXTENSION',
+          displayableDescription: 'overview.partyLogo.uploadError.description',
+        })
+      );
+    });
+
+    test.each([
+      [350, 350, null],
+      [300, 300, null],
+      [400, 400, null],
+      [401, 401, 'height-width'],
+      [299, 299, 'height-width'],
+      [350, 340, 'height-width'],
+    ])('validates an image %ix%i', (width, height, expectedCode) => {
+      renderWithProviders(
+        <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={vi.fn()} />
+      );
+
+      const result = mockValidator({ width, height });
+      expect(result?.code ?? null).toBe(expectedCode);
+    });
+  });
+
+  test('updates the logo and asks to clear the cache after a successful upload', async () => {
+    const setclearCache = vi.fn();
+    renderWithProviders(
+      <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={setclearCache} />
+    );
+
+    await act(async () => {
+      mockOnDropAccepted([new File([''], 'test.png', { type: 'image/png' })]);
+    });
+
+    await waitFor(() => expect(setclearCache).toHaveBeenCalledWith(true));
+    expect(mockDispatch).toHaveBeenCalledWith(
+      expect.objectContaining({ payload: 'mock-logo-url' })
+    );
+    expect(mockAddError).not.toHaveBeenCalled();
+  });
+
+  test('notifies an error when the upload fails', async () => {
+    const reason = new Error('Upload failed');
+    (DashboardApi.uploadLogo as Mock).mockImplementation(() => Promise.reject(reason));
+    const setclearCache = vi.fn();
+    renderWithProviders(
+      <PartyLogoUploader canUploadLogo={true} partyId="123" setclearCache={setclearCache} />
+    );
+
+    await act(async () => {
+      mockOnDropAccepted([new File([''], 'test.png', { type: 'image/png' })]);
+    });
+
+    await waitFor(() =>
+      expect(mockAddError).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 'FILE_UPLOAD_ERROR', error: reason, onRetry: mockOpen })
+      )
+    );
+    expect(setclearCache).not.toHaveBeenCalled();
   });
 });
