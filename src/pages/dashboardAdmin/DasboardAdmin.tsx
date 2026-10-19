@@ -40,7 +40,8 @@ const DashboardAdminPage: React.FC = () => {
 
   useEffect(() => {
     // only fetch when explicitly reloading or when we don't have permissions yet
-    const shouldFetch = needsReload || (status !== 'succeeded' && permissions.length === 0);
+    // a failed load is not retried automatically, otherwise it would loop on every failure
+    const shouldFetch = needsReload || (status === 'idle' && permissions.length === 0);
     if (status === 'pending' || !shouldFetch) {
       return;
     }

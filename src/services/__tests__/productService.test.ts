@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let, functional/immutable-data */
 import { Mock } from 'vitest';
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { StatusEnum } from '../../api/generated/b4f-dashboard/ProductsResource';
@@ -149,10 +150,9 @@ describe('productService tests', () => {
       expect(party).toBeDefined();
       expect(product).toBeDefined();
 
-      const { fetchProductRoles: fetchProductRolesImplementation } =
-        await vi.importActual<typeof import('../__mocks__/productService')>(
-          '../__mocks__/productService'
-        );
+      const { fetchProductRoles: fetchProductRolesImplementation } = await vi.importActual<
+        typeof import('../__mocks__/productService')
+      >('../__mocks__/productService');
       const roles = await fetchProductRolesImplementation(product!, party!);
 
       expect(roles).toHaveLength(expectedPartnerTechFlags.length);
@@ -235,5 +235,83 @@ describe('productService tests', () => {
         expectedRoles.map((role) => (role.endsWith('-pt') ? true : undefined))
       );
     });
+  });
+});
+
+describe('productService edge cases (real API path)', () => {
+  const product = { id: 'prod-pagopa' } as Product;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
+  });
+
+  test('fetchProducts returns an empty array when the API returns no products', async () => {
+    (DashboardApi.getProducts as Mock).mockResolvedValue(null);
+
+    await expect(fetchProducts()).resolves.toEqual([]);
+  });
+
+  test('fetchProductRoles uses an empty institutionType when the product is not actively onboarded', async () => {
+    (DashboardApi.getProductRoles as Mock).mockResolvedValue({ roleMappings: [] });
+    const party = {
+      ...mockedParties[0],
+      products: mockedParties[0].products.map((p) => ({
+        ...p,
+        productOnBoardingStatus: 'PENDING',
+      })),
+    } as any;
+
+    const result = await fetchProductRoles(product, party);
+
+    expect(DashboardApi.getProductRoles).toHaveBeenCalledWith('prod-pagopa', '');
+    expect(result).toEqual([]);
+  });
+
+  test('fetchProductRoles defaults missing role fields', async () => {
+    (DashboardApi.getProductRoles as Mock).mockResolvedValue({
+      roleMappings: [
+        { partyRole: 'MANAGER', selcRole: 'ADMIN', productRoles: [{}] },
+        { partyRole: 'OPERATOR', selcRole: 'LIMITED' },
+      ],
+    });
+
+    const result = await fetchProductRoles(product, mockedParties[0]);
+
+    expect(result).toEqual([
+      {
+        productId: 'prod-pagopa',
+        partyRole: 'MANAGER',
+        selcRole: 'ADMIN',
+        phasesAdditionAllowed: [],
+        multiroleGroups: [],
+        productRole: '',
+        title: '',
+        description: '',
+      },
+    ]);
+  });
+
+  test('fetchProductRoles ignores missing partnerTechRoleMappings when partner tech is enabled', async () => {
+    (DashboardApi.getProductRoles as Mock).mockResolvedValue({
+      roleMappings: [{ partyRole: 'MANAGER', selcRole: 'ADMIN', productRoles: [{ code: 'a' }] }],
+    });
+    const party = {
+      ...mockedParties[0],
+      products: mockedParties[0].products.map((p, i) =>
+        i === 0 ? { ...p, partnerTechRolesEnabled: true, userPartnerTechRole: true } : p
+      ),
+    };
+
+    const result = await fetchProductRoles(product, party);
+
+    expect(result).toEqual([]);
+  });
+
+  test('fetchProductRoles resolves with the rejection reason when the API fails', async () => {
+    const error = new Error('roles error');
+    (DashboardApi.getProductRoles as Mock).mockRejectedValue(error);
+
+    await expect(fetchProductRoles(product, mockedParties[0])).resolves.toBe(error);
   });
 });

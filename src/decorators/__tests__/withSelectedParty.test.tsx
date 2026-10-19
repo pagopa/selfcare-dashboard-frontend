@@ -98,3 +98,16 @@ const checkSelectedParty = (state: RootState) => {
   verifyFetchPartyDetailsMockExecution(party);
   verifyFetchPartyProductsMockExecution(partyProducts);
 };
+test('generic fetch error adds a retryable error that redirects on close', async () => {
+  mockedFetchPartyDetails.mockRejectedValue(new Error('generic'));
+  const { store, history } = await renderApp(false);
+
+  await waitFor(() => expect(store.getState().appState.errors.length).toBe(1));
+  const error = store.getState().appState.errors[0];
+  expect(error.toNotify).toBe(true);
+  expect(error.onRetry).toBeDefined();
+  expect(error.techDescription).toContain(`IPACode ${expectedPartyId}`);
+
+  error.onClose?.();
+  expect(history.location.pathname).toBe('/dashboard/party-selection');
+});

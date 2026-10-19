@@ -1,4 +1,4 @@
-import { Visibility } from '@mui/icons-material';
+import Visibility from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
