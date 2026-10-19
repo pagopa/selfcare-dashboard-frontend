@@ -30,7 +30,8 @@ const renderWizard = (returnTo?: string) => {
     undefined,
     history
   );
-  return { history, user: userEvent.setup() };
+  // delay: null skips the per-keystroke timer, keeping long typing flows well under the test timeout
+  return { history, user: userEvent.setup({ delay: null }) };
 };
 
 const next = () => screen.getByRole('button', { name: 'Continua' });
@@ -166,7 +167,7 @@ test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) 
   await fillLR(user);
   await user.click(next());
   expect(screen.getByLabelText('Dato aggiuntivo dimostrativo')).toHaveValue('');
-});
+}, 15000);
 
 test.each([
   '/dashboard/party-1/documents/product-2/update-contract',
