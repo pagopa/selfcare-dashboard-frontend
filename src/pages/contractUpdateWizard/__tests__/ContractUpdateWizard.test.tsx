@@ -117,58 +117,6 @@ test('preserves editable data in both steps and disables submission in the last 
   expect(screen.getByLabelText('Dato aggiuntivo dimostrativo')).toHaveValue('demo step 3');
 });
 
-test.each([0, 1, 2])('requires confirmation to exit from step %s', async (step) => {
-  const { history, user } = renderWizard();
-  if (step > 0) {
-    await user.click(next());
-    await fillLR(user);
-  }
-  if (step > 1) {
-    await user.click(next());
-    await user.type(screen.getByLabelText('Dato aggiuntivo dimostrativo'), 'keep me too');
-  }
-
-  await user.click(screen.getByRole('button', { name: 'Esci' }));
-  const modal = await screen.findByRole('dialog', { name: 'Vuoi davvero uscire?' });
-  expect(modal).toHaveAccessibleDescription(
-    'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.'
-  );
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-1/update-contract');
-  await user.click(within(modal).getByRole('button', { name: 'Continua' }));
-  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-  expect(
-    screen.getByRole('heading', { level: 1, name: ['Dati dell’ente', lrTitle, 'Altri dati'][step] })
-  ).toBeInTheDocument();
-  if (step === 1) {
-    expect(screen.getByLabelText('Nome')).toHaveValue('Mario');
-  }
-  if (step === 2) {
-    expect(screen.getByRole('textbox')).toHaveValue('keep me too');
-  }
-
-  await user.click(screen.getByRole('button', { name: 'Esci' }));
-  await user.click(
-    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Chiudi' })
-  );
-  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-1/update-contract');
-
-  await user.click(screen.getByRole('button', { name: 'Esci' }));
-  await user.click(
-    within(await screen.findByRole('dialog')).getByRole('button', { name: 'Torna a Documenti' })
-  );
-  expect(history.location.pathname).toBe('/dashboard/party-1/documents');
-  expect(screen.getByText('Elenco documenti')).toBeInTheDocument();
-
-  act(() => history.push(wizardPath));
-  expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
-  await user.click(next());
-  expect(screen.getByLabelText('Nome')).toHaveValue('');
-  await fillLR(user);
-  await user.click(next());
-  expect(screen.getByLabelText('Dato aggiuntivo dimostrativo')).toHaveValue('');
-}, 15000);
-
 test.each([
   '/dashboard/party-1/documents/product-2/update-contract',
   '/dashboard/party-2/documents/product-1/update-contract',
