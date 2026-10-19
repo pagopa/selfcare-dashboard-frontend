@@ -5,7 +5,10 @@ import { ProductRolesLists } from '../../../model/ProductRole';
 import { createStore } from '../../store';
 import { partiesActions, partiesSelectors } from '../partiesSlice';
 
-const cacheBusted = (url: string) => new RegExp(`^${url.replace(/[?.]/g, '\\$&')}[?&]t=\\d+$`);
+const cacheBusted = (url: string) => {
+  const escapedUrl = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`^${escapedUrl}[?&]t=\\d+$`);
+};
 
 const rolesLists = { list: [] } as unknown as ProductRolesLists;
 
