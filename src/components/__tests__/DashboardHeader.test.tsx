@@ -1,7 +1,7 @@
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import i18n from 'i18next';
 import { createMemoryHistory } from 'history';
 import { Mock } from 'vitest';
@@ -352,14 +352,19 @@ describe('DashboardHeader', () => {
   });
 
   it('does not show the documentation button when the language is not italian', async () => {
-    await i18n.changeLanguage('en');
+    await act(async () => {
+      await i18n.changeLanguage('en');
+    });
     try {
       setup();
       await screen.findByTestId('header-mock');
       expect(screen.queryByText('documentation')).not.toBeInTheDocument();
       expect(headerProps.current.onDocumentationClick).toBeUndefined();
     } finally {
-      await i18n.changeLanguage('it');
+      // the header is still mounted, so the language switch re-renders it
+      await act(async () => {
+        await i18n.changeLanguage('it');
+      });
     }
   });
 

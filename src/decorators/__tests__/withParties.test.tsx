@@ -35,7 +35,8 @@ test('Test', async () => {
 
   renderApp(store);
 
-  expect(fetchPartiesSpy).toBeCalledTimes(1);
+  // waitFor also lets the second mount settle before the test ends
+  await waitFor(() => expect(fetchPartiesSpy).toBeCalledTimes(1));
 });
 
 test('returns the wrapped component as is for PagoPA users', async () => {

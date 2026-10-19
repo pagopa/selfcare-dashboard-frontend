@@ -69,7 +69,7 @@ const selectPartner = async (user: ReturnType<typeof userEvent.setup>, text: str
 };
 
 describe('AddDelegationForm', () => {
-  test('renders with no products and navigates back to delegations on exit', () => {
+  test('renders with no products and navigates back to delegations on exit', async () => {
     const { history } = renderWithProviders(
       <AddDelegationForm productsWithCreateDelegationAction={[]} party={party} />
     );
@@ -84,6 +84,8 @@ describe('AddDelegationForm', () => {
 
     fireEvent.click(screen.getByText('Esci'));
     expect(history.location.pathname).toBe(`/dashboard/${party.partyId}/delegations`);
+    // waitFor also lets the delegations request started on mount settle
+    await waitFor(() => expect(mockedFetchDelegations).toHaveBeenCalledWith(party.partyId));
   });
 
   test('auto-selects the only product and shows sorted, not yet delegated brokers', async () => {

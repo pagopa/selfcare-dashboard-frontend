@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
@@ -86,7 +86,7 @@ test('Test party not active', async () => {
   const history = createMemoryHistory();
   store.dispatch(partiesActions.setPartiesList(mockedParties as Array<BaseParty>));
   await renderApp(false, store, history);
-  history.push(`/2`);
+  act(() => history.push(`/2`));
 
   await waitFor(() => expect(store.getState().appState.errors.length).toBe(1));
   expect(store.getState().parties.selected).toBeUndefined();
@@ -100,7 +100,8 @@ const checkSelectedParty = (state: RootState) => {
 };
 test('generic fetch error adds a retryable error that redirects on close', async () => {
   mockedFetchPartyDetails.mockRejectedValue(new Error('generic'));
-  const { store, history } = await renderApp(false);
+  // the rejection is handled while renderApp is awaited, so await it inside act
+  const { store, history } = await act(() => renderApp(false));
 
   await waitFor(() => expect(store.getState().appState.errors.length).toBe(1));
   const error = store.getState().appState.errors[0];
@@ -108,6 +109,9 @@ test('generic fetch error adds a retryable error that redirects on close', async
   expect(error.onRetry).toBeDefined();
   expect(error.techDescription).toContain(`IPACode ${expectedPartyId}`);
 
-  error.onClose?.();
+  act(() => error.onClose?.());
   expect(history.location.pathname).toBe('/dashboard/party-selection');
+  // in this test router "/dashboard/..." still matches "/:partyId", so the decorator fetches again;
+  // wait for that request so its updates don't land after the test ends
+  await waitFor(() => expect(mockedFetchPartyDetails).toHaveBeenLastCalledWith('dashboard'));
 });

@@ -1,6 +1,6 @@
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Mock } from 'vitest';
 import { DashboardApi } from '../../../api/DashboardApiClient';
 import { UploadIcon } from '../../../assets/icons/UploadIcon';
@@ -139,6 +139,10 @@ test('should render component DashboardOverview with no geoTaxonomy', async () =
 
   expect(modifyButton).toBeInTheDocument();
   fireEvent.click(modifyButton);
+  // the click saves the geographic taxonomies; wait for the request so its .finally runs inside the test
+  await waitFor(() =>
+    expect(DashboardApi.updateInstitutionGeographicTaxonomy).toHaveBeenCalled()
+  );
 });
 
 test('should render component DashboardOverview with geoTaxonomy', async () => {
@@ -165,14 +169,16 @@ test('should render banner DORA for PSP for product pagoPA', async () => {
   const { store } = renderWithProviders(
     <DashboardOverview party={mockedPSPwithPagoPA} products={mockedPartyProducts} />
   );
-  store.dispatch(
-    setProductPermissions([
-      {
-        productId: 'prod-pagopa',
-        actions: COMMON_ADMIN_ACTIONS,
-      },
-    ])
-  );
+  act(() => {
+    store.dispatch(
+      setProductPermissions([
+        {
+          productId: 'prod-pagopa',
+          actions: COMMON_ADMIN_ACTIONS,
+        },
+      ])
+    );
+  });
 
   const bannerDORATitle = await screen.findByText('Nuovo addendum DORA');
   expect(bannerDORATitle).toBeInTheDocument();
