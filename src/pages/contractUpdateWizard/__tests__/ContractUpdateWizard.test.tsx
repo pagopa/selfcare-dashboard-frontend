@@ -1,15 +1,15 @@
-import { act, screen, waitFor, within } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
-import { renderWithProviders } from '../../../utils/test-utils';
 import { ENV } from '../../../utils/env';
-import { ContractUpdateWizardPage } from '../ContractUpdateWizardPage';
+import { renderWithProviders } from '../../../utils/test-utils';
 import {
   CONTRACT_UPDATE_STEPS,
   contractUpdateWizardReducer,
   initialWizardState,
 } from '../ContractUpdateWizardContext';
+import { ContractUpdateWizardPage } from '../ContractUpdateWizardPage';
 
 const wizardPath = '/dashboard/party-1/documents/product-1/update-contract';
 
