@@ -1,4 +1,5 @@
-import { ExitToApp, SvgIconComponent } from '@mui/icons-material';
+import type { SvgIconComponent } from '@mui/icons-material';
+import ExitToApp from '@mui/icons-material/ExitToApp';
 import {
   Icon,
   ListItemButton,

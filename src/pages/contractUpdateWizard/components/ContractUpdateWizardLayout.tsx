@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { CONTRACT_UPDATE_STEPS, useContractUpdateWizard } from '../ContractUpdateWizardContext';
-import { stepComponents } from '../steps';
+import { stepComponents, stepValidators } from '../steps';
 import { ContractUpdateExitDialog } from './ContractUpdateExitDialog';
 
 export const ContractUpdateWizardLayout = () => {
@@ -43,6 +43,11 @@ export const ContractUpdateWizardLayout = () => {
     }
   };
 
+  const goNext = () => {
+    const isStepValid = stepValidators[stepId]?.(state.draft) ?? true;
+    dispatch({ type: isStepValid ? 'next' : 'showErrors' });
+  };
+
   return (
     <Container component="main" maxWidth={false} sx={{ maxWidth: 1032, py: 5 }}>
       <ButtonNaked
@@ -50,6 +55,7 @@ export const ContractUpdateWizardLayout = () => {
         color="text"
         size="medium"
         startIcon={<CloseIcon />}
+        sx={{ color: (theme) => theme.colors.neutral.black }}
         onClick={() => setExitModalOpen(true)}
       >
         {t('contractUpdateWizard.exit')}
@@ -82,7 +88,7 @@ export const ContractUpdateWizardLayout = () => {
           variant="contained"
           disabled={isLastStep}
           aria-describedby={isLastStep ? 'contract-update-submit-unavailable' : undefined}
-          onClick={() => dispatch({ type: 'next' })}
+          onClick={goNext}
         >
           {t('contractUpdateWizard.continue')}
         </MIButton>

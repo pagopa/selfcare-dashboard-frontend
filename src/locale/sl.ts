@@ -6,7 +6,7 @@ export default {
     continue: 'Nadaljuj',
     steps: {
       institutionData: 'Podatki ustanove',
-      addLR: 'Podatki',
+      addLR: 'Navedite pravnega zastopnika',
       addUsers: 'Dodatni podatki',
     },
     institutionData: {
@@ -28,7 +28,28 @@ export default {
         geographicTaxonomies: 'Geografsko območje',
       },
     },
-    detailsField: 'Vzorčno polje',
+    addLR: {
+      description:
+        'Vnesite podatke pravnega zastopnika ali pooblaščenca vaše organizacije. Odgovoren bo za podpis pogodbe za {{productName}} in bo imel vlogo skrbnika za ta izdelek v rezerviranem območju.',
+      rolesInfo: 'Več informacij o vlogah',
+      fields: {
+        name: 'Ime',
+        surname: 'Priimek',
+        taxCode: 'Davčna številka',
+        email: 'Overjen e-poštni naslov',
+      },
+      emailHint:
+        'Prosimo, vnesite institucionalni e-poštni naslov, ki se uporablja za subjekt. Naslovi PEC niso dovoljeni.',
+      errors: {
+        required: 'Obvezno polje',
+        nameMismatch: 'Ime ni pravilno ali se razlikuje od davčne številke',
+        surnameMismatch: 'Priimek ni pravilen ali se razlikuje od davčne številke',
+        invalidTaxCode: 'Vnesena davčna številka je neveljavna',
+        invalidEmail: 'E-poštni naslov je neveljaven',
+        pecEmail:
+          'Naslov PEC ni sprejet. Prosimo, vnesite institucionalni e-poštni naslov, ki se uporablja za subjekt.',
+      },
+    },
     additionalDetailsField: 'Dodatno vzorčno polje',
     fieldHint: 'Začasno polje: ne vnašajte osebnih podatkov. Vrednost se ne shrani.',
     submitUnavailable: 'Oddaja še ni na voljo. Lahko se vrnete in spremenite podatke.',

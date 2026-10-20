@@ -1,4 +1,4 @@
-import { InfoOutlined } from '@mui/icons-material';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import { Grid, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { Trans, useTranslation } from 'react-i18next';

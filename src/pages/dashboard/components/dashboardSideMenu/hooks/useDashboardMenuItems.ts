@@ -1,4 +1,4 @@
-import { SvgIconComponent } from '@mui/icons-material';
+import type { SvgIconComponent } from '@mui/icons-material';
 import ArticleIcon from '@mui/icons-material/Article';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';

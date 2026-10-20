@@ -1,10 +1,14 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { useEffect, useState } from 'react';
+/* eslint-disable functional/no-let, functional/immutable-data */
+import { act, renderHook } from '@testing-library/react';
+import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import type { Mock } from 'vitest';
-import withProductsRolesMap from '../../decorators/withProductsRolesMap';
 import { Product } from '../../model/Product';
-import { ProductRole, ProductsRolesMap } from '../../model/ProductRole';
+import {
+  ProductRole,
+  productRoles2ProductRolesList,
+  ProductRolesLists,
+} from '../../model/ProductRole';
 import { partiesActions } from '../../redux/slices/partiesSlice';
 import { createStore } from '../../redux/store';
 import { mockedParties } from '../../services/__mocks__/partyService';
@@ -18,142 +22,100 @@ vi.mock('../../services/productService', () => ({
 
 const mockedFetchProductRoles = fetchProductRoles as Mock;
 
-const renderApp = (product: Product, injectedStore?: ReturnType<typeof createStore>) => {
-  const store = injectedStore ?? createStore();
+const buildRoles = (product: Product): Array<ProductRole> => [
+  {
+    productId: product.id,
+    partyRole: 'MANAGER',
+    selcRole: 'ADMIN',
+    multiroleGroups: [],
+    phasesAdditionAllowed: [],
+    productRole: `${product.id}-admin`,
+    title: 'Admin',
+    description: 'Admin role',
+  } as ProductRole,
+];
 
-  const Component = () => {
-    const [productRoles, setProductRoles] = useState<Array<ProductRole>>();
-    const fetchProductRoles = useProductRoles();
+const renderUseProductRoles = (store: ReturnType<typeof createStore>) =>
+  renderHook(() => useProductRoles(), {
+    wrapper: ({ children }: { children: ReactNode }) => (
+      <Provider store={store}>{children}</Provider>
+    ),
+  });
 
-    useEffect(() => {
-      fetchProductRoles({ product, party: mockedParties[0] })
-        .then((r) => setProductRoles(r.list))
-        .catch((r) => console.error(r));
-    }, []);
-
-    return productRoles ? (
-      <>RENDERED using useProductRoles and fetching {product.id}</>
-    ) : (
-      <>NOT RETRIEVED</>
-    );
-  };
-
-  render(
-    <Provider store={store}>
-      <Component />
-    </Provider>
-  );
-
-  return store;
-};
-
-const renderWithProductsRolesMapDecorated = (injectedStore?: ReturnType<typeof createStore>) => {
-  const store = injectedStore ?? createStore();
-  const Component = () => <>RENDERED using withProductsRolesMap</>;
-  const DecoratedComponent = withProductsRolesMap(Component);
-
-  render(
-    <Provider store={store}>
-      <DecoratedComponent />
-    </Provider>
-  );
-
-  return store;
+const fetchWith = async (
+  fetcher: ReturnType<typeof useProductRoles>,
+  product: Product
+): Promise<ProductRolesLists> => {
+  let roles: ProductRolesLists | undefined;
+  await act(async () => {
+    roles = await fetcher({ product, party: mockedParties[0] });
+  });
+  return roles as ProductRolesLists;
 };
 
 beforeEach(() => {
   mockedFetchProductRoles.mockReset();
-  mockedFetchProductRoles.mockResolvedValue({
-    list: [{ id: 'role-1' }],
+  mockedFetchProductRoles.mockImplementation((product: Product) =>
+    Promise.resolve(buildRoles(product))
+  );
+});
+
+describe('useProductRoles', () => {
+  test('fetches the roles of a product, transcodes them and caches them in redux', async () => {
+    const store = createStore();
+    const { result } = renderUseProductRoles(store);
+
+    const roles = await fetchWith(result.current, mockedPartyProducts[0]);
+
+    expect(mockedFetchProductRoles).toHaveBeenCalledWith(mockedPartyProducts[0], mockedParties[0]);
+    expect(roles).toEqual(productRoles2ProductRolesList(buildRoles(mockedPartyProducts[0])));
+    expect(store.getState().parties.selectedProductsRolesMap).toEqual({
+      [mockedPartyProducts[0].id]: roles,
+    });
+  });
+
+  test('returns the cached roles without fetching them again', async () => {
+    const store = createStore();
+    const cached = productRoles2ProductRolesList(buildRoles(mockedPartyProducts[0]));
+    store.dispatch(
+      partiesActions.setPartySelectedProductsRolesMap({ [mockedPartyProducts[0].id]: cached })
+    );
+    const { result } = renderUseProductRoles(store);
+
+    const roles = await fetchWith(result.current, mockedPartyProducts[0]);
+
+    expect(mockedFetchProductRoles).not.toHaveBeenCalled();
+    expect(roles).toEqual(cached);
+  });
+
+  test('fetches only the products not yet cached and adds them to the cache', async () => {
+    const store = createStore();
+    const cached = productRoles2ProductRolesList(buildRoles(mockedPartyProducts[0]));
+    store.dispatch(
+      partiesActions.setPartySelectedProductsRolesMap({ [mockedPartyProducts[0].id]: cached })
+    );
+    const { result } = renderUseProductRoles(store);
+
+    await fetchWith(result.current, mockedPartyProducts[1]);
+
+    expect(mockedFetchProductRoles).toHaveBeenCalledTimes(1);
+    expect(mockedFetchProductRoles.mock.calls[0][0]).toBe(mockedPartyProducts[1]);
+    expect(Object.keys(store.getState().parties.selectedProductsRolesMap ?? {})).toEqual([
+      mockedPartyProducts[0].id,
+      mockedPartyProducts[1].id,
+    ]);
+  });
+
+  test('propagates fetch errors without caching', async () => {
+    mockedFetchProductRoles.mockRejectedValue(new Error('roles error'));
+    const store = createStore();
+    const { result } = renderUseProductRoles(store);
+
+    await act(async () => {
+      await expect(
+        result.current({ product: mockedPartyProducts[0], party: mockedParties[0] })
+      ).rejects.toThrow('roles error');
+    });
+    expect(store.getState().parties.selectedProductsRolesMap).toBeUndefined();
   });
 });
-
-test.skip('Test', async () => {
-  const store = renderApp(mockedPartyProducts[0]);
-
-  await waitFor(() =>
-    expect(
-      screen.getByText(`RENDERED using useProductRoles and fetching ${mockedPartyProducts[0].id}`)
-    ).toBeInTheDocument()
-  );
-
-  await waitFor(() =>
-    expect(store.getState().parties.selectedProductsRolesMap).not.toBeUndefined()
-  );
-
-  await checkProductsRolesMapLength(1, store);
-
-  renderApp(mockedPartyProducts[1], store);
-
-  await waitFor(() =>
-    expect(
-      screen.getByText(`RENDERED using useProductRoles and fetching ${mockedPartyProducts[1].id}`)
-    ).toBeInTheDocument()
-  );
-
-  await checkProductsRolesMapLength(2, store);
-
-  renderApp(mockedPartyProducts[0], store);
-
-  await waitFor(() =>
-    expect(
-      screen.getAllByText(
-        `RENDERED using useProductRoles and fetching ${mockedPartyProducts[0].id}`
-      ).length
-    ).toBe(2)
-  );
-
-  await checkProductsRolesMapLength(2, store);
-
-  store.dispatch(partiesActions.setPartySelectedProducts(mockedPartyProducts));
-  renderWithProductsRolesMapDecorated(store);
-
-  await waitFor(() =>
-    expect(screen.getByText('RENDERED using withProductsRolesMap')).toBeInTheDocument()
-  );
-
-  await checkProductsRolesMapLength(
-    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
-    store
-  );
-
-  renderApp(mockedPartyProducts[2], store);
-
-  await waitFor(() =>
-    expect(
-      screen.getAllByText(
-        `RENDERED using useProductRoles and fetching ${mockedPartyProducts[2].id}`
-      ).length
-    ).toBeGreaterThan(0)
-  );
-
-  renderApp(mockedPartyProducts[0], store);
-
-  await waitFor(() =>
-    expect(
-      screen.getAllByText(
-        `RENDERED using useProductRoles and fetching ${mockedPartyProducts[0].id}`
-      ).length
-    ).toBe(3)
-  );
-
-  await checkProductsRolesMapLength(
-    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length,
-    store
-  );
-
-  expect(mockedFetchProductRoles).toHaveBeenCalledTimes(
-    mockedPartyProducts.filter((p) => p.status === 'ACTIVE').length
-  );
-});
-
-const checkProductsRolesMapLength = async (
-  expectedProductCached: number,
-  store: ReturnType<typeof createStore>
-) => {
-  await waitFor(() =>
-    expect(
-      Object.keys(store.getState().parties.selectedProductsRolesMap as ProductsRolesMap).length
-    ).toBe(expectedProductCached)
-  );
-};

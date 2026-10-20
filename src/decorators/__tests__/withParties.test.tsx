@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let, functional/immutable-data */
 import { render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockInstance } from 'vitest';
@@ -21,7 +22,7 @@ const renderApp = (injectedStore?: any) => {
 };
 
 let fetchPartiesSpy:
-  | MockInstance<(this: unknown, ...args: unknown[]) => unknown>
+  | MockInstance<(this: unknown, ...args: Array<unknown>) => unknown>
   | MockInstance<any>;
 
 beforeEach(() => {
@@ -34,5 +35,15 @@ test('Test', async () => {
 
   renderApp(store);
 
-  expect(fetchPartiesSpy).toBeCalledTimes(1);
+  // waitFor also lets the second mount settle before the test ends
+  await waitFor(() => expect(fetchPartiesSpy).toBeCalledTimes(1));
+});
+
+test('returns the wrapped component as is for PagoPA users', async () => {
+  const { storageUserOps } = await import('@pagopa/selfcare-common-frontend/lib/utils/storage');
+  const readSpy = vi.spyOn(storageUserOps, 'read').mockReturnValue({ iss: 'PAGOPA' } as any);
+  const Component = () => <></>;
+
+  expect(withParties(Component)).toBe(Component);
+  readSpy.mockRestore();
 });

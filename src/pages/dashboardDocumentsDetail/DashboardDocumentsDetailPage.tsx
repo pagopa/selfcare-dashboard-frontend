@@ -1,4 +1,4 @@
-import { OpenInNew } from '@mui/icons-material';
+import OpenInNew from '@mui/icons-material/OpenInNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import {

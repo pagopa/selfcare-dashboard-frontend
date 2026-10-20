@@ -1,9 +1,23 @@
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import type { Mock } from 'vitest';
 import {
   addCacheBuster,
   compareDates,
   compareStrings,
-  startWithProductInterop
+  getAppArea,
+  isPnpgOrImprese,
+  isProductAllowed,
+  startWithProductInterop,
 } from '../helperFunctions';
+
+vi.mock('../env', () => ({
+  ENV: { ALLOWED_PREFIXES: 'prod-io, prod-pagopa ,,' },
+}));
+
+vi.mock('@pagopa/selfcare-common-frontend/lib/utils/storage', async (importOriginal) => {
+  const actual: any = await importOriginal();
+  return { ...actual, isPagoPaUser: vi.fn(() => false) };
+});
 
 describe('compareDates', () => {
   it('should return 0 when both dates are undefined', () => {
@@ -86,5 +100,49 @@ describe('compareStrings', () => {
     const url = 'https://example.com/logo?t=value1&scope=123456&param2=value2';
     const result = addCacheBuster(url);
     expect(result).toMatch(/https:\/\/example\.com\/logo\?scope=123456&param2=value2&t=\d+/);
+  });
+});
+
+describe('isProductAllowed', () => {
+  it('returns true only for products starting with an allowed prefix', () => {
+    expect(isProductAllowed('prod-io')).toBe(true);
+    expect(isProductAllowed('prod-io-premium')).toBe(true);
+    expect(isProductAllowed('prod-pagopa')).toBe(true);
+    expect(isProductAllowed('prod-pn')).toBe(false);
+    expect(isProductAllowed('')).toBe(false);
+  });
+});
+
+describe('isPnpgOrImprese and getAppArea', () => {
+  const setHostname = (hostname: string) =>
+    vi.spyOn(window, 'location', 'get').mockReturnValue({ hostname } as Location);
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it.each([
+    ['pnpg.selfcare.pagopa.it', true],
+    ['imprese.notifichedigitali.it', true],
+    ['selfcare.pagopa.it', false],
+  ])('isPnpgOrImprese(%s) is %s', (hostname, expected) => {
+    setHostname(hostname);
+    expect(isPnpgOrImprese()).toBe(expected);
+  });
+
+  it('returns imprese on pnpg/imprese hosts', () => {
+    setHostname('imprese.notifichedigitali.it');
+    expect(getAppArea()).toBe('imprese');
+  });
+
+  it('returns ar_backstage for PagoPA users', () => {
+    setHostname('selfcare.pagopa.it');
+    (isPagoPaUser as Mock).mockReturnValueOnce(true);
+    expect(getAppArea()).toBe('ar_backstage');
+  });
+
+  it('returns area_riservata otherwise', () => {
+    setHostname('selfcare.pagopa.it');
+    expect(getAppArea()).toBe('area_riservata');
   });
 });

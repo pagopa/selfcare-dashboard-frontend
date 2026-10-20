@@ -1,4 +1,5 @@
-import { AddOutlined, RemoveCircleOutlineOutlined } from '@mui/icons-material';
+import AddOutlined from '@mui/icons-material/AddOutlined';
+import RemoveCircleOutlineOutlined from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import {
   Autocomplete,
   Box,

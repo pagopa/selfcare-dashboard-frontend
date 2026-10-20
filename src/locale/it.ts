@@ -6,7 +6,7 @@ export default {
     continue: 'Continua',
     steps: {
       institutionData: 'Dati dell’ente',
-      addLR: 'Dati',
+      addLR: 'Indica il Legale Rappresentante',
       addUsers: 'Altri dati',
     },
     institutionData: {
@@ -29,10 +29,32 @@ export default {
         geographicTaxonomies: 'Area geografica',
       },
     },
-    detailsField: 'Dato dimostrativo',
+    addLR: {
+      description:
+        'Inserisci i dati del Legale Rappresentante o del procuratore del tuo ente. Sarà responsabile della firma del contratto per {{productName}} e avrà il ruolo di Amministratore per questo prodotto nell’Area Riservata.',
+      rolesInfo: 'Più informazioni sui ruoli',
+      fields: {
+        name: 'Nome',
+        surname: 'Cognome',
+        taxCode: 'Codice Fiscale',
+        email: 'Email istituzionale',
+      },
+      emailHint:
+        'Inserisci l’indirizzo email istituzionale utilizzato per l’ente. Non sono ammessi gli indirizzi PEC.',
+      errors: {
+        required: 'Campo obbligatorio',
+        nameMismatch: 'Nome non corretto o diverso dal Codice Fiscale',
+        surnameMismatch: 'Cognome non corretto o diverso dal Codice Fiscale',
+        invalidTaxCode: 'Il Codice Fiscale inserito non è valido',
+        invalidEmail: 'L’indirizzo email non è valido',
+        pecEmail:
+          'Indirizzo PEC non accettato. Inserisci l’indirizzo email istituzionale utilizzato per l’ente',
+      },
+    },
     additionalDetailsField: 'Dato aggiuntivo dimostrativo',
     fieldHint: 'Campo provvisorio: non inserire dati personali. Il valore non viene salvato.',
-    submitUnavailable: 'L’invio non è ancora disponibile. Puoi tornare indietro e modificare i dati.',
+    submitUnavailable:
+      'L’invio non è ancora disponibile. Puoi tornare indietro e modificare i dati.',
     exitModal: {
       title: 'Vuoi davvero uscire?',
       message: 'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.',
@@ -102,7 +124,7 @@ export default {
     title: 'Panoramica',
     subTitle:
       'Gestisci i prodotti PagoPA attivi e, se hai i permessi, puoi aderire a nuovi prodotti.',
-    backstageSubTitle:"Consulta le informazioni dell'ente e accedi al backoffice dei prodotti",
+    backstageSubTitle: "Consulta le informazioni dell'ente e accedi al backoffice dei prodotti",
     sideMenu: {
       titleExpand: 'Espandi menu laterale',
       titleCollapse: 'Comprimi menu laterale',

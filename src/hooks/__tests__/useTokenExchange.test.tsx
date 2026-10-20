@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let, functional/immutable-data */
 import { render, waitFor } from '@testing-library/react';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
@@ -30,14 +31,11 @@ afterAll(() => {
 
 vi.mock('../../services/tokenExchangeService');
 
-let retrieveBackOfficeUrlSpy: any; 
+let retrieveBackOfficeUrlSpy: any;
 
 beforeEach(() => {
   // 3. Spy on the imported ES module
-  retrieveBackOfficeUrlSpy = vi.spyOn(
-    tokenExchangeService,
-    'retrieveBackOfficeUrl'
-  );
+  retrieveBackOfficeUrlSpy = vi.spyOn(tokenExchangeService, 'retrieveBackOfficeUrl');
 });
 
 test('validateUrlBO', () => {
@@ -66,7 +64,7 @@ describe('useTokenExchange', () => {
 
     expectedProduct = {
       ...mockedPartyProducts[0],
-      urlBO: urlBO,
+      urlBO,
     };
 
     const Component = () => {
@@ -106,5 +104,77 @@ describe('useTokenExchange', () => {
     await waitFor(() =>
       expect(mockedLocation.assign).toBeCalledWith('https://hostname/path?id=DUMMYTOKEN')
     );
+  });
+});
+
+describe('useTokenExchange with environment and errors', () => {
+  const party: Party = mockedParties[0];
+
+  const renderInvoke = (product: Product, environment?: string) => {
+    const store = createStore();
+    const Component = () => {
+      const { invokeProductBo } = useTokenExchange();
+      useEffect(() => void invokeProductBo(product, party, environment, 'it'), []);
+      return <></>;
+    };
+    render(
+      <Provider store={store}>
+        <Component />
+      </Provider>
+    );
+    return store;
+  };
+
+  const productWithEnv: Product = {
+    ...mockedPartyProducts[0],
+    urlBO: 'https://prod-host/path',
+    backOfficeEnvironmentConfigurations: [
+      { environment: 'Collaudo', url: 'https://test-host/path' },
+    ],
+  };
+
+  beforeEach(() => {
+    mockedLocation.assign.mockClear();
+  });
+
+  test('uses the selected environment url and redirects', async () => {
+    const store = renderInvoke(productWithEnv, 'collaudo');
+
+    await waitFor(() =>
+      expect(mockedLocation.assign).toHaveBeenCalledWith('https://hostname/path?id=DUMMYTOKEN')
+    );
+    expect(retrieveBackOfficeUrlSpy).toHaveBeenCalledWith(party, productWithEnv, 'collaudo', 'it');
+    expect(store.getState().appState.errors).toHaveLength(0);
+  });
+
+  test('adds an error when the selected environment has an invalid url', () => {
+    const store = renderInvoke(
+      {
+        ...productWithEnv,
+        backOfficeEnvironmentConfigurations: [{ environment: 'Collaudo', url: 'invalid' }],
+      },
+      'Collaudo'
+    );
+
+    expect(store.getState().appState.errors[0].id).toMatch(
+      new RegExp(`^ValidationUrlError-${productWithEnv.id}`)
+    );
+    expect(retrieveBackOfficeUrlSpy).not.toHaveBeenCalled();
+  });
+
+  test.each([
+    ['test', 'collaudo'],
+    ['prod', undefined],
+  ])('adds an error when token exchange fails (%s)', async (_label, environment) => {
+    retrieveBackOfficeUrlSpy.mockRejectedValueOnce(new Error('exchange failed'));
+
+    const store = renderInvoke(productWithEnv, environment);
+
+    await waitFor(() => expect(store.getState().appState.errors).toHaveLength(1));
+    const error = store.getState().appState.errors[0];
+    expect(error.id).toMatch(new RegExp(`^TokenExchangeError-${productWithEnv.id}`));
+    expect(error.techDescription).toContain(environment ? 'of test environment' : 'for product');
+    expect(mockedLocation.assign).not.toHaveBeenCalled();
+    expect(store.getState().appState.loading.result).toBeFalsy();
   });
 });
