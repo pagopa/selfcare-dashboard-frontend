@@ -57,7 +57,7 @@ export const useSelectedParty = (): {
         throw new Error(`Cannot find partyId ${partyId}`);
       }
     });
-    
+
   const fetchProductLists = () =>
     fetchProducts().then((products) => {
       if (products) {
@@ -66,7 +66,7 @@ export const useSelectedParty = (): {
           partiesActions.setPartySelectedProductsRolesMap(
             products
               .filter((p) =>
-                selectedParty?.products.map(
+                selectedParty?.products.some(
                   (us) => us.productId === p.id && us.productOnBoardingStatus === 'ACTIVE'
                 )
               )

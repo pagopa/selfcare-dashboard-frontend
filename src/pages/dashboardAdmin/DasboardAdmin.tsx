@@ -2,6 +2,7 @@ import { useTheme } from '@mui/material';
 import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
 import {
   resetPermissions,
+  selectProductPermissions,
   setProductPermissions,
 } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { useEffect } from 'react';
@@ -36,11 +37,11 @@ const DashboardAdminPage: React.FC = () => {
   const addError = useErrorDispatcher();
   const status = useAppSelector(selectAdminRolesStatus);
   const needsReload = useAppSelector(selectAdminRolesNeedsReload);
-  const permissions = useAppSelector((s: any) => s.permissions?.items ?? []);
+  const permissions = useAppSelector(selectProductPermissions);
 
   useEffect(() => {
-    // only fetch when explicitly reloading or when we don't have permissions yet
-    const shouldFetch = needsReload || (status !== 'succeeded' && permissions.length === 0);
+    // fetch only on explicit reload or first load; a failed load must not retrigger an endless refetch
+    const shouldFetch = needsReload || (status === 'idle' && permissions.length === 0);
     if (status === 'pending' || !shouldFetch) {
       return;
     }

@@ -60,17 +60,10 @@ export default function NotActiveProductCard({
       const baseName = `${spliTitle[0]}`;
       const subName = `${spliTitle[1]}`;
       return (
-        <Typography
-          variant="h6"
-          sx={{
-            ...truncateText,
-            WebkitLineClamp: 1,
-            fontWeight: '400',
-          }}
-        >
+        <span style={{ fontWeight: '400' }}>
           <strong style={{ fontWeight: 'fontWeightBold' }}>{baseName}</strong>
           {` ${subName}`}
-        </Typography>
+        </span>
       );
     } else {
       return title;
@@ -136,10 +129,10 @@ export default function NotActiveProductCard({
                     WebkitLineClamp: 1,
                   }}
                 >
-                  <p style={{ fontWeight: '400', padding: '0px', margin: '0px' }}>
+                  <span style={{ fontWeight: '400' }}>
                     <strong style={{ fontWeight: 'fontWeightBold' }}>{product?.title}</strong>&nbsp;
                     {prodActiveWithSubProdInactive?.title}
-                  </p>
+                  </span>
                 </Typography>
               </Tooltip>
             ) : (

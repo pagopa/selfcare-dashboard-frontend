@@ -140,7 +140,12 @@ const DashboardOverview = ({ party, products }: Props) => {
   }, []);
 
   useEffect(() => {
-    const excludeProductsList = ['prod-idpay-merchant', 'prod-idpay-gi', 'prod-idpay', 'prod-registro-beni'];
+    const excludeProductsList = [
+      'prod-idpay-merchant',
+      'prod-idpay-gi',
+      'prod-idpay',
+      'prod-registro-beni',
+    ];
 
     if (canSeeNotActiveProductsList && allowedInstitutionTypes && party) {
       const filterByConfig = {
@@ -149,7 +154,9 @@ const DashboardOverview = ({ party, products }: Props) => {
         allowedInstitutionTypes,
       };
 
-      const productsWithStatusActive = products.filter((p) => p.status === StatusEnum.ACTIVE && !excludeProductsList.includes(p.id ?? ''));
+      const productsWithStatusActive = products.filter(
+        (p) => p.status === StatusEnum.ACTIVE && !excludeProductsList.includes(p.id ?? '')
+      );
       const onboardedProducts = party.products.filter(
         (p) => p.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE
       );
@@ -297,7 +304,7 @@ const DashboardOverview = ({ party, products }: Props) => {
         onConfirm={() => handleAddNewTaxonomies()}
         onConfirmEnabled={isAddNewAutocompleteEnabled}
         showCloseButton={false}
-        handleClose={() => { }}
+        handleClose={() => {}}
       />
 
       <SessionModal
@@ -383,7 +390,8 @@ const DashboardOverview = ({ party, products }: Props) => {
               label: t('overview.pecOtp.modifyButton'),
               onClick: () => {
                 history.push(
-                  `${import.meta.env.BASE_URL}/${userOtpEmailInfo?.otpReferenceInstitutionId
+                  `${import.meta.env.BASE_URL}/${
+                    userOtpEmailInfo?.otpReferenceInstitutionId
                   }/users/${userOtpEmailInfo?.userId}/edit`
                 );
               },
@@ -399,7 +407,7 @@ const DashboardOverview = ({ party, products }: Props) => {
             title=""
             message={
               (
-                <Typography>
+                <Typography component="span">
                   <Trans
                     i18nKey="overview.partyLogo.uploadSendLogoBanner"
                     components={{
@@ -437,7 +445,11 @@ const DashboardOverview = ({ party, products }: Props) => {
           <EnvironmentBanner
             bgColor="info"
             title={t('overview.dora.title')}
-            message={(<Typography>{t('overview.dora.message')}</Typography>) as unknown as string}
+            message={
+              (
+                <Typography component="span">{t('overview.dora.message')}</Typography>
+              ) as unknown as string
+            }
             actionButton={{
               label: t('overview.dora.downloadButton'),
               onClick: () =>
