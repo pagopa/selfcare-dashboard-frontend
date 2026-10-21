@@ -308,10 +308,10 @@ describe('productService edge cases (real API path)', () => {
     expect(result).toEqual([]);
   });
 
-  test('fetchProductRoles resolves with the rejection reason when the API fails', async () => {
+  test('fetchProductRoles rejects when the API fails', async () => {
     const error = new Error('roles error');
     (DashboardApi.getProductRoles as Mock).mockRejectedValue(error);
 
-    await expect(fetchProductRoles(product, mockedParties[0])).resolves.toBe(error);
+    await expect(fetchProductRoles(product, mockedParties[0])).rejects.toBe(error);
   });
 });

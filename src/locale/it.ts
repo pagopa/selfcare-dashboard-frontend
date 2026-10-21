@@ -218,7 +218,7 @@ export default {
       },
       uploadSendLogoGuide: 'Per un corretto caricamento del logo, <1>consulta le linee guida</1>',
       uploadSendLogoBanner:
-        'Carica il logo ufficiale del tuo ente per mostrarlo nelle comunicazioni istituzionali e nei servizi pubblici online. Per un corretto caricamento, <1>consulta le linee guida.<1/>',
+        'Carica il logo ufficiale del tuo ente per mostrarlo nelle comunicazioni istituzionali e nei servizi pubblici online. Per un corretto caricamento, <1>consulta le linee guida.</1>',
       uploadTheLogoButton: 'Carica logo',
       modifyError: {
         title: 'Caricamento non riuscito',

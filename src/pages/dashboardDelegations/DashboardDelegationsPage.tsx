@@ -22,10 +22,7 @@ type Props = {
   delegableProducts: Readonly<Array<Product>>;
 };
 
-export default function DashboardDelegationsPage({
-  party,
-  delegableProducts,
-}: Readonly<Props>) {
+export default function DashboardDelegationsPage({ party, delegableProducts }: Readonly<Props>) {
   const { t } = useTranslation();
   const onExit = useUnloadEventOnExit();
   const history = useHistory();
@@ -212,7 +209,7 @@ export default function DashboardDelegationsPage({
                               </Typography>
                             </Grid>
                           </Box>
-                          {delegationsList.length - 1 !== index && (
+                          {delegatesByProduct.length - 1 !== index && (
                             <Box>
                               <Grid item xs={12} my={3}>
                                 <Divider sx={{ borderColor: 'background.default' }} />

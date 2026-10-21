@@ -47,12 +47,15 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
   if (import.meta.env.VITE_API_MOCK_PRODUCTS === 'true') {
     return fetchProductRolesMocked(product, party);
   } else {
-    return DashboardApi.getProductRoles(product.id, institutionTypeOnActiveOnboarding)
-      .then((response: ProductRolesApiResponse) => {
+    return DashboardApi.getProductRoles(product.id, institutionTypeOnActiveOnboarding).then(
+      (response: ProductRolesApiResponse) => {
         const onboarding = activeOnboardings.find((p) => p.productId === product.id);
         const standardMappings = response.roleMappings;
         const partnerTechMappings = response.partnerTechRoleMappings ?? [];
-        if (onboarding?.partnerTechRolesEnabled === true && onboarding.userPartnerTechRole === true) {
+        if (
+          onboarding?.partnerTechRolesEnabled === true &&
+          onboarding.userPartnerTechRole === true
+        ) {
           return mapProductRoleMappings(partnerTechMappings, product.id, true);
         }
 
@@ -62,7 +65,7 @@ export const fetchProductRoles = (product: Product, party: Party): Promise<Array
             ? mapProductRoleMappings(partnerTechMappings, product.id, true)
             : []),
         ];
-      })
-      .catch((reason) => reason);
+      }
+    );
   }
 };

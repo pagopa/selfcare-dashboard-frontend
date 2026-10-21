@@ -236,8 +236,8 @@ export default function GeoTaxonomySection({
                       handleChange(event, value, reason, i)
                     }
                     value={val?.desc?.toLowerCase()}
-                    renderOption={(props, option) => (
-                      <li style={{ textTransform: 'capitalize' }} {...props}>
+                    renderOption={({ key, ...props }, option) => (
+                      <li key={key} style={{ textTransform: 'capitalize' }} {...props}>
                         {option ? option.toLocaleLowerCase() : ''}
                       </li>
                     )}
