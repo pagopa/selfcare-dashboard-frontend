@@ -70,6 +70,7 @@ export default {
         remove: 'Entfernen',
         close: 'Schließen',
       },
+      removedToast: 'Du hast einen Administrator entfernt',
     },
     exitModal: {
       title: 'Möchtest du wirklich verlassen?',

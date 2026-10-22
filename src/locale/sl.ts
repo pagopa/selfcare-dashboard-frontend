@@ -68,6 +68,7 @@ export default {
         remove: 'Odstrani',
         close: 'Zapri',
       },
+      removedToast: 'Odstranili ste skrbnika',
     },
     exitModal: {
       title: 'Ali res želite zapustiti?',

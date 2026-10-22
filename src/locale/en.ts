@@ -69,6 +69,7 @@ export default {
         remove: 'Remove',
         close: 'Close',
       },
+      removedToast: 'You removed an administrator',
     },
     exitModal: {
       title: 'Do you really want to leave?',

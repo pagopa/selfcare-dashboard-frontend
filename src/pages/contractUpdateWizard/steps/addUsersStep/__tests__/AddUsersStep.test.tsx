@@ -54,6 +54,10 @@ const renderStep = () => {
 const adminCard = (index: number) =>
   screen.getByRole('region', { name: `Amministratore ${index}` });
 const addButton = () => screen.getByRole('button', { name: 'Aggiungi amministratore' });
+const removedToasts = (store: ReturnType<typeof createStore>) =>
+  appStateSelectors
+    .selectNotifies(store.getState())
+    .filter((notify) => notify.id.startsWith('CONTRACT_UPDATE_ADMIN_REMOVED'));
 
 beforeEach(() => {
   (fetchProductAdmins as Mock).mockResolvedValue(mockedProductAdmins);
@@ -94,7 +98,7 @@ test('lets the logged user edit only their email and never remove themselves', a
 });
 
 test('adds an empty admin card and removes it without confirmation while it is empty', async () => {
-  const { user } = renderStep();
+  const { store, user } = renderStep();
   await screen.findByRole('region', { name: 'Amministratore 2' });
 
   await user.click(addButton());
@@ -108,10 +112,11 @@ test('adds an empty admin card and removes it without confirmation while it is e
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(screen.queryByRole('region', { name: 'Amministratore 3' })).not.toBeInTheDocument();
   expect(addButton()).toHaveFocus();
+  expect(removedToasts(store)).toHaveLength(1);
 });
 
 test('asks for confirmation before removing a filled admin card', async () => {
-  const { user } = renderStep();
+  const { store, user } = renderStep();
   await screen.findByRole('region', { name: 'Amministratore 2' });
 
   await user.click(within(adminCard(2)).getByRole('button', { name: 'Rimuovi Amministratore 2' }));
@@ -122,6 +127,7 @@ test('asks for confirmation before removing a filled admin card', async () => {
   await user.click(within(dialog).getByRole('button', { name: 'Indietro' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(adminCard(2)).toBeInTheDocument();
+  expect(removedToasts(store)).toHaveLength(0);
 
   await user.click(within(adminCard(2)).getByRole('button', { name: 'Rimuovi Amministratore 2' }));
   await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Rimuovi' }));
@@ -129,6 +135,9 @@ test('asks for confirmation before removing a filled admin card', async () => {
   expect(screen.queryByRole('region', { name: 'Amministratore 2' })).not.toBeInTheDocument();
   expect(screen.queryByDisplayValue('Giulio')).not.toBeInTheDocument();
   expect(addButton()).toHaveFocus();
+  expect(removedToasts(store)).toEqual([
+    expect.objectContaining({ component: 'Toast', title: 'Hai rimosso un amministratore' }),
+  ]);
 });
 
 test('shows live validation errors on the admin fields', async () => {

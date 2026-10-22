@@ -3,6 +3,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Box, Grid, TextField, Typography } from '@mui/material';
 import { ButtonNaked, MIPaper } from '@pagopa/mui-italia';
+import { useUserNotify } from '@pagopa/selfcare-common-frontend/lib';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ContractUpdateConfirmDialog } from '../../components/ContractUpdateConfirmDialog';
@@ -12,6 +13,7 @@ const halfWidthFields = ['name', 'surname'];
 
 export const AddUsersStep = () => {
   const { t } = useTranslation();
+  const addNotify = useUserNotify();
   const { productName, rolesInfoUrl, summaryFields, admins, isLoading, addAdmin, removeAdmin } =
     useAddUsersStep();
   const [adminToRemove, setAdminToRemove] = useState<AdminCard>();
@@ -32,17 +34,27 @@ export const AddUsersStep = () => {
     previousAdminsCount.current = isLoading ? undefined : admins.length;
   }, [admins.length, isLoading]);
 
+  const removeAndNotify = (key: string) => {
+    removeAdmin(key);
+    addNotify({
+      component: 'Toast',
+      id: 'CONTRACT_UPDATE_ADMIN_REMOVED',
+      title: t('contractUpdateWizard.addUsers.removedToast'),
+      message: '',
+    });
+  };
+
   const requestRemove = (admin: AdminCard) => {
     if (admin.needsRemoveConfirmation) {
       setAdminToRemove(admin);
     } else {
-      removeAdmin(admin.key);
+      removeAndNotify(admin.key);
     }
   };
 
   const confirmRemove = () => {
     if (adminToRemove) {
-      removeAdmin(adminToRemove.key);
+      removeAndNotify(adminToRemove.key);
     }
     setAdminToRemove(undefined);
   };
