@@ -25,6 +25,18 @@ export const useSelectedParty = (): {
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
   const isPagoPa = useIsPagoPaUser();
 
+  const setPartyPermissions = (party: Party) =>
+    dispatch(
+      setProductPermissions(
+        party.products
+          .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
+          .map((product) => ({
+            productId: product.productId ?? '',
+            actions: product.userProductActions ? [...product.userProductActions] : [],
+          }))
+      )
+    );
+
   const fetchParty = (partyId: string): Promise<Party | null> =>
     fetchPartyDetails(partyId).then((party) => {
       if (party) {
@@ -38,15 +50,7 @@ export const useSelectedParty = (): {
           userRole: selectedParty?.userRole,
         };
         setParty(partyWithUserRoleAndStatus);
-
-        const productPermissions = [...party.products]
-          .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
-          .map((product) => ({
-            productId: product.productId ?? '',
-            actions: product.userProductActions ? [...product.userProductActions] : [],
-          }));
-
-        dispatch(setProductPermissions(productPermissions));
+        setPartyPermissions(party);
 
         const institutionTypesList = [...party.products]
           .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
@@ -106,6 +110,8 @@ export const useSelectedParty = (): {
         throw e;
       });
     } else {
+      // the shared permissions may have been replaced meanwhile (e.g. by the PagoPA admin area)
+      setPartyPermissions(selectedParty);
       return Promise.all([
         new Promise<Party>((resolve) => resolve(selectedParty)),
         new Promise<Array<Product>>((resolve) => resolve(selectedPartyProducts ?? [])),
