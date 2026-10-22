@@ -1,6 +1,6 @@
 import { appStateSelectors } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
 import { userActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/userSlice';
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route } from 'react-router-dom';
@@ -118,6 +118,25 @@ test('adds an empty admin card and removes it without confirmation while it is e
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(screen.queryByRole('region', { name: 'Amministratore 3' })).not.toBeInTheDocument();
   await expectRemovedSnackbarAndFocusRestore(user);
+});
+
+test('closes the removed snackbar automatically even while it has the focus', async () => {
+  const { user } = renderStep();
+  await screen.findByRole('region', { name: 'Amministratore 2' });
+  await user.click(addButton());
+
+  vi.useFakeTimers({ shouldAdvanceTime: true });
+  try {
+    await user.click(screen.getByRole('button', { name: 'Rimuovi Amministratore 3' }));
+    await waitFor(() => expect(removedSnackbar()).toHaveFocus());
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+    await waitFor(() => expect(removedSnackbar()).not.toBeInTheDocument());
+    expect(addButton()).toHaveFocus();
+  } finally {
+    vi.useRealTimers();
+  }
 });
 
 test('asks for confirmation before removing a filled admin card', async () => {

@@ -9,6 +9,7 @@ import { ContractUpdateConfirmDialog } from '../../components/ContractUpdateConf
 import { AdminCard, useAddUsersStep } from './useAddUsersStep';
 
 const halfWidthFields = ['name', 'surname'];
+const REMOVED_SNACKBAR_DURATION = 5000;
 
 export const AddUsersStep = () => {
   const { t } = useTranslation();
@@ -34,6 +35,15 @@ export const AddUsersStep = () => {
     // eslint-disable-next-line functional/immutable-data
     previousAdminsCount.current = isLoading ? undefined : admins.length;
   }, [admins.length, isLoading]);
+
+  // MISnackbar focuses itself on open and MUI pauses the auto-hide while focused, so close it here
+  useEffect(() => {
+    if (!isRemovedSnackbarOpen) {
+      return;
+    }
+    const timer = setTimeout(() => setIsRemovedSnackbarOpen(false), REMOVED_SNACKBAR_DURATION);
+    return () => clearTimeout(timer);
+  }, [isRemovedSnackbarOpen]);
 
   const requestRemove = (admin: AdminCard) => {
     if (admin.needsRemoveConfirmation) {
@@ -229,6 +239,7 @@ export const AddUsersStep = () => {
 
       <MISnackbar
         open={isRemovedSnackbarOpen}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         severity="success"
         description={t('contractUpdateWizard.addUsers.removedSnackbar')}
         onClose={() => setIsRemovedSnackbarOpen(false)}
