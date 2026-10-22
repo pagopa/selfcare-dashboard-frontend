@@ -1,6 +1,5 @@
 import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
 import { ProductsRolesMap } from '../model/ProductRole';
@@ -9,6 +8,7 @@ import { partiesActions, partiesSelectors } from '../redux/slices/partiesSlice';
 import { fetchPartyDetails } from '../services/partyService';
 import { fetchProducts } from '../services/productService';
 import { LOADING_TASK_SEARCH_PARTY, LOADING_TASK_SEARCH_PRODUCTS } from '../utils/constants';
+import { useIsPagoPaUser } from './useIsPagoPaUser';
 
 export const useSelectedParty = (): {
   fetchSelectedParty: (partyId: string) => Promise<[Party | null, Array<Product> | null]>;
@@ -23,12 +23,13 @@ export const useSelectedParty = (): {
   const setLoadingDetails = useLoading(LOADING_TASK_SEARCH_PARTY);
   const setLoadingProducts = useLoading(LOADING_TASK_SEARCH_PRODUCTS);
   const productsRolesMap = useAppSelector(partiesSelectors.selectPartySelectedProductsRolesMap);
+  const isPagoPa = useIsPagoPaUser();
 
   const fetchParty = (partyId: string): Promise<Party | null> =>
     fetchPartyDetails(partyId).then((party) => {
       if (party) {
-        const selectedParty = isPagoPaUser() ? party : parties?.find((p) => p.partyId === partyId);
-        if (!isPagoPaUser() && selectedParty && selectedParty.status !== 'ACTIVE') {
+        const selectedParty = isPagoPa ? party : parties?.find((p) => p.partyId === partyId);
+        if (!isPagoPa && selectedParty && selectedParty.status !== 'ACTIVE') {
           throw new Error(`INVALID_PARTY_STATE_${selectedParty.status}`);
         }
         const partyWithUserRoleAndStatus = {

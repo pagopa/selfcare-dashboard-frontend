@@ -2,9 +2,9 @@ import { Grid } from '@mui/material';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useIsPagoPaUser } from '../../../../../hooks/useIsPagoPaUser';
 import { useTokenExchange } from '../../../../../hooks/useTokenExchange';
 import { OnboardedProduct, Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
@@ -39,6 +39,7 @@ export default function ActiveProductCardContainer({
   const { t } = useTranslation();
   const { invokeProductBo } = useTokenExchange();
   const { hasPermission } = usePermissions();
+  const isPagoPa = useIsPagoPaUser();
 
   const isDisabled =
     !!party.products.find(
@@ -59,7 +60,7 @@ export default function ActiveProductCardContainer({
       return;
     }
 
-    if (isPagoPaUser() && isProductAllowed(productOnboarded.id ?? '') === false) {
+    if (isPagoPa && isProductAllowed(productOnboarded.id ?? '') === false) {
       return setOpenBackofficeNotIntegratedModal(true);
     }
 
