@@ -15,7 +15,7 @@ const validateAdmin = (
   lrTaxCode: string,
   taxCodeCounts: Map<string, number>
 ): PersonErrors => {
-  const errors = validatePerson(admin, { allowPec: true });
+  const errors = validatePerson(admin);
   const taxCode = admin.taxCode.toUpperCase();
   const isDuplicate = !!taxCode && (taxCode === lrTaxCode || (taxCodeCounts.get(taxCode) ?? 0) > 1);
   const withDuplicate: PersonErrors =

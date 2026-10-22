@@ -20,11 +20,17 @@ const giulio: Admin = {
 
 const draft = (admins: Array<Admin>): ContractUpdateDraft => ({ legalRepresentative, admins });
 
-test('accepts valid admins, also with a PEC email', () => {
-  const admins = [{ ...giulio, email: 'giulio.bianchi@pec.comune.it' }];
+test('accepts valid admins', () => {
+  const admins = [giulio];
   expect(validateAdmins(draft(admins))).toEqual({ 'admin-0': {} });
   expect(areAdminsValid(draft(admins))).toBe(true);
   expect(areAdminsValid(draft([]))).toBe(true);
+});
+
+test('rejects a PEC email', () => {
+  const admins = [{ ...giulio, email: 'giulio.bianchi@pec.comune.it' }];
+  expect(validateAdmins(draft(admins))).toEqual({ 'admin-0': { email: 'pecEmail' } });
+  expect(areAdminsValid(draft(admins))).toBe(false);
 });
 
 test('applies the same field rules used for the Legal Representative', () => {

@@ -85,8 +85,8 @@ test('lets the logged user edit only their email and never remove themselves', a
   const email = within(loggedUserCard).getByLabelText('Email istituzionale');
   expect(email).not.toHaveAttribute('readonly');
   await user.clear(email);
-  await user.type(email, 'laura.neri@pec.comune.it');
-  expect(email).toHaveValue('laura.neri@pec.comune.it');
+  await user.type(email, 'laura.neri@nuova.comune.it');
+  expect(email).toHaveValue('laura.neri@nuova.comune.it');
   expect(within(loggedUserCard).queryByRole('button', { name: /Rimuovi/ })).not.toBeInTheDocument();
   expect(
     within(adminCard(2)).getByRole('button', { name: 'Rimuovi Amministratore 2' })

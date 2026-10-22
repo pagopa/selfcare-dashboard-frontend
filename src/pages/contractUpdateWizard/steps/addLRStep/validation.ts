@@ -49,25 +49,27 @@ const validateTaxCode = (taxCode: string): PersonFieldError | undefined => {
     : undefined;
 };
 
-const validateEmail = (email: string, allowPec: boolean): PersonFieldError | undefined => {
+const validateEmail = (email: string): PersonFieldError | undefined => {
   if (!email) {
     return 'required';
   }
   if (!emailRegexp.test(email)) {
     return 'invalidEmail';
   }
-  return !allowPec && isPecEmail(email) ? 'pecEmail' : undefined;
+  return isPecEmail(email) ? 'pecEmail' : undefined;
 };
 
-export const validatePerson = (
-  { name, surname, taxCode, email }: LegalRepresentative,
-  { allowPec = false }: { allowPec?: boolean } = {}
-): PersonErrors => {
+export const validatePerson = ({
+  name,
+  surname,
+  taxCode,
+  email,
+}: LegalRepresentative): PersonErrors => {
   const errors: PersonErrors = {
     name: validateName(name, taxCode),
     surname: validateSurname(surname, taxCode),
     taxCode: validateTaxCode(taxCode),
-    email: validateEmail(email, allowPec),
+    email: validateEmail(email),
   };
   return Object.fromEntries(
     Object.entries(errors).filter(([, error]) => error !== undefined)
