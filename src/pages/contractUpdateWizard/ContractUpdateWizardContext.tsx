@@ -100,6 +100,10 @@ export const contractUpdateWizardReducer = (
     case 'loadAdminsStart':
       return { ...state, adminsStatus: 'loading' };
     case 'loadAdmins':
+      // Ignore duplicate completions (e.g. StrictMode effect replay) so user edits are kept
+      if (state.adminsStatus === 'loaded') {
+        return state;
+      }
       return {
         ...state,
         adminsStatus: 'loaded',

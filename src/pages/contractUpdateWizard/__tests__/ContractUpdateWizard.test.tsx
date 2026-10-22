@@ -230,3 +230,19 @@ test('manages the admins list in the shared state', () => {
     'admin-2'
   );
 });
+
+test('ignores a duplicate loadAdmins completion so user edits are not overwritten', () => {
+  const admin = {
+    name: 'Giulio',
+    surname: 'Verdi',
+    taxCode: 'VRDGLI80A01H501Z',
+    email: 'giulio@comune.it',
+  };
+  const loaded = contractUpdateWizardReducer(
+    contractUpdateWizardReducer(initialWizardState, { type: 'loadAdminsStart' }),
+    { type: 'loadAdmins', admins: [admin] }
+  );
+  const duplicate = contractUpdateWizardReducer(loaded, { type: 'loadAdmins', admins: [] });
+
+  expect(duplicate).toBe(loaded);
+});

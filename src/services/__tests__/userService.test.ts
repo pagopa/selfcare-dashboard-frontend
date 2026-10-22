@@ -20,8 +20,9 @@ test('fetches the product admins and maps them to ProductUser', async () => {
     'SUB_DELEGATE',
     'MANAGER',
     'ADMIN_EA',
+    'ADMIN_EA_IO',
   ]);
-  expect(PRODUCT_ADMIN_ROLES).toHaveLength(4);
+  expect(PRODUCT_ADMIN_ROLES).toHaveLength(5);
   expect(result).toEqual([
     {
       id: '1',
