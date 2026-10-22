@@ -8,6 +8,8 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import { matchPath, useLocation } from 'react-router-dom';
+import { ENV } from '../../../../utils/env';
 
 type SideNavItemProps = {
   title: string;
@@ -31,6 +33,8 @@ export default function DashboardSideNavItem({
 }: Readonly<SideNavItemProps>) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const { pathname } = useLocation();
+  const isAdminArea = !!matchPath(pathname, { path: ENV.ROUTES.ADMIN });
 
   return (
     <ListItemButton
@@ -51,7 +55,7 @@ export default function DashboardSideNavItem({
       </ListItemIcon>
 
       {!hideLabels && <ListItemText primary={title} />}
-      {itemKey === 'adminPage' && !location.pathname?.includes('admin') && !hideLabels && (
+      {itemKey === 'adminPage' && !isAdminArea && !hideLabels && (
         <ListItemIcon>
           <ExitToApp />
         </ListItemIcon>

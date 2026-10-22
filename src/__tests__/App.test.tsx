@@ -109,7 +109,7 @@ describe('PagoPA admin routes', () => {
     const { store } = renderApp(undefined, history);
 
     expect(await screen.findByTestId('federation-mock')).toBeInTheDocument();
-    expect(screen.getByRole('navigation')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Adesioni' })).toBeInTheDocument();
     await waitFor(() => expect(store.getState().adminRoles.status).toBe('succeeded'));
     expect(getPermissionsAdminService).toHaveBeenCalled();
     expect(store.getState().parties.selected).toBeUndefined();
@@ -122,7 +122,7 @@ describe('PagoPA admin routes', () => {
     renderApp(undefined, history);
 
     expect(await screen.findByTestId('federation-mock')).toBeInTheDocument();
-    expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Adesioni' })).not.toBeInTheDocument();
     expect(getPermissionsAdminService).not.toHaveBeenCalled();
   });
 });
