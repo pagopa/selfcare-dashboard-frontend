@@ -10,29 +10,29 @@ export const taxCodeRegexp = new RegExp(
   '^[A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1}$'
 );
 
-export type LegalRepresentativeError =
+export type PersonFieldError =
   | 'required'
   | 'nameMismatch'
   | 'surnameMismatch'
   | 'invalidTaxCode'
   | 'invalidEmail'
-  | 'pecEmail';
+  | 'pecEmail'
+  | 'duplicateTaxCode';
 
-export type LegalRepresentativeErrors = Partial<
-  Record<keyof LegalRepresentative, LegalRepresentativeError>
->;
+export type PersonErrors = Partial<Record<keyof LegalRepresentative, PersonFieldError>>;
 
-const validateName = (name: string, taxCode: string): LegalRepresentativeError | undefined => {
+export type LegalRepresentativeError = PersonFieldError;
+
+export type LegalRepresentativeErrors = PersonErrors;
+
+const validateName = (name: string, taxCode: string): PersonFieldError | undefined => {
   if (!name) {
     return 'required';
   }
   return verifyNameMatchWithTaxCode(name, taxCode) ? 'nameMismatch' : undefined;
 };
 
-const validateSurname = (
-  surname: string,
-  taxCode: string
-): LegalRepresentativeError | undefined => {
+const validateSurname = (surname: string, taxCode: string): PersonFieldError | undefined => {
   if (!surname) {
     return 'required';
   }
@@ -40,7 +40,7 @@ const validateSurname = (
 };
 
 // verifyChecksumMatchWithTaxCode returns true when the checksum does NOT match
-const validateTaxCode = (taxCode: string): LegalRepresentativeError | undefined => {
+const validateTaxCode = (taxCode: string): PersonFieldError | undefined => {
   if (!taxCode) {
     return 'required';
   }
@@ -49,29 +49,31 @@ const validateTaxCode = (taxCode: string): LegalRepresentativeError | undefined 
     : undefined;
 };
 
-const validateEmail = (email: string): LegalRepresentativeError | undefined => {
+const validateEmail = (email: string, allowPec: boolean): PersonFieldError | undefined => {
   if (!email) {
     return 'required';
   }
   if (!emailRegexp.test(email)) {
     return 'invalidEmail';
   }
-  return isPecEmail(email) ? 'pecEmail' : undefined;
+  return !allowPec && isPecEmail(email) ? 'pecEmail' : undefined;
 };
 
-export const validateLegalRepresentative = ({
-  name,
-  surname,
-  taxCode,
-  email,
-}: LegalRepresentative): LegalRepresentativeErrors => {
-  const errors: LegalRepresentativeErrors = {
+export const validatePerson = (
+  { name, surname, taxCode, email }: LegalRepresentative,
+  { allowPec = false }: { allowPec?: boolean } = {}
+): PersonErrors => {
+  const errors: PersonErrors = {
     name: validateName(name, taxCode),
     surname: validateSurname(surname, taxCode),
     taxCode: validateTaxCode(taxCode),
-    email: validateEmail(email),
+    email: validateEmail(email, allowPec),
   };
   return Object.fromEntries(
     Object.entries(errors).filter(([, error]) => error !== undefined)
-  ) as LegalRepresentativeErrors;
+  ) as PersonErrors;
 };
+
+export const validateLegalRepresentative = (
+  legalRepresentative: LegalRepresentative
+): LegalRepresentativeErrors => validatePerson(legalRepresentative);

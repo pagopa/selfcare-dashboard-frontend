@@ -11,15 +11,32 @@ export type LegalRepresentative = {
   email: string;
 };
 
-export type ContractUpdateDraft = {
-  legalRepresentative: LegalRepresentative;
-  additionalDetails: string;
+export type AdminPerson = LegalRepresentative;
+
+export type Admin = AdminPerson & {
+  // Local identifier of the card, stable across edits
+  key: string;
+  // Present only for users loaded from the API
+  userId?: string;
+  // Tax code returned by the API, used to hide the user when it is the new Legal Representative
+  originalTaxCode?: string;
+  // The logged user can change only their own email and cannot remove themselves
+  isLoggedUser?: boolean;
 };
 
-type ContractUpdateWizardState = {
+export type AdminsStatus = 'idle' | 'loading' | 'loaded';
+
+export type ContractUpdateDraft = {
+  legalRepresentative: LegalRepresentative;
+  admins: Array<Admin>;
+};
+
+export type ContractUpdateWizardState = {
   activeStep: number;
   // true after the user tried to continue from a step with invalid data
   showErrors: boolean;
+  adminsStatus: AdminsStatus;
+  nextAdminKey: number;
   draft: ContractUpdateDraft;
 };
 
@@ -28,16 +45,30 @@ type ContractUpdateWizardAction =
   | { type: 'back' }
   | { type: 'reset' }
   | { type: 'showErrors' }
-  | { type: 'updateDraft'; field: 'additionalDetails'; value: string }
-  | { type: 'updateLegalRepresentative'; field: keyof LegalRepresentative; value: string };
+  | { type: 'updateLegalRepresentative'; field: keyof LegalRepresentative; value: string }
+  | { type: 'loadAdminsStart' }
+  | { type: 'loadAdmins'; admins: Array<Omit<Admin, 'key'>> }
+  | { type: 'addAdmin' }
+  | { type: 'updateAdmin'; key: string; field: keyof AdminPerson; value: string }
+  | { type: 'removeAdmin'; key: string };
 
 export const initialWizardState: ContractUpdateWizardState = {
   activeStep: 0,
   showErrors: false,
+  adminsStatus: 'idle',
+  nextAdminKey: 0,
   draft: {
     legalRepresentative: { name: '', surname: '', taxCode: '', email: '' },
-    additionalDetails: '',
+    admins: [],
   },
+};
+
+const emptyAdminPerson: AdminPerson = { name: '', surname: '', taxCode: '', email: '' };
+
+// Loaded users that have the same tax code as the Legal Representative are not shown as admins
+export const getVisibleAdmins = (draft: ContractUpdateDraft): Array<Admin> => {
+  const lrTaxCode = draft.legalRepresentative.taxCode.toUpperCase();
+  return draft.admins.filter((admin) => !lrTaxCode || admin.originalTaxCode !== lrTaxCode);
 };
 
 export const contractUpdateWizardReducer = (
@@ -55,8 +86,6 @@ export const contractUpdateWizardReducer = (
       return { ...state, showErrors: false, activeStep: Math.max(state.activeStep - 1, 0) };
     case 'showErrors':
       return { ...state, showErrors: true };
-    case 'updateDraft':
-      return { ...state, draft: { ...state.draft, [action.field]: action.value } };
     case 'updateLegalRepresentative':
       return {
         ...state,
@@ -66,6 +95,51 @@ export const contractUpdateWizardReducer = (
             ...state.draft.legalRepresentative,
             [action.field]: action.value,
           },
+        },
+      };
+    case 'loadAdminsStart':
+      return { ...state, adminsStatus: 'loading' };
+    case 'loadAdmins':
+      return {
+        ...state,
+        adminsStatus: 'loaded',
+        nextAdminKey: state.nextAdminKey + action.admins.length,
+        draft: {
+          ...state.draft,
+          admins: action.admins.map((admin, index) => ({
+            ...admin,
+            key: `admin-${state.nextAdminKey + index}`,
+          })),
+        },
+      };
+    case 'addAdmin':
+      return {
+        ...state,
+        nextAdminKey: state.nextAdminKey + 1,
+        draft: {
+          ...state.draft,
+          admins: [
+            ...state.draft.admins,
+            { ...emptyAdminPerson, key: `admin-${state.nextAdminKey}` },
+          ],
+        },
+      };
+    case 'updateAdmin':
+      return {
+        ...state,
+        draft: {
+          ...state.draft,
+          admins: state.draft.admins.map((admin) =>
+            admin.key === action.key ? { ...admin, [action.field]: action.value } : admin
+          ),
+        },
+      };
+    case 'removeAdmin':
+      return {
+        ...state,
+        draft: {
+          ...state.draft,
+          admins: state.draft.admins.filter((admin) => admin.key !== action.key),
         },
       };
     case 'reset':
@@ -81,8 +155,14 @@ const ContractUpdateWizardContext = createContext<
   | undefined
 >(undefined);
 
-export const ContractUpdateWizardProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(contractUpdateWizardReducer, initialWizardState);
+export const ContractUpdateWizardProvider = ({
+  children,
+  initialState = initialWizardState,
+}: {
+  children: ReactNode;
+  initialState?: ContractUpdateWizardState;
+}) => {
+  const [state, dispatch] = useReducer(contractUpdateWizardReducer, initialState);
   const value = useMemo(() => ({ state, dispatch }), [state]);
 
   return (

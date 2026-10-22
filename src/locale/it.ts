@@ -7,7 +7,7 @@ export default {
     steps: {
       institutionData: 'Dati dell’ente',
       addLR: 'Indica il Legale Rappresentante',
-      addUsers: 'Altri dati',
+      addUsers: 'Indica gli Amministratori',
     },
     institutionData: {
       description:
@@ -51,10 +51,26 @@ export default {
           'Indirizzo PEC non accettato. Inserisci l’indirizzo email istituzionale utilizzato per l’ente',
       },
     },
-    additionalDetailsField: 'Dato aggiuntivo dimostrativo',
-    fieldHint: 'Campo provvisorio: non inserire dati personali. Il valore non viene salvato.',
-    submitUnavailable:
-      'L’invio non è ancora disponibile. Puoi tornare indietro e modificare i dati.',
+    addUsers: {
+      description:
+        'Verifica i dati degli Amministratori attuali o aggiungi altri Amministratori alla lista. Saranno i responsabili della gestione di {{productName}} e presenti nel contratto di adesione come delegati dal Legale Rappresentante.',
+      legalRepresentativeTitle: 'Legale Rappresentante e Amministratore',
+      adminTitle: 'Amministratore {{index}}',
+      remove: 'Rimuovi',
+      removeAriaLabel: 'Rimuovi {{title}}',
+      add: 'Aggiungi amministratore',
+      errors: {
+        duplicateTaxCode: 'Il Codice Fiscale inserito è già presente',
+      },
+      removeModal: {
+        title: 'Desideri rimuovere questo amministratore?',
+        message:
+          'Tutti i relativi dati inseriti verranno eliminati e non risulteranno nel contratto.',
+        back: 'Indietro',
+        remove: 'Rimuovi',
+        close: 'Chiudi',
+      },
+    },
     exitModal: {
       title: 'Vuoi davvero uscire?',
       message: 'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.',

@@ -45,7 +45,12 @@ export const ContractUpdateWizardLayout = () => {
 
   const goNext = () => {
     const isStepValid = stepValidators[stepId]?.(state.draft) ?? true;
-    dispatch({ type: isStepValid ? 'next' : 'showErrors' });
+    if (!isStepValid) {
+      dispatch({ type: 'showErrors' });
+    } else if (!isLastStep) {
+      dispatch({ type: 'next' });
+    }
+    // TODO: on the last step send the contract update request when the API is available
   };
 
   return (
@@ -75,21 +80,11 @@ export const ContractUpdateWizardLayout = () => {
         {t(`contractUpdateWizard.steps.${stepId}`)}
       </Typography>
       <StepContent />
-      {isLastStep && (
-        <Typography id="contract-update-submit-unavailable" sx={{ mt: 3 }}>
-          {t('contractUpdateWizard.submitUnavailable')}
-        </Typography>
-      )}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 3, mt: 6 }}>
         <MIButton variant="outlined" startIcon={<ArrowBackIcon />} onClick={goBack}>
           {t('contractUpdateWizard.back')}
         </MIButton>
-        <MIButton
-          variant="contained"
-          disabled={isLastStep}
-          aria-describedby={isLastStep ? 'contract-update-submit-unavailable' : undefined}
-          onClick={goNext}
-        >
+        <MIButton variant="contained" onClick={goNext}>
           {t('contractUpdateWizard.continue')}
         </MIButton>
       </Box>

@@ -2,9 +2,7 @@ import { EmailString } from '@pagopa/ts-commons/lib/strings';
 import { BrokerResource } from '../generated/b4f-dashboard/BrokerResource';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import { InstitutionBaseResource } from '../generated/b4f-dashboard/InstitutionBaseResource';
-import {
-  InstitutionResource,
-} from '../generated/b4f-dashboard/InstitutionResource';
+import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
 import { SelcRoleEnum } from '../generated/b4f-dashboard/ProductRoleInfoResource';
 import { ProductRolesResource } from '../generated/b4f-dashboard/ProductRolesResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
@@ -211,36 +209,36 @@ export const mockedProductUserResource: Array<ProductUserResource> = [
 
 export const mockedProductRoles: ProductRolesResource = {
   roleMappings: [
-  {
-    partyRole: 'SUB_DELEGATE',
-    selcRole: SelcRoleEnum.ADMIN,
-    productRoles: [
-      {
-        code: 'incaricato-ente-creditore',
-        description: 'Descrizione incaricato-ente-creditore',
-        label: 'Incaricato Ente Creditore',
-        multiroleGroups: ['group1', 'group2'],
-      },
-    ],
-  },
-  {
-    partyRole: 'OPERATOR',
-    selcRole: SelcRoleEnum.LIMITED,
-    productRoles: [
-      {
-        code: 'referente-dei-pagamenti',
-        description: 'Descrizione referente-dei-pagamenti',
-        label: 'Referente dei Pagamenti',
-        multiroleGroups: ['group1', 'group2'],
-      },
-      {
-        code: 'referente-tecnico',
-        description: 'Descrizione referente-tecnico',
-        label: 'Referente Tecnico',
-        multiroleGroups: ['group1', 'group2'],
-      },
-    ],
-  },
+    {
+      partyRole: 'SUB_DELEGATE',
+      selcRole: SelcRoleEnum.ADMIN,
+      productRoles: [
+        {
+          code: 'incaricato-ente-creditore',
+          description: 'Descrizione incaricato-ente-creditore',
+          label: 'Incaricato Ente Creditore',
+          multiroleGroups: ['group1', 'group2'],
+        },
+      ],
+    },
+    {
+      partyRole: 'OPERATOR',
+      selcRole: SelcRoleEnum.LIMITED,
+      productRoles: [
+        {
+          code: 'referente-dei-pagamenti',
+          description: 'Descrizione referente-dei-pagamenti',
+          label: 'Referente dei Pagamenti',
+          multiroleGroups: ['group1', 'group2'],
+        },
+        {
+          code: 'referente-tecnico',
+          description: 'Descrizione referente-tecnico',
+          label: 'Referente Tecnico',
+          multiroleGroups: ['group1', 'group2'],
+        },
+      ],
+    },
   ],
 };
 
@@ -311,8 +309,11 @@ export const DashboardApi = {
     _environment?: string
   ): Promise<IdentityTokenResource> => new Promise((resolve) => resolve({ token: 'DUMMYTOKEN' })),
 
-  getBillingToken: async (_partyId: string, _environment?: string, _lang?: string): Promise<string> =>
-    new Promise((resolve) => resolve('DUMMYTOKEN')),
+  getBillingToken: async (
+    _partyId: string,
+    _environment?: string,
+    _lang?: string
+  ): Promise<string> => new Promise((resolve) => resolve('DUMMYTOKEN')),
 
   getProductRoles: async (
     _productId: string,
@@ -323,4 +324,11 @@ export const DashboardApi = {
     _productId: string,
     _institutionType: string
   ): Promise<Array<BrokerResource>> => new Promise((resolve) => resolve(mockedBrokerResource)),
+
+  getProductUsers: async (
+    _institutionId: string,
+    _productId: string,
+    _roles: Array<string>
+  ): Promise<Array<ProductUserResource>> =>
+    new Promise((resolve) => resolve(mockedProductUserResource)),
 };

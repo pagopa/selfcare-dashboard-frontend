@@ -22,6 +22,7 @@ import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResour
 import { OnboardingInfo } from './generated/b4f-dashboard/OnboardingInfo';
 import { ProductRolePermissionsList } from './generated/b4f-dashboard/ProductRolePermissionsList';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
+import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
 import { UserOtpEmailInfo } from './generated/b4f-dashboard/UserOtpEmailInfo';
 
 const withBearerAndPartyId: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
@@ -222,6 +223,19 @@ export const DashboardApi = {
 
   myPermissionsAdmin: async (): Promise<ProductRolePermissionsList> => {
     const result = await apiClient.getMyPermissions({});
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getProductUsers: async (
+    institutionId: string,
+    productId: string,
+    roles: Array<string>
+  ): Promise<Array<ProductUserResource>> => {
+    const result = await apiClient.v2GetUsersUsingGET({
+      institutionId,
+      productId,
+      roles: roles.join(','),
+    });
     return extractResponse(result, 200, onRedirectToLogin);
   },
 

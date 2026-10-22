@@ -26,6 +26,7 @@ const { mockedClient, createClientSpy } = vi.hoisted(() => {
     'v2CheckAttachment',
     'getUserOtpEmailInfoUsingGET',
     'getMyPermissions',
+    'v2GetUsersUsingGET',
   ];
   const client: Record<string, Mock> = Object.fromEntries(methods.map((m) => [m, vi.fn()]));
   return { mockedClient: client, createClientSpy: vi.fn(() => client) };
@@ -180,6 +181,12 @@ const cases: Array<Case> = [
     expectedParams: {},
   },
   { name: 'myPermissionsAdmin', clientMethod: 'getMyPermissions', args: [], expectedParams: {} },
+  {
+    name: 'getProductUsers',
+    clientMethod: 'v2GetUsersUsingGET',
+    args: ['inst-1', 'prod-io', ['MANAGER', 'DELEGATE']],
+    expectedParams: { institutionId: 'inst-1', productId: 'prod-io', roles: 'MANAGER,DELEGATE' },
+  },
 ];
 
 describe('DashboardApiClient', () => {
