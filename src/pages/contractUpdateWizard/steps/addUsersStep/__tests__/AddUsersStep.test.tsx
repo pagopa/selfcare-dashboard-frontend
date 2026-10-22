@@ -54,10 +54,16 @@ const renderStep = () => {
 const adminCard = (index: number) =>
   screen.getByRole('region', { name: `Amministratore ${index}` });
 const addButton = () => screen.getByRole('button', { name: 'Aggiungi amministratore' });
-const removedToasts = (store: ReturnType<typeof createStore>) =>
-  appStateSelectors
-    .selectNotifies(store.getState())
-    .filter((notify) => notify.id.startsWith('CONTRACT_UPDATE_ADMIN_REMOVED'));
+const removedSnackbar = () =>
+  screen.queryByRole('alert', { name: 'Hai rimosso un amministratore' });
+
+// The snackbar takes the focus to be announced and gives it back to the add button once closed
+const expectRemovedSnackbarAndFocusRestore = async (user: ReturnType<typeof userEvent.setup>) => {
+  await waitFor(() => expect(removedSnackbar()).toHaveFocus());
+  await user.click(within(removedSnackbar()!).getByRole('button', { name: 'Close' }));
+  await waitFor(() => expect(removedSnackbar()).not.toBeInTheDocument());
+  expect(addButton()).toHaveFocus();
+};
 
 beforeEach(() => {
   (fetchProductAdmins as Mock).mockResolvedValue(mockedProductAdmins);
@@ -98,7 +104,7 @@ test('lets the logged user edit only their email and never remove themselves', a
 });
 
 test('adds an empty admin card and removes it without confirmation while it is empty', async () => {
-  const { store, user } = renderStep();
+  const { user } = renderStep();
   await screen.findByRole('region', { name: 'Amministratore 2' });
 
   await user.click(addButton());
@@ -111,12 +117,11 @@ test('adds an empty admin card and removes it without confirmation while it is e
   await user.click(within(newCard).getByRole('button', { name: 'Rimuovi Amministratore 3' }));
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(screen.queryByRole('region', { name: 'Amministratore 3' })).not.toBeInTheDocument();
-  expect(addButton()).toHaveFocus();
-  expect(removedToasts(store)).toHaveLength(1);
+  await expectRemovedSnackbarAndFocusRestore(user);
 });
 
 test('asks for confirmation before removing a filled admin card', async () => {
-  const { store, user } = renderStep();
+  const { user } = renderStep();
   await screen.findByRole('region', { name: 'Amministratore 2' });
 
   await user.click(within(adminCard(2)).getByRole('button', { name: 'Rimuovi Amministratore 2' }));
@@ -127,17 +132,14 @@ test('asks for confirmation before removing a filled admin card', async () => {
   await user.click(within(dialog).getByRole('button', { name: 'Indietro' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(adminCard(2)).toBeInTheDocument();
-  expect(removedToasts(store)).toHaveLength(0);
+  expect(removedSnackbar()).not.toBeInTheDocument();
 
   await user.click(within(adminCard(2)).getByRole('button', { name: 'Rimuovi Amministratore 2' }));
   await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Rimuovi' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(screen.queryByRole('region', { name: 'Amministratore 2' })).not.toBeInTheDocument();
   expect(screen.queryByDisplayValue('Giulio')).not.toBeInTheDocument();
-  expect(addButton()).toHaveFocus();
-  expect(removedToasts(store)).toEqual([
-    expect.objectContaining({ component: 'Toast', title: 'Hai rimosso un amministratore' }),
-  ]);
+  await expectRemovedSnackbarAndFocusRestore(user);
 });
 
 test('shows live validation errors on the admin fields', async () => {

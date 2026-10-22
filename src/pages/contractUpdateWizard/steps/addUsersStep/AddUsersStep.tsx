@@ -2,8 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Box, Grid, TextField, Typography } from '@mui/material';
-import { ButtonNaked, MIPaper } from '@pagopa/mui-italia';
-import { useUserNotify } from '@pagopa/selfcare-common-frontend/lib';
+import { ButtonNaked, MIPaper, MISnackbar } from '@pagopa/mui-italia';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ContractUpdateConfirmDialog } from '../../components/ContractUpdateConfirmDialog';
@@ -13,10 +12,10 @@ const halfWidthFields = ['name', 'surname'];
 
 export const AddUsersStep = () => {
   const { t } = useTranslation();
-  const addNotify = useUserNotify();
   const { productName, rolesInfoUrl, summaryFields, admins, isLoading, addAdmin, removeAdmin } =
     useAddUsersStep();
   const [adminToRemove, setAdminToRemove] = useState<AdminCard>();
+  const [isRemovedSnackbarOpen, setIsRemovedSnackbarOpen] = useState(false);
   const addButton = useRef<HTMLButtonElement>(null);
   const firstFieldByAdmin = useRef<Record<string, HTMLInputElement | null>>({});
   const previousAdminsCount = useRef<number>();
@@ -28,33 +27,25 @@ export const AddUsersStep = () => {
         firstFieldByAdmin.current[admins[admins.length - 1].key]?.focus();
       } else if (admins.length < previousAdminsCount.current) {
         addButton.current?.focus();
+        // Opened after moving the focus, so the snackbar gives it back to the add button when it closes
+        setIsRemovedSnackbarOpen(true);
       }
     }
     // eslint-disable-next-line functional/immutable-data
     previousAdminsCount.current = isLoading ? undefined : admins.length;
   }, [admins.length, isLoading]);
 
-  const removeAndNotify = (key: string) => {
-    removeAdmin(key);
-    addNotify({
-      component: 'Toast',
-      id: 'CONTRACT_UPDATE_ADMIN_REMOVED',
-      title: t('contractUpdateWizard.addUsers.removedToast'),
-      message: '',
-    });
-  };
-
   const requestRemove = (admin: AdminCard) => {
     if (admin.needsRemoveConfirmation) {
       setAdminToRemove(admin);
     } else {
-      removeAndNotify(admin.key);
+      removeAdmin(admin.key);
     }
   };
 
   const confirmRemove = () => {
     if (adminToRemove) {
-      removeAndNotify(adminToRemove.key);
+      removeAdmin(adminToRemove.key);
     }
     setAdminToRemove(undefined);
   };
@@ -234,6 +225,13 @@ export const AddUsersStep = () => {
           label: t('contractUpdateWizard.addUsers.removeModal.remove'),
           onClick: confirmRemove,
         }}
+      />
+
+      <MISnackbar
+        open={isRemovedSnackbarOpen}
+        severity="success"
+        description={t('contractUpdateWizard.addUsers.removedSnackbar')}
+        onClose={() => setIsRemovedSnackbarOpen(false)}
       />
     </>
   );
