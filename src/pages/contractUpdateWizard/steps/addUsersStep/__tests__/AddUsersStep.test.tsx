@@ -1,6 +1,6 @@
 import { appStateSelectors } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
 import { userActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/userSlice';
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route } from 'react-router-dom';
@@ -54,6 +54,16 @@ const renderStep = () => {
 const adminCard = (index: number) =>
   screen.getByRole('region', { name: `Amministratore ${index}` });
 const addButton = () => screen.getByRole('button', { name: 'Aggiungi amministratore' });
+const removedSnackbar = () =>
+  screen.queryByRole('alert', { name: 'Hai rimosso un amministratore' });
+
+// The snackbar takes the focus to be announced and gives it back to the add button once closed
+const expectRemovedSnackbarAndFocusRestore = async (user: ReturnType<typeof userEvent.setup>) => {
+  await waitFor(() => expect(removedSnackbar()).toHaveFocus());
+  await user.click(within(removedSnackbar()!).getByRole('button', { name: 'Close' }));
+  await waitFor(() => expect(removedSnackbar()).not.toBeInTheDocument());
+  expect(addButton()).toHaveFocus();
+};
 
 beforeEach(() => {
   (fetchProductAdmins as Mock).mockResolvedValue(mockedProductAdmins);
@@ -107,7 +117,26 @@ test('adds an empty admin card and removes it without confirmation while it is e
   await user.click(within(newCard).getByRole('button', { name: 'Rimuovi Amministratore 3' }));
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(screen.queryByRole('region', { name: 'Amministratore 3' })).not.toBeInTheDocument();
-  expect(addButton()).toHaveFocus();
+  await expectRemovedSnackbarAndFocusRestore(user);
+});
+
+test('closes the removed snackbar automatically even while it has the focus', async () => {
+  const { user } = renderStep();
+  await screen.findByRole('region', { name: 'Amministratore 2' });
+  await user.click(addButton());
+
+  vi.useFakeTimers({ shouldAdvanceTime: true });
+  try {
+    await user.click(screen.getByRole('button', { name: 'Rimuovi Amministratore 3' }));
+    await waitFor(() => expect(removedSnackbar()).toHaveFocus());
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+    await waitFor(() => expect(removedSnackbar()).not.toBeInTheDocument());
+    expect(addButton()).toHaveFocus();
+  } finally {
+    vi.useRealTimers();
+  }
 });
 
 test('asks for confirmation before removing a filled admin card', async () => {
@@ -122,13 +151,14 @@ test('asks for confirmation before removing a filled admin card', async () => {
   await user.click(within(dialog).getByRole('button', { name: 'Indietro' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(adminCard(2)).toBeInTheDocument();
+  expect(removedSnackbar()).not.toBeInTheDocument();
 
   await user.click(within(adminCard(2)).getByRole('button', { name: 'Rimuovi Amministratore 2' }));
   await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Rimuovi' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(screen.queryByRole('region', { name: 'Amministratore 2' })).not.toBeInTheDocument();
   expect(screen.queryByDisplayValue('Giulio')).not.toBeInTheDocument();
-  expect(addButton()).toHaveFocus();
+  await expectRemovedSnackbarAndFocusRestore(user);
 });
 
 test('shows live validation errors on the admin fields', async () => {

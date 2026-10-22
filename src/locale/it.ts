@@ -70,6 +70,7 @@ export default {
         remove: 'Rimuovi',
         close: 'Chiudi',
       },
+      removedSnackbar: 'Hai rimosso un amministratore',
     },
     exitModal: {
       title: 'Vuoi davvero uscire?',

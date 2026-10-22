@@ -68,6 +68,7 @@ export default {
         remove: 'Odstrani',
         close: 'Zapri',
       },
+      removedSnackbar: 'Odstranili ste skrbnika',
     },
     exitModal: {
       title: 'Ali res želite zapustiti?',
