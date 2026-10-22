@@ -1,7 +1,10 @@
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { Redirect, useParams } from 'react-router-dom';
+import { useIsPagoPaUser } from './hooks/useIsPagoPaUser';
+import AdminRemote from './microcomponents/admin/AdminRemote';
 import ContractUpdateWizardPage from './pages/contractUpdateWizard/ContractUpdateWizardPage';
 import Dashboard from './pages/dashboard/Dashboard';
+import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';
 import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from './pages/dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
 import DashboardDocuments from './pages/dashboardDocuments/DashboardDocumentsPage';
@@ -37,7 +40,24 @@ const buildRedirectToBasePath = (basePath: string): RoutesObject => ({
   },
 });
 
+const DefaultRedirect = () => {
+  const isPagoPa = useIsPagoPaUser();
+  return <Redirect to={isPagoPa ? ENV.ROUTES.ADMIN_SEARCH : ROUTES.PARTY_SELECTION.path} />;
+};
+
+// Order matters: admin routes must precede PARTY_DASHBOARD (`/:partyId` would match `/admin`)
 const ROUTES = {
+  // PagoPA backstage: the onboarding detail is rendered full page, without the dashboard shell
+  ADMIN_PARTY_DETAIL: {
+    path: ENV.ROUTES.ADMIN_PARTY_DETAIL,
+    exact: false,
+    component: AdminRemote,
+  },
+  ADMIN: {
+    path: ENV.ROUTES.ADMIN,
+    exact: false,
+    component: DashboardAdminPage,
+  },
   PARTY_SELECTION: {
     path: `${BASE_ROUTE}/party-selection`,
     exact: true,
@@ -52,6 +72,10 @@ const ROUTES = {
     path: `${BASE_ROUTE}/:partyId`,
     exact: false,
     component: Dashboard,
+  },
+  DEFAULT: {
+    path: '*',
+    component: DefaultRedirect,
   },
 };
 

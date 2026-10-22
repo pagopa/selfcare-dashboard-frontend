@@ -1,5 +1,6 @@
 import PeopleAlt from '@mui/icons-material/PeopleAlt';
 import { fireEvent, screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import DashboardSideNavItem from '../DashboardSidenavItem';
 
@@ -46,5 +47,21 @@ describe('DashboardSideNavItem', () => {
       />
     );
     expect(screen.getByTestId('ExitToAppIcon')).toBeInTheDocument();
+  });
+
+  it('hides the exit icon for the admin page item inside the admin area', () => {
+    const history = createMemoryHistory();
+    history.push('/dashboard/admin/search');
+    renderWithProviders(
+      <DashboardSideNavItem
+        title="Dashboard"
+        icon={PeopleAlt}
+        handleClick={vi.fn()}
+        itemKey="adminPage"
+      />,
+      undefined,
+      history
+    );
+    expect(screen.queryByTestId('ExitToAppIcon')).not.toBeInTheDocument();
   });
 });

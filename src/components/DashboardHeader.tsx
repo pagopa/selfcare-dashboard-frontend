@@ -5,11 +5,11 @@ import { User } from '@pagopa/selfcare-common-frontend/lib/model/User';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions, roleLabels } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import withParties, { WithPartiesProps } from '../decorators/withParties';
+import { useIsPagoPaUser } from '../hooks/useIsPagoPaUser';
 import { useTokenExchange } from '../hooks/useTokenExchange';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
@@ -37,6 +37,8 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     path: ENV.ROUTES.CONTRACT_UPDATE,
     exact: true,
   });
+  const isPagoPa = useIsPagoPaUser();
+  const isAdminArea = !!matchPath(location.pathname, { path: ENV.ROUTES.ADMIN });
 
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
@@ -51,23 +53,18 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
 
   const actualActiveProducts = useRef<Array<Product>>([]);
   const actualSelectedParty = useRef<Party>();
-  const [showDocBtn, setShowDocBtn] = useState(false);
   const { hasPermission } = usePermissions();
   const hasBackofficePermission = (productId: string) =>
     hasPermission(productId, Actions.AccessProductBackoffice) ||
     hasPermission(productId, Actions.AccessProductBackofficeAdmin);
 
-  useEffect(() => {
-    if (isPagoPaUser()) {
-      setShowDocBtn(false);
-      return;
-    }
-    setShowDocBtn(i18n.language === 'it');
-  }, [i18n.language, isPagoPaUser]);
+  const showDocBtn = !isPagoPa && i18n.language === 'it';
 
-  const parties2Show = isPagoPaUser()
-    ? [party]
-    : parties?.filter((party) => party.status === 'ACTIVE');
+  const logout = isPagoPa
+    ? { title: t('exitModal.titleBackstage'), url: `${ENV.URL_FE.LOGOUT}/google` }
+    : { title: t('exitModal.title'), url: ENV.URL_FE.LOGOUT };
+
+  const parties2Show = isPagoPa ? [party] : parties?.filter((party) => party.status === 'ACTIVE');
 
   const findAuthorizedProduct = (productId: string) =>
     party?.products.find(
@@ -108,8 +105,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     productRole: t('searchBackstagePage.supportRole'),
   };
 
-  const fixedParty =
-    isPagoPaUser() && location.pathname?.includes('admin') ? pagoPaInstitution : undefined;
+  const fixedParty = isPagoPa && isAdminArea ? pagoPaInstitution : undefined;
 
   return (
     <div>
@@ -137,7 +133,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             id: party?.partyId ?? '',
             name: party?.description ?? '',
             productRole:
-              isPagoPaUser() && !location.pathname?.includes('admin')
+              isPagoPa && !isAdminArea
                 ? undefined
                 : t(
                     roleLabels[(party?.userRole ?? 'ADMIN') as keyof typeof roleLabels].longLabelKey
@@ -157,7 +153,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
               }
             : false
         }
-        enableAssistanceButton={ENV.ENV !== 'UAT' && !isPagoPaUser()}
+        enableAssistanceButton={ENV.ENV !== 'UAT' && !isPagoPa}
         assistanceEmail={ENV.ASSISTANCE.EMAIL}
         onDocumentationClick={
           showDocBtn
@@ -175,7 +171,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
             const selectedProduct = actualActiveProducts.current.find((ap) => ap.id === p.id);
             setProductSelected(selectedProduct);
 
-            if (isPagoPaUser() && isProductAllowed(selectedProduct?.id ?? '') === false) {
+            if (isPagoPa && isProductAllowed(selectedProduct?.id ?? '') === false) {
               setOpenBackofficeNotIntegratedModal(true);
               return;
             }
@@ -218,7 +214,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
       />
       <SessionModal
         open={openExitModal}
-        title={isPagoPaUser() ? t('exitModal.titleBackstage') : t('exitModal.title')}
+        title={logout.title}
         message=""
         onConfirmLabel={t('exitModal.confirm')}
         onCloseLabel={t('exitModal.cancel')}
@@ -227,9 +223,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
         }}
         onConfirm={() => {
           setOpenExitModal(false);
-          window.location.assign(
-            isPagoPaUser() ? `${ENV.URL_FE.LOGOUT}/google` : ENV.URL_FE.LOGOUT
-          );
+          window.location.assign(logout.url);
         }}
       />
       <SessionModalInteropProduct

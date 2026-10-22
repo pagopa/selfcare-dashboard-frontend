@@ -1,4 +1,5 @@
 /* eslint-disable functional/no-let, functional/immutable-data */
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { act, renderHook } from '@testing-library/react';
 import { ReactNode } from 'react';
@@ -131,6 +132,27 @@ describe('useSelectedParty', () => {
     expect(value).toEqual([party, []]);
     expect(fetchPartyDetails).not.toHaveBeenCalled();
     expect(fetchProducts).not.toHaveBeenCalled();
+  });
+
+  test('restores the party permissions when re-entering the cached party', async () => {
+    // e.g. a PagoPA user going back to the party after the admin area loaded admin-wide permissions
+    const store = createStore();
+    store.dispatch(partiesActions.setPartySelected(party));
+    store.dispatch(
+      setProductPermissions([{ productId: 'ALL', actions: ['Selc:ListAllProductUsers'] }])
+    );
+    const { result } = renderUseSelectedParty(store);
+
+    await act(async () => {
+      await result.current.fetchSelectedParty(party.partyId);
+    });
+
+    expect(fetchPartyDetails).not.toHaveBeenCalled();
+    expect(store.getState().permissions.productPermissions).toEqual(
+      party.products
+        .filter((p) => p.productOnBoardingStatus === 'ACTIVE')
+        .map((p) => ({ productId: p.productId, actions: [...(p.userProductActions ?? [])] }))
+    );
   });
 
   test('keeps the cached roles of the products when switching party', async () => {
