@@ -10,6 +10,7 @@ import { AdminCard, useAddUsersStep } from './useAddUsersStep';
 
 const halfWidthFields = ['name', 'surname'];
 const REMOVED_SNACKBAR_DURATION = 5000;
+const REMOVED_SNACKBAR_WIDTH = 560;
 
 export const AddUsersStep = () => {
   const { t } = useTranslation();
@@ -237,13 +238,16 @@ export const AddUsersStep = () => {
         }}
       />
 
-      <MISnackbar
-        open={isRemovedSnackbarOpen}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        severity="success"
-        description={t('contractUpdateWizard.addUsers.removedSnackbar')}
-        onClose={() => setIsRemovedSnackbarOpen(false)}
-      />
+      {/* MISnackbar replaces its own sx when one is passed, so the Figma width is set from here */}
+      <Box sx={{ '& .MuiSnackbar-root .MuiAlert-root': { width: { sm: REMOVED_SNACKBAR_WIDTH } } }}>
+        <MISnackbar
+          open={isRemovedSnackbarOpen}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          severity="success"
+          description={t('contractUpdateWizard.addUsers.removedSnackbar')}
+          onClose={() => setIsRemovedSnackbarOpen(false)}
+        />
+      </Box>
     </>
   );
 };
