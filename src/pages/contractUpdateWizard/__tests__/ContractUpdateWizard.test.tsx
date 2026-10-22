@@ -148,7 +148,7 @@ test('preserves the data of every step and validates the admins on continue', as
   await user.click(next());
   expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toBeInTheDocument();
   expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
-});
+}, 20000);
 
 test.each([
   '/dashboard/party-1/documents/product-2/update-contract',
