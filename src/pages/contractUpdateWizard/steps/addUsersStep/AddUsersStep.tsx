@@ -2,19 +2,22 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Box, Grid, TextField, Typography } from '@mui/material';
-import { ButtonNaked, MIPaper } from '@pagopa/mui-italia';
+import { ButtonNaked, MIPaper, MISnackbar } from '@pagopa/mui-italia';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ContractUpdateConfirmDialog } from '../../components/ContractUpdateConfirmDialog';
 import { AdminCard, useAddUsersStep } from './useAddUsersStep';
 
 const halfWidthFields = ['name', 'surname'];
+const REMOVED_SNACKBAR_DURATION = 5000;
+const REMOVED_SNACKBAR_WIDTH = 560;
 
 export const AddUsersStep = () => {
   const { t } = useTranslation();
   const { productName, rolesInfoUrl, summaryFields, admins, isLoading, addAdmin, removeAdmin } =
     useAddUsersStep();
   const [adminToRemove, setAdminToRemove] = useState<AdminCard>();
+  const [isRemovedSnackbarOpen, setIsRemovedSnackbarOpen] = useState(false);
   const addButton = useRef<HTMLButtonElement>(null);
   const firstFieldByAdmin = useRef<Record<string, HTMLInputElement | null>>({});
   const previousAdminsCount = useRef<number>();
@@ -26,11 +29,22 @@ export const AddUsersStep = () => {
         firstFieldByAdmin.current[admins[admins.length - 1].key]?.focus();
       } else if (admins.length < previousAdminsCount.current) {
         addButton.current?.focus();
+        // Opened after moving the focus, so the snackbar gives it back to the add button when it closes
+        setIsRemovedSnackbarOpen(true);
       }
     }
     // eslint-disable-next-line functional/immutable-data
     previousAdminsCount.current = isLoading ? undefined : admins.length;
   }, [admins.length, isLoading]);
+
+  // MISnackbar focuses itself on open and MUI pauses the auto-hide while focused, so close it here
+  useEffect(() => {
+    if (!isRemovedSnackbarOpen) {
+      return;
+    }
+    const timer = setTimeout(() => setIsRemovedSnackbarOpen(false), REMOVED_SNACKBAR_DURATION);
+    return () => clearTimeout(timer);
+  }, [isRemovedSnackbarOpen]);
 
   const requestRemove = (admin: AdminCard) => {
     if (admin.needsRemoveConfirmation) {
@@ -223,6 +237,17 @@ export const AddUsersStep = () => {
           onClick: confirmRemove,
         }}
       />
+
+      {/* MISnackbar replaces its own sx when one is passed, so the Figma width is set from here */}
+      <Box sx={{ '& .MuiSnackbar-root .MuiAlert-root': { width: { sm: REMOVED_SNACKBAR_WIDTH } } }}>
+        <MISnackbar
+          open={isRemovedSnackbarOpen}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          severity="success"
+          description={t('contractUpdateWizard.addUsers.removedSnackbar')}
+          onClose={() => setIsRemovedSnackbarOpen(false)}
+        />
+      </Box>
     </>
   );
 };
