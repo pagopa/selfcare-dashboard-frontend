@@ -1,24 +1,9 @@
 import { useTheme } from '@mui/material';
-import { useErrorDispatcher } from '@pagopa/selfcare-common-frontend';
-import {
-  resetPermissions,
-  selectProductPermissions,
-  setProductPermissions,
-} from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import withAdminPermissions from '../../decorators/withAdminPermissions';
 import RemoteRoutingAdmin from '../../microcomponents/admin/RemoteRoutingAdmin';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import {
-  resetAdminProductRoles,
-  selectAdminRolesNeedsReload,
-  selectAdminRolesStatus,
-  setAdminProductRoles,
-  setAdminRolesStatus,
-} from '../../redux/slices/adminRolesSlice';
-import { getPermissionsAdminService } from '../../services/adminService';
 import { ENV } from '../../utils/env';
 import DashboardShell from '../dashboard/DashboardShell';
 
@@ -32,52 +17,6 @@ const DashboardAdminPage: React.FC = () => {
   const store = useStore();
   const { i18n } = useTranslation();
   const history = useHistory();
-
-  const dispatch = useAppDispatch();
-  const addError = useErrorDispatcher();
-  const status = useAppSelector(selectAdminRolesStatus);
-  const needsReload = useAppSelector(selectAdminRolesNeedsReload);
-  const permissions = useAppSelector(selectProductPermissions);
-
-  useEffect(() => {
-    // fetch only on explicit reload or first load; a failed load must not retrigger an endless refetch
-    const shouldFetch = needsReload || (status === 'idle' && permissions.length === 0);
-    if (status === 'pending' || !shouldFetch) {
-      return;
-    }
-
-    // avoid wiping existing permissions unless a reload was requested
-    if (needsReload) {
-      dispatch(resetPermissions());
-      dispatch(resetAdminProductRoles());
-    }
-    dispatch(setAdminRolesStatus('pending'));
-
-    getPermissionsAdminService()
-      .then((res) => {
-        const payload = (res.items || []).map((p) => ({
-          productId: p.productId ?? '',
-          actions: [...(p.permissions ?? [])],
-        }));
-        dispatch(setProductPermissions(payload));
-
-        const rolesPayload = (res.items || []).map((i) => ({
-          productId: i.productId ?? '',
-          role: i.role ?? '',
-        }));
-        dispatch(setAdminProductRoles(rolesPayload));
-      })
-      .catch((error) => {
-        dispatch(setAdminRolesStatus('failed'));
-        addError({
-          id: 'getPermissionsList-api-error',
-          blocking: false,
-          techDescription: 'Get permissions list failed',
-          toNotify: false,
-          error: error as Error,
-        });
-      });
-  }, [needsReload, status, permissions]);
 
   return (
     <DashboardShell
@@ -95,4 +34,4 @@ const DashboardAdminPage: React.FC = () => {
   );
 };
 
-export default DashboardAdminPage;
+export default withAdminPermissions(DashboardAdminPage);
