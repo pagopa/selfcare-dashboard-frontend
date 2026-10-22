@@ -1,4 +1,4 @@
-import { act, screen, within } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
@@ -55,11 +55,14 @@ const validLR = {
   'Email istituzionale': 'mario.rossi@comune.it',
 };
 
-const fillLR = async (user: ReturnType<typeof userEvent.setup>) => {
-  for (const [label, value] of Object.entries(validLR)) {
-    await user.type(screen.getByLabelText(label), value);
-  }
-};
+// Sets the value in one event instead of typing every character
+const setValue = (field: HTMLElement, value: string) =>
+  fireEvent.change(field, { target: { value } });
+
+const fillLR = () =>
+  Object.entries(validLR).forEach(([label, value]) =>
+    setValue(screen.getByLabelText(label), value)
+  );
 
 test('starts with a read-only step, its own main heading and enabled back navigation', () => {
   renderWizard();
@@ -98,7 +101,7 @@ test('blocks the Legal Representative step until the data is valid', async () =>
   expect(screen.getByRole('heading', { level: 1, name: lrTitle })).toBeInTheDocument();
   expect(screen.getAllByText('Campo obbligatorio')).toHaveLength(4);
 
-  await fillLR(user);
+  fillLR();
   expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
   await user.click(next());
   expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toHaveFocus();
@@ -107,14 +110,13 @@ test('blocks the Legal Representative step until the data is valid', async () =>
 test('preserves the data of every step and validates the admins on continue', async () => {
   const { user } = renderWizard();
   await user.click(next());
-  await fillLR(user);
+  fillLR();
 
   await user.click(next());
   expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toHaveFocus();
   const secondAdmin = await screen.findByRole('region', { name: 'Amministratore 2' });
   const email = within(secondAdmin).getByLabelText('Email istituzionale');
-  await user.clear(email);
-  await user.type(email, 'giulio@comune.it');
+  setValue(email, 'giulio@comune.it');
 
   await user.click(screen.getByRole('button', { name: 'Aggiungi amministratore' }));
   await user.click(next());
@@ -148,7 +150,7 @@ test('preserves the data of every step and validates the admins on continue', as
   await user.click(next());
   expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toBeInTheDocument();
   expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
-}, 20000);
+});
 
 test.each([
   '/dashboard/party-1/documents/product-2/update-contract',
