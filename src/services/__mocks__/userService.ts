@@ -25,6 +25,11 @@ export const mockedProductAdmins: Array<ProductUser> = [
   },
 ];
 
+// In local mock mode the logged user (see MOCK_USER in selfcare-common-frontend) has uid '0'
+export const mockedLocalProductAdmins: Array<ProductUser> = mockedProductAdmins.map((admin) =>
+  admin.id === 'UID' ? { ...admin, id: '0' } : admin
+);
+
 export const fetchProductAdmins = (
   _institutionId: string,
   _productId: string

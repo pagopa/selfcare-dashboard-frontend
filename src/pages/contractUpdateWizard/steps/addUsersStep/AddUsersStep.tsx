@@ -169,6 +169,23 @@ export const AddUsersStep = () => {
                   inputProps={{ 'aria-required': !readOnly, 'aria-readonly': readOnly }}
                   fullWidth
                   size="small"
+                  sx={
+                    readOnly
+                      ? {
+                          '& .MuiInputBase-root': {
+                            backgroundColor: (theme) => theme.colors.neutral.grey[50],
+                          },
+                          '& .MuiInputBase-input': {
+                            cursor: 'not-allowed',
+                            color: (theme) => theme.colors.neutral.grey[700],
+                            WebkitTextFillColor: (theme) => theme.colors.neutral.grey[700],
+                          },
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: (theme) => theme.colors.neutral.grey[100],
+                          },
+                        }
+                      : undefined
+                  }
                 />
               </Grid>
             ))}
