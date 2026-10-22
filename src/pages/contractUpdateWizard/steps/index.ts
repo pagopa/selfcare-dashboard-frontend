@@ -4,6 +4,7 @@ import { InstitutionDataStep } from './institutionDataStep/InstitutionDataStep';
 import { AddLRStep } from './addLRStep/AddLRStep';
 import { validateLegalRepresentative } from './addLRStep/validation';
 import { AddUsersStep } from './addUsersStep/AddUsersStep';
+import { areAdminsValid } from './addUsersStep/validation';
 
 export const stepComponents: Record<ContractUpdateStepId, ComponentType> = {
   institutionData: InstitutionDataStep,
@@ -17,4 +18,5 @@ export const stepValidators: Partial<
 > = {
   addLR: (draft) =>
     Object.keys(validateLegalRepresentative(draft.legalRepresentative)).length === 0,
+  addUsers: areAdminsValid,
 };

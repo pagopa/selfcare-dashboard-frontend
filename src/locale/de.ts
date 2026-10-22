@@ -7,7 +7,7 @@ export default {
     steps: {
       institutionData: 'Daten der Einrichtung',
       addLR: 'Gib den Rechtsvertreter an',
-      addUsers: 'Weitere Daten',
+      addUsers: 'Gib die Administratoren an',
     },
     institutionData: {
       description:
@@ -51,11 +51,26 @@ export default {
           'PEC-E-Mail-Adresse nicht akzeptiert. Bitte geben Sie die institutionelle E-Mail-Adresse der Organisation ein.',
       },
     },
-    additionalDetailsField: 'Zusätzliches Beispielfeld',
-    fieldHint:
-      'Vorläufiges Feld: Gib keine personenbezogenen Daten ein. Der Wert wird nicht gespeichert.',
-    submitUnavailable:
-      'Das Absenden ist noch nicht verfügbar. Du kannst zurückgehen und die Daten ändern.',
+    addUsers: {
+      description:
+        'Überprüfe die Daten der aktuellen Administratoren oder füge weitere Administratoren zur Liste hinzu. Sie sind für die Verwaltung von {{productName}} verantwortlich und werden im Beitrittsvertrag als Beauftragte des gesetzlichen Vertreters aufgeführt.',
+      legalRepresentativeTitle: 'Gesetzlicher Vertreter und Administrator',
+      adminTitle: 'Administrator {{index}}',
+      remove: 'Entfernen',
+      removeAriaLabel: '{{title}} entfernen',
+      add: 'Administrator hinzufügen',
+      errors: {
+        duplicateTaxCode: 'Die eingegebene Steuernummer ist bereits vorhanden',
+      },
+      removeModal: {
+        title: 'Möchtest du diesen Administrator entfernen?',
+        message:
+          'Alle zugehörigen eingegebenen Daten werden gelöscht und erscheinen nicht im Vertrag.',
+        back: 'Zurück',
+        remove: 'Entfernen',
+        close: 'Schließen',
+      },
+    },
     exitModal: {
       title: 'Möchtest du wirklich verlassen?',
       message: 'Wenn du verlässt, wird die Anfrage abgebrochen und du musst von vorne beginnen.',

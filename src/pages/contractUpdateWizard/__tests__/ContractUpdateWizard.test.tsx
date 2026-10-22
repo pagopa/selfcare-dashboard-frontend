@@ -1,15 +1,24 @@
-import { act, screen } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
+import { fetchProductAdmins } from '../../../services/userService';
 import { ENV } from '../../../utils/env';
 import { renderWithProviders } from '../../../utils/test-utils';
 import {
   CONTRACT_UPDATE_STEPS,
   contractUpdateWizardReducer,
+  getVisibleAdmins,
   initialWizardState,
 } from '../ContractUpdateWizardContext';
 import { ContractUpdateWizardPage } from '../ContractUpdateWizardPage';
+
+vi.mock('../../../services/userService', async () => {
+  const mocked = await vi.importActual<typeof import('../../../services/__mocks__/userService')>(
+    '../../../services/__mocks__/userService'
+  );
+  return { fetchProductAdmins: vi.fn(mocked.fetchProductAdmins) };
+});
 
 const wizardPath = '/dashboard/party-1/documents/product-1/update-contract';
 
@@ -38,6 +47,7 @@ const next = () => screen.getByRole('button', { name: 'Continua' });
 const back = () => screen.getByRole('button', { name: 'Indietro' });
 
 const lrTitle = 'Indica il Legale Rappresentante';
+const adminsTitle = 'Indica gli Amministratori';
 const validLR = {
   Nome: 'Mario',
   Cognome: 'Rossi',
@@ -45,11 +55,14 @@ const validLR = {
   'Email istituzionale': 'mario.rossi@comune.it',
 };
 
-const fillLR = async (user: ReturnType<typeof userEvent.setup>) => {
-  for (const [label, value] of Object.entries(validLR)) {
-    await user.type(screen.getByLabelText(label), value);
-  }
-};
+// Sets the value in one event instead of typing every character
+const setValue = (field: HTMLElement, value: string) =>
+  fireEvent.change(field, { target: { value } });
+
+const fillLR = () =>
+  Object.entries(validLR).forEach(([label, value]) =>
+    setValue(screen.getByLabelText(label), value)
+  );
 
 test('starts with a read-only step, its own main heading and enabled back navigation', () => {
   renderWizard();
@@ -58,7 +71,7 @@ test('starts with a read-only step, its own main heading and enabled back naviga
   expect(screen.getAllByRole('heading')).toHaveLength(1);
   expect(screen.queryByText(/Step \d di \d/)).not.toBeInTheDocument();
   expect(screen.queryByText(lrTitle)).not.toBeInTheDocument();
-  expect(screen.queryByText('Altri dati')).not.toBeInTheDocument();
+  expect(screen.queryByText(adminsTitle)).not.toBeInTheDocument();
   expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   expect(back()).toBeEnabled();
   expect(next()).toBeEnabled();
@@ -88,22 +101,28 @@ test('blocks the Legal Representative step until the data is valid', async () =>
   expect(screen.getByRole('heading', { level: 1, name: lrTitle })).toBeInTheDocument();
   expect(screen.getAllByText('Campo obbligatorio')).toHaveLength(4);
 
-  await fillLR(user);
+  fillLR();
   expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
   await user.click(next());
-  expect(screen.getByRole('heading', { level: 1, name: 'Altri dati' })).toHaveFocus();
+  expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toHaveFocus();
 });
 
-test('preserves editable data in both steps and disables submission in the last step', async () => {
+test('preserves the data of every step and validates the admins on continue', async () => {
   const { user } = renderWizard();
   await user.click(next());
-  await fillLR(user);
+  fillLR();
 
   await user.click(next());
-  expect(screen.getByRole('heading', { level: 1, name: 'Altri dati' })).toHaveFocus();
-  await user.type(screen.getByLabelText('Dato aggiuntivo dimostrativo'), 'demo step 3');
-  expect(next()).toBeDisabled();
-  expect(screen.getByText(/L’invio non è ancora disponibile/)).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toHaveFocus();
+  const secondAdmin = await screen.findByRole('region', { name: 'Amministratore 2' });
+  const email = within(secondAdmin).getByLabelText('Email istituzionale');
+  setValue(email, 'giulio@comune.it');
+
+  await user.click(screen.getByRole('button', { name: 'Aggiungi amministratore' }));
+  await user.click(next());
+  expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toBeInTheDocument();
+  const newAdmin = screen.getByRole('region', { name: 'Amministratore 3' });
+  expect(within(newAdmin).getAllByText('Campo obbligatorio')).toHaveLength(4);
 
   await user.click(back());
   expect(screen.getByLabelText('Nome')).toHaveValue('Mario');
@@ -114,7 +133,23 @@ test('preserves editable data in both steps and disables submission in the last 
   await user.click(next());
   expect(screen.getByLabelText('Codice Fiscale')).toHaveValue('RSSMRA80A01H501U');
   await user.click(next());
-  expect(screen.getByLabelText('Dato aggiuntivo dimostrativo')).toHaveValue('demo step 3');
+  expect(
+    within(screen.getByRole('region', { name: 'Amministratore 2' })).getByLabelText(
+      'Email istituzionale'
+    )
+  ).toHaveValue('giulio@comune.it');
+  expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
+  expect(fetchProductAdmins).toHaveBeenCalledTimes(1);
+
+  await user.click(
+    within(screen.getByRole('region', { name: 'Amministratore 3' })).getByRole('button', {
+      name: 'Rimuovi Amministratore 3',
+    })
+  );
+  // TODO: assert the submission when the contract update API is available
+  await user.click(next());
+  expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toBeInTheDocument();
+  expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
 });
 
 test.each([
@@ -147,4 +182,69 @@ test('bounds navigation and resets the entire shared state without mutating the 
   expect(withErrors.showErrors).toBe(true);
   expect(contractUpdateWizardReducer(withErrors, { type: 'back' }).showErrors).toBe(false);
   expect(contractUpdateWizardReducer(edited, { type: 'reset' })).toEqual(initialWizardState);
+});
+
+test('manages the admins list in the shared state', () => {
+  const loading = contractUpdateWizardReducer(initialWizardState, { type: 'loadAdminsStart' });
+  expect(loading.adminsStatus).toBe('loading');
+  const loaded = contractUpdateWizardReducer(loading, {
+    type: 'loadAdmins',
+    admins: [
+      {
+        userId: 'user-1',
+        originalTaxCode: 'RSSMRA80A01H501U',
+        name: 'Mario',
+        surname: 'Rossi',
+        taxCode: 'RSSMRA80A01H501U',
+        email: 'mario@comune.it',
+      },
+    ],
+  });
+  expect(loaded.adminsStatus).toBe('loaded');
+  const added = contractUpdateWizardReducer(loaded, { type: 'addAdmin' });
+  expect(added.draft.admins.map((admin) => admin.key)).toEqual(['admin-0', 'admin-1']);
+  expect(added.draft.admins[1]).toEqual({
+    key: 'admin-1',
+    name: '',
+    surname: '',
+    taxCode: '',
+    email: '',
+  });
+  const updated = contractUpdateWizardReducer(added, {
+    type: 'updateAdmin',
+    key: 'admin-1',
+    field: 'name',
+    value: 'Giulio',
+  });
+  expect(updated.draft.admins[1].name).toBe('Giulio');
+  expect(added.draft.admins[1].name).toBe('');
+
+  expect(getVisibleAdmins(updated.draft)).toHaveLength(2);
+  const withLR = {
+    ...updated.draft,
+    legalRepresentative: { ...updated.draft.legalRepresentative, taxCode: 'rssmra80a01h501u' },
+  };
+  expect(getVisibleAdmins(withLR).map((admin) => admin.key)).toEqual(['admin-1']);
+
+  const removed = contractUpdateWizardReducer(updated, { type: 'removeAdmin', key: 'admin-0' });
+  expect(removed.draft.admins.map((admin) => admin.key)).toEqual(['admin-1']);
+  expect(contractUpdateWizardReducer(removed, { type: 'addAdmin' }).draft.admins[1].key).toBe(
+    'admin-2'
+  );
+});
+
+test('ignores a duplicate loadAdmins completion so user edits are not overwritten', () => {
+  const admin = {
+    name: 'Giulio',
+    surname: 'Verdi',
+    taxCode: 'VRDGLI80A01H501Z',
+    email: 'giulio@comune.it',
+  };
+  const loaded = contractUpdateWizardReducer(
+    contractUpdateWizardReducer(initialWizardState, { type: 'loadAdminsStart' }),
+    { type: 'loadAdmins', admins: [admin] }
+  );
+  const duplicate = contractUpdateWizardReducer(loaded, { type: 'loadAdmins', admins: [] });
+
+  expect(duplicate).toBe(loaded);
 });

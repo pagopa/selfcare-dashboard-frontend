@@ -7,7 +7,7 @@ export default {
     steps: {
       institutionData: 'Podatki ustanove',
       addLR: 'Navedite pravnega zastopnika',
-      addUsers: 'Dodatni podatki',
+      addUsers: 'Navedite skrbnike',
     },
     institutionData: {
       description: 'Preverite in potrdite podatke ustanove ter se prepričajte, da so pravilni.',
@@ -50,9 +50,25 @@ export default {
           'Naslov PEC ni sprejet. Prosimo, vnesite institucionalni e-poštni naslov, ki se uporablja za subjekt.',
       },
     },
-    additionalDetailsField: 'Dodatno vzorčno polje',
-    fieldHint: 'Začasno polje: ne vnašajte osebnih podatkov. Vrednost se ne shrani.',
-    submitUnavailable: 'Oddaja še ni na voljo. Lahko se vrnete in spremenite podatke.',
+    addUsers: {
+      description:
+        'Preverite podatke trenutnih skrbnikov ali dodajte druge skrbnike na seznam. Odgovorni bodo za upravljanje {{productName}} in bodo navedeni v pogodbi o pristopu kot pooblaščenci zakonitega zastopnika.',
+      legalRepresentativeTitle: 'Zakoniti zastopnik in skrbnik',
+      adminTitle: 'Skrbnik {{index}}',
+      remove: 'Odstrani',
+      removeAriaLabel: 'Odstrani {{title}}',
+      add: 'Dodaj skrbnika',
+      errors: {
+        duplicateTaxCode: 'Vneseni davčni kodeks je že prisoten',
+      },
+      removeModal: {
+        title: 'Ali želite odstraniti tega skrbnika?',
+        message: 'Vsi povezani vneseni podatki bodo izbrisani in ne bodo navedeni v pogodbi.',
+        back: 'Nazaj',
+        remove: 'Odstrani',
+        close: 'Zapri',
+      },
+    },
     exitModal: {
       title: 'Ali res želite zapustiti?',
       message: 'Če zapustite, bo zahteva preklicana in boste morali začeti znova.',

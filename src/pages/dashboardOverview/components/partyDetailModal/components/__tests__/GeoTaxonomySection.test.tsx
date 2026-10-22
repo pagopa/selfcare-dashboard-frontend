@@ -51,7 +51,7 @@ beforeEach(() => {
 
 describe('GeoTaxonomySection', () => {
   test('renders component with Local options selected', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderWithProviders(
       <GeoTaxonomySection
         geographicTaxonomies={mockGeographicTaxonomies}

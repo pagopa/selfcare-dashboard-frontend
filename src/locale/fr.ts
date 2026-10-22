@@ -7,7 +7,7 @@ export default {
     steps: {
       institutionData: 'Données de l’organisme',
       addLR: 'Indiquez le Représentant Légal',
-      addUsers: 'Données supplémentaires',
+      addUsers: 'Indiquez les Administrateurs',
     },
     institutionData: {
       description:
@@ -51,11 +51,26 @@ export default {
           "Adresse PEC non acceptée. Veuillez saisir l'adresse e-mail institutionnelle utilisée pour l'entité.",
       },
     },
-    additionalDetailsField: 'Champ de démonstration supplémentaire',
-    fieldHint:
-      'Champ provisoire : ne saisissez pas de données personnelles. La valeur n’est pas enregistrée.',
-    submitUnavailable:
-      'L’envoi n’est pas encore disponible. Vous pouvez revenir en arrière et modifier les données.',
+    addUsers: {
+      description:
+        'Vérifiez les données des Administrateurs actuels ou ajoutez d’autres Administrateurs à la liste. Ils seront responsables de la gestion de {{productName}} et figureront dans le contrat d’adhésion en tant que délégués du Représentant légal.',
+      legalRepresentativeTitle: 'Représentant légal et Administrateur',
+      adminTitle: 'Administrateur {{index}}',
+      remove: 'Supprimer',
+      removeAriaLabel: 'Supprimer {{title}}',
+      add: 'Ajouter un administrateur',
+      errors: {
+        duplicateTaxCode: 'Le Code fiscal saisi est déjà présent',
+      },
+      removeModal: {
+        title: 'Voulez-vous supprimer cet administrateur ?',
+        message:
+          'Toutes les données saisies correspondantes seront supprimées et n’apparaîtront pas dans le contrat.',
+        back: 'Retour',
+        remove: 'Supprimer',
+        close: 'Fermer',
+      },
+    },
     exitModal: {
       title: 'Voulez-vous vraiment quitter ?',
       message:

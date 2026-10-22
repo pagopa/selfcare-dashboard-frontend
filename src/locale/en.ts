@@ -7,7 +7,7 @@ export default {
     steps: {
       institutionData: 'Institution data',
       addLR: 'Enter the Legal Representative',
-      addUsers: 'Additional details',
+      addUsers: 'Specify the Administrators',
     },
     institutionData: {
       description: 'Check and confirm the institution data, making sure it is correct.',
@@ -50,9 +50,26 @@ export default {
           'PEC email address not accepted. Please enter the institutional email address used for the entity.',
       },
     },
-    additionalDetailsField: 'Additional sample field',
-    fieldHint: 'Temporary field: do not enter personal data. The value is not saved.',
-    submitUnavailable: 'Submission is not available yet. You can go back and edit the data.',
+    addUsers: {
+      description:
+        'Check the data of the current Administrators or add other Administrators to the list. They will be responsible for managing {{productName}} and will appear in the membership contract as delegates of the Legal Representative.',
+      legalRepresentativeTitle: 'Legal Representative and Administrator',
+      adminTitle: 'Administrator {{index}}',
+      remove: 'Remove',
+      removeAriaLabel: 'Remove {{title}}',
+      add: 'Add administrator',
+      errors: {
+        duplicateTaxCode: 'The Tax Code entered is already present',
+      },
+      removeModal: {
+        title: 'Do you want to remove this administrator?',
+        message:
+          'All the related data entered will be deleted and will not appear in the contract.',
+        back: 'Back',
+        remove: 'Remove',
+        close: 'Close',
+      },
+    },
     exitModal: {
       title: 'Do you really want to leave?',
       message: 'If you leave, the request will be cancelled and you will have to start over.',
