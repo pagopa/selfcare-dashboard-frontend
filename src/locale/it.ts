@@ -89,6 +89,11 @@ export default {
       confirm: 'Continua',
       close: 'Chiudi',
     },
+    result: {
+      success: 'Richiesta inviata',
+      error: 'Non è stato possibile inviare la richiesta',
+      backToDocuments: 'Torna a Documenti',
+    },
   },
   customAlert: {
     message:

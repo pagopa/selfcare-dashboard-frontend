@@ -88,6 +88,11 @@ export default {
       confirm: 'Continue',
       close: 'Close',
     },
+    result: {
+      success: 'Request sent',
+      error: 'The request could not be sent',
+      backToDocuments: 'Back to Documents',
+    },
   },
   customAlert: {
     message:

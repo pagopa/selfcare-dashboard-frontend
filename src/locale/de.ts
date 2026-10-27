@@ -89,6 +89,11 @@ export default {
       confirm: 'Weiter',
       close: 'Schließen',
     },
+    result: {
+      success: 'Anfrage gesendet',
+      error: 'Die Anfrage konnte nicht gesendet werden',
+      backToDocuments: 'Zurück zu Dokumente',
+    },
   },
   customAlert: {
     message:

@@ -2,6 +2,10 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils
 import { Redirect, useParams } from 'react-router-dom';
 import { useIsPagoPaUser } from './hooks/useIsPagoPaUser';
 import AdminRemote from './microcomponents/admin/AdminRemote';
+import {
+  ContractUpdateErrorPage,
+  ContractUpdateSuccessPage,
+} from './pages/contractUpdateWizard/ContractUpdateResultPage';
 import ContractUpdateWizardPage from './pages/contractUpdateWizard/ContractUpdateWizardPage';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';
@@ -67,6 +71,16 @@ const ROUTES = {
     path: ENV.ROUTES.CONTRACT_UPDATE,
     exact: true,
     component: ContractUpdateWizardPage,
+  },
+  CONTRACT_UPDATE_SUCCESS: {
+    path: ENV.ROUTES.CONTRACT_UPDATE_SUCCESS,
+    exact: true,
+    component: ContractUpdateSuccessPage,
+  },
+  CONTRACT_UPDATE_ERROR: {
+    path: ENV.ROUTES.CONTRACT_UPDATE_ERROR,
+    exact: true,
+    component: ContractUpdateErrorPage,
   },
   PARTY_DASHBOARD: {
     path: `${BASE_ROUTE}/:partyId`,

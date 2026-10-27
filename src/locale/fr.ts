@@ -90,6 +90,11 @@ export default {
       confirm: 'Continuer',
       close: 'Fermer',
     },
+    result: {
+      success: 'Demande envoyée',
+      error: 'Impossible d’envoyer la demande',
+      backToDocuments: 'Retour aux Documents',
+    },
   },
   customAlert: {
     message:

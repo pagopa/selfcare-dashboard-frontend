@@ -2,6 +2,10 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
+import { Party } from '../../../model/Party';
+import { partiesActions } from '../../../redux/slices/partiesSlice';
+import { createStore } from '../../../redux/store';
+import { submitContractUpdate } from '../../../services/contractUpdateService';
 import { fetchProductAdmins } from '../../../services/userService';
 import { ENV } from '../../../utils/env';
 import { renderWithProviders } from '../../../utils/test-utils';
@@ -11,7 +15,10 @@ import {
   getVisibleAdmins,
   initialWizardState,
 } from '../ContractUpdateWizardContext';
+import { ContractUpdateErrorPage, ContractUpdateSuccessPage } from '../ContractUpdateResultPage';
 import { ContractUpdateWizardPage } from '../ContractUpdateWizardPage';
+
+vi.mock('../../../services/contractUpdateService', () => ({ submitContractUpdate: vi.fn() }));
 
 vi.mock('../../../services/userService', async () => {
   const mocked = await vi.importActual<typeof import('../../../services/__mocks__/userService')>(
@@ -22,21 +29,35 @@ vi.mock('../../../services/userService', async () => {
 
 const wizardPath = '/dashboard/party-1/documents/product-1/update-contract';
 
+const selectedParty = {
+  partyId: 'party-1',
+  description: 'Comune di Roma',
+  products: [],
+} as unknown as Party;
+
 const renderWizard = (returnTo?: string) => {
   const history = createMemoryHistory({ initialEntries: [wizardPath] });
   if (returnTo) {
     history.replace(wizardPath, { returnTo });
   }
+  const store = createStore();
+  store.dispatch(partiesActions.setPartySelected(selectedParty));
   renderWithProviders(
     <Switch>
       <Route path={ENV.ROUTES.CONTRACT_UPDATE} exact>
         <ContractUpdateWizardPage />
       </Route>
+      <Route path={ENV.ROUTES.CONTRACT_UPDATE_SUCCESS} exact>
+        <ContractUpdateSuccessPage />
+      </Route>
+      <Route path={ENV.ROUTES.CONTRACT_UPDATE_ERROR} exact>
+        <ContractUpdateErrorPage />
+      </Route>
       <Route path="/dashboard/:partyId/documents" exact>
         <div>Elenco documenti</div>
       </Route>
     </Switch>,
-    undefined,
+    store,
     history
   );
   // delay: null skips the per-keystroke timer, keeping long typing flows well under the test timeout
@@ -155,6 +176,49 @@ test('preserves the data of every step and validates the admins on continue', as
   expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toBeInTheDocument();
   expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
 });
+
+test.each([
+  [
+    'success',
+    () => vi.mocked(submitContractUpdate).mockResolvedValue(),
+    '/dashboard/party-1/documents/product-1/update-contract/success',
+    'Richiesta inviata',
+  ],
+  [
+    'error',
+    () => vi.mocked(submitContractUpdate).mockRejectedValue(new Error('KO')),
+    '/dashboard/party-1/documents/product-1/update-contract/error',
+    'Non è stato possibile inviare la richiesta',
+  ],
+])(
+  'sends the request on confirm and goes to the %s page',
+  async (_outcome, mockSubmit, expectedPath, expectedTitle) => {
+    mockSubmit();
+    const { history, user } = renderWizard();
+    await user.click(next());
+    fillLR();
+    await user.click(next());
+    await screen.findByRole('region', { name: 'Amministratore 2' });
+    await user.click(next());
+
+    const dialog = await screen.findByRole('dialog', { name: 'Confermi la richiesta di invio?' });
+    expect(within(dialog).getByText('Comune di Roma', { selector: 'strong' })).toBeInTheDocument();
+    await user.click(within(dialog).getByRole('button', { name: 'Continua' }));
+
+    expect(
+      await screen.findByRole('heading', { level: 1, name: expectedTitle })
+    ).toBeInTheDocument();
+    expect(history.location.pathname).toBe(expectedPath);
+    expect(submitContractUpdate).toHaveBeenCalledTimes(1);
+    expect(submitContractUpdate).toHaveBeenCalledWith(
+      selectedParty,
+      'product-1',
+      expect.objectContaining({
+        legalRepresentative: expect.objectContaining({ taxCode: 'RSSMRA80A01H501U' }),
+      })
+    );
+  }
+);
 
 test.each([
   '/dashboard/party-1/documents/product-2/update-contract',

@@ -3,6 +3,7 @@ import { BrokerResource } from '../generated/b4f-dashboard/BrokerResource';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import { InstitutionBaseResource } from '../generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
+import { OnboardingContractUpdateDto } from '../generated/b4f-dashboard/OnboardingContractUpdateDto';
 import { SelcRoleEnum } from '../generated/b4f-dashboard/ProductRoleInfoResource';
 import { ProductRolesResource } from '../generated/b4f-dashboard/ProductRolesResource';
 import { ProductsResource, StatusEnum } from '../generated/b4f-dashboard/ProductsResource';
@@ -331,4 +332,10 @@ export const DashboardApi = {
     _roles: Array<string>
   ): Promise<Array<ProductUserResource>> =>
     new Promise((resolve) => resolve(mockedProductUserResource)),
+
+  onboardingContractUpdate: async (
+    _institutionId: string,
+    _productId: string,
+    _body: OnboardingContractUpdateDto
+  ): Promise<void> => new Promise((resolve) => resolve()),
 };

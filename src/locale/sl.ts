@@ -87,6 +87,11 @@ export default {
       confirm: 'Nadaljuj',
       close: 'Zapri',
     },
+    result: {
+      success: 'Zahteva poslana',
+      error: 'Zahteve ni bilo mogoče poslati',
+      backToDocuments: 'Nazaj na Dokumente',
+    },
   },
   customAlert: {
     message:
