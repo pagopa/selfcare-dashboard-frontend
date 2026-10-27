@@ -1,10 +1,9 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
-import { screen, waitFor } from '@testing-library/react';
+import { cleanup, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Mock } from 'vitest';
 import {
-  markAdminPermissionsStale,
   setAdminProductRoles,
   setAdminRolesStatus,
 } from '../../../redux/slices/adminRolesSlice';
@@ -90,19 +89,30 @@ describe('DashboardAdminPage', () => {
     expect(getPermissionsAdminService).not.toHaveBeenCalled();
   });
 
-  it('resets and reloads permissions when a reload is requested', async () => {
+  it('replaces stale permissions left by a party page when entering the admin area', async () => {
     const store = createStore();
     store.dispatch(setProductPermissions([{ productId: 'old', actions: ['a'] }]));
     store.dispatch(setAdminProductRoles([{ productId: 'old', role: 'old-role' }]));
-    store.dispatch(markAdminPermissionsStale());
 
     renderAdmin(store);
 
-    await waitFor(() => expect(store.getState().adminRoles.needsReload).toBe(false));
+    await waitFor(() =>
+      expect(store.getState().adminRoles.rolesByProduct).toHaveProperty('prod-io')
+    );
     expect(getPermissionsAdminService).toHaveBeenCalledTimes(1);
     expect(store.getState().adminRoles.rolesByProduct).not.toHaveProperty('old');
     expect(
       store.getState().permissions.productPermissions.map((p: any) => p.productId)
     ).not.toContain('old');
+  });
+
+  it('reloads the permissions every time the admin area is mounted again', async () => {
+    const { store } = renderAdmin();
+    await waitFor(() => expect(store.getState().adminRoles.status).toBe('succeeded'));
+    cleanup();
+
+    renderAdmin(store);
+    await waitFor(() => expect(getPermissionsAdminService).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(store.getState().adminRoles.status).toBe('succeeded'));
   });
 });

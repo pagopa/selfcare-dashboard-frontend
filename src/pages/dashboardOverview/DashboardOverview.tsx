@@ -10,12 +10,13 @@ import {
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { isPagoPaUser, storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { storageUserOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { isPecEmail } from '@pagopa/selfcare-common-frontend/lib/utils/utils';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { DashboardApi } from '../../api/DashboardApiClient';
+import { useIsPagoPaUser } from '../../hooks/useIsPagoPaUser';
 import { GeographicTaxonomyDto } from '../../api/generated/b4f-dashboard/GeographicTaxonomyDto';
 import { GeographicTaxonomyResource } from '../../api/generated/b4f-dashboard/GeographicTaxonomyResource';
 import { ProductOnBoardingStatusEnum } from '../../api/generated/b4f-dashboard/OnboardedProductResource';
@@ -93,7 +94,7 @@ const DashboardOverview = ({ party, products }: Props) => {
       product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
       product.institutionType === 'PSP'
   );
-  const isBackstageUser = isPagoPaUser();
+  const isBackstageUser = useIsPagoPaUser();
 
   const canUploadDoraAddendum =
     !isBackstageUser &&

@@ -1,9 +1,10 @@
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
+import { Mock } from 'vitest';
 import App from '../App';
 import {
   verifyMockExecution as verifyLoginMockExecution,
@@ -12,8 +13,10 @@ import {
   verifyMockExecution as verifyPartiesMockExecution,
 } from '../decorators/__mocks__/withParties';
 import { verifyMockExecution as verifySelectedPartyMockExecution } from '../decorators/__mocks__/withSelectedParty';
+import { useIsPagoPaUser } from '../hooks/useIsPagoPaUser';
 import { BaseParty } from '../model/Party';
 import { createStore } from '../redux/store';
+import { getPermissionsAdminService } from '../services/adminService';
 import { mockedBaseParties } from '../services/__mocks__/partyService';
 
 vi.mock('@pagopa/selfcare-common-frontend/lib/decorators/withLogin', async () => {
@@ -25,6 +28,10 @@ vi.mock('@pagopa/selfcare-common-frontend/lib/decorators/withLogin', async () =>
 });
 vi.mock('../decorators/withParties');
 vi.mock('../decorators/withSelectedParty');
+vi.mock('../hooks/useIsPagoPaUser', () => ({ useIsPagoPaUser: vi.fn(() => false) }));
+vi.mock('../services/adminService', () => ({
+  getPermissionsAdminService: vi.fn(() => Promise.resolve({ items: [] })),
+}));
 
 const renderApp = (
   injectedStore?: ReturnType<typeof createStore>,
@@ -77,4 +84,45 @@ test('Test routing ', async () => {
   expect(history.location.pathname).toBe('/dashboard/1');
 
   verifySelectedPartyMockExecution(store.getState());
+});
+
+describe('PagoPA admin routes', () => {
+  beforeEach(() => {
+    (useIsPagoPaUser as Mock).mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    (useIsPagoPaUser as Mock).mockReturnValue(false);
+  });
+
+  test('redirects unknown paths to the admin search', async () => {
+    const history = createMemoryHistory();
+    history.push('/unknown');
+    renderApp(undefined, history);
+
+    await waitFor(() => expect(history.location.pathname).toBe('/dashboard/admin/search'));
+  });
+
+  test('renders the admin area inside the dashboard shell and loads the admin permissions', async () => {
+    const history = createMemoryHistory();
+    history.push('/dashboard/admin/search');
+    const { store } = renderApp(undefined, history);
+
+    expect(await screen.findByTestId('federation-mock')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Adesioni' })).toBeInTheDocument();
+    await waitFor(() => expect(store.getState().adminRoles.status).toBe('succeeded'));
+    expect(getPermissionsAdminService).toHaveBeenCalled();
+    expect(store.getState().parties.selected).toBeUndefined();
+  });
+
+  test('renders the onboarding detail full page without reloading the admin permissions', async () => {
+    (getPermissionsAdminService as Mock).mockClear();
+    const history = createMemoryHistory();
+    history.push('/dashboard/admin/onboarding/token-1');
+    renderApp(undefined, history);
+
+    expect(await screen.findByTestId('federation-mock')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Adesioni' })).not.toBeInTheDocument();
+    expect(getPermissionsAdminService).not.toHaveBeenCalled();
+  });
 });

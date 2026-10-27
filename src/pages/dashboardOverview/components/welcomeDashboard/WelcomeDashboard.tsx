@@ -2,8 +2,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Grid } from '@mui/material';
 import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useTranslation } from 'react-i18next';
+import { useIsPagoPaUser } from '../../../../hooks/useIsPagoPaUser';
 
 type Props = {
   setOpen: (open: boolean) => void;
@@ -11,7 +11,7 @@ type Props = {
 
 export default function WelcomeDashboard({ setOpen }: Readonly<Props>) {
   const { t } = useTranslation();
-  const isPagoPa = isPagoPaUser();
+  const isPagoPa = useIsPagoPaUser();
   const title = t('overview.title');
   const subTitle = isPagoPa ? t('overview.backstageSubTitle') : t('overview.subTitle');
 

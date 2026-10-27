@@ -1,9 +1,7 @@
 import {
   adminRolesReducer,
-  markAdminPermissionsStale,
   resetAdminProductRoles,
   selectAdminRolesByProduct,
-  selectAdminRolesNeedsReload,
   selectAdminRolesStatus,
   selectAdminUniqueRoles,
   setAdminProductRoles,
@@ -19,12 +17,11 @@ describe('adminRolesSlice', () => {
       rolesByProduct: {},
       uniqueRoles: [],
       status: 'idle',
-      needsReload: false,
     });
   });
 
   test('setAdminProductRoles builds the roles map, unique roles and marks as succeeded', () => {
-    const stale = { ...initialState, needsReload: true, status: 'pending' as const };
+    const stale = { ...initialState, status: 'pending' as const };
 
     const state = adminRolesReducer(
       stale,
@@ -46,7 +43,6 @@ describe('adminRolesSlice', () => {
       },
       uniqueRoles: ['admin', 'operator'],
       status: 'succeeded',
-      needsReload: false,
     });
   });
 
@@ -76,11 +72,6 @@ describe('adminRolesSlice', () => {
     expect(state).toEqual({ ...initialState, status: 'failed' });
   });
 
-  test('markAdminPermissionsStale sets needsReload', () => {
-    const state = adminRolesReducer(initialState, markAdminPermissionsStale());
-    expect(state.needsReload).toBe(true);
-  });
-
   test('resetAdminProductRoles restores the initial state', () => {
     const populated = adminRolesReducer(
       initialState,
@@ -92,12 +83,10 @@ describe('adminRolesSlice', () => {
   test('selectors read from the store', () => {
     const store = createStore();
     store.dispatch(setAdminProductRoles([{ productId: 'prod-io', role: 'admin' }]));
-    store.dispatch(markAdminPermissionsStale());
 
     const state = store.getState();
     expect(selectAdminRolesByProduct(state)).toEqual({ 'prod-io': 'admin' });
     expect(selectAdminUniqueRoles(state)).toEqual(['admin']);
     expect(selectAdminRolesStatus(state)).toBe('succeeded');
-    expect(selectAdminRolesNeedsReload(state)).toBe(true);
   });
 });

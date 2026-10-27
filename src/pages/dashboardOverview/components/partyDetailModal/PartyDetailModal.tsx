@@ -1,9 +1,9 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Drawer, Grid, IconButton, Link, Typography, styled } from '@mui/material';
 import { useLoading } from '@pagopa/selfcare-common-frontend/lib';
-import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useIsPagoPaUser } from '../../../../hooks/useIsPagoPaUser';
 import { Party } from '../../../../model/Party';
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
@@ -51,9 +51,11 @@ export const PartyDetailModal = ({
   const setLoading = useLoading('DRAWER_PARTY_DETAIL');
   const institutionTypesList = useAppSelector(partiesSelectors.selectPartySelectedInstitutionTypes);
 
+  const isPagoPa = useIsPagoPaUser();
+
   const [clearCache, setclearCache] = useState(false);
 
-  const showInfoBanner = institutionTypesList?.includes('PA') && !isPagoPaUser();
+  const showInfoBanner = institutionTypesList?.includes('PA') && !isPagoPa;
 
   const reloadPage = () => {
     setclearCache(false);
@@ -93,7 +95,7 @@ export const PartyDetailModal = ({
         </Grid>
 
         <Typography variant="h6" sx={{ fontWeight: '700' }} pb={3}>
-          {isPagoPaUser() ? t('overview.viewDetails') : t('overview.changeDetails')}
+          {isPagoPa ? t('overview.viewDetails') : t('overview.changeDetails')}
         </Typography>
         <Grid item xs={12}>
           <PartyLogoUploader
