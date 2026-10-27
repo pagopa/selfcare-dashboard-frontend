@@ -64,8 +64,10 @@ const renderWizard = (returnTo?: string) => {
   return { history, user: userEvent.setup({ delay: null }) };
 };
 
-const next = () => screen.getByRole('button', { name: 'Continua' });
-const back = () => screen.getByRole('button', { name: 'Indietro' });
+// getByRole computes the accessible name of every button, which is slow with the admin cards rendered.
+// The footer buttons are matched by text, so these helpers must not be used while a dialog is open.
+const next = () => screen.getByText('Continua', { selector: 'button' });
+const back = () => screen.getByText('Indietro', { selector: 'button' });
 
 const lrTitle = 'Indica il Legale Rappresentante';
 const adminsTitle = 'Indica gli Amministratori';
@@ -84,6 +86,13 @@ const fillLR = () =>
   Object.entries(validLR).forEach(([label, value]) =>
     setValue(screen.getByLabelText(label), value)
   );
+
+const goToAdminsStep = async (user: ReturnType<typeof userEvent.setup>) => {
+  await user.click(next());
+  fillLR();
+  await user.click(next());
+  await screen.findByRole('region', { name: 'Amministratore 2' });
+};
 
 test('starts with a read-only step, its own main heading and enabled back navigation', () => {
   renderWizard();
@@ -168,13 +177,24 @@ test('preserves the data of every step and validates the admins on continue', as
     })
   );
   await user.click(next());
+  expect(
+    await screen.findByRole('dialog', { name: 'Confermi la richiesta di invio?' })
+  ).toBeInTheDocument();
+});
+
+test('shows the product and the institution in the submit dialog and closes it with Indietro', async () => {
+  const { user } = renderWizard();
+  await goToAdminsStep(user);
+  await user.click(next());
+
   const dialog = await screen.findByRole('dialog', { name: 'Confermi la richiesta di invio?' });
   expect(within(dialog).getByText(/richiesta di adesione al prodotto/)).toBeInTheDocument();
   expect(within(dialog).getByText('product-1', { selector: 'strong' })).toBeInTheDocument();
+  expect(within(dialog).getByText('Comune di Roma', { selector: 'strong' })).toBeInTheDocument();
   await user.click(within(dialog).getByRole('button', { name: 'Indietro' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toBeInTheDocument();
-  expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
+  expect(submitContractUpdate).not.toHaveBeenCalled();
 });
 
 test.each([
@@ -195,14 +215,10 @@ test.each([
   async (_outcome, mockSubmit, expectedPath, expectedTitle) => {
     mockSubmit();
     const { history, user } = renderWizard();
-    await user.click(next());
-    fillLR();
-    await user.click(next());
-    await screen.findByRole('region', { name: 'Amministratore 2' });
+    await goToAdminsStep(user);
     await user.click(next());
 
     const dialog = await screen.findByRole('dialog', { name: 'Confermi la richiesta di invio?' });
-    expect(within(dialog).getByText('Comune di Roma', { selector: 'strong' })).toBeInTheDocument();
     await user.click(within(dialog).getByRole('button', { name: 'Continua' }));
 
     expect(
