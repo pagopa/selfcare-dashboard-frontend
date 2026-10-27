@@ -53,7 +53,7 @@ export default {
     },
     addUsers: {
       description:
-        'Vérifiez les données des Administrateurs actuels ou ajoutez d’autres Administrateurs à la liste. Ils seront responsables de la gestion de {{productName}} et figureront dans le contrat d’adhésion en tant que délégués du Représentant légal.',
+        'Vérifiez les données des Administrateurs actuels ou ajoutez d’autres Administrateurs à la liste. Ils seront responsables de la gestion de <1>{{productName}}</1> et figureront dans le contrat d’adhésion en tant que délégués du Représentant légal.',
       legalRepresentativeTitle: 'Représentant légal et Administrateur',
       adminTitle: 'Administrateur {{index}}',
       remove: 'Supprimer',
@@ -76,8 +76,18 @@ export default {
       title: 'Voulez-vous vraiment quitter ?',
       message:
         'Si vous quittez, la demande sera annulée et vous devrez recommencer depuis le début.',
-      exit: 'Retour aux Documents',
-      stay: 'Continuer',
+      exit: 'Quitter',
+      back: 'Retour',
+      close: 'Fermer',
+    },
+    submitModal: {
+      title: 'Confirmez-vous la demande d’envoi ?',
+      message:
+        'Vous envoyez le document avec la demande d’adhésion au produit <1>{{productName}}</1> pour l’entité <2>{{partyName}}</2>.',
+      description:
+        'L’accord d’adhésion sera envoyé à la PEC institutionnelle de l’entité et devra être signé par le Représentant Légal. Assurez-vous d’être autorisé en tant qu’employé à effectuer cette demande.',
+      back: 'Retour',
+      confirm: 'Continuer',
       close: 'Fermer',
     },
   },

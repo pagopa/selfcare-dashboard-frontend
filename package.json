@@ -12,7 +12,7 @@
     "@mui/system": "^5.14.1",
     "@mui/x-data-grid": "^6.20.4",
     "@mui/x-data-grid-generator": "^6.20.4",
-    "@pagopa/mui-italia": "2.7.0",
+    "@pagopa/mui-italia": "^2.7.0",
     "@pagopa/selfcare-common-frontend": "^2.5.4",
     "@pagopa/ts-commons": "^13.1.2",
     "@types/react": "^18.2.22",
@@ -86,7 +86,7 @@
   "resolutions": {
     "static-eval": "^2.0.2",
     "yargs": "^17.5.1",
-    "shell-quote": "^1.8.4",
+    "shell-quote": "^1.11.0",
     "jsonpath": "^1.1.1",
     "svgo": "^2.8.0",
     "json-schema-ref-parser": "^7.1.0",

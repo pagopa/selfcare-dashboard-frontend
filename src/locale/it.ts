@@ -53,7 +53,7 @@ export default {
     },
     addUsers: {
       description:
-        'Verifica i dati degli Amministratori attuali o aggiungi altri Amministratori alla lista. Saranno i responsabili della gestione di {{productName}} e presenti nel contratto di adesione come delegati dal Legale Rappresentante.',
+        'Verifica i dati degli Amministratori attuali o aggiungi altri Amministratori alla lista. Saranno i responsabili della gestione di <1>{{productName}}</1> e presenti nel contratto di adesione come delegati dal Legale Rappresentante.',
       legalRepresentativeTitle: 'Legale Rappresentante e Amministratore',
       adminTitle: 'Amministratore {{index}}',
       remove: 'Rimuovi',
@@ -75,8 +75,18 @@ export default {
     exitModal: {
       title: 'Vuoi davvero uscire?',
       message: 'Se esci, la richiesta verrà annullata e dovrai ripartire dall’inizio.',
-      exit: 'Torna a Documenti',
-      stay: 'Continua',
+      exit: 'Esci',
+      back: 'Indietro',
+      close: 'Chiudi',
+    },
+    submitModal: {
+      title: 'Confermi la richiesta di invio?',
+      message:
+        'Stai inviando il documento con la richiesta di adesione al prodotto <1>{{productName}}</1> per l’ente <2>{{partyName}}</2>.',
+      description:
+        'L’accordo di adesione arriverà alla PEC istituzionale dell’ente e dovrà essere sottoscritto dal Legale Rappresentante. Assicurati di essere autorizzato come dipendente a effettuare questa richiesta.',
+      back: 'Indietro',
+      confirm: 'Continua',
       close: 'Chiudi',
     },
   },

@@ -52,7 +52,7 @@ export default {
     },
     addUsers: {
       description:
-        'Preverite podatke trenutnih skrbnikov ali dodajte druge skrbnike na seznam. Odgovorni bodo za upravljanje {{productName}} in bodo navedeni v pogodbi o pristopu kot pooblaščenci zakonitega zastopnika.',
+        'Preverite podatke trenutnih skrbnikov ali dodajte druge skrbnike na seznam. Odgovorni bodo za upravljanje <1>{{productName}}</1> in bodo navedeni v pogodbi o pristopu kot pooblaščenci zakonitega zastopnika.',
       legalRepresentativeTitle: 'Zakoniti zastopnik in skrbnik',
       adminTitle: 'Skrbnik {{index}}',
       remove: 'Odstrani',
@@ -73,8 +73,18 @@ export default {
     exitModal: {
       title: 'Ali res želite zapustiti?',
       message: 'Če zapustite, bo zahteva preklicana in boste morali začeti znova.',
-      exit: 'Nazaj na Dokumente',
-      stay: 'Nadaljuj',
+      exit: 'Izhod',
+      back: 'Nazaj',
+      close: 'Zapri',
+    },
+    submitModal: {
+      title: 'Ali potrjujete zahtevo za pošiljanje?',
+      message:
+        'Pošiljate dokument z zahtevo za pristop k izdelku <1>{{productName}}</1> za organizacijo <2>{{partyName}}</2>.',
+      description:
+        'Pristopni sporazum bo poslan na institucionalni PEC organizacije, podpisati pa ga mora zakoniti zastopnik. Prepričajte se, da ste kot zaposleni pooblaščeni za to zahtevo.',
+      back: 'Nazaj',
+      confirm: 'Nadaljuj',
       close: 'Zapri',
     },
   },

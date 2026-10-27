@@ -18,8 +18,8 @@ export const ContractUpdateExitDialog = ({ open, onStay, onExit }: Props) => {
       message={t('contractUpdateWizard.exitModal.message')}
       closeLabel={t('contractUpdateWizard.exitModal.close')}
       onClose={onStay}
-      secondaryAction={{ label: t('contractUpdateWizard.exitModal.exit'), onClick: onExit }}
-      primaryAction={{ label: t('contractUpdateWizard.exitModal.stay'), onClick: onStay }}
+      secondaryAction={{ label: t('contractUpdateWizard.exitModal.back'), onClick: onStay }}
+      primaryAction={{ label: t('contractUpdateWizard.exitModal.exit'), onClick: onExit }}
     />
   );
 };
