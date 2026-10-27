@@ -92,7 +92,7 @@ export default {
     result: {
       success: 'Anfrage gesendet',
       error: 'Die Anfrage konnte nicht gesendet werden',
-      backToDocuments: 'Zurück zu Dokumente',
+      backToDocuments: 'Zurück zu den Dokumenten',
     },
   },
   customAlert: {
