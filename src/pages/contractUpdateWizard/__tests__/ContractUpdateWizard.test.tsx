@@ -1,4 +1,4 @@
-import { act, fireEvent, screen, within } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
@@ -146,8 +146,12 @@ test('preserves the data of every step and validates the admins on continue', as
       name: 'Rimuovi Amministratore 3',
     })
   );
-  // TODO: assert the submission when the contract update API is available
   await user.click(next());
+  const dialog = await screen.findByRole('dialog', { name: 'Confermi la richiesta di invio?' });
+  expect(within(dialog).getByText(/richiesta di adesione al prodotto/)).toBeInTheDocument();
+  expect(within(dialog).getByText('product-1', { selector: 'strong' })).toBeInTheDocument();
+  await user.click(within(dialog).getByRole('button', { name: 'Indietro' }));
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(screen.getByRole('heading', { level: 1, name: adminsTitle })).toBeInTheDocument();
   expect(screen.queryAllByText('Campo obbligatorio')).toHaveLength(0);
 });

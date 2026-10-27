@@ -52,7 +52,7 @@ export default {
     },
     addUsers: {
       description:
-        'Check the data of the current Administrators or add other Administrators to the list. They will be responsible for managing {{productName}} and will appear in the membership contract as delegates of the Legal Representative.',
+        'Check the data of the current Administrators or add other Administrators to the list. They will be responsible for managing <1>{{productName}}</1> and will appear in the membership contract as delegates of the Legal Representative.',
       legalRepresentativeTitle: 'Legal Representative and Administrator',
       adminTitle: 'Administrator {{index}}',
       remove: 'Remove',
@@ -74,8 +74,18 @@ export default {
     exitModal: {
       title: 'Do you really want to leave?',
       message: 'If you leave, the request will be cancelled and you will have to start over.',
-      exit: 'Back to Documents',
-      stay: 'Continue',
+      exit: 'Exit',
+      back: 'Back',
+      close: 'Close',
+    },
+    submitModal: {
+      title: 'Do you confirm the submission request?',
+      message:
+        'You are sending the document with the request to join the product <1>{{productName}}</1> for the institution <2>{{partyName}}</2>.',
+      description:
+        'The adhesion agreement will be sent to the institution’s official PEC and must be signed by the Legal Representative. Make sure you are authorized as an employee to make this request.',
+      back: 'Back',
+      confirm: 'Continue',
       close: 'Close',
     },
   },

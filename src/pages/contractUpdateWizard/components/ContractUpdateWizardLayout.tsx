@@ -6,18 +6,25 @@ import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useAppSelector } from '../../../redux/hooks';
+import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { CONTRACT_UPDATE_STEPS, useContractUpdateWizard } from '../ContractUpdateWizardContext';
 import { stepComponents, stepValidators } from '../steps';
 import { ContractUpdateExitDialog } from './ContractUpdateExitDialog';
+import { ContractUpdateSubmitDialog } from './ContractUpdateSubmitDialog';
 
 export const ContractUpdateWizardLayout = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation<{ returnTo?: string } | undefined>();
-  const { partyId } = useParams<{ partyId: string }>();
+  const { partyId, productId } = useParams<{ partyId: string; productId?: string }>();
+  const party = useAppSelector(partiesSelectors.selectPartySelected);
+  const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+  const productName = products?.find((product) => product.id === productId)?.title ?? productId;
   const { state, dispatch } = useContractUpdateWizard();
   const [exitModalOpen, setExitModalOpen] = useState(false);
+  const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const stepHeading = useRef<HTMLHeadingElement>(null);
   const stepId = CONTRACT_UPDATE_STEPS[state.activeStep];
   const StepContent = stepComponents[stepId];
@@ -47,10 +54,16 @@ export const ContractUpdateWizardLayout = () => {
     const isStepValid = stepValidators[stepId]?.(state.draft) ?? true;
     if (!isStepValid) {
       dispatch({ type: 'showErrors' });
-    } else if (!isLastStep) {
+    } else if (isLastStep) {
+      setSubmitModalOpen(true);
+    } else {
       dispatch({ type: 'next' });
     }
-    // TODO: on the last step send the contract update request when the API is available
+  };
+
+  const confirmSubmit = () => {
+    setSubmitModalOpen(false);
+    // TODO: send the contract update request when the API is available
   };
 
   return (
@@ -92,6 +105,13 @@ export const ContractUpdateWizardLayout = () => {
         open={exitModalOpen}
         onStay={() => setExitModalOpen(false)}
         onExit={confirmExit}
+      />
+      <ContractUpdateSubmitDialog
+        open={submitModalOpen}
+        productName={productName}
+        partyName={party?.description}
+        onBack={() => setSubmitModalOpen(false)}
+        onConfirm={confirmSubmit}
       />
     </Container>
   );

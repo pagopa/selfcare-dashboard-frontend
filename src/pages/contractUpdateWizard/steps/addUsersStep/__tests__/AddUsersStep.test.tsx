@@ -75,7 +75,8 @@ test('shows the Legal Representative and the current admins, without the Legal R
   expect(await screen.findByRole('region', { name: 'Amministratore 2' })).toBeInTheDocument();
   expect(fetchProductAdmins).toHaveBeenCalledTimes(1);
   expect(fetchProductAdmins).toHaveBeenCalledWith('party-1', 'prod-io');
-  expect(screen.getByText(/gestione di IO e presenti nel contratto/)).toBeInTheDocument();
+  expect(screen.getByText('IO', { selector: 'strong' })).toBeInTheDocument();
+  expect(screen.getByText(/e presenti nel contratto di adesione/)).toBeInTheDocument();
   expect(
     screen.getByRole('heading', { level: 2, name: 'Legale Rappresentante e Amministratore' })
   ).toBeInTheDocument();

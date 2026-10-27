@@ -1,6 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Dialog, IconButton, Typography } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
+import { ReactNode } from 'react';
 
 type DialogAction = { label: string; onClick: () => void };
 
@@ -8,7 +9,7 @@ type Props = {
   id: string;
   open: boolean;
   title: string;
-  message: string;
+  message: ReactNode;
   closeLabel: string;
   onClose: () => void;
   secondaryAction: DialogAction;
@@ -64,6 +65,7 @@ export const ContractUpdateConfirmDialog = ({
     </Box>
     <Typography
       id={`${id}-description`}
+      component="div"
       variant="body2"
       sx={{ mt: 1, color: (theme) => theme.colors.neutral.grey[700] }}
     >

@@ -4,7 +4,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Box, Grid, TextField, Typography } from '@mui/material';
 import { ButtonNaked, MIPaper, MISnackbar } from '@pagopa/mui-italia';
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { ContractUpdateConfirmDialog } from '../../components/ContractUpdateConfirmDialog';
 import { AdminCard, useAddUsersStep } from './useAddUsersStep';
 
@@ -67,7 +67,13 @@ export const AddUsersStep = () => {
         variant="body2"
         sx={{ maxWidth: 680, color: (theme) => theme.colors.neutral.grey[700] }}
       >
-        {t('contractUpdateWizard.addUsers.description', { productName })}
+        <Trans
+          i18nKey="contractUpdateWizard.addUsers.description"
+          values={{ productName }}
+          components={{ 1: <strong /> }}
+        >
+          {`Verifica i dati degli Amministratori attuali o aggiungi altri Amministratori alla lista. Saranno i responsabili della gestione di <1>{{productName}}</1> e presenti nel contratto di adesione come delegati dal Legale Rappresentante.`}
+        </Trans>
       </Typography>
       <ButtonNaked
         component="a"

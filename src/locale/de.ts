@@ -53,7 +53,7 @@ export default {
     },
     addUsers: {
       description:
-        'Überprüfe die Daten der aktuellen Administratoren oder füge weitere Administratoren zur Liste hinzu. Sie sind für die Verwaltung von {{productName}} verantwortlich und werden im Beitrittsvertrag als Beauftragte des gesetzlichen Vertreters aufgeführt.',
+        'Überprüfe die Daten der aktuellen Administratoren oder füge weitere Administratoren zur Liste hinzu. Sie sind für die Verwaltung von <1>{{productName}}</1> verantwortlich und werden im Beitrittsvertrag als Beauftragte des gesetzlichen Vertreters aufgeführt.',
       legalRepresentativeTitle: 'Gesetzlicher Vertreter und Administrator',
       adminTitle: 'Administrator {{index}}',
       remove: 'Entfernen',
@@ -75,8 +75,18 @@ export default {
     exitModal: {
       title: 'Möchtest du wirklich verlassen?',
       message: 'Wenn du verlässt, wird die Anfrage abgebrochen und du musst von vorne beginnen.',
-      exit: 'Zurück zu Dokumente',
-      stay: 'Weiter',
+      exit: 'Verlassen',
+      back: 'Zurück',
+      close: 'Schließen',
+    },
+    submitModal: {
+      title: 'Bestätigst du die Sendeanfrage?',
+      message:
+        'Du sendest das Dokument mit dem Beitrittsantrag für das Produkt <1>{{productName}}</1> für die Einrichtung <2>{{partyName}}</2>.',
+      description:
+        'Die Beitrittsvereinbarung wird an die institutionelle PEC der Einrichtung gesendet und muss vom gesetzlichen Vertreter unterzeichnet werden. Stelle sicher, dass du als Mitarbeiter zu dieser Anfrage berechtigt bist.',
+      back: 'Zurück',
+      confirm: 'Weiter',
       close: 'Schließen',
     },
   },
