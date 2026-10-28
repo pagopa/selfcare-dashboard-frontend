@@ -202,13 +202,13 @@ test.each([
     'success',
     () => vi.mocked(submitContractUpdate).mockResolvedValue(),
     '/dashboard/party-1/documents/product-1/update-contract/success',
-    'Richiesta inviata',
+    'Fatto!',
   ],
   [
     'error',
     () => vi.mocked(submitContractUpdate).mockRejectedValue(new Error('KO')),
     '/dashboard/party-1/documents/product-1/update-contract/error',
-    'Non è stato possibile inviare la richiesta',
+    'Qualcosa è andato storto',
   ],
 ])(
   'sends the request on confirm and goes to the %s page',
@@ -235,6 +235,29 @@ test.each([
     );
   }
 );
+
+test.each([
+  ['success', 'Torna a Documenti', '/dashboard/party-1/documents'],
+  ['error', 'Torna alla home', '/dashboard/party-1'],
+])('the %s page button navigates back', async (outcome, buttonLabel, expectedPath) => {
+  const history = createMemoryHistory({
+    initialEntries: [`/dashboard/party-1/documents/product-1/update-contract/${outcome}`],
+  });
+  renderWithProviders(
+    <Switch>
+      <Route path={ENV.ROUTES.CONTRACT_UPDATE_SUCCESS} exact>
+        <ContractUpdateSuccessPage />
+      </Route>
+      <Route path={ENV.ROUTES.CONTRACT_UPDATE_ERROR} exact>
+        <ContractUpdateErrorPage />
+      </Route>
+    </Switch>,
+    createStore(),
+    history
+  );
+  await userEvent.click(screen.getByRole('button', { name: buttonLabel }));
+  expect(history.location.pathname).toBe(expectedPath);
+});
 
 test.each([
   '/dashboard/party-1/documents/product-2/update-contract',

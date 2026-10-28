@@ -88,9 +88,18 @@ export default {
       close: 'Zapri',
     },
     result: {
-      success: 'Zahteva poslana',
-      error: 'Zahteve ni bilo mogoče poslati',
-      backToDocuments: 'Nazaj na Dokumente',
+      success: {
+        title: 'Končano!',
+        description:
+          'Na primarni naslov PEC ustanove bomo poslali e-poštno sporočilo. V njem so navodila za dokončanje postopka.',
+        button: 'Nazaj na Dokumente',
+      },
+      error: {
+        title: 'Prišlo je do napake',
+        description:
+          'Zaradi sistemske napake postopka ni mogoče dokončati. Poskusite znova pozneje.',
+        button: 'Nazaj na domačo stran',
+      },
     },
   },
   customAlert: {

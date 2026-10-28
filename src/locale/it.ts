@@ -90,9 +90,18 @@ export default {
       close: 'Chiudi',
     },
     result: {
-      success: 'Richiesta inviata',
-      error: 'Non è stato possibile inviare la richiesta',
-      backToDocuments: 'Torna a Documenti',
+      success: {
+        title: 'Fatto!',
+        description:
+          'Invieremo un’email all’indirizzo PEC primario dell’ente. Al suo interno, ci sono le istruzioni per completare il processo.',
+        button: 'Torna a Documenti',
+      },
+      error: {
+        title: 'Qualcosa è andato storto',
+        description:
+          'A causa di un errore del sistema non è possibile completare la procedura. Ti chiediamo di riprovare più tardi.',
+        button: 'Torna alla home',
+      },
     },
   },
   customAlert: {
