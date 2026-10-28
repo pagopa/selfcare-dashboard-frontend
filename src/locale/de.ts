@@ -90,9 +90,18 @@ export default {
       close: 'Schließen',
     },
     result: {
-      success: 'Anfrage gesendet',
-      error: 'Die Anfrage konnte nicht gesendet werden',
-      backToDocuments: 'Zurück zu den Dokumenten',
+      success: {
+        title: 'Fertig!',
+        description:
+          'Wir senden eine E-Mail an die primäre PEC-Adresse der Körperschaft. Sie enthält die Anweisungen zum Abschluss des Vorgangs.',
+        button: 'Zurück zu den Dokumenten',
+      },
+      error: {
+        title: 'Etwas ist schiefgelaufen',
+        description:
+          'Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden. Bitte versuchen Sie es später erneut.',
+        button: 'Zurück zur Startseite',
+      },
     },
   },
   customAlert: {

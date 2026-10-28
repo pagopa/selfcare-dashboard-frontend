@@ -91,9 +91,18 @@ export default {
       close: 'Fermer',
     },
     result: {
-      success: 'Demande envoyée',
-      error: 'Impossible d’envoyer la demande',
-      backToDocuments: 'Retour aux Documents',
+      success: {
+        title: 'C’est fait !',
+        description:
+          'Nous enverrons un e-mail à l’adresse PEC principale de l’organisme. Il contient les instructions pour terminer le processus.',
+        button: 'Retour aux Documents',
+      },
+      error: {
+        title: 'Une erreur s’est produite',
+        description:
+          'En raison d’une erreur système, il n’est pas possible de terminer la procédure. Veuillez réessayer plus tard.',
+        button: 'Retour à l’accueil',
+      },
     },
   },
   customAlert: {

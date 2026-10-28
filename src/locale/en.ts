@@ -89,9 +89,18 @@ export default {
       close: 'Close',
     },
     result: {
-      success: 'Request sent',
-      error: 'The request could not be sent',
-      backToDocuments: 'Back to Documents',
+      success: {
+        title: 'Done!',
+        description:
+          'We will send an email to the institution’s primary PEC address. It contains the instructions to complete the process.',
+        button: 'Back to Documents',
+      },
+      error: {
+        title: 'Something went wrong',
+        description:
+          'Due to a system error, the procedure cannot be completed. Please try again later.',
+        button: 'Back to home',
+      },
     },
   },
   customAlert: {
