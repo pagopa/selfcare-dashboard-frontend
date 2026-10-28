@@ -1516,6 +1516,76 @@
         "summary": "checkUser"
       }
     },
+    "/v2/institutions/{institutionId}/products/{productId}/contract-update": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/problem+json"
+        ],
+        "parameters": [
+          {
+            "description": "Institution's unique internal identifier",
+            "in": "path",
+            "name": "institutionId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Product's unique identifier",
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OnboardingContractUpdateDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ],
+        "tags": [
+          "institutions"
+        ],
+        "description": "Service to request a contract update for a specific pair of institution-product, providing the legal representative and the administrators",
+        "operationId": "v2OnboardingContractUpdate",
+        "summary": "onboardingContractUpdate"
+      }
+    },
     "/v2/institutions/{institutionId}/products/{productId}/users": {
       "post": {
         "consumes": [
@@ -3597,6 +3667,45 @@
       },
       "type": "object"
     },
+    "ContractUpdateUserDto": {
+      "description": "Legal representative and administrators of the contract update request",
+      "properties": {
+        "email": {
+          "description": "User's institutional email",
+          "type": "string"
+        },
+        "name": {
+          "description": "User's name",
+          "type": "string"
+        },
+        "role": {
+          "description": "User's role, available values: [MANAGER, DELEGATE, SUB_DELEGATE, OPERATOR, ADMIN_EA]",
+          "enum": [
+            "MANAGER",
+            "DELEGATE",
+            "SUB_DELEGATE",
+            "OPERATOR",
+            "ADMIN_EA"
+          ],
+          "type": "string"
+        },
+        "surname": {
+          "description": "User's surname",
+          "type": "string"
+        },
+        "taxCode": {
+          "description": "User's fiscal code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "role",
+        "surname",
+        "taxCode"
+      ],
+      "type": "object"
+    },
     "CreateUserDto": {
       "properties": {
         "email": {
@@ -4377,6 +4486,59 @@
       },
       "type": "object"
     },
+    "OnboardingContractUpdateDto": {
+      "properties": {
+        "institutionType": {
+          "description": "Institution's type",
+          "enum": [
+            "PA",
+            "PG",
+            "GSP",
+            "SA",
+            "PT",
+            "SCP",
+            "PSP",
+            "AS",
+            "REC",
+            "CON",
+            "PRV",
+            "PRV_PF",
+            "GPU",
+            "SCEC"
+          ],
+          "type": "string"
+        },
+        "origin": {
+          "description": "Institution's data origin",
+          "type": "string"
+        },
+        "originId": {
+          "description": "Institution's identifier related to origin",
+          "type": "string"
+        },
+        "subunitCode": {
+          "description": "AOO o UO unique code",
+          "type": "string"
+        },
+        "taxCode": {
+          "description": "Fiscal code corresponding to the institution",
+          "type": "string"
+        },
+        "users": {
+          "description": "Legal representative and administrators of the contract update request",
+          "items": {
+            "$ref": "#/definitions/ContractUpdateUserDto"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "origin",
+        "originId",
+        "users"
+      ],
+      "type": "object"
+    },
     "OnboardingInfo": {
       "properties": {
         "contractAvailable": {
@@ -4980,6 +5142,10 @@
     },
     "SupportRequestDto": {
       "properties": {
+        "category": {
+          "description": "Support request category (e.g. contract-update)",
+          "type": "string"
+        },
         "data": {
           "description": "Technical data",
           "type": "string"

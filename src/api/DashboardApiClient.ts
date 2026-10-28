@@ -19,6 +19,7 @@ import { DelegationWithPagination } from './generated/b4f-dashboard/DelegationWi
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
+import { OnboardingContractUpdateDto } from './generated/b4f-dashboard/OnboardingContractUpdateDto';
 import { OnboardingInfo } from './generated/b4f-dashboard/OnboardingInfo';
 import { ProductRolePermissionsList } from './generated/b4f-dashboard/ProductRolePermissionsList';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
@@ -237,6 +238,19 @@ export const DashboardApi = {
       roles: roles.join(','),
     });
     return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  onboardingContractUpdate: async (
+    institutionId: string,
+    productId: string,
+    body: OnboardingContractUpdateDto
+  ): Promise<void> => {
+    const result = await apiClient.v2OnboardingContractUpdate({
+      institutionId,
+      productId,
+      body,
+    });
+    return extractResponse(result, 201, onRedirectToLogin);
   },
 
   /*

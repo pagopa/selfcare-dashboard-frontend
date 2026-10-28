@@ -2,6 +2,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Container, Typography } from '@mui/material';
 import { ButtonNaked, MIButton } from '@pagopa/mui-italia';
+import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
+import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +11,9 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../redux/hooks';
 import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES } from '../../../routes';
+import { submitContractUpdate } from '../../../services/contractUpdateService';
+import { LOADING_TASK_CONTRACT_UPDATE } from '../../../utils/constants';
+import { ENV } from '../../../utils/env';
 import { CONTRACT_UPDATE_STEPS, useContractUpdateWizard } from '../ContractUpdateWizardContext';
 import { stepComponents, stepValidators } from '../steps';
 import { ContractUpdateExitDialog } from './ContractUpdateExitDialog';
@@ -18,11 +23,13 @@ export const ContractUpdateWizardLayout = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation<{ returnTo?: string } | undefined>();
-  const { partyId, productId } = useParams<{ partyId: string; productId?: string }>();
+  const { partyId, productId } = useParams<{ partyId: string; productId: string }>();
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
   const productName = products?.find((product) => product.id === productId)?.title ?? productId;
   const { state, dispatch } = useContractUpdateWizard();
+  const addError = useErrorDispatcher();
+  const setLoading = useLoading(LOADING_TASK_CONTRACT_UPDATE);
   const [exitModalOpen, setExitModalOpen] = useState(false);
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const stepHeading = useRef<HTMLHeadingElement>(null);
@@ -62,8 +69,32 @@ export const ContractUpdateWizardLayout = () => {
   };
 
   const confirmSubmit = () => {
+    // Closing the dialog before the request also prevents a double submission
     setSubmitModalOpen(false);
-    // TODO: send the contract update request when the API is available
+    setLoading(true);
+    (party
+      ? submitContractUpdate(party, productId, state.draft)
+      : Promise.reject(new Error('Selected party not available'))
+    )
+      .then(() =>
+        history.replace(
+          resolvePathVariables(ENV.ROUTES.CONTRACT_UPDATE_SUCCESS, { partyId, productId })
+        )
+      )
+      .catch((reason) => {
+        // The KO page is the user feedback, the error is only tracked
+        addError({
+          id: `CONTRACT_UPDATE_${partyId}_${productId}`,
+          blocking: false,
+          error: reason,
+          techDescription: `An error occurred while requesting the contract update of party ${partyId} and product ${productId}`,
+          toNotify: false,
+        });
+        history.replace(
+          resolvePathVariables(ENV.ROUTES.CONTRACT_UPDATE_ERROR, { partyId, productId })
+        );
+      })
+      .finally(() => setLoading(false));
   };
 
   return (

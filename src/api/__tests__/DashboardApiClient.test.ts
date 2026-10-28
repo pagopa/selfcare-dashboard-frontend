@@ -5,6 +5,7 @@ import { Product } from '../../model/Product';
 import { store } from '../../redux/store';
 import { DashboardApi } from '../DashboardApiClient';
 import { BrokerResource } from '../generated/b4f-dashboard/BrokerResource';
+import { RoleEnum } from '../generated/b4f-dashboard/ContractUpdateUserDto';
 
 const { mockedClient, createClientSpy } = vi.hoisted(() => {
   const methods = [
@@ -27,6 +28,7 @@ const { mockedClient, createClientSpy } = vi.hoisted(() => {
     'getUserOtpEmailInfoUsingGET',
     'getMyPermissions',
     'v2GetUsersUsingGET',
+    'v2OnboardingContractUpdate',
   ];
   const client: Record<string, Mock> = Object.fromEntries(methods.map((m) => [m, vi.fn()]));
   return { mockedClient: client, createClientSpy: vi.fn(() => client) };
@@ -58,6 +60,11 @@ type Case = {
 const party = { partyId: 'party-1', description: 'Party 1' } as Party;
 const product = { id: 'prod-io' } as Product;
 const logo = new File(['logo'], 'logo.png');
+const contractUpdateBody = {
+  origin: 'IPA',
+  originId: 'c_h501',
+  users: [{ name: 'Mario', surname: 'Rossi', taxCode: 'RSSMRA80A01H501U', role: RoleEnum.MANAGER }],
+};
 
 const cases: Array<Case> = [
   {
@@ -186,6 +193,13 @@ const cases: Array<Case> = [
     clientMethod: 'v2GetUsersUsingGET',
     args: ['inst-1', 'prod-io', ['MANAGER', 'DELEGATE']],
     expectedParams: { institutionId: 'inst-1', productId: 'prod-io', roles: 'MANAGER,DELEGATE' },
+  },
+  {
+    name: 'onboardingContractUpdate',
+    clientMethod: 'v2OnboardingContractUpdate',
+    args: ['inst-1', 'prod-io', contractUpdateBody],
+    expectedParams: { institutionId: 'inst-1', productId: 'prod-io', body: contractUpdateBody },
+    successStatus: 201,
   },
 ];
 

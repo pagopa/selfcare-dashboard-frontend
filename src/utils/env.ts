@@ -18,6 +18,8 @@ export const ENV = {
 
   ROUTES: {
     CONTRACT_UPDATE: `${PUBLIC_URL_INNER}/:partyId/documents/:productId/update-contract`,
+    CONTRACT_UPDATE_SUCCESS: `${PUBLIC_URL_INNER}/:partyId/documents/:productId/update-contract/success`,
+    CONTRACT_UPDATE_ERROR: `${PUBLIC_URL_INNER}/:partyId/documents/:productId/update-contract/error`,
     OVERVIEW: `${PUBLIC_URL_INNER}/:partyId`,
     USERS: `${PUBLIC_URL_INNER}/:partyId/users`,
     USERS_DETAIL: `${PUBLIC_URL_INNER}/:partyId/users/:userId`,
