@@ -413,6 +413,16 @@ export default {
     delegationNotCreated: 'Pooblastila ni bilo mogoče dodati. Poskusite znova.',
     alreadyDelegated: 'Izbrani partner je že povezan z organizacijo.',
   },
+  documents: {
+    pendingRequestModal: {
+      title: 'Zahteva v teku',
+      message:
+        'Zahteva za dodajanje tega dokumenta že obstaja, vendar še ni bila zaključena. Sledite navodilom v PEC, ki ste jo prejeli, ali začnite novo zahtevo.',
+      back: 'Nazaj na Dokumente',
+      newRequest: 'Začni novo zahtevo',
+      close: 'Zapri',
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Upravljane organizacije',
