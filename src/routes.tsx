@@ -1,5 +1,6 @@
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { Redirect, useParams } from 'react-router-dom';
+import withAdminPermissions from './decorators/withAdminPermissions';
 import { useIsPagoPaUser } from './hooks/useIsPagoPaUser';
 import AdminRemote from './microcomponents/admin/AdminRemote';
 import {
@@ -55,7 +56,7 @@ const ROUTES = {
   ADMIN_PARTY_DETAIL: {
     path: ENV.ROUTES.ADMIN_PARTY_DETAIL,
     exact: false,
-    component: AdminRemote,
+    component: withAdminPermissions(AdminRemote),
   },
   ADMIN: {
     path: ENV.ROUTES.ADMIN,
