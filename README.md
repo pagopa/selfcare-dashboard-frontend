@@ -9,6 +9,14 @@ The micro-frontends used are:
 * [selfcare-dashboard-users-microfrontend](https://github.com/pagopa/selfcare-dashboard-users-microfrontend) to handle the management of the users
 * [selfcare-dashboard-groups-microfrontend](https://github.com/pagopa/selfcare-dashboard-groups-microfrontend) to handle the management of the groups of users
 
+## Admin onboarding request permissions
+
+The standalone `/dashboard/admin/onboarding/:tokenId` route loads admin permissions
+through `withAdminPermissions`, just like the normal admin dashboard. Direct links
+and page refreshes therefore restore product permissions from the API instead of
+depending on Redux state left by a previous page. The request remains outside the
+dashboard shell.
+
 ## Contract update wizard (scaffold)
 
 The route `/dashboard/:partyId/documents/:productId/update-contract` opens a
