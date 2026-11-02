@@ -18,7 +18,7 @@ export const PendingRequestDialog = ({ open, partyId, productId, onClose }: Prop
 
   const startNewRequest = () =>
     history.push(resolvePathVariables(ENV.ROUTES.CONTRACT_UPDATE, { partyId, productId }), {
-      returnTo: `${location.pathname}${location.search}`,
+      returnTo: `${location.pathname}${location.search}${location.hash}`,
     });
 
   return (

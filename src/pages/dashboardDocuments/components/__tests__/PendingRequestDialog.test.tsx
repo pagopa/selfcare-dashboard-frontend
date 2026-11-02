@@ -8,7 +8,7 @@ describe('PendingRequestDialog', () => {
 
   const renderDialog = () => {
     const onClose = vi.fn();
-    const history = createMemoryHistory({ initialEntries: [`${documentsPath}?tab=1`] });
+    const history = createMemoryHistory({ initialEntries: [`${documentsPath}?tab=1#product-1`] });
     renderWithProviders(
       <PendingRequestDialog open={true} partyId="party-1" productId="prod-io" onClose={onClose} />,
       undefined,
@@ -35,7 +35,7 @@ describe('PendingRequestDialog', () => {
     const { onClose, history } = renderDialog();
     fireEvent.click(screen.getByRole('button', { name: 'Inizia nuova richiesta' }));
     expect(history.location.pathname).toBe('/dashboard/party-1/documents/prod-io/update-contract');
-    expect(history.location.state).toEqual({ returnTo: `${documentsPath}?tab=1` });
+    expect(history.location.state).toEqual({ returnTo: `${documentsPath}?tab=1#product-1` });
     expect(onClose).not.toHaveBeenCalled();
   });
 });
