@@ -1,15 +1,20 @@
 import { fireEvent, screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import { renderWithProviders } from '../../../../utils/test-utils';
 import { PendingRequestDialog } from '../PendingRequestDialog';
 
 describe('PendingRequestDialog', () => {
+  const documentsPath = '/dashboard/party-1/documents';
+
   const renderDialog = () => {
     const onClose = vi.fn();
-    const onNewRequest = vi.fn();
+    const history = createMemoryHistory({ initialEntries: [`${documentsPath}?tab=1`] });
     renderWithProviders(
-      <PendingRequestDialog open={true} onClose={onClose} onNewRequest={onNewRequest} />
+      <PendingRequestDialog open={true} partyId="party-1" productId="prod-io" onClose={onClose} />,
+      undefined,
+      history
     );
-    return { onClose, onNewRequest };
+    return { onClose, history };
   };
 
   it('renders title and message', () => {
@@ -19,17 +24,18 @@ describe('PendingRequestDialog', () => {
   });
 
   it('calls onClose from the back and close buttons', () => {
-    const { onClose, onNewRequest } = renderDialog();
+    const { onClose, history } = renderDialog();
     fireEvent.click(screen.getByRole('button', { name: 'Torna a Documenti' }));
     fireEvent.click(screen.getByRole('button', { name: 'Chiudi' }));
     expect(onClose).toHaveBeenCalledTimes(2);
-    expect(onNewRequest).not.toHaveBeenCalled();
+    expect(history.location.pathname).toBe(documentsPath);
   });
 
-  it('calls onNewRequest from the primary button', () => {
-    const { onClose, onNewRequest } = renderDialog();
+  it('starts the contract update wizard from the primary button', () => {
+    const { onClose, history } = renderDialog();
     fireEvent.click(screen.getByRole('button', { name: 'Inizia nuova richiesta' }));
-    expect(onNewRequest).toHaveBeenCalledTimes(1);
+    expect(history.location.pathname).toBe('/dashboard/party-1/documents/prod-io/update-contract');
+    expect(history.location.state).toEqual({ returnTo: `${documentsPath}?tab=1` });
     expect(onClose).not.toHaveBeenCalled();
   });
 });

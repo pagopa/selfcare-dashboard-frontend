@@ -1,14 +1,25 @@
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useTranslation } from 'react-i18next';
+import { useHistory, useLocation } from 'react-router-dom';
+import { ENV } from '../../../utils/env';
 import { ContractUpdateConfirmDialog } from '../../contractUpdateWizard/components/ContractUpdateConfirmDialog';
 
 type Props = {
   open: boolean;
+  partyId: string;
+  productId: string;
   onClose: () => void;
-  onNewRequest: () => void;
 };
 
-export const PendingRequestDialog = ({ open, onClose, onNewRequest }: Props) => {
+export const PendingRequestDialog = ({ open, partyId, productId, onClose }: Props) => {
   const { t } = useTranslation();
+  const history = useHistory();
+  const location = useLocation();
+
+  const startNewRequest = () =>
+    history.push(resolvePathVariables(ENV.ROUTES.CONTRACT_UPDATE, { partyId, productId }), {
+      returnTo: `${location.pathname}${location.search}`,
+    });
 
   return (
     <ContractUpdateConfirmDialog
@@ -21,7 +32,7 @@ export const PendingRequestDialog = ({ open, onClose, onNewRequest }: Props) => 
       secondaryAction={{ label: t('documents.pendingRequestModal.back'), onClick: onClose }}
       primaryAction={{
         label: t('documents.pendingRequestModal.newRequest'),
-        onClick: onNewRequest,
+        onClick: startNewRequest,
       }}
     />
   );
