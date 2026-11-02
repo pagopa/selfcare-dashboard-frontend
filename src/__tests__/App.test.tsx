@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { render, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
@@ -115,14 +116,23 @@ describe('PagoPA admin routes', () => {
     expect(store.getState().parties.selected).toBeUndefined();
   });
 
-  test('renders the onboarding detail full page without reloading the admin permissions', async () => {
+  test('renders the onboarding detail full page and reloads the admin permissions', async () => {
     (getPermissionsAdminService as Mock).mockClear();
+    vi.mocked(getPermissionsAdminService).mockResolvedValueOnce({
+      items: [
+        { productId: 'prod-io', role: 'admin', permissions: [Actions.ManageAccountPage] },
+      ],
+    });
     const history = createMemoryHistory();
     history.push('/dashboard/admin/onboarding/token-1');
-    renderApp(undefined, history);
+    const { store } = renderApp(undefined, history);
 
     expect(await screen.findByTestId('federation-mock')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Adesioni' })).not.toBeInTheDocument();
-    expect(getPermissionsAdminService).not.toHaveBeenCalled();
+    await waitFor(() => expect(store.getState().adminRoles.status).toBe('succeeded'));
+    expect(getPermissionsAdminService).toHaveBeenCalledTimes(1);
+    expect(store.getState().permissions.productPermissions).toEqual([
+      { productId: 'prod-io', actions: [Actions.ManageAccountPage] },
+    ]);
   });
 });
