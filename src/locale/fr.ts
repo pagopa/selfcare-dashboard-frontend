@@ -61,6 +61,7 @@ export default {
       add: 'Ajouter un administrateur',
       errors: {
         duplicateTaxCode: 'Le Code fiscal saisi est déjà présent',
+        duplicateEmail: "L'adresse e-mail saisie est déjà présente",
       },
       removeModal: {
         title: 'Voulez-vous supprimer cet administrateur ?',

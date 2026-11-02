@@ -44,9 +44,11 @@ const fieldIds: Array<keyof AdminPerson> = ['name', 'surname', 'taxCode', 'email
 const isEmptyNewAdmin = (admin: Admin) =>
   !admin.userId && fieldIds.every((id) => admin[id].trim() === '');
 
+const addUsersErrors: Array<PersonFieldError> = ['duplicateTaxCode', 'duplicateEmail'];
+
 const errorTranslationKey = (error: PersonFieldError) =>
-  error === 'duplicateTaxCode'
-    ? 'contractUpdateWizard.addUsers.errors.duplicateTaxCode'
+  addUsersErrors.includes(error)
+    ? `contractUpdateWizard.addUsers.errors.${error}`
     : `contractUpdateWizard.addLR.errors.${error}`;
 
 export const useAddUsersStep = () => {
