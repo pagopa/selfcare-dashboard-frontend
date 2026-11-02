@@ -82,6 +82,30 @@ test('ignores loaded users that are the Legal Representative', () => {
   expect(areAdminsValid(draft([lrUser]))).toBe(true);
 });
 
+test('flags emails that are repeated between admins or equal to the Legal Representative one', () => {
+  const duplicated: Admin = {
+    key: 'admin-1',
+    name: 'Anna',
+    surname: 'Verdi',
+    taxCode: 'VRDNNA80A41H501X',
+    email: 'Giulio.Bianchi@Comune.it',
+  };
+  const sameAsLR: Admin = {
+    key: 'admin-2',
+    name: 'Anna',
+    surname: 'Verdi',
+    taxCode: 'VRDNNA80A41H501X',
+    email: 'MARIO.ROSSI@comune.it',
+  };
+  const loggedUser: Admin = { ...sameAsLR, key: 'admin-3', isLoggedUser: true };
+  const errors = validateAdmins(draft([giulio, duplicated, sameAsLR, loggedUser]));
+  expect(errors['admin-0'].email).toBe('duplicateEmail');
+  expect(errors['admin-1'].email).toBe('duplicateEmail');
+  expect(errors['admin-2'].email).toBe('duplicateEmail');
+  expect(errors['admin-3']).toEqual({ email: 'duplicateEmail' });
+  expect(areAdminsValid(draft([giulio, duplicated]))).toBe(false);
+});
+
 test('validates only the email of the logged user', () => {
   const loggedUser: Admin = { ...giulio, isLoggedUser: true, name: 'Wrong', email: 'invalid' };
   expect(validateAdmins(draft([loggedUser]))).toEqual({ 'admin-0': { email: 'invalidEmail' } });

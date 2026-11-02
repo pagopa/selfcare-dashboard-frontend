@@ -17,7 +17,8 @@ export type PersonFieldError =
   | 'invalidTaxCode'
   | 'invalidEmail'
   | 'pecEmail'
-  | 'duplicateTaxCode';
+  | 'duplicateTaxCode'
+  | 'duplicateEmail';
 
 export type PersonErrors = Partial<Record<keyof LegalRepresentative, PersonFieldError>>;
 

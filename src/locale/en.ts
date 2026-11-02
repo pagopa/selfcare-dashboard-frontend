@@ -60,6 +60,7 @@ export default {
       add: 'Add administrator',
       errors: {
         duplicateTaxCode: 'The Tax Code entered is already present',
+        duplicateEmail: 'The email address entered is already present',
       },
       removeModal: {
         title: 'Do you want to remove this administrator?',

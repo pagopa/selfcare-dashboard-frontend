@@ -60,6 +60,7 @@ export default {
       add: 'Dodaj skrbnika',
       errors: {
         duplicateTaxCode: 'Vneseni davčni kodeks je že prisoten',
+        duplicateEmail: 'Vneseni e-poštni naslov je že prisoten',
       },
       removeModal: {
         title: 'Ali želite odstraniti tega skrbnika?',

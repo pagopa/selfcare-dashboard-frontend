@@ -61,6 +61,7 @@ export default {
       add: 'Administrator hinzufügen',
       errors: {
         duplicateTaxCode: 'Die eingegebene Steuernummer ist bereits vorhanden',
+        duplicateEmail: 'Die eingegebene E-Mail-Adresse ist bereits vorhanden',
       },
       removeModal: {
         title: 'Möchtest du diesen Administrator entfernen?',
