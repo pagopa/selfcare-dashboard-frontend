@@ -429,6 +429,16 @@ export default {
     delegationNotCreated: 'Impossible d’ajouter la procuration. Réessayer.',
     alreadyDelegated: 'Le Partenaire sélectionné est déjà associé à l’organisme.',
   },
+  documents: {
+    pendingRequestModal: {
+      title: 'Demande en cours',
+      message:
+        'Une demande d’ajout de ce document existe déjà, mais elle n’a pas encore été finalisée. Suivez les instructions figurant dans la PEC que vous avez reçue ou commencez une nouvelle demande.',
+      back: 'Retour aux Documents',
+      newRequest: 'Commencer une nouvelle demande',
+      close: 'Fermer',
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Organismes gérés',

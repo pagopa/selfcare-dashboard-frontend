@@ -428,6 +428,16 @@ export default {
     delegationNotCreated: 'Die Vollmacht konnte nicht hinzugefügt werden. Erneut versuchen.',
     alreadyDelegated: 'Der gewählte Partner ist bereits mit der Körperschaft verbunden',
   },
+  documents: {
+    pendingRequestModal: {
+      title: 'Anfrage in Bearbeitung',
+      message:
+        'Es liegt bereits eine Anfrage zum Hinzufügen dieses Dokuments vor, die jedoch noch nicht abgeschlossen wurde. Befolge die Anweisungen in der erhaltenen PEC oder starte eine neue Anfrage.',
+      back: 'Zurück zu Dokumente',
+      newRequest: 'Neue Anfrage starten',
+      close: 'Schließen',
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Verwaltete Körperschaften',
