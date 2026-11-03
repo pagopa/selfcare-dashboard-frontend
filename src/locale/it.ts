@@ -479,6 +479,14 @@ export default {
       'Qui puoi visualizzare i tuoi prodotti attivi e scaricare il relativo contratto di adesione. Per farlo, clicca su ‘Vedi di più’.',
     viewMore: 'Vedi di più',
     backButton: 'Esci',
+    pendingRequestModal: {
+      title: 'Richiesta in corso',
+      message:
+        'È già presente una richiesta per l’aggiunta di questo documento, ma non è ancora stata completata. Segui le indicazioni che trovi nella PEC che hai ricevuto oppure inizia una nuova richiesta.',
+      back: 'Torna a Documenti',
+      newRequest: 'Inizia nuova richiesta',
+      close: 'Chiudi',
+    },
   },
   documentsDetails: {
     firstCard: {

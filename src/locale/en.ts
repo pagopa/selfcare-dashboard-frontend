@@ -418,6 +418,16 @@ export default {
     delegationNotCreated: 'It was not possible to add the delegation. Try again.',
     alreadyDelegated: 'The selected partner is already associated with the institution.',
   },
+  documents: {
+    pendingRequestModal: {
+      title: 'Request in progress',
+      message:
+        'A request to add this document already exists, but it has not been completed yet. Follow the instructions in the PEC you received or start a new request.',
+      back: 'Back to Documents',
+      newRequest: 'Start new request',
+      close: 'Close',
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Managed institutions',
