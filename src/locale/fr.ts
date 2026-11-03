@@ -91,6 +91,14 @@ export default {
       confirm: 'Continuer',
       close: 'Fermer',
     },
+    nextProductModal: {
+      title: 'Voulez-vous également ajouter les documents pour {{productName}} ?',
+      message:
+        'Vous pouvez maintenant ajouter les documents manquants pour les autres produits également. Voulez-vous continuer ?',
+      back: 'Retour aux Documents',
+      confirm: 'Continuer',
+      close: 'Fermer',
+    },
     result: {
       success: {
         title: 'C’est fait !',

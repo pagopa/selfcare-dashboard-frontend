@@ -88,6 +88,13 @@ export default {
       confirm: 'Nadaljuj',
       close: 'Zapri',
     },
+    nextProductModal: {
+      title: 'Ali želite dodati tudi dokumente za {{productName}}?',
+      message: 'Zdaj lahko dodate manjkajoče dokumente tudi za druge izdelke. Želite nadaljevati?',
+      back: 'Nazaj na Dokumente',
+      confirm: 'Nadaljuj',
+      close: 'Zapri',
+    },
     result: {
       success: {
         title: 'Končano!',

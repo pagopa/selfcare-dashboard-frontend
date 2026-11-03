@@ -3,9 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
 import { Party } from '../../../model/Party';
+import { Product } from '../../../model/Product';
 import { partiesActions } from '../../../redux/slices/partiesSlice';
 import { createStore } from '../../../redux/store';
-import { submitContractUpdate } from '../../../services/contractUpdateService';
+import {
+  fetchProductsContractUpdateStatus,
+  submitContractUpdate,
+} from '../../../services/contractUpdateService';
 import { fetchProductAdmins } from '../../../services/userService';
 import { ENV } from '../../../utils/env';
 import { renderWithProviders } from '../../../utils/test-utils';
@@ -18,7 +22,10 @@ import {
 import { ContractUpdateErrorPage, ContractUpdateSuccessPage } from '../ContractUpdateResultPage';
 import { ContractUpdateWizardPage } from '../ContractUpdateWizardPage';
 
-vi.mock('../../../services/contractUpdateService', () => ({ submitContractUpdate: vi.fn() }));
+vi.mock('../../../services/contractUpdateService', () => ({
+  submitContractUpdate: vi.fn(),
+  fetchProductsContractUpdateStatus: vi.fn(() => Promise.resolve([])),
+}));
 
 vi.mock('../../../services/userService', async () => {
   const mocked = await vi.importActual<typeof import('../../../services/__mocks__/userService')>(
@@ -257,6 +264,85 @@ test.each([
   );
   await userEvent.click(screen.getByRole('button', { name: buttonLabel }));
   expect(history.location.pathname).toBe(expectedPath);
+});
+
+const renderSuccessPage = (
+  statuses: Awaited<ReturnType<typeof fetchProductsContractUpdateStatus>>
+) => {
+  vi.mocked(fetchProductsContractUpdateStatus).mockResolvedValueOnce(statuses);
+  const history = createMemoryHistory({
+    initialEntries: ['/dashboard/party-1/documents/product-1/update-contract/success'],
+  });
+  const store = createStore();
+  store.dispatch(
+    partiesActions.setPartySelectedProducts([
+      { id: 'product-2', title: 'Prodotto 2' },
+    ] as unknown as Array<Product>)
+  );
+  renderWithProviders(
+    <Route path={ENV.ROUTES.CONTRACT_UPDATE_SUCCESS} exact>
+      <ContractUpdateSuccessPage />
+    </Route>,
+    store,
+    history
+  );
+  return history;
+};
+
+const status = (
+  productId: string,
+  contractUpdateRequired: boolean,
+  contractUpdateInProgress = false
+) => ({
+  productId,
+  contractUpdateRequired,
+  contractUpdateInProgress,
+});
+
+test.each([
+  ['the submitted product', [status('product-1', true)]],
+  ['a product already in progress', [status('product-2', true, true)]],
+  ['a product not requiring an update', [status('product-2', false)]],
+])('the success page goes back to the documents without the modal for %s', async (_, statuses) => {
+  const history = renderSuccessPage(statuses);
+  await waitFor(() => expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith('party-1'));
+  await userEvent.click(screen.getByRole('button', { name: 'Torna a Documenti' }));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents');
+});
+
+test('the success page proposes the update of another product requiring it', async () => {
+  const history = renderSuccessPage([status('product-1', true), status('product-2', true)]);
+  const openModal = async () => {
+    await userEvent.click(screen.getByRole('button', { name: 'Torna a Documenti' }));
+    return screen.findByRole('dialog', {
+      name: 'Vuoi aggiungere anche i documenti per Prodotto 2?',
+    });
+  };
+  await waitFor(() => expect(fetchProductsContractUpdateStatus).toHaveBeenCalled());
+
+  await userEvent.click(within(await openModal()).getByRole('button', { name: 'Chiudi' }));
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  expect(history.location.pathname).toBe(
+    '/dashboard/party-1/documents/product-1/update-contract/success'
+  );
+
+  await userEvent.click(within(await openModal()).getByRole('button', { name: 'Continua' }));
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-2/update-contract');
+});
+
+test('the error page does not look for other products to update', async () => {
+  const history = createMemoryHistory({
+    initialEntries: ['/dashboard/party-1/documents/product-1/update-contract/error'],
+  });
+  renderWithProviders(
+    <Route path={ENV.ROUTES.CONTRACT_UPDATE_ERROR} exact>
+      <ContractUpdateErrorPage />
+    </Route>,
+    createStore(),
+    history
+  );
+  expect(fetchProductsContractUpdateStatus).not.toHaveBeenCalled();
 });
 
 test.each([

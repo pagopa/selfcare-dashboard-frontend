@@ -59,3 +59,14 @@ export const submitContractUpdate = (
     buildContractUpdateRequest(party, productId, draft)
   );
 };
+
+export type ProductContractUpdateStatus = {
+  productId: string;
+  contractUpdateRequired: boolean;
+  contractUpdateInProgress: boolean;
+};
+
+// TODO: call the products contract update status API once it is available
+export const fetchProductsContractUpdateStatus = (
+  _partyId: string
+): Promise<Array<ProductContractUpdateStatus>> => Promise.resolve([]);
