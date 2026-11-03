@@ -1,9 +1,7 @@
 import { DashboardApi } from '../../api/DashboardApiClient';
 import { Party } from '../../model/Party';
-import {
-  ContractUpdateDraft,
-  initialWizardState,
-} from '../../pages/contractUpdateWizard/ContractUpdateWizardContext';
+import { ContractUpdateDraft } from '../../model/ContractUpdate';
+import { initialWizardState } from '../../pages/documents/contractUpdate/ContractUpdateWizardContext';
 import { buildContractUpdateRequest, submitContractUpdate } from '../contractUpdateService';
 
 vi.mock('../../api/DashboardApiClient', () => ({

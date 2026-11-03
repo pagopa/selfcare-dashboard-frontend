@@ -8,11 +8,7 @@ import {
   OnboardingContractUpdateDto,
 } from '../api/generated/b4f-dashboard/OnboardingContractUpdateDto';
 import { Party } from '../model/Party';
-import {
-  AdminPerson,
-  ContractUpdateDraft,
-  getVisibleAdmins,
-} from '../pages/contractUpdateWizard/ContractUpdateWizardContext';
+import { AdminPerson, ContractUpdateDraft, getVisibleAdmins } from '../model/ContractUpdate';
 
 const toContractUpdateUser = (person: AdminPerson, role: RoleEnum): ContractUpdateUserDto => ({
   name: person.name.trim(),

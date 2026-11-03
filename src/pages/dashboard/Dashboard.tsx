@@ -22,8 +22,8 @@ import RemoteRoutingUsers from '../../microcomponents/users/RemoteRoutingUsers';
 
 import DashboardDelegationsPage from '../dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from '../dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
-import DashboardDocuments from '../dashboardDocuments/DashboardDocumentsPage';
-import DashboardDocumentsDetail from '../dashboardDocumentsDetail/DashboardDocumentsDetailPage';
+import DashboardDocuments from '../documents/list/DashboardDocumentsPage';
+import DashboardDocumentsDetail from '../documents/detail/DashboardDocumentsDetailPage';
 import DashboardHandleDelegatesPage from '../dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 
 import { Party } from '../../model/Party';
@@ -187,17 +187,11 @@ const Dashboard: React.FC = () => {
         </Route>
 
         <Route path={DASHBOARD_ROUTES.ADD_DELEGATE.path} exact>
-          <AddDelegationPage
-            delegableProducts={delegableProducts}
-            party={party}
-          />
+          <AddDelegationPage delegableProducts={delegableProducts} party={party} />
         </Route>
 
         <Route path={DASHBOARD_ROUTES.DELEGATIONS.path} exact>
-          <DashboardDelegationsPage
-            party={party}
-            delegableProducts={delegableProducts}
-          />
+          <DashboardDelegationsPage party={party} delegableProducts={delegableProducts} />
         </Route>
 
         <Route path={DASHBOARD_ROUTES.TECHPARTNER.path} exact>
