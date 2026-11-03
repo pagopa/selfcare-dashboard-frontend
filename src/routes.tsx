@@ -6,14 +6,14 @@ import AdminRemote from './microcomponents/admin/AdminRemote';
 import {
   ContractUpdateErrorPage,
   ContractUpdateSuccessPage,
-} from './pages/contractUpdateWizard/ContractUpdateResultPage';
-import ContractUpdateWizardPage from './pages/contractUpdateWizard/ContractUpdateWizardPage';
+} from './pages/documents/contractUpdate/ContractUpdateResultPage';
+import ContractUpdateWizardPage from './pages/documents/contractUpdate/ContractUpdateWizardPage';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardAdminPage from './pages/dashboardAdmin/DasboardAdmin';
 import DashboardDelegationsPage from './pages/dashboardDelegations/DashboardDelegationsPage';
 import AddDelegationPage from './pages/dashboardDelegations/dashboardDelegationsAdd/AddDelegationPage';
-import DashboardDocuments from './pages/dashboardDocuments/DashboardDocumentsPage';
-import DashboardDocumentsDetail from './pages/dashboardDocumentsDetail/DashboardDocumentsDetailPage';
+import DashboardDocuments from './pages/documents/list/DashboardDocumentsPage';
+import DashboardDocumentsDetail from './pages/documents/detail/DashboardDocumentsDetailPage';
 import DashboardHandleDelegatesPage from './pages/dashboardHandleDelegatesPage/DashboardHandleDelegatesPage';
 import DashboardOverview from './pages/dashboardOverview/DashboardOverview';
 import PartySelectionContainer from './pages/partySelectionContainer/PartySelectionContainer';

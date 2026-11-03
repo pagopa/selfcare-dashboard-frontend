@@ -8,11 +8,7 @@ import {
   OnboardingContractUpdateDto,
 } from '../api/generated/b4f-dashboard/OnboardingContractUpdateDto';
 import { Party } from '../model/Party';
-import {
-  AdminPerson,
-  ContractUpdateDraft,
-  getVisibleAdmins,
-} from '../pages/contractUpdateWizard/ContractUpdateWizardContext';
+import { AdminPerson, ContractUpdateDraft, getVisibleAdmins } from '../model/ContractUpdate';
 
 const toContractUpdateUser = (person: AdminPerson, role: RoleEnum): ContractUpdateUserDto => ({
   name: person.name.trim(),
@@ -59,3 +55,14 @@ export const submitContractUpdate = (
     buildContractUpdateRequest(party, productId, draft)
   );
 };
+
+export type ProductContractUpdateStatus = {
+  productId: string;
+  contractUpdateRequired: boolean;
+  contractUpdateInProgress: boolean;
+};
+
+// TODO: call the products contract update status API once it is available
+export const fetchProductsContractUpdateStatus = (
+  _partyId: string
+): Promise<Array<ProductContractUpdateStatus>> => Promise.resolve([]);
