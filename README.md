@@ -17,31 +17,40 @@ and page refreshes therefore restore product permissions from the API instead of
 depending on Redux state left by a previous page. The request remains outside the
 dashboard shell.
 
-## Contract update wizard (scaffold)
+## Documents section
 
-The route `/dashboard/:partyId/documents/:productId/update-contract` opens a
-three-step wizard outside the dashboard side menu, with the secondary institution
-header hidden. In development (`yarn start`), product cards in Documents include
-a temporary entry button; the existing document link is unchanged.
-Each step has its own main heading, without a step indicator or counter.
-Back navigates to the previous step; on the first step it leaves immediately and
-returns to the entry URL (including query and hash), or Documents for direct links.
+Shown in the side menu only when `VITE_SHOW_DOCUMENTS` is `true`, the institution is
+a PSP on PagoPA, and the user has `ViewContract` on an active product. All code lives in
+`src/pages/documents/`:
 
-The first step ("Dati dell’ente") shows the selected institution data read from
-redux (loaded by `withSelectedParty` via `fetchPartyDetails`), with `-` for missing
-values; the other two contain editable sample fields. A
-wizard-scoped Context and reducer retain values between steps, without storing
-them in Redux, browser storage or an API. Refreshing, changing institution/product,
-or leaving the page resets the draft. The Exit button opens a confirmation modal:
-cancelling keeps the draft, confirming clears it and returns to Documents.
-The last Continue button is disabled until submission is implemented.
+| Folder | Route (`/dashboard/:partyId/...`) | Purpose |
+| --- | --- | --- |
+| `list/` | `documents` | Product cards with their contracts; `PendingRequestDialog` starts a new contract update request |
+| `detail/` | `documents/details` | Documents of a single product |
+| `contractUpdate/` | `documents/:productId/update-contract[/success\|/error]` | Contract update wizard and its OK/KO result pages |
 
-Step IDs and state transitions live in `src/pages/documents/contractUpdate/ContractUpdateWizardContext.tsx`;
-the shared shell (heading, Back/Continue, exit modal) lives in
-`components/ContractUpdateWizardLayout.tsx`. Each step has its own folder under
-`steps/` with a layout-only component and a `use<Step>` hook holding its logic;
-the step-to-component map is `steps/index.ts`. Contract eligibility, real fields, validation and
-submission are intentionally not implemented.
+List and detail render inside the dashboard shell; the wizard and the result pages are
+full-page routes in `src/routes.tsx`, outside the side menu.
+
+### Contract update wizard
+
+Three steps: institution data (read-only, from redux), Legal Representative, and
+Administrators (pre-filled with the current product admins). The draft lives in a
+wizard-scoped Context and reducer (`ContractUpdateWizardContext.tsx`), never in Redux,
+browser storage or the API, so refreshing or changing institution/product resets it.
+Back on the first step returns to `location.state.returnTo` (or Documents); Exit asks for
+confirmation. The last step opens a submit confirmation and calls
+`submitContractUpdate`, then replaces the URL with the success or error page.
+
+On the success page, if another product still requires a contract update (and is not the
+submitted one or already in progress), "Torna a Documenti" proposes to start the wizard for
+that product. The status API is not available yet: `fetchProductsContractUpdateStatus`
+returns an empty list.
+
+Where to change things: the shared shell is `components/ContractUpdateWizardLayout.tsx`;
+each step folder under `steps/` has a layout-only component, a `use<Step>` hook and, for
+steps with inputs, `validation.ts`; `steps/index.ts` maps step IDs to components and optional validators. Draft types
+are in `src/model/ContractUpdate.ts`, API calls in `src/services/contractUpdateService.ts`.
 
 ## Data and model/types shared with remotes micro-frontend
 This application represents the container app for some remotes pages/components and provide to them some shared data having shared types.
