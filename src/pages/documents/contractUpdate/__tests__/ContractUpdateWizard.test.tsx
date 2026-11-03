@@ -267,9 +267,13 @@ test.each([
 });
 
 const renderSuccessPage = (
-  statuses: Awaited<ReturnType<typeof fetchProductsContractUpdateStatus>>
+  statuses: Awaited<ReturnType<typeof fetchProductsContractUpdateStatus>> | Error
 ) => {
-  vi.mocked(fetchProductsContractUpdateStatus).mockResolvedValueOnce(statuses);
+  if (statuses instanceof Error) {
+    vi.mocked(fetchProductsContractUpdateStatus).mockRejectedValueOnce(statuses);
+  } else {
+    vi.mocked(fetchProductsContractUpdateStatus).mockResolvedValueOnce(statuses);
+  }
   const history = createMemoryHistory({
     initialEntries: ['/dashboard/party-1/documents/product-1/update-contract/success'],
   });
@@ -303,6 +307,7 @@ test.each([
   ['the submitted product', [status('product-1', true)]],
   ['a product already in progress', [status('product-2', true, true)]],
   ['a product not requiring an update', [status('product-2', false)]],
+  ['a failed status request', new Error('KO')],
 ])('the success page goes back to the documents without the modal for %s', async (_, statuses) => {
   const history = renderSuccessPage(statuses);
   await waitFor(() => expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith('party-1'));
