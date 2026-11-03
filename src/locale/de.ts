@@ -94,7 +94,7 @@ export default {
       title: 'Möchten Sie auch die Dokumente für {{productName}} hinzufügen?',
       message:
         'Sie können jetzt auch die fehlenden Dokumente für die anderen Produkte hinzufügen. Möchten Sie fortfahren?',
-      back: 'Zurück zu Dokumente',
+      back: 'Zurück zu den Dokumenten',
       confirm: 'Weiter',
       close: 'Schließen',
     },
