@@ -1,5 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react';
-import { store } from '../../../../../redux/store';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { createStore, store } from '../../../../../redux/store';
 import { mockedParties } from '../../../../../services/__mocks__/partyService';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import DashboardSideMenu from '../DashboardSideMenu';
@@ -83,4 +84,28 @@ test('Test: The Aggregator has been delegated will see the menu section and will
 
   fireEvent.click(institutionsListVoice);
   expect(history.location.pathname).toBe(`/dashboard/${institutionEA.partyId}/delegate`);
+});
+
+test('Test: the divider separates the users and groups items from the other ones', () => {
+  const testStore = createStore();
+  testStore.dispatch(
+    setProductPermissions([
+      { productId: 'prod-io', actions: ['Selc:ListProductUsers', 'Selc:ListProductGroups'] },
+    ])
+  );
+  renderWithProviders(
+    <DashboardSideMenu
+      party={mockedParties[2]}
+      isInvoiceSectionVisible={false}
+      isAddDelegateSectionVisible={true}
+      setDrawerOpen={vi.fn()}
+    />,
+    testStore
+  );
+
+  const divider = screen.getByTestId('sidenav-divider');
+  const isFollowedBy = (a: Node, b: Node) =>
+    a.compareDocumentPosition(b) === Node.DOCUMENT_POSITION_FOLLOWING;
+  expect(isFollowedBy(screen.getByRole('button', { name: 'Deleghe' }), divider)).toBe(true);
+  expect(isFollowedBy(divider, screen.getByRole('button', { name: 'Utenti' }))).toBe(true);
 });

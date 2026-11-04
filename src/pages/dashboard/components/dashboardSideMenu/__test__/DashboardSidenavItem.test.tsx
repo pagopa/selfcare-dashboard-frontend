@@ -64,4 +64,30 @@ describe('DashboardSideNavItem', () => {
     );
     expect(screen.queryByTestId('ExitToAppIcon')).not.toBeInTheDocument();
   });
+  it('shows the selected dot on the selected item', () => {
+    renderWithProviders(
+      <DashboardSideNavItem
+        title="Documenti"
+        icon={PeopleAlt}
+        handleClick={vi.fn()}
+        itemKey="documents"
+        isSelected
+      />
+    );
+    expect(screen.getByTestId('sidenav-selected-dot')).toBeInTheDocument();
+  });
+
+  it('hides the selected dot when labels are hidden', () => {
+    renderWithProviders(
+      <DashboardSideNavItem
+        title="Documenti"
+        icon={PeopleAlt}
+        handleClick={vi.fn()}
+        itemKey="documents"
+        isSelected
+        hideLabels
+      />
+    );
+    expect(screen.queryByTestId('sidenav-selected-dot')).not.toBeInTheDocument();
+  });
 });

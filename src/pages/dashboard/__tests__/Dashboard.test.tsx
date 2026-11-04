@@ -1,4 +1,6 @@
+import { ThemeProvider } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { theme } from '@pagopa/mui-italia';
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -47,11 +49,13 @@ const renderDashboard = (
   const store = injectedStore || createStore();
   const history = injectedHistory || createMemoryHistory();
   render(
-    <Router history={history}>
-      <Provider store={store}>
-        <Dashboard />
-      </Provider>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router history={history}>
+        <Provider store={store}>
+          <Dashboard />
+        </Provider>
+      </Router>
+    </ThemeProvider>
   );
   return { store, history };
 };
