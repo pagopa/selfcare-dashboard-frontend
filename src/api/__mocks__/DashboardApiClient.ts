@@ -1,5 +1,10 @@
 import { EmailString } from '@pagopa/ts-commons/lib/strings';
 import { BrokerResource } from '../generated/b4f-dashboard/BrokerResource';
+import {
+  DocumentResource,
+  TypeEnum as DocumentTypeEnum,
+} from '../generated/b4f-dashboard/DocumentResource';
+import { DocumentsResource } from '../generated/b4f-dashboard/DocumentsResource';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import { InstitutionBaseResource } from '../generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
@@ -294,6 +299,11 @@ export const mockedBrokerResource: Array<BrokerResource> = [
   },
 ];
 
+export const mockedDocuments: Array<DocumentResource> = [
+  { name: 'Contratto_di_adesione.pdf', type: DocumentTypeEnum.INSTITUTION },
+  { name: 'Addendum.pdf', type: DocumentTypeEnum.ATTACHMENT },
+];
+
 export const DashboardApi = {
   getInstitutions: async (): Promise<Array<InstitutionBaseResource>> =>
     new Promise((resolve) => resolve(mockedInstitutionResources)),
@@ -338,4 +348,18 @@ export const DashboardApi = {
     _productId: string,
     _body: OnboardingContractUpdateDto
   ): Promise<void> => new Promise((resolve) => resolve()),
+
+  getDocumentsList: async (
+    _institutionId: string,
+    _productId: string
+  ): Promise<DocumentsResource> =>
+    new Promise((resolve) => resolve({ documents: mockedDocuments })),
+
+  getDocument: async (
+    _institutionId: string,
+    _productId: string,
+    _type: DocumentTypeEnum,
+    _name?: string
+  ): Promise<Blob> =>
+    new Promise((resolve) => resolve(new Blob([''], { type: 'application/pdf' }))),
 };

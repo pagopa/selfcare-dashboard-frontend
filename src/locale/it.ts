@@ -498,12 +498,13 @@ export default {
   },
   documentsDetails: {
     firstCard: {
-      title: 'DETTAGLI ADESIONE',
+      title: 'Dettagli adesione',
       state: 'Stato',
       active: 'Attiva',
     },
     secondCard: {
-      title: 'DOCUMENTI',
+      title: 'Documenti',
+      download: 'Scarica {{name}}',
       noDocumentFound:
         'Non ci è possibile recuperare questo documento, ma la tua adesione al prodotto resta valida.',
     },
