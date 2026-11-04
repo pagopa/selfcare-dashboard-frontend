@@ -1,13 +1,11 @@
 import type { SvgIconComponent } from '@mui/icons-material';
-import ArticleIcon from '@mui/icons-material/Article';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import DnsIcon from '@mui/icons-material/Dns';
 import DnsOutlinedIcon from '@mui/icons-material/DnsOutlined';
-import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
-import PeopleAlt from '@mui/icons-material/PeopleAlt';
-import SupervisedUserCircle from '@mui/icons-material/SupervisedUserCircle';
-import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
+import EuroSymbolOutlinedIcon from '@mui/icons-material/EuroSymbolOutlined';
+import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import PhotoOutlinedIcon from '@mui/icons-material/PhotoOutlined';
+import SupervisedUserCircleOutlinedIcon from '@mui/icons-material/SupervisedUserCircleOutlined';
 import {
   useErrorDispatcher,
   useLoading,
@@ -29,6 +27,7 @@ import { DASHBOARD_ROUTES } from '../../../../../routes';
 import { getBillingToken } from '../../../../../services/tokenExchangeService';
 import { LOADING_TASK_TOKEN_EXCHANGE_INVOICE } from '../../../../../utils/constants';
 import { ENV } from '../../../../../utils/env';
+import ApprovalDelegationOutlinedIcon from '../icons/ApprovalDelegationOutlined';
 
 export type MenuItem = {
   key: string;
@@ -142,7 +141,7 @@ export function useDashboardMenuItems({
     {
       key: 'techpartner',
       title: t('overview.ptPage.title'),
-      icon: DnsIcon,
+      icon: DnsOutlinedIcon,
       path: resolvePath(DASHBOARD_ROUTES.TECHPARTNER.path),
       isVisible: isHandleDelegationsVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.TECHPARTNER.path),
@@ -151,7 +150,7 @@ export function useDashboardMenuItems({
     {
       key: 'overview',
       title: t('overview.sideMenu.institutionManagement.overview.title'),
-      icon: ViewSidebarIcon,
+      icon: PhotoOutlinedIcon,
       path: resolvePath(DASHBOARD_ROUTES.OVERVIEW.path, isPagoPa ? 'onboarded' : undefined),
       isVisible: true,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.OVERVIEW.path),
@@ -160,7 +159,7 @@ export function useDashboardMenuItems({
     {
       key: 'delegations',
       title: t('overview.sideMenu.institutionManagement.delegations.title'),
-      icon: AssignmentIcon,
+      icon: ApprovalDelegationOutlinedIcon,
       path: resolvePath(DASHBOARD_ROUTES.DELEGATIONS.path),
       isVisible: isAddDelegateSectionVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DELEGATIONS.path),
@@ -169,7 +168,7 @@ export function useDashboardMenuItems({
     {
       key: 'documents',
       title: t('overview.sideMenu.institutionManagement.documents.title'),
-      icon: ArticleIcon,
+      icon: FeedOutlinedIcon,
       path: resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
       isVisible: isPagoPa ? ENV.SHOW_DOCUMENTS && canSeeDocuments : isDocumentsSectionVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
@@ -181,7 +180,7 @@ export function useDashboardMenuItems({
     {
       key: 'users',
       title: t('overview.sideMenu.institutionManagement.referents.title'),
-      icon: PeopleAlt,
+      icon: PersonOutlinedIcon,
       path: resolvePath(ENV.ROUTES.USERS),
       isVisible: canSeeUsers,
       isSelected: location.pathname.startsWith(resolvePath(ENV.ROUTES.USERS)),
@@ -190,7 +189,7 @@ export function useDashboardMenuItems({
     {
       key: 'groups',
       title: t('overview.sideMenu.institutionManagement.groups.title'),
-      icon: SupervisedUserCircle,
+      icon: SupervisedUserCircleOutlinedIcon,
       path: resolvePath(ENV.ROUTES.GROUPS),
       isVisible: canSeeGroups,
       isSelected: location.pathname.startsWith(resolvePath(ENV.ROUTES.GROUPS)),
@@ -199,7 +198,7 @@ export function useDashboardMenuItems({
     {
       key: 'invoices',
       title: t('overview.sideMenu.institutionManagement.invoices.title'),
-      icon: EuroSymbolIcon,
+      icon: EuroSymbolOutlinedIcon,
       path: '#',
       isVisible: !isPagoPa && isInvoiceSectionVisible,
       isSelected: false,

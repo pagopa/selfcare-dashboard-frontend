@@ -1,5 +1,4 @@
 import { Divider, Grid, List, ListItem } from '@mui/material';
-import { useLocation } from 'react-router-dom';
 import { Party } from '../../../../model/Party';
 import DashboardSideNavItem from './DashboardSidenavItem';
 import { useDashboardMenuItems } from './hooks/useDashboardMenuItems';
@@ -14,6 +13,8 @@ type Props = {
   hideLabels?: boolean;
 };
 
+const MICROFRONTEND_ITEM_KEYS = ['users', 'groups'];
+
 export default function DashboardSideMenu({
   party,
   isAddDelegateSectionVisible = false,
@@ -23,9 +24,6 @@ export default function DashboardSideMenu({
   setDrawerOpen,
   hideLabels = false,
 }: Readonly<Props>) {
-  const location = useLocation();
-  const isPagoPaOverviewVisible = !location.pathname.includes('admin');
-
   const visibleMenuItems = useDashboardMenuItems({
     party,
     isAddDelegateSectionVisible,
@@ -35,12 +33,19 @@ export default function DashboardSideMenu({
     setDrawerOpen,
   });
 
+  const firstMicrofrontendItemIndex = visibleMenuItems.findIndex((item) =>
+    MICROFRONTEND_ITEM_KEYS.includes(item.key)
+  );
+
   return (
     <Grid container item mt={1} width="100%">
       <Grid item xs={12}>
         <List>
-          {visibleMenuItems.map((item) => (
+          {visibleMenuItems.map((item, index) => (
             <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
+              {index > 0 && index === firstMicrofrontendItemIndex && (
+                <Divider data-testid="sidenav-divider" sx={{ my: 1 }} />
+              )}
               <DashboardSideNavItem
                 title={item.title}
                 icon={item.icon}
@@ -49,10 +54,6 @@ export default function DashboardSideMenu({
                 hideLabels={hideLabels}
                 itemKey={item.key}
               />
-              {(item.key === 'techpartner' ||
-                (isPagoPaOverviewVisible && item.key === 'onboardings')) && (
-                  <Divider sx={{ mt: 2, mb: 2 }} />
-                )}
             </ListItem>
           ))}
         </List>
