@@ -50,6 +50,10 @@ type ProductDocuments = {
   documents: Array<DisplayDocument>;
 };
 
+// BE document names may come without extension: documents are PDFs
+const withPdfExtension = (fileName: string) =>
+  /\.[a-z0-9]+$/i.test(fileName) ? fileName : `${fileName}.pdf`;
+
 const saveFile = (blob: Blob, fileName: string) => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -136,7 +140,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
   }, [party.partyId, productId, subProductId]);
 
   const downloadDocument = (docProductId: string, doc: DisplayDocument) => {
-    const fileName = doc.name || `${doc.label}.pdf`;
+    const fileName = withPdfExtension(doc.name || doc.label);
 
     trackEvent('DASHBOARD_VIEW_DOCUMENT', {
       product_role: party.products.find((p) => p.productId === docProductId)?.userRole,

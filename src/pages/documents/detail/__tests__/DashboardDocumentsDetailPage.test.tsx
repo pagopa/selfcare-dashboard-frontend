@@ -100,24 +100,32 @@ describe('DashboardDocumentsDetailPage', () => {
     vi.unstubAllGlobals();
   });
 
-  test('downloads the document with its type and name', async () => {
-    (getDocumentsList as Mock).mockResolvedValue([contract]);
+  test('downloads the document by type and name adding the pdf extension if missing', async () => {
+    const document = {
+      name: 'Pagamenti_pagoPA_accordo_adesione',
+      type: DocumentTypeEnum.INSTITUTION,
+    };
+    (getDocumentsList as Mock).mockResolvedValue([document]);
     (getDocument as Mock).mockResolvedValue(new Blob(['pdf']));
-    const createObjectURL = vi.fn(() => 'blob:mock');
     const revokeObjectURL = vi.fn();
-    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL });
-    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+    vi.stubGlobal('URL', { ...URL, createObjectURL: vi.fn(() => 'blob:mock'), revokeObjectURL });
+    const savedFileNames: Array<string | null> = [];
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+      this: HTMLAnchorElement
+    ) {
+      savedFileNames.push(this.getAttribute('download'));
+    });
 
     renderPage('?productId=prod-io&productTitle=IO');
 
-    fireEvent.click(await screen.findByLabelText(`Scarica ${contract.name}`));
+    fireEvent.click(await screen.findByLabelText(`Scarica ${document.name}`));
 
-    await waitFor(() => expect(click).toHaveBeenCalled());
+    await waitFor(() => expect(savedFileNames).toEqual([`${document.name}.pdf`]));
     expect(getDocument).toHaveBeenCalledWith(
       mockedParties[0].partyId,
       'prod-io',
       DocumentTypeEnum.INSTITUTION,
-      contract.name
+      document.name
     );
     expect(revokeObjectURL).toHaveBeenCalledWith('blob:mock');
 
