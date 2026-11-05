@@ -1,10 +1,12 @@
+import { CONFIG } from '@pagopa/selfcare-common-frontend/lib/config/env';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
 import {
   buildFetchApi,
   extractResponse,
 } from '@pagopa/selfcare-common-frontend/lib/utils/api-utils';
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { withOnSuccess } from '@pagopa/selfcare-common-frontend/lib/utils/login-utils';
+import { isPagoPaUser, storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { ProductRolesApiResponse } from '../model/ProductRolesApiResponse';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
@@ -226,7 +228,13 @@ export const DashboardApi = {
       }
     );
     if (response.status === 401) {
+      // same as extractResponse: notify, redirect to logout and never settle
       onRedirectToLogin();
+      const invalidSessionUrl = withOnSuccess(
+        isPagoPaUser() ? CONFIG.URL_FE.LOGOUT_GOOGLE : CONFIG.URL_FE.LOGOUT
+      );
+      window.setTimeout(() => window.location.assign(invalidSessionUrl), 2000);
+      return new Promise<Blob>(() => null);
     }
     if (!response.ok) {
       throw new Error(`Unexpected HTTP status! Expected 200 obtained ${response.status}`);

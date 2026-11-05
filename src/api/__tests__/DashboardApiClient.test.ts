@@ -356,5 +356,32 @@ describe('DashboardApiClient', () => {
         DashboardApi.getDocument('inst-1', 'prod-io', DocumentTypeEnum.INSTITUTION)
       ).rejects.toThrow('Unexpected HTTP status! Expected 200 obtained 404');
     });
+
+    test('on 401 dispatches only the session expired error, redirects and never settles', async () => {
+      vi.useFakeTimers();
+      const assign = vi.fn();
+      vi.stubGlobal('location', { ...window.location, assign });
+      try {
+        fetchMock.mockResolvedValue({ ok: false, status: 401 });
+        const settled = vi.fn();
+        const errorsBefore = store.getState().appState.errors.length;
+
+        void DashboardApi.getDocument('inst-1', 'prod-io', DocumentTypeEnum.INSTITUTION).then(
+          settled,
+          settled
+        );
+        await vi.advanceTimersByTimeAsync(2000);
+
+        const errors = store.getState().appState.errors.slice(errorsBefore);
+        expect(errors).toEqual([
+          expect.objectContaining({ id: expect.stringMatching(/^tokenNotValid/) }),
+        ]);
+        expect(assign).toHaveBeenCalledTimes(1);
+        expect(settled).not.toHaveBeenCalled();
+      } finally {
+        vi.clearAllTimers();
+        vi.useRealTimers();
+      }
+    });
   });
 });

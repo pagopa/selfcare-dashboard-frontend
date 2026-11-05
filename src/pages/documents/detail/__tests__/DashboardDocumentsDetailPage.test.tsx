@@ -60,6 +60,28 @@ describe('DashboardDocumentsDetailPage', () => {
     expect(screen.getByText('IO Premium')).toBeInTheDocument();
   });
 
+  test('keeps the documents of the product that loaded when the other request fails', async () => {
+    (getDocumentsList as Mock).mockImplementation((_partyId: string, productId: string) =>
+      productId === 'prod-io'
+        ? Promise.reject(new Error('unavailable'))
+        : Promise.resolve([premiumContract])
+    );
+
+    const { store } = renderPage('?productId=prod-io&subProductId=prod-io-premium&productTitle=IO');
+
+    expect(await screen.findByText(premiumContract.name)).toBeInTheDocument();
+    expect(screen.getByText('IO Premium')).toBeInTheDocument();
+    expect(screen.queryByText(contract.name)).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(store.getState().appState.errors).toEqual([
+        expect.objectContaining({
+          id: expect.stringMatching(`^getDocumentsList-${mockedParties[0].partyId}-prod-io_`),
+          toNotify: true,
+        }),
+      ])
+    );
+  });
+
   test('shows the missing contract message when there is no INSTITUTION document', async () => {
     (getDocumentsList as Mock).mockResolvedValue([
       { name: 'Addendum.pdf', type: DocumentTypeEnum.ATTACHMENT },

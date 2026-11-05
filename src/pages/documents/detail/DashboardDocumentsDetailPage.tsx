@@ -118,7 +118,8 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
     const productIds = subProductId ? [productId, subProductId] : [productId];
 
     setLoadingDocumentsList(true);
-    Promise.all(
+    // allSettled: a failing product must not hide the documents of the other one
+    Promise.allSettled(
       productIds.map((id) =>
         getDocumentsList(party.partyId, id).then((documents) => ({
           productId: id,
@@ -126,15 +127,22 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
         }))
       )
     )
-      .then(setProductsDocuments)
-      .catch((error) => {
-        addError({
-          id: `getDocumentsList-${party.partyId}`,
-          blocking: false,
-          error,
-          techDescription: `Something gone wrong retrieving documents list with party id ${party.partyId}`,
-          toNotify: true,
-        });
+      .then((results) => {
+        setProductsDocuments(
+          results.flatMap((result, i) => {
+            if (result.status === 'fulfilled') {
+              return [result.value];
+            }
+            addError({
+              id: `getDocumentsList-${party.partyId}-${productIds[i]}`,
+              blocking: false,
+              error: result.reason,
+              techDescription: `Something gone wrong retrieving documents list with party id ${party.partyId} and product id ${productIds[i]}`,
+              toNotify: true,
+            });
+            return [];
+          })
+        );
       })
       .finally(() => setLoadingDocumentsList(false));
   }, [party.partyId, productId, subProductId]);
@@ -243,7 +251,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
           <Stack spacing={3}>
             {productsDocuments.map(({ productId: docProductId, documents }) => (
               <Stack key={docProductId} spacing={2}>
-                {productsDocuments.length > 1 && (
+                {subProductId && (
                   <Typography variant="body1" fontWeight={'fontWeightMedium'}>
                     {mapProductIdToTitle(docProductId)}
                   </Typography>
