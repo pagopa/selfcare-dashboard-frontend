@@ -504,7 +504,7 @@ export default {
     },
     secondCard: {
       title: 'Documenti',
-      download: 'Scarica {{name}}',
+      open: 'Apri {{name}} in una nuova scheda',
       noDocumentFound:
         'Non ci è possibile recuperare questo documento, ma la tua adesione al prodotto resta valida.',
     },

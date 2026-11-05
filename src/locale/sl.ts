@@ -438,7 +438,7 @@ export default {
     },
     secondCard: {
       title: 'Dokumenti',
-      download: 'Prenesi {{name}}',
+      open: 'Odpri {{name}} v novem zavihku',
       noDocumentFound:
         'Tega dokumenta ni mogoče pridobiti, vendar vaš pristop k izdelku ostaja veljaven.',
     },

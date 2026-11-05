@@ -104,25 +104,27 @@ describe('DashboardDocumentsDetailPage', () => {
     ]);
     (getDocument as Mock).mockResolvedValue(new Blob(['pdf']));
     vi.stubGlobal('URL', { ...URL, createObjectURL: vi.fn(), revokeObjectURL: vi.fn() });
-    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+    const tab = { location: { href: '' }, opener: {}, close: vi.fn() };
+    const open = vi.spyOn(window, 'open').mockReturnValue(tab as unknown as Window);
 
     renderPage('?productId=prod-io&productTitle=IO');
 
     fireEvent.click(await screen.findByText('Contratto_di_adesione_IO'));
 
-    await waitFor(() => expect(click).toHaveBeenCalled());
+    expect(open).toHaveBeenCalledWith('', '_blank');
     expect(getDocument).toHaveBeenCalledWith(
       mockedParties[0].partyId,
       'prod-io',
       DocumentTypeEnum.INSTITUTION,
       undefined
     );
-    expect(screen.getAllByRole('button', { name: /^Scarica/ })).toHaveLength(1);
+    expect(screen.getAllByRole('button', { name: /^Apri/ })).toHaveLength(1);
 
     vi.unstubAllGlobals();
   });
 
-  test('downloads the document by type and name adding the pdf extension if missing', async () => {
+  test('opens the document as pdf in a new tab', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     const document = {
       name: 'Pagamenti_pagoPA_accordo_adesione',
       type: DocumentTypeEnum.INSTITUTION,
@@ -130,27 +132,42 @@ describe('DashboardDocumentsDetailPage', () => {
     (getDocumentsList as Mock).mockResolvedValue([document]);
     (getDocument as Mock).mockResolvedValue(new Blob(['pdf']));
     const revokeObjectURL = vi.fn();
-    vi.stubGlobal('URL', { ...URL, createObjectURL: vi.fn(() => 'blob:mock'), revokeObjectURL });
-    const savedFileNames: Array<string | null> = [];
-    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
-      this: HTMLAnchorElement
-    ) {
-      savedFileNames.push(this.getAttribute('download'));
-    });
+    const createObjectURL = vi.fn((_blob: Blob) => 'blob:mock');
+    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL });
+    const tab = { location: { href: '' }, opener: {}, close: vi.fn() };
+    vi.spyOn(window, 'open').mockReturnValue(tab as unknown as Window);
 
     renderPage('?productId=prod-io&productTitle=IO');
 
-    fireEvent.click(await screen.findByLabelText(`Scarica ${document.name}`));
+    fireEvent.click(await screen.findByLabelText(`Apri ${document.name} in una nuova scheda`));
 
-    await waitFor(() => expect(savedFileNames).toEqual([`${document.name}.pdf`]));
+    await waitFor(() => expect(tab.location.href).toBe('blob:mock'));
+    expect(tab.opener).toBeNull();
+    expect(createObjectURL.mock.calls[0][0].type).toBe('application/pdf');
     expect(getDocument).toHaveBeenCalledWith(
       mockedParties[0].partyId,
       'prod-io',
       DocumentTypeEnum.INSTITUTION,
       document.name
     );
+    expect(revokeObjectURL).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(60_000);
     expect(revokeObjectURL).toHaveBeenCalledWith('blob:mock');
 
+    vi.useRealTimers();
     vi.unstubAllGlobals();
+  });
+
+  test('closes the new tab when the document cannot be retrieved', async () => {
+    (getDocumentsList as Mock).mockResolvedValue([contract]);
+    (getDocument as Mock).mockRejectedValue(new Error('unavailable'));
+    const tab = { location: { href: '' }, opener: {}, close: vi.fn() };
+    vi.spyOn(window, 'open').mockReturnValue(tab as unknown as Window);
+
+    renderPage('?productId=prod-io&productTitle=IO');
+
+    fireEvent.click(await screen.findByLabelText(`Apri ${contract.name} in una nuova scheda`));
+
+    await waitFor(() => expect(tab.close).toHaveBeenCalled());
   });
 });

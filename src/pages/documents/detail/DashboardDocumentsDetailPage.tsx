@@ -1,5 +1,5 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {
   Box,
   Breadcrumbs,
@@ -50,19 +50,15 @@ type ProductDocuments = {
   documents: Array<DisplayDocument>;
 };
 
-// BE document names may come without extension: documents are PDFs
-const withPdfExtension = (fileName: string) =>
-  /\.[a-z0-9]+$/i.test(fileName) ? fileName : `${fileName}.pdf`;
+// The new tab needs the blob URL alive while it loads the document
+const BLOB_URL_REVOKE_DELAY_MS = 60_000;
 
-const saveFile = (blob: Blob, fileName: string) => {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.setAttribute('href', url);
-  link.setAttribute('download', fileName);
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+// Documents are PDFs: force the type so the browser renders them instead of downloading
+const openFileInTab = (tab: Window, blob: Blob) => {
+  const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+  // eslint-disable-next-line functional/immutable-data
+  tab.location.href = url;
+  setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_DELAY_MS);
 };
 
 const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
@@ -147,8 +143,14 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
       .finally(() => setLoadingDocumentsList(false));
   }, [party.partyId, productId, subProductId]);
 
-  const downloadDocument = (docProductId: string, doc: DisplayDocument) => {
-    const fileName = withPdfExtension(doc.name || doc.label);
+  const openDocument = (docProductId: string, doc: DisplayDocument) => {
+    const fileName = doc.name || doc.label;
+    // Opened synchronously on click, otherwise popup blockers stop it after the async fetch
+    const tab = window.open('', '_blank');
+    if (tab) {
+      // eslint-disable-next-line functional/immutable-data
+      tab.opener = null;
+    }
 
     trackEvent('DASHBOARD_VIEW_DOCUMENT', {
       product_role: party.products.find((p) => p.productId === docProductId)?.userRole,
@@ -159,8 +161,13 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
 
     setLoadingDocument(true);
     getDocument(party.partyId, docProductId, doc.type, doc.name)
-      .then((blob) => saveFile(blob, fileName))
+      .then((blob) => {
+        if (tab) {
+          openFileInTab(tab, blob);
+        }
+      })
       .catch((error) => {
+        tab?.close();
         addError({
           id: `getDocument-${docProductId}-${fileName}`,
           blocking: false,
@@ -270,7 +277,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
                   >
                     <ButtonNaked
                       color="primary"
-                      onClick={() => downloadDocument(docProductId, doc)}
+                      onClick={() => openDocument(docProductId, doc)}
                       sx={{
                         textAlign: 'start',
                         justifyContent: 'flex-start',
@@ -283,10 +290,10 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
                     </ButtonNaked>
                     <IconButton
                       sx={{ color: (theme) => theme.colors.blue[500] }}
-                      aria-label={t('documentsDetails.secondCard.download', { name: doc.label })}
-                      onClick={() => downloadDocument(docProductId, doc)}
+                      aria-label={t('documentsDetails.secondCard.open', { name: doc.label })}
+                      onClick={() => openDocument(docProductId, doc)}
                     >
-                      <FileDownloadOutlinedIcon />
+                      <OpenInNewIcon />
                     </IconButton>
                   </Box>
                 ))}

@@ -447,7 +447,7 @@ export default {
     },
     secondCard: {
       title: 'Documents',
-      download: 'Télécharger {{name}}',
+      open: 'Ouvrir {{name}} dans un nouvel onglet',
       noDocumentFound:
         'Nous ne sommes pas en mesure de récupérer ce document, mais votre adhésion au produit reste valable.',
     },

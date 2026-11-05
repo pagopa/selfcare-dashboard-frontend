@@ -446,7 +446,7 @@ export default {
     },
     secondCard: {
       title: 'Dokumente',
-      download: '{{name}} herunterladen',
+      open: '{{name}} in neuem Tab öffnen',
       noDocumentFound:
         'Wir können dieses Dokument nicht abrufen, aber dein Beitritt zum Produkt bleibt gültig.',
     },

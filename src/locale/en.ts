@@ -444,7 +444,7 @@ export default {
     },
     secondCard: {
       title: 'Documents',
-      download: 'Download {{name}}',
+      open: 'Open {{name}} in a new tab',
       noDocumentFound:
         'We are unable to retrieve this document, but your membership of the product remains valid.',
     },
