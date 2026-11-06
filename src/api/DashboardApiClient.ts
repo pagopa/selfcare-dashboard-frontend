@@ -1,10 +1,12 @@
+import { CONFIG } from '@pagopa/selfcare-common-frontend/lib/config/env';
 import i18n from '@pagopa/selfcare-common-frontend/lib/locale/locale-utils';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
 import {
   buildFetchApi,
   extractResponse,
 } from '@pagopa/selfcare-common-frontend/lib/utils/api-utils';
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
+import { withOnSuccess } from '@pagopa/selfcare-common-frontend/lib/utils/login-utils';
+import { isPagoPaUser, storageTokenOps } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { ProductRolesApiResponse } from '../model/ProductRolesApiResponse';
 import { Party } from '../model/Party';
 import { Product } from '../model/Product';
@@ -16,11 +18,12 @@ import { WithDefaultsT, createClient } from './generated/b4f-dashboard/client';
 import { DelegationIdResource } from './generated/b4f-dashboard/DelegationIdResource';
 import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
 import { DelegationWithPagination } from './generated/b4f-dashboard/DelegationWithPagination';
+import { TypeEnum as DocumentTypeEnum } from './generated/b4f-dashboard/DocumentResource';
+import { DocumentsResource } from './generated/b4f-dashboard/DocumentsResource';
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
 import { OnboardingContractUpdateDto } from './generated/b4f-dashboard/OnboardingContractUpdateDto';
-import { OnboardingInfo } from './generated/b4f-dashboard/OnboardingInfo';
 import { ProductRolePermissionsList } from './generated/b4f-dashboard/ProductRolePermissionsList';
 import { ProductsResource } from './generated/b4f-dashboard/ProductsResource';
 import { ProductUserResource } from './generated/b4f-dashboard/ProductUserResource';
@@ -193,15 +196,50 @@ export const DashboardApi = {
     return extractResponse(result, 201, onRedirectToLogin);
   },
 
-  getOnboardingInfo: async (
+  getDocumentsList: async (
     institutionId: string,
-    products: string
-  ): Promise<Array<OnboardingInfo>> => {
-    const result = await apiClient.v2GetOnboardingsInfo({
+    productId: string
+  ): Promise<DocumentsResource> => {
+    const result = await apiClient.getDocumentsListUsingGET({
       institutionId,
-      products,
+      productId,
     });
     return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  // fetch in place of codegen: the generated client cannot decode binary responses
+  getDocument: async (
+    institutionId: string,
+    productId: string,
+    type: DocumentTypeEnum,
+    name?: string
+  ): Promise<Blob> => {
+    const query = new URLSearchParams({ type, ...(name ? { name } : {}) });
+    const response = await fetch(
+      `${ENV.URL_API.API_DASHBOARD}/v1/documents/institutions/${encodeURIComponent(
+        institutionId
+      )}/products/${encodeURIComponent(productId)}/document?${query.toString()}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${storageTokenOps.read()}`,
+          accept: 'application/octet-stream',
+        },
+      }
+    );
+    if (response.status === 401) {
+      // same as extractResponse: notify, redirect to logout and never settle
+      onRedirectToLogin();
+      const invalidSessionUrl = withOnSuccess(
+        isPagoPaUser() ? CONFIG.URL_FE.LOGOUT_GOOGLE : CONFIG.URL_FE.LOGOUT
+      );
+      window.setTimeout(() => window.location.assign(invalidSessionUrl), 2000);
+      return new Promise<Blob>(() => null);
+    }
+    if (!response.ok) {
+      throw new Error(`Unexpected HTTP status! Expected 200 obtained ${response.status}`);
+    }
+    return response.blob();
   },
 
   getAttachmentStatus: async (

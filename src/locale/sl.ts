@@ -430,6 +430,19 @@ export default {
       close: 'Zapri',
     },
   },
+  documentsDetails: {
+    firstCard: {
+      title: 'Podrobnosti o pristopu',
+      state: 'Stanje',
+      active: 'Aktivno',
+    },
+    secondCard: {
+      title: 'Dokumenti',
+      open: 'Odpri {{name}} v novem zavihku',
+      noDocumentFound:
+        'Tega dokumenta ni mogoče pridobiti, vendar vaš pristop k izdelku ostaja veljaven.',
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Upravljane organizacije',

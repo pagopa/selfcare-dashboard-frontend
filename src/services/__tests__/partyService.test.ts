@@ -9,7 +9,6 @@ import {
   fetchParties,
   fetchPartyDetails,
   getAttachmentStatusService,
-  getOnboardingInfo,
   getProductBrokers,
   getUserOtpEmailInfoService,
 } from '../partyService';
@@ -23,7 +22,6 @@ vi.mock('../../api/DashboardApiClient', () => ({
     getAllInstituionById: vi.fn(),
     getProductBrokers: vi.fn(),
     createDelegation: vi.fn(),
-    getOnboardingInfo: vi.fn(),
     getAttachmentStatus: vi.fn(),
     getUserOtpEmailInfo: vi.fn(),
   },
@@ -161,30 +159,6 @@ describe('yourModuleFile tests', () => {
       expect(DashboardApi.getAllInstituionById).toHaveBeenCalledWith('9');
       expect(DashboardApi.getInstitution).not.toHaveBeenCalled();
       expect(result).toEqual(institutionResource2Party(institution as any));
-    });
-  });
-
-  describe('getOnboardingInfo', () => {
-    test('returns mocked onboarding info in mock mode', async () => {
-      import.meta.env.VITE_API_MOCK_PARTIES = 'true';
-
-      const result = await getOnboardingInfo('1', 'prod-io');
-
-      expect(result.map((o) => o.productId)).toEqual([
-        'prod-io',
-        'prod-io-premium',
-        'prod-dashboard-psp',
-      ]);
-      expect(DashboardApi.getOnboardingInfo).not.toHaveBeenCalled();
-    });
-
-    test('calls DashboardApi.getOnboardingInfo', async () => {
-      import.meta.env.VITE_API_MOCK_PARTIES = 'false';
-      const info = [{ productId: 'prod-pn', status: 'ACTIVE' }];
-      (DashboardApi.getOnboardingInfo as Mock).mockResolvedValue(info);
-
-      await expect(getOnboardingInfo('1', 'prod-pn')).resolves.toEqual(info);
-      expect(DashboardApi.getOnboardingInfo).toHaveBeenCalledWith('1', 'prod-pn');
     });
   });
 

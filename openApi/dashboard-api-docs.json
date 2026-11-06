@@ -12,6 +12,9 @@
     "name" : "delegations",
     "description" : "Delegation Controller"
   }, {
+    "name" : "documents",
+    "description" : "Document operations"
+  }, {
     "name" : "institutions",
     "description" : "Institution operations"
   }, {
@@ -3962,6 +3965,266 @@
         } ]
       }
     },
+    "/v1/documents/status" : {
+      "get" : {
+        "tags" : [ "documents" ],
+        "summary" : "getDocumentStatus",
+        "description" : "Service to get, for each requested product of an institution, whether the contract update is required and whether a contract update request is in progress",
+        "operationId" : "getDocumentStatusUsingGET",
+        "parameters" : [ {
+          "name" : "institutionId",
+          "in" : "query",
+          "description" : "Institution's unique internal identifier",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "productIds",
+          "in" : "query",
+          "description" : "List of product identifiers",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DocumentStatusResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/documents/institutions/{institutionId}/products/{productId}" : {
+      "get" : {
+        "tags" : [ "documents" ],
+        "summary" : "getDocumentsList",
+        "description" : "Service to get the documents available for download for a specific pair of institution-product: the institution contracts and the allowed attachments",
+        "operationId" : "getDocumentsListUsingGET",
+        "parameters" : [ {
+          "name" : "institutionId",
+          "in" : "path",
+          "description" : "Institution's unique internal identifier",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "productId",
+          "in" : "path",
+          "description" : "Product's unique identifier",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DocumentsResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/documents/institutions/{institutionId}/products/{productId}/document" : {
+      "get" : {
+        "tags" : [ "documents" ],
+        "summary" : "getDocument",
+        "description" : "Service to download a document of a specific pair of institution-product: the signed institution contract (type INSTITUTION) or an allowed attachment by its name (type ATTACHMENT)",
+        "operationId" : "getDocumentUsingGET",
+        "parameters" : [ {
+          "name" : "institutionId",
+          "in" : "path",
+          "description" : "Institution's unique internal identifier",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "productId",
+          "in" : "path",
+          "description" : "Product's unique identifier",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "Name of the attachment as returned by getDocumentsList: required for type ATTACHMENT, ignored for type INSTITUTION",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "Document type: INSTITUTION for the institution contracts, ATTACHMENT for the attachments",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INSTITUTION", "ATTACHMENT" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/octet-stream" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "byte"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
     "/v2/users/{userId}" : {
       "delete" : {
         "tags" : [ "user" ],
@@ -5768,6 +6031,10 @@
           "invoiceable" : {
             "type" : "boolean",
             "description" : "If a product is invoiceable"
+          },
+          "contractEnabled" : {
+            "type" : "boolean",
+            "description" : "If the documents view is enabled for the product"
           }
         }
       },
@@ -5819,9 +6086,70 @@
           "invoiceable" : {
             "type" : "boolean",
             "description" : "If a product is invoiceable"
+          },
+          "contractEnabled" : {
+            "type" : "boolean",
+            "description" : "If the documents view is enabled for the product"
           }
         },
         "description" : "Product's sub products list"
+      },
+      "DocumentStatusResource" : {
+        "type" : "object",
+        "properties" : {
+          "products" : {
+            "type" : "array",
+            "description" : "Contractual status of the requested products",
+            "items" : {
+              "$ref" : "#/components/schemas/ProductDocumentStatusResource"
+            }
+          }
+        }
+      },
+      "ProductDocumentStatusResource" : {
+        "type" : "object",
+        "properties" : {
+          "productId" : {
+            "type" : "string",
+            "description" : "Product's unique identifier"
+          },
+          "contractUpdateRequired" : {
+            "type" : "boolean",
+            "description" : "Boolean indicating whether the institution must update the contract of the product"
+          },
+          "contractUpdateInProgress" : {
+            "type" : "boolean",
+            "description" : "Boolean indicating whether a not expired contract update request is pending for the product"
+          }
+        },
+        "description" : "Contractual status of the requested products"
+      },
+      "DocumentResource" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Document name, to be used to download the document"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "Document type: INSTITUTION for the institution contracts, ATTACHMENT for the attachments",
+            "enum" : [ "INSTITUTION", "ATTACHMENT" ]
+          }
+        },
+        "description" : "Documents available for download"
+      },
+      "DocumentsResource" : {
+        "type" : "object",
+        "properties" : {
+          "documents" : {
+            "type" : "array",
+            "description" : "Documents available for download",
+            "items" : {
+              "$ref" : "#/components/schemas/DocumentResource"
+            }
+          }
+        }
       },
       "Problem" : {
         "required" : [ "status", "title" ],

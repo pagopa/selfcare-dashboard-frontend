@@ -6,6 +6,8 @@ import { store } from '../../redux/store';
 import { DashboardApi } from '../DashboardApiClient';
 import { BrokerResource } from '../generated/b4f-dashboard/BrokerResource';
 import { RoleEnum } from '../generated/b4f-dashboard/ContractUpdateUserDto';
+import { TypeEnum as DocumentTypeEnum } from '../generated/b4f-dashboard/DocumentResource';
+import { ENV } from '../../utils/env';
 
 const { mockedClient, createClientSpy } = vi.hoisted(() => {
   const methods = [
@@ -23,7 +25,7 @@ const { mockedClient, createClientSpy } = vi.hoisted(() => {
     'updateInstitutionGeographicTaxonomyUsingPUT',
     'getProductBrokersUsingGET',
     'createDelegationUsingPOST',
-    'v2GetOnboardingsInfo',
+    'getDocumentsListUsingGET',
     'v2CheckAttachment',
     'getUserOtpEmailInfoUsingGET',
     'getMyPermissions',
@@ -170,10 +172,10 @@ const cases: Array<Case> = [
     successStatus: 201,
   },
   {
-    name: 'getOnboardingInfo',
-    clientMethod: 'v2GetOnboardingsInfo',
-    args: ['inst-1', 'prod-io,prod-pn'],
-    expectedParams: { institutionId: 'inst-1', products: 'prod-io,prod-pn' },
+    name: 'getDocumentsList',
+    clientMethod: 'getDocumentsListUsingGET',
+    args: ['inst-1', 'prod-io'],
+    expectedParams: { institutionId: 'inst-1', productId: 'prod-io' },
   },
   {
     name: 'getAttachmentStatus',
@@ -304,5 +306,82 @@ describe('DashboardApiClient', () => {
       vi.clearAllTimers();
       vi.useRealTimers();
     }
+  });
+
+  describe('getDocument', () => {
+    const fetchMock = vi.fn();
+
+    beforeEach(() => {
+      fetchMock.mockReset();
+      vi.stubGlobal('fetch', fetchMock);
+    });
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    test('downloads an attachment by name with the bearer token', async () => {
+      const blob = new Blob(['pdf']);
+      fetchMock.mockResolvedValue({ ok: true, status: 200, blob: () => Promise.resolve(blob) });
+
+      await expect(
+        DashboardApi.getDocument('inst-1', 'prod-io', DocumentTypeEnum.ATTACHMENT, 'Addendum.pdf')
+      ).resolves.toBe(blob);
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `${ENV.URL_API.API_DASHBOARD}/v1/documents/institutions/inst-1/products/prod-io/document?type=ATTACHMENT&name=Addendum.pdf`,
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.objectContaining({ Authorization: 'Bearer MOCKED_TOKEN' }),
+        })
+      );
+    });
+
+    test('omits the name for the institution contract', async () => {
+      fetchMock.mockResolvedValue({
+        ok: true,
+        status: 200,
+        blob: () => Promise.resolve(new Blob()),
+      });
+
+      await DashboardApi.getDocument('inst-1', 'prod-io', DocumentTypeEnum.INSTITUTION);
+
+      expect(fetchMock.mock.calls[0][0]).toMatch(/\/document\?type=INSTITUTION$/);
+    });
+
+    test('rejects on a non ok response', async () => {
+      fetchMock.mockResolvedValue({ ok: false, status: 404 });
+
+      await expect(
+        DashboardApi.getDocument('inst-1', 'prod-io', DocumentTypeEnum.INSTITUTION)
+      ).rejects.toThrow('Unexpected HTTP status! Expected 200 obtained 404');
+    });
+
+    test('on 401 dispatches only the session expired error, redirects and never settles', async () => {
+      vi.useFakeTimers();
+      const assign = vi.fn();
+      vi.stubGlobal('location', { ...window.location, assign });
+      try {
+        fetchMock.mockResolvedValue({ ok: false, status: 401 });
+        const settled = vi.fn();
+        const errorsBefore = store.getState().appState.errors.length;
+
+        void DashboardApi.getDocument('inst-1', 'prod-io', DocumentTypeEnum.INSTITUTION).then(
+          settled,
+          settled
+        );
+        await vi.advanceTimersByTimeAsync(2000);
+
+        const errors = store.getState().appState.errors.slice(errorsBefore);
+        expect(errors).toEqual([
+          expect.objectContaining({ id: expect.stringMatching(/^tokenNotValid/) }),
+        ]);
+        expect(assign).toHaveBeenCalledTimes(1);
+        expect(settled).not.toHaveBeenCalled();
+      } finally {
+        vi.clearAllTimers();
+        vi.useRealTimers();
+      }
+    });
   });
 });

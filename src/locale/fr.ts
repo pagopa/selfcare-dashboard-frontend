@@ -439,6 +439,19 @@ export default {
       close: 'Fermer',
     },
   },
+  documentsDetails: {
+    firstCard: {
+      title: 'Détails de l’adhésion',
+      state: 'Statut',
+      active: 'Active',
+    },
+    secondCard: {
+      title: 'Documents',
+      open: 'Ouvrir {{name}} dans un nouvel onglet',
+      noDocumentFound:
+        'Nous ne sommes pas en mesure de récupérer ce document, mais votre adhésion au produit reste valable.',
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Organismes gérés',

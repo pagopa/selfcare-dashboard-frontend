@@ -438,6 +438,19 @@ export default {
       close: 'Schließen',
     },
   },
+  documentsDetails: {
+    firstCard: {
+      title: 'Details zum Beitritt',
+      state: 'Status',
+      active: 'Aktiv',
+    },
+    secondCard: {
+      title: 'Dokumente',
+      open: '{{name}} in neuem Tab öffnen',
+      noDocumentFound:
+        'Wir können dieses Dokument nicht abrufen, aber dein Beitritt zum Produkt bleibt gültig.',
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Verwaltete Körperschaften',

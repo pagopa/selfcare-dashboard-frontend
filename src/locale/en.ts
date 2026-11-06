@@ -436,6 +436,19 @@ export default {
       close: 'Close',
     },
   },
+  documentsDetails: {
+    firstCard: {
+      title: 'Membership details',
+      state: 'Status',
+      active: 'Active',
+    },
+    secondCard: {
+      title: 'Documents',
+      open: 'Open {{name}} in a new tab',
+      noDocumentFound:
+        'We are unable to retrieve this document, but your membership of the product remains valid.',
+    },
+  },
   subHeader: {
     partySelectionSearch: {
       title: 'Managed institutions',
