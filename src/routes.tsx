@@ -57,7 +57,7 @@ const PagoPaAdminRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!isPagoPa) {
-      window.location.assign(withOnSuccess(ENV.URL_FE.LOGIN_GOOGLE));
+      window.location.assign(withOnSuccess(ENV.URL_FE.LOGOUT_GOOGLE));
     }
   }, [isPagoPa]);
 

@@ -122,7 +122,7 @@ describe('routes', () => {
       expect(permissionsService).toHaveBeenCalledTimes(1);
     });
 
-    test('redirects non-PagoPA users to Google login without loading admin permissions', async () => {
+    test('redirects non-PagoPA users to Google logout without loading admin permissions', async () => {
       vi.mocked(useIsPagoPaUser).mockReturnValue(false);
       const assign = vi.fn();
       vi.stubGlobal('location', {
@@ -136,7 +136,7 @@ describe('routes', () => {
         renderRequest();
 
         await waitFor(() =>
-          expect(assign).toHaveBeenCalledWith(withOnSuccess(ENV.URL_FE.LOGIN_GOOGLE))
+          expect(assign).toHaveBeenCalledWith(withOnSuccess(ENV.URL_FE.LOGOUT_GOOGLE))
         );
         expect(permissionsService).not.toHaveBeenCalled();
         expect(
