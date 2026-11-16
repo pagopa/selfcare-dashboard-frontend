@@ -18,7 +18,7 @@ import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { matchPath, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useIsPagoPaUser } from '../../../../../hooks/useIsPagoPaUser';
 import { Party } from '../../../../../model/Party';
 import { useAppDispatch } from '../../../../../redux/hooks';
@@ -27,6 +27,7 @@ import { DASHBOARD_ROUTES } from '../../../../../routes';
 import { getBillingToken } from '../../../../../services/tokenExchangeService';
 import { LOADING_TASK_TOKEN_EXCHANGE_INVOICE } from '../../../../../utils/constants';
 import { ENV } from '../../../../../utils/env';
+import { isAdminRoute } from '../../../../../utils/login';
 import ApprovalDelegationOutlinedIcon from '../icons/ApprovalDelegationOutlined';
 
 export type MenuItem = {
@@ -66,7 +67,7 @@ export function useDashboardMenuItems({
   const dispatch = useAppDispatch();
 
   const isPagoPa = useIsPagoPaUser();
-  const isAdminArea = !!matchPath(location.pathname, { path: ENV.ROUTES.ADMIN });
+  const isAdminArea = isAdminRoute(location.pathname);
   // PagoPA operators see the party sections only while browsing a party, not in the admin area
   const showPartySections = !isPagoPa || !isAdminArea;
 

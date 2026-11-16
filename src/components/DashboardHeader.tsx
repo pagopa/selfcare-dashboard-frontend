@@ -21,6 +21,7 @@ import { partiesSelectors } from '../redux/slices/partiesSlice';
 import ROUTES from '../routes';
 import { INTEROP_PRODUCT_ENUM, interopProductIdList } from '../utils/constants';
 import { isProductAllowed, startWithProductInterop } from '../utils/helperFunctions';
+import { isAdminRoute } from '../utils/login';
 import { ENV } from './../utils/env';
 
 type Props = WithPartiesProps & {
@@ -38,7 +39,7 @@ const DashboardHeader = ({ onExit, loggedUser, parties }: Props) => {
     exact: true,
   });
   const isPagoPa = useIsPagoPaUser();
-  const isAdminArea = !!matchPath(location.pathname, { path: ENV.ROUTES.ADMIN });
+  const isAdminArea = isAdminRoute(location.pathname);
 
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
