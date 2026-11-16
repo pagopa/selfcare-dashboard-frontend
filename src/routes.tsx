@@ -1,4 +1,6 @@
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
+import { withOnSuccess } from '@pagopa/selfcare-common-frontend/lib/utils/login-utils';
+import { useEffect } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import withAdminPermissions from './decorators/withAdminPermissions';
 import { useIsPagoPaUser } from './hooks/useIsPagoPaUser';
@@ -50,18 +52,44 @@ const DefaultRedirect = () => {
   return <Redirect to={isPagoPa ? ENV.ROUTES.ADMIN_SEARCH : ROUTES.PARTY_SELECTION.path} />;
 };
 
+const PagoPaAdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const isPagoPa = useIsPagoPaUser();
+
+  useEffect(() => {
+    if (!isPagoPa) {
+      window.location.assign(withOnSuccess(ENV.URL_FE.LOGIN_GOOGLE));
+    }
+  }, [isPagoPa]);
+
+  return isPagoPa ? <>{children}</> : null;
+};
+
+const AdminPartyDetail = withAdminPermissions(AdminRemote);
+
+const AdminPartyDetailRoute = () => (
+  <PagoPaAdminRoute>
+    <AdminPartyDetail />
+  </PagoPaAdminRoute>
+);
+
+const DashboardAdminRoute = () => (
+  <PagoPaAdminRoute>
+    <DashboardAdminPage />
+  </PagoPaAdminRoute>
+);
+
 // Order matters: admin routes must precede PARTY_DASHBOARD (`/:partyId` would match `/admin`)
 const ROUTES = {
   // PagoPA backstage: the onboarding detail is rendered full page, without the dashboard shell
   ADMIN_PARTY_DETAIL: {
     path: ENV.ROUTES.ADMIN_PARTY_DETAIL,
     exact: false,
-    component: withAdminPermissions(AdminRemote),
+    component: AdminPartyDetailRoute,
   },
   ADMIN: {
     path: ENV.ROUTES.ADMIN,
     exact: false,
-    component: DashboardAdminPage,
+    component: DashboardAdminRoute,
   },
   PARTY_SELECTION: {
     path: `${BASE_ROUTE}/party-selection`,

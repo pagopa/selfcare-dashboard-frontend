@@ -1,5 +1,6 @@
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib';
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { withOnSuccess } from '@pagopa/selfcare-common-frontend/lib/utils/login-utils';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -7,10 +8,16 @@ import { Route, Router, Switch } from 'react-router-dom';
 import ROUTES, { BASE_ROUTE, DASHBOARD_ROUTES, RoutesObject } from '../routes';
 import { createStore } from '../redux/store';
 import { getPermissionsAdminService } from '../services/adminService';
+import { useIsPagoPaUser } from '../hooks/useIsPagoPaUser';
 import { renderWithProviders } from '../utils/test-utils';
+import { ENV } from '../utils/env';
 
 vi.mock('../services/adminService', () => ({
   getPermissionsAdminService: vi.fn(),
+}));
+
+vi.mock('../hooks/useIsPagoPaUser', () => ({
+  useIsPagoPaUser: vi.fn(() => true),
 }));
 
 vi.mock('../microcomponents/admin/AdminRemote', () => ({
@@ -28,6 +35,10 @@ vi.mock('../microcomponents/admin/AdminRemote', () => ({
 const SUBPATH_DEFAULT = (DASHBOARD_ROUTES as RoutesObject).SUBPATH_DEFAULT;
 
 describe('routes', () => {
+  beforeEach(() => {
+    vi.mocked(useIsPagoPaUser).mockReturnValue(true);
+  });
+
   test('builds the routes from BASE_ROUTE', () => {
     expect(ROUTES.PARTY_SELECTION.path).toBe(`${BASE_ROUTE}/party-selection`);
     expect(ROUTES.PARTY_DASHBOARD.path).toBe(`${BASE_ROUTE}/:partyId`);
@@ -109,6 +120,31 @@ describe('routes', () => {
         expect.objectContaining({ id: expect.stringMatching(/^getPermissionsList-api-error/) }),
       ]);
       expect(permissionsService).toHaveBeenCalledTimes(1);
+    });
+
+    test('redirects non-PagoPA users to Google login without loading admin permissions', async () => {
+      vi.mocked(useIsPagoPaUser).mockReturnValue(false);
+      const assign = vi.fn();
+      vi.stubGlobal('location', {
+        ...window.location,
+        pathname: `${BASE_ROUTE}/admin/onboarding/token-1`,
+        search: '?source=email',
+        assign,
+      });
+
+      try {
+        renderRequest();
+
+        await waitFor(() =>
+          expect(assign).toHaveBeenCalledWith(withOnSuccess(ENV.URL_FE.LOGIN_GOOGLE))
+        );
+        expect(permissionsService).not.toHaveBeenCalled();
+        expect(
+          screen.queryByRole('heading', { name: 'Dettaglio adesione' })
+        ).not.toBeInTheDocument();
+      } finally {
+        vi.unstubAllGlobals();
+      }
     });
 
     test('reloads permissions with a fresh store after a page refresh', async () => {
