@@ -9,8 +9,8 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { matchPath, useLocation } from 'react-router-dom';
-import { ENV } from '../../../../utils/env';
+import { useLocation } from 'react-router-dom';
+import { isAdminRoute } from '../../../../utils/login';
 
 type SideNavItemProps = {
   title: string;
@@ -35,7 +35,7 @@ export default function DashboardSideNavItem({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const { pathname } = useLocation();
-  const isAdminArea = !!matchPath(pathname, { path: ENV.ROUTES.ADMIN });
+  const isAdminArea = isAdminRoute(pathname);
   const { blue, neutral } = theme.colors;
 
   return (

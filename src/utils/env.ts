@@ -36,6 +36,7 @@ export const ENV = {
   URL_FE: {
     LOGIN: import.meta.env.VITE_URL_FE_LOGIN,
     LOGOUT: import.meta.env.VITE_URL_FE_LOGOUT,
+    LOGOUT_GOOGLE: '/auth/logout/google',
     ONBOARDING: import.meta.env.VITE_URL_FE_ONBOARDING,
     LANDING: import.meta.env.VITE_URL_FE_LANDING,
     ASSISTANCE: import.meta.env.VITE_URL_FE_ASSISTANCE,

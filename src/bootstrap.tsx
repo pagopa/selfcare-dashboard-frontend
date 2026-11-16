@@ -3,6 +3,7 @@ import { theme } from '@pagopa/mui-italia';
 import '@pagopa/selfcare-common-frontend/index.css';
 import LoadingOverlay from '@pagopa/selfcare-common-frontend/lib/components/Loading/LoadingOverlay';
 import { CONFIG } from '@pagopa/selfcare-common-frontend/lib/config/env';
+import { withOnSuccess } from '@pagopa/selfcare-common-frontend/lib/utils/login-utils';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -14,13 +15,12 @@ import './locale';
 import { store } from './redux/store';
 import { MOCK_USER } from './utils/constants';
 import { ENV } from './utils/env';
-
-const onSuccessEncoded = encodeURIComponent(location.pathname + location.search);
+import { getLoginUrlForPath } from './utils/login';
 
 // eslint-disable-next-line functional/immutable-data
 CONFIG.MOCKS.MOCK_USER = MOCK_USER;
 // eslint-disable-next-line functional/immutable-data
-CONFIG.URL_FE.LOGIN = `${ENV.URL_FE.LOGIN}/login?onSuccess=` + onSuccessEncoded;
+CONFIG.URL_FE.LOGIN = withOnSuccess(getLoginUrlForPath(location.pathname));
 // eslint-disable-next-line functional/immutable-data
 CONFIG.URL_FE.LOGOUT = ENV.URL_FE.LOGOUT;
 // eslint-disable-next-line functional/immutable-data
