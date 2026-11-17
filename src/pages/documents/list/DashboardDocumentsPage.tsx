@@ -18,12 +18,24 @@ type DocumentsProps = {
   products: Array<Product>;
 };
 
+type ScopedStatuses = {
+  partyId: string;
+  productIds: Array<string>;
+  statuses: Array<ProductContractUpdateStatus>;
+};
+
 const DashboardDocuments = ({ party, products }: DocumentsProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const documentProducts = useMemo(() => getDocumentProducts(party, products), [party, products]);
   const productIds = useMemo(() => getDocumentProductIds(documentProducts), [documentProducts]);
-  const [statuses, setStatuses] = useState<Array<ProductContractUpdateStatus>>([]);
+  const [statusResult, setStatusResult] = useState<ScopedStatuses>();
+  const statuses =
+    statusResult?.partyId === party.partyId &&
+    statusResult.productIds.length === productIds.length &&
+    statusResult.productIds.every((productId, index) => productId === productIds[index])
+      ? statusResult.statuses
+      : [];
 
   useEffect(() => {
     if (productIds.length === 0) {
@@ -35,12 +47,12 @@ const DashboardDocuments = ({ party, products }: DocumentsProps) => {
     fetchProductsContractUpdateStatus(party.partyId, productIds)
       .then((result) => {
         if (active) {
-          setStatuses(result);
+          setStatusResult({ partyId: party.partyId, productIds, statuses: result });
         }
       })
       .catch((error) => {
         if (active) {
-          setStatuses([]);
+          setStatusResult({ partyId: party.partyId, productIds, statuses: [] });
           dispatch(
             appStateActions.addError({
               id: `fetchProductsContractUpdateStatus-${party.partyId}`,

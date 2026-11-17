@@ -1,5 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { IllusMICompleted, IllusMIMaintenance, MIButton } from '@pagopa/mui-italia';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -56,11 +58,23 @@ const ContractUpdateResultPage = ({ outcome }: { outcome: Outcome }) => {
   const { partyId, productId } = useParams<{ partyId: string; productId: string }>();
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+  const { productPermissions } = usePermissions();
   const documentProducts = useMemo(
     () => (party ? getDocumentProducts(party, products ?? []) : []),
     [party, products]
   );
-  const productIds = useMemo(() => getDocumentProductIds(documentProducts), [documentProducts]);
+  const productIds = useMemo(
+    () =>
+      getDocumentProductIds(
+        documentProducts.filter(({ parentProductId }) =>
+          productPermissions.some(
+            ({ productId, actions }) =>
+              productId === parentProductId && actions.includes(Actions.ViewContract)
+          )
+        )
+      ),
+    [documentProducts, productPermissions]
+  );
   const nextProductId = useNextProductToUpdate(
     outcome === 'success',
     partyId,
