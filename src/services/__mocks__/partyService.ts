@@ -418,6 +418,16 @@ export const mockedParties: Array<Party> = [
         originId: '20128',
       },
       {
+        productId: 'prod-cgn',
+        authorized: false,
+        productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        userRole: 'LIMITED',
+        userProductActions: [Actions.AccessProductBackoffice],
+        institutionType: 'PSP',
+        origin: 'IVASS',
+        originId: '20128',
+      },
+      {
         productId: 'prod-dashboard-psp',
         authorized: false,
         productOnBoardingStatus: ProductOnBoardingStatusEnum.REJECTED,

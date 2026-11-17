@@ -131,3 +131,22 @@ test('does not call the status endpoint when there are no products', async () =>
   await expect(fetchProductsContractUpdateStatus('party-1', [])).resolves.toEqual([]);
   expect(DashboardApi.getDocumentStatus).not.toHaveBeenCalled();
 });
+
+test('returns the local document-status mock for requested products', async () => {
+  const originalMockParties = import.meta.env.VITE_API_MOCK_PARTIES;
+  import.meta.env.VITE_API_MOCK_PARTIES = 'true';
+  try {
+    await expect(
+      fetchProductsContractUpdateStatus('party-1', ['prod-io', 'unknown-product'])
+    ).resolves.toEqual([
+      {
+        productId: 'prod-io',
+        contractUpdateRequired: true,
+        contractUpdateInProgress: false,
+      },
+    ]);
+  } finally {
+    import.meta.env.VITE_API_MOCK_PARTIES = originalMockParties;
+  }
+  expect(DashboardApi.getDocumentStatus).not.toHaveBeenCalled();
+});

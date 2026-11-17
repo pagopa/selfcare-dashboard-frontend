@@ -169,8 +169,9 @@ describe('ProductCards', () => {
       },
     ]);
 
+    expect(screen.getByRole('alert')).toHaveTextContent('Mancano alcuni documenti');
     expect(screen.getByText('Mancano alcuni documenti')).toBeInTheDocument();
-    expect(screen.getByText('Documento mancante')).toBeInTheDocument();
+    expect(screen.getByText('Documento mancante').closest('.MuiChip-root')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
 
     expect(history.location.pathname).toBe('/dashboard/party-1/documents/prod-io/update-contract');

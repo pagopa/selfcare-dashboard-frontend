@@ -36,6 +36,10 @@ test('should render component DashboardDocuments', async () => {
   const seeMoreButtons = await screen.findAllByText('Vedi di più');
 
   expect(seeMoreButtons[1]).toBeInTheDocument();
+  expect(
+    screen.getByText('Altri prodotti attivi per il tuo ente (non gestibili dal tuo profilo)')
+  ).toBeInTheDocument();
+  expect(screen.getByText('Carta Giovani')).toBeInTheDocument();
   await waitFor(() =>
     expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith(
       party.partyId,

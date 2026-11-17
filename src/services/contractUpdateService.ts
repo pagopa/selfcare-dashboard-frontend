@@ -9,6 +9,7 @@ import {
 } from '../api/generated/b4f-dashboard/OnboardingContractUpdateDto';
 import { Party } from '../model/Party';
 import { AdminPerson, ContractUpdateDraft, getVisibleAdmins } from '../model/ContractUpdate';
+import { mockedProductContractUpdateStatuses } from './__mocks__/contractUpdateService';
 
 const toContractUpdateUser = (person: AdminPerson, role: RoleEnum): ContractUpdateUserDto => ({
   name: person.name.trim(),
@@ -66,8 +67,13 @@ export const fetchProductsContractUpdateStatus = (
   partyId: string,
   productIds: Array<string>
 ): Promise<Array<ProductContractUpdateStatus>> => {
-  if (productIds.length === 0 || import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
+  if (productIds.length === 0) {
     return Promise.resolve([]);
+  }
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
+    return Promise.resolve(
+      mockedProductContractUpdateStatuses.filter((status) => productIds.includes(status.productId))
+    );
   }
   return DashboardApi.getDocumentStatus(partyId, productIds).then((status) =>
     (status.products ?? []).flatMap((productStatus) =>

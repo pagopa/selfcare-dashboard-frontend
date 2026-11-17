@@ -1,7 +1,7 @@
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import Cached from '@mui/icons-material/Cached';
-import { Alert, AlertTitle, Box, Card, CardContent, Chip, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Card, CardContent, Typography } from '@mui/material';
+import { MIAlert, MIButton, MIChip } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
@@ -133,21 +133,11 @@ const ProductCard = ({
         <Typography variant="body1" component="div" fontWeight="fontWeightMedium">
           {displayedTitle}
         </Typography>
-        {hasMissingDocument && (
-          <Chip
-            size="small"
-            label={t('documents.missingDocument')}
-            sx={{
-              backgroundColor: '#FFF4D6',
-              color: '#634B12',
-              fontSize: 12,
-            }}
-          />
-        )}
+        {hasMissingDocument && <MIChip color="warning" label={t('documents.missingDocument')} />}
       </CardContent>
       {canManage && (
-        <ButtonNaked
-          component="button"
+        <MIButton
+          variant="text"
           endIcon={hasMissingDocument ? <Cached /> : <ArrowForward />}
           onClick={() =>
             hasMissingDocument
@@ -157,10 +147,10 @@ const ProductCard = ({
                 )
               : handleViewDocuments()
           }
-          sx={{ color: 'primary.main', fontWeight: 'bold', whiteSpace: 'nowrap' }}
+          sx={{ whiteSpace: 'nowrap' }}
         >
           {hasMissingDocument ? t('documents.addDocument') : t('documents.viewMore')}
-        </ButtonNaked>
+        </MIButton>
       )}
     </Card>
   );
@@ -230,10 +220,9 @@ const ProductCards: React.FC<ProductCardsProps> = ({
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 3 }}>
       {hasMissingDocuments && (
-        <Alert severity="warning" sx={{ border: 1, borderColor: 'warning.main', borderRadius: 2 }}>
-          <AlertTitle>{t('documents.missingDocuments.title')}</AlertTitle>
+        <MIAlert severity="warning" title={t('documents.missingDocuments.title')}>
           {t('documents.missingDocuments.description')}
-        </Alert>
+        </MIAlert>
       )}
       {productsWithPermission.map((product) => renderProductCard(product, true))}
       {productsWithoutPermission.length > 0 && (
