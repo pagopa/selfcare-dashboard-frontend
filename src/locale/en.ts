@@ -427,6 +427,19 @@ export default {
     alreadyDelegated: 'The selected partner is already associated with the institution.',
   },
   documents: {
+    title: 'Documents',
+    subTitle:
+      'Here you can view your active products and download the relevant membership agreement. To do so, select “View more”.',
+    viewMore: 'View more',
+    backButton: 'Exit',
+    missingDocuments: {
+      title: 'Some documents are missing',
+      description:
+        'We could not retrieve some documents, so you need to add them again. Select “Add document” for the relevant product to add a digital copy of the missing document.',
+    },
+    missingDocument: 'Document missing',
+    addDocument: 'Add document',
+    otherProducts: 'Other active products for your institution (not manageable with your profile)',
     pendingRequestModal: {
       title: 'Request in progress',
       message:

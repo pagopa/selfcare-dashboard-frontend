@@ -62,7 +62,24 @@ export type ProductContractUpdateStatus = {
   contractUpdateInProgress: boolean;
 };
 
-// TODO: call the products contract update status API once it is available
 export const fetchProductsContractUpdateStatus = (
-  _partyId: string
-): Promise<Array<ProductContractUpdateStatus>> => Promise.resolve([]);
+  partyId: string,
+  productIds: Array<string>
+): Promise<Array<ProductContractUpdateStatus>> => {
+  if (productIds.length === 0 || import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
+    return Promise.resolve([]);
+  }
+  return DashboardApi.getDocumentStatus(partyId, productIds).then((status) =>
+    (status.products ?? []).flatMap((productStatus) =>
+      productStatus.productId
+        ? [
+            {
+              productId: productStatus.productId,
+              contractUpdateRequired: productStatus.contractUpdateRequired ?? false,
+              contractUpdateInProgress: productStatus.contractUpdateInProgress ?? false,
+            },
+          ]
+        : []
+    )
+  );
+};

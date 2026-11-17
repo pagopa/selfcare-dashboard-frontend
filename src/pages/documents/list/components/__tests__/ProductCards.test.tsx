@@ -1,13 +1,18 @@
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import { ProductOnBoardingStatusEnum } from '../../../../../api/generated/b4f-dashboard/OnboardedProductResource';
-import { StatusEnum } from '../../../../../api/generated/b4f-dashboard/SubProductResource';
+import {
+  StatusEnum,
+  SubProductResource,
+} from '../../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../../../../model/Party';
 import { Product } from '../../../../../model/Product';
 import { createStore } from '../../../../../redux/store';
+import { ProductContractUpdateStatus } from '../../../../../services/contractUpdateService';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import ProductCards from '../ProductCards';
+import { getDocumentProducts } from '../../productUtils';
 
 vi.mock(
   '@pagopa/selfcare-common-frontend/lib/services/analyticsService',
@@ -28,11 +33,17 @@ const buildProduct = (id: string, overrides: Partial<Product> = {}): Product => 
   status: StatusEnum.ACTIVE,
   imageUrl: '',
   delegable: false,
+  contractEnabled: true,
   ...overrides,
 });
 
-const subProduct = (id: string, status = StatusEnum.ACTIVE) =>
-  ({ id, title: `Title ${id}`, status, logo: `logo-${id}` } as any);
+const subProduct = (id: string, status = StatusEnum.ACTIVE): SubProductResource => ({
+  id,
+  title: `Title ${id}`,
+  status,
+  logo: `logo-${id}`,
+  contractEnabled: true,
+});
 
 const products: Array<Product> = [
   buildProduct('prod-io', { subProducts: [subProduct('prod-io-premium')] }),
@@ -41,6 +52,7 @@ const products: Array<Product> = [
   buildProduct('prod-pn', { subProducts: [subProduct('prod-pn-sub')] }),
   buildProduct('prod-inactive', { status: StatusEnum.INACTIVE }),
   buildProduct('prod-noperm'),
+  buildProduct('prod-no-contract', { contractEnabled: false }),
 ];
 
 const onboarded = (productId: string, status = ProductOnBoardingStatusEnum.ACTIVE) => ({
@@ -63,10 +75,11 @@ const party: Party = {
     onboarded('prod-pn-sub', ProductOnBoardingStatusEnum.PENDING),
     onboarded('prod-inactive'),
     onboarded('prod-noperm'),
+    onboarded('prod-no-contract'),
   ],
 };
 
-const setup = () => {
+const setup = (statuses: Array<ProductContractUpdateStatus> = []) => {
   const store = createStore();
   store.dispatch(
     setProductPermissions(
@@ -75,7 +88,15 @@ const setup = () => {
       )
     )
   );
-  return renderWithProviders(<ProductCards party={party} products={products} />, store);
+  return renderWithProviders(
+    <ProductCards
+      party={party}
+      products={products}
+      documentProducts={getDocumentProducts(party, products)}
+      statuses={statuses}
+    />,
+    store
+  );
 };
 
 describe('ProductCards', () => {
@@ -93,10 +114,18 @@ describe('ProductCards', () => {
     );
     // prod-pn sub product is not active, the base product is shown
     expect(screen.getByText('Title prod-pn')).toBeInTheDocument();
-    // not eligible: inactive product, pending onboarding, missing permission
+    // not eligible: inactive product, pending onboarding
     expect(screen.queryByText('Title prod-inactive')).not.toBeInTheDocument();
-    expect(screen.queryByText('Title prod-noperm')).not.toBeInTheDocument();
+    expect(screen.queryByText('Title prod-no-contract')).not.toBeInTheDocument();
+    expect(screen.getByText('Title prod-noperm')).toBeInTheDocument();
+    expect(
+      screen.getByText('Altri prodotti attivi per il tuo ente (non gestibili dal tuo profilo)')
+    ).toBeInTheDocument();
     expect(screen.getAllByText('Vedi di più')).toHaveLength(3);
+
+    const productWithoutPermission = screen.getByText('Title prod-noperm').closest('.MuiCard-root');
+    expect(productWithoutPermission).not.toBeNull();
+    expect(within(productWithoutPermission as HTMLElement).queryByRole('button')).toBeNull();
   });
 
   it('navigates to the sub product detail with the parent product id', () => {
@@ -129,5 +158,34 @@ describe('ProductCards', () => {
     fireEvent.click(screen.getAllByText('Vedi di più')[2]);
 
     expect(history.location.search).toBe('?productId=prod-pn&productTitle=Title%20prod-pn');
+  });
+
+  it('shows the missing-document banner and starts the contract update for its parent product', () => {
+    const { history } = setup([
+      {
+        productId: 'prod-io',
+        contractUpdateRequired: true,
+        contractUpdateInProgress: false,
+      },
+    ]);
+
+    expect(screen.getByText('Mancano alcuni documenti')).toBeInTheDocument();
+    expect(screen.getByText('Documento mancante')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
+
+    expect(history.location.pathname).toBe('/dashboard/party-1/documents/prod-io/update-contract');
+  });
+
+  it('opens the pending-request dialog when a contract update is already in progress', () => {
+    setup([
+      {
+        productId: 'prod-io',
+        contractUpdateRequired: true,
+        contractUpdateInProgress: true,
+      },
+    ]);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
+    expect(screen.getByRole('dialog', { name: 'Richiesta in corso' })).toBeInTheDocument();
   });
 });

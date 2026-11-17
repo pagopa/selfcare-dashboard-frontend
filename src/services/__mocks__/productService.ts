@@ -32,6 +32,7 @@ export const mockedPartyProducts: Array<Product> = [
     logoBgColor: 'primary.main',
     delegable: true,
     invoiceable: false,
+    contractEnabled: true,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pn/logo.svg',
@@ -48,6 +49,7 @@ export const mockedPartyProducts: Array<Product> = [
     logoBgColor: '#0B3EE3',
     delegable: false,
     invoiceable: true,
+    contractEnabled: true,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.svg',
@@ -88,6 +90,7 @@ export const mockedPartyProducts: Array<Product> = [
     ],
     delegable: true,
     invoiceable: false,
+    contractEnabled: true,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-ciban/logo.svg',
@@ -118,6 +121,7 @@ export const mockedPartyProducts: Array<Product> = [
     logoBgColor: undefined,
     delegable: false,
     invoiceable: false,
+    contractEnabled: true,
   },
   {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-interop/logo.svg',

@@ -1,18 +1,25 @@
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import { mockedParties } from '../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../../utils/test-utils';
+import { fetchProductsContractUpdateStatus } from '../../../../services/contractUpdateService';
 import DashboardDocumentsPage from '../DashboardDocumentsPage';
+import { getDocumentProductIds, getDocumentProducts } from '../productUtils';
+
+vi.mock('../../../../services/contractUpdateService', () => ({
+  fetchProductsContractUpdateStatus: vi.fn(() => Promise.resolve([])),
+}));
 
 afterEach(() => vi.restoreAllMocks());
 
 test('should render component DashboardDocuments', async () => {
+  const party = mockedParties[2];
   const { store } = renderWithProviders(
-    <DashboardDocumentsPage party={mockedParties[2]} products={mockedPartyProducts} />
+    <DashboardDocumentsPage party={party} products={mockedPartyProducts} />
   );
 
-  const mockedActions = mockedParties[2].products
+  const mockedActions = party.products
     .filter((product) => product.productOnBoardingStatus === 'ACTIVE')
     .map((product) => ({
       productId: product.productId ?? '',
@@ -29,5 +36,11 @@ test('should render component DashboardDocuments', async () => {
   const seeMoreButtons = await screen.findAllByText('Vedi di più');
 
   expect(seeMoreButtons[1]).toBeInTheDocument();
+  await waitFor(() =>
+    expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith(
+      party.partyId,
+      getDocumentProductIds(getDocumentProducts(party, mockedPartyProducts))
+    )
+  );
   fireEvent.click(seeMoreButtons[1]);
 });

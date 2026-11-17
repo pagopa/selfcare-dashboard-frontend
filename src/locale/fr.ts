@@ -430,6 +430,19 @@ export default {
     alreadyDelegated: 'Le Partenaire sélectionné est déjà associé à l’organisme.',
   },
   documents: {
+    title: 'Documents',
+    subTitle:
+      'Vous pouvez consulter vos produits actifs et télécharger le contrat d’adhésion correspondant. Pour cela, sélectionnez « Voir plus ».',
+    viewMore: 'Voir plus',
+    backButton: 'Quitter',
+    missingDocuments: {
+      title: 'Certains documents sont manquants',
+      description:
+        'Nous n’avons pas pu récupérer certains documents et vous devez les ajouter à nouveau. Sélectionnez « Ajouter un document » pour le produit concerné afin d’ajouter la version numérique du document manquant.',
+    },
+    missingDocument: 'Document manquant',
+    addDocument: 'Ajouter un document',
+    otherProducts: 'Autres produits actifs de votre organisme (non gérables avec votre profil)',
     pendingRequestModal: {
       title: 'Demande en cours',
       message:

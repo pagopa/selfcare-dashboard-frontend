@@ -2,6 +2,8 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
+import { ProductOnBoardingStatusEnum } from '../../../../api/generated/b4f-dashboard/OnboardedProductResource';
+import { StatusEnum } from '../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
 import { partiesActions } from '../../../../redux/slices/partiesSlice';
@@ -279,9 +281,25 @@ const renderSuccessPage = (
   });
   const store = createStore();
   store.dispatch(
+    partiesActions.setPartySelected({
+      ...selectedParty,
+      products: [
+        {
+          productId: 'product-2',
+          productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        },
+      ],
+    })
+  );
+  store.dispatch(
     partiesActions.setPartySelectedProducts([
-      { id: 'product-2', title: 'Prodotto 2' },
-    ] as unknown as Array<Product>)
+      {
+        id: 'product-2',
+        title: 'Prodotto 2',
+        status: StatusEnum.ACTIVE,
+        contractEnabled: true,
+      },
+    ] as Array<Product>)
   );
   renderWithProviders(
     <Route path={ENV.ROUTES.CONTRACT_UPDATE_SUCCESS} exact>
@@ -310,7 +328,9 @@ test.each([
   ['a failed status request', new Error('KO')],
 ])('the success page goes back to the documents without the modal for %s', async (_, statuses) => {
   const history = renderSuccessPage(statuses);
-  await waitFor(() => expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith('party-1'));
+  await waitFor(() =>
+    expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith('party-1', ['product-2'])
+  );
   await userEvent.click(screen.getByRole('button', { name: 'Torna a Documenti' }));
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(history.location.pathname).toBe('/dashboard/party-1/documents');

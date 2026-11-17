@@ -1,179 +1,255 @@
 import ArrowForward from '@mui/icons-material/ArrowForward';
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import Cached from '@mui/icons-material/Cached';
+import { Alert, AlertTitle, Box, Card, CardContent, Chip, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
-import { SubProductResource } from '../../../../api/generated/b4f-dashboard/SubProductResource';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../../routes';
+import { ProductContractUpdateStatus } from '../../../../services/contractUpdateService';
 import { PRODUCT_IDS } from '../../../../utils/constants';
+import { ENV } from '../../../../utils/env';
+import { DocumentProduct } from '../productUtils';
+import { PendingRequestDialog } from './PendingRequestDialog';
 
 type ProductCardsProps = {
   party: Party;
   products: Array<Product>;
+  documentProducts: Array<DocumentProduct>;
+  statuses: Array<ProductContractUpdateStatus>;
 };
 
-const isProductEligible = (
-  product: Product,
-  party: Party,
-  hasPermission: (productId: string, action: string) => boolean
-): Product | SubProductResource | null => {
-  const baseInstitutionProduct = party.products.find(
-    (ip) =>
-      ip.productId === product.id &&
-      product.status === 'ACTIVE' &&
-      ip.productOnBoardingStatus === 'ACTIVE'
-  );
-
-  if (
-    !baseInstitutionProduct ||
-    baseInstitutionProduct.productOnBoardingStatus !== 'ACTIVE' ||
-    !hasPermission(baseInstitutionProduct.productId ?? '', Actions.ViewContract)
-  ) {
-    return null;
-  }
-
-  // If no subproducts, return the base product
-  if (!product.subProducts || product.subProducts.length === 0) {
-    return product;
-  }
-
-  // Check child product
-  const childProduct = product.subProducts[0];
-  const childInstitutionProduct = party.products.find(
-    (ip) => ip.productId === childProduct.id && childProduct.status === 'ACTIVE'
-  );
-
-  // Return child if active, otherwise base product
-  return childInstitutionProduct?.productOnBoardingStatus === 'ACTIVE' ? childProduct : product;
+type ProductCardProps = {
+  party: Party;
+  products: Array<Product>;
+  documentProduct: DocumentProduct;
+  status?: ProductContractUpdateStatus;
+  canManage: boolean;
+  onAddDocument: (productId: string, isInProgress: boolean) => void;
 };
 
-const ProductCards: React.FC<ProductCardsProps> = ({ party, products }) => {
+const ProductCard = ({
+  party,
+  products,
+  documentProduct,
+  status,
+  canManage,
+  onAddDocument,
+}: ProductCardProps) => {
   const { t } = useTranslation();
-  const { hasPermission } = usePermissions();
   const history = useHistory();
+  const { product, productId, parentProduct, parentProductId } = documentProduct;
+  const hasMissingDocument = status?.contractUpdateRequired === true;
+  const title =
+    productId === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
+      ? products.find((candidate) => candidate.id === PRODUCT_IDS.PAGOPA)?.title
+      : product.title;
+  const displayedTitle = title ?? productId;
+  const logo =
+    productId === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
+      ? products.find((candidate) => candidate.id === PRODUCT_IDS.PAGOPA)?.logo
+      : product.logo;
+  const logoAltTitle = product.title ?? parentProduct.title ?? displayedTitle;
 
-  const displayProducts = useMemo(
-    () =>
-      products
-        .map((product) => isProductEligible(product, party, hasPermission))
-        .filter((product): product is Product => product !== null),
-    [products, party, hasPermission]
-  );
-
-  const handleProductClick = (product: Product) => {
+  const handleViewDocuments = () => {
     trackEvent('DASHBOARD_OPEN_PRODUCT_DOCUMENT', {
-      product_role: party.products.find((p) => p.productId === product.id)?.userRole,
-      product_id: product.id,
+      product_role:
+        party.products.find((onboardedProduct) => onboardedProduct.productId === productId)
+          ?.userRole ??
+        party.products.find((onboardedProduct) => onboardedProduct.productId === parentProductId)
+          ?.userRole,
+      product_id: productId,
       party_id: party.partyId,
     });
+
+    const baseProductId = parentProduct.id ?? productId;
     const baseUrl = resolvePathVariables(DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path, {
       partyId: party.partyId,
     });
+    const subProductQuery = baseProductId !== productId ? `&subProductId=${productId}` : '';
 
-    const title =
-      product.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
-        ? products.find((p) => p.id === PRODUCT_IDS.PAGOPA)?.title
-        : product.title;
-
-    const encodedTitle = encodeURIComponent(title ?? '');
-
-    // eslint-disable-next-line functional/no-let
-    let queryParams = `?productId=${product.id}&productTitle=${encodedTitle}`;
-
-    // Check if this product is a base product with an active subproduct
-    if (product.subProducts && product.subProducts?.length > 0) {
-      const activeSubProduct = product.subProducts.find((subProduct) =>
-        party.products.some(
-          (ip) => ip.productId === subProduct.id && ip.productOnBoardingStatus === 'ACTIVE'
-        )
-      );
-
-      if (activeSubProduct) {
-        queryParams += `&subProductId=${activeSubProduct.id}`;
-      }
-    }
-
-    // Check if this product is a subproduct itself
-    const parentProduct = products.find((p) => p.subProducts?.some((sub) => sub.id === product.id));
-
-    if (parentProduct) {
-      queryParams = `?productId=${parentProduct.id}&subProductId=${product.id}&productTitle=${encodedTitle}`;
-    }
-
-    history.push(baseUrl.concat(queryParams));
+    history.push(
+      `${baseUrl}?productId=${baseProductId}${subProductQuery}&productTitle=${encodeURIComponent(
+        displayedTitle
+      )}`
+    );
   };
 
   return (
-    <Box
+    <Card
+      key={productId}
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
         width: '100%',
-        gap: 5,
+        border: 1,
+        borderColor: 'divider',
+        boxShadow: 0,
+        display: 'flex',
+        alignItems: 'center',
+        py: 2,
+        px: 2,
       }}
     >
-      {displayProducts.map((product) => (
-        <Card
-          key={product.id}
-          sx={{
-            width: '100%',
-            boxShadow: 1,
-            display: 'flex',
-            alignItems: 'center',
-            py: 5,
-            px: 3,
+      <Box
+        sx={{
+          backgroundColor: product.logoBgColor ?? parentProduct.logoBgColor,
+          borderRadius: 1,
+          border: 1,
+          borderColor: 'divider',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: 44,
+          height: 44,
+          marginRight: 2,
+          flexShrink: 0,
+        }}
+      >
+        <img
+          src={logo ?? parentProduct.logo}
+          alt={`${logoAltTitle} logo`}
+          style={{
+            maxWidth: '80%',
+            maxHeight: '80%',
+            objectFit: 'contain',
           }}
-        >
-          <Box
+        />
+      </Box>
+      <CardContent
+        sx={{
+          flexGrow: 1,
+          padding: '0 !important',
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 1,
+        }}
+      >
+        <Typography variant="body1" component="div" fontWeight="fontWeightMedium">
+          {displayedTitle}
+        </Typography>
+        {hasMissingDocument && (
+          <Chip
+            size="small"
+            label={t('documents.missingDocument')}
             sx={{
-              backgroundColor: product.logoBgColor,
-              borderRadius: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 32,
-              height: 32,
-              marginRight: 2,
+              backgroundColor: '#FFF4D6',
+              color: '#634B12',
+              fontSize: 12,
             }}
-          >
-            <img
-              src={
-                product.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
-                  ? products.find((p) => p.id === PRODUCT_IDS.PAGOPA)?.logo
-                  : product.logo
-              }
-              alt={`${product.title} logo`}
-              style={{
-                maxWidth: '80%',
-                maxHeight: '80%',
-                objectFit: 'contain',
-              }}
-            />
-          </Box>
-          <CardContent sx={{ flexGrow: 1, padding: '0 !important' }}>
-            <Typography variant="h6" component="div">
-              {product.id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP
-                ? products.find((p) => p.id === PRODUCT_IDS.PAGOPA)?.title
-                : product.title}
-            </Typography>
-          </CardContent>
-          <ButtonNaked
-            component="button"
-            endIcon={<ArrowForward />}
-            onClick={() => handleProductClick(product)}
-            sx={{ color: 'primary.main', fontWeight: 'bold' }}
-          >
-            {t('documents.viewMore')}
-          </ButtonNaked>
-        </Card>
-      ))}
+          />
+        )}
+      </CardContent>
+      {canManage && (
+        <ButtonNaked
+          component="button"
+          endIcon={hasMissingDocument ? <Cached /> : <ArrowForward />}
+          onClick={() =>
+            hasMissingDocument
+              ? onAddDocument(
+                  status?.productId ?? parentProductId,
+                  status?.contractUpdateInProgress === true
+                )
+              : handleViewDocuments()
+          }
+          sx={{ color: 'primary.main', fontWeight: 'bold', whiteSpace: 'nowrap' }}
+        >
+          {hasMissingDocument ? t('documents.addDocument') : t('documents.viewMore')}
+        </ButtonNaked>
+      )}
+    </Card>
+  );
+};
+
+const ProductCards: React.FC<ProductCardsProps> = ({
+  party,
+  products,
+  documentProducts,
+  statuses,
+}) => {
+  const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
+  const history = useHistory();
+  const location = useLocation();
+  const [pendingRequestProductId, setPendingRequestProductId] = useState<string>();
+
+  const statusesByProductId = useMemo(
+    () => new Map(statuses.map((status) => [status.productId, status])),
+    [statuses]
+  );
+  const productsWithPermission = useMemo(
+    () =>
+      documentProducts.filter(({ parentProductId }) =>
+        hasPermission(parentProductId, Actions.ViewContract)
+      ),
+    [documentProducts, hasPermission]
+  );
+  const productsWithoutPermission = useMemo(
+    () => documentProducts.filter((product) => !productsWithPermission.includes(product)),
+    [documentProducts, productsWithPermission]
+  );
+  const hasMissingDocuments = documentProducts.some(
+    ({ parentProductId }) => statusesByProductId.get(parentProductId)?.contractUpdateRequired
+  );
+
+  const openContractUpdate = (productId: string, isInProgress: boolean) => {
+    if (isInProgress) {
+      setPendingRequestProductId(productId);
+      return;
+    }
+
+    history.push(
+      resolvePathVariables(ENV.ROUTES.CONTRACT_UPDATE, {
+        partyId: party.partyId,
+        productId,
+      }),
+      { returnTo: `${location.pathname}${location.search}${location.hash}` }
+    );
+  };
+
+  const renderProductCard = (documentProduct: DocumentProduct, canManage: boolean) => {
+    const status = statusesByProductId.get(documentProduct.parentProductId);
+    return (
+      <ProductCard
+        key={documentProduct.productId}
+        party={party}
+        products={products}
+        documentProduct={documentProduct}
+        status={status}
+        canManage={canManage}
+        onAddDocument={openContractUpdate}
+      />
+    );
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 3 }}>
+      {hasMissingDocuments && (
+        <Alert severity="warning" sx={{ border: 1, borderColor: 'warning.main', borderRadius: 2 }}>
+          <AlertTitle>{t('documents.missingDocuments.title')}</AlertTitle>
+          {t('documents.missingDocuments.description')}
+        </Alert>
+      )}
+      {productsWithPermission.map((product) => renderProductCard(product, true))}
+      {productsWithoutPermission.length > 0 && (
+        <>
+          <Typography variant="body2" color="text.secondary">
+            {t('documents.otherProducts')}
+          </Typography>
+          {productsWithoutPermission.map((product) => renderProductCard(product, false))}
+        </>
+      )}
+      <PendingRequestDialog
+        open={pendingRequestProductId !== undefined}
+        partyId={party.partyId}
+        productId={pendingRequestProductId ?? ''}
+        onClose={() => setPendingRequestProductId(undefined)}
+      />
     </Box>
   );
 };

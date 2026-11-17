@@ -484,9 +484,17 @@ export default {
   documents: {
     title: 'Documenti',
     subTitle:
-      'Qui puoi visualizzare i tuoi prodotti attivi e scaricare il relativo contratto di adesione. Per farlo, clicca su ‘Vedi di più’.',
+      'Qui puoi visualizzare i tuoi prodotti attivi e scaricare il relativo contratto di adesione. Per farlo, premi su ‘Vedi di più’.',
     viewMore: 'Vedi di più',
     backButton: 'Esci',
+    missingDocuments: {
+      title: 'Mancano alcuni documenti',
+      description:
+        'Non siamo riusciti a recuperare alcuni documenti ed è necessario aggiungerli di nuovo. Premi su “Aggiungi documento” del relativo prodotto per aggiungere la versione digitale del documento mancante.',
+    },
+    missingDocument: 'Documento mancante',
+    addDocument: 'Aggiungi documento',
+    otherProducts: 'Altri prodotti attivi per il tuo ente (non gestibili dal tuo profilo)',
     pendingRequestModal: {
       title: 'Richiesta in corso',
       message:

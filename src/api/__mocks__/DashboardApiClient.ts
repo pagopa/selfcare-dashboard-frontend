@@ -5,6 +5,7 @@ import {
   TypeEnum as DocumentTypeEnum,
 } from '../generated/b4f-dashboard/DocumentResource';
 import { DocumentsResource } from '../generated/b4f-dashboard/DocumentsResource';
+import { DocumentStatusResource } from '../generated/b4f-dashboard/DocumentStatusResource';
 import { IdentityTokenResource } from '../generated/b4f-dashboard/IdentityTokenResource';
 import { InstitutionBaseResource } from '../generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from '../generated/b4f-dashboard/InstitutionResource';
@@ -354,6 +355,11 @@ export const DashboardApi = {
     _productId: string
   ): Promise<DocumentsResource> =>
     new Promise((resolve) => resolve({ documents: mockedDocuments })),
+
+  getDocumentStatus: async (
+    _institutionId: string,
+    _productIds: Array<string>
+  ): Promise<DocumentStatusResource> => new Promise((resolve) => resolve({ products: [] })),
 
   getDocument: async (
     _institutionId: string,

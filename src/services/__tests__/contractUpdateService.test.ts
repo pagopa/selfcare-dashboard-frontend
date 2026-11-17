@@ -2,10 +2,17 @@ import { DashboardApi } from '../../api/DashboardApiClient';
 import { Party } from '../../model/Party';
 import { ContractUpdateDraft } from '../../model/ContractUpdate';
 import { initialWizardState } from '../../pages/documents/contractUpdate/ContractUpdateWizardContext';
-import { buildContractUpdateRequest, submitContractUpdate } from '../contractUpdateService';
+import {
+  buildContractUpdateRequest,
+  fetchProductsContractUpdateStatus,
+  submitContractUpdate,
+} from '../contractUpdateService';
 
 vi.mock('../../api/DashboardApiClient', () => ({
-  DashboardApi: { onboardingContractUpdate: vi.fn() },
+  DashboardApi: {
+    getDocumentStatus: vi.fn(),
+    onboardingContractUpdate: vi.fn(),
+  },
 }));
 
 const party: Party = {
@@ -95,4 +102,32 @@ test('sends the request for the selected party and product', async () => {
     'prod-io',
     buildContractUpdateRequest(party, 'prod-io', draft)
   );
+});
+
+test('fetches contract update statuses for the requested products', async () => {
+  import.meta.env.VITE_API_MOCK_PARTIES = 'false';
+  vi.mocked(DashboardApi.getDocumentStatus).mockResolvedValue({
+    products: [
+      {
+        productId: 'prod-io',
+        contractUpdateRequired: true,
+        contractUpdateInProgress: false,
+      },
+    ],
+  });
+
+  await expect(fetchProductsContractUpdateStatus('party-1', ['prod-io'])).resolves.toEqual([
+    {
+      productId: 'prod-io',
+      contractUpdateRequired: true,
+      contractUpdateInProgress: false,
+    },
+  ]);
+  expect(DashboardApi.getDocumentStatus).toHaveBeenCalledWith('party-1', ['prod-io']);
+});
+
+test('does not call the status endpoint when there are no products', async () => {
+  vi.mocked(DashboardApi.getDocumentStatus).mockClear();
+  await expect(fetchProductsContractUpdateStatus('party-1', [])).resolves.toEqual([]);
+  expect(DashboardApi.getDocumentStatus).not.toHaveBeenCalled();
 });
