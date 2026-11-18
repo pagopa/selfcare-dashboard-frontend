@@ -79,20 +79,22 @@ const party: Party = {
   ],
 };
 
-const setup = (statuses: Array<ProductContractUpdateStatus> = []) => {
+const setup = (
+  statuses: Array<ProductContractUpdateStatus> = [],
+  permissionProductIds = ['prod-io', 'prod-pagopa', 'prod-dashboard-psp', 'prod-pn', 'prod-inactive'],
+  selectedParty = party
+) => {
   const store = createStore();
   store.dispatch(
     setProductPermissions(
-      ['prod-io', 'prod-pagopa', 'prod-dashboard-psp', 'prod-pn', 'prod-inactive'].map(
-        (productId) => ({ productId, actions: [VIEW_CONTRACT] })
-      )
+      permissionProductIds.map((productId) => ({ productId, actions: [VIEW_CONTRACT] }))
     )
   );
   return renderWithProviders(
     <ProductCards
-      party={party}
+      party={selectedParty}
       products={products}
-      documentProducts={getDocumentProducts(party, products)}
+      documentProducts={getDocumentProducts(selectedParty, products)}
       statuses={statuses}
     />,
     store
@@ -188,5 +190,32 @@ describe('ProductCards', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
     expect(screen.getByRole('dialog', { name: 'Richiesta in corso' })).toBeInTheDocument();
+  });
+
+  it('uses child permission for document access but requires parent permission for updates', () => {
+    const childOnlyParty = {
+      ...party,
+      products: party.products.filter(({ productId }) => productId !== 'prod-io'),
+    };
+    const { history } = setup(
+      [
+        {
+          productId: 'prod-io',
+          contractUpdateRequired: true,
+          contractUpdateInProgress: false,
+        },
+      ],
+      ['prod-io-premium'],
+      childOnlyParty
+    );
+
+    const childCard = screen.getByText('Title prod-io-premium').closest('.MuiCard-root');
+    expect(childCard).not.toBeNull();
+    fireEvent.click(within(childCard as HTMLElement).getByRole('button', { name: 'Vedi di più' }));
+
+    expect(history.location.search).toBe(
+      '?productId=prod-io&subProductId=prod-io-premium&productTitle=Title%20prod-io-premium'
+    );
+    expect(history.location.pathname).toBe('/dashboard/party-1/documents/details');
   });
 });

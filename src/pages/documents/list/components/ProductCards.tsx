@@ -30,7 +30,8 @@ type ProductCardProps = {
   products: Array<Product>;
   documentProduct: DocumentProduct;
   status?: ProductContractUpdateStatus;
-  canManage: boolean;
+  canViewDocuments: boolean;
+  canUpdateContract: boolean;
   onAddDocument: (productId: string, isInProgress: boolean) => void;
 };
 
@@ -39,7 +40,8 @@ const ProductCard = ({
   products,
   documentProduct,
   status,
-  canManage,
+  canViewDocuments,
+  canUpdateContract,
   onAddDocument,
 }: ProductCardProps) => {
   const { t } = useTranslation();
@@ -56,6 +58,7 @@ const ProductCard = ({
       ? products.find((candidate) => candidate.id === PRODUCT_IDS.PAGOPA)?.logo
       : product.logo;
   const logoAltTitle = product.title ?? parentProduct.title ?? displayedTitle;
+  const canAddDocument = hasMissingDocument && canUpdateContract;
 
   const handleViewDocuments = () => {
     trackEvent('DASHBOARD_OPEN_PRODUCT_DOCUMENT', {
@@ -135,12 +138,12 @@ const ProductCard = ({
         </Typography>
         {hasMissingDocument && <MIChip color="warning" label={t('documents.missingDocument')} />}
       </CardContent>
-      {canManage && (
+      {(canViewDocuments || canAddDocument) && (
         <MIButton
           variant="text"
-          endIcon={hasMissingDocument ? <Cached /> : <ArrowForward />}
+          endIcon={canAddDocument ? <Cached /> : <ArrowForward />}
           onClick={() =>
-            hasMissingDocument
+            canAddDocument
               ? onAddDocument(
                   status?.productId ?? parentProductId,
                   status?.contractUpdateInProgress === true
@@ -149,7 +152,7 @@ const ProductCard = ({
           }
           sx={{ whiteSpace: 'nowrap' }}
         >
-          {hasMissingDocument ? t('documents.addDocument') : t('documents.viewMore')}
+          {canAddDocument ? t('documents.addDocument') : t('documents.viewMore')}
         </MIButton>
       )}
     </Card>
@@ -168,16 +171,16 @@ const ProductCards: React.FC<ProductCardsProps> = ({
   const location = useLocation();
   const [pendingRequestProductId, setPendingRequestProductId] = useState<string>();
 
+  const canViewProductDocuments = ({ productId, parentProductId }: DocumentProduct) =>
+    hasPermission(productId, Actions.ViewContract) ||
+    hasPermission(parentProductId, Actions.ViewContract);
   const statusesByProductId = useMemo(
     () => new Map(statuses.map((status) => [status.productId, status])),
     [statuses]
   );
   const productsWithPermission = useMemo(
-    () =>
-      documentProducts.filter(({ parentProductId }) =>
-        hasPermission(parentProductId, Actions.ViewContract)
-      ),
-    [documentProducts, hasPermission]
+    () => documentProducts.filter(canViewProductDocuments),
+    [documentProducts, canViewProductDocuments]
   );
   const productsWithoutPermission = useMemo(
     () => documentProducts.filter((product) => !productsWithPermission.includes(product)),
@@ -202,7 +205,7 @@ const ProductCards: React.FC<ProductCardsProps> = ({
     );
   };
 
-  const renderProductCard = (documentProduct: DocumentProduct, canManage: boolean) => {
+  const renderProductCard = (documentProduct: DocumentProduct) => {
     const status = statusesByProductId.get(documentProduct.parentProductId);
     return (
       <ProductCard
@@ -211,7 +214,8 @@ const ProductCards: React.FC<ProductCardsProps> = ({
         products={products}
         documentProduct={documentProduct}
         status={status}
-        canManage={canManage}
+        canViewDocuments={canViewProductDocuments(documentProduct)}
+        canUpdateContract={hasPermission(documentProduct.parentProductId, Actions.ViewContract)}
         onAddDocument={openContractUpdate}
       />
     );
@@ -224,13 +228,13 @@ const ProductCards: React.FC<ProductCardsProps> = ({
           {t('documents.missingDocuments.description')}
         </MIAlert>
       )}
-      {productsWithPermission.map((product) => renderProductCard(product, true))}
+      {productsWithPermission.map(renderProductCard)}
       {productsWithoutPermission.length > 0 && (
         <>
           <Typography variant="body2" color="text.secondary">
             {t('documents.otherProducts')}
           </Typography>
-          {productsWithoutPermission.map((product) => renderProductCard(product, false))}
+          {productsWithoutPermission.map(renderProductCard)}
         </>
       )}
       <PendingRequestDialog
