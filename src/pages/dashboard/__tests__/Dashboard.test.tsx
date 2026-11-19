@@ -2,6 +2,7 @@ import { ThemeProvider } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { theme } from '@pagopa/mui-italia';
 import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { isPagoPaUser } from '@pagopa/selfcare-common-frontend/lib/utils/storage';
 import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
@@ -19,6 +20,10 @@ import { Mock } from 'vitest';
 
 vi.mock('../../../decorators/withSelectedParty');
 vi.mock('@mui/material/useMediaQuery');
+vi.mock('@pagopa/selfcare-common-frontend/lib/utils/storage', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  isPagoPaUser: vi.fn(() => false),
+}));
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {
@@ -38,6 +43,7 @@ afterAll(() => {
 });
 
 afterEach(() => {
+  vi.mocked(isPagoPaUser).mockReturnValue(false);
   vi.clearAllMocks();
   cleanup();
 });
@@ -211,6 +217,19 @@ describe('Dashboard side menu visibility', () => {
     expect(screen.queryByText('Deleghe')).not.toBeInTheDocument();
     expect(screen.queryByText('Enti gestiti')).not.toBeInTheDocument();
   });
+
+  test.each([true, false])(
+    'shows Documents with IO-only permission only for PagoPA operators (isPagoPa: %s)',
+    async (isPagoPa) => {
+      vi.mocked(isPagoPaUser).mockReturnValue(isPagoPa);
+      renderWithParty('/dashboard/psp1/users', [
+        { productId: 'prod-io', actions: ['Selc:ViewContract'] },
+      ]);
+
+      expect(await screen.findByText('Panoramica')).toBeInTheDocument();
+      expect(screen.queryAllByText('Documenti')).toHaveLength(isPagoPa ? 1 : 0);
+    }
+  );
 
   test('hides the side menu on full page flows', async () => {
     renderWithParty('/dashboard/psp1/users/add', [

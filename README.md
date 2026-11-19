@@ -19,9 +19,10 @@ dashboard shell.
 
 ## Documents section
 
-Shown in the side menu only when `VITE_SHOW_DOCUMENTS` is `true`, the institution is
-a PSP on PagoPA, and the user has `ViewContract` on an active product. All code lives in
-`src/pages/documents/`:
+Shown in the side menu only when `VITE_SHOW_DOCUMENTS` is `true`. Regular users need
+an active PSP onboarding on `prod-pagopa` and `ViewContract` on that product. PagoPA
+operators browsing an institution need `ViewContract` on any product.
+The pages live in `src/pages/documents/`:
 
 | Folder | Route (`/dashboard/:partyId/...`) | Purpose |
 | --- | --- | --- |
