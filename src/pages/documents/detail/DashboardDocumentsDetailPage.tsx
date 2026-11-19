@@ -72,21 +72,22 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
   const [productsDocuments, setProductsDocuments] = useState<Array<ProductDocuments>>([]);
 
   const searchParams = new URLSearchParams(window.location.search);
-  const productTitle = searchParams.get('productTitle');
   const productId = searchParams.get('productId');
   const subProductId = searchParams.get('subProductId') ?? undefined;
+  const subProductTitle = subProductId
+    ? products.find((p) => p.id === productId)?.subProducts?.find((p) => p.id === subProductId)
+        ?.title
+    : undefined;
+  const productTitle = subProductTitle ?? searchParams.get('productTitle');
 
   const mapProductIdToTitle = (id: string) => {
+    if (id === subProductId && subProductTitle) {
+      return subProductTitle;
+    }
     if (id === PRODUCT_IDS.PAGOPA_DASHBOARD_PSP) {
       return products.find((p) => p.id === PRODUCT_IDS.PAGOPA)?.title;
-    } else {
-      const product = products.find((p) => p.id === id);
-      const subProduct = products
-        .find((p) => p.id === productId)
-        ?.subProducts?.find((p) => p.id === id);
-
-      return product ? product.title : subProduct?.title ?? '';
     }
+    return products.find((p) => p.id === id)?.title ?? '';
   };
 
   // A contract without name is still downloadable (the name is mandatory only for attachments)
