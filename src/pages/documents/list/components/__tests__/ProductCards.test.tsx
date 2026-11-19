@@ -23,6 +23,7 @@ vi.mock(
 );
 
 const VIEW_CONTRACT = 'Selc:ViewContract';
+const UPDATE_CONTRACT = 'Selc:UpdateContract';
 
 const buildProduct = (id: string, overrides: Partial<Product> = {}): Product => ({
   id,
@@ -82,12 +83,18 @@ const party: Party = {
 const setup = (
   statuses: Array<ProductContractUpdateStatus> = [],
   permissionProductIds = ['prod-io', 'prod-pagopa', 'prod-dashboard-psp', 'prod-pn', 'prod-inactive'],
-  selectedParty = party
+  selectedParty = party,
+  updatePermissionProductIds = permissionProductIds
 ) => {
   const store = createStore();
   store.dispatch(
     setProductPermissions(
-      permissionProductIds.map((productId) => ({ productId, actions: [VIEW_CONTRACT] }))
+      permissionProductIds.map((productId) => ({
+        productId,
+        actions: updatePermissionProductIds.includes(productId)
+          ? [VIEW_CONTRACT, UPDATE_CONTRACT]
+          : [VIEW_CONTRACT],
+      }))
     )
   );
   return renderWithProviders(
@@ -190,6 +197,25 @@ describe('ProductCards', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
     expect(screen.getByRole('dialog', { name: 'Richiesta in corso' })).toBeInTheDocument();
+  });
+
+  it('disables adding a document without update permission but keeps view more enabled', () => {
+    const { history } = setup(
+      [{ productId: 'prod-io', contractUpdateRequired: true, contractUpdateInProgress: false }],
+      ['prod-io', 'prod-pn'],
+      party,
+      []
+    );
+
+    const addButton = screen.getByRole('button', { name: 'Aggiungi documento' });
+    expect(addButton).toBeDisabled();
+    fireEvent.click(addButton);
+    expect(history.location.pathname).not.toContain('update-contract');
+
+    const viewButton = screen.getByRole('button', { name: 'Vedi di più' });
+    expect(viewButton).toBeEnabled();
+    fireEvent.click(viewButton);
+    expect(history.location.pathname).toBe('/dashboard/party-1/documents/details');
   });
 
   it('uses child permission for document access but requires parent permission for updates', () => {

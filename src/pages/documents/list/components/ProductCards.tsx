@@ -18,6 +18,9 @@ import { ENV } from '../../../../utils/env';
 import { DocumentProduct } from '../productUtils';
 import { PendingRequestDialog } from './PendingRequestDialog';
 
+// TODO: shortcut: common v2 lacks this action; use Actions.UpdateContract after upgrading common.
+const UPDATE_CONTRACT = 'Selc:UpdateContract';
+
 type ProductCardsProps = {
   party: Party;
   products: Array<Product>;
@@ -32,6 +35,7 @@ type ProductCardProps = {
   status?: ProductContractUpdateStatus;
   canViewDocuments: boolean;
   canUpdateContract: boolean;
+  hasUpdateContractPermission: boolean;
   onAddDocument: (productId: string, isInProgress: boolean) => void;
 };
 
@@ -42,6 +46,7 @@ const ProductCard = ({
   status,
   canViewDocuments,
   canUpdateContract,
+  hasUpdateContractPermission,
   onAddDocument,
 }: ProductCardProps) => {
   const { t } = useTranslation();
@@ -141,6 +146,7 @@ const ProductCard = ({
       {(canViewDocuments || canAddDocument) && (
         <MIButton
           variant="text"
+          disabled={canAddDocument && !hasUpdateContractPermission}
           endIcon={canAddDocument ? <Cached /> : <ArrowForward />}
           onClick={() =>
             canAddDocument
@@ -216,6 +222,7 @@ const ProductCards: React.FC<ProductCardsProps> = ({
         status={status}
         canViewDocuments={canViewProductDocuments(documentProduct)}
         canUpdateContract={hasPermission(documentProduct.parentProductId, Actions.ViewContract)}
+        hasUpdateContractPermission={hasPermission(documentProduct.parentProductId, UPDATE_CONTRACT)}
         onAddDocument={openContractUpdate}
       />
     );
