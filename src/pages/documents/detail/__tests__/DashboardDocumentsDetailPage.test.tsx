@@ -57,7 +57,23 @@ describe('DashboardDocumentsDetailPage', () => {
     expect(await screen.findByText(premiumContract.name)).toBeInTheDocument();
     expect(screen.getByText(contract.name)).toBeInTheDocument();
     expect(getDocumentsList).toHaveBeenCalledWith(mockedParties[0].partyId, 'prod-io-premium');
-    expect(screen.getByText('IO Premium')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'IO Premium' })).toBeInTheDocument();
+  });
+
+  test('uses the PSP sub-product name rather than the parent name on the detail page', async () => {
+    (getDocumentsList as Mock).mockResolvedValue([{ type: DocumentTypeEnum.INSTITUTION }]);
+    const subProductTitle = 'Servizio di dashboarding pagoPA per PSP';
+
+    renderPage(
+      '?productId=prod-pagopa&subProductId=prod-dashboard-psp&productTitle=Pagamenti%20pagoPA'
+    );
+
+    expect(await screen.findByText(`Contratto_di_adesione_${subProductTitle}`)).toBeInTheDocument();
+    expect(screen.getByText('Contratto_di_adesione_Pagamenti pagoPA')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: subProductTitle })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'breadcrumb' })).toHaveTextContent(
+      subProductTitle
+    );
   });
 
   test('keeps the documents of the product that loaded when the other request fails', async () => {
@@ -70,7 +86,7 @@ describe('DashboardDocumentsDetailPage', () => {
     const { store } = renderPage('?productId=prod-io&subProductId=prod-io-premium&productTitle=IO');
 
     expect(await screen.findByText(premiumContract.name)).toBeInTheDocument();
-    expect(screen.getByText('IO Premium')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'IO Premium' })).toBeInTheDocument();
     expect(screen.queryByText(contract.name)).not.toBeInTheDocument();
     await waitFor(() =>
       expect(store.getState().appState.errors).toEqual([

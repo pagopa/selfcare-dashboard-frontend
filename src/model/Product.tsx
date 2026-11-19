@@ -17,6 +17,7 @@ export type Product = {
   status: StatusEnum;
   imageUrl: string;
   subProducts?: Array<SubProductResource>;
+  contractEnabled?: boolean;
   logoBgColor?: string;
   delegable: boolean;
   invoiceable?: boolean;
@@ -29,7 +30,6 @@ export type ProductInstitutionMap = {
     [institutionType: string]: Record<string, unknown>;
   };
 };
-
 
 export const buildProductsMap = (products: Array<Product>): ProductsMap =>
   products.reduce((acc, p) => {
@@ -51,6 +51,7 @@ export const productResource2Product = (resource: ProductsResource): Product => 
   urlPublic: resource.urlPublic,
   tag: undefined,
   subProducts: resource.children as Array<SubProductResource>,
+  contractEnabled: resource.contractEnabled,
   delegable: resource.delegable ?? false,
   invoiceable: resource.invoiceable ?? false,
 });

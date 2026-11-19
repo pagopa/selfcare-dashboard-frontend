@@ -19,9 +19,10 @@ dashboard shell.
 
 ## Documents section
 
-Shown in the side menu only when `VITE_SHOW_DOCUMENTS` is `true`, the institution is
-a PSP on PagoPA, and the user has `ViewContract` on an active product. All code lives in
-`src/pages/documents/`:
+Shown in the side menu only when `VITE_SHOW_DOCUMENTS` is `true`. Regular users need
+an active PSP onboarding on `prod-pagopa` and `ViewContract` on that product. PagoPA
+operators browsing an institution need `ViewContract` on any product.
+The pages live in `src/pages/documents/`:
 
 | Folder | Route (`/dashboard/:partyId/...`) | Purpose |
 | --- | --- | --- |
@@ -44,8 +45,8 @@ confirmation. The last step opens a submit confirmation and calls
 
 On the success page, if another product still requires a contract update (and is not the
 submitted one or already in progress), "Torna a Documenti" proposes to start the wizard for
-that product. The status API is not available yet: `fetchProductsContractUpdateStatus`
-returns an empty list.
+that product. `fetchProductsContractUpdateStatus` reads contract status from the document-status
+API; with local party mocks it uses sample statuses for IO and pagoPA.
 
 Where to change things: the shared shell is `components/ContractUpdateWizardLayout.tsx`;
 each step folder under `steps/` has a layout-only component, a `use<Step>` hook and, for
@@ -205,6 +206,12 @@ The remote components should be put into execution locally or use the following 
 ## To execute locally mocking REST invocation, modify the file .env.development.local setting
 - VITE_API_MOCK_PARTIES=true
 - VITE_API_MOCK_PRODUCTS=true
+- VITE_SHOW_DOCUMENTS=true
+
+With these flags enabled, choose the mock party "Comune di Roma" (`partyId: 3`) and open
+`/dashboard/3/documents`. IO shows a missing-document action that opens the update wizard;
+pagoPA shows the pending-request dialog. Carta Giovani appears under "Altri prodotti attivi per
+il tuo ente" without document actions.
 
 ## To build a configured workspace execute the following command
 - yarn build

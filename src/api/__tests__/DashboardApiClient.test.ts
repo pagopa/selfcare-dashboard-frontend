@@ -26,6 +26,7 @@ const { mockedClient, createClientSpy } = vi.hoisted(() => {
     'getProductBrokersUsingGET',
     'createDelegationUsingPOST',
     'getDocumentsListUsingGET',
+    'getDocumentStatusUsingGET',
     'v2CheckAttachment',
     'getUserOtpEmailInfoUsingGET',
     'getMyPermissions',
@@ -88,6 +89,12 @@ const cases: Array<Case> = [
     expectedParams: { institutionId: 'inst-1' },
   },
   { name: 'getProducts', clientMethod: 'getProductsTreeUsingGET', args: [], expectedParams: {} },
+  {
+    name: 'getDocumentStatus',
+    clientMethod: 'getDocumentStatusUsingGET',
+    args: ['inst-1', ['prod-io', 'prod-pn']],
+    expectedParams: { institutionId: 'inst-1', productIds: 'prod-io,prod-pn' },
+  },
   {
     name: 'getDelegations',
     clientMethod: 'getDelegationsUsingFromUsingGET',

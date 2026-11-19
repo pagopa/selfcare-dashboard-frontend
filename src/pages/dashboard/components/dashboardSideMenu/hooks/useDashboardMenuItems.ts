@@ -79,8 +79,6 @@ export function useDashboardMenuItems({
     getAllProductsWithPermission(Actions.ListProductGroups).length > 0 ||
     getAllProductsWithPermission(Actions.ListAllProductGroups).length > 0;
 
-  const canSeeDocuments = getAllProductsWithPermission(Actions.ViewContract).length > 0;
-
   const resolvePath = useCallback(
     (path: string, institutionId?: string) =>
       resolvePathVariables(path, { partyId: party?.partyId || institutionId || '' }),
@@ -171,7 +169,7 @@ export function useDashboardMenuItems({
       title: t('overview.sideMenu.institutionManagement.documents.title'),
       icon: FeedOutlinedIcon,
       path: resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
-      isVisible: isPagoPa ? ENV.SHOW_DOCUMENTS && canSeeDocuments : isDocumentsSectionVisible,
+      isVisible: isDocumentsSectionVisible,
       isSelected: location.pathname === resolvePath(DASHBOARD_ROUTES.DOCUMENTS.path),
       action: () => {
         trackEvent('DASHBOARD_OPEN_DOCUMENT', { party_id: party?.partyId });

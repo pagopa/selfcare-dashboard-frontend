@@ -1,7 +1,11 @@
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
+import { ProductOnBoardingStatusEnum } from '../../../../api/generated/b4f-dashboard/OnboardedProductResource';
+import { StatusEnum } from '../../../../api/generated/b4f-dashboard/SubProductResource';
 import { Party } from '../../../../model/Party';
 import { Product } from '../../../../model/Product';
 import { partiesActions } from '../../../../redux/slices/partiesSlice';
@@ -267,7 +271,8 @@ test.each([
 });
 
 const renderSuccessPage = (
-  statuses: Awaited<ReturnType<typeof fetchProductsContractUpdateStatus>> | Error
+  statuses: Awaited<ReturnType<typeof fetchProductsContractUpdateStatus>> | Error,
+  canManageProduct = true
 ) => {
   if (statuses instanceof Error) {
     vi.mocked(fetchProductsContractUpdateStatus).mockRejectedValueOnce(statuses);
@@ -278,10 +283,31 @@ const renderSuccessPage = (
     initialEntries: ['/dashboard/party-1/documents/product-1/update-contract/success'],
   });
   const store = createStore();
+  if (canManageProduct) {
+    store.dispatch(
+      setProductPermissions([{ productId: 'product-2', actions: [Actions.ViewContract] }])
+    );
+  }
+  store.dispatch(
+    partiesActions.setPartySelected({
+      ...selectedParty,
+      products: [
+        {
+          productId: 'product-2',
+          productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+        },
+      ],
+    })
+  );
   store.dispatch(
     partiesActions.setPartySelectedProducts([
-      { id: 'product-2', title: 'Prodotto 2' },
-    ] as unknown as Array<Product>)
+      {
+        id: 'product-2',
+        title: 'Prodotto 2',
+        status: StatusEnum.ACTIVE,
+        contractEnabled: true,
+      },
+    ] as Array<Product>)
   );
   renderWithProviders(
     <Route path={ENV.ROUTES.CONTRACT_UPDATE_SUCCESS} exact>
@@ -310,7 +336,9 @@ test.each([
   ['a failed status request', new Error('KO')],
 ])('the success page goes back to the documents without the modal for %s', async (_, statuses) => {
   const history = renderSuccessPage(statuses);
-  await waitFor(() => expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith('party-1'));
+  await waitFor(() =>
+    expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith('party-1', ['product-2'])
+  );
   await userEvent.click(screen.getByRole('button', { name: 'Torna a Documenti' }));
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(history.location.pathname).toBe('/dashboard/party-1/documents');
@@ -318,6 +346,13 @@ test.each([
 
 test('the success page proposes the update of another product requiring it', async () => {
   const history = renderSuccessPage([status('product-1', true), status('product-2', true)]);
+  await waitFor(() =>
+    expect(fetchProductsContractUpdateStatus).toHaveBeenCalledWith('party-1', ['product-2'])
+  );
+  await act(async () => {
+    const results = vi.mocked(fetchProductsContractUpdateStatus).mock.results;
+    await results[results.length - 1]?.value;
+  });
   const openModal = async () => {
     await userEvent.click(screen.getByRole('button', { name: 'Torna a Documenti' }));
     return screen.findByRole('dialog', {
@@ -334,6 +369,16 @@ test('the success page proposes the update of another product requiring it', asy
 
   await userEvent.click(within(await openModal()).getByRole('button', { name: 'Continua' }));
   expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-2/update-contract');
+});
+
+test('the success page does not propose updates for products without contract permission', async () => {
+  const history = renderSuccessPage([status('product-2', true)], false);
+
+  await userEvent.click(screen.getByRole('button', { name: 'Torna a Documenti' }));
+
+  expect(fetchProductsContractUpdateStatus).not.toHaveBeenCalled();
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents');
 });
 
 test('the error page does not look for other products to update', async () => {

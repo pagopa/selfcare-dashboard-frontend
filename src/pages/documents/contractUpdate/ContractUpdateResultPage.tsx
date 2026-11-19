@@ -1,7 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { IllusMICompleted, IllusMIMaintenance, MIButton } from '@pagopa/mui-italia';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../redux/hooks';
@@ -9,22 +11,28 @@ import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { fetchProductsContractUpdateStatus } from '../../../services/contractUpdateService';
 import { ENV } from '../../../utils/env';
+import { getDocumentProductIds, getDocumentProducts } from '../list/productUtils';
 import { ContractUpdateNextProductDialog } from './components/ContractUpdateNextProductDialog';
 
 type Outcome = 'success' | 'error';
 
 // The submitted product can still report contractUpdateRequired while its request is processed asynchronously,
 // so it is excluded together with products already in progress to avoid proposing the same update again.
-const useNextProductToUpdate = (enabled: boolean, partyId: string, productId: string) => {
+const useNextProductToUpdate = (
+  enabled: boolean,
+  partyId: string,
+  productId: string,
+  productIds: Array<string>
+) => {
   const [nextProductId, setNextProductId] = useState<string>();
 
   useEffect(() => {
-    if (!enabled) {
+    if (!enabled || productIds.length === 0) {
       return;
     }
     // eslint-disable-next-line functional/no-let
     let active = true;
-    fetchProductsContractUpdateStatus(partyId)
+    fetchProductsContractUpdateStatus(partyId, productIds)
       .then((statuses) => {
         if (active) {
           setNextProductId(
@@ -39,7 +47,7 @@ const useNextProductToUpdate = (enabled: boolean, partyId: string, productId: st
     return () => {
       active = false;
     };
-  }, [enabled, partyId, productId]);
+  }, [enabled, partyId, productId, productIds]);
 
   return nextProductId;
 };
@@ -48,8 +56,31 @@ const ContractUpdateResultPage = ({ outcome }: { outcome: Outcome }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const { partyId, productId } = useParams<{ partyId: string; productId: string }>();
+  const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
-  const nextProductId = useNextProductToUpdate(outcome === 'success', partyId, productId);
+  const { productPermissions } = usePermissions();
+  const documentProducts = useMemo(
+    () => (party ? getDocumentProducts(party, products ?? []) : []),
+    [party, products]
+  );
+  const productIds = useMemo(
+    () =>
+      getDocumentProductIds(
+        documentProducts.filter(({ parentProductId }) =>
+          productPermissions.some(
+            ({ productId, actions }) =>
+              productId === parentProductId && actions.includes(Actions.ViewContract)
+          )
+        )
+      ),
+    [documentProducts, productPermissions]
+  );
+  const nextProductId = useNextProductToUpdate(
+    outcome === 'success',
+    partyId,
+    productId,
+    productIds
+  );
   const [nextProductModalOpen, setNextProductModalOpen] = useState(false);
   // DASHBOARD_ROUTES must be read at render time: routes.tsx imports this module (circular import)
   const Illustration = outcome === 'success' ? IllusMICompleted : IllusMIMaintenance;
@@ -94,7 +125,12 @@ const ContractUpdateResultPage = ({ outcome }: { outcome: Outcome }) => {
       {nextProductId && (
         <ContractUpdateNextProductDialog
           open={nextProductModalOpen}
-          productName={products?.find((p) => p.id === nextProductId)?.title ?? nextProductId}
+          productName={
+            documentProducts.find((product) => product.parentProductId === nextProductId)?.product
+              .title ??
+            products?.find((product) => product.id === nextProductId)?.title ??
+            nextProductId
+          }
           onClose={() => setNextProductModalOpen(false)}
           onBackToDocuments={goBack}
           onContinue={() =>

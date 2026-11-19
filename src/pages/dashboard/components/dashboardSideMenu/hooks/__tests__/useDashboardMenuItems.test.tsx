@@ -257,6 +257,15 @@ describe('useDashboardMenuItems - PagoPA user', () => {
     expect(item('onboardings').isSelected).toBe(false);
   });
 
+  it('uses the supplied Documents visibility even when the operator has ViewContract', () => {
+    const { result } = setup({
+      flags: { ...allVisibleFlags, isDocumentsSectionVisible: false },
+      permissions: fullPermissions,
+    });
+
+    expect(result.current.map((item) => item.key)).not.toContain('documents');
+  });
+
   it('marks the onboardings item as selected on nested onboardings routes', () => {
     const { item } = setup({ path: '/dashboard/admin/onboardings/abc' });
     expect(item('onboardings').isSelected).toBe(true);

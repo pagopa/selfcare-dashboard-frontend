@@ -429,6 +429,19 @@ export default {
     alreadyDelegated: 'Der gewählte Partner ist bereits mit der Körperschaft verbunden',
   },
   documents: {
+    title: 'Dokumente',
+    subTitle:
+      'Hier können Sie Ihre aktiven Produkte anzeigen und den zugehörigen Beitrittsvertrag herunterladen. Wählen Sie dazu „Mehr anzeigen“.',
+    viewMore: 'Mehr anzeigen',
+    backButton: 'Beenden',
+    missingDocuments: {
+      title: 'Einige Dokumente fehlen',
+      description:
+        'Einige Dokumente konnten nicht abgerufen werden und müssen erneut hinzugefügt werden. Wählen Sie beim entsprechenden Produkt „Dokument hinzufügen“, um die digitale Version des fehlenden Dokuments hinzuzufügen.',
+    },
+    missingDocument: 'Dokument fehlt',
+    addDocument: 'Dokument hinzufügen',
+    otherProducts: 'Weitere aktive Produkte Ihrer Institution (mit Ihrem Profil nicht verwaltbar)',
     pendingRequestModal: {
       title: 'Anfrage in Bearbeitung',
       message:

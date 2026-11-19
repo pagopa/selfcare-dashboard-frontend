@@ -9,6 +9,7 @@ import {
 } from '../api/generated/b4f-dashboard/OnboardingContractUpdateDto';
 import { Party } from '../model/Party';
 import { AdminPerson, ContractUpdateDraft, getVisibleAdmins } from '../model/ContractUpdate';
+import { mockedProductContractUpdateStatuses } from './__mocks__/contractUpdateService';
 
 const toContractUpdateUser = (person: AdminPerson, role: RoleEnum): ContractUpdateUserDto => ({
   name: person.name.trim(),
@@ -62,7 +63,29 @@ export type ProductContractUpdateStatus = {
   contractUpdateInProgress: boolean;
 };
 
-// TODO: call the products contract update status API once it is available
 export const fetchProductsContractUpdateStatus = (
-  _partyId: string
-): Promise<Array<ProductContractUpdateStatus>> => Promise.resolve([]);
+  partyId: string,
+  productIds: Array<string>
+): Promise<Array<ProductContractUpdateStatus>> => {
+  if (productIds.length === 0) {
+    return Promise.resolve([]);
+  }
+  if (import.meta.env.VITE_API_MOCK_PARTIES === 'true') {
+    return Promise.resolve(
+      mockedProductContractUpdateStatuses.filter((status) => productIds.includes(status.productId))
+    );
+  }
+  return DashboardApi.getDocumentStatus(partyId, productIds).then((status) =>
+    (status.products ?? []).flatMap((productStatus) =>
+      productStatus.productId
+        ? [
+            {
+              productId: productStatus.productId,
+              contractUpdateRequired: productStatus.contractUpdateRequired ?? false,
+              contractUpdateInProgress: productStatus.contractUpdateInProgress ?? false,
+            },
+          ]
+        : []
+    )
+  );
+};

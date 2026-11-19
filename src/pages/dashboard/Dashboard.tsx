@@ -15,6 +15,7 @@ import withProductRolesMap from '../../decorators/withProductsRolesMap';
 import withSelectedParty from '../../decorators/withSelectedParty';
 import withSelectedProduct from '../../decorators/withSelectedPartyProduct';
 import withSelectedProductRoles from '../../decorators/withSelectedPartyProductAndRoles';
+import { useIsPagoPaUser } from '../../hooks/useIsPagoPaUser';
 
 import RemoteRoutingGroups from '../../microcomponents/groups/RemoteRoutingGroups';
 import RemoteRoutingProductUsers from '../../microcomponents/users/RemoteRoutingProductUsers';
@@ -53,6 +54,7 @@ const Dashboard: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
   const store = useStore();
+  const isPagoPa = useIsPagoPaUser();
 
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
@@ -96,8 +98,9 @@ const Dashboard: React.FC = () => {
 
   const isDocumentsSectionVisible =
     ENV.SHOW_DOCUMENTS &&
-    isPSPOnPagopa &&
-    activeProducts.some((p) => hasPermission(p.id ?? '', Actions.ViewContract));
+    (isPagoPa
+      ? getAllProductsWithPermission(Actions.ViewContract).length > 0
+      : isPSPOnPagopa && hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract));
 
   const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&

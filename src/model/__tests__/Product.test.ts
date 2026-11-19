@@ -2,7 +2,6 @@ import { ProductsResource, StatusEnum } from '../../api/generated/b4f-dashboard/
 import { productResource2Product } from '../Product';
 
 test('Test institutionInfo2Party', () => {
-
   const productResource: ProductsResource = {
     logo: 'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/prod-pagopa/logo.png',
     id: '3',
@@ -17,12 +16,14 @@ test('Test institutionInfo2Party', () => {
         id: 'subProductId',
         title: 'Premium',
         status: StatusEnum.ACTIVE,
+        contractEnabled: true,
       },
     ],
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     logoBgColor: '#0066CC',
     delegable: true,
+    contractEnabled: true,
   };
 
   const product = productResource2Product(productResource);
@@ -37,11 +38,14 @@ test('Test institutionInfo2Party', () => {
     backOfficeEnvironmentConfigurations: undefined,
     urlPublic: 'http://pagopa/public',
     tag: undefined,
-    subProducts: [{ id: 'subProductId', title: 'Premium', status: 'ACTIVE' }],
+    subProducts: [
+      { id: 'subProductId', title: 'Premium', status: 'ACTIVE', contractEnabled: true },
+    ],
     imageUrl:
       'https://selcdcheckoutsa.z6.web.core.windows.net/resources/products/default/depict-image.jpeg',
     logoBgColor: '#0066CC',
     delegable: true,
     invoiceable: false,
+    contractEnabled: true,
   });
 });

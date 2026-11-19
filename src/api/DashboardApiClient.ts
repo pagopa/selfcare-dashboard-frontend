@@ -20,6 +20,7 @@ import { TypeEnum } from './generated/b4f-dashboard/DelegationRequestDto';
 import { DelegationWithPagination } from './generated/b4f-dashboard/DelegationWithPagination';
 import { TypeEnum as DocumentTypeEnum } from './generated/b4f-dashboard/DocumentResource';
 import { DocumentsResource } from './generated/b4f-dashboard/DocumentsResource';
+import { DocumentStatusResource } from './generated/b4f-dashboard/DocumentStatusResource';
 import { GeographicTaxonomyDto } from './generated/b4f-dashboard/GeographicTaxonomyDto';
 import { InstitutionBaseResource } from './generated/b4f-dashboard/InstitutionBaseResource';
 import { InstitutionResource } from './generated/b4f-dashboard/InstitutionResource';
@@ -203,6 +204,17 @@ export const DashboardApi = {
     const result = await apiClient.getDocumentsListUsingGET({
       institutionId,
       productId,
+    });
+    return extractResponse(result, 200, onRedirectToLogin);
+  },
+
+  getDocumentStatus: async (
+    institutionId: string,
+    productIds: Array<string>
+  ): Promise<DocumentStatusResource> => {
+    const result = await apiClient.getDocumentStatusUsingGET({
+      institutionId,
+      productIds: productIds.join(','),
     });
     return extractResponse(result, 200, onRedirectToLogin);
   },

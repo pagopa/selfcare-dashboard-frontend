@@ -421,6 +421,20 @@ export default {
     alreadyDelegated: 'Izbrani partner je že povezan z organizacijo.',
   },
   documents: {
+    title: 'Dokumenti',
+    subTitle:
+      'Tukaj si lahko ogledate svoje aktivne izdelke in prenesete ustrezno pristopno pogodbo. Za to izberite »Prikaži več«.',
+    viewMore: 'Prikaži več',
+    backButton: 'Izhod',
+    missingDocuments: {
+      title: 'Nekateri dokumenti manjkajo',
+      description:
+        'Nekaterih dokumentov nismo mogli pridobiti, zato jih morate znova dodati. Pri ustreznem izdelku izberite »Dodaj dokument«, da dodate digitalno različico manjkajočega dokumenta.',
+    },
+    missingDocument: 'Dokument manjka',
+    addDocument: 'Dodaj dokument',
+    otherProducts:
+      'Drugi aktivni izdelki za vašo organizacijo (ki jih ni mogoče upravljati z vašim profilom)',
     pendingRequestModal: {
       title: 'Zahteva v teku',
       message:
