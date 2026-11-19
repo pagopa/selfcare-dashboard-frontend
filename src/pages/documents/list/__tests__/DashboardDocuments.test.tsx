@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { mockedParties } from '../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../services/__mocks__/productService';
 import { renderWithProviders } from '../../../../utils/test-utils';
+import { useIsPagoPaUser } from '../../../../hooks/useIsPagoPaUser';
 import {
   fetchProductsContractUpdateStatus,
   ProductContractUpdateStatus,
@@ -15,7 +16,14 @@ vi.mock('../../../../services/contractUpdateService', () => ({
   fetchProductsContractUpdateStatus: vi.fn(() => Promise.resolve([])),
 }));
 
-afterEach(() => vi.restoreAllMocks());
+vi.mock('../../../../hooks/useIsPagoPaUser', () => ({
+  useIsPagoPaUser: vi.fn(() => false),
+}));
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.mocked(useIsPagoPaUser).mockReturnValue(false);
+});
 
 test('should render component DashboardDocuments', async () => {
   const party = mockedParties[2];
@@ -103,4 +111,45 @@ test('shows product cards if the status request fails', async () => {
 
   expect(await screen.findByText('Carta Giovani')).toBeInTheDocument();
   expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+});
+
+test('shows products without contract enabled for PagoPA operators', async () => {
+  vi.mocked(useIsPagoPaUser).mockReturnValue(true);
+  const product = {
+    ...mockedPartyProducts[1],
+    id: 'prod-no-contract',
+    title: 'Product without contract',
+    contractEnabled: false,
+    subProducts: [],
+  };
+  const productWithSubProduct = {
+    ...mockedPartyProducts[0],
+    id: 'prod-with-subproduct',
+    title: 'Product with subproduct',
+    contractEnabled: false,
+    subProducts: [
+      {
+        ...mockedPartyProducts[0].subProducts![0],
+        id: 'prod-subproduct-no-contract',
+        title: 'Subproduct without contract',
+        contractEnabled: false,
+      },
+    ],
+  };
+  const party = {
+    ...mockedParties[2],
+    products: [
+      ...mockedParties[2].products,
+      { ...mockedParties[2].products[0], productId: product.id },
+      { ...mockedParties[2].products[0], productId: productWithSubProduct.id },
+      { ...mockedParties[2].products[0], productId: 'prod-subproduct-no-contract' },
+    ],
+  };
+
+  renderWithProviders(
+    <DashboardDocumentsPage party={party} products={[product, productWithSubProduct]} />
+  );
+
+  expect(await screen.findByText('Product without contract')).toBeInTheDocument();
+  expect(await screen.findByText('Subproduct without contract')).toBeInTheDocument();
 });

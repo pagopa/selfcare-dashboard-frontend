@@ -25,12 +25,13 @@ const isProductOnboarded = (party: Party, productId?: string) =>
 
 export const getDocumentProducts = (
   party: Party,
-  products: Array<Product>
+  products: Array<Product>,
+  isPagoPaUser = false
 ): Array<DocumentProduct> =>
   products.flatMap((parentProduct) => {
     const activeSubProducts = (parentProduct.subProducts ?? []).flatMap((product) =>
       product.id &&
-      product.contractEnabled &&
+      (isPagoPaUser || product.contractEnabled) &&
       product.status === StatusEnum.ACTIVE &&
       isProductOnboarded(party, product.id)
         ? [
@@ -49,7 +50,7 @@ export const getDocumentProducts = (
     }
 
     return parentProduct.id &&
-      parentProduct.contractEnabled &&
+      (isPagoPaUser || parentProduct.contractEnabled) &&
       parentProduct.status === StatusEnum.ACTIVE &&
       isProductOnboarded(party, parentProduct.id)
       ? [

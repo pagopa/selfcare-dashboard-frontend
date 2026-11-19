@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 import { useAppDispatch } from '../../../redux/hooks';
+import { useIsPagoPaUser } from '../../../hooks/useIsPagoPaUser';
 import {
   fetchProductsContractUpdateStatus,
   ProductContractUpdateStatus,
@@ -27,7 +28,11 @@ type ScopedStatuses = {
 const DashboardDocuments = ({ party, products }: DocumentsProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const documentProducts = useMemo(() => getDocumentProducts(party, products), [party, products]);
+  const isPagoPaUser = useIsPagoPaUser();
+  const documentProducts = useMemo(
+    () => getDocumentProducts(party, products, isPagoPaUser),
+    [isPagoPaUser, party, products]
+  );
   const productIds = useMemo(() => getDocumentProductIds(documentProducts), [documentProducts]);
   const [statusResult, setStatusResult] = useState<ScopedStatuses>();
   const statuses =
