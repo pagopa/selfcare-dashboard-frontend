@@ -1,6 +1,6 @@
 import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
 import TitleBox from '@pagopa/selfcare-common-frontend/lib/components/TitleBox';
-import { Grid } from '@mui/material';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Party } from '../../../model/Party';
@@ -35,7 +35,7 @@ const DashboardDocuments = ({ party, products }: DocumentsProps) => {
     statusResult.productIds.length === productIds.length &&
     statusResult.productIds.every((productId, index) => productId === productIds[index])
       ? statusResult.statuses
-      : [];
+      : undefined;
 
   useEffect(() => {
     if (productIds.length === 0) {
@@ -82,12 +82,18 @@ const DashboardDocuments = ({ party, products }: DocumentsProps) => {
           subTitle={t('documents.subTitle')}
         />
       </Grid>
-      <ProductCards
-        party={party}
-        products={products}
-        documentProducts={documentProducts}
-        statuses={statuses}
-      />
+      {productIds.length > 0 && statuses === undefined ? (
+        <Box display="flex" justifyContent="center">
+          <CircularProgress aria-label={t('documents.title')} />
+        </Box>
+      ) : (
+        <ProductCards
+          party={party}
+          products={products}
+          documentProducts={documentProducts}
+          statuses={statuses ?? []}
+        />
+      )}
     </Grid>
   );
 };

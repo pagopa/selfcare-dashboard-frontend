@@ -66,20 +66,41 @@ test('does not show the previous party statuses while fetching the new party sta
     const [currentParty, setCurrentParty] = useState(party);
     return (
       <>
-        <button onClick={() => setCurrentParty({ ...party, partyId: 'party-2' })}>Switch party</button>
+        <button onClick={() => setCurrentParty({ ...party, partyId: 'party-2' })}>
+          Switch party
+        </button>
         <DashboardDocumentsPage party={currentParty} products={mockedPartyProducts} />
       </>
     );
   };
 
   renderWithProviders(<PartySwitcher />);
+  expect(screen.getByText('Documenti')).toBeInTheDocument();
+  expect(screen.getByRole('progressbar', { name: 'Documenti' })).toBeInTheDocument();
+  expect(screen.queryByText('Carta Giovani')).not.toBeInTheDocument();
+
   expect(await screen.findByText('Documento mancante')).toBeInTheDocument();
+  expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: 'Switch party' }));
 
   expect(screen.queryByText('Documento mancante')).not.toBeInTheDocument();
+  expect(screen.getByRole('progressbar')).toBeInTheDocument();
+  expect(screen.queryByText('Carta Giovani')).not.toBeInTheDocument();
   expect(fetchProductsContractUpdateStatus).toHaveBeenLastCalledWith(
     'party-2',
-    getDocumentProductIds(getDocumentProducts({ ...party, partyId: 'party-2' }, mockedPartyProducts))
+    getDocumentProductIds(
+      getDocumentProducts({ ...party, partyId: 'party-2' }, mockedPartyProducts)
+    )
   );
+});
+
+test('shows product cards if the status request fails', async () => {
+  vi.mocked(fetchProductsContractUpdateStatus).mockRejectedValueOnce(new Error('Request failed'));
+  renderWithProviders(
+    <DashboardDocumentsPage party={mockedParties[2]} products={mockedPartyProducts} />
+  );
+
+  expect(await screen.findByText('Carta Giovani')).toBeInTheDocument();
+  expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
 });
