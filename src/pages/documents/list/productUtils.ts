@@ -6,6 +6,9 @@ import {
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 
+// TODO: common v2 lacks this action; use Actions.UpdateContract after upgrading common.
+export const UPDATE_CONTRACT_ACTION = 'Selc:UpdateContract';
+
 export type DocumentProduct = {
   product: Product | SubProductResource;
   productId: string;

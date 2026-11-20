@@ -15,11 +15,8 @@ import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ProductContractUpdateStatus } from '../../../../services/contractUpdateService';
 import { PRODUCT_IDS } from '../../../../utils/constants';
 import { ENV } from '../../../../utils/env';
-import { DocumentProduct } from '../productUtils';
+import { DocumentProduct, UPDATE_CONTRACT_ACTION } from '../productUtils';
 import { PendingRequestDialog } from './PendingRequestDialog';
-
-// TODO: shortcut: common v2 lacks this action; use Actions.UpdateContract after upgrading common.
-const UPDATE_CONTRACT = 'Selc:UpdateContract';
 
 type ProductCardsProps = {
   party: Party;
@@ -222,7 +219,10 @@ const ProductCards: React.FC<ProductCardsProps> = ({
         status={status}
         canViewDocuments={canViewProductDocuments(documentProduct)}
         canUpdateContract={hasPermission(documentProduct.parentProductId, Actions.ViewContract)}
-        hasUpdateContractPermission={hasPermission(documentProduct.parentProductId, UPDATE_CONTRACT)}
+        hasUpdateContractPermission={hasPermission(
+          documentProduct.parentProductId,
+          UPDATE_CONTRACT_ACTION
+        )}
         onAddDocument={openContractUpdate}
       />
     );
