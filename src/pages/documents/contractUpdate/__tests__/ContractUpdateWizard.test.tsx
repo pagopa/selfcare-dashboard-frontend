@@ -18,6 +18,7 @@ import { fetchProductAdmins } from '../../../../services/userService';
 import { ENV } from '../../../../utils/env';
 import { renderWithProviders } from '../../../../utils/test-utils';
 import { getVisibleAdmins } from '../../../../model/ContractUpdate';
+import { UPDATE_CONTRACT_ACTION } from '../../list/productUtils';
 import {
   CONTRACT_UPDATE_STEPS,
   contractUpdateWizardReducer,
@@ -43,16 +44,49 @@ const wizardPath = '/dashboard/party-1/documents/product-1/update-contract';
 const selectedParty = {
   partyId: 'party-1',
   description: 'Comune di Roma',
-  products: [],
+  products: [
+    {
+      productId: 'product-1',
+      productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      userProductActions: [Actions.ViewContract, UPDATE_CONTRACT_ACTION],
+    },
+    {
+      productId: 'product-2',
+      productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+      userProductActions: [Actions.ViewContract, UPDATE_CONTRACT_ACTION],
+    },
+  ],
 } as unknown as Party;
 
-const renderWizard = (returnTo?: string) => {
+const renderWizard = (returnTo?: string, canUpdateContract = true) => {
   const history = createMemoryHistory({ initialEntries: [wizardPath] });
   if (returnTo) {
     history.replace(wizardPath, { returnTo });
   }
   const store = createStore();
-  store.dispatch(partiesActions.setPartySelected(selectedParty));
+  store.dispatch(
+    partiesActions.setPartySelected(
+      canUpdateContract
+        ? selectedParty
+        : {
+            ...selectedParty,
+            products: selectedParty.products.map((product) => ({
+              ...product,
+              userProductActions: [Actions.ViewContract],
+            })),
+          }
+    )
+  );
+  store.dispatch(
+    setProductPermissions(
+      ['product-1', 'product-2'].map((productId) => ({
+        productId,
+        actions: canUpdateContract
+          ? [Actions.ViewContract, UPDATE_CONTRACT_ACTION]
+          : [Actions.ViewContract],
+      }))
+    )
+  );
   renderWithProviders(
     <Switch>
       <Route path={ENV.ROUTES.CONTRACT_UPDATE} exact>
@@ -72,7 +106,7 @@ const renderWizard = (returnTo?: string) => {
     history
   );
   // delay: null skips the per-keystroke timer, keeping long typing flows well under the test timeout
-  return { history, user: userEvent.setup({ delay: null }) };
+  return { history, store, user: userEvent.setup({ delay: null }) };
 };
 
 // getByRole computes the accessible name of every button, which is slow with the admin cards rendered.
@@ -117,6 +151,13 @@ test('starts with a read-only step, its own main heading and enabled back naviga
   expect(back()).toBeEnabled();
   expect(next()).toBeEnabled();
   expect(screen.getByRole('button', { name: 'Esci' })).toBeInTheDocument();
+});
+
+test('returns to Documents when the user lacks update permission', () => {
+  const { history } = renderWizard(undefined, false);
+
+  expect(history.location.pathname).toBe('/dashboard/party-1/documents');
+  expect(screen.queryByRole('heading', { name: 'Dati dell’ente' })).not.toBeInTheDocument();
 });
 
 test.each([undefined, '/dashboard/party-1/documents?filter=contracts#product-1'])(
@@ -247,6 +288,30 @@ test.each([
   }
 );
 
+test('does not submit if update permission is removed before confirmation', async () => {
+  const { history, store, user } = renderWizard();
+  await goToAdminsStep(user);
+  await user.click(next());
+  await screen.findByRole('dialog', { name: 'Confermi la richiesta di invio?' });
+
+  act(() =>
+    store.dispatch(
+      setProductPermissions([{ productId: 'product-1', actions: [Actions.ViewContract] }])
+    )
+  );
+  await user.click(
+    within(screen.getByRole('dialog', { name: 'Confermi la richiesta di invio?' })).getByRole(
+      'button',
+      { name: 'Continua' }
+    )
+  );
+
+  await waitFor(() => {
+    expect(history.location.pathname).toBe('/dashboard/party-1/documents');
+    expect(submitContractUpdate).not.toHaveBeenCalled();
+  });
+});
+
 test.each([
   ['success', 'Torna a Documenti', '/dashboard/party-1/documents'],
   ['error', 'Torna alla home', '/dashboard/party-1'],
@@ -272,7 +337,7 @@ test.each([
 
 const renderSuccessPage = (
   statuses: Awaited<ReturnType<typeof fetchProductsContractUpdateStatus>> | Error,
-  canManageProduct = true
+  canUpdateContract = true
 ) => {
   if (statuses instanceof Error) {
     vi.mocked(fetchProductsContractUpdateStatus).mockRejectedValueOnce(statuses);
@@ -283,7 +348,16 @@ const renderSuccessPage = (
     initialEntries: ['/dashboard/party-1/documents/product-1/update-contract/success'],
   });
   const store = createStore();
-  if (canManageProduct) {
+  if (canUpdateContract) {
+    store.dispatch(
+      setProductPermissions([
+        {
+          productId: 'product-2',
+          actions: [Actions.ViewContract, UPDATE_CONTRACT_ACTION],
+        },
+      ])
+    );
+  } else {
     store.dispatch(
       setProductPermissions([{ productId: 'product-2', actions: [Actions.ViewContract] }])
     );
@@ -371,7 +445,7 @@ test('the success page proposes the update of another product requiring it', asy
   expect(history.location.pathname).toBe('/dashboard/party-1/documents/product-2/update-contract');
 });
 
-test('the success page does not propose updates for products without contract permission', async () => {
+test('the success page does not propose updates for products without update permission', async () => {
   const history = renderSuccessPage([status('product-2', true)], false);
 
   await userEvent.click(screen.getByRole('button', { name: 'Torna a Documenti' }));
@@ -399,9 +473,14 @@ test.each([
   '/dashboard/party-1/documents/product-2/update-contract',
   '/dashboard/party-2/documents/product-1/update-contract',
 ])('starts a fresh draft when the scope changes to %s', async (path) => {
-  const { history, user } = renderWizard();
+  const { history, store, user } = renderWizard();
   await user.click(next());
   await user.type(screen.getByLabelText('Nome'), 'old draft');
+  if (path.includes('/party-2/')) {
+    act(() =>
+      store.dispatch(partiesActions.setPartySelected({ ...selectedParty, partyId: 'party-2' }))
+    );
+  }
   act(() => history.push(path));
   expect(screen.getByRole('heading', { level: 1, name: 'Dati dell’ente' })).toBeInTheDocument();
   await user.click(next());

@@ -11,7 +11,11 @@ import { partiesSelectors } from '../../../redux/slices/partiesSlice';
 import { DASHBOARD_ROUTES } from '../../../routes';
 import { fetchProductsContractUpdateStatus } from '../../../services/contractUpdateService';
 import { ENV } from '../../../utils/env';
-import { getDocumentProductIds, getDocumentProducts } from '../list/productUtils';
+import {
+  getDocumentProductIds,
+  getDocumentProducts,
+  UPDATE_CONTRACT_ACTION,
+} from '../list/productUtils';
 import { ContractUpdateNextProductDialog } from './components/ContractUpdateNextProductDialog';
 
 type Outcome = 'success' | 'error';
@@ -69,7 +73,9 @@ const ContractUpdateResultPage = ({ outcome }: { outcome: Outcome }) => {
         documentProducts.filter(({ parentProductId }) =>
           productPermissions.some(
             ({ productId, actions }) =>
-              productId === parentProductId && actions.includes(Actions.ViewContract)
+              productId === parentProductId &&
+              actions.includes(Actions.ViewContract) &&
+              actions.includes(UPDATE_CONTRACT_ACTION)
           )
         )
       ),

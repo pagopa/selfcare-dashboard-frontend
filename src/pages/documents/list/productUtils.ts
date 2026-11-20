@@ -6,6 +6,9 @@ import {
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 
+// TODO: common v2 lacks this action; use Actions.UpdateContract after upgrading common.
+export const UPDATE_CONTRACT_ACTION = 'Selc:UpdateContract';
+
 export type DocumentProduct = {
   product: Product | SubProductResource;
   productId: string;
@@ -25,12 +28,13 @@ const isProductOnboarded = (party: Party, productId?: string) =>
 
 export const getDocumentProducts = (
   party: Party,
-  products: Array<Product>
+  products: Array<Product>,
+  isPagoPaUser = false
 ): Array<DocumentProduct> =>
   products.flatMap((parentProduct) => {
     const activeSubProducts = (parentProduct.subProducts ?? []).flatMap((product) =>
       product.id &&
-      product.contractEnabled &&
+      (isPagoPaUser || product.contractEnabled) &&
       product.status === StatusEnum.ACTIVE &&
       isProductOnboarded(party, product.id)
         ? [
@@ -49,7 +53,7 @@ export const getDocumentProducts = (
     }
 
     return parentProduct.id &&
-      parentProduct.contractEnabled &&
+      (isPagoPaUser || parentProduct.contractEnabled) &&
       parentProduct.status === StatusEnum.ACTIVE &&
       isProductOnboarded(party, parentProduct.id)
       ? [

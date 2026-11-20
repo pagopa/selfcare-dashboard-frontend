@@ -4,6 +4,7 @@ import { Box, Container, Typography } from '@mui/material';
 import { ButtonNaked, MIButton } from '@pagopa/mui-italia';
 import useErrorDispatcher from '@pagopa/selfcare-common-frontend/lib/hooks/useErrorDispatcher';
 import useLoading from '@pagopa/selfcare-common-frontend/lib/hooks/useLoading';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,7 @@ import { DASHBOARD_ROUTES } from '../../../../routes';
 import { submitContractUpdate } from '../../../../services/contractUpdateService';
 import { LOADING_TASK_CONTRACT_UPDATE } from '../../../../utils/constants';
 import { ENV } from '../../../../utils/env';
+import { UPDATE_CONTRACT_ACTION } from '../../list/productUtils';
 import { CONTRACT_UPDATE_STEPS, useContractUpdateWizard } from '../ContractUpdateWizardContext';
 import { stepComponents, stepValidators } from '../steps';
 import { ContractUpdateExitDialog } from './ContractUpdateExitDialog';
@@ -26,6 +28,8 @@ export const ContractUpdateWizardLayout = () => {
   const { partyId, productId } = useParams<{ partyId: string; productId: string }>();
   const party = useAppSelector(partiesSelectors.selectPartySelected);
   const products = useAppSelector(partiesSelectors.selectPartySelectedProducts);
+  const { hasPermission } = usePermissions();
+  const hasUpdateContractPermission = hasPermission(productId, UPDATE_CONTRACT_ACTION);
   const productName = products?.find((product) => product.id === productId)?.title ?? productId;
   const { state, dispatch } = useContractUpdateWizard();
   const addError = useErrorDispatcher();
@@ -69,6 +73,11 @@ export const ContractUpdateWizardLayout = () => {
   };
 
   const confirmSubmit = () => {
+    if (!hasUpdateContractPermission) {
+      history.replace(resolvePathVariables(DASHBOARD_ROUTES.DOCUMENTS.path, { partyId }));
+      return;
+    }
+
     // Closing the dialog before the request also prevents a double submission
     setSubmitModalOpen(false);
     setLoading(true);

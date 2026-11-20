@@ -15,7 +15,7 @@ import { DASHBOARD_ROUTES } from '../../../../routes';
 import { ProductContractUpdateStatus } from '../../../../services/contractUpdateService';
 import { PRODUCT_IDS } from '../../../../utils/constants';
 import { ENV } from '../../../../utils/env';
-import { DocumentProduct } from '../productUtils';
+import { DocumentProduct, UPDATE_CONTRACT_ACTION } from '../productUtils';
 import { PendingRequestDialog } from './PendingRequestDialog';
 
 type ProductCardsProps = {
@@ -215,7 +215,10 @@ const ProductCards: React.FC<ProductCardsProps> = ({
         documentProduct={documentProduct}
         status={status}
         canViewDocuments={canViewProductDocuments(documentProduct)}
-        canUpdateContract={hasPermission(documentProduct.parentProductId, Actions.ViewContract)}
+        canUpdateContract={
+          hasPermission(documentProduct.parentProductId, Actions.ViewContract) &&
+          hasPermission(documentProduct.parentProductId, UPDATE_CONTRACT_ACTION)
+        }
         onAddDocument={openContractUpdate}
       />
     );
