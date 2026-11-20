@@ -199,23 +199,20 @@ describe('ProductCards', () => {
     expect(screen.getByRole('dialog', { name: 'Richiesta in corso' })).toBeInTheDocument();
   });
 
-  it('disables adding a document without update permission but keeps view more enabled', () => {
+  it('shows View more for a missing document without update permission', () => {
     const { history } = setup(
       [{ productId: 'prod-io', contractUpdateRequired: true, contractUpdateInProgress: false }],
-      ['prod-io', 'prod-pn'],
+      ['prod-io'],
       party,
       []
     );
 
-    const addButton = screen.getByRole('button', { name: 'Aggiungi documento' });
-    expect(addButton).toBeDisabled();
-    fireEvent.click(addButton);
-    expect(history.location.pathname).not.toContain('update-contract');
-
+    expect(screen.queryByRole('button', { name: 'Aggiungi documento' })).not.toBeInTheDocument();
     const viewButton = screen.getByRole('button', { name: 'Vedi di più' });
     expect(viewButton).toBeEnabled();
     fireEvent.click(viewButton);
     expect(history.location.pathname).toBe('/dashboard/party-1/documents/details');
+    expect(history.location.search).toContain('productId=prod-io&subProductId=prod-io-premium');
   });
 
   it('uses child permission for document access but requires parent permission for updates', () => {

@@ -32,7 +32,6 @@ type ProductCardProps = {
   status?: ProductContractUpdateStatus;
   canViewDocuments: boolean;
   canUpdateContract: boolean;
-  hasUpdateContractPermission: boolean;
   onAddDocument: (productId: string, isInProgress: boolean) => void;
 };
 
@@ -43,7 +42,6 @@ const ProductCard = ({
   status,
   canViewDocuments,
   canUpdateContract,
-  hasUpdateContractPermission,
   onAddDocument,
 }: ProductCardProps) => {
   const { t } = useTranslation();
@@ -143,7 +141,6 @@ const ProductCard = ({
       {(canViewDocuments || canAddDocument) && (
         <MIButton
           variant="text"
-          disabled={canAddDocument && !hasUpdateContractPermission}
           endIcon={canAddDocument ? <Cached /> : <ArrowForward />}
           onClick={() =>
             canAddDocument
@@ -218,11 +215,10 @@ const ProductCards: React.FC<ProductCardsProps> = ({
         documentProduct={documentProduct}
         status={status}
         canViewDocuments={canViewProductDocuments(documentProduct)}
-        canUpdateContract={hasPermission(documentProduct.parentProductId, Actions.ViewContract)}
-        hasUpdateContractPermission={hasPermission(
-          documentProduct.parentProductId,
-          UPDATE_CONTRACT_ACTION
-        )}
+        canUpdateContract={
+          hasPermission(documentProduct.parentProductId, Actions.ViewContract) &&
+          hasPermission(documentProduct.parentProductId, UPDATE_CONTRACT_ACTION)
+        }
         onAddDocument={openContractUpdate}
       />
     );
