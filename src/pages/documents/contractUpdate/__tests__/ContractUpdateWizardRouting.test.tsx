@@ -1,4 +1,5 @@
 import { act, screen } from '@testing-library/react';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
 import { createMemoryHistory } from 'history';
 import { Route, Switch } from 'react-router-dom';
 import Layout from '../../../../components/Layout/Layout';
@@ -7,9 +8,12 @@ import { createStore } from '../../../../redux/store';
 import { partiesActions } from '../../../../redux/slices/partiesSlice';
 import { mockedParties } from '../../../../services/__mocks__/partyService';
 import { renderWithProviders } from '../../../../utils/test-utils';
+import { UPDATE_CONTRACT_ACTION } from '../../list/productUtils';
 
 vi.mock('../../../../decorators/withParties');
-vi.mock('../../../../decorators/withSelectedParty');
+vi.mock('../../../../decorators/withSelectedParty', () => ({
+  default: (Component: React.ComponentType<any>) => Component,
+}));
 vi.mock('../../../dashboard/Dashboard', () => ({
   default: () => <nav aria-label="Dashboard side menu" />,
 }));
@@ -29,7 +33,22 @@ test('routes outside the dashboard shell and hides only the secondary header dur
     initialEntries: ['/dashboard/party-1/documents/product-1/update-contract'],
   });
   const store = createStore();
-  store.dispatch(partiesActions.setPartySelected(mockedParties[0]));
+  store.dispatch(
+    partiesActions.setPartySelected({
+      ...mockedParties[0],
+      partyId: 'party-1',
+      products: [
+        {
+          ...mockedParties[0].products[0],
+          productId: 'product-1',
+          userProductActions: [UPDATE_CONTRACT_ACTION],
+        },
+      ],
+    })
+  );
+  store.dispatch(
+    setProductPermissions([{ productId: 'product-1', actions: [UPDATE_CONTRACT_ACTION] }])
+  );
   renderWithProviders(
     <Layout>
       <Switch>
