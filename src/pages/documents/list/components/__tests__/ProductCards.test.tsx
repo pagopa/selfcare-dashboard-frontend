@@ -23,6 +23,7 @@ vi.mock(
 );
 
 const VIEW_CONTRACT = 'Selc:ViewContract';
+const UPDATE_CONTRACT = 'Selc:UpdateContract';
 
 const buildProduct = (id: string, overrides: Partial<Product> = {}): Product => ({
   id,
@@ -82,12 +83,18 @@ const party: Party = {
 const setup = (
   statuses: Array<ProductContractUpdateStatus> = [],
   permissionProductIds = ['prod-io', 'prod-pagopa', 'prod-dashboard-psp', 'prod-pn', 'prod-inactive'],
-  selectedParty = party
+  selectedParty = party,
+  updatePermissionProductIds = permissionProductIds
 ) => {
   const store = createStore();
   store.dispatch(
     setProductPermissions(
-      permissionProductIds.map((productId) => ({ productId, actions: [VIEW_CONTRACT] }))
+      permissionProductIds.map((productId) => ({
+        productId,
+        actions: updatePermissionProductIds.includes(productId)
+          ? [VIEW_CONTRACT, UPDATE_CONTRACT]
+          : [VIEW_CONTRACT],
+      }))
     )
   );
   return renderWithProviders(
@@ -171,10 +178,10 @@ describe('ProductCards', () => {
       },
     ]);
 
-    expect(screen.getByRole('alert')).toHaveTextContent('Mancano alcuni documenti');
-    expect(screen.getByText('Mancano alcuni documenti')).toBeInTheDocument();
-    expect(screen.getByText('Documento mancante').closest('.MuiChip-root')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('Completa la documentazione');
+    expect(screen.getByText('Completa la documentazione')).toBeInTheDocument();
+    expect(screen.getByText('Documento da completare').closest('.MuiChip-root')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Completa documento' }));
 
     expect(history.location.pathname).toBe('/dashboard/party-1/documents/prod-io/update-contract');
   });
@@ -188,8 +195,24 @@ describe('ProductCards', () => {
       },
     ]);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Completa documento' }));
     expect(screen.getByRole('dialog', { name: 'Richiesta in corso' })).toBeInTheDocument();
+  });
+
+  it('shows View more for a missing document without update permission', () => {
+    const { history } = setup(
+      [{ productId: 'prod-io', contractUpdateRequired: true, contractUpdateInProgress: false }],
+      ['prod-io'],
+      party,
+      []
+    );
+
+    expect(screen.queryByRole('button', { name: 'Completa documento' })).not.toBeInTheDocument();
+    const viewButton = screen.getByRole('button', { name: 'Vedi di più' });
+    expect(viewButton).toBeEnabled();
+    fireEvent.click(viewButton);
+    expect(history.location.pathname).toBe('/dashboard/party-1/documents/details');
+    expect(history.location.search).toContain('productId=prod-io&subProductId=prod-io-premium');
   });
 
   it('uses child permission for document access but requires parent permission for updates', () => {
