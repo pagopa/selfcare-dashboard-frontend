@@ -87,12 +87,12 @@ test('does not show the previous party statuses while fetching the new party sta
   expect(screen.getByRole('progressbar', { name: 'Documenti' })).toBeInTheDocument();
   expect(screen.queryByText('Carta Giovani')).not.toBeInTheDocument();
 
-  expect(await screen.findByText('Documento mancante')).toBeInTheDocument();
+  expect(await screen.findByText('Documento da completare')).toBeInTheDocument();
   expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: 'Switch party' }));
 
-  expect(screen.queryByText('Documento mancante')).not.toBeInTheDocument();
+  expect(screen.queryByText('Documento da completare')).not.toBeInTheDocument();
   expect(screen.getByRole('progressbar')).toBeInTheDocument();
   expect(screen.queryByText('Carta Giovani')).not.toBeInTheDocument();
   expect(fetchProductsContractUpdateStatus).toHaveBeenLastCalledWith(

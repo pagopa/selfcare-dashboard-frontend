@@ -488,12 +488,12 @@ export default {
     viewMore: 'Vedi di più',
     backButton: 'Esci',
     missingDocuments: {
-      title: 'Mancano alcuni documenti',
+      title: 'Completa la documentazione',
       description:
-        'Non siamo riusciti a recuperare alcuni documenti ed è necessario aggiungerli di nuovo. Premi su “Aggiungi documento” del relativo prodotto per aggiungere la versione digitale del documento mancante.',
+        'È necessario integrare alcuni documenti per il tuo ente.  Premi su “Completa documento” del relativo prodotto per aggiungere la versione digitale del documento mancante.',
     },
-    missingDocument: 'Documento mancante',
-    addDocument: 'Aggiungi documento',
+    missingDocument: 'Documento da completare',
+    addDocument: 'Completa documento',
     otherProducts: 'Altri prodotti attivi per il tuo ente (non gestibili dal tuo profilo)',
     pendingRequestModal: {
       title: 'Richiesta in corso',

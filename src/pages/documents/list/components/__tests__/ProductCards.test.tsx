@@ -178,10 +178,10 @@ describe('ProductCards', () => {
       },
     ]);
 
-    expect(screen.getByRole('alert')).toHaveTextContent('Mancano alcuni documenti');
-    expect(screen.getByText('Mancano alcuni documenti')).toBeInTheDocument();
-    expect(screen.getByText('Documento mancante').closest('.MuiChip-root')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('Completa la documentazione');
+    expect(screen.getByText('Completa la documentazione')).toBeInTheDocument();
+    expect(screen.getByText('Documento da completare').closest('.MuiChip-root')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Completa documento' }));
 
     expect(history.location.pathname).toBe('/dashboard/party-1/documents/prod-io/update-contract');
   });
@@ -195,7 +195,7 @@ describe('ProductCards', () => {
       },
     ]);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Aggiungi documento' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Completa documento' }));
     expect(screen.getByRole('dialog', { name: 'Richiesta in corso' })).toBeInTheDocument();
   });
 
@@ -207,7 +207,7 @@ describe('ProductCards', () => {
       []
     );
 
-    expect(screen.queryByRole('button', { name: 'Aggiungi documento' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Completa documento' })).not.toBeInTheDocument();
     const viewButton = screen.getByRole('button', { name: 'Vedi di più' });
     expect(viewButton).toBeEnabled();
     fireEvent.click(viewButton);
