@@ -1,6 +1,6 @@
 import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
 import { appStateActions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/appStateSlice';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { useEffect, useMemo, useState } from 'react';
 import { TypeEnum as DocumentType } from '../../../api/generated/b4f-dashboard/DocumentResource';
 import { ProductOnBoardingStatusEnum } from '../../../api/generated/b4f-dashboard/OnboardedProductResource';
@@ -150,32 +150,23 @@ const useDocumentsVisibility = (
   return useVisibilityResult(party?.partyId, productIds, documentIds);
 };
 
-// Combine the feature flag, existing PSP rules and new SelfCare visibility checks.
+// Combine the feature flag, PagoPA permissions and document visibility checks.
 export const useDocumentsSectionVisibility = (
   party: Party | null | undefined,
   products: Array<Product> | null | undefined,
   isPagoPa: boolean
 ): boolean | undefined => {
   // Read the permissions used by both SelfCare and PagoPA visibility rules.
-  const { hasPermission, getAllProductsWithPermission, productPermissions } = usePermissions();
+  const { getAllProductsWithPermission, productPermissions } = usePermissions();
   
   // Avoid deciding visibility using permissions from a previously selected party.
   const permissionsReady = permissionsMatchParty(party, productPermissions);
 
-  // Preserve visibility for PSPs already allowed to view pagoPA contracts.
-  const legacyVisible =
-    !!party?.products.some(
-      (product) =>
-        product.productId === PRODUCT_IDS.PAGOPA &&
-        product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
-        product.institutionType === 'PSP'
-    ) && hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract);
-
-  // Check new eligibility only for SelfCare users who are not already covered.
+  // Check document eligibility for SelfCare users once their permissions are current.
   const newVisibility = useDocumentsVisibility(
     party,
     products,
-    ENV.SHOW_DOCUMENTS && !isPagoPa && permissionsReady && !legacyVisible
+    ENV.SHOW_DOCUMENTS && !isPagoPa && permissionsReady
   );
   if (!ENV.SHOW_DOCUMENTS) {
     return false;
@@ -186,5 +177,5 @@ export const useDocumentsSectionVisibility = (
   if (!permissionsReady) {
     return undefined;
   }
-  return legacyVisible || newVisibility;
+  return newVisibility;
 };

@@ -223,7 +223,7 @@ describe('Dashboard side menu visibility', () => {
     return { store, history };
   };
 
-  test('shows invoices, documents, delegations and managed institutions when allowed', async () => {
+  test('shows invoices, delegations and managed institutions when allowed', async () => {
     renderWithParty('/dashboard/psp1/users', [
       {
         productId: 'prod-pagopa',
@@ -237,7 +237,7 @@ describe('Dashboard side menu visibility', () => {
     ]);
 
     expect(await screen.findByText('Fatturazione')).toBeInTheDocument();
-    expect(screen.getByText('Documenti')).toBeInTheDocument();
+    expect(screen.queryByText('Documenti')).not.toBeInTheDocument();
     expect(screen.getByText('Deleghe')).toBeInTheDocument();
     expect(screen.getByText('Enti gestiti')).toBeInTheDocument();
     expect(getDocumentsList).not.toHaveBeenCalled();
