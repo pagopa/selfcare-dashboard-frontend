@@ -14,9 +14,10 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useErrorDispatcher, useLoading } from '@pagopa/selfcare-common-frontend/lib';
 import BackComponent from '@pagopa/selfcare-common-frontend/lib/components/BackComponent';
+import { usePermissions } from '@pagopa/selfcare-common-frontend/lib/hooks/usePermissions';
 import { trackEvent } from '@pagopa/selfcare-common-frontend/lib/services/analyticsService';
 import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import {
@@ -24,6 +25,7 @@ import {
   TypeEnum as DocumentTypeEnum,
 } from '../../../api/generated/b4f-dashboard/DocumentResource';
 import FileCopyOff from '../../../assets/file_copy_off.svg?react';
+import { useIsPagoPaUser } from '../../../hooks/useIsPagoPaUser';
 import { Party } from '../../../model/Party';
 import { Product } from '../../../model/Product';
 import { DASHBOARD_ROUTES } from '../../../routes';
@@ -33,6 +35,7 @@ import {
   LOADING_TASK_FETCH_DOCUMENTS_LIST,
   PRODUCT_IDS,
 } from '../../../utils/constants';
+import { getEligibleDocumentProducts } from '../list/productUtils';
 
 type DocDetailsProps = {
   party: Party;
@@ -68,6 +71,8 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
   const addError = useErrorDispatcher();
   const setLoadingDocumentsList = useLoading(LOADING_TASK_FETCH_DOCUMENTS_LIST);
   const setLoadingDocument = useLoading(LOADING_TASK_FETCH_CONTRACT);
+  const isPagoPaUser = useIsPagoPaUser();
+  const { productPermissions } = usePermissions();
 
   const [productsDocuments, setProductsDocuments] = useState<Array<ProductDocuments>>([]);
 
@@ -79,6 +84,19 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
         ?.title
     : undefined;
   const productTitle = subProductTitle ?? searchParams.get('productTitle');
+  const productIds = useMemo(() => {
+    if (!productId) {
+      return [];
+    }
+    const requestedIds = subProductId ? [productId, subProductId] : [productId];
+    if (isPagoPaUser) {
+      return requestedIds;
+    }
+    const eligibleProducts = getEligibleDocumentProducts(party, products, productPermissions);
+    return requestedIds.filter((id) =>
+      eligibleProducts.some((product) => product.productId === id)
+    );
+  }, [isPagoPaUser, party, productId, productPermissions, products, subProductId]);
 
   const mapProductIdToTitle = (id: string) => {
     if (id === subProductId && subProductTitle) {
@@ -109,11 +127,12 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
     });
 
   useEffect(() => {
-    if (!productId) {
+    if (productIds.length === 0) {
       return;
     }
-    const productIds = subProductId ? [productId, subProductId] : [productId];
 
+    // eslint-disable-next-line functional/no-let
+    let active = true;
     setLoadingDocumentsList(true);
     // allSettled: a failing product must not hide the documents of the other one
     Promise.allSettled(
@@ -125,6 +144,9 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
       )
     )
       .then((results) => {
+        if (!active) {
+          return;
+        }
         setProductsDocuments(
           results.flatMap((result, i) => {
             if (result.status === 'fulfilled') {
@@ -141,8 +163,16 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
           })
         );
       })
-      .finally(() => setLoadingDocumentsList(false));
-  }, [party.partyId, productId, subProductId]);
+      .finally(() => {
+        if (active) {
+          setLoadingDocumentsList(false);
+        }
+      });
+    return () => {
+      active = false;
+      setLoadingDocumentsList(false);
+    };
+  }, [party.partyId, productIds]);
 
   const openDocument = (docProductId: string, doc: DisplayDocument) => {
     const fileName = doc.name || doc.label;
@@ -179,6 +209,10 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
       })
       .finally(() => setLoadingDocument(false));
   };
+
+  const visibleProductsDocuments = productsDocuments.filter(({ productId: id }) =>
+    productIds.includes(id)
+  );
 
   return (
     <Grid sx={{ width: '100%', px: 3, mt: 3 }}>
@@ -257,7 +291,7 @@ const DashboardDocumentsDetail = ({ party, products }: DocDetailsProps) => {
           </Typography>
 
           <Stack spacing={3}>
-            {productsDocuments.map(({ productId: docProductId, documents }) => (
+            {visibleProductsDocuments.map(({ productId: docProductId, documents }) => (
               <Stack key={docProductId} spacing={2}>
                 {subProductId && (
                   <Typography variant="body1" fontWeight={'fontWeightMedium'}>

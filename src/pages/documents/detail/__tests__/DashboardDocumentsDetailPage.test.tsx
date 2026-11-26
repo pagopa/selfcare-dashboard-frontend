@@ -1,6 +1,11 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { setProductPermissions } from '@pagopa/selfcare-common-frontend/lib/redux/slices/permissionsSlice';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import { Mock } from 'vitest';
 import { TypeEnum as DocumentTypeEnum } from '../../../../api/generated/b4f-dashboard/DocumentResource';
+import { ProductOnBoardingStatusEnum } from '../../../../api/generated/b4f-dashboard/OnboardedProductResource';
+import { useIsPagoPaUser } from '../../../../hooks/useIsPagoPaUser';
+import { createStore } from '../../../../redux/store';
 import { mockedParties } from '../../../../services/__mocks__/partyService';
 import { mockedPartyProducts } from '../../../../services/__mocks__/productService';
 import { getDocument, getDocumentsList } from '../../../../services/documentService';
@@ -11,6 +16,9 @@ vi.mock('../../../../services/documentService', () => ({
   getDocumentsList: vi.fn(),
   getDocument: vi.fn(),
 }));
+vi.mock('../../../../hooks/useIsPagoPaUser', () => ({
+  useIsPagoPaUser: vi.fn(() => false),
+}));
 
 const contract = { name: 'Contratto_di_adesione_IO.pdf', type: DocumentTypeEnum.INSTITUTION };
 const premiumContract = {
@@ -18,16 +26,101 @@ const premiumContract = {
   type: DocumentTypeEnum.INSTITUTION,
 };
 
-const renderPage = (search: string) => {
+const party = {
+  ...mockedParties[0],
+  products: ['prod-io', 'prod-io-premium', 'prod-pagopa', 'prod-dashboard-psp'].map(
+    (productId) => ({
+      productId,
+      productOnBoardingStatus: ProductOnBoardingStatusEnum.ACTIVE,
+    })
+  ),
+};
+const products = mockedPartyProducts.map((product) => ({
+  ...product,
+  subProducts: product.subProducts?.map((subProduct) => ({
+    ...subProduct,
+    contractEnabled: true,
+  })),
+}));
+const permissions = ['prod-io', 'prod-pagopa'].map((productId) => ({
+  productId,
+  actions: [Actions.ViewContract],
+}));
+
+const renderPage = (
+  search: string,
+  selectedProducts = products,
+  selectedPermissions = permissions
+) => {
   window.history.pushState({}, '', `/dashboard/1/documents/details${search}`);
+  const store = createStore();
+  store.dispatch(setProductPermissions(selectedPermissions));
   return renderWithProviders(
-    <DashboardDocumentsDetailPage party={mockedParties[0]} products={mockedPartyProducts} />
+    <DashboardDocumentsDetailPage party={party} products={selectedProducts} />,
+    store
   );
 };
 
 describe('DashboardDocumentsDetailPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(useIsPagoPaUser).mockReturnValue(false);
+  });
+
+  test('requests only eligible product documents for SelfCare', async () => {
+    (getDocumentsList as Mock).mockResolvedValue([contract]);
+    const catalog = products.map((product) =>
+      product.id === 'prod-io'
+        ? {
+            ...product,
+            subProducts: product.subProducts?.map((subProduct) => ({
+              ...subProduct,
+              contractEnabled: false,
+            })),
+          }
+        : product
+    );
+
+    renderPage('?productId=prod-io&subProductId=prod-io-premium', catalog);
+    expect(await screen.findByText(contract.name)).toBeInTheDocument();
+    expect(getDocumentsList).toHaveBeenCalledTimes(1);
+    expect(getDocumentsList).toHaveBeenCalledWith(party.partyId, 'prod-io');
+  });
+
+  test('does not request documents without ViewContract', () => {
+    renderPage('?productId=prod-io&productTitle=IO', products, []);
+    expect(getDocumentsList).not.toHaveBeenCalled();
+  });
+
+  test('hides previously loaded documents when permission is removed', async () => {
+    (getDocumentsList as Mock).mockResolvedValue([contract]);
+    const { store } = renderPage('?productId=prod-io&productTitle=IO');
+    expect(await screen.findByText(contract.name)).toBeInTheDocument();
+
+    act(() => store.dispatch(setProductPermissions([])));
+    expect(screen.queryByText(contract.name)).not.toBeInTheDocument();
+  });
+
+  test('ignores a document response after permission is removed', async () => {
+    // eslint-disable-next-line functional/no-let
+    let resolveDocuments!: (documents: Array<typeof contract>) => void;
+    (getDocumentsList as Mock).mockReturnValue(
+      new Promise((resolve) => {
+        resolveDocuments = resolve;
+      })
+    );
+    const { store } = renderPage('?productId=prod-io&productTitle=IO');
+    act(() => store.dispatch(setProductPermissions([])));
+    await act(async () => resolveDocuments([contract]));
+    expect(screen.queryByText(contract.name)).not.toBeInTheDocument();
+  });
+
+  test('keeps existing PagoPA operator requests without contract eligibility', async () => {
+    vi.mocked(useIsPagoPaUser).mockReturnValue(true);
+    (getDocumentsList as Mock).mockResolvedValue([contract]);
+    renderPage('?productId=other&productTitle=Other', products, []);
+    expect(await screen.findByText(contract.name)).toBeInTheDocument();
+    expect(getDocumentsList).toHaveBeenCalledWith(party.partyId, 'other');
   });
 
   test('shows the documents of the product without the product heading', async () => {

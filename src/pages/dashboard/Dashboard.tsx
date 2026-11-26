@@ -1,9 +1,10 @@
-import { useTheme } from '@mui/material';
-import { Actions, PRODUCT_IDS } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { CircularProgress, useTheme } from '@mui/material';
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
+import { resolvePathVariables } from '@pagopa/selfcare-common-frontend/lib/utils/routes-utils';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'react-redux';
-import { Route, Switch, matchPath, useHistory } from 'react-router-dom';
+import { Redirect, Route, Switch, matchPath, useHistory, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -31,6 +32,7 @@ import { Party } from '../../model/Party';
 import { Product, ProductsMap } from '../../model/Product';
 import DashboardShell from './DashboardShell';
 import { useDashboardData } from './hooks/useDashboardData';
+import { useDocumentsSectionVisibility } from './hooks/useDocumentsVisibility';
 import { buildRoutes } from './utils/dashboard-utils';
 
 export type DashboardPageProps = {
@@ -45,6 +47,31 @@ export type DashboardDecoratorsType = {
   withSelectedProductRoles: (
     WrappedComponent: React.ComponentType<any>
   ) => React.ComponentType<any>;
+};
+
+const DocumentsAccess = ({
+  party,
+  isPagoPa,
+  visibility,
+  children,
+}: {
+  party: Party;
+  isPagoPa: boolean;
+  visibility: boolean | undefined;
+  children: React.ReactNode;
+}) => {
+  const { partyId } = useParams<{ partyId: string }>();
+  const { t } = useTranslation();
+  if (isPagoPa) {
+    return <>{children}</>;
+  }
+  if (party.partyId !== partyId || visibility === undefined) {
+    return <CircularProgress aria-label={t('documents.title')} />;
+  }
+  if (!visibility) {
+    return <Redirect to={resolvePathVariables(DASHBOARD_ROUTES.OVERVIEW.path, { partyId })} />;
+  }
+  return <>{children}</>;
 };
 
 const Dashboard: React.FC = () => {
@@ -92,15 +119,8 @@ const Dashboard: React.FC = () => {
       )
   );
 
-  const isPSPOnPagopa = activeOnboardings.some(
-    (product) => product.productId === PRODUCT_IDS.PAGOPA && product.institutionType === 'PSP'
-  );
-
-  const isDocumentsSectionVisible =
-    ENV.SHOW_DOCUMENTS &&
-    (isPagoPa
-      ? getAllProductsWithPermission(Actions.ViewContract).length > 0
-      : isPSPOnPagopa && hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract));
+  const documentsVisibility = useDocumentsSectionVisibility(party, products, isPagoPa);
+  const isDocumentsSectionVisible = documentsVisibility === true;
 
   const isAddDelegateSectionVisible =
     ENV.DELEGATIONS.ENABLE &&
@@ -202,11 +222,15 @@ const Dashboard: React.FC = () => {
         </Route>
 
         <Route path={DASHBOARD_ROUTES.DOCUMENTS.path} exact>
-          <DashboardDocuments party={party} products={products} />
+          <DocumentsAccess party={party} isPagoPa={isPagoPa} visibility={documentsVisibility}>
+            <DashboardDocuments party={party} products={products} />
+          </DocumentsAccess>
         </Route>
 
         <Route path={DASHBOARD_ROUTES.DOCUMENTS_DETAIL.path} exact>
-          <DashboardDocumentsDetail party={party} products={products} />
+          <DocumentsAccess party={party} isPagoPa={isPagoPa} visibility={documentsVisibility}>
+            <DashboardDocumentsDetail party={party} products={products} />
+          </DocumentsAccess>
         </Route>
 
         {buildRoutes(party, products, activeProducts, productsMap, decorators, DASHBOARD_ROUTES)}
