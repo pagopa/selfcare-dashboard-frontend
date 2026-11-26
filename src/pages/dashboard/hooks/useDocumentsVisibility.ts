@@ -15,6 +15,7 @@ import {
   getEligibleDocumentProducts,
 } from '../../documents/list/productUtils';
 
+// Wait until the shared permissions reflect the selected party's active products.
 const permissionsMatchParty = (
   party: Party | null | undefined,
   permissions: ReturnType<typeof usePermissions>['productPermissions']
@@ -28,6 +29,7 @@ const permissionsMatchParty = (
       }))
   ) === JSON.stringify(permissions.map(({ productId, actions }) => ({ productId, actions })));
 
+// Report failures that prevent determining document visibility.
 const reportVisibilityError = (
   dispatch: ReturnType<typeof useAppDispatch>,
   partyId: string,
@@ -43,15 +45,18 @@ const reportVisibilityError = (
     })
   );
 
+// Check update statuses and document lists without letting one failed request hide other results.
 const checkDocumentsVisibility = async (
   partyId: string,
   productIds: Array<string>,
   documentIds: Array<string>
 ) => {
+  // Statuses use parent product IDs; document lists use the individual product IDs.
   const [statusResult, ...documentResults] = await Promise.allSettled([
     fetchProductsContractUpdateStatus(partyId, productIds),
     ...documentIds.map((productId) => getDocumentsList(partyId, productId)),
   ]);
+  // A required or pending update, or an institution document, makes the section visible.
   const visible =
     (statusResult.status === 'fulfilled' &&
       statusResult.value.some(
@@ -64,19 +69,24 @@ const checkDocumentsVisibility = async (
         result.status === 'fulfilled' &&
         result.value.some((document) => document.type === DocumentType.INSTITUTION)
     );
+  // Keep the first failure to report if no successful response establishes visibility.
   const failure = [statusResult, ...documentResults].find(
     (result): result is PromiseRejectedResult => result.status === 'rejected'
   );
   return { visible, failure };
 };
 
+// Fetch visibility for the current party and discard results from previous inputs.
 const useVisibilityResult = (
   partyId: string | undefined,
   productIds: Array<string>,
   documentIds: Array<string>
 ): boolean | undefined => {
+  // Dispatch a notification when visibility cannot be established.
   const dispatch = useAppDispatch();
+  // Identify this set of inputs so an old response cannot be reused.
   const scope = useMemo(() => ({}), [partyId, productIds, documentIds]);
+  // Keep the result associated with the inputs that produced it.
   const [result, setResult] = useState<{ scope: object; visible: boolean }>();
 
   useEffect(() => {
@@ -115,19 +125,24 @@ const useVisibilityResult = (
   return result?.scope === scope ? result.visible : undefined;
 };
 
+// Find eligible products and resolve their document visibility.
 const useDocumentsVisibility = (
   party: Party | null | undefined,
   products: Array<Product> | null | undefined,
   enabled: boolean
 ): boolean | undefined => {
+  // Use the current product permissions to filter document requests.
   const { productPermissions } = usePermissions();
+  // Include only active, contract-enabled products the user can view.
   const documentProducts = useMemo(() => {
     if (!party || !products || !enabled) {
       return [];
     }
     return getEligibleDocumentProducts(party, products, productPermissions);
   }, [party, products, enabled, productPermissions]);
+  // Update statuses are requested using parent product IDs.
   const productIds = useMemo(() => getDocumentProductIds(documentProducts), [documentProducts]);
+  // Document lists are requested for each eligible product or subproduct.
   const documentIds = useMemo(
     () => Array.from(new Set(documentProducts.map(({ productId }) => productId))),
     [documentProducts]
@@ -135,13 +150,19 @@ const useDocumentsVisibility = (
   return useVisibilityResult(party?.partyId, productIds, documentIds);
 };
 
+// Combine the feature flag, existing PSP rules and new SelfCare visibility checks.
 export const useDocumentsSectionVisibility = (
   party: Party | null | undefined,
   products: Array<Product> | null | undefined,
   isPagoPa: boolean
 ): boolean | undefined => {
+  // Read the permissions used by both SelfCare and PagoPA visibility rules.
   const { hasPermission, getAllProductsWithPermission, productPermissions } = usePermissions();
+  
+  // Avoid deciding visibility using permissions from a previously selected party.
   const permissionsReady = permissionsMatchParty(party, productPermissions);
+
+  // Preserve visibility for PSPs already allowed to view pagoPA contracts.
   const legacyVisible =
     !!party?.products.some(
       (product) =>
@@ -149,6 +170,8 @@ export const useDocumentsSectionVisibility = (
         product.productOnBoardingStatus === ProductOnBoardingStatusEnum.ACTIVE &&
         product.institutionType === 'PSP'
     ) && hasPermission(PRODUCT_IDS.PAGOPA, Actions.ViewContract);
+
+  // Check new eligibility only for SelfCare users who are not already covered.
   const newVisibility = useDocumentsVisibility(
     party,
     products,

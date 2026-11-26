@@ -27,16 +27,34 @@ const mapProductRoleMappings = (
     }))
   );
 
+/* eslint-disable functional/no-let, functional/immutable-data */
+let productsCache: Promise<Array<Product>> | undefined;
+
+export const clearProductsCache = (): void => {
+  productsCache = undefined;
+};
+
 export const fetchProducts = (): Promise<Array<Product>> => {
   /* istanbul ignore if */
   if (import.meta.env.VITE_API_MOCK_PRODUCTS === 'true') {
     return Promise.resolve(mockedPartyProducts);
   } else {
-    return DashboardApi.getProducts().then((productResources) =>
-      productResources ? productResources.map(productResource2Product) : []
-    );
+    if (!productsCache) {
+      const request = DashboardApi.getProducts().then((productResources) =>
+        productResources ? productResources.map(productResource2Product) : []
+      );
+      productsCache = request;
+      return request.catch((error: unknown) => {
+        if (productsCache === request) {
+          productsCache = undefined;
+        }
+        throw error;
+      });
+    }
+    return productsCache;
   }
 };
+/* eslint-enable functional/no-let, functional/immutable-data */
 
 export const fetchProductRoles = (product: Product, party: Party): Promise<Array<ProductRole>> => {
   const activeOnboardings = party.products.filter((p) => p.productOnBoardingStatus === 'ACTIVE');

@@ -10,7 +10,7 @@ import {
 } from '../../model/__mocks__/ProductRolesApiResponse';
 
 import { mockedParties } from '../__mocks__/partyService';
-import { fetchProductRoles, fetchProducts } from '../productService';
+import { clearProductsCache, fetchProductRoles, fetchProducts } from '../productService';
 import {
   fetchProductRoles as fetchProductRolesMocked,
   mockedPartyProducts,
@@ -37,6 +37,7 @@ vi.mock('../__mocks__/productService', async (importOriginal) => {
 describe('productService tests', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    clearProductsCache();
   });
 
   describe('fetchProducts', () => {
@@ -91,6 +92,13 @@ describe('productService tests', () => {
       const result = await fetchProducts();
       expect(DashboardApi.getProducts).toHaveBeenCalled();
       expect(result).toEqual(expectedProducts);
+
+      await expect(fetchProducts()).resolves.toEqual(expectedProducts);
+      expect(DashboardApi.getProducts).toHaveBeenCalledTimes(1);
+
+      clearProductsCache();
+      await expect(fetchProducts()).resolves.toEqual(expectedProducts);
+      expect(DashboardApi.getProducts).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -243,6 +251,7 @@ describe('productService edge cases (real API path)', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    clearProductsCache();
     import.meta.env.VITE_API_MOCK_PRODUCTS = 'false';
   });
 
@@ -250,6 +259,17 @@ describe('productService edge cases (real API path)', () => {
     (DashboardApi.getProducts as Mock).mockResolvedValue(null);
 
     await expect(fetchProducts()).resolves.toEqual([]);
+  });
+
+  test('fetchProducts does not cache a failed request', async () => {
+    const error = new Error('products error');
+    (DashboardApi.getProducts as Mock)
+      .mockRejectedValueOnce(error)
+      .mockResolvedValueOnce([]);
+
+    await expect(fetchProducts()).rejects.toBe(error);
+    await expect(fetchProducts()).resolves.toEqual([]);
+    expect(DashboardApi.getProducts).toHaveBeenCalledTimes(2);
   });
 
   test('fetchProductRoles uses an empty institutionType when the product is not actively onboarded', async () => {
