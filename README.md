@@ -19,9 +19,11 @@ dashboard shell.
 
 ## Documents section
 
-Shown in the side menu only when `VITE_SHOW_DOCUMENTS` is `true`. Regular users need
-an active PSP onboarding on `prod-pagopa` and `ViewContract` on that product. PagoPA
-operators browsing an institution need `ViewContract` on any product.
+Shown in the side menu only when `VITE_SHOW_DOCUMENTS` is `true`. Regular users see it
+with an active PSP onboarding and `ViewContract` on `prod-pagopa`, or when an active,
+contract-enabled product with `ViewContract` has an institution document or a required
+or in-progress contract update. Ineligible regular users are redirected from the list
+and detail pages. PagoPA operators browsing an institution need `ViewContract` on any product.
 The pages live in `src/pages/documents/`:
 
 | Folder | Route (`/dashboard/:partyId/...`) | Purpose |

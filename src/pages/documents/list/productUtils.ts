@@ -1,3 +1,4 @@
+import { Actions } from '@pagopa/selfcare-common-frontend/lib/utils/constants';
 import { ProductOnBoardingStatusEnum } from '../../../api/generated/b4f-dashboard/OnboardedProductResource';
 import {
   StatusEnum,
@@ -69,3 +70,22 @@ export const getDocumentProducts = (
 
 export const getDocumentProductIds = (documentProducts: Array<DocumentProduct>): Array<string> =>
   Array.from(new Set(documentProducts.map(({ parentProductId }) => parentProductId)));
+
+export const getEligibleDocumentProducts = (
+  party: Party,
+  products: Array<Product>,
+  permissions: Array<{ productId: string; actions: Array<string> }>
+): Array<DocumentProduct> =>
+  [
+    ...getDocumentProducts(party, products),
+    ...getDocumentProducts(
+      party,
+      products.map((product) => ({ ...product, subProducts: [] }))
+    ),
+  ].filter(({ productId, parentProductId }) =>
+    permissions.some(
+      (permission) =>
+        (permission.productId === productId || permission.productId === parentProductId) &&
+        permission.actions.includes(Actions.ViewContract)
+    )
+  );
